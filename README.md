@@ -69,13 +69,14 @@ The **Claude Command and Control** repository is the definitive resource for bui
 
 | Document | Purpose | Key Topics |
 |----------|---------|------------|
-| **[01-Introduction-and-Core-Principles](01-Introduction-and-Core-Principles.md)** | Foundational philosophy and architecture | Agent-first design, core tenets, ecosystem architecture, success factors |
-| **[02-Individual-Command-Creation](02-Individual-Command-Creation.md)** | Technical specifications for slash commands | Command structure, naming, security, versioning, examples |
-| **[03-Individual-Agent-Configuration](03-Individual-Agent-Configuration.md)** | Agent setup and configuration | Role specialization, permissions, context management, memory |
-| **[04-Multi-Agent-Orchestration](04-Multi-Agent-Orchestration.md)** | Coordinating multiple agents | Orchestrator-worker pattern, communication protocols, task decomposition |
-| **[05-Testing-and-Quality-Assurance](05-Testing-and-Quality-Assurance.md)** | Validation strategies | Testing approaches, static analysis, audit routines |
-| **[06-Production-Deployment-and-Maintenance](06-Production-Deployment-and-Maintenance.md)** | Operations and monitoring | Deployment strategies, observability, rollback, lifecycle management |
-| **[07-Quick-Reference-and-Templates](07-Quick-Reference-and-Templates.md)** | Boilerplate and cheat sheets | Command templates, agent configs, QA checklists, memory snippets |
+| **[01-Introduction-and-Core-Principles](docs/best-practices/01-Introduction-and-Core-Principles.md)** | Foundational philosophy and architecture | Agent-first design, core tenets, ecosystem architecture, success factors |
+| **[02-Individual-Command-Creation](docs/best-practices/02-Individual-Command-Creation.md)** | Technical specifications for slash commands | Command structure, naming, security, versioning, examples |
+| **[03-Individual-Agent-Configuration](docs/best-practices/03-Individual-Agent-Configuration.md)** | Agent setup and configuration | Role specialization, permissions, context management, memory |
+| **[04-Multi-Agent-Orchestration](docs/best-practices/04-Multi-Agent-Orchestration.md)** | Coordinating multiple agents | Orchestrator-worker pattern, communication protocols, task decomposition |
+| **[05-Testing-and-Quality-Assurance](docs/best-practices/05-Testing-and-Quality-Assurance.md)** | Validation strategies | Testing approaches, static analysis, audit routines |
+| **[06-Production-Deployment-and-Maintenance](docs/best-practices/06-Production-Deployment-and-Maintenance.md)** | Operations and monitoring | Deployment strategies, observability, rollback, lifecycle management |
+| **[07-Quick-Reference-and-Templates](docs/best-practices/07-Quick-Reference-and-Templates.md)** | Boilerplate and cheat sheets | Command templates, agent configs, QA checklists, memory snippets |
+| **[08-Claude-Skills-Guide](docs/best-practices/08-Claude-Skills-Guide.md)** | Skills creation and integration | Skill architecture, triggers, examples, orchestration patterns, best practices |
 
 ---
 
@@ -115,6 +116,50 @@ Professional agent configurations for specialized roles:
 - **[search.md](templates/commands/search.md)** - Search codebase with context
 - **[cleanup.md](templates/commands/cleanup.md)** - Maintain workspace health
 - **[env-check.md](templates/commands/env-check.md)** - Validate development environment
+
+---
+
+## 🎯 Claude Skills
+
+**NEW**: Extend command and agent capabilities with reusable workflow automation.
+
+### What Are Skills?
+
+**Skills** are portable workflow automation units that complement commands and agents:
+- **Commands**: Quick session shortcuts (`/test`, `/pr`)
+- **Agents**: Role-specialized project execution (Builder, Validator)
+- **Skills**: Cross-project reusable workflows (PR review, code formatting, doc generation)
+
+### Getting Started with Skills
+
+**Step 1**: Identify a workflow that repeats ≥3x per week
+
+**Step 2**: Use the skill creator:
+```
+"Use skill-creator skill to help me build a skill for [your workflow]"
+```
+
+**Step 3**: Choose your template:
+- **Simple workflows** → `templates/skills/minimal-skill-template.md`
+- **Moderate workflows** → `templates/skills/standard-skill-template.md`
+- **Complex workflows** → `templates/skills/comprehensive-skill-template.md`
+
+**Step 4**: Test and deploy
+
+### Pre-Built Skills
+
+| Skill | Purpose | Use When |
+|-------|---------|----------|
+| **skill-creator** | Creates new skills | Building new automation |
+| **agent-skill-bridge** | Integrates agents and skills | Coordinating agents with skills |
+| **skill-orchestrator** | Coordinates multiple skills | Complex multi-skill workflows |
+
+### Resources
+
+- **Documentation**: `docs/best-practices/08-Claude-Skills-Guide.md`
+- **Templates**: `templates/skills/`
+- **Examples**: `skills/*/SKILL.md`
+- **Best Practices**: See comprehensive skills guide
 
 ---
 

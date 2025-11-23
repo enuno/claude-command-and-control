@@ -21,7 +21,7 @@ This repository provides comprehensive instruction manuals, templates, and best 
 When working within this repository, Claude should:
 
 ### Documentation Mode
-1. **Read First**: Always review the manual documents (01-07) before generating new commands or agents
+1. **Read First**: Always review the manual documents (01-08) before generating new commands, agents, or skills
 2. **Follow Standards**: Adhere strictly to the patterns, structures, and conventions documented in the manuals
 3. **Reference Templates**: Use templates from Document 07 as starting points
 4. **Maintain Consistency**: Ensure all generated artifacts match the established format and style
@@ -53,6 +53,16 @@ When asked to create multi-agent systems:
 5. Implement proper error handling and recovery
 6. Document parallel execution strategies
 
+### Skill Creation
+When asked to create Claude Skills:
+1. Review **08-Claude-Skills-Guide.md** for skill architecture and best practices
+2. Use skill-creator skill to guide skill development
+3. Choose appropriate template (minimal/standard/comprehensive) based on complexity
+4. Define explicit trigger phrases (3-5 "When to Use" statements)
+5. Include concrete examples with real data (not placeholders)
+6. Document integration with agents and commands
+7. Test with 5-10 real scenarios before deployment
+
 ---
 
 ## Tool Permissions
@@ -70,7 +80,7 @@ allowed-tools:
 ```
 
 ### Restricted Operations
-- NO modifications to core manual documents (01-07) without explicit approval
+- NO modifications to core manual documents (01-08) without explicit approval
 - NO deletion of template files
 - NO modifications to repository structure without review
 - NO execution of arbitrary system commands
@@ -134,9 +144,9 @@ Scope: [Boundaries and limitations]
 ### Analyzing Repository Structure
 
 **When asked about repository organization:**
-1. Explain the manual document structure (01-07)
-2. Describe the template organization
-3. Detail the command/agent file hierarchy
+1. Explain the manual document structure (01-08)
+2. Describe the template organization (commands, agents, skills)
+3. Detail the command/agent/skill file hierarchy
 4. Reference the documentation architecture from Document 01
 
 **When asked about best practices:**
@@ -164,6 +174,7 @@ Load relevant manuals based on task:
 - Orchestration → Document 04
 - Testing → Document 05
 - Deployment → Document 06
+- Skill creation → Document 08
 
 ### Context Refresh
 When providing guidance, always:
@@ -368,17 +379,21 @@ Before executing any generated code:
 - Document 05: Testing and Quality Assurance
 - Document 06: Production Deployment and Maintenance
 - Document 07: Quick Reference and Templates
+- Document 08: Claude Skills Guide
 
 ### Repository Structure
 ```
 claude-command-and-control/
-├── 01-Introduction-and-Core-Principles.md
-├── 02-Individual-Command-Creation.md
-├── 03-Individual-Agent-Configuration.md
-├── 04-Multi-Agent-Orchestration.md
-├── 05-Testing-and-Quality-Assurance.md
-├── 06-Production-Deployment-and-Maintenance.md
-├── 07-Quick-Reference-and-Templates.md
+├── docs/
+│   └── best-practices/
+│       ├── 01-Introduction-and-Core-Principles.md
+│       ├── 02-Individual-Command-Creation.md
+│       ├── 03-Individual-Agent-Configuration.md
+│       ├── 04-Multi-Agent-Orchestration.md
+│       ├── 05-Testing-and-Quality-Assurance.md
+│       ├── 06-Production-Deployment-and-Maintenance.md
+│       ├── 07-Quick-Reference-and-Templates.md
+│       └── 08-Claude-Skills-Guide.md
 ├── templates/
 │   ├── agents/
 │   │   ├── architect.md
@@ -387,21 +402,30 @@ claude-command-and-control/
 │   │   ├── scribe.md
 │   │   ├── devops.md
 │   │   └── researcher.md
-│   └── commands/
-│       ├── start-session.md
-│       ├── close-session.md
-│       ├── plan.md
-│       ├── summarize.md
-│       ├── pr.md
-│       ├── test-all.md
-│       ├── lint-fixes.md
-│       ├── error-report.md
-│       ├── docs.md
-│       ├── search.md
-│       ├── deps-update.md
-│       ├── cleanup.md
-│       ├── env-check.md
-│       └── handoff.md
+│   ├── commands/
+│   │   ├── start-session.md
+│   │   ├── close-session.md
+│   │   ├── plan.md
+│   │   ├── summarize.md
+│   │   ├── pr.md
+│   │   ├── test-all.md
+│   │   ├── lint-fixes.md
+│   │   ├── error-report.md
+│   │   ├── docs.md
+│   │   ├── search.md
+│   │   ├── deps-update.md
+│   │   ├── cleanup.md
+│   │   ├── env-check.md
+│   │   └── handoff.md
+│   └── skills/
+│       ├── minimal-skill-template.md
+│       ├── standard-skill-template.md
+│       └── comprehensive-skill-template.md
+├── skills/
+│   ├── skill-creator/
+│   ├── agent-skill-bridge/
+│   ├── skill-orchestrator/
+│   └── README.md
 ├── README.md
 └── CLAUDE.md (this file)
 ```
