@@ -88,12 +88,13 @@ Professional agent configurations for specialized roles:
 
 | Agent | Purpose | Key Capabilities |
 |-------|---------|------------------|
-| **[Architect](templates/agents/architect.md)** | System design and planning | Architecture assessment, planning document creation, design decisions |
-| **[Builder](templates/agents/builder.md)** | Code implementation | Feature development, TDD implementation, git workflow management |
-| **[Validator](templates/agents/validator.md)** | Testing and code review | Test creation, code review, coverage validation, security audits |
-| **[Scribe](templates/agents/scribe.md)** | Documentation | API docs, deployment guides, architecture documentation |
-| **[DevOps](templates/agents/devops.md)** | Infrastructure and deployment | CI/CD pipelines, infrastructure as code, monitoring setup |
-| **[Researcher](templates/agents/researcher.md)** | Technical research | Technology evaluation, competitive analysis, feasibility studies |
+| **[Architect](agents-templates/architect.md)** | System design and planning | Architecture assessment, planning document creation, design decisions |
+| **[Builder](agents-templates/builder.md)** | Code implementation | Feature development, TDD implementation, git workflow management |
+| **[Validator](agents-templates/validator.md)** | Testing and code review | Test creation, code review, coverage validation, security audits |
+| **[Scribe](agents-templates/scribe.md)** | Documentation | API docs, deployment guides, architecture documentation |
+| **[DevOps](agents-templates/devops.md)** | Infrastructure and deployment | CI/CD pipelines, infrastructure as code, monitoring setup |
+| **[Researcher](agents-templates/researcher.md)** | Technical research | Technology evaluation, competitive analysis, feasibility studies |
+| **[Integration Manager](agents-templates/integration-manager.md)** | Content ingestion and integration | File categorization, quality validation, documentation updates, audit trails |
 
 ### Command Templates
 
@@ -116,6 +117,10 @@ Professional agent configurations for specialized roles:
 - **[search.md](templates/commands/search.md)** - Search codebase with context
 - **[cleanup.md](templates/commands/cleanup.md)** - Maintain workspace health
 - **[env-check.md](templates/commands/env-check.md)** - Validate development environment
+
+#### Integration & Maintenance Commands
+- **[integration-scan.md](.claude/commands/integration-scan.md)** - Scan and categorize files in /INTEGRATION/incoming directory
+- **[maintenance-scan.md](.claude/commands/maintenance-scan.md)** - Identify stale files (>30 days) and generate maintenance reports
 
 ---
 
@@ -160,6 +165,106 @@ Professional agent configurations for specialized roles:
 - **Templates**: `templates/skills/`
 - **Examples**: `skills/*/SKILL.md`
 - **Best Practices**: See comprehensive skills guide
+
+---
+
+## 🔄 Integration & Maintenance System
+
+**NEW**: Automated content ingestion and repository health monitoring.
+
+### What is the Integration System?
+
+The Integration System provides automated workflows for:
+- **Ingesting new content** - Commands, agents, skills, and documentation
+- **Validating quality** - Structure, security, and standards compliance
+- **Integrating seamlessly** - Moving files to correct locations and updating docs
+- **Maintaining audit trails** - Complete logs of all integration activities
+
+### How It Works
+
+**Step 1: Add Content**
+Place new files in `/INTEGRATION/incoming/`:
+```bash
+cp my-new-command.md /INTEGRATION/incoming/
+```
+
+**Step 2: Scan**
+```
+/integration-scan
+```
+Categorizes files and generates detailed report.
+
+**Step 3: Review**
+Check the scan report at `/INTEGRATION/logs/scan-report-[timestamp].md`
+
+**Step 4: Integrate** *(Coming Soon)*
+```
+/integration-process    # Move validated files to proper locations
+/integration-validate   # Run comprehensive quality checks
+/integration-update-docs  # Update all documentation
+```
+
+### What is the Maintenance System?
+
+The Maintenance System keeps the repository healthy by:
+- **Identifying stale content** - Files not updated in 30+ days
+- **Researching improvements** - Latest best practices and patterns
+- **Proposing updates** - Concrete action items for evolution
+- **Tracking repository health** - Freshness scores and metrics
+
+### How It Works
+
+**Step 1: Scan for Stale Files**
+```
+/maintenance-scan
+```
+Generates report at `/MAINTENANCE/todo/stale-files-[timestamp].md`
+
+**Step 2: Review Priority Files** *(Coming Soon)*
+```
+/maintenance-review path/to/stale-file.md
+```
+Research Specialist agent investigates and proposes updates.
+
+**Step 3: Update Development Plan** *(Coming Soon)*
+```
+/maintenance-plan-update
+```
+Adds approved improvements to `DEVELOPMENT_PLAN.md`
+
+### Directory Structure
+
+```
+/INTEGRATION/
+├── incoming/     # Drop new files here
+├── processed/    # Archive of successfully integrated files
+├── failed/       # Files that didn't pass validation
+└── logs/         # Scan and integration reports
+
+/MAINTENANCE/
+├── reports/      # Research findings and proposals
+└── todo/         # Stale file lists and action items
+```
+
+### Integration Manager Agent
+
+The **Integration Manager** orchestrates the entire ingestion pipeline:
+- Scans incoming directories
+- Categorizes by type (Command/Agent/Skill/Doc)
+- Validates against repository standards
+- Coordinates file movement and documentation updates
+- Maintains comprehensive audit trails
+
+See: [agents-templates/integration-manager.md](agents-templates/integration-manager.md)
+
+### Benefits
+
+✅ **Consistency** - All content follows repository standards
+✅ **Security** - Automated validation catches security issues
+✅ **Quality** - Comprehensive checks before integration
+✅ **Automation** - Reduces manual file management
+✅ **Audit Trail** - Complete history of all changes
+✅ **Repository Health** - Proactive staleness detection
 
 ---
 
