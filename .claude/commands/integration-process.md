@@ -1,8 +1,8 @@
 ---
-description: "Process validated files from integration scan and move to proper locations"
-allowed-tools: ["Read", "Bash(mv)", "Bash(cp)", "Bash(mkdir)", "Bash(ls)", "Edit"]
+description: "Process validated files from integration scan and move to proper locations with batch processing support"
+allowed-tools: ["Read", "Bash(mv)", "Bash(cp)", "Bash(mkdir)", "Bash(ls)", "Edit", "Task"]
 author: "Claude Command and Control"
-version: "1.0"
+version: "2.0"
 ---
 
 # Integration Process
@@ -10,12 +10,45 @@ version: "1.0"
 ## Purpose
 Process files that have been validated by `/integration-scan`, moving them to appropriate target locations, creating backups, and generating integration reports.
 
+**Supports Two Modes**:
+1. **Standard Mode**: Process files sequentially (1-10 files)
+2. **Batch Mode**: Process large volumes in parallel (10+ files)
+
 ## Prerequisites
 - `/integration-scan` must have been run
 - Scan report exists at `/INTEGRATION/logs/scan-report-[timestamp].md`
 - Files marked as ✅ Ready in scan report
 
-## Workflow
+## Mode Selection
+
+### Determine Processing Mode
+
+After loading scan report, check file count:
+
+```
+If files_to_process >= 10:
+  → Use BATCH MODE (parallel processing)
+Else:
+  → Use STANDARD MODE (sequential processing)
+```
+
+**Batch Mode Advantages** (10+ files):
+- Parallel processing of independent file types
+- Faster overall completion
+- Optimized resource utilization
+- Progress tracking across workers
+
+**Standard Mode Advantages** (1-10 files):
+- Simpler execution
+- Easier debugging
+- Lower overhead
+- Sequential audit trail
+
+---
+
+## Standard Mode Workflow
+
+Use for 1-10 files. Sequential processing.
 
 ### 1. Load Latest Scan Report
 
@@ -431,6 +464,471 @@ Before moving any file:
 - Don't create files with overly permissive permissions
 - Maintain git file permissions where applicable
 
+---
+
+## Batch Mode Workflow
+
+Use for 10+ files. Parallel processing by category.
+
+### 1. Load and Analyze Scan Report
+
+```bash
+!ls -t /INTEGRATION/logs/scan-report-*.md | head -1
+```
+
+Read scan report and categorize files:
+```
+Commands: [count] files
+Agents: [count] files
+Skills: [count] files
+Documentation: [count] files
+
+Total: [count] files (≥10, using BATCH MODE)
+```
+
+### 2. Organize into Processing Groups
+
+**Group files by category** for parallel processing:
+
+```markdown
+**Batch 1**: Commands (Worker 1)
+- command1.md
+- command2.md
+- command3.md
+
+**Batch 2**: Agents (Worker 2)
+- agent1.md
+- agent2.md
+
+**Batch 3**: Skills (Worker 3)
+- skill1.md
+- skill2.md
+- skill3.md
+- skill4.md
+- skill5.md
+
+**Batch 4**: Documentation (Worker 4)
+- doc1.md
+- doc2.md
+```
+
+### 3. Display Batch Processing Plan
+
+```
+╔═══════════════════════════════════════════════════╗
+║       BATCH INTEGRATION STARTING                   ║
+╚═══════════════════════════════════════════════════╝
+
+MODE: Batch Processing (Parallel)
+SCAN REPORT: [filename]
+TOTAL FILES: [count]
+
+PARALLEL PROCESSING PLAN:
+
+Worker 1 - Commands ([count] files)
+  → Target: .claude/commands/
+  → Estimated time: [X] seconds
+
+Worker 2 - Agents ([count] files)
+  → Target: agents-templates/
+  → Estimated time: [Y] seconds
+
+Worker 3 - Skills ([count] files)
+  → Target: skills/*/SKILL.md
+  → Estimated time: [Z] seconds
+
+Worker 4 - Documentation ([count] files)
+  → Target: docs/*/
+  → Estimated time: [W] seconds
+
+EXPECTED COMPLETION: [max(X,Y,Z,W)] seconds
+OPTIMIZATION: [percentage]% faster than sequential
+
+Proceed with parallel batch integration? [Confirm]
+```
+
+### 4. Spawn Parallel Workers
+
+**IMPORTANT**: Use single message with multiple Task tool calls.
+
+```
+Task 1: Process all Commands
+  - Read scan report
+  - Filter for Command category
+  - Process each command file
+  - Report results
+
+Task 2: Process all Agents
+  - Read scan report
+  - Filter for Agent category
+  - Process each agent file
+  - Report results
+
+Task 3: Process all Skills
+  - Read scan report
+  - Filter for Skill category
+  - Process each skill file (create directories)
+  - Report results
+
+Task 4: Process all Documentation
+  - Read scan report
+  - Filter for Documentation category
+  - Process each doc file
+  - Report results
+
+All tasks spawn simultaneously.
+```
+
+**Worker Task Template**:
+```markdown
+BATCH PROCESSING TASK: [Category]
+
+Input:
+- Scan report: [path]
+- Category filter: [Command|Agent|Skill|Documentation]
+- Source directory: /INTEGRATION/incoming/
+- Target directory: [category-specific]
+
+Process:
+1. Read scan report
+2. Extract files for this category
+3. For each file:
+   a. Check if target exists (backup if needed)
+   b. Copy to target location
+   c. Verify copy succeeded
+   d. Move original to /INTEGRATION/processed/
+   e. Log operation
+4. Count successes/failures
+5. Generate category report
+
+Output:
+- Category integration report
+- Success count
+- Failure count (if any)
+- Backup count
+
+Timeline: Complete within 60 seconds
+```
+
+### 5. Monitor Parallel Execution
+
+While workers are processing:
+
+```
+BATCH INTEGRATION IN PROGRESS...
+
+Worker 1 (Commands): ⏳ Processing...
+Worker 2 (Agents): ⏳ Processing...
+Worker 3 (Skills): ⏳ Processing...
+Worker 4 (Docs): ⏳ Processing...
+
+[Updates as workers complete]
+
+Worker 2 (Agents): ✅ Complete (2/2 files)
+Worker 1 (Commands): ✅ Complete (3/3 files)
+Worker 4 (Docs): ✅ Complete (2/2 files)
+Worker 3 (Skills): ⏳ Processing 4/5...
+Worker 3 (Skills): ✅ Complete (5/5 files)
+
+ALL WORKERS COMPLETE
+```
+
+### 6. Aggregate Results
+
+Once all parallel workers complete:
+
+**Read all category reports**:
+```bash
+# Each worker generated a partial report
+!ls /INTEGRATION/logs/batch-commands-*.md
+!ls /INTEGRATION/logs/batch-agents-*.md
+!ls /INTEGRATION/logs/batch-skills-*.md
+!ls /INTEGRATION/logs/batch-docs-*.md
+```
+
+**Combine statistics**:
+```
+Total Processed: [sum of all categories]
+Total Successes: [sum of successes]
+Total Failures: [sum of failures]
+Total Backups: [sum of backups created]
+
+Processing Time: [duration]
+Speed vs Sequential: [percentage]% faster
+```
+
+### 7. Generate Unified Batch Report
+
+Create `/INTEGRATION/logs/batch-integration-report-[timestamp].md`:
+
+```markdown
+# Batch Integration Report - [Date/Time]
+
+**Mode**: Batch Processing (Parallel)
+**Scan Report**: [filename]
+**Workers**: 4 (parallel execution)
+**Total Files**: X
+**Processing Time**: [duration]
+**Speed Improvement**: [percentage]% vs sequential
+
+---
+
+## Batch Processing Summary
+
+| Worker | Category | Files | Successes | Failures | Backups | Time |
+|--------|----------|-------|-----------|----------|---------|------|
+| 1 | Commands | 3 | 3 | 0 | 1 | 15s |
+| 2 | Agents | 2 | 2 | 0 | 0 | 12s |
+| 3 | Skills | 5 | 5 | 0 | 0 | 25s |
+| 4 | Docs | 2 | 2 | 0 | 0 | 10s |
+| **Total** | **All** | **12** | **12** | **0** | **1** | **25s** |
+
+**Overall Success Rate**: 100%
+**Bottleneck Worker**: Worker 3 (Skills - 25s)
+**Optimization**: Well-balanced workload
+
+---
+
+## Integration Details by Category
+
+### Commands Integration (Worker 1)
+
+**Files Processed**: 3
+**Target Directory**: .claude/commands/
+**Status**: ✅ All successful
+
+| File | Target | Status | Backed Up |
+|------|--------|--------|-----------|
+| integration-parallel.md | .claude/commands/integration-parallel.md | ✅ | Yes |
+| maintenance-batch.md | .claude/commands/maintenance-batch.md | ✅ | No |
+| cleanup-stale.md | .claude/commands/cleanup-stale.md | ✅ | No |
+
+### Agents Integration (Worker 2)
+
+**Files Processed**: 2
+**Target Directory**: agents-templates/
+**Status**: ✅ All successful
+
+| File | Target | Status | Backed Up |
+|------|--------|--------|-----------|
+| validator.md | agents-templates/validator.md | ✅ | No |
+| scribe.md | agents-templates/scribe.md | ✅ | No |
+
+### Skills Integration (Worker 3)
+
+**Files Processed**: 5
+**Target Directory**: skills/*/SKILL.md
+**Status**: ✅ All successful
+
+| File | Target | Status | Directory Created |
+|------|--------|--------|-------------------|
+| debugging-skill.md | skills/debugging/SKILL.md | ✅ | Yes |
+| testing-skill.md | skills/testing/SKILL.md | ✅ | Yes |
+| refactoring-skill.md | skills/refactoring/SKILL.md | ✅ | Yes |
+| deployment-skill.md | skills/deployment/SKILL.md | ✅ | Yes |
+| monitoring-skill.md | skills/monitoring/SKILL.md | ✅ | Yes |
+
+### Documentation Integration (Worker 4)
+
+**Files Processed**: 2
+**Target Directory**: docs/best-practices/
+**Status**: ✅ All successful
+
+| File | Target | Status | Backed Up |
+|------|--------|--------|-----------|
+| 09-Parallel-Processing.md | docs/best-practices/09-Parallel-Processing.md | ✅ | No |
+| 10-Batch-Operations.md | docs/best-practices/10-Batch-Operations.md | ✅ | No |
+
+---
+
+## Performance Analysis
+
+**Parallel Execution Timeline**:
+```
+0s    - All workers started simultaneously
+12s   - Worker 2 (Agents) completed
+15s   - Worker 1 (Commands) completed
+10s   - Worker 4 (Docs) completed
+25s   - Worker 3 (Skills) completed ← Bottleneck
+
+Total: 25 seconds
+```
+
+**Sequential Estimation**:
+```
+Commands: 15s
+Agents: 12s
+Skills: 25s
+Docs: 10s
+Total: 62 seconds
+```
+
+**Speed Improvement**: 59.7% faster (37s saved)
+
+**Load Balancing Assessment**:
+- Worker distribution: Good (3+2+5+2 files)
+- Time variance: Acceptable (12-25s range)
+- Bottleneck: Skills worker (most files + directory creation)
+- **Recommendation**: Consider splitting Skills into 2 workers for 10+ skills
+
+---
+
+## Backup Manifest
+
+**Backups Created**: 1
+
+| Original | Backup | Timestamp |
+|----------|--------|-----------|
+| .claude/commands/integration-parallel.md | .claude/commands/integration-parallel.md.backup-20251123-0830 | 2025-11-23 08:30:45 |
+
+---
+
+## Processed Files Archive
+
+All original files moved to: /INTEGRATION/processed/
+
+| File | Archive Location | Timestamp |
+|------|------------------|-----------|
+| integration-parallel.md | /INTEGRATION/processed/integration-parallel.md | 2025-11-23 08:30:45 |
+| maintenance-batch.md | /INTEGRATION/processed/maintenance-batch.md | 2025-11-23 08:30:46 |
+| [... all 12 files listed] | | |
+
+---
+
+## Next Steps
+
+1. ✅ Files successfully integrated across all categories
+2. 🔄 Run `/integration-update-docs` to update documentation indices
+3. 🔄 Run `/integration-validate` for quality assurance
+4. 📝 Review integrated files by category
+5. 🧪 Test new commands/agents/skills
+6. ✅ Commit changes with batch integration message
+
+### Recommended Git Commit Message
+
+```
+integrate: batch process 12 new components
+
+Parallel batch integration of:
+- 3 commands (integration-parallel, maintenance-batch, cleanup-stale)
+- 2 agents (validator, scribe)
+- 5 skills (debugging, testing, refactoring, deployment, monitoring)
+- 2 docs (09-Parallel-Processing, 10-Batch-Operations)
+
+Batch processing completed in 25s (59.7% faster than sequential).
+All files validated by integration-scan.
+
+Workers: 4 (parallel execution)
+Success rate: 100%
+```
+
+---
+
+**Report Status**: ✅ COMPLETE
+**Integration Mode**: Batch (Parallel)
+**Workers**: 4
+**Success Rate**: 100%
+**Processing Time**: 25 seconds
+**Action Required**: Run /integration-update-docs
+```
+
+### 8. Display Batch Summary
+
+```
+╔═══════════════════════════════════════════════════╗
+║       BATCH INTEGRATION COMPLETED                  ║
+╚═══════════════════════════════════════════════════╝
+
+BATCH MODE: Parallel Processing
+WORKERS: 4 (Commands, Agents, Skills, Docs)
+
+FILES PROCESSED: 12
+  ✅ Successfully integrated: 12
+  ❌ Failed: 0
+  ⏭️  Skipped: 0
+
+INTEGRATION BREAKDOWN:
+  • Commands: 3 → .claude/commands/
+  • Agents: 2 → agents-templates/
+  • Skills: 5 → skills/*/SKILL.md
+  • Documentation: 2 → docs/best-practices/
+
+PERFORMANCE:
+  ⏱️  Batch completion: 25 seconds
+  🚀 Speed improvement: 59.7% vs sequential
+  ⚖️  Load balance: Good
+
+BACKUPS CREATED: 1
+  See batch report for locations
+
+REPORT SAVED: /INTEGRATION/logs/batch-integration-report-[timestamp].md
+
+PROCESSED FILES ARCHIVED: /INTEGRATION/processed/
+
+NEXT STEPS:
+  1. Run '/integration-update-docs' to update indices
+  2. Run '/integration-validate' for QA
+  3. Test integrated components
+  4. Commit with batch message (see report)
+```
+
+---
+
+## Batch Mode Best Practices
+
+### Optimal Batch Composition
+
+**Balanced Distribution**:
+- Distribute files evenly across workers
+- Mix simple and complex files within each worker
+- Target similar completion times
+
+**Category-Based Workers**:
+- Commands → Worker 1
+- Agents → Worker 2
+- Skills → Worker 3
+- Documentation → Worker 4
+
+**Avoid Bottlenecks**:
+- If Skills >10, split into 2 workers
+- If any category >15 files, consider sub-batching
+- Monitor worker completion times, adjust future batches
+
+### When to Use Sub-Batching
+
+**For very large batches (30+ files)**:
+
+```
+Batch 1 (Workers 1-4): Files 1-15
+Wait for completion
+Aggregate results
+
+Batch 2 (Workers 1-4): Files 16-30
+Wait for completion
+Aggregate results
+
+Combine all batch reports
+```
+
+### Error Handling in Batch Mode
+
+**One Worker Fails**:
+- Other workers continue
+- Re-run failed worker separately
+- Aggregate partial results
+
+**Multiple Workers Fail**:
+- Abort remaining workers
+- Investigate root cause
+- Retry entire batch after fix
+
+**Partial Success**:
+- Accept successful integrations
+- Document failures in report
+- Manually process failed files
+
+---
+
 ## Integration with Other Commands
 
 ### Before this command:
@@ -447,7 +945,10 @@ Before moving any file:
 
 ---
 
-**Version**: 1.0
+**Version**: 2.0
 **Last Updated**: November 23, 2025
 **Dependencies**: `/integration-scan` must be run first
-**Estimated Runtime**: 5-30 seconds depending on file count
+**Estimated Runtime**:
+- Standard Mode: 5-30 seconds (1-10 files)
+- Batch Mode: 15-60 seconds (10+ files, parallel processing)
+**New in 2.0**: Batch mode with parallel processing for 10+ files
