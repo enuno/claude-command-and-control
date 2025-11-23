@@ -63,6 +63,15 @@ When asked to create Claude Skills:
 6. Document integration with agents and commands
 7. Test with 5-10 real scenarios before deployment
 
+### Integration & Maintenance
+When managing repository content and health:
+1. **For new content**: Place files in `/INTEGRATION/incoming` and run `/integration-scan`
+2. **For validation**: Review scan reports at `/INTEGRATION/logs/scan-report-[timestamp].md`
+3. **For repository health**: Run `/maintenance-scan` monthly to identify stale content
+4. **For evolution**: Review stale file reports at `/MAINTENANCE/todo/stale-files-[timestamp].md`
+5. Use Integration Manager agent to orchestrate ingestion pipelines
+6. Follow DEVELOPMENT_PLAN.md for implementation roadmap
+
 ---
 
 ## Tool Permissions
