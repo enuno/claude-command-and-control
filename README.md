@@ -155,9 +155,17 @@ Professional agent configurations for specialized roles:
 
 | Skill | Purpose | Use When |
 |-------|---------|----------|
-| **skill-creator** | Creates new skills | Building new automation |
 | **agent-skill-bridge** | Integrates agents and skills | Coordinating agents with skills |
+| **content-research-writer** | Writing assistance with research and citations | Writing articles, documentation, blog posts |
+| **documentation-update** | Update repository documentation tables and indices | Adding entries to README, maintaining indices |
+| **file-categorization** | Categorize files as Command/Agent/Skill/Doc | Processing files in integration pipelines |
+| **root-cause-tracing** | Systematic debugging through call stack | Tracing bugs deep in execution |
+| **sharing-skills** | Contribute skills upstream via PR | Sharing broadly useful patterns |
+| **skill-creator** | Creates new skills | Building new automation |
 | **skill-orchestrator** | Coordinates multiple skills | Complex multi-skill workflows |
+| **subagent-driven-development** | Execute plans with fresh subagents per task | Plan execution with quality gates |
+| **using-git-worktrees** | Isolated workspace management | Feature work needing isolation |
+| **using-superpowers** | Meta-skill for skill discovery | Starting any conversation, ensuring skill usage |
 
 ### Resources
 
