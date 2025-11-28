@@ -287,9 +287,9 @@ The most effective approach for complex multi-agent systems:
 ┌─────────────────────────────────────────────────┐
 │         Lead Agent (Orchestrator)               │
 │         - Claude Opus 4                         │
-│         - Request analysis                       │
-│         - Task decomposition                     │
-│         - Result synthesis                       │
+│         - Request analysis                      │
+│         - Task decomposition                    │
+│         - Result synthesis                      │
 └────────────┬────────────────────────────────────┘
              │
              │ Spawns & coordinates
