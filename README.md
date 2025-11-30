@@ -62,6 +62,47 @@ The **Claude Command and Control** repository is the definitive resource for bui
 
 3. Follow the documented patterns and use provided templates
 
+### For Multi-Agent Orchestration (NEW)
+
+**Launch parallel development in 4 steps:**
+
+1. **Describe your feature**
+   ```
+   I need to implement user authentication with multiple approaches
+   (OAuth, JWT, and session-based) to compare and select the best
+   ```
+
+2. **Orchestrate the feature**
+   ```
+   /orchestrate-feature
+   ```
+   Creates MULTI_AGENT_PLAN.md with tasks, dependencies, and agent assignments
+
+3. **Spawn agents in parallel**
+   ```
+   /spawn-agents
+   ```
+   Instantiates specialized agents in isolated git worktrees
+
+4. **Monitor and integrate**
+   ```
+   /coordinate-workflow  # Real-time progress tracking
+   /quality-gate         # Multi-stage validation
+   ```
+
+**Result**: 3 parallel implementations completed in 2-3 hours vs. 8 hours sequential
+
+**Example workflow**:
+```bash
+# Agent 1 (Architect): Designs API specification → 30 min
+# Agent 2 (Builder):   Implements OAuth 2.0     → 90 min
+# Agent 3 (Builder):   Implements JWT           → 75 min
+# Agent 4 (Validator): Security testing         → 45 min (waits for 2&3)
+
+# Total wall-clock time: ~2.5 hours (vs 4+ hours sequential)
+# Productivity gain: 3.2x faster + quality through comparison
+```
+
 ---
 
 ## 📖 Documentation Structure
@@ -97,6 +138,17 @@ Professional agent configurations for specialized roles:
 | **[Researcher](agents-templates/researcher.md)** | Technical research | Technology evaluation, competitive analysis, feasibility studies |
 | **[Integration Manager](agents-templates/integration-manager.md)** | Content ingestion and integration | File categorization, quality validation, documentation updates, audit trails |
 
+#### Orchestration Agent Templates
+
+Multi-agent coordination and parallel execution specialists:
+
+| Agent | Model | Purpose | Key Capabilities |
+|-------|-------|---------|------------------|
+| **[Orchestrator Lead](agents-templates/orchestration/orchestrator-lead.md)** | Claude Opus 4 | Multi-agent workflow coordination | Request decomposition, agent spawning, result synthesis, quality control |
+| **[Task Coordinator](agents-templates/orchestration/task-coordinator.md)** | Claude Sonnet 4 | Dependency and resource management | Dependency graphs, parallel optimization, bottleneck detection, resource balancing |
+| **[Integration Orchestrator](agents-templates/orchestration/integration-orchestrator.md)** | Claude Sonnet 4 | Result merging and validation | Cross-agent merging, conflict resolution, git worktree integration, final validation |
+| **[Monitoring Agent](agents-templates/orchestration/monitoring-agent.md)** | Claude Haiku 3.5 | Real-time tracking and metrics | Execution tracking, performance metrics, error detection, cost monitoring |
+
 ### Command Templates
 
 #### Core Workflow Commands
@@ -122,6 +174,16 @@ Professional agent configurations for specialized roles:
 #### Integration & Maintenance Commands
 - **[integration-scan.md](.claude/commands/integration-scan.md)** - Scan and categorize files in /INTEGRATION/incoming directory
 - **[maintenance-scan.md](.claude/commands/maintenance-scan.md)** - Identify stale files (>30 days) and generate maintenance reports
+
+#### Multi-Agent Orchestration Commands
+
+Advanced parallel development and coordination:
+
+- **[orchestrate-feature.md](commands-templates/orchestration/orchestrate-feature.md)** - Multi-agent feature development with parallel task execution and git worktree isolation
+- **[spawn-agents.md](commands-templates/orchestration/spawn-agents.md)** - Dynamic agent instantiation with role assignment, context isolation, and resource allocation
+- **[coordinate-workflow.md](commands-templates/orchestration/coordinate-workflow.md)** - Real-time inter-agent communication, result aggregation, and conflict resolution
+- **[worktree-setup.md](commands-templates/orchestration/worktree-setup.md)** - Automated git worktree lifecycle management with branch strategy enforcement
+- **[quality-gate.md](commands-templates/orchestration/quality-gate.md)** - Multi-stage validation pipeline with parallel test execution and security audits
 
 ---
 
@@ -167,6 +229,17 @@ Professional agent configurations for specialized roles:
 | **subagent-driven-development** | Execute plans with fresh subagents per task | Plan execution with quality gates |
 | **using-git-worktrees** | Isolated workspace management | Feature work needing isolation |
 | **using-superpowers** | Meta-skill for skill discovery | Starting any conversation, ensuring skill usage |
+
+#### Orchestration Skills (NEW)
+
+Advanced multi-agent coordination and parallel execution:
+
+| Skill | Purpose | Use When |
+|-------|---------|----------|
+| **[multi-agent-planner-skill](skills-templates/orchestration/multi-agent-planner-skill.md)** | Automated MULTI_AGENT_PLAN.md generation | Creating multi-agent plans for complex features |
+| **[parallel-executor-skill](skills-templates/orchestration/parallel-executor-skill.md)** | Concurrent task execution orchestration | Executing tasks in parallel across agents |
+| **[worktree-manager-skill](skills-templates/orchestration/worktree-manager-skill.md)** | Git worktree lifecycle management | Setting up isolated workspaces for agents |
+| **[agent-communication-skill](skills-templates/orchestration/agent-communication-skill.md)** | Inter-agent messaging and handoffs | Facilitating communication between agents |
 
 ### Resources
 
@@ -314,6 +387,117 @@ The most effective approach for complex multi-agent systems:
 - Complex refactoring requiring testing and documentation
 - Release preparation with quality gates
 - Multi-environment deployment orchestration
+
+---
+
+### Multi-Agent Orchestration Patterns
+
+**NEW**: Advanced patterns for parallel, concurrent multi-agent development with git worktree isolation.
+
+#### The Hybrid AI Agent Development Pattern
+
+Combine git worktrees with multi-agent orchestration for massive productivity gains:
+
+```
+┌──────────────────────────────────────────────────────────┐
+│            Lead Orchestrator (Claude Opus 4)             │
+│  • Decomposes feature into parallel tasks                │
+│  • Spawns specialized agents in isolated worktrees       │
+│  • Monitors progress and coordinates handoffs            │
+│  • Synthesizes results and resolves conflicts            │
+└───────────────────────┬──────────────────────────────────┘
+                        │
+        ┌───────────────┼────────────────┬────────────────┐
+        │               │                │                │
+        ▼               ▼                ▼                ▼
+┌─────────────┐  ┌─────────────┐  ┌────────────┐  ┌─────────────┐
+│  Agent 1    │  │  Agent 2    │  │  Agent 3   │  │  Agent 4    │
+│  Architect  │  │  Builder    │  │  Builder   │  │  Validator  │
+│             │  │  (OAuth)    │  │  (JWT)     │  │             │
+│ Worktree:   │  │ Worktree:   │  │ Worktree:  │  │ Worktree:   │
+│ ../arch     │  │ ../impl-v1  │  │ ../impl-v2 │  │ ../tests    │
+│ Branch:     │  │ Branch:     │  │ Branch:    │  │ Branch:     │
+│ feat/design │  │ feat/oauth  │  │ feat/jwt   │  │ feat/tests  │
+└─────────────┘  └─────────────┘  └────────────┘  └─────────────┘
+```
+
+**Key Benefits**:
+- **3-10x faster**: Parallel execution vs. sequential development
+- **Filesystem isolation**: No merge conflicts during development
+- **Multiple approaches**: Explore variants, select best implementation
+- **Stochastic diversity**: Non-deterministic LLM outputs as a feature
+- **Clean integration**: Git worktrees share history, separate working dirs
+
+**Workflow**:
+1. **`/orchestrate-feature`** - Decompose feature, create MULTI_AGENT_PLAN.md
+2. **`/spawn-agents`** - Instantiate agents in isolated worktrees
+3. **`/coordinate-workflow`** - Monitor progress, resolve blockers
+4. **`/quality-gate`** - Multi-stage validation before merge
+5. **`/worktree-setup`** - Manage workspace lifecycle and cleanup
+
+**Example**: Implementing authentication with 3 parallel approaches (OAuth, JWT, Session-based):
+- **Sequential**: 8 hours (1 approach, tested, documented)
+- **Parallel (3 agents)**: 2.5 hours (explore all 3, select best, integrate)
+- **Speedup**: 3.2x faster + higher quality through comparison
+
+#### Orchestration Command Templates
+
+| Command | Purpose | Execution Time |
+|---------|---------|----------------|
+| **[orchestrate-feature](commands-templates/orchestration/orchestrate-feature.md)** | Multi-agent feature orchestration with parallel task execution | 90-120 min for complex features |
+| **[spawn-agents](commands-templates/orchestration/spawn-agents.md)** | Dynamic agent instantiation with role assignment and resource allocation | < 1 min per agent |
+| **[coordinate-workflow](commands-templates/orchestration/coordinate-workflow.md)** | Real-time inter-agent communication and progress tracking | Continuous monitoring |
+| **[worktree-setup](commands-templates/orchestration/worktree-setup.md)** | Git worktree lifecycle management and cleanup automation | < 10 sec per worktree |
+| **[quality-gate](commands-templates/orchestration/quality-gate.md)** | Multi-stage validation pipeline with parallel test execution | 20-30 min validation |
+
+#### Orchestration Agent Templates
+
+| Agent | Model | Purpose | Cost Optimization |
+|-------|-------|---------|-------------------|
+| **[Orchestrator Lead](agents-templates/orchestration/orchestrator-lead.md)** | Claude Opus 4 | Request decomposition, agent spawning, result synthesis | High capability for planning |
+| **[Task Coordinator](agents-templates/orchestration/task-coordinator.md)** | Claude Sonnet 4 | Dependency management, parallel optimization, bottleneck detection | Efficient for coordination |
+| **[Integration Orchestrator](agents-templates/orchestration/integration-orchestrator.md)** | Claude Sonnet 4 | Result merging, conflict resolution, final validation | Efficient for integration |
+| **[Monitoring Agent](agents-templates/orchestration/monitoring-agent.md)** | Claude Haiku 3.5 | Real-time tracking, metrics collection, cost monitoring | Minimal cost for monitoring |
+
+#### Orchestration Skills
+
+| Skill | Purpose | Integration |
+|-------|---------|-------------|
+| **[multi-agent-planner-skill](skills-templates/orchestration/multi-agent-planner-skill.md)** | Automated MULTI_AGENT_PLAN.md generation with dependency analysis | Orchestrate-feature command |
+| **[parallel-executor-skill](skills-templates/orchestration/parallel-executor-skill.md)** | Concurrent task execution with work distribution and result aggregation | Spawn-agents, coordinate-workflow |
+| **[worktree-manager-skill](skills-templates/orchestration/worktree-manager-skill.md)** | Git worktree lifecycle management and merge strategies | Worktree-setup command |
+| **[agent-communication-skill](skills-templates/orchestration/agent-communication-skill.md)** | Inter-agent messaging and handoff documentation | Coordinate-workflow command |
+
+#### Decision Matrix: When to Use Multi-Agent Orchestration
+
+| Scenario | Use Orchestration? | Recommended Pattern |
+|----------|-------------------|---------------------|
+| Simple bug fix (< 100 lines) | ❌ No | Single Builder agent |
+| Feature with clear implementation (< 500 lines) | ❌ No | Single Builder + Validator |
+| Complex feature with multiple approaches | ✅ Yes | Parallel builders + comparison |
+| Large refactoring (multi-module) | ✅ Yes | Architect + parallel builders |
+| Full-stack feature (FE + BE + DB + Tests + Docs) | ✅ Yes | Specialized agents per layer |
+| Exploring technical solutions (POC) | ✅ Yes | Parallel researchers |
+
+#### Git Worktree Integration Strategy
+
+**Lightweight Isolation** (default for trusted code):
+- **Setup time**: < 1 second per worktree
+- **Disk overhead**: Minimal (shared .git)
+- **Isolation level**: Filesystem only
+- **Use case**: Parallel feature variants, rapid prototyping
+
+**Container-Based Isolation** (security-critical):
+- **Setup time**: 1-3 minutes per container
+- **Disk overhead**: High (per-container layers)
+- **Isolation level**: Full process isolation
+- **Use case**: Untrusted code, compliance requirements
+
+**Hybrid Approach** (production systems):
+- Containers for primary isolation
+- Worktrees within containers for lightweight filesystem separation
+- Defense-in-depth security
+- Resource quotas enforced at container level
 
 ---
 
