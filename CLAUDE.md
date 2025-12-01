@@ -393,50 +393,129 @@ Before executing any generated code:
 ### Repository Structure
 ```
 claude-command-and-control/
-├── docs/
-│   └── best-practices/
-│       ├── 01-Introduction-and-Core-Principles.md
-│       ├── 02-Individual-Command-Creation.md
-│       ├── 03-Individual-Agent-Configuration.md
-│       ├── 04-Multi-Agent-Orchestration.md
-│       ├── 05-Testing-and-Quality-Assurance.md
-│       ├── 06-Production-Deployment-and-Maintenance.md
-│       ├── 07-Quick-Reference-and-Templates.md
-│       └── 08-Claude-Skills-Guide.md
-├── templates/
-│   ├── agents/
-│   │   ├── architect.md
-│   │   ├── builder.md
-│   │   ├── validator.md
-│   │   ├── scribe.md
-│   │   ├── devops.md
-│   │   └── researcher.md
-│   ├── commands/
-│   │   ├── start-session.md
-│   │   ├── close-session.md
-│   │   ├── plan.md
-│   │   ├── summarize.md
-│   │   ├── pr.md
-│   │   ├── test-all.md
-│   │   ├── lint-fixes.md
-│   │   ├── error-report.md
-│   │   ├── docs.md
-│   │   ├── search.md
-│   │   ├── deps-update.md
-│   │   ├── cleanup.md
-│   │   ├── env-check.md
-│   │   └── handoff.md
-│   └── skills/
-│       ├── minimal-skill-template.md
-│       ├── standard-skill-template.md
-│       └── comprehensive-skill-template.md
-├── skills/
-│   ├── skill-creator/
-│   ├── agent-skill-bridge/
-│   ├── skill-orchestrator/
-│   └── README.md
+├── agents-templates
+│   ├── architect.md
+│   ├── builder.md
+│   ├── devops.md
+│   ├── integration-manager.md
+│   ├── maintenance-manager.md
+│   ├── orchestration
+│   │   ├── integration-orchestrator.md
+│   │   ├── monitoring-agent.md
+│   │   ├── orchestrator-lead.md
+│   │   └── task-coordinator.md
+│   ├── README.md
+│   ├── research-specialist.md
+│   ├── researcher.md
+│   ├── scribe.md
+│   ├── system-architect.md
+│   └── validator.md
+├── CLAUDE.md
+├── commands-templates
+│   ├── cleanup.md
+│   ├── close-session.md
+│   ├── deps-update.md
+│   ├── docs.md
+│   ├── env-check.md
+│   ├── error-report.md
+│   ├── handoff.md
+│   ├── lint-fixes.md
+│   ├── orchestration
+│   │   ├── coordinate-workflow.md
+│   │   ├── orchestrate-feature.md
+│   │   ├── quality-gate.md
+│   │   ├── spawn-agents.md
+│   │   └── worktree-setup.md
+│   ├── plan.md
+│   ├── pr.md
+│   ├── README.md
+│   ├── search.md
+│   ├── start-session.md
+│   ├── summarize.md
+│   └── test-all.md
+├── DEVELOPMENT_PLAN.md
+├── docs
+│   ├── claude
+│   │   ├── 01-Introduction-and-Core-Principles.md
+│   │   ├── 02-Individual-Command-Creation.md
+│   │   ├── 03-Individual-Agent-Configuration.md
+│   │   ├── 04-Multi-Agent-Orchestration.md
+│   │   ├── 05-Testing-and-Quality-Assurance.md
+│   │   ├── 06-Production-Deployment-and-Maintenance.md
+│   │   ├── 07-Quick-Reference-and-Templates.md
+│   │   ├── 08-Claude-Skills-Guide.md
+│   │   ├── 09-Developing-High-Impact-Claude-Skills.md
+│   │   ├── 10-hybrid-ai-agent-multi-git-worktree-development.md
+│   │   └── 11-multi-agent-development-architecture.md
+│   └── TEMPLATE_CUSTOMIZATION.md
+├── INTEGRATION
+│   ├── failed
+│   ├── incoming
+│   ├── logs
+│   │   ├── integration-report-2025-11-23T07-45.md
+│   │   └── scan-report-2025-11-23T02-37.md
+│   └── processed
+│       ├── CONTENT-RESEARCH-WRITER-SKILL.md
+│       ├── ROOT-CAUSE-TRACING-SKILL.md
+│       ├── SKILL-SHARING-SKILL.md
+│       ├── SUBAGENT-DRIVEN-DEVELOPMENT-SKILL.md
+│       ├── USING-GIT-WORKTREES-SKILL.md
+│       └── USING-SUPERPOWERS-SKILL.md
+├── MAINTENANCE
+│   ├── reports
+│   └── todo
+│       └── stale-files-2025-11-23T02-40.md
+├── ORCHESTRATION_IMPLEMENTATION_SUMMARY.md
 ├── README.md
-└── CLAUDE.md (this file)
+├── session-work.md
+├── skills
+│   ├── agent-skill-bridge
+│   │   └── SKILL.md
+│   ├── content-research-writer
+│   │   └── SKILL.md
+│   ├── documentation-update
+│   │   └── SKILL.md
+│   ├── file-categorization
+│   │   └── SKILL.md
+│   ├── README.md
+│   ├── root-cause-tracing
+│   │   └── SKILL.md
+│   ├── sharing-skills
+│   │   └── SKILL.md
+│   ├── skill-creator
+│   │   └── SKILL.md
+│   ├── skill-orchestrator
+│   │   └── SKILL.md
+│   ├── subagent-driven-development
+│   │   └── SKILL.md
+│   ├── superpowers-lab
+│   ├── using-git-worktrees
+│   │   └── SKILL.md
+│   └── using-superpowers
+│       └── SKILL.md
+├── skills-templates
+│   ├── orchestration
+│   │   ├── agent-communication-skill.md
+│   │   ├── multi-agent-planner-skill.md
+│   │   ├── parallel-executor-skill.md
+│   │   └── worktree-manager-skill.md
+│   ├── skill-creator
+│   │   ├── LICENSE.txt
+│   │   ├── references
+│   │   │   ├── output-patterns.md
+│   │   │   └── workflows.md
+│   │   ├── scripts
+│   │   │   ├── init_skill.py
+│   │   │   ├── package_skill.py
+│   │   │   └── quick_validate.py
+│   │   └── SKILL.md
+│   └── template-skill
+│       └── SKILL.md
+└── templates
+    └── skills
+        ├── comprehensive-skill-template.md
+        ├── minimal-skill-template.md
+        └── standard-skill-template.md
 ```
 
 ---
