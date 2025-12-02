@@ -374,10 +374,10 @@ The most effective approach for complex multi-agent systems:
              │
     ┌────────┴────────┬──────────┬──────────┐
     │                 │          │          │
-┌───▼───┐      ┌─────▼────┐  ┌──▼────┐  ┌─▼─────┐
-│Builder│      │Validator │  │Scribe │  │DevOps │
-│Sonnet │      │Sonnet    │  │Sonnet │  │Sonnet │
-└───────┘      └──────────┘  └───────┘  └───────┘
+┌───▼───┐       ┌─────▼────┐  ┌──▼────┐   ┌─▼─────┐
+│Builder│       │Validator │  │Scribe │   │DevOps │
+│Sonnet │       │Sonnet    │  │Sonnet │   │Sonnet │
+└───────┘       └──────────┘  └───────┘   └───────┘
 ```
 
 **Key Benefits**:
