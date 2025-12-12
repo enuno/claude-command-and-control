@@ -119,6 +119,7 @@ The **Claude Command and Control** repository is the definitive resource for bui
 | **[06-Production-Deployment-and-Maintenance](docs/best-practices/06-Production-Deployment-and-Maintenance.md)** | Operations and monitoring | Deployment strategies, observability, rollback, lifecycle management |
 | **[07-Quick-Reference-and-Templates](docs/best-practices/07-Quick-Reference-and-Templates.md)** | Boilerplate and cheat sheets | Command templates, agent configs, QA checklists, memory snippets |
 | **[08-Claude-Skills-Guide](docs/best-practices/08-Claude-Skills-Guide.md)** | Skills creation and integration | Skill architecture, triggers, examples, orchestration patterns, best practices |
+| **[09-Agent-Skills-vs-Multi-Agent](docs/best-practices/09-Agent-Skills-vs-Multi-Agent.md)** | Strategic guidance on architecture | Skills-first approach, hybrid patterns, migration strategies, decision matrices |
 
 ---
 
@@ -126,7 +127,21 @@ The **Claude Command and Control** repository is the definitive resource for bui
 
 ### Agent Templates
 
-Professional agent configurations for specialized roles:
+Professional agent configurations for specialized roles.
+
+**Note**: With Anthropic's skills-first approach, these templates now serve two purposes:
+
+1. **As Skill Packages** (Recommended): Convert to skills for use with a general agent
+   - More efficient and maintainable
+   - Can be composed with other skills
+   - See Phase 4 conversions in progress
+
+2. **As Multi-Agent Configs** (For Parallel Work): Use when spawning workers for concurrent tasks
+   - Each worker loads appropriate skills
+   - Use orchestrator-worker pattern
+   - See [Multi-Agent Orchestration guide](docs/best-practices/04-Multi-Agent-Orchestration.md)
+
+**Migration Path**: Most users should start by using these as skills with a general agent, and only introduce multi-agent orchestration when parallel execution is necessary.
 
 | Agent | Purpose | Key Capabilities |
 |-------|---------|------------------|
@@ -250,6 +265,61 @@ Advanced multi-agent coordination and parallel execution:
 
 ---
 
+## 🧠 Agent Skills vs. Multi-Agent Architecture
+
+**NEW**: Anthropic's latest research shows that for most workflows, a **general agent with dynamically-loaded skills** outperforms multiple specialized agents in terms of cost, maintainability, and efficiency.
+
+### The Shift
+
+**OLD**: Build separate agents for each role (OAuth-agent, JWT-agent, Session-agent)
+**NEW**: One general agent + specialized skills (OAuth-skill, JWT-skill, Session-skill)
+
+### When to Use What
+
+| Scenario | Approach |
+|----------|----------|
+| Sequential coding workflows | ✅ Single agent + skills |
+| Parallel research tasks | ✅ Multi-agent |
+| Complex features (hybrid) | ✅ Both (orchestrator + workers with skills) |
+| Feature implementation | ✅ Single agent + skills |
+| Bug fixes and refactoring | ✅ Single agent + skills |
+| Exploring multiple approaches | ✅ Multi-agent (parallel builders) |
+| Multi-environment deployment | ✅ Multi-agent (per environment) |
+
+### Benefits of Skills Approach
+
+- **35% reduction** in token usage through context reuse
+- **Single agent** to maintain and configure
+- **Composable capabilities** - combine skills for complex workflows
+- **Progressive context loading** - load only what's needed per phase
+- **Easier knowledge sharing** across teams and projects
+- **Faster onboarding** - understand one agent pattern + modular skills
+
+### When Multi-Agent Still Makes Sense
+
+- **Breadth-first parallel tasks** - Research across independent sources
+- **Multiple independent workstreams** - Concurrent feature development
+- **Exploring alternative approaches** simultaneously
+- **Time-sensitive deliverables** requiring parallel execution
+- **Large-scale operations** needing true concurrency
+
+### Hybrid Approach (Best of Both Worlds)
+
+For complex features, combine both patterns:
+```
+Orchestrator (Opus 4)
+  ↓
+Spawns workers (Sonnet 4)
+  ↓
+Each worker loads appropriate skills dynamically
+```
+
+**Result**: Parallel execution efficiency + skills-first token optimization
+
+**Read More**: See [Agent Skills vs. Multi-Agent Guide](docs/best-practices/09-Agent-Skills-vs-Multi-Agent.md) for detailed decision matrices, migration strategies, and performance analysis.
+
+---
+
 ## 🔄 Integration & Maintenance System
 
 **NEW**: Automated content ingestion and repository health monitoring.
@@ -357,9 +427,51 @@ See: [agents-templates/integration-manager.md](agents-templates/integration-mana
 
 ## 🏗️ Architecture Patterns
 
-### The Orchestrator-Worker Pattern
+### Single Agent + Skills Pattern (Recommended Default)
 
-The most effective approach for complex multi-agent systems:
+For most workflows, use a general agent that dynamically loads skills:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   General Agent (Claude)                    │
+│                                                             │
+│  Dynamically Loads Skills Based on Task:                   │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐    │
+│  │ Builder  │ │Validator│ │  Scribe  │ │  DevOps  │    │
+│  │  Skill   │ │  Skill   │ │  Skill   │ │  Skill   │    │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Benefits**:
+- Maintains context across workflow phases
+- **35% more token-efficient** than multi-agent
+- Single agent to configure and maintain
+- Skills are composable and reusable
+- Progressive context loading
+- Easier knowledge sharing
+
+**Use For**:
+- Feature implementation (sequential workflows)
+- Bug fixes and refactoring
+- Documentation generation
+- Code reviews and testing
+- Standard development tasks
+
+---
+
+### The Orchestrator-Worker Pattern (For Parallel Tasks)
+
+**Best for breadth-first parallelizable work:**
+- Research across multiple independent sources
+- Exploring multiple solution approaches simultaneously
+- Multi-environment deployments
+- Large-scale concurrent operations
+
+**NOT recommended for:**
+- Sequential coding workflows
+- Single-threaded task execution
+- When context needs to flow between steps
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -392,6 +504,24 @@ The most effective approach for complex multi-agent systems:
 - Complex refactoring requiring testing and documentation
 - Release preparation with quality gates
 - Multi-environment deployment orchestration
+
+**Modern Hybrid Approach**: Orchestrator spawns workers that each load appropriate skills:
+
+```
+┌───────────────────────────┐
+│   Orchestrator Agent      │
+│   (Opus 4)                │
+└───────────┬───────────────┘
+            │
+   ┌────────┼────────┐
+   │        │        │
+┌──▼─────┐ ┌▼──────┐ ┌▼──────┐
+│Agent 1 │ │Agent 2│ │Agent 3│
+│+Skills │ │+Skills│ │+Skills│
+└────────┘ └───────┘ └───────┘
+```
+
+**Result**: Parallel execution + skills-first token efficiency
 
 ---
 

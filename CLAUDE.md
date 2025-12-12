@@ -19,13 +19,20 @@ The **Claude Command and Control** repository provides comprehensive instruction
 
 ## Core Principles
 
-### Agent-First Development Philosophy
+### Skills-First Development Philosophy
+- **Skills as Primary Building Block**: Portable workflow automation units that agents dynamically load
+- **General Agent + Skills**: Default to single agent with skill loading; use multi-agent only for parallelization
+- **Progressive Disclosure**: Load only what's needed per task phase (35% token reduction vs multi-agent)
 - **Command-Centric Design**: Slash commands are primary interface for agent workflows
-- **Role Specialization**: Each agent has clear, focused responsibilities (Architect, Builder, Validator, Scribe, DevOps)
-- **Orchestration Patterns**: Multi-agent coordination through orchestrator-worker pattern
+- **Composable Capabilities**: Combine skills for complex workflows
 - **Template-Driven**: Reusable patterns captured as production-tested templates
 - **Documentation as Protocol**: Instructions are executable specifications, not mere guidelines
-- **Skills as Workflows**: Portable workflow automation units that complement commands and agents
+
+### Agent Development Standards
+- **Role Specialization** (Skills): Capabilities packaged as skills (builder-skill, validator-skill, etc.)
+- **Multi-Agent When Needed**: Use orchestrator-worker pattern only for parallel, independent tasks
+- **Hybrid Architecture**: Orchestrators spawn workers that each load appropriate skills
+- **Context Efficiency**: Skills maintain context better than separate agent instances
 
 ### Repository Structure Standards
 - **Modular Organization**: Separate directories for commands, agents, skills, and documentation
@@ -205,6 +212,33 @@ collaboration:
 
 ## Multi-Agent Orchestration Patterns
 
+**IMPORTANT**: Anthropic's latest research shows that for most workflows, a **single general agent with skills** is more efficient than multiple specialized agents. This section focuses on the specific scenarios where multi-agent orchestration provides value.
+
+### When to Use Multi-Agent
+
+✅ **Use Multi-Agent When:**
+1. **Breadth-First Parallelization** - Research across independent sources, exploring multiple solution approaches
+2. **Scale Requires Concurrency** - Large codebases needing parallel analysis, high-volume data processing
+3. **Comparison Through Diversity** - Want multiple implementations to compare, leveraging stochastic variation
+
+❌ **Don't Use Multi-Agent For:**
+- Sequential workflows (use single agent + skills)
+- Context-heavy tasks (use single agent + progressive skill loading)
+- Standard development tasks (feature implementation, bug fixes, documentation, testing)
+
+### Decision Matrix
+
+| Task Type | Sequential? | Parallel? | Recommended Approach |
+|-----------|-------------|-----------|--------------------|
+| Bug fix | ✓ | ✗ | Single agent + builder skill |
+| Feature (small) | ✓ | ✗ | Single agent + builder + test skills |
+| Feature (large) | ✗ | ✓ | Multi-agent with skills per agent |
+| Research | ✗ | ✓ | Multi-agent (breadth-first) |
+| Refactoring | ✓ | ✗ | Single agent + refactor skill |
+| Multiple approaches | ✗ | ✓ | Multi-agent + same skill per agent |
+
+---
+
 ### The Hybrid AI Agent Development Pattern
 ```
 ┌─────────────────────────────────────────────┐
@@ -242,11 +276,47 @@ collaboration:
 
 ## Skills Development Standards
 
-### What Are Skills?
-**Skills** are portable workflow automation units that complement commands and agents:
+### The Skills-First Paradigm
+
+**Skills** are portable workflow automation units that represent the **primary building block** for AI agent capabilities:
+
+```
+Commands < Skills < Agents < Multi-Agent Systems
+```
+
 - **Commands**: Quick session shortcuts (`/test`, `/pr`)
-- **Agents**: Role-specialized project execution
-- **Skills**: Cross-project reusable workflows
+- **Skills**: Reusable workflow automation (builder-skill, validator-skill)
+- **Agents**: General-purpose with skill loading capability
+- **Multi-Agent**: Orchestration for parallelization
+
+### Why Skills Win
+
+| Aspect | Multiple Agents | Single Agent + Skills |
+|--------|-----------------|---------------------|
+| Maintenance | Update N agents | Update 1 agent + M skills |
+| Token Efficiency | 15x baseline | 5-7x baseline (35% savings) |
+| Context Management | Distributed, duplicated | Centralized, progressive |
+| Composability | Agent coordination overhead | Native skill composition |
+| Sharing | Copy entire agent configs | Share skill packages |
+| Versioning | N agent versions | 1 agent + M skill versions |
+
+### When to Use Each
+
+**Skills (Default Choice)**:
+- Any sequential workflow
+- Standard development tasks
+- Depth-first problem solving
+- Context-heavy operations
+
+**Multi-Agent (Special Cases)**:
+- Parallel independent research
+- Exploring multiple approaches
+- Breadth-first tasks
+- Scale requiring concurrency
+
+**Hybrid (Complex Features)**:
+- Orchestrator + workers with skills
+- Best of both worlds
 
 ### Skill Templates
 - **Minimal**: `templates/skills/minimal-skill-template.md` (simple workflows)
@@ -457,6 +527,40 @@ How this was tested
 /docs                   # Generate documentation
 /search                 # Search codebase
 /cleanup                # Maintain workspace health
+```
+
+### Skills-First Workflows
+
+**Feature Implementation** (Single Agent + Skills):
+```bash
+# Agent loads builder-skill dynamically
+1. Analyze requirements
+2. Agent loads: builder-skill, validator-skill
+3. Implement with TDD workflow
+4. Agent loads: documentation-skill
+5. Generate docs and commit
+# Result: 35% fewer tokens vs multi-agent approach
+```
+
+**Bug Investigation** (Progressive Skill Loading):
+```bash
+# Agent progressively loads skills as needed
+1. Agent loads: root-cause-tracing-skill
+2. Identify issue location
+3. Agent loads: builder-skill for fix
+4. Agent loads: validator-skill for tests
+5. Verify fix and commit
+# Context maintained throughout - no agent switching
+```
+
+**Parallel Research** (Multi-Agent with Skills):
+```bash
+# Hybrid approach: Each agent loads research-skill
+1. Orchestrator spawns 3 researcher agents
+2. Each loads: researcher-skill + domain-specific context
+3. Parallel investigation of alternatives
+4. Orchestrator synthesizes findings
+# Parallel execution + skills efficiency
 ```
 
 ### File Structure

@@ -1,0 +1,203 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2025-12-12",
+  "description": "Skills registry for dynamic skill discovery and loading",
+  "skills": [
+    {
+      "name": "skill-creator",
+      "path": "../../skills/skill-creator",
+      "category": "meta",
+      "description": "Guide for creating effective skills",
+      "triggers": ["create a new skill", "build a skill for"]
+    },
+    {
+      "name": "documentation-update",
+      "path": "../../skills/documentation-update",
+      "category": "maintenance",
+      "description": "Update repository documentation tables and indices",
+      "triggers": ["update documentation", "add to README"]
+    },
+    {
+      "name": "using-git-worktrees",
+      "path": "../../skills/using-git-worktrees",
+      "category": "development",
+      "description": "Isolated workspace management with git worktrees",
+      "triggers": ["create worktree", "isolated workspace"]
+    },
+    {
+      "name": "root-cause-tracing",
+      "path": "../../skills/root-cause-tracing",
+      "category": "debugging",
+      "description": "Systematic debugging through call stack analysis",
+      "triggers": ["debug", "trace bug", "investigate error"]
+    },
+    {
+      "name": "file-categorization",
+      "path": "../../skills/file-categorization",
+      "category": "integration",
+      "description": "Categorize files as Command/Agent/Skill/Doc",
+      "triggers": ["categorize files", "integration scan"]
+    },
+    {
+      "name": "content-research-writer",
+      "path": "../../skills/content-research-writer",
+      "category": "writing",
+      "description": "Writing assistance with research and citations",
+      "triggers": ["write article", "research and write"]
+    },
+    {
+      "name": "skill-orchestrator",
+      "path": "../../skills/skill-orchestrator",
+      "category": "meta",
+      "description": "Coordinates multiple skills for complex workflows",
+      "triggers": ["coordinate skills", "multi-skill workflow"]
+    },
+    {
+      "name": "subagent-driven-development",
+      "path": "../../skills/subagent-driven-development",
+      "category": "development",
+      "description": "Execute plans with fresh subagents per task",
+      "triggers": ["execute plan", "subagent development"]
+    },
+    {
+      "name": "agent-skill-bridge",
+      "path": "../../skills/agent-skill-bridge",
+      "category": "meta",
+      "description": "Integrates agents and skills",
+      "triggers": ["bridge agents and skills"]
+    },
+    {
+      "name": "using-superpowers",
+      "path": "../../skills/using-superpowers",
+      "category": "meta",
+      "description": "Meta-skill for skill discovery",
+      "triggers": ["use superpowers", "discover skills"]
+    },
+    {
+      "name": "multi-agent-planner-skill",
+      "path": "../../skills-templates/orchestration/multi-agent-planner-skill.md",
+      "category": "orchestration",
+      "description": "Automated MULTI_AGENT_PLAN.md generation",
+      "triggers": ["create multi-agent plan", "orchestrate feature"]
+    },
+    {
+      "name": "parallel-executor-skill",
+      "path": "../../skills-templates/orchestration/parallel-executor-skill.md",
+      "category": "orchestration",
+      "description": "Concurrent task execution orchestration",
+      "triggers": ["parallel execution", "concurrent tasks"]
+    },
+    {
+      "name": "worktree-manager-skill",
+      "path": "../../skills-templates/orchestration/worktree-manager-skill.md",
+      "category": "orchestration",
+      "description": "Git worktree lifecycle management",
+      "triggers": ["manage worktrees", "worktree setup"]
+    },
+    {
+      "name": "agent-communication-skill",
+      "path": "../../skills-templates/orchestration/agent-communication-skill.md",
+      "category": "orchestration",
+      "description": "Inter-agent messaging and handoffs",
+      "triggers": ["agent communication", "handoff protocol"]
+    },
+    {
+      "name": "builder-role-skill",
+      "path": "../../skills/builder-role-skill",
+      "category": "development",
+      "description": "Professional software implementation through multi-phase TDD development",
+      "triggers": ["implement feature", "build component", "create implementation"]
+    },
+    {
+      "name": "validator-role-skill",
+      "path": "../../skills/validator-role-skill",
+      "category": "quality-assurance",
+      "description": "Code quality, test coverage, and security validation",
+      "triggers": ["validate code", "review pull request", "create tests"]
+    },
+    {
+      "name": "architect-role-skill",
+      "path": "../../skills/architect-role-skill",
+      "category": "architecture",
+      "description": "System design, architecture planning, and technical decision-making",
+      "triggers": ["design system", "create architecture", "analyze codebase"]
+    },
+    {
+      "name": "scribe-role-skill",
+      "path": "../../skills/scribe-role-skill",
+      "category": "documentation",
+      "description": "Professional technical writing and comprehensive documentation",
+      "triggers": ["create documentation", "write docs", "document api"]
+    },
+    {
+      "name": "devops-role-skill",
+      "path": "../../skills/devops-role-skill",
+      "category": "infrastructure",
+      "description": "CI/CD pipelines, infrastructure as code, and monitoring implementation",
+      "triggers": ["create pipeline", "setup cicd", "infrastructure as code"]
+    },
+    {
+      "name": "researcher-role-skill",
+      "path": "../../skills/researcher-role-skill",
+      "category": "research",
+      "description": "Technical research, technology evaluation, and recommendation reports",
+      "triggers": ["research technology", "investigate solution", "evaluate options"]
+    }
+  ],
+  "categories": {
+    "meta": {
+      "description": "Meta-skills for creating and managing other skills",
+      "skills_count": 4
+    },
+    "development": {
+      "description": "Software development and implementation skills",
+      "skills_count": 3
+    },
+    "debugging": {
+      "description": "Bug investigation and troubleshooting skills",
+      "skills_count": 1
+    },
+    "maintenance": {
+      "description": "Repository and documentation maintenance skills",
+      "skills_count": 1
+    },
+    "writing": {
+      "description": "Content creation and documentation skills",
+      "skills_count": 1
+    },
+    "integration": {
+      "description": "Content integration and categorization skills",
+      "skills_count": 1
+    },
+    "orchestration": {
+      "description": "Multi-agent coordination and parallel execution skills",
+      "skills_count": 4
+    },
+    "quality-assurance": {
+      "description": "Testing, validation, and code review skills",
+      "skills_count": 1
+    },
+    "architecture": {
+      "description": "System design and architectural planning skills",
+      "skills_count": 1
+    },
+    "documentation": {
+      "description": "Technical writing and documentation generation skills",
+      "skills_count": 1
+    },
+    "infrastructure": {
+      "description": "DevOps, CI/CD, and infrastructure automation skills",
+      "skills_count": 1
+    },
+    "research": {
+      "description": "Technology evaluation and research skills",
+      "skills_count": 1
+    }
+  },
+  "usage_instructions": {
+    "discovery": "Browse this registry to find appropriate skills for your task",
+    "loading": "Skills are loaded dynamically by the general agent based on task requirements",
+    "creation": "Use skill-creator skill to create new skills when workflows repeat ≥3x/week",
+    "composition": "Combine multiple skills for complex workflows"
+  }
+}
