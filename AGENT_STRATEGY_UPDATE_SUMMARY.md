@@ -418,27 +418,150 @@ For quick reference when deciding architecture:
 - [x] Provide decision matrices
 - [x] Include migration strategies
 
-### Phase 2: Core Documentation Updates (Next)
-- [ ] Update README.md with skills vs. multi-agent section
-- [ ] Update architecture patterns section
-- [ ] Clarify agent templates usage
-- [ ] Update documentation structure table
-- [ ] Update `01-Introduction-and-Core-Principles.md`
-- [ ] Update `04-Multi-Agent-Orchestration.md`
-- [ ] Update `08-Claude-Skills-Guide.md`
+### Phase 2: Core Documentation Updates (Completed ✅)
+- [x] Update README.md with skills vs. multi-agent section
+- [x] Update architecture patterns section
+- [x] Clarify agent templates usage
+- [x] Update documentation structure table
+- [x] Update CLAUDE.md with skills-first paradigm
+- [ ] Update `01-Introduction-and-Core-Principles.md` (file doesn't exist yet)
+- [ ] Update `04-Multi-Agent-Orchestration.md` (file doesn't exist yet)
+- [ ] Update `08-Claude-Skills-Guide.md` (file doesn't exist yet)
 
-### Phase 3: Skill Conversions (Future)
-- [ ] Create `skills/builder-role-skill/`
-- [ ] Create `skills/validator-role-skill/`
-- [ ] Create `skills/architect-role-skill/`
-- [ ] Create `skills/scribe-role-skill/`
-- [ ] Create `skills/devops-role-skill/`
-- [ ] Create `skills/researcher-role-skill/`
+### Phase 3: .claude/ Directory Setup (Completed ✅)
+- [x] Create `.claude/agents/general-agent.md` (skills-first configuration)
+- [x] Create `.claude/skills/registry.json` (14 active skills cataloged)
+- [x] Create `.claude/skills/README.md` (skills discovery guide)
 
-### Phase 4: Examples (Future)
+### Phase 4: Skill Conversions (In Progress - Multi-Agent Strategy)
+- [x] Create `skills/builder-role-skill/` (Completed ✅ - 650 lines)
+- [ ] Create `skills/validator-role-skill/` (In progress - parallel execution)
+- [ ] Create `skills/architect-role-skill/` (In progress - parallel execution)
+- [ ] Create `skills/scribe-role-skill/` (In progress - parallel execution)
+- [ ] Create `skills/devops-role-skill/` (In progress - parallel execution)
+- [ ] Create `skills/researcher-role-skill/` (In progress - parallel execution)
+
+**Multi-Agent Orchestration Strategy**: The remaining 5 skill conversions are being executed in parallel using the orchestrator-worker pattern (see Multi-Agent Execution Plan below).
+
+### Phase 5: Examples (Future)
 - [ ] Add before/after examples
 - [ ] Create case studies with metrics
 - [ ] Document real-world migrations
+
+---
+
+## Multi-Agent Execution Plan for Phase 4 Skill Conversions
+
+### Rationale for Multi-Agent Approach
+
+The remaining 5 skill conversions meet the criteria for multi-agent orchestration:
+
+✅ **Breadth-First Parallelization**: Each conversion is independent and can proceed simultaneously
+✅ **Scale Requires Concurrency**: 5 parallel conversions significantly reduce wall-clock time
+✅ **Consistent Pattern**: All follow the same conversion template established by builder-role-skill
+
+**Performance Projection**:
+- **Sequential**: 5 conversions × 90 minutes = ~7.5 hours
+- **Parallel (Multi-Agent)**: ~90 minutes (85% time savings)
+- **Token Efficiency**: Each agent loads only the conversion pattern + source template
+
+### Orchestration Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│   Orchestrator Lead (Current Session)                      │
+│   • Coordinates 5 parallel conversion workers              │
+│   • Manages task allocation                                │
+│   • Validates outputs                                       │
+│   • Updates registry.json with new skills                  │
+└───────────────┬─────────────────────────────────────────────┘
+                │
+      ┌─────────┼─────────┬─────────┬─────────┬─────────┐
+      │         │         │         │         │         │
+┌─────▼────┐ ┌──▼────┐ ┌──▼────┐ ┌──▼────┐ ┌──▼────┐
+│Worker 1  │ │Worker 2│ │Worker 3│ │Worker 4│ │Worker 5│
+│Validator │ │Architect│ │Scribe  │ │DevOps  │ │Research│
+│Skill     │ │Skill    │ │Skill   │ │Skill   │ │Skill   │
+└──────────┘ └─────────┘ └────────┘ └────────┘ └────────┘
+```
+
+### Worker Agent Task Allocation
+
+| Worker | Source Template | Target Skill | Estimated Lines | Key Workflows |
+|--------|----------------|--------------|-----------------|---------------|
+| **Worker 1** | `agents-templates/validator.md` | `skills/validator-role-skill/` | ~550 | Testing, code review, security validation |
+| **Worker 2** | `agents-templates/architect.md` | `skills/architect-role-skill/` | ~400 | System design, ADRs, technology evaluation |
+| **Worker 3** | `agents-templates/scribe.md` | `skills/scribe-role-skill/` | ~800 | API docs, deployment guides, style guides |
+| **Worker 4** | `agents-templates/devops.md` | `skills/devops-role-skill/` | ~850 | CI/CD, IaC, container management |
+| **Worker 5** | `agents-templates/researcher.md` | `skills/researcher-role-skill/` | ~700 | Research methodology, feasibility studies |
+
+### Conversion Pattern (Applied by Each Worker)
+
+Each worker follows the same systematic approach:
+
+**Step 1: Extract Workflow Knowledge**
+- Read source agent template
+- Identify core responsibilities
+- Extract workflow patterns (3-5 specialized workflows)
+- Identify collaboration patterns
+
+**Step 2: Create Skill Structure**
+```bash
+mkdir -p skills/[skill-name]/{scripts,resources}
+```
+
+**Step 3: Generate SKILL.md**
+- **YAML Frontmatter**: name, version, category, triggers, dependencies
+- **Main Workflow**: Multi-phase approach (3-5 phases)
+- **Specialized Workflows**: Task-specific patterns (2-3 variants)
+- **Quality Standards**: Checklists and best practices
+- **Collaboration Patterns**: Integration with other skills
+- **Examples**: 2-3 concrete use cases
+
+**Step 4: Create Supporting Resources**
+- `scripts/`: Automation for deterministic operations
+- `resources/`: Templates and reference documentation
+
+**Step 5: Validation**
+- YAML frontmatter is valid
+- Triggers are clear and actionable
+- Workflows are complete (no missing steps from source)
+- Examples are concrete and realistic
+
+### Coordination Checkpoints
+
+**Pre-Execution**:
+- [ ] All worker templates identified
+- [ ] Conversion pattern validated (builder-role-skill as reference)
+- [ ] Directory structure created
+
+**During Execution** (Parallel):
+- Each worker operates independently
+- No inter-worker dependencies
+- No shared file conflicts
+
+**Post-Execution**:
+- [ ] All 5 skills created with SKILL.md
+- [ ] Validate YAML frontmatter in each skill
+- [ ] Update `.claude/skills/registry.json` with 6 new skills (5 + builder)
+- [ ] Verify directory structures are complete
+- [ ] Cross-reference skills in documentation
+
+### Integration Strategy
+
+After parallel conversions complete:
+
+1. **Registry Update**: Add all 6 role-based skills to `.claude/skills/registry.json`
+2. **Documentation Update**: Update README.md skills section to reference new skills
+3. **Validation**: Ensure all skills follow consistent structure
+4. **Examples**: Create before/after migration examples (Phase 5)
+
+### Success Metrics
+
+- **Conversion Completeness**: All 6 agent templates → skills
+- **Time Efficiency**: 85% reduction in wall-clock time (7.5h → 1.5h)
+- **Quality**: Consistent structure across all skills
+- **Token Efficiency**: Parallel execution with isolated contexts
 
 ---
 
