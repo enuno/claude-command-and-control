@@ -1,2 +1,2 @@
-# braiins-bos-plus-api-mcp-server
+# braiins-os-mcp-serve
 MCP server for Braiins OS bitcoin mining firmware. Enables AI assistants to monitor and control ASIC miners via natural language queries.
