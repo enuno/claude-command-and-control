@@ -120,6 +120,7 @@ The **Claude Command and Control** repository is the definitive resource for bui
 | **[07-Quick-Reference-and-Templates](docs/best-practices/07-Quick-Reference-and-Templates.md)** | Boilerplate and cheat sheets | Command templates, agent configs, QA checklists, memory snippets |
 | **[08-Claude-Skills-Guide](docs/best-practices/08-Claude-Skills-Guide.md)** | Skills creation and integration | Skill architecture, triggers, examples, orchestration patterns, best practices |
 | **[09-Agent-Skills-vs-Multi-Agent](docs/best-practices/09-Agent-Skills-vs-Multi-Agent.md)** | Strategic guidance on architecture | Skills-first approach, hybrid patterns, migration strategies, decision matrices |
+| **[12-Skills-First-Planning-and-Orchestration](docs/best-practices/12-Skills-First-Planning-and-Orchestration.md)** | Planning for skills-first and multi-agent workflows | Decision framework, agent registries, multi-agent plans, orchestration patterns, metrics |
 
 ---
 
@@ -199,6 +200,17 @@ Advanced parallel development and coordination:
 - **[coordinate-workflow.md](commands-templates/orchestration/coordinate-workflow.md)** - Real-time inter-agent communication, result aggregation, and conflict resolution
 - **[worktree-setup.md](commands-templates/orchestration/worktree-setup.md)** - Automated git worktree lifecycle management with branch strategy enforcement
 - **[quality-gate.md](commands-templates/orchestration/quality-gate.md)** - Multi-stage validation pipeline with parallel test execution and security audits
+
+### Orchestration Planning Templates
+
+Essential planning documents for skills-first and multi-agent workflows:
+
+| Template | Purpose | Use When |
+|----------|---------|----------|
+| **[AGENT_REGISTRY.md](templates/orchestration/AGENT_REGISTRY.md)** | Track agent capabilities and skill compatibility | Setting up orchestration projects, documenting available agents |
+| **[MULTIAGENT_PLAN.md](templates/orchestration/MULTIAGENT_PLAN.md)** | Structured multi-agent planning with skills composition | Planning parallel development, coordinating multiple agents |
+
+**See Also**: [12-Skills-First-Planning-and-Orchestration](docs/best-practices/12-Skills-First-Planning-and-Orchestration.md) for comprehensive planning guidance
 
 ---
 
