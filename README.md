@@ -431,16 +431,16 @@ Email: security@rynocrypto.mining with details
 ## 📈 Roadmap
 
 ### ✅ Phase 1 (Completed): Foundation
-- [x] gRPC client & MCP skeleton
-- [x] REST API endpoints
-- [x] Authentication & authorization
-- [x] Caching layer
+- [ ] gRPC client & MCP skeleton
+- [ ] REST API endpoints
+- [ ] Authentication & authorization
+- [ ] Caching layer
 
 ### ✅ Phase 2 (Current): Production Readiness
-- [x] Firmware update workflow
-- [x] Monitoring & alerting
-- [x] Comprehensive documentation
-- [x] E2E testing & validation
+- [ ] Firmware update workflow
+- [ ] Monitoring & alerting
+- [ ] Comprehensive documentation
+- [ ] E2E testing & validation
 
 ### 🔮 Phase 3 (Future): Enhancements
 - [ ] Advanced analytics
