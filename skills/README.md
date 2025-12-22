@@ -11,13 +11,14 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 ---
 
-## Available Skills (11 Total)
+## Available Skills (12 Total)
 
 ### Development Workflow Skills
 
 | Skill | Description | Key Use Cases |
 |-------|-------------|---------------|
 | **[root-cause-tracing](root-cause-tracing/SKILL.md)** | Systematically traces bugs backward through call stack to find original trigger | Debugging errors deep in execution, tracing invalid data sources |
+| **[software-architecture](software-architecture/SKILL.md)** | Clean Architecture & DDD guidance for quality-focused development | Software design, architecture decisions, code quality, anti-patterns |
 | **[subagent-driven-development](subagent-driven-development/SKILL.md)** | Dispatches fresh subagent for each task with code review between tasks | Executing plans with independent tasks, fast iteration with quality gates |
 | **[using-git-worktrees](using-git-worktrees/SKILL.md)** | Creates isolated git worktrees with smart directory selection and safety verification | Feature work needing isolation, working on multiple branches simultaneously |
 
@@ -119,6 +120,7 @@ Based on complexity:
 
 ### Development Workflow Skills
 Skills that enhance the software development process:
+- Software architecture (software-architecture)
 - Debugging (root-cause-tracing)
 - Parallel development (using-git-worktrees)
 - Plan execution (subagent-driven-development)
@@ -209,8 +211,8 @@ All skills in this repository meet these criteria:
 
 ## Statistics
 
-**Total Skills**: 11
-- Development Workflow: 3
+**Total Skills**: 12
+- Development Workflow: 4
 - Integration & Automation: 2
 - Content & Documentation: 1
 - Contribution & Sharing: 1
@@ -225,6 +227,9 @@ All skills in this repository meet these criteria:
 
 ## Recent Additions
 
+**December 2025**:
+- ✨ software-architecture (2025-12-21) - Clean Architecture & DDD guidance
+
 **November 2025**:
 - ✨ content-research-writer (2025-11-23)
 - ✨ root-cause-tracing (2025-11-23)
@@ -237,6 +242,6 @@ All skills in this repository meet these criteria:
 
 ---
 
-**Last Updated**: November 23, 2025
+**Last Updated**: December 21, 2025
 **Maintained By**: Claude Command and Control Repository
 **Version**: 2.0.0
