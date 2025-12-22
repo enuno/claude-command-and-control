@@ -122,6 +122,14 @@ The **Claude Command and Control** repository is the definitive resource for bui
 | **[09-Agent-Skills-vs-Multi-Agent](docs/best-practices/09-Agent-Skills-vs-Multi-Agent.md)** | Strategic guidance on architecture | Skills-first approach, hybrid patterns, migration strategies, decision matrices |
 | **[12-Skills-First-Planning-and-Orchestration](docs/best-practices/12-Skills-First-Planning-and-Orchestration.md)** | Planning for skills-first and multi-agent workflows | Decision framework, agent registries, multi-agent plans, orchestration patterns, metrics |
 
+### Reference Documentation
+
+| Document | Purpose | Source |
+|----------|---------|--------|
+| **[Agent Skills Specification](docs/references/agent-skills-specification.md)** | Official format spec for SKILL.md files | Anthropic (agentskills.io) |
+| **[Agent Skills Overview](docs/references/agent-skills-overview.md)** | What are skills? Concept introduction | Anthropic (agentskills.io) |
+| **[Agent Skills Integration Guide](docs/references/agent-skills-integration-guide.md)** | How to build skills-compatible agents | Anthropic (agentskills.io) |
+
 ---
 
 ## 🎨 Template Library
@@ -253,6 +261,7 @@ Essential planning documents for skills-first and multi-agent workflows:
 | **sharing-skills** | Contribute skills upstream via PR | Sharing broadly useful patterns |
 | **skill-creator** | Creates new skills | Building new automation |
 | **skill-orchestrator** | Coordinates multiple skills | Complex multi-skill workflows |
+| **[software-architecture](skills/software-architecture/SKILL.md)** | Clean Architecture & DDD guidance | Software design, code quality, anti-patterns |
 | **subagent-driven-development** | Execute plans with fresh subagents per task | Plan execution with quality gates |
 | **using-git-worktrees** | Isolated workspace management | Feature work needing isolation |
 | **using-superpowers** | Meta-skill for skill discovery | Starting any conversation, ensuring skill usage |
@@ -274,6 +283,7 @@ Advanced multi-agent coordination and parallel execution:
 - **Templates**: `templates/skills/`
 - **Examples**: `skills/*/SKILL.md`
 - **Best Practices**: See comprehensive skills guide
+- **Official Spec**: `docs/references/agent-skills-specification.md` (Anthropic's open standard)
 
 ---
 
