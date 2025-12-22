@@ -263,6 +263,7 @@ Essential planning documents for skills-first and multi-agent workflows:
 | **skill-orchestrator** | Coordinates multiple skills | Complex multi-skill workflows |
 | **[software-architecture](skills/software-architecture/SKILL.md)** | Clean Architecture & DDD guidance | Software design, code quality, anti-patterns |
 | **subagent-driven-development** | Execute plans with fresh subagents per task | Plan execution with quality gates |
+| **[ui-ux-pro-max](skills/ui-ux-pro-max/SKILL.md)** | UI/UX design intelligence with 50+ styles, color palettes, font pairings, and 8 framework stacks | Frontend design, component styling, accessibility |
 | **using-git-worktrees** | Isolated workspace management | Feature work needing isolation |
 | **using-superpowers** | Meta-skill for skill discovery | Starting any conversation, ensuring skill usage |
 

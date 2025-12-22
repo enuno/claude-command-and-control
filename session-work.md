@@ -825,3 +825,163 @@ The `software-architecture` skill provides Clean Architecture and DDD guidance, 
 
 **Session Status**: ✅ COMPLETE
 **Ready to Commit**: Yes
+
+---
+
+# NEW SESSION: ui-ux-pro-max Skill Integration
+
+**Date**: December 22, 2025
+**Session Duration**: ~30 minutes
+**Session Goal**: Integrate ui-ux-pro-max skill from INTEGRATION/incoming
+
+## Executive Summary
+
+Successfully integrated the **ui-ux-pro-max** skill - a comprehensive UI/UX design intelligence system with BM25 search engine. This skill provides searchable databases for 50+ UI styles, 95 color palettes, 56 font pairings, 24 chart types, and 8 framework stacks.
+
+---
+
+## Work Completed
+
+### Integration Pipeline Executed
+
+1. **`/integration-scan`** - Scanned 19 files
+   - 1 skill (ui-ux-pro-max/SKILL.md)
+   - 2 Python scripts (core.py, search.py)
+   - 16 CSV data files (styles, colors, typography, charts, stacks, etc.)
+
+2. **`/integration-process`** - Processed all 19 files
+   - Created `skills/ui-ux-pro-max/` directory structure
+   - Copied SKILL.md and Python scripts
+   - Copied all 16 CSV data files
+   - Updated path references (`.claude/skills/` → `skills/`)
+   - Normalized line endings (CRLF → LF)
+   - Tested search functionality
+
+3. **`/integration-update-docs`** - Updated documentation
+   - README.md: Added to Pre-Built Skills table
+   - skills/README.md: Created new "Design & UI/UX Skills" category, updated counts (12 → 13)
+
+---
+
+## Files Created
+
+| File | Description |
+|------|-------------|
+| `skills/ui-ux-pro-max/SKILL.md` | Main skill definition (229 lines) |
+| `skills/ui-ux-pro-max/scripts/core.py` | BM25 search engine (237 lines) |
+| `skills/ui-ux-pro-max/scripts/search.py` | CLI interface (62 lines) |
+| `skills/ui-ux-pro-max/data/styles.csv` | 57 UI style guides |
+| `skills/ui-ux-pro-max/data/colors.csv` | 95 color palettes |
+| `skills/ui-ux-pro-max/data/typography.csv` | 56 font pairings |
+| `skills/ui-ux-pro-max/data/charts.csv` | 24 chart types |
+| `skills/ui-ux-pro-max/data/landing.csv` | 29 landing page patterns |
+| `skills/ui-ux-pro-max/data/products.csv` | 95 product recommendations |
+| `skills/ui-ux-pro-max/data/ux-guidelines.csv` | 98 UX guidelines |
+| `skills/ui-ux-pro-max/data/prompts.csv` | 23 AI prompts |
+| `skills/ui-ux-pro-max/data/stacks/html-tailwind.csv` | 55 Tailwind guidelines |
+| `skills/ui-ux-pro-max/data/stacks/react.csv` | 53 React guidelines |
+| `skills/ui-ux-pro-max/data/stacks/nextjs.csv` | 52 Next.js guidelines |
+| `skills/ui-ux-pro-max/data/stacks/vue.csv` | 49 Vue guidelines |
+| `skills/ui-ux-pro-max/data/stacks/svelte.csv` | 53 Svelte guidelines |
+| `skills/ui-ux-pro-max/data/stacks/swiftui.csv` | 50 SwiftUI guidelines |
+| `skills/ui-ux-pro-max/data/stacks/react-native.csv` | 51 React Native guidelines |
+| `skills/ui-ux-pro-max/data/stacks/flutter.csv` | 52 Flutter guidelines |
+| `INTEGRATION/logs/scan-report-2025-12-22T15-56.md` | Scan report |
+| `INTEGRATION/logs/integration-report-2025-12-22T09-05.md` | Integration report |
+| `INTEGRATION/logs/doc-update-report-2025-12-22T09-10.md` | Doc update report |
+
+---
+
+## Files Modified
+
+| File | Changes |
+|------|---------|
+| `README.md` | +1 line (ui-ux-pro-max in Pre-Built Skills table) |
+| `skills/README.md` | +16 lines, 3 modified (new category, skill entry, updated stats) |
+
+---
+
+## Skill Capabilities
+
+| Domain | Content |
+|--------|---------|
+| Styles | 57 UI styles (glassmorphism, minimalism, brutalism, etc.) |
+| Colors | 95 color palettes by product type (hex codes) |
+| Typography | 56 font pairings with Google Fonts URLs |
+| Charts | 24 chart types with library recommendations |
+| Landing | 29 page patterns with CTA strategies |
+| Products | 95 product type recommendations |
+| UX Guidelines | 98 Do/Don't patterns with code examples |
+| Stacks | 8 frameworks with implementation guides |
+
+---
+
+## Technical Decisions
+
+### Path Updates
+Updated all script paths from `.claude/skills/ui-ux-pro-max/` to `skills/ui-ux-pro-max/` for consistency with this repository's structure.
+
+### Line Ending Normalization
+Converted SKILL.md and search.py from CRLF (Windows) to LF (Unix) for cross-platform compatibility.
+
+### Duplicate Cleanup
+Removed duplicate copy from `.claude/skills/ui-ux-pro-max/` - skill lives only in `skills/ui-ux-pro-max/`.
+
+---
+
+## Git Summary
+
+**Branch**: main
+**Status**: Changes ready to commit
+
+### Files to Stage
+```
+skills/ui-ux-pro-max/ (20 files)
+README.md
+skills/README.md
+INTEGRATION/logs/scan-report-2025-12-22T15-56.md
+INTEGRATION/logs/integration-report-2025-12-22T09-05.md
+INTEGRATION/logs/doc-update-report-2025-12-22T09-10.md
+session-work.md
+```
+
+---
+
+## Work Remaining
+
+### TODO
+- [ ] Test ui-ux-pro-max skill in real UI/UX workflow
+- [ ] Consider adding more framework stacks (Angular, Qwik)
+- [ ] Explore expanding the UX guidelines database
+
+### Next Steps
+1. Commit all changes
+2. Push to remote
+3. Test the skill with sample UI/UX requests
+
+---
+
+## Security & Dependencies
+
+### Vulnerabilities
+None - Python scripts use only standard library modules (csv, re, pathlib, math, collections, argparse)
+
+### Dependencies
+- Python 3.x required for search functionality
+- No external packages needed
+
+---
+
+## Notes
+
+The **ui-ux-pro-max** skill uses BM25 (Best Match 25), an industry-standard probabilistic ranking algorithm for information retrieval. Key features:
+- Term frequency with diminishing returns
+- Inverse document frequency to weight rare terms
+- Document length normalization
+
+This makes it highly effective for searching across the 16 CSV databases containing 1,400+ entries.
+
+---
+
+**Session Status**: ✅ COMPLETE
+**Ready to Commit**: Yes

@@ -11,7 +11,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 ---
 
-## Available Skills (12 Total)
+## Available Skills (13 Total)
 
 ### Development Workflow Skills
 
@@ -28,6 +28,12 @@ This directory contains the repository's skill library. Each skill is a reusable
 |-------|-------------|---------------|
 | **[documentation-update](documentation-update/SKILL.md)** | Reusable logic for updating repository documentation (README, indices, tables) while preserving formatting | Adding entries to README tables after integration, maintaining indices |
 | **[file-categorization](file-categorization/SKILL.md)** | Categorizes files as Command, Agent, Skill, or Documentation based on structure and content analysis | Processing files in integration pipelines, auto-routing files |
+
+### Design & UI/UX Skills
+
+| Skill | Description | Key Use Cases |
+|-------|-------------|---------------|
+| **[ui-ux-pro-max](ui-ux-pro-max/SKILL.md)** | UI/UX design intelligence with searchable database of 50+ styles, color palettes, font pairings, and 8 framework stacks | Frontend design, component styling, landing pages, dashboards, accessibility |
 
 ### Content & Documentation Skills
 
@@ -125,6 +131,10 @@ Skills that enhance the software development process:
 - Parallel development (using-git-worktrees)
 - Plan execution (subagent-driven-development)
 
+### Design & UI/UX Skills
+Skills for frontend design and user experience:
+- UI/UX design intelligence (ui-ux-pro-max)
+
 ### Integration & Automation Skills
 Skills for automating repository maintenance:
 - File processing (file-categorization)
@@ -211,8 +221,9 @@ All skills in this repository meet these criteria:
 
 ## Statistics
 
-**Total Skills**: 12
+**Total Skills**: 13
 - Development Workflow: 4
+- Design & UI/UX: 1
 - Integration & Automation: 2
 - Content & Documentation: 1
 - Contribution & Sharing: 1
@@ -228,6 +239,7 @@ All skills in this repository meet these criteria:
 ## Recent Additions
 
 **December 2025**:
+- ✨ ui-ux-pro-max (2025-12-22) - UI/UX design intelligence with BM25 search
 - ✨ software-architecture (2025-12-21) - Clean Architecture & DDD guidance
 
 **November 2025**:
@@ -242,6 +254,6 @@ All skills in this repository meet these criteria:
 
 ---
 
-**Last Updated**: December 21, 2025
+**Last Updated**: December 22, 2025
 **Maintained By**: Claude Command and Control Repository
 **Version**: 2.0.0
