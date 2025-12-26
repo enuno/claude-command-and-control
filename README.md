@@ -254,18 +254,42 @@ Essential planning documents for skills-first and multi-agent workflows:
 | Skill | Purpose | Use When |
 |-------|---------|----------|
 | **agent-skill-bridge** | Integrates agents and skills | Coordinating agents with skills |
+| **[artifacts-builder](skills-templates/artifacts-builder/)** | React/Tailwind/shadcn UI artifact builder | Complex artifacts requiring state management or shadcn/ui components |
+| **[brand-guidelines](skills-templates/brand-guidelines/)** | Anthropic brand colors and typography | Applying brand standards to artifacts |
+| **[canvas-design](skills-templates/canvas-design/)** | Visual art creation using design philosophy | Creating posters, art, or static visual pieces |
+| **[changelog-generator](skills-templates/changelog-generator/)** | Git commits to user-friendly changelogs | Preparing release notes or product updates |
+| **[competitive-ads-extractor](skills-templates/competitive-ads-extractor/)** | Analyze competitors' ads from ad libraries | Understanding competitor messaging and creative approaches |
 | **content-research-writer** | Writing assistance with research and citations | Writing articles, documentation, blog posts |
+| **[developer-growth-analysis](skills-templates/developer-growth-analysis/)** | Coding pattern analysis from Claude Code history | Identifying development gaps and curating learning resources |
+| **[document-skills/docx](skills-templates/document-skills/docx/)** | Word document creation and editing | Working with .docx files, tracked changes, or comments |
+| **[document-skills/pdf](skills-templates/document-skills/pdf/)** | PDF manipulation toolkit | Extracting text, creating PDFs, or filling PDF forms |
+| **[document-skills/pptx](skills-templates/document-skills/pptx/)** | PowerPoint presentation toolkit | Creating or editing presentations |
+| **[document-skills/xlsx](skills-templates/document-skills/xlsx/)** | Excel spreadsheet toolkit | Working with spreadsheets, formulas, or data analysis |
 | **documentation-update** | Update repository documentation tables and indices | Adding entries to README, maintaining indices |
+| **[domain-name-brainstormer](skills-templates/domain-name-brainstormer/)** | Domain name generation and availability checking | Finding available domain names for projects |
 | **file-categorization** | Categorize files as Command/Agent/Skill/Doc | Processing files in integration pipelines |
+| **[file-organizer](skills-templates/file-organizer/)** | Intelligent file organization | Organizing files, finding duplicates, or cleaning up directories |
+| **[image-enhancer](skills-templates/image-enhancer/)** | Image quality improvement | Enhancing screenshots or images for presentations |
+| **[internal-comms](skills-templates/internal-comms/)** | Internal communications templates | Writing status reports, newsletters, or company updates |
+| **[invoice-organizer](skills-templates/invoice-organizer/)** | Invoice and receipt organization | Tax preparation or bookkeeping |
+| **[lead-research-assistant](skills-templates/lead-research-assistant/)** | Lead identification and qualification | Sales, business development, or marketing research |
+| **[mcp-builder](skills-templates/mcp-builder/)** | MCP server development guide | Building Model Context Protocol servers |
+| **[meeting-insights-analyzer](skills-templates/meeting-insights-analyzer/)** | Meeting transcript analysis | Improving communication or leadership skills |
+| **[raffle-winner-picker](skills-templates/raffle-winner-picker/)** | Random winner selection | Running giveaways, raffles, or contests |
 | **root-cause-tracing** | Systematic debugging through call stack | Tracing bugs deep in execution |
 | **sharing-skills** | Contribute skills upstream via PR | Sharing broadly useful patterns |
-| **skill-creator** | Creates new skills | Building new automation |
+| **[skill-creator](skills-templates/skill-creator/)** | Guide for creating effective skills | Building new skills with specialized knowledge |
 | **skill-orchestrator** | Coordinates multiple skills | Complex multi-skill workflows |
+| **[skill-share](skills-templates/skill-share/)** | Skill creation and Slack sharing | Automating skill sharing with teams |
+| **[slack-gif-creator](skills-templates/slack-gif-creator/)** | Animated GIF creation for Slack | Creating GIFs optimized for Slack constraints |
 | **[software-architecture](skills/software-architecture/SKILL.md)** | Clean Architecture & DDD guidance | Software design, code quality, anti-patterns |
 | **subagent-driven-development** | Execute plans with fresh subagents per task | Plan execution with quality gates |
+| **[theme-factory](skills-templates/theme-factory/)** | 10 pre-set themes for artifact styling | Applying professional themes to slides, docs, or HTML |
 | **[ui-ux-pro-max](skills/ui-ux-pro-max/SKILL.md)** | UI/UX design intelligence with 50+ styles, color palettes, font pairings, and 8 framework stacks | Frontend design, component styling, accessibility |
 | **using-git-worktrees** | Isolated workspace management | Feature work needing isolation |
 | **using-superpowers** | Meta-skill for skill discovery | Starting any conversation, ensuring skill usage |
+| **[video-downloader](skills-templates/video-downloader/)** | Video downloads from YouTube and platforms | Downloading videos for offline viewing or archival |
+| **[webapp-testing](skills-templates/webapp-testing/)** | Playwright-based web app testing | Testing local web applications or debugging UI |
 
 #### Orchestration Skills (NEW)
 
