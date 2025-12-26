@@ -57,9 +57,15 @@ This directory contains production-ready skill templates and examples for Claude
 | **[meeting-insights-analyzer](meeting-insights-analyzer/)** | Analyzes meeting transcripts to uncover behavioral patterns and communication insights |
 | **[raffle-winner-picker](raffle-winner-picker/)** | Randomly selects winners from lists or spreadsheets using cryptographically secure randomness |
 
-### Meta Skills (2 skills)
+### Testing/QA (1 skill)
 | Skill | Description |
 |-------|-------------|
+| **[pict-test-designer](pict-test-designer/)** | Designs comprehensive test cases using PICT (Pairwise Independent Combinatorial Testing) for systematic coverage |
+
+### Meta/Development Skills (3 skills)
+| Skill | Description |
+|-------|-------------|
+| **[prompt-engineering](prompt-engineering/)** | Advanced prompt engineering patterns for commands, hooks, skills, and LLM interactions |
 | **[skill-creator](skill-creator/)** | Provides guidance for creating effective Claude Skills with specialized knowledge |
 | **[skill-share](skill-share/)** | Creates new Claude skills and automatically shares them on Slack using Rube |
 
@@ -180,13 +186,13 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 30
-- **Individual Skills**: 22
+- **Total Skills**: 32
+- **Individual Skills**: 24
 - **Document Processing Suite**: 4
 - **Orchestration Skills**: 4
-- **Average Quality Score**: 98.2/100 (from integration validation)
-- **Total Content**: ~250K of skill documentation
-- **Supporting Files**: 300+ (scripts, themes, examples, references)
+- **Average Quality Score**: 96.7/100 (from integration validation)
+- **Total Content**: ~284K of skill documentation
+- **Supporting Files**: 309 (scripts, themes, examples, references)
 
 ## 🔗 Resources
 
@@ -222,5 +228,5 @@ Individual skills may have different licenses. Check each skill's directory for 
 ---
 
 **Last Updated**: 2025-12-26
-**Total Skills**: 30
+**Total Skills**: 32
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)
