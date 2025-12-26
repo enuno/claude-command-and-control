@@ -194,11 +194,27 @@ Gracefully closes sessions by:
 - Creating optional weekly reports
 - Providing comprehensive closure checklist
 
+
+### 15. **create-skill.md** (NEW)
+
+Generates Claude AI skills from multiple sources by:
+
+- Converting documentation websites to skills (React, FastAPI, etc.)
+- Extracting skills from GitHub repositories with AST parsing
+- Transforming PDFs into structured skills
+- Auto-installing Skill Seekers dependency if missing
+- Optionally enhancing skills with AI refinement (--enhance flag)
+- Auto-outputting to /INTEGRATION/incoming for seamless workflow
+- Auto-running /integration-scan for immediate categorization
+- Supporting custom config files for advanced use cases
+- Providing comprehensive error handling and recovery
+- Generating complete skill structure (SKILL.md, knowledge/, examples/, references/)
+
 ***
 
 ## Complete Claude Commands Suite Summary
 
-You now have **16 comprehensive command templates** organized into two categories:
+You now have **17 comprehensive command templates** organized into three categories:
 
 ### **Core Workflow Commands (6)**
 
@@ -209,7 +225,7 @@ You now have **16 comprehensive command templates** organized into two categorie
 5. ✅ `test-all.md` - Run comprehensive tests
 6. ✅ `lint-fixes.md` - Auto-fix code style
 
-### **Diagnostic \& Utility Commands (10)**
+### **Diagnostic \& Utility Commands (9)**
 
 7. ✅ `error-report.md` - Diagnose errors
 8. ✅ `docs.md` - Generate documentation
@@ -219,6 +235,12 @@ You now have **16 comprehensive command templates** organized into two categorie
 12. ✅ `env-check.md` - Validate environment
 13. ✅ `handoff.md` - Document for handoff
 14. ✅ `close-session.md` - Close session gracefully
+
+### **Integration & Skill Generation Commands (2)**
+
+15. ✅ `create-skill.md` - Generate skills from docs/GitHub/PDFs (NEW)
+16. ✅ `integration-scan.md` - Scan and categorize incoming files
+17. ✅ `maintenance-scan.md` - Identify stale files
 
 Plus the **6 specialized agent templates** (architect, builder, validator, scribe, devops, researcher)
 
