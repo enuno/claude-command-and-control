@@ -1,0 +1,7269 @@
+# Dokploy - Llms-Txt
+
+**Pages:** 146
+
+---
+
+## Cloudflare Tunnels
+
+**URL:** llms-txt#cloudflare-tunnels
+
+**Contents:**
+- What are Cloudflare Tunnels?
+  - Benefits
+- Prerequisites
+- Cloudflare Tunnel Setup
+  - Step 1: Create a Tunnel in Cloudflare
+  - Step 2: Configure SSL/TLS Settings
+  - Step 3: Create Cloudflare Service in Dokploy
+  - Step 4: Configuring Public Hostnames (Domains)
+  - For Wildcard Subdomains (Multiple Apps)
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Cloudflare Tunnels provide a secure way to connect your applications to the internet without exposing ports on your server. This is particularly useful for home servers or networks where you can't easily configure port forwarding or want enhanced security.
+
+## What are Cloudflare Tunnels?
+
+Cloudflare Tunnels (formerly Argo Tunnels) create an encrypted tunnel between your origin server and Cloudflare's global network. Instead of opening ports 80 and 443 on your server, the tunnel establishes an outbound-only connection to Cloudflare, which then routes traffic to your applications.
+
+* **Enhanced Security**: No need to open inbound ports on your firewall
+* **Simple Setup**: Works behind NAT and restrictive firewalls
+* **DDoS Protection**: Traffic is routed through Cloudflare's network
+* **Free Tier Available**: Included with free Cloudflare accounts
+* **Wildcard Support**: Route multiple subdomains through a single tunnel
+
+Before setting up Cloudflare Tunnels with Dokploy, ensure you have:
+
+* A domain managed by Cloudflare (free tier works)
+* Dokploy installed and running
+* Access to Cloudflare dashboard
+
+<Callout type="warn">
+  When using Cloudflare Tunnels, you should **disable Let's Encrypt** in Dokploy and use HTTP instead of HTTPS for internal connections. Cloudflare handles SSL/TLS termination at their edge.
+</Callout>
+
+## Cloudflare Tunnel Setup
+
+### Step 1: Create a Tunnel in Cloudflare
+
+* Log in to your [Cloudflare Dashboard](https://dash.cloudflare.com/)
+* Navigate to **Zero Trust** (or **Access** in older dashboards)
+* Go to **Networks** → **Connectors**
+* Click **Create a tunnel**
+* Choose **Cloudflared** as the connector type
+* Give your tunnel a name (e.g., `dokploy-tunnel`)
+* Copy the **Tunnel Token** that's generated (you'll need this later)
+
+<Callout type="info">
+  Keep your tunnel token secure! It provides access to route traffic to your server.
+</Callout>
+
+### Step 2: Configure SSL/TLS Settings
+
+For Cloudflare Tunnels to work properly with Dokploy:
+
+* In Cloudflare Dashboard, go to **SSL/TLS**
+* Set the encryption mode to **Full** or **Full (Strict)**
+
+<Callout type="warn">
+  Do not use "Flexible" mode as it may cause redirect loops with Traefik.
+</Callout>
+
+### Step 3: Create Cloudflare Service in Dokploy
+
+1. Create a new application
+2. Select Docker Provider and set the Image name as `cloudflare/cloudflared`
+3. Go to the Environments tab and add the token you copied: `TUNNEL_TOKEN="TOKEN-YOU-COPIED"`
+4. Go to the Advanced tab, in the Arguments field add 2 entries: first `tunnel`, second `run`, then click save
+5. Deploy the application. You should see the container in healthy status in the logs section
+
+### Step 4: Configuring Public Hostnames (Domains)
+
+After deploying cloudflared, you need to configure which domains route through the tunnel.
+
+#### Understanding Traefik Routing vs Direct Access
+
+Dokploy uses **Traefik** as its reverse proxy to route traffic to your applications. When configuring Cloudflare Tunnels, you have two options:
+
+**Option 1: Route through Traefik (Recommended)**
+
+* **Traffic flow**: Cloudflare → Tunnel → Traefik → Your Apps
+* **Benefits**:
+  * Support for multiple applications with a single tunnel (wildcard domains)
+  * Leverage all Dokploy domain configurations (redirects, path rewrites, etc.)
+  * Traefik automatically routes based on the domain you configured in Dokploy
+  * Configure once, works for all apps
+
+**Option 2: Direct Container Access**
+
+* **Traffic flow**: Cloudflare → Tunnel → Your App (bypasses Traefik)
+* **Benefits**:
+  * Simpler setup for single applications
+  * Slightly lower latency (one less hop)
+* **When to use**: For single dedicated services or special cases
+* **Note**: You'll need a separate public hostname in Cloudflare for each container
+
+#### For Applications (via Traefik)
+
+* In Cloudflare Dashboard, go to your tunnel
+* Click **Configure**
+* Go to the **Published application routes** tab
+* Click **Add a published application route**
+* Configure:
+  * **Subdomain**: Your subdomain (e.g., `app`)
+  * **Domain**: Your domain (e.g., `example.com`) - Select from dropdown
+  * **Service**:
+    * **Type**: HTTP
+    * **URL**: `dokploy-traefik:80`
+* Click **Save**
+
+<Callout type="info">
+  With this setup, Traefik will route the request to the correct application based on the domain you configured in Dokploy's domain settings.
+</Callout>
+
+To test this, let's create a minimal app:
+
+1. Create a simple application
+2. Select Docker Provider and set the image name to `nginx`
+3. Click on Deploy
+4. Go to the Domains tab
+5. Create a new domain (Important: make sure to use the same domain you created in Cloudflare dashboard under `Published application routes`)
+6. Set the correct port where your application is running (nginx runs on port `80` by default)
+7. Don't enable HTTPS toggle or select any certificate provider (this can cause conflicts with Cloudflare SSL)
+
+#### For Direct Container Access
+
+If you prefer to bypass Traefik and connect directly to a container:
+
+* Configure the public hostname with:
+  * **Service**:
+    * **Type**: HTTP
+    * **URL**: `appName:port` (e.g., `dokploy:3000`, `my-app:8080`)
+
+Note: The app name in Dokploy is shown under the service name, usually formatted as `project-serviceName-hash`
+
+<Callout type="warn">
+  When using direct access, you bypass Traefik completely. Domain configurations in Dokploy won't apply, and you'll need to configure each container separately in Cloudflare.
+</Callout>
+
+### For Wildcard Subdomains (Multiple Apps)
+
+To support multiple applications/subdomains with a single tunnel configuration:
+
+**Note:** You need to create a manual CNAME wildcard record in your Cloudflare DNS configuration.
+
+1. Go to the **Connectors** section and copy the **Tunnel ID** value
+2. Go to **DNS Records** of your domain
+3. Create a new record:
+   * **Type**: CNAME
+   * **Name**: `*`
+   * **Content**: `your-tunnel-id.cfargotunnel.com` (replace `your-tunnel-id` with the ID you copied)
+4. Click Save
+
+Then, go to the configuration of your tunnel under **Published application routes**:
+
+* Add a public hostname with:
+  * **Subdomain**: `*` (asterisk for wildcard)
+  * **Domain**: Your domain (e.g., `example.com`)
+  * **Service**:
+    * **Type**: HTTP
+    * **URL**: `dokploy-traefik:80`
+
+This allows all subdomains (`app1.example.com`, `app2.example.com`, etc.) to route through Traefik, which then directs traffic to the appropriate container based on your Dokploy domain configurations.
+
+<Callout type="info">
+  With wildcard routing, you only need ONE public hostname in Cloudflare Tunnel. Traefik handles routing to different apps based on the domain configured in Dokploy.
+</Callout>
+
+---
+
+## Certificates
+
+**URL:** llms-txt#certificates
+
+**Contents:**
+- Traefik.me HTTPS Setup
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Dokploy offers a UI to manage your certificates.
+
+We expose a UI to create and delete the certificates, we ask two fields:
+
+1. **Name**: Enter a name for the certificate (this can be anything you choose).
+2. **Certificate Data**: Provide the certificate details.
+3. **Private Key**: Enter the private key.
+4. **(Optional) Server**: If you want to create a certificate for a server, you can select it here.
+
+<Callout type="warn">
+  This action will create the files, but that doesn't mean it will work automatically. You need to adjust the Traefik configuration to use it, this configuration will make
+  to traefik can recognize the certificate.
+</Callout>
+
+## Traefik.me HTTPS Setup
+
+By default, all the domains from `traefik.me` are HTTP only, if you want to use HTTPS you need to create a certificate and use it in the domain settings.
+
+You need to download the full [https://traefik.me/fullchain.pem](https://traefik.me/fullchain.pem) and [https://traefik.me/privkey.pem](https://traefik.me/privkey.pem), this are valid for 30 days.s
+
+The fullchain.pem paste in the `Certificate Data` field and the privkey.pem paste in the `Private Key` field.
+
+Now when using the traefik.me domains, make sure to enable `HTTPS` toggle and select the certificate provider set `None`
+
+If you want to remove the certificate, just remove the certificate and in your domains settings remove the `HTTPS` toggle.
+
+---
+
+## Ssh Key
+
+**URL:** llms-txt#ssh-key
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/sshKey.create"},{"method":"post","path":"/sshKey.remove"},{"method":"get","path":"/sshKey.one"},{"method":"get","path":"/sshKey.all"},{"method":"post","path":"/sshKey.generate"},{"method":"post","path":"/sshKey.update"}]} hasHead={true} />
+
+---
+
+## Redis
+
+**URL:** llms-txt#redis
+
+1. Download and install RedisInsight [RedisInsight](https://redis.io/insight/).
+2. Go to your `redis` databases.
+3. In External Credentials, enter the `External Port (Internet)` make sure the port is not in use by another service eg. `6379` and click `Save`.
+4. It will display the `External Connection URL` eg. `redis://user:password@1.2.4.5:6379/database`.
+
+Open RedisInsight and follow the steps:
+
+1. Add Redis Database.
+2. Enter the `Host` eg. `1.2.4.5`.
+3. Enter the `Port` eg. `6379`.
+4. Enter the username eg. `default`.
+5. Enter the `Password` eg. `password`.
+6. Click on `Save`.
+
+Done! now you can manage the database from RedisInsight.
+
+---
+
+## Rollbacks
+
+**URL:** llms-txt#rollbacks
+
+**Contents:**
+- Types of Rollbacks
+- Requirements
+- Docker Swarm Automatic Rollback
+  - Steps to Configure Automatic Rollback
+- Registry-based Rollback to Specific Versions
+  - How Registry-based Rollbacks Work
+  - Prerequisites for Registry-based Rollbacks
+  - Enabling Registry-based Rollbacks
+  - Performing a Registry-based Rollback
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Rollbacks are a powerful feature that allows you to easily revert changes to your application. This is particularly useful when you encounter issues or want to revert to a previous version of your application.
+
+## Types of Rollbacks
+
+Dokploy supports two types of rollback mechanisms:
+
+1. **Docker Swarm Rollbacks** (Automatic): Based on health checks, automatically reverts to the previous version if a deployment fails health checks
+2. **Registry-based Rollbacks** (Manual): Uses Docker registry to store each deployment's image, allowing you to manually rollback to any specific deployment version
+
+<Callout type="info">
+  The rollback methods described in the first section of this guide are based on **Docker Swarm's automatic rollback feature**. Dokploy also supports **registry-based rollbacks** at the deployment level, which allows you to save each deployment's image to a registry and rollback to any specific version. See the "Rollback to a specific version" section below for more details.
+</Callout>
+
+1. Have a `/health` endpoint in your application.
+2. Have `curl` available in your container (if you use alpine for example, it won't be installed by default).
+
+## Docker Swarm Automatic Rollback
+
+This method uses Docker Swarm's built-in rollback feature, which automatically reverts to the previous version if health checks fail during deployment.
+
+<Callout type="info">
+  This rollback method is **automatic** and based on Docker Swarm's health check system. It only works if the new deployment fails health checks, triggering an automatic rollback to the previous version.
+</Callout>
+
+### Steps to Configure Automatic Rollback
+
+Let's suppose we have a NodeJS application that has a health check route `/api/health` that returns a 200 status code and running in the port 3000.
+
+1. In your application is necessary to have a `Path` or `Health Route` to be able to achieve zero downtime deployments eg. in the case of a NodeJS app you can have a route `/api/health` that returns a 200 status code.
+2. Go to `Advanced` Tab and go to Cluster Settings and enter to `Swarm Settings`
+3. There are a couple options that you can use, in this case we will focus on `Health Check` and `Update Config`.
+4. Paste this code in the health check field:
+   Make sure the API Route exists in your application
+
+5. Now in the `Update Config`
+
+Now when the application is getting unhealthy response from the health check, the container will rollback to the previous version.
+
+Paste the following code:
+
+## Registry-based Rollback to Specific Versions
+
+The previous section covered Docker Swarm's automatic rollback feature, which only works when health checks fail. Dokploy also supports **registry-based rollbacks** at the deployment level, which provides more control and flexibility.
+
+### How Registry-based Rollbacks Work
+
+When using registry-based rollbacks, Dokploy:
+
+* **Saves each deployment's image to your configured registry**: Every time you deploy, the built image is tagged and pushed to your Docker registry (Docker Hub, GHCR, etc.)
+* **Associates each deployment with its image**: Each deployment record in Dokploy is linked to a specific image tag in your registry
+* **Enables rollback to any deployment**: You can rollback to any previous deployment by using the image that was saved during that deployment
+
+This approach is different from Docker Swarm rollbacks because:
+
+* ✅ **Works with any deployment**: Not limited to health check failures
+* ✅ **Rollback to any version**: Can rollback to any previous deployment, not just the immediate previous one
+* ✅ **Uses registry storage**: Images are stored in your registry, making them persistent and accessible
+
+<Callout type="info">
+  Registry-based rollbacks require that your application is configured to use a Docker registry. The images are automatically pushed to your registry during each deployment, and Dokploy tracks which image corresponds to each deployment.
+</Callout>
+
+### Prerequisites for Registry-based Rollbacks
+
+To use registry-based rollbacks, you need:
+
+1. **A configured Docker registry** in Dokploy (Docker Hub, GHCR, or custom registry)
+2. **Registry credentials** set up in Dokploy's registry settings
+3. **Application configured to push images** to the registry during deployment
+
+<Callout type="info">
+  When you enable rollbacks, Dokploy will automatically push each deployment's image to your configured registry with a unique tag, allowing you to rollback to any specific deployment version.
+</Callout>
+
+### Enabling Registry-based Rollbacks
+
+To start saving deployment images to your registry for rollbacks:
+
+1. Navigate to your application
+2. Go to **Deployments** → **Rollback Settings**
+3. Enable the **Rollback** option
+4. Select the registry you want to use for rollbacks
+5. Click on **Save**
+
+Once enabled, Dokploy will:
+
+* **Automatically tag and push images**: Every deployment's image is tagged and pushed to your configured registry
+* **Track deployment associations**: Each deployment is linked to its specific image tag in the registry
+* **Enable rollback buttons**: You'll see a **Rollback** button next to each deployment in the Deployments section
+
+### Performing a Registry-based Rollback
+
+1. Go to your application's **Deployments** section
+2. Find the deployment version you want to rollback to
+3. Click the **Rollback** button next to that deployment
+4. Confirm the rollback action
+
+<Callout type="info">
+  After clicking **Rollback**, you'll need to wait a few seconds for Dokploy to download the image from your registry. The container will not appear in the **Logs** tab immediately - wait a moment for the image download to complete before checking the logs to see the container running.
+</Callout>
+
+**Examples:**
+
+Example 1 (json):
+```json
+{
+  "Test": [
+    "CMD",
+    "curl",
+    "-f",
+    "http://localhost:3000/api/health"
+  ],
+  "Interval": 30000000000,
+  "Timeout": 10000000000,
+  "StartPeriod": 30000000000,
+  "Retries": 3
+}
+```
+
+Example 2 (json):
+```json
+{
+  "Parallelism": 1,
+  "Delay": 10000000000,
+  "FailureAction": "rollback",
+  "Order": "start-first"
+}
+```
+
+---
+
+## Destination
+
+**URL:** llms-txt#destination
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/destination.create"},{"method":"post","path":"/destination.testConnection"},{"method":"get","path":"/destination.one"},{"method":"get","path":"/destination.all"},{"method":"post","path":"/destination.remove"},{"method":"post","path":"/destination.update"}]} hasHead={true} />
+
+---
+
+## Ai
+
+**URL:** llms-txt#ai
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"get","path":"/ai.one"},{"method":"get","path":"/ai.getModels"},{"method":"post","path":"/ai.create"},{"method":"post","path":"/ai.update"},{"method":"get","path":"/ai.getAll"},{"method":"get","path":"/ai.get"},{"method":"post","path":"/ai.delete"},{"method":"post","path":"/ai.suggest"},{"method":"post","path":"/ai.deploy"}]} hasHead={true} />
+
+---
+
+## Compose
+
+**URL:** llms-txt#compose
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/compose.create"},{"method":"get","path":"/compose.one"},{"method":"post","path":"/compose.update"},{"method":"post","path":"/compose.delete"},{"method":"post","path":"/compose.cleanQueues"},{"method":"post","path":"/compose.killBuild"},{"method":"get","path":"/compose.loadServices"},{"method":"get","path":"/compose.loadMountsByService"},{"method":"post","path":"/compose.fetchSourceType"},{"method":"post","path":"/compose.randomizeCompose"},{"method":"post","path":"/compose.isolatedDeployment"},{"method":"get","path":"/compose.getConvertedCompose"},{"method":"post","path":"/compose.deploy"},{"method":"post","path":"/compose.redeploy"},{"method":"post","path":"/compose.stop"},{"method":"post","path":"/compose.start"},{"method":"get","path":"/compose.getDefaultCommand"},{"method":"post","path":"/compose.refreshToken"},{"method":"post","path":"/compose.deployTemplate"},{"method":"get","path":"/compose.templates"},{"method":"get","path":"/compose.getTags"},{"method":"post","path":"/compose.disconnectGitProvider"},{"method":"post","path":"/compose.move"},{"method":"post","path":"/compose.processTemplate"},{"method":"post","path":"/compose.import"},{"method":"post","path":"/compose.cancelDeployment"}]} hasHead={true} />
+
+---
+
+## Providers
+
+**URL:** llms-txt#providers
+
+**Contents:**
+- GitHub, Gitlab, Bitbucket, Gitea
+- Git
+  - Public Repositories (HTTPS)
+  - Private Repositories
+- Docker (Applications)
+- Drag and Drop .zip (Applications)
+- Raw (Docker Compose)
+
+Dokploy offers several deployment methods, streamlining the process whether you're utilizing GitHub, any Git provider, Docker, or automated deployments.
+
+1. GitHub
+2. Gitlab
+3. Bitbucket
+4. Gitea
+5. Git
+6. Docker (Only Applications)
+7. Drag and Drop .zip (Only Applications)
+8. Raw (Only Docker Compose)
+
+## GitHub, Gitlab, Bitbucket, Gitea
+
+1. [Github](/docs/core/github) Guide.
+2. [Gitlab](/docs/core/gitlab) guide.
+3. [Bitbucket](/docs/core/bitbucket) guide.
+4. [Gitea](/docs/core/gitea) guide.
+
+For deployments from any Git repository, whether public or private, you can use either SSH or HTTPS:
+
+### Public Repositories (HTTPS)
+
+1. Enter the repository URL in `HTTPS URL`.
+2. Type the branch name.
+3. Click on `Save`.
+
+### Private Repositories
+
+For private repositories, is required to first create an SSH Key The Steps are almost similar for all providers.
+
+1. Go to [SSH Keys Section](/docs/core/ssh-keys) and click on `Create SSH Key`.
+2. Click on `Generate RSA SSH Key` and copy the `Public Key`.
+3. Go to your Git Provider, either Github, Gitlab, Bitbucket, Gitea or any other.
+4. Go to `Settings` and search for `SSH Keys`.
+5. Click on `Add SSH Key`.
+6. Paste the SSH Key and click on `Add Key`.
+
+You can then copy the SSH key and paste it into the settings of your account.
+
+This is for Github, but the same applies for Gitlab, Bitbucket, Gitea, etc.
+
+<ImageZoom src="/assets/private-repository.png" width={800} height={630} className="rounded-lg" />
+
+This enables you to pull repositories from your private repository, a method consistent across nearly all providers,
+remember to use the SSH URL `git@github.com:user/repo.git` and not the HTTPS URL `https://github.com/user/repo.git`.
+
+## Docker (Applications)
+
+For Docker deployments you have two options:
+
+1. Login to your registry using the [Registry Section](/docs/core/registry) and it automatically will pull the image from the registry in the case of a private registry.
+2. Provide the username and password directly in the application settings.
+
+## Drag and Drop .zip (Applications)
+
+You can upload a zip file directly from your computer and trigger a deployment.
+
+## Raw (Docker Compose)
+
+You specify a docker compose file directly in the code editor and trigger a deployment.
+
+<userStyle>
+  Normal
+</userStyle>
+
+---
+
+## Uninstall
+
+**URL:** llms-txt#uninstall
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Follow these steps to completely remove Dokploy and its components from your server.
+
+<Steps>
+  <Step>
+    Remove the docker swarm services created by Dokploy:
+
+<Step>
+    Remove the docker volumes created by Dokploy:
+
+<Step>
+    Remove the docker network created by Dokploy:
+
+<Step>
+    Docker cleanup to remove leftovers:
+
+<Step>
+    Remove the dokploy files and directories from your server:
+
+**Examples:**
+
+Example 1 (bash):
+```bash
+docker service remove dokploy dokploy-traefik dokploy-postgres dokploy-redis
+    docker container remove -f dokploy-traefik
+```
+
+Example 2 (bash):
+```bash
+docker volume remove -f dokploy dokploy-postgres dokploy-redis
+```
+
+Example 3 (bash):
+```bash
+docker network remove -f dokploy-network
+```
+
+Example 4 (bash):
+```bash
+docker container prune --force
+    docker image prune --all --force
+    docker volume prune --all --force
+    docker builder prune --all --force
+    docker system prune --all --volumes --force
+```
+
+---
+
+## Schedule Jobs
+
+**URL:** llms-txt#schedule-jobs
+
+**Contents:**
+- Job Types
+- Container-based Jobs (Application and Compose)
+  - Example
+- Server-based Jobs (Server and Dokploy Server)
+  - Server Jobs
+  - Dokploy Server Jobs
+  - Example 1: Automatic Docker Cleanup
+  - Example 2: Custom Database Backup
+
+Schedule Jobs in Dokploy allows you to create and manage automated tasks that run on a specified schedule using cron expressions. Each job execution creates a log entry where you can monitor the output and execution status.
+
+Dokploy supports four types of scheduled jobs:
+
+1. **Application Jobs**: Run commands inside specific application containers
+2. **Compose Jobs**: Execute commands in Docker Compose services
+3. **Server Jobs**: Run scripts on remote servers (executed on the host)
+4. **Dokploy Server Jobs**: Execute tasks at the container level within the Dokploy container. These jobs can interact with commands inside the Dokploy container (e.g., `docker ps`, `docker image prune`), but they are not executed directly on the host system
+
+## Container-based Jobs (Application and Compose)
+
+For application and compose jobs, you can run single commands that will be executed inside the target container. Dokploy internally uses Docker exec to run these commands:
+
+Assuming you with a nginx container and you want to check the nginx version in a container:
+
+1. Create a new schedule job
+2. Set the command to: `nginx -v`
+3. Configure your desired schedule using cron syntax
+4. Save and monitor the execution logs
+
+<Callout>
+  The target container must be running for the job to execute successfully.
+</Callout>
+
+<Callout>
+  For docker compose jobs, is required to not change the COMPOSE\_PROJECT\_NAME environment variable, since this is used to identify the project.
+</Callout>
+
+## Server-based Jobs (Server and Dokploy Server)
+
+For remote servers, you can write bash scripts to perform various tasks. These scripts are executed directly on the host system and can use any command or tool available on the target server.
+
+### Dokploy Server Jobs
+
+Dokploy Server Jobs are executed at the container level within the Dokploy container. This means:
+
+* Commands run inside the Dokploy container environment
+* You can interact with Docker commands (e.g., `docker ps`, `docker image prune`, `docker system prune`)
+* Scripts have access to the Docker socket and can manage containers and images
+* Jobs do not execute directly on the host system, but within the containerized Dokploy environment
+
+**Example**: You can create a scheduled job to clean up unused Docker images:
+
+This command will run inside the Dokploy container and can interact with Docker to clean up images.
+
+<Callout type="info">
+  Make sure any required dependencies are installed on the target server before using them in your scripts.
+</Callout>
+
+### Example 1: Automatic Docker Cleanup
+
+This script cleans up unused Docker containers. You could schedule it to run every 15 minutes using the cron expression `*/15 * * * *`:
+
+### Example 2: Custom Database Backup
+
+You can create scripts to backup databases that aren't natively supported by Dokploy. Here's an example structure for a custom backup script:
+
+**Examples:**
+
+Example 1 (bash):
+```bash
+docker exec -it <container_id> <command>
+```
+
+Example 2 (bash):
+```bash
+#!/bin/bash
+docker image prune -af
+```
+
+Example 3 (bash):
+```bash
+#!/bin/bash
+docker system prune --force
+```
+
+---
+
+## Mongo
+
+**URL:** llms-txt#mongo
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/mongo.create"},{"method":"get","path":"/mongo.one"},{"method":"post","path":"/mongo.start"},{"method":"post","path":"/mongo.stop"},{"method":"post","path":"/mongo.saveExternalPort"},{"method":"post","path":"/mongo.deploy"},{"method":"post","path":"/mongo.changeStatus"},{"method":"post","path":"/mongo.reload"},{"method":"post","path":"/mongo.remove"},{"method":"post","path":"/mongo.saveEnvironment"},{"method":"post","path":"/mongo.update"},{"method":"post","path":"/mongo.move"},{"method":"post","path":"/mongo.rebuild"}]} hasHead={true} />
+
+---
+
+## Reset Password & 2FA
+
+**URL:** llms-txt#reset-password-&-2fa
+
+**Contents:**
+- Reset Password
+- Reset 2FA
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+To reset your password, follow these steps:
+
+<Steps>
+  <Step>
+    Log in to your VPS.
+  </Step>
+
+<Step>
+    Run the command below to get the container ID of the dokploy container.
+
+<Step>
+    Run command below to open a shell in the dokploy container.
+
+<Step>
+    It will display a random password. Copy it and use it to access again to the dashboard.
+  </Step>
+</Steps>
+
+To disable 2FA, follow these steps:
+
+To reset your 2FA, follow these steps:
+
+<Steps>
+  <Step>
+    Log in to your VPS.
+  </Step>
+
+<Step>
+    Run the command below to get the container ID of the dokploy container.
+
+<Step>
+    Run command below to open a shell in the dokploy container.
+
+<Step>
+    You can now login again without having to supply a 2FA code.
+  </Step>
+</Steps>
+
+**Examples:**
+
+Example 1 (bash):
+```bash
+docker ps
+```
+
+Example 2 (bash):
+```bash
+docker exec -it <container-id> bash -c "pnpm run reset-password"
+```
+
+Example 3 (bash):
+```bash
+docker ps
+```
+
+Example 4 (bash):
+```bash
+docker exec -it <container-id> bash -c "pnpm run reset-2fa"
+```
+
+---
+
+## Run this command to get the private IP of your server:
+
+**URL:** llms-txt#run-this-command-to-get-the-private-ip-of-your-server:
+
+---
+
+## Vite React
+
+**URL:** llms-txt#vite-react
+
+This example will deploy a simple Vite React application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/vite`
+   * Publish Directory: `./dist` (Nixpacks)
+
+2. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+3. **Generate a Domain**:
+   * Click on generate domain button.
+   * A new domain will be generated for you.
+   * Set Port `80`
+   * You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+---
+
+## Auto Deploy
+
+**URL:** llms-txt#auto-deploy
+
+**Contents:**
+- Supported Services:
+- Github
+- Webhook URL
+  - Configuration Steps
+- Dockerhub (Only Applications)
+- API Method
+  - Steps to Deploy Using API
+
+## Supported Services:
+
+Auto deploy is only valid for the following services:
+
+* Applications
+* Docker Compose
+
+For Github, we provide autodeploy without any configuration. This will automatically deploy your application whenever you push to your repository.
+
+Webhooks allow you to automatically deploy your application whenever changes are made in your source repository.
+
+* GitHub
+* GitLab
+* Bitbucket
+* Gitea
+* DockerHub (Only for Applications)
+
+### Configuration Steps
+
+1. **Enable Auto Deploy**: Toggle the 'Auto Deploy' button found in the general tab of your application settings in Dokploy.
+2. **Obtain Webhook URL**: Locate the Webhook URL from the deployment logs.
+
+<ImageZoom src="/assets/webhook-url.png" alt="Webhook URL" width={1000} height={500} />
+
+3. **Configure Your Repository**:
+   * Navigate to your repository settings on your chosen platform.
+   * Add the webhook URL provided by Dokploy.
+   * Ensure the settings match the configuration necessary for triggering the webhook.
+
+<ImageZoom src="/assets/webhook-github.png" alt="Webhook URL" width={1000} height={500} />
+
+* **Branch Matching**: When using Git-based providers (GitHub, GitLab, Gitea, etc.), ensure that the branch configured in Dokploy matches the branch you intend to push to. Misalignment will result in a "Branch Not Match" error.
+* **Docker Tags**: For deployments using DockerHub, ensure the tag pushed matches the one specified in Dokploy.
+* The steps are the same for all the providers.
+
+<Callout type="info">
+  The steps are almost the same for all the Git providers, GitHub, GitLab, Bitbucket, Gitea.
+</Callout>
+
+## Dockerhub (Only Applications)
+
+To setup auto deploys for Dockerhub, follow the steps below:
+
+1. Go to your application and select `Deployments` tab.
+2. Copy the `Webhook URL`.
+3. Go to your Dockerhub repository and select `Webhooks` tab.
+4. Set a name for the webhook and paste the `Webhook URL` copied in step 2.
+5. That's it, now every time you push to your repository, your application will trigger a deployment in dokploy.
+
+The deployment will trigger only if the `Tag` matches the one specified in Dokploy.
+
+Deploy your application programmatically using the Dokploy API from anywhere, this is useful when you want to trigger a deployment from a CI/CD pipeline or from a script.
+
+### Steps to Deploy Using API
+
+1. **Generate a Token**: Create an API token in your profile settings on Dokploy.
+2. **Retrieve Application ID**:
+
+This command lists all projects and services. Identify the applicationId for the application you wish to deploy.
+
+3. **Trigger Deployment**:
+
+This API method allows for flexible, scriptable deployment options, suitable for automated systems or situations where direct repository integration is not feasible.
+In this way you can deploy your application from anywhere, you can use the webhook URL or the API.
+
+**Examples:**
+
+Example 1 (http):
+```http
+curl -X 'GET' \
+  'https://your-domain/api/project.all' \
+  -H 'accept: application/json' \
+  -H 'x-api-key: <token>'
+```
+
+Example 2 (http):
+```http
+curl -X 'POST' \
+  'https://your-domain/api/application.deploy' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -H 'x-api-key: <token>' \
+  -d '{
+  "applicationId": "string"
+}'
+```
+
+---
+
+## Redirects
+
+**URL:** llms-txt#redirects
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/redirects.create"},{"method":"get","path":"/redirects.one"},{"method":"post","path":"/redirects.delete"},{"method":"post","path":"/redirects.update"}]} hasHead={true} />
+
+---
+
+## Utilities
+
+**URL:** llms-txt#utilities
+
+**Contents:**
+- Isolated Deployments
+
+Dokploy provides a set of utilities to enhance your Docker Compose application deployment experience.
+
+## Isolated Deployments
+
+All open source templates come with this feature enabled by default.
+
+This feature allows you to deploy your application in a separate network, isolated from other applications. This isolation is particularly useful when you need to deploy multiple instances of the same application.
+
+For example, if you want to deploy two WordPress instances, you would typically encounter service naming conflicts since they share the same network (dokploy-network). Docker doesn't allow services with identical names in the same network. Consider this typical WordPress service:
+
+<ImageZoom src="/assets/images/compose-isolate.png" alt="Isolated Deployments" width={1000} height={600} />
+
+When Isolated Deployments is enabled, Dokploy will:
+
+1. Create a network based on your `appName` and associate it with each service in your compose file
+2. Add the network to every service in your compose file
+3. Connect the Traefik load balancer to this isolated network, maintaining service isolation while ensuring proper routing
+
+When using this feature, you don't need to explicitly define dokploy-network in your networks section, as isolation is handled automatically.
+
+<Callout type="warn">
+  **Important: Installation Type Considerations**
+
+If you're using a **custom installation** that replaces the standalone Traefik container with a Docker service (see [Manual Installation](/docs/core/manual-installation)), be aware of the following risks:
+
+1. **System Restart Issues**: If your system restarts, your services may lose their network references to Traefik. This happens because Docker Swarm changes network references after a restart, which can cause connectivity issues between your services and Traefik.
+
+2. **Manual Redeployment Required**: After a system restart, you may need to manually redeploy your Docker Compose applications to restore network connectivity, which can be tedious and time-consuming.
+
+3. **Reference**: For more details about this issue, see [GitHub Issue #1004](https://github.com/Dokploy/dokploy/issues/1004).
+
+**Recommended Approach**: If you use the **official installation** or **manual installation with the standalone Traefik container**, you won't experience these issues. Your services should start normally after a system restart without requiring manual intervention.
+</Callout>
+
+**Examples:**
+
+Example 1 (yaml):
+```yaml
+services:
+  wordpress:
+    image: wordpress:latest
+    ports:
+      - "80"
+```
+
+---
+
+## 11ty
+
+**URL:** llms-txt#11ty
+
+This example will deploy a simple 11ty application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/11ty`
+   * Publish Directory: `./_site` (Nixpacks)
+
+2. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+3. **Generate a Domain**:
+   * Click on generate domain button.
+   * A new domain will be generated for you.
+   * Set Port `80`
+   * You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+---
+
+## Advanced
+
+**URL:** llms-txt#advanced
+
+**Contents:**
+  - Run Command
+  - Cluster Settings
+  - Swarm Settings
+  - Rollback Config
+  - Mode
+  - Network
+  - Labels
+  - Note
+- Build Server
+- Resources
+
+This section is designed for experienced users who need to manage complex configurations and orchestration settings in Dokploy. The **Advanced** tab is located in your **Applications** settings. Here, you can execute custom commands, manage cluster replicas, select Docker registries, and configure Docker Swarm settings.
+
+* **Purpose**: Allows users to execute custom shell commands directly within the container.
+* **Usage**: Enter the command you need to run in the provided field and click 'Save' to execute it within the container environment. This tool is particularly useful for debugging or specific administrative tasks.
+
+* **Purpose**: Manages the scaling and distribution of the application across multiple servers or nodes.
+* **Replicas**: Set the number of instances of your **application** that should be running.
+* **Registry Selection**: Choose the Docker registry from which your container images will be pulled. This is crucial for ensuring that the correct images are used during deployment.
+
+Always click 'Redeploy' after modifying the cluster settings to apply the changes.
+
+Swarm settings allow for detailed configuration of how containers are orchestrated within the Docker Swarm.
+
+* **Purpose**: Ensures that containers are running smoothly and restarts them if they fail.
+* **Configuration**: Specify parameters like test commands, intervals, timeouts, start periods, and retries.
+
+Defines how containers should be handled if they exit or fail, the configuration is as follows:
+
+* **Condition**: Specifies under what condition a restart should occur.
+* **Delay**: Sets the time delay between restarts.
+* **Max Attempts**: Limits the number of restart attempts.
+* **Window**: Defines the time window used to evaluate the restart policy.
+
+Manages the deployment and update process of services in the swarm, the configuration is as follows:
+
+* **Parallelism**: Number of containers to update simultaneously.
+* **Delay**: Time between updates.
+* **Failure Action**: Action to take if an update fails.
+* **Monitor**: Duration to monitor a container after an update.
+* **Max Failure Ratio**: The fraction of containers that are allowed to fail before the update is considered a failure.
+* **Order**: The order in which containers are stopped and started during an update.
+
+Controls where containers are placed within the swarm based on specific rules and preferences, the configuration is as follows:
+
+* **Constraints**: Conditions that must be met for a container to be placed on a node.
+* **Preferences**: Preferences for placing containers across nodes to spread load evenly.
+
+Manages the rollback process for services when updates fail, the configuration is as follows:
+
+* **Parallelism**: Number of containers to rollback simultaneously.
+* **Delay**: Time between rollbacks.
+* **FailureAction**: Action to take if a rollback fails.
+* **Monitor**: Duration to monitor a container after a rollback.
+* **MaxFailureRatio**: The fraction of containers that are allowed to fail before the rollback is considered a failure.
+* **Order**: The order in which containers are stopped and restarted during a rollback.
+
+Defines how services are replicated within the swarm, the configuration is as follows:
+
+* **Replicated**: Services are replicated across nodes as specified.
+* **Replicas**: Number of replicas per service.
+* **Global**: A single instance of the service runs on every node.
+* **ReplicatedJob**: Runs a job in a replicated manner.
+* **MaxConcurrent**: Maximum number of jobs running concurrently.
+* **TotalCompletions**: Total number of times the jobs need to complete.
+
+Configures network settings for the services, the configuration is as follows:
+
+* **Target**: Specifies the network name.
+* **Aliases**: Provides aliases for the network.
+* **DriverOpts**: Network driver options like MTU size and host binding.
+
+Assigns metadata to containers to help identify and organize them, the configuration is as follows:
+
+* **Labels**: Key-value pairs assigned to the service. For example:
+
+1. `com.example.app.name`: "my-app"
+2. `com.example.app.version`: "1.0.0"
+
+Modifying Swarm Settings requires careful consideration as incorrect configurations can disrupt the entire container orchestration. Always ensure you understand the implications of the changes you are making.
+
+You can configure your application to use an external build server to compile and build your application. This feature allows you to separate the build process from your deployment servers, which is particularly useful when you want to:
+
+* Use powerful build resources without paying for expensive deployment servers
+* Keep your deployment servers lightweight
+* Build once and deploy to multiple servers
+* Isolate the build process from production environments
+
+When you enable a custom build server:
+
+1. **Build Phase**: Dokploy connects to your build server via SSH, clones your repository, and builds the Docker image on the build server
+2. **Push Phase**: The built image is pushed to your configured Docker registry
+3. **Deploy Phase**: Your deployment server(s) pull the image from the registry and deploy it
+
+<Callout type="info">
+  **Important**: Build servers are currently **only available for Applications**. This feature is not supported for Docker Compose deployments.
+</Callout>
+
+<Callout type="warn">
+  **Required Configuration**: When using a build server, you must configure a Docker registry in your Dokploy settings. The built image needs to be stored in a registry that's accessible to your deployment servers. See [Docker Registry](/docs/core/registry) for configuration details.
+</Callout>
+
+**For complete setup instructions, configuration details, and best practices, please read the comprehensive [Build Server guide](/docs/core/remote-servers/build-server).**
+
+Manage the memory and CPU resources allocated to your applications or databases. These settings help control resource consumption and ensure fair distribution across your containers.
+
+<Callout type="info">
+  Remember to click **Redeploy** after modifying the resources to apply the changes.
+</Callout>
+
+Docker API expects memory values in **bytes**. Dokploy provides a user-friendly interface that accepts values with units and converts them automatically.
+
+The maximum amount of memory the container can use. If the container tries to use more memory than this limit, it will be killed by the Docker daemon.
+
+**Format**: Enter a number followed by the unit (B, KB, MB, GB)
+
+**Docker API Value**: The value is converted to bytes internally
+
+* `1073741824` bytes = 1GB
+* `268435456` bytes = 256MB
+* `536870912` bytes = 512MB
+
+* `256MB` → Limits container to 256 megabytes
+* `1GB` → Limits container to 1 gigabyte
+* `2GB` → Limits container to 2 gigabytes
+
+#### Memory Reservation
+
+The minimum amount of memory guaranteed to the container. Docker will try to ensure this amount is always available, but the container can use more if available.
+
+**Format**: Enter a number followed by the unit (B, KB, MB, GB)
+
+**Docker API Value**: The value is converted to bytes internally
+
+* `268435456` bytes = 256MB
+* `536870912` bytes = 512MB
+
+* `128MB` → Reserves at least 128 megabytes
+* `256MB` → Reserves at least 256 megabytes
+* `512MB` → Reserves at least 512 megabytes
+
+<Callout type="warn">
+  Memory Reservation should always be **less than or equal to** Memory Limit. If you set a reservation higher than the limit, Docker will use the limit value.
+</Callout>
+
+Docker API expects CPU values in **nanoseconds** (for periods) or as a decimal fraction of available CPU cores. Dokploy displays this in a user-friendly format.
+
+The maximum number of CPU cores the container can use. This is a hard limit enforced by the Docker daemon.
+
+**Format**: Enter as a decimal number representing CPU cores
+
+* `2000000000` nanoseconds = 2 CPUs (2 full cores)
+* `1000000000` nanoseconds = 1 CPU (1 full core)
+* `500000000` nanoseconds = 0.5 CPU (half a core)
+
+**Docker API Value**: Internally represented as `NanoCPUs`
+
+* `1 CPU` → Limits to 1 full CPU core (1000000000 nanoseconds)
+* `2 CPUs` → Limits to 2 full CPU cores (2000000000 nanoseconds)
+* `0.5 CPU` → Limits to half a CPU core (500000000 nanoseconds)
+* `4 CPUs` → Limits to 4 full CPU cores (4000000000 nanoseconds)
+
+The minimum number of CPU cores reserved for the container. Docker will try to ensure this amount is always available.
+
+**Format**: Enter as a decimal number representing CPU cores
+
+* `1000000000` nanoseconds = 1 CPU
+* `500000000` nanoseconds = 0.5 CPU
+
+**Docker API Value**: Internally represented as `NanoCPUs`
+
+* `0.5 CPU` → Reserves half a CPU core (500000000 nanoseconds)
+* `1 CPU` → Reserves 1 full CPU core (1000000000 nanoseconds)
+* `0.25 CPU` → Reserves a quarter CPU core (250000000 nanoseconds)
+
+<Callout type="warn">
+  CPU Reservation should always be **less than or equal to** CPU Limit. Setting it too high may prevent the container from starting if resources aren't available.
+</Callout>
+
+#### Docker API Reference
+
+When Dokploy communicates with Docker API, these values are sent in the service specification:
+
+This JSON represents:
+
+* **CPU Limit**: 2 CPUs (2000000000 nanoseconds)
+* **Memory Limit**: 1GB (1073741824 bytes)
+* **CPU Reservation**: 1 CPU (1000000000 nanoseconds)
+* **Memory Reservation**: 512MB (536870912 bytes)
+
+For detailed information about Docker API resource specifications and service creation, refer to the official Docker Engine API documentation:
+
+[Docker Engine API - Service Create](https://docs.docker.com/reference/api/engine/version/v1.51/#tag/Service/operation/ServiceCreate)
+
+This documentation includes:
+
+* Complete resource specification schema
+* Advanced configuration options
+* API request/response examples
+* Additional parameters and constraints
+
+Configure persistent storage for your application to ensure data remains intact across container restarts and deployments.
+
+**Bind Mount**: Maps a host file or directory to a container file or directory. Typically used for specific configurations or databases.
+
+1. **Host Path**: Path on the host.
+2. **Mount Path**: Path in the container.
+
+**Volume Mount**: Uses Docker-managed volumes that are easier to back up and migrate than bind mounts.
+
+1. **Volume Name**: Name of the Docker-managed volume.
+2. **Mount Path**: Path in the container where the volume is mounted.
+
+**File Mount**: Specifically for single files, useful for configuration files.
+
+1. **Content**: The content to store in the file.
+2. **File Path**: The name of the file.
+3. **Mount Path**: Path in the container where the file is placed. **The path must also contain the filename.**
+
+File mounts are a Dokploy feature. When you create a file mount, Dokploy stores the file in a folder called `files` inside your project directory. This file is created once when you set up the file mount and persists across deployments.
+
+<ImageZoom src="/assets/file-mount-configuration.webp" width={800} height={630} className="rounded-lg" />
+
+<ImageZoom src="/assets/file-mount.png" width={800} height={630} className="rounded-lg" />
+
+Redirect requests to your application to another URL based on specified rules, enhancing navigational efficiency and SEO.
+
+* **Regex**: Enter a regular expression to match the URLs that need redirecting.
+* **Replacement**: Specify the target URL where traffic should be redirected.
+* **Permanent**: Toggle this option to apply a permanent (HTTP 301) redirection, indicating to browsers and search engines that the page has moved permanently.
+
+To redirect all traffic from "[http://localhost](http://localhost)" to "[http://mydomain](http://mydomain)", set the Regex as `http://localhost/(.*)` and the Replacement as `http://mydomain/$1`.
+
+Add basic authentication to your application to restrict access.
+
+* **Username**: Enter a username.
+* **Password**: Enter a password.
+
+Adding basic authentication will prompt users for a username and password before allowing access to the application. Use this for environments where an additional layer of security is required.
+
+Expose your application to the internet by configuring network ports, allowing external access.
+
+* **Published Port**: The port number on the host that will route traffic to your application.
+* **Target Port**: The port number inside the container that the application uses.
+* **Protocol**: Choose between TCP and UDP based on your application's requirements.
+
+Ensure that the published port does not conflict with other services on the host to avoid port binding errors, also this port is used mostly for accesing the application from the outside, eg your-ip:port, this is not for accessing the application trought a domain.
+
+Provides a dynamic and robust method to manage HTTP traffic to your services, including load balancing and SSL termination.
+
+* **Rules**: Define complex routing, load balancing, and security configurations using Traefik's powerful rule-based configuration system.
+
+**Examples:**
+
+Example 1 (json):
+```json
+{
+  "TaskTemplate": {
+    "Resources": {
+      "Limits": {
+        "NanoCPUs": 2000000000,
+        "MemoryBytes": 1073741824
+      },
+      "Reservations": {
+        "NanoCPUs": 1000000000,
+        "MemoryBytes": 536870912
+      }
+    }
+  }
+}
+```
+
+---
+
+## Copy this value and paste in the ADVERTISE_ADDR variable:
+
+**URL:** llms-txt#copy-this-value-and-paste-in-the-advertise_addr-variable:
+
+ip addr show | grep -E "inet (192\.168\.|10\.|172\.1[6-9]\.|172\.2[0-9]\.|172\.3[0-1]\.)" | head -n1 | awk '{print $2}' | cut -d/ -f1
+
+---
+
+## Dokploy API
+
+**URL:** llms-txt#dokploy-api
+
+**Contents:**
+- For Administrators
+- For Users
+- Usage
+  - Authentication
+
+In some cases, you may need to interact directly with the dokploy API. Here's how both administrators and users can do this.
+
+## For Administrators
+
+1. Access the Swagger UI by navigating to `your-vps-ip:3000/swagger`.
+2. Use the Swagger interface to interact with the API.
+3. By default, access to the Swagger UI is restricted, and only authenticated administrators can access the API.
+
+1. By default, users do not have direct access to the API.
+2. Administrators can grant users access to:
+   * Generate access tokens
+   * Access the Swagger UI
+3. If you need access, contact your administrator.
+
+Note: The API provides advanced functionalities. Make sure you understand the operations you're performing to avoid unintended changes to the system.
+
+By default the OpenApi base url is `http://localhost:3000/api`, you need to replace with the ip of your dokploy instance or the domain name.
+
+The API uses JWT tokens for authentication. You can generate a token by going to the `/settings/profile` page and go to API/CLI Section and generate the token.
+
+Let's take a example of authenticated request:
+
+then you will get the something like this:
+
+**Examples:**
+
+Example 1 (bash):
+```bash
+curl -X 'GET' \
+  'https://dokploy.com/api/project.all' \
+  -H 'accept: application/json' \
+  -H 'x-api-key: YOUR-GENERATED-API-KEY'
+```
+
+Example 2 (json):
+```json
+[
+  {
+    "projectId": "klZKsyw5g-QT_jrWJ5T-w",
+    "name": "Random",
+    "description": "",
+    "createdAt": "2024-06-19T15:05:58.785Z",
+    "adminId": "_WrKZbs7iJAA3p4N2Yfyu",
+    "applications": [],
+    "mariadb": [],
+    "mongo": [],
+    "mysql": [
+      {
+        "mysqlId": "N3cudwO46TiDXzBm4SaQ1",
+        "name": "mysql",
+        "appName": "random-mysql-924715",
+        "description": "",
+        "databaseName": "mysql",
+        "databaseUser": "mysql",
+        "databasePassword": "h13BzO6y3KYSHaQg",
+        "databaseRootPassword": "mM1b7JeoPA7jArxj",
+        "dockerImage": "mysql:8",
+        "command": null,
+        "env": null,
+        "memoryReservation": null,
+        "memoryLimit": null,
+        "cpuReservation": null,
+        "cpuLimit": null,
+        "externalPort": null,
+        "applicationStatus": "done",
+        "createdAt": "2024-06-24T01:55:40.378Z",
+        "projectId": "klZKsyw5g-QT_jrWJ5T-w"
+      }
+    ],
+    "postgres": [],
+    "redis": [
+      {
+        "redisId": "TtFK5S4QFaIjaNGOb8Ku-",
+        "name": "redis",
+        "appName": "random-redis-7eec62",
+        "description": "",
+        "databasePassword": "Yvb8gqClfomjcue8",
+        "dockerImage": "redis:7",
+        "command": null,
+        "env": null,
+        "memoryReservation": null,
+        "memoryLimit": null,
+        "cpuReservation": null,
+        "cpuLimit": null,
+        "externalPort": 6379,
+        "createdAt": "2024-06-26T06:43:20.570Z",
+        "applicationStatus": "done",
+        "projectId": "klZKsyw5g-QT_jrWJ5T-w"
+      }
+    ],
+    "compose": []
+  },
+]
+```
+
+---
+
+## Docker Hub
+
+**URL:** llms-txt#docker-hub
+
+To configure a Docker Hub registry, you need to fill the form with the following details:
+
+1. Insert the Registry Name eg. `My Registry`.
+2. Insert the Username eg. `dockerhub_username`.
+3. Insert the Password, you can use your own dockerhub password or generate a token here `https://app.docker.com/settings/personal-access-tokens`
+4. Click on Generate Token.
+5. Insert the Token Description eg. `dockerhub_token`.
+6. In permissions make sure to select `Read` and `Write`.
+7. Click on `Create`.
+8. Copy the `access token` and paste it in Dokploy `Docker Hub` Modal section.
+9. (Optional) If you pretend to use Cluster Feature, make sure to set a `Image Prefix` and `Registry URL`.
+10. Click on `Test` to make sure everything is working.
+11. Click on `Create` to save the registry.
+
+---
+
+## Settings
+
+**URL:** llms-txt#settings
+
+{/* This file was generated by Fumadocs. Do not edit this file directly. Any changes should be made by running the generation command again. */}
+
+<APIPage document={"./public/openapi.json"} webhooks={[]} operations={[{"path":"/settings.reloadServer","method":"post"},{"path":"/settings.cleanRedis","method":"post"},{"path":"/settings.reloadRedis","method":"post"},{"path":"/settings.reloadTraefik","method":"post"},{"path":"/settings.toggleDashboard","method":"post"},{"path":"/settings.cleanUnusedImages","method":"post"},{"path":"/settings.cleanUnusedVolumes","method":"post"},{"path":"/settings.cleanStoppedContainers","method":"post"},{"path":"/settings.cleanDockerBuilder","method":"post"},{"path":"/settings.cleanDockerPrune","method":"post"},{"path":"/settings.cleanAll","method":"post"},{"path":"/settings.cleanMonitoring","method":"post"},{"path":"/settings.saveSSHPrivateKey","method":"post"},{"path":"/settings.assignDomainServer","method":"post"},{"path":"/settings.cleanSSHPrivateKey","method":"post"},{"path":"/settings.updateDockerCleanup","method":"post"},{"path":"/settings.readTraefikConfig","method":"get"},{"path":"/settings.updateTraefikConfig","method":"post"},{"path":"/settings.readWebServerTraefikConfig","method":"get"},{"path":"/settings.updateWebServerTraefikConfig","method":"post"},{"path":"/settings.readMiddlewareTraefikConfig","method":"get"},{"path":"/settings.updateMiddlewareTraefikConfig","method":"post"},{"path":"/settings.getUpdateData","method":"post"},{"path":"/settings.updateServer","method":"post"},{"path":"/settings.getDokployVersion","method":"get"},{"path":"/settings.getReleaseTag","method":"get"},{"path":"/settings.readDirectories","method":"get"},{"path":"/settings.updateTraefikFile","method":"post"},{"path":"/settings.readTraefikFile","method":"get"},{"path":"/settings.getIp","method":"get"},{"path":"/settings.getOpenApiDocument","method":"get"},{"path":"/settings.readTraefikEnv","method":"get"},{"path":"/settings.writeTraefikEnv","method":"post"},{"path":"/settings.haveTraefikDashboardPortEnabled","method":"get"},{"path":"/settings.haveActivateRequests","method":"get"},{"path":"/settings.toggleRequests","method":"post"},{"path":"/settings.isCloud","method":"get"},{"path":"/settings.isUserSubscribed","method":"get"},{"path":"/settings.health","method":"get"},{"path":"/settings.setupGPU","method":"post"},{"path":"/settings.checkGPUStatus","method":"get"},{"path":"/settings.updateTraefikPorts","method":"post"},{"path":"/settings.getTraefikPorts","method":"get"},{"path":"/settings.updateLogCleanup","method":"post"},{"path":"/settings.getLogCleanupStatus","method":"get"},{"path":"/settings.getDokployCloudIps","method":"get"}]} showTitle={true} />
+
+---
+
+## If you are using docker standalone traefik
+
+**URL:** llms-txt#if-you-are-using-docker-standalone-traefik
+
+docker rm -f dokploy-traefik
+
+docker run -d \
+    --name dokploy-traefik \
+    --restart always \
+    -v /etc/dokploy/traefik/traefik.yml:/etc/traefik/traefik.yml \
+    -v /etc/dokploy/traefik/dynamic:/etc/dokploy/traefik/dynamic \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    -p 80:80/tcp \
+    -p 443:443/tcp \
+    -p 443:443/udp \
+    traefik:v3.6.1
+
+docker network connect dokploy-network dokploy-traefik
+
+---
+
+## Qwik
+
+**URL:** llms-txt#qwik
+
+This example will deploy a simple Qwik application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/qwik`
+
+2. **Add Environment Variables**:
+
+* Navigate to the "Environments" tab and add the following variable:
+
+3. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+4. **Generate a Domain**:
+   * Click on generate domain button.
+   * A new domain will be generated for you.
+   * You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+**Examples:**
+
+Example 1 (cmd):
+```cmd
+NIXPACKS_START_CMD="pnpm run preview"
+```
+
+---
+
+## Backups
+
+**URL:** llms-txt#backups
+
+**Contents:**
+- Backing Up Your Database
+  - Testing Your Backup Configuration
+
+Dokploy provides an integrated solution for backing up your databases, ensuring data safety and recovery capabilities.
+
+## Backing Up Your Database
+
+To configure database backups, navigate to the `Backup` tab within your Dokploy dashboard. Here’s what you’ll need to set up:
+
+* **Select Destination S3 Bucket**: Specify where your backups will be stored. Buckets can be configured in the `/dashboard/settings/destinations` route.
+* **Database Name**: Enter the name of the database you want to backup.
+* **Schedule Cron**: Define the schedule for your backups using cron syntax.
+* **Prefix**: Choose a prefix under which backups will be stored in your bucket.
+* **Enabled**: Toggle whether backups are active. The default setting is enabled.
+
+### Testing Your Backup Configuration
+
+To ensure your backup settings are correctly configured:
+
+1. Click the `Test` button.
+2. This will initiate a test backup to the S3 bucket you selected.
+3. Check the bucket to see the result of the test backup.
+
+This feature provides peace of mind by verifying that your backup process is set up correctly before relying on it for operational backups.
+
+---
+
+## Cloudflare
+
+**URL:** llms-txt#cloudflare
+
+**Contents:**
+- Switch Mode
+- Assign a Domain Full (Strict)
+  - Using Let's Encrypt
+  - Using Cloudflare's Origin CA
+- Assign a Domain Flexible
+  - Important Clarification on Container Ports
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Cloudflare has multiple SSL's Modes:
+
+1. **Strict (SSL-Only Origin Pull)**: Enforce encryption between Cloudflare and your origin. Use this mode to guarantee connections to your origin will always be encrypted, regardless of your visitor’s request.
+2. **Full (Strict)**: Enable encryption end-to-end and enforce validation on origin certificates. Use Cloudflare’s Origin CA to generate certificates for your origin.
+3. **Full**: Enable encryption end-to-end. Use this mode when your origin server supports SSL certification but does not use a valid, publicly trusted certificate.
+4. **Flexible**: Enable encryption only between your visitors and Cloudflare. This will avoid browser security warnings, but all connections between Cloudflare and your origin are made through HTTP.
+5. **Off (not secure)**: No encryption applied. Turning off SSL disables HTTPS and causes browsers to show a warning that your website is not secure.
+
+We will cover two of SSL modes in this guide:
+
+* **Full (Strict)**
+* **Flexible**
+
+To switch between modes, follow these steps:
+
+1. Go to cloudflare dashboard and then click on `Account Home` -> Select the Domain you want to change.
+2. On the left side, click `SSL/TLS`.
+3. Click on `Overview`.
+4. Click on Configure SSL/TLS Encryption.
+5. Select the desired mode Full (Strict) or Flexible.
+6. Click `Save`.
+
+## Assign a Domain Full (Strict)
+
+<Callout type="warn">
+  Follow the steps in the same order to prevent any issues.
+</Callout>
+
+You can create a certificate for your origin server using two methods:
+
+* Using Let's Encrypt to generate a certificate for your origin server.
+* Using Cloudflare's Origin CA to generate a certificate for your origin server.
+
+We assume that you have enabled the `Full (Strict)` mode in the previous step, is super important to follow the steps in the same order to prevent any issues.
+
+### Using Let's Encrypt
+
+1. Go to cloudflare dashboard and then click on `Account Home` -> Select the Domain.
+2. On the left side, click `DNS`.
+3. Click on `Records`.
+4. Click on `Add Record`.
+5. Select `A` record type.
+6. Enter the `Host` name, eg. `api` so it will be `api.dokploy.com`.
+7. Enter the `IPv4 Address` from your server where the application is hosted eg. `1.2.3.4`.
+8. Click `Save`.
+9. Go to dokploy panel and now you can assign either for `Applications` or `Docker Compose`.
+10. Go to `Domains` section.
+11. Click `Create Domain`.
+12. In the `Host` field, enter the domain name eg. `api.dokploy.com`.
+13. In the `Path` field, enter the path eg. `/`.
+14. In the `Container Port` field, enter the port where your application is running eg. `3000`.
+15. In the `HTTPS` field enable `ON`.
+16. In the `Certificate` field select `Let's Encrypt`.
+17. Click `Create`.
+18. A domain will be automatically assigned to your application.
+19. Wait a few seconds and refresh the application.
+20. You should see the application running on the domain you just created.
+
+### Using Cloudflare's Origin CA
+
+1. Go to cloudflare dashboard and then click on `Account Home` -> Select the Domain.
+2. On the left side, click `SSL/TLS`.
+3. Click on `Origin Server`.
+4. Click on `Create Certificate`.
+5. Select `Generate private key and CSR with Cloudflare`.
+6. Choose the list of hostnames you want the certificate to cover eg. `api.dokploy.com`.
+7. Choose the validity period eg. `15 years`.
+8. Click `Create`.
+9. Using the PEM format, copy the `Origin Certificate` and `Private Key` in the respective fields in the dokploy new certificate panel (Certificates > Add Certificate).
+10. Go to `Domains` section in your application.
+11. Click `Create Domain`.
+12. In the `Host` field, enter the domain name eg. `api.dokploy.com`. (Make sure that the domain is already pointing to your server IP in Cloudflare DNS settings and the **hostname matches the one in the certificate**).
+13. In the `Path` field, enter the path eg. `/`.
+14. In the `Container Port` field, enter the port where your application is running eg. `3000`.
+15. In the `HTTPS` field enable `ON`.
+16. In the `Certificate` field select `None`.
+17. Click `Create`.
+
+Using Cloudflare's Origin CA, you are sure that the certificate will be valid for the next 15 years, or the duration you selected, and you don't have to worry about failed renewals.
+
+<Callout type="info">
+  You can also create a certificate for wildcards domains eg. `*.dokploy.com` and use it for multiple subdomains.
+</Callout>
+
+<Callout type="warn">
+  **Important**: With a free Cloudflare account, this methods work only for the main domain and subdomains, not for sub-subdomains. Eg. `api.dokploy.com` works but `staging.api.dokploy.com` does not work.
+</Callout>
+
+## Assign a Domain Flexible
+
+We assume that you have enabled the `Flexible` mode in the previous step, is super important to follow the steps in the same order to prevent any issues.
+
+1. Go to cloudflare dashboard and then click on `Account Home` -> Select the Domain.
+2. On the left side, click `DNS`.
+3. Click on `Records`.
+4. Click on `Add Record`.
+5. Select `A` record type.
+6. Enter the `Host` name, eg. `api` so it will be `api.dokploy.com`.
+7. Enter the `IPv4 Address` from your server where the application is hosted eg. `1.2.3.4`.
+8. Click `Save`.
+9. Go to dokploy panel and now you can assign either for `Applications` or `Docker Compose`.
+10. Go to `Domains` section.
+11. Click `Create Domain`.
+12. In the `Host` field, enter the domain name eg. `api.dokploy.com`.
+13. In the `Path` field, enter the path eg. `/`.
+14. In the `Container Port` field, enter the port where your application is running eg. `3000`.
+15. In the `HTTPS` field enable `OFF`.
+16. In the `Certificate` field select `None`.
+17. Click `Create`.
+18. A domain will be automatically assigned to your application.
+19. Wait a few seconds and refresh the application.
+20. You should see the application running on the domain you just created.
+
+### Important Clarification on Container Ports
+
+The "Container Port" specified in the domain settings is exclusively for routing traffic to the correct application container through Traefik, and does not expose the port directly to the internet. This is fundamentally different from the port settings in the "Advanced -> Ports" section, which are used to directly expose application ports. The container port in the domain settings ensures that Traefik can internally direct traffic to the specified port within the container based on the domain configuration.
+
+---
+
+## Port
+
+**URL:** llms-txt#port
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/port.create"},{"method":"get","path":"/port.one"},{"method":"post","path":"/port.delete"},{"method":"post","path":"/port.update"}]} hasHead={true} />
+
+---
+
+## Going Production
+
+**URL:** llms-txt#going-production
+
+**Contents:**
+- Solution
+  - Build & Publish the application in a CI/CD pipeline
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+By default, dokploy offer multiple [Builds Types](/docs/core/applications/build-type) to deploy your application, the most common is `nixpacks` and `heroku buildpacks`
+however this also comes with problems, first is the resources that are required to build your application which some times can lead to timeout on your server or even freezeing your server
+and all your application will be down for this reasson, this is mainly problem from `Docker` since the comsumption of resources such as RAM, CPU is very high to build an application.
+
+You have two options to solve this problem:
+
+1. Increase the resources of your server CPU, RAM, Disk (Probably is not a good idea and cheapest solution)
+2. Build & Publish the application in a CI/CD pipeline eg. Github Actions, Gitlab CI, Gitea Actions, etc. (Recommended)
+
+### Build & Publish the application in a CI/CD pipeline
+
+We will use Github Actions as an example, but you can use any CI/CD pipeline that you want.
+
+We will use the following configuration:
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/production-example`
+   * Branch: `main`
+   * Build path: `/`
+
+<Callout type="info">
+  The repo have everything you need, however you can follow the same idea for your own applications.
+</Callout>
+
+3. The repository already have a Dockerfile, so we will use that, in the case your application is different create your own Dockerfile is required for this guide.
+4. We will use `Dockerhub` as an example, but you can use any container registry that you want.
+5. Make sure to create the repository in the `Dockerhub` , `namespace` is your username and `repository` is `example`.
+6. Create a new Github Actions workflow in `.github/workflows/deploy.yml`
+7. Add the following code to the workflow:
+
+8. Create your own Dockerfile, in this case we will use the `Dockerfile` from the repository.
+
+```properties
+FROM node:18-alpine AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+FROM base AS build
+WORKDIR /app
+COPY . .
+COPY package.json pnpm-lock.yaml ./
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+ENV NODE_ENV=production
+RUN pnpm run build
+
+FROM base AS dokploy
+WORKDIR /app
+ENV NODE_ENV=production
+
+**Examples:**
+
+Example 1 (yaml):
+```yaml
+name: Build Docker images
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build-and-push-dockerfile-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }} # Make sure to add the secrets in your repository in -> Settings -> Secrets (Actions) -> New repository secret
+          password: ${{ secrets.DOCKERHUB_TOKEN }}   # Make sure to add the secrets in your repository in -> Settings -> Secrets (Actions) -> New repository secret
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          # Make sure to replace with your own namespace and repository
+          tags: |
+            namespace/example:latest 
+          platforms: linux/amd64
+```
+
+---
+
+## Webhook
+
+**URL:** llms-txt#webhook
+
+**Contents:**
+- Webhook Notifications
+- Testing Your Webhook
+- JSON Format
+- Production Setup
+
+Webhook notifications are a generic way to receive notifications from Dokploy to any HTTP endpoint. You can choose to receive notifications for specific events or all events. Notifications are sent in JSON format.
+
+## Webhook Notifications
+
+To start receiving webhook notifications, you need to fill the form with the following details:
+
+* **Name**: Enter any name you want.
+* **Webhook URL**: Enter the webhook URL where you want to receive notifications. eg. `https://your-endpoint.com/webhook`
+
+## Testing Your Webhook
+
+For testing purposes, you can use [Webhook.site](https://webhook.site) to generate a unique URL and inspect the JSON payload that Dokploy sends:
+
+1. Go to [https://webhook.site](https://webhook.site)
+2. Copy your unique webhook URL
+3. Go to Dokploy **Notifications** and select **Webhook** as the notification provider
+4. Enter a name for your notification configuration
+5. Paste the webhook URL you copied
+6. Click on **Test** to send a test notification
+7. Check your Webhook.site page to see the JSON payload
+8. Click on **Create** to save the notification
+
+Dokploy sends notifications in JSON format. The payload structure includes information about the event type, timestamp, and relevant details about the action that triggered the notification.
+
+**Example notification payload:**
+
+For production use, ensure your webhook endpoint:
+
+* Accepts POST requests
+* Returns a 2xx HTTP status code for successful delivery
+* Handles JSON payloads
+* Is accessible from the internet (or from your Dokploy server's network)
+* Implements proper authentication if needed (consider using HTTPS with API keys in headers)
+
+**Examples:**
+
+Example 1 (json):
+```json
+{
+  "title": "Test Notification",
+  "message": "Hi, From Dokploy 👋",
+  "timestamp": "2025-12-07T19:41:53.470Z"
+}
+```
+
+---
+
+## Deploy Server
+
+**URL:** llms-txt#deploy-server
+
+**Contents:**
+- Requirements
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+Remote servers allows you to deploy your apps remotely to different servers without needing to build and run them where the Dokploy UI is installed.
+
+1. To install Dokploy UI, follow the [installation guide](en/docs/core/get-started/installation).
+
+<Callout type="warning">
+  If your remote server is configured with a different shell (other than bash), you must configure bash as the default shell, as Dokploy has been developed and tested with bash.
+</Callout>
+
+2. Create an SSH key by going to `/dashboard/settings/ssh-keys` and add a new key. Be sure to copy the public key.
+
+<ImageZoom src="/assets/ssh-keys.png" alt="Architecture Diagram" width={1000} height={600} className="rounded-lg" />
+
+3. Decide which remote server to deploy your apps on. We recommend these reliable providers:
+
+* [Hostinger](https://www.hostinger.com/vps-hosting?ref=dokploy) Get 20% off with this [referral link](https://www.hostinger.com/vps-hosting?REFERRALCODE=1SIUMAURICI97).
+* [DigitalOcean](https://www.digitalocean.com/pricing/droplets#basic-droplets) Get $200 credits for free with this [referral link](https://m.do.co/c/db24efd43f35).
+* [Hetzner](https://www.hetzner.com/cloud/) Get €20 credits with this [referral link](https://hetzner.cloud/?ref=vou4fhxJ1W2D).
+* [Vultr](https://www.vultr.com/pricing/#cloud-compute) Referral Link: [Referral Link](https://www.vultr.com/?ref=9679828)
+* [Linode](https://www.linode.com/es/pricing/#compute-shared).
+* [Scaleway](https://www.scaleway.com/en/pricing/?tags=baremetal,available).
+* [Google Cloud](https://cloud.google.com/).
+* [AWS](https://aws.amazon.com/ec2/pricing/).
+
+4. When creating the server, it should ask for SSH keys. Ideally, use your computer's public key and the key you generated in the previous step. Here's how to add the public key in Hostinger:
+
+<ImageZoom src="/assets/hostinger-add-sshkey.png" alt="Adding SSH key" width={1000} height={600} className="rounded-lg" />
+
+<Callout>
+  The steps are similar across other providers.
+</Callout>
+
+5. Copy the server’s IP address and ensure you know the username (often `root`). Fill in all fields and click `Create`.
+
+<ImageZoom src="/assets/multi-server-add-server.png" alt="Add server" width={1000} height={600} className="rounded-lg" />
+
+6. To test connectivity, open the server dropdown and click `Enter Terminal`. If everything is correct, you should be able to interact with the remote server.
+
+7. Click `Setup Server` to proceed. There are two tabs: SSH Keys and Deployments. This guide explains the easy way, but you can follow the manual process via the Dokploy UI if you prefer.
+
+<ImageZoom src="/assets/multi-server-setup-2.png" alt="Setup process" width={1000} height={600} className="rounded-lg" />
+
+8. Click `Deployments`, then `Setup Server`. If everything is correct, you should see output similar to this:
+
+<ImageZoom src="/assets/multi-server-setup-3.png" alt="Server setup output" width={1000} height={600} className="rounded-lg" />
+
+<Callout>
+  You only need to run this setup once. If Dokploy updates later, check the
+  release notes to see if rerunning this command is required.
+</Callout>
+
+9. You're ready to deploy your apps! Let's test it out:
+
+<ImageZoom src="/assets/multi-server-add-app.png" alt="Add app" width={1000} height={600} className="rounded-lg" />
+
+10. To check which server an app belongs to, you’ll see the server name at the top. If no server is selected, it defaults to `Dokploy Server`. Click `Deploy` to start building your app on the remote server. You can check the `Logs` tab to see the build process. For this example, we’ll use a test repo:\
+    Repo: `https://github.com/Dokploy/examples.git`\
+    Branch: `main`\
+    Build Path: `/astro`
+
+<ImageZoom src="/assets/multi-server-setup-app.png" alt="App setup" width={1000} height={600} className="rounded-lg" />
+
+11. Once the build is done, go to `Domains` and create a free domain. Just click `Create` and you’re good to go! 🎊
+
+<ImageZoom src="/assets/multi-server-finish.png" alt="Finished setup" width={1000} height={600} className="rounded-lg" />
+
+---
+
+## Installation
+
+**URL:** llms-txt#installation
+
+**Contents:**
+- Setup Dokploy Timezone
+- Manual Upgrade
+
+docker service create \
+  --name dokploy \
+  --replicas 1 \
+  --network dokploy-network \
+  --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
+  --mount type=bind,source=/etc/dokploy,target=/etc/dokploy \
+  --publish published=3000,target=3000,mode=host \
+  --update-parallelism 1 \
+  --update-order stop-first \
+  dokploy/dokploy:latest
+bash
+docker service update --env-add TZ=America/New_York dokploy
+bash
+curl -sSL https://dokploy.com/install.sh | sh -s update
+bash
+export DOKPLOY_VERSION=canary && curl -sSL https://dokploy.com/install.sh | sh
+export DOKPLOY_VERSION=feature && curl -sSL https://dokploy.com/install.sh | sh
+curl -sSL https://dokploy.com/install.sh | sh (defaults to latest)
+bash
+DOKPLOY_VERSION=canary bash -s < <(curl -sSL https://dokploy.com/install.sh)
+DOKPLOY_VERSION=feature bash -s < <(curl -sSL https://dokploy.com/install.sh)
+```
+
+**Examples:**
+
+Example 1 (unknown):
+```unknown
+## Setup Dokploy Timezone
+
+To setup the timezone of Dokploy, you can use the following command:
+```
+
+Example 2 (unknown):
+```unknown
+## Manual Upgrade
+
+To upgrade Dokploy manually, you can use the following command:
+```
+
+Example 3 (unknown):
+```unknown
+To use a specific version, you can use the following command:
+```
+
+Example 4 (unknown):
+```unknown
+Alternatively, you can use `bash -s`:
+```
+
+---
+
+## Build Server
+
+**URL:** llms-txt#build-server
+
+**Contents:**
+- Overview
+- Prerequisites
+- Setting Up a Build Server
+  - Step 1: Add a New Server
+  - Step 2: Setup the Build Server
+  - Step 3: Configure as Build Server
+- Using a Build Server
+  - Configure an Application to Use a Build Server
+  - Build Process Flow
+- Docker Registry Configuration
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+Build servers allow you to separate the build process from your deployment servers. This is particularly useful when you want to compile your applications on a dedicated server with more resources, or when you want to keep your deployment servers lightweight.
+
+<Callout type="info">
+  Build servers are currently **only available for Applications**. This feature is not supported for Docker Compose deployments.
+</Callout>
+
+A **Build Server** is a remote server dedicated to building and compiling your applications. Instead of building your application on the deployment server, Dokploy will:
+
+1. Connect to the build server
+2. Clone your repository and build your application
+3. Create a Docker image
+4. Push the image to a registry
+5. Deploy the image to your deployment server
+
+This approach offers several benefits:
+
+* **Resource Optimization**: Use powerful build servers without paying for expensive deployment servers
+* **Security**: Keep your source code and build process separate from production
+* **Flexibility**: Build once, deploy to multiple servers
+* **Performance**: Dedicated build resources mean faster builds
+
+Before setting up a build server, ensure you have:
+
+1. A Dokploy instance running
+2. A remote server for builds (VPS, cloud instance, or dedicated server)
+3. SSH access to the build server
+4. Docker installed on the build server (or use Dokploy's automatic setup)
+5. A Docker registry to store your built images (Docker Hub, GitHub Container Registry, etc.)
+
+<Callout type="info">
+  You can use the same SSH key you created for deploy servers, or create a dedicated one for build servers.
+</Callout>
+
+## Setting Up a Build Server
+
+### Step 1: Add a New Server
+
+Navigate to **Dashboard → Remote Servers → Add Server -> Build Type (Build Server)** in your Dokploy dashboard.
+
+Fill in the server details:
+
+* **Name**: A descriptive name (e.g., "Build Server - EU")
+* **IP Address**: The public IP address of your build server
+* **Port**: SSH port (default is 22)
+* **Username**: SSH username (usually `root` or your custom user)
+* **SSH Key**: Select the SSH key to use for authentication
+
+### Step 2: Setup the Build Server
+
+After creating the server, you need to install Docker and configure it:
+
+1. Click on the server you just created
+2. Click on **Setup Server ->**
+3. Follow the setup instructions:
+   * **Automatic Setup**: Copy the command and run it on your server
+   * **Manual Setup**: Follow the step-by-step instructions if automatic setup fails
+
+<Callout type="warn">
+  Make sure your build server has enough disk space for Docker images. Build processes can consume significant storage. To prevent disk space issues, you can:
+
+* Enable **Docker Cleanup** in the server settings to automatically remove unused images
+  * Create a **Scheduled Job** to periodically clean up Docker images (e.g., `docker image prune -af`)
+</Callout>
+
+### Step 3: Configure as Build Server
+
+Once you have access to the server, you need to configure it as a build server:
+
+1. Go to the **Deployments** tab
+2. Click on the **Setup Server** button
+3. A modal will appear showing the commands being executed on the server to configure everything necessary
+4. Once the setup process finishes, navigate to the **Validate** tab
+5. Verify that all status items show as green, indicating the build server is ready
+
+<Callout type="info">
+  The build server setup only installs build dependencies and tools. No Docker containers or active processes are deployed. The following tools are installed: **Nixpacks**, **Docker**, **Railpack**, and **Heroku Buildpacks**.
+</Callout>
+
+## Using a Build Server
+
+### Configure an Application to Use a Build Server
+
+When creating or editing an application:
+
+1. Go to the **Advanced** tab
+
+2. In the **Build Server** section:
+   * **Enable Custom Build Server**: Toggle this on
+   * **Select Build Server**: Choose your build server from the dropdown
+
+3. **Configure Registry** (required for build servers):
+   * Go to **Settings → Registries**
+   * Add a Docker registry (Docker Hub, GHCR, etc.)
+   * Configure your registry credentials
+
+4. **Select Registry in Application**:
+   * In your application's **Advanced** tab
+   * Under **Cluster Settings**
+   * Select the registry where built images will be pushed
+
+<Callout type="info">
+  A registry is required when using build servers because the built image needs to be stored somewhere accessible to your deployment servers.
+</Callout>
+
+### Build Process Flow
+
+When you deploy an application with a custom build server:
+
+1. **Build Phase**:
+   * Dokploy connects to your build server via SSH
+   * Clones your repository on the build server
+   * Builds the Docker image on the build server
+   * Pushes the image to your configured registry
+
+2. **Deploy Phase**:
+   * Dokploy connects to your deployment server(s)
+   * Pulls the built image from the registry
+   * Deploys the container on your deployment server(s)
+
+<Callout type="info">
+  After the build image is pushed to the registry, allow a few moments for your deployment server(s) to pull and cache the image before it becomes available for deployment.
+</Callout>
+
+## Docker Registry Configuration
+
+Build servers require a Docker registry to store built images. For detailed instructions on configuring a registry, see the [Docker Registry](/docs/core/registry) guide.
+
+---
+
+## Registry
+
+**URL:** llms-txt#registry
+
+**Contents:**
+- Registry Settings
+
+Dokploy offers a UI to connect to any Docker Registry.
+
+You need to fill the form with the following details:
+
+* **Registry Name**: Enter a name for your registry eg. `My Registry`.
+* **Username**: Enter the username you want to use to connect to your registry.
+* **Password**: Enter the password you want to use to connect to your registry.
+* **Image Prefix(Optional)**: Useful when using Cluster feature, to tag your images with a prefix eg. `dokploy` will convert to `dokploy/my-app:latest`.
+* **Registry URL**: Enter the URL of your registry eg. `https://index.docker.io/v1`.
+
+This approach allows you to authenticate and store your credentials on the machine,
+making it convenient when using multiple applications. You won't need to provide credentials
+for each one individually. It also enables seamless login to remote servers. If no server is selected,
+Dokploy will default to using its own server.
+
+---
+
+## Domains
+
+**URL:** llms-txt#domains
+
+**Contents:**
+- How Domains Are Managed
+  - Applications
+  - Docker Compose
+- Requirements (Optional)
+  - Add Domain
+  - Note
+  - Understanding Internal Path and Strip Path
+  - Important Clarification on Container Ports
+- Static Build Type
+- Adding WWW to your domain
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Link } from 'next/link';
+
+Dokploy Provide 2 ways to add a domain to your service:
+
+1. **Free Domains** from Traefik.me
+2. **Buy a domain** from one of the providers above
+
+<Callout type="warn">
+  `traefik.me` domains are free, but they are limited to HTTP only, if you want to configure HTTPS for free domains
+  you can [Create a certificate](/docs/core/certificates#traefikme-https-setup) and use it in the domain settings.
+</Callout>
+
+If you don't have a domain, you can use our integrated free domains from Traefik.me in the Dokploy panel, without doing any configuration however is only for HTTP, if you want to have a HTTPS domain you need to buy a domain from one of the providers above.
+
+Domains are supported for:
+
+* **Applications**
+* **Docker Compose**
+
+## How Domains Are Managed
+
+Dokploy handles domains differently depending on whether you're using Applications or Docker Compose:
+
+For **Applications**, Dokploy creates a unique configuration file for each domain you create or update. These files are managed automatically and can be viewed in:
+
+* **Traefik File System**: Accessible through the Dokploy UI
+* **Advanced Settings**: Scroll to the bottom of the Advanced tab to view the Traefik configuration
+
+Each domain configuration follows this structure:
+
+**Key Points for Applications:**
+
+* **No Redeployment Required**: Changes to domains take effect immediately without needing to redeploy your application
+* **Hot Reload**: Dokploy uses Traefik's [File Provider](https://doc.traefik.io/traefik/reference/install-configuration/providers/others/file/) which supports hot reloading, so configuration changes are applied automatically
+* **Troubleshooting**: If you make changes and your domain doesn't work, check the Traefik logs for any errors. The logs should provide helpful information about what might be wrong
+
+For **Docker Compose**, domains are managed using [Traefik Docker Labels](https://doc.traefik.io/traefik/expose/docker/). This means:
+
+* **No Configuration Files**: Domains are configured directly through Docker labels in your compose file
+* **Redeployment Required**: Unlike Applications, you **must redeploy** your Docker Compose application for domain changes to take effect
+* **No Hot Reload**: Docker Compose does not support hot reloading of domain configurations, so Traefik needs to read the labels from a fresh deployment
+
+**Key Points for Docker Compose:**
+
+* Each time you modify a domain, you need to redeploy the application
+* Domain changes are applied when Traefik reads the Docker labels during deployment
+* For more details on configuring domains manually with Docker Compose, see the [Docker Compose Domains guide](/docs/core/docker-compose/domains)
+
+## Requirements (Optional)
+
+We recommend this if you want to have a HTTPS domain, you need to buy a domain from one of the providers above.
+
+* [Cloudflare](https://www.cloudflare.com/)
+* [Porkbun](https://porkbun.com/)
+* [Namecheap](https://www.namecheap.com/domains/)
+* [Name.com](https://www.name.com/)
+* [GoDaddy](https://www.godaddy.com/)
+* [Domain.com](https://www.domain.com/)
+
+Associate custom domains with your application to make it accessible over the internet.
+
+* **Host**: The domain name that you want to link to your application (e.g., `api.dokploy.com`).
+* **Path**: The specific path within the domain where the application should be accessible.
+* **Internal Path**: The internal path where your application expects to receive requests.
+* **Strip Path**: Removes the **Path** from the request before forwarding to the application.
+* **Container Port**: The port on the container that the domain should route to.
+* **HTTPS**: Toggle this on to enable HTTPS for your domain, providing secure, encrypted connections.
+* **Certificate**: Select (letsencrypt) or (None)
+
+For how **Internal Path** and **Strip Path** work using Traefik middlewares, see the note below.
+
+Proper domain configuration is crucial for the accessibility and security of your application. Always verify domain settings and ensure that DNS configurations are properly set up to point to the correct IP addresses. Enable HTTPS to enhance security and trust, especially for production environments.
+
+### Understanding Internal Path and Strip Path
+
+Dokploy uses Traefik middlewares to modify request paths before they reach your application. These powerful tools allow you to create flexible routing configurations that match your application's expected URL structure.
+
+<Callout type="warn">
+  **Warning: Potential Redirect Issues**
+
+When using Internal Path and Strip Path middlewares, ensure your application is properly configured to handle the modified paths. If your application generates redirects or absolute URLs that don't match the expected path structure, it may cause redirect loops or broken functionality. Use these middlewares with caution and test thoroughly to ensure your application works correctly with the path transformations.
+</Callout>
+
+**Internal Path Middleware**
+
+The Internal Path middleware adds a prefix to the request path before forwarding it to your container. This is useful when your application expects all requests to start with a specific base path.
+
+* Domain: `api.dokploy.com`
+* Path: `/v1`
+* Internal Path: `/backend/api`
+* Request: `api.dokploy.com/v1/users`
+* Forwarded to container as: `/backend/api/users`
+
+In this example, the middleware adds `/backend/api` to the beginning of the request path, which is helpful when your application is structured to expect requests at a specific internal directory.
+
+**Strip Path Middleware**
+
+The Strip Path middleware removes a specified path prefix from the request before forwarding it to your container. This is perfect when you want to organize your public URLs with prefixes but your application expects clean, unprefixed paths.
+
+* Domain: `app.dokploy.com`
+* Path: `/dashboard`
+* Strip Path: Enabled
+* Request: `app.dokploy.com/dashboard/settings`
+* Forwarded to container as: `/settings`
+
+Here, the middleware removes the `/dashboard` prefix, so your application receives the request as if it was made directly to `/settings`.
+
+**Using Both Internal Path and Strip Path Together**
+
+You can combine both middlewares to create sophisticated routing scenarios. When both are enabled, Strip Path is applied first, then Internal Path is added.
+
+* Domain: `service.dokploy.com`
+* Path: `/public`
+* Strip Path: Enabled
+* Internal Path: `/app/v2`
+* Request: `service.dokploy.com/public/api/users`
+* Processing:
+  1. Strip Path removes `/public`: `/api/users`
+  2. Internal Path adds `/app/v2`: `/app/v2/api/users`
+* Final forwarded path: `/app/v2/api/users`
+
+This powerful combination allows you to:
+
+* Remove public-facing path prefixes that users see
+* Add internal path prefixes that your application requires
+* Create clean separation between your public URL structure and internal application structure
+
+**When to Use Each Option**
+
+* **Internal Path only**: When your application requires a specific base path that differs from your public URL
+* **Strip Path only**: When you want organized public URLs but your application expects clean paths
+* **Both together**: When you need to transform public URLs to match complex internal application structures
+
+These middlewares ensure your application receives requests in the exact format it expects, regardless of how you structure your public domain paths.
+
+### Important Clarification on Container Ports
+
+The "Container Port" specified in the domain settings is exclusively for routing traffic to the correct application container through Traefik, and does not expose the port directly to the internet. This is fundamentally different from the port settings in the "Advanced -> Ports" section, which are used to directly expose application ports. The container port in the domain settings ensures that Traefik can internally direct traffic to the specified port within the container based on the domain configuration.
+
+When using the `Static` build type or `Nixpacks` and `Publish Directory` build type, you need to use the port `80` when creating a domain.
+
+## Adding WWW to your domain
+
+If you want to add WWW to your domain, you can do it by adding a CNAME record to your DNS provider.
+
+For example, if your domain is `example.com`, you can add a CNAME record to your DNS provider with the following configuration:
+
+* TYPE: CNAME
+* NAME: www
+* VALUE: example.com
+
+Create the domain in dokploy, using the host `www.example.com`
+
+Now in dokploy, you can go to application -> advanced -> redirects (Select the preset www to non-www) and click on save.
+
+now everytime you access `www.example.com` it will redirect to `example.com`
+
+**Examples:**
+
+Example 1 (yaml):
+```yaml
+http:
+  routers:
+    dokploy-app-name-router-1:
+      rule: Host(`your-domain.com`)
+      service: dokploy-app-name-service-1
+      middlewares:
+        - redirect-to-https
+      entryPoints:
+        - web
+    dokploy-app-name-router-websecure-1:
+      rule: Host(`your-domain.com`)
+      service: dokploy-app-name-service-1
+      middlewares: []
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt
+  services:
+    dokploy-app-name-service-1:
+      loadBalancer:
+        servers:
+          - url: http://dokploy-app-name:3000
+        passHostHeader: true
+```
+
+---
+
+## Environment Variables
+
+**URL:** llms-txt#environment-variables
+
+**Contents:**
+- Overview
+- Defining Variables
+- Project-Level Variables
+  - Practical Example
+  - 1. Define Shared Variable
+  - 2. Use the Variable in Services
+- Environment-Level Variables
+  - Practical Example
+  - 1. Define Environment Variable
+  - 2. Use the Variable in Services
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+Environment variables in Dokploy allow you to:
+
+* Define configuration once and reuse it
+* Share values across multiple services
+* Reference values from within the same service
+* Centrally manage sensitive information
+
+<ImageZoom src="/assets/images/shared-variables.png" width={800} height={630} alt="Environment variables panel" className="rounded-lg" />
+
+## Defining Variables
+
+You can declare environment variables either:
+
+* **Project-level (shared)** — available across all services in the project
+* **Environment-level** — specific to a single environment
+* **Service-level** — specific to a single service
+
+## Project-Level Variables
+
+### Practical Example
+
+Let's consider a common scenario where you have:
+
+* A PostgreSQL database
+* Two services that need to connect to this database
+
+### 1. Define Shared Variable
+
+In the project's shared variables section, define:
+
+### 2. Use the Variable in Services
+
+In each service's environment variables tab, reference the shared variable:
+
+<Callout type="info">
+  Dokploy will automatically replace `${{project.DATABASE_URL}}` with the value defined in the project's shared variables.
+</Callout>
+
+You can use shared environment variables in all the services available in dokploy.
+
+## Environment-Level Variables
+
+### Practical Example
+
+Let's consider a scenario where you have:
+
+* A staging environment with different database credentials
+* Multiple services that need environment-specific configurations
+
+### 1. Define Environment Variable
+
+In the environment's variables section, define:
+
+### 2. Use the Variable in Services
+
+In each service's environment variables tab, reference the environment variable:
+
+<Callout type="info">
+  Dokploy will automatically replace `${{environment.VARIABLE_NAME}}` with the value defined in the environment's variables.
+</Callout>
+
+You can use environment variables in all the services available in that specific environment.
+
+## Service-Level Variables
+
+Service-level variables are specific to a single service and can be used to override shared variables or define service-specific configurations.
+
+### Practical Example
+
+Let's say you have a service that requires a different database user. You can define a service-level variable:
+
+<Callout type="info">
+  Preview Deployments environments also include a service-level variable called `DOKPLOY_DEPLOY_URL`, which points to the deployment URL of the service.
+  It can be used as `${{DOKPLOY_DEPLOY_URL}}` for variables like `APP_URL=https://${{DOKPLOY_DEPLOY_URL}}`.
+</Callout>
+
+* Use shared variables for credentials and configurations that repeat across services
+* Keep descriptive variable names
+* Document the purpose of each variable for easier maintenance
+
+**Examples:**
+
+Example 1 (bash):
+```bash
+DATABASE_URL=postgresql://postgres:postgres@database:5432/postgres
+```
+
+Example 2 (bash):
+```bash
+DATABASE_URL=${{project.DATABASE_URL}}
+```
+
+Example 3 (bash):
+```bash
+DATABASE_PASSWORD=staging_secret_password
+API_KEY=staging_api_key_12345
+```
+
+Example 4 (bash):
+```bash
+DATABASE_URL=postgresql://postgres:${{environment.DATABASE_PASSWORD}}@staging-db:5432/postgres
+EXTERNAL_API_KEY=${{environment.API_KEY}}
+```
+
+---
+
+## Google Cloud Storage
+
+**URL:** llms-txt#google-cloud-storage
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Google Cloud Storage provides a simple and cost-effective way to store and retrieve data. It is a cloud-based service that allows you to store and retrieve data from anywhere in the world. This is a great option for storing backups, as it is easy to set up and manage.
+
+1. Navigate to the Cloud Storage console and create a new bucket with preferred name.
+2. Navigate to the IAM & Admin and create a new service account. Assign a role `Storage Admin` to the service account.
+3. Return to Cloud Storage again, and click `Settings` on the left navigation menu.
+4. Click `Interoperability` tab. This is where you will create Amazon S3-compatible ID and access keys.
+5. Copy the value in `Storage URI`. You will need this for the Endpoint value in Dokploy.
+6. Under `Service account HMAC`, click `Create a key for a service account`. Select the service account you created earlier and click `Create`. You will get an Access Key and a Secret Key.
+
+Now copy the following variables:
+
+| (from) Cloud Storage | (to) Dokploy        | Example value                                                       |
+| -------------------- | ------------------- | ------------------------------------------------------------------- |
+| `Access Key`         | `Access Key ID`     | `f3811c6d27415a9s6cv943b6743ad784`                                  |
+| `Secret`             | `Secret Access Key` | `aa55ee40b4049e93b7252bf698408cc22a3c2856d2530s7c1cb7670e318f15e58` |
+| `Location`           | `Region`            | `us-central1, etc` it will depend on the region you are using.      |
+| `Endpoint`           | `Endpoint`          | `https://storage.googleapis.com`. The value in `Storage URI`.       |
+| `Bucket Name`        | `Bucket`            | `dokploy-backups` use the name of the bucket you created.           |
+
+Test the connection and you should see a success message.
+
+---
+
+## Create a new dokploy-redis service
+
+**URL:** llms-txt#create-a-new-dokploy-redis-service
+
+docker service create \
+  --name dokploy-redis \
+  --constraint 'node.role==manager' \
+  --network dokploy-network \
+  --mount type=volume,source=dokploy-redis,target=/data \
+  redis:7
+bash
+docker service rm dokploy-postgres
+
+**Examples:**
+
+Example 1 (unknown):
+```unknown
+Remove the dokploy-postgres service:
+```
+
+---
+
+## Slack
+
+**URL:** llms-txt#slack
+
+**Contents:**
+- Slack Notifications
+
+Slack notifications are a great way to stay up to date with important events in your Dokploy panel. You can choose to receive notifications for specific events or all events.
+
+## Slack Notifications
+
+For start receiving slack notifications, you need to fill the form with the following details:
+
+* **Name**: Enter any name you want.
+* **Webhook URL**: Enter the webhook URL. eg. `https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX`
+* **Channel**: Enter the channel name that you want to send the notifications to.
+
+To Setup the slack notifications, follow these steps:
+
+1. Go to `https://dokploy.slack.com/marketplace/A0F7XDUAZ-webhooks-entrantes` and click on `Add To Slack`.
+2. Select the channel that you want to send the notifications to.
+3. Click on `Add webhook to channel`.
+4. Copy the `Webhook URL`.
+5. Go to Dokploy `Notifications` and select `Slack` as the notification provider.
+6. Use the `Webhook URL` you copied in the previous step.
+7. In Channel section, select the channel that you want to send the notifications to.
+8. Click on `Create` to save the notification.
+
+---
+
+## Postgres
+
+**URL:** llms-txt#postgres
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/postgres.create"},{"method":"get","path":"/postgres.one"},{"method":"post","path":"/postgres.start"},{"method":"post","path":"/postgres.stop"},{"method":"post","path":"/postgres.saveExternalPort"},{"method":"post","path":"/postgres.deploy"},{"method":"post","path":"/postgres.changeStatus"},{"method":"post","path":"/postgres.remove"},{"method":"post","path":"/postgres.saveEnvironment"},{"method":"post","path":"/postgres.reload"},{"method":"post","path":"/postgres.update"},{"method":"post","path":"/postgres.move"},{"method":"post","path":"/postgres.rebuild"}]} hasHead={true} />
+
+---
+
+## Monitoring
+
+**URL:** llms-txt#monitoring
+
+**Contents:**
+  - Prerequisites
+  - Configuration Options
+  - Notifications
+  - Important Security Note
+
+Before setting up monitoring for your applications and servers, ensure you have completed the server deployment setup. You can verify this by:
+
+1. Navigate to Remote Servers → Select your server → Setup Server
+2. Validate that you see a green checkmark in every section
+
+### Configuration Options
+
+Once the prerequisites are met, you can access the Monitoring Section where you'll find the following configuration options:
+
+* **Server Refresh Rate**: Determines how frequently the server metrics are collected (default: 20 seconds). Lower values provide more accurate metrics but increase server load.
+* **Container Refresh Rate**: Sets the frequency for container metric collection (default: 20 seconds). Similar to server refresh rate, lower values mean more precise data but higher resource usage.
+
+* **Cron Job**: Automated task that cleans old metrics based on the retention period settings.
+* **Server Retention Days**: Specifies how long metrics data is stored (default: 2 days).
+* **Port**: The designated port for the metrics server (default: 4500).
+
+#### Service Selection
+
+* **Include Services**: Choose which services to monitor. Options include:
+  * All services
+  * Specific compose services
+  * Specific applications
+  * Both compose and applications
+* **Exclude Services**: Specify services to exclude from monitoring using the same options as above.
+
+#### Alert Thresholds
+
+* **CPU Threshold (%)**: Set the CPU usage percentage that triggers an alert. Set to 0 to disable alerts.
+* **Memory Threshold (%)**: Set the memory usage percentage that triggers an alert. Set to 0 to disable alerts.
+
+#### Security and Integration
+
+* **Metrics Token**: Authentication token for metrics requests. You can:
+  * Use the automatically generated token
+  * Generate a new token in the server section
+* **Metrics Callback URL**: The endpoint that receives metrics data. Default URL is:
+  
+  You can use this default or configure your own callback URL.
+
+In order to enable just click on `Save Changes` button.
+
+If you have configured notifications with Server Threshold properties, metric alerts will be sent to your enabled notification providers, the notifications will sent only if the threshold is exceeded based on the Server itself not individual services.
+
+### Important Security Note
+
+**Make sure port 4500 is open on your server** to allow proper communication of monitoring metrics. This is essential for the monitoring system to function correctly.
+
+If you have errors like failed to fetch metrics, or no data available, just give it a few minutes and check again, this is normal, the server needs to collect data first.
+
+You should see something like this for your server:
+
+<ImageZoom src="/monitoring.png" alt="Architecture Diagram" width={1000} height={600} className="rounded-lg" />
+
+For your services you should see something like this:
+
+<ImageZoom src="/monitoring-services.png" alt="Architecture Diagram" width={1000} height={600} className="rounded-lg" />
+
+This is feature only available on Cloud Version of Dokploy.
+
+**Examples:**
+
+Example 1 (unknown):
+```unknown
+https://app.dokploy.com/api/trpc/notification.receiveNotification
+```
+
+---
+
+## Applications
+
+**URL:** llms-txt#applications
+
+**Contents:**
+- General
+- Environment
+- Monitoring
+- Logs
+- Deployments
+- Domains
+- Advanced Settings
+- Keyboard Shortcuts
+  - Note
+
+Applications in Dokploy are treated as a single service, entity or container, making it easy and intuitive for users to work with each application in its own workspace.
+
+We offer multiple functionalities that you can use to manage your applications, such as:
+
+Configure the source of your code, the way your application is built, and also manage actions like deploying, updating, and deleting your application, and stopping it.
+
+If you need to assign environment variables to your application, you can do so here.
+
+In case you need to use a multiline variable, you can wrap it in double quotes just like this `'"here_is_my_private_key"'`.
+
+Four graphs will be displayed for the use of memory, CPU, disk, and network. Note that the information is only updated if you are viewing the current page, otherwise it will not be updated.
+
+If you want to see any important logs from your application that is running, you can do so here and determine if your application is displaying any errors or not.
+
+You can view the last 10 deployments of your application. When you deploy your application in real time, a new deployment record will be created and it will gradually show you how your application is being built.
+
+We also offer a button to cancel deployments that are in queue. Note that those in progress cannot be canceled.
+
+We provide a webhook so that you can trigger your own deployments by pushing to your GitHub, Gitea, GitLab, Bitbucket, DockerHub repository.
+
+This is where you will assign your domain so that your application can be accessed from the internet.
+
+There are two ways to assign a domain:
+
+1. Create a custom domain.
+2. Use a generated domain, we use traefik.me to generate free domains.
+
+This section provides advanced configuration options for experienced users. It includes tools for custom commands within the container, managing Docker Swarm settings, and adjusting cluster settings such as replicas and registry selection. These tools are typically not required for standard application deployment and are intended for complex management and troubleshooting tasks.
+
+* **Run Command**: Execute custom commands directly in the container, after the application has been build & running.
+* **Cluster Settings**: Configure the number of replicas and select the Docker registry for your deployment to manage how your application scales and where it pulls images from.
+* **Swarm Settings**: Access additional Docker Swarm configurations for detailed orchestration and scaling across multiple nodes.
+* **Resources**: Adjust the CPU and memory allocation for your application.
+* **Volumes**: To ensure data persistence across deployments, configure storage volumes for your application, you can create Volumes, Binds, File Mounts.
+* **Ports**: Expose your application to the internet by configuring network ports.
+* **Traefik**: Modify Traefik settings to manage HTTP request handling for your application.
+
+## Keyboard Shortcuts
+
+To help speed up navigating there are some built in keyboard shortcuts for
+navigating tabs on application pages. Similar to GitHub these are all prefixed
+with the `g` key so to use them press `g` and then the shortcut key.
+
+| Key | Tab                 |
+| --- | ------------------- |
+| `g` | General             |
+| `e` | Environment         |
+| `u` | Domains             |
+| `p` | Preview Deployments |
+| `s` | Schedules           |
+| `v` | Volume Backups      |
+| `d` | Deployments         |
+| `l` | Logs                |
+| `m` | Monitoring          |
+| `a` | Advanced            |
+
+Adjust these settings carefully as incorrect configurations can significantly impact your application’s functionality and availability.
+
+---
+
+## Lit
+
+**URL:** llms-txt#lit
+
+This example will deploy a simple Lit application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/lit`
+   * Publish Directory: `./dist` (Nixpacks)
+
+2. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+3. **Generate a Domain**:
+   * Click on generate domain button.
+   * A new domain will be generated for you.
+   * Set Port `80`
+   * You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+---
+
+## Authentication
+
+**URL:** llms-txt#authentication
+
+**Contents:**
+- Creating an Access Token
+- Storing the Access Token
+- Commands
+
+The Dokploy CLI uses a token-based authentication system. To authenticate, you'll need to create an access token and store it securely.
+
+## Creating an Access Token
+
+To create an access token, first you need to have permissions if you are admin you don't need permissions.
+
+by default access token never expires.
+
+You can go to `dashboard/settings/profile` and click on the `Generate` button.
+
+<ImageZoom src="/assets/cli/token.png" width={800} height={630} alt="home og image" className="rounded-lg" />
+
+## Storing the Access Token
+
+Dokploy when you create an access token automatically will generate a config.json with the access token and the server url.
+
+1. `dokploy authenticate` - Authenticate with the Dokploy CLI.
+2. `dokploy verify` - Verify if the access token is valid.
+
+---
+
+## Backup script for custom database
+
+**URL:** llms-txt#backup-script-for-custom-database
+
+backup_date=$(date +%Y%m%d_%H%M%S)
+backup_file="database_${backup_date}.backup"
+
+---
+
+## Server
+
+**URL:** llms-txt#server
+
+{/* This file was generated by Fumadocs. Do not edit this file directly. Any changes should be made by running the generation command again. */}
+
+<APIPage document={"./public/openapi.json"} webhooks={[]} operations={[{"path":"/server.create","method":"post"},{"path":"/server.one","method":"get"},{"path":"/server.getDefaultCommand","method":"get"},{"path":"/server.all","method":"get"},{"path":"/server.count","method":"get"},{"path":"/server.withSSHKey","method":"get"},{"path":"/server.buildServers","method":"get"},{"path":"/server.setup","method":"post"},{"path":"/server.validate","method":"get"},{"path":"/server.security","method":"get"},{"path":"/server.setupMonitoring","method":"post"},{"path":"/server.remove","method":"post"},{"path":"/server.update","method":"post"},{"path":"/server.publicIp","method":"get"},{"path":"/server.getServerTime","method":"get"},{"path":"/server.getServerMetrics","method":"get"}]} showTitle={true} />
+
+---
+
+## Solid.js
+
+**URL:** llms-txt#solid.js
+
+This example will deploy a simple Solid.js application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/solidjs`
+   * Publish Directory: `./dist` (Nixpacks)
+
+2. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+3. **Generate a Domain**:
+   * Click on generate domain button.
+   * A new domain will be generated for you.
+   * Set Port `80`
+   * You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+---
+
+## We need the advertise address to be set which is the Private IP of your server, you can get it by running the following command:
+
+**URL:** llms-txt#we-need-the-advertise-address-to-be-set-which-is-the-private-ip-of-your-server,-you-can-get-it-by-running-the-following-command:
+
+---
+
+## Restore
+
+**URL:** llms-txt#restore
+
+**Contents:**
+- Restoring from S3 Buckets
+- Default Backup Commands
+  - Postgres
+  - MySQL
+  - MariaDB
+  - MongoDB
+
+## Restoring from S3 Buckets
+
+To restore your database from an S3 bucket, navigate to the `Backup` tab and click on the `Restore` button within your Dokploy dashboard. Here’s what you’ll need to set up:
+
+* **Select Source S3 Bucket**: Specify the S3 bucket where your backup files are stored.
+* **Search for Backup File**: Enter the name of the backup file you want to restore(it will autocomplete based on the files in the bucket)
+* **Database Name**: Enter the name of the database you want to restore to.
+* **Restore Database**: Click the `Restore` button to start the restoration process.
+
+If you previously used the backups generated by dokploy, it will automatically use the correct commands to restore your database.
+
+Other formats are not guaranteed to work.
+
+<Callout type="info">
+  If you have nested folders in your S3 Bucket, you can start typing the folder name and it will autocomplete.
+
+eg. If you have a folder called `backups` and you have a backup file called `backup.sql.gz`, you can start typing `backups/` and it will autocomplete to `backups/backup.sql.gz`.
+</Callout>
+
+## Default Backup Commands
+
+This are the default commands that Dokploy uses to generate the backups.
+
+**Examples:**
+
+Example 1 (bash):
+```bash
+pg_dump -Fc --no-acl --no-owner -h localhost -U ${databaseUser} --no-password '${database}' | gzip"
+```
+
+Example 2 (bash):
+```bash
+mysqldump --default-character-set=utf8mb4 -u 'root' --password='${databaseRootPassword}' --single-transaction --no-tablespaces --quick '${database}' | gzip"
+```
+
+Example 3 (bash):
+```bash
+mariadb-dump --user='${databaseUser}' --password='${databasePassword}' --databases ${database} | gzip"
+```
+
+Example 4 (bash):
+```bash
+mongodump -d '${database}' -u '${databaseUser}' -p '${databasePassword}' --archive --authenticationDatabase=admin --gzip"
+```
+
+---
+
+## Docker Compose
+
+**URL:** llms-txt#docker-compose
+
+**Contents:**
+  - Configuration Methods
+  - General
+  - Enviroment
+  - Monitoring
+  - Logs
+  - Deployments
+  - Advanced
+- Keyboard Shortcuts
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+Dokploy integrates with Docker Compose and Docker Stack to provide flexible deployment solutions. Whether you are developing locally or deploying at scale, Dokploy facilitates application management through these powerful Docker tools.
+
+### Configuration Methods
+
+Dokploy provides two methods for creating Docker Compose configurations:
+
+* **Docker Compose**: Ideal for standard Docker Compose configurations.
+* **Stack**: Geared towards orchestrating applications using Docker Swarm. Note that some Docker Compose features, such as `build`, are not available in this mode.
+
+Configure the source of your code, the way your application is built, and also manage actions like deploying, updating, and deleting your application, and stopping it.
+
+A code editor within Dokploy allows you to specify environment variables for your Docker Compose file. By default, Dokploy creates a `.env` file in the specified Docker Compose file path.
+
+Monitor each service individually within Dokploy. If your application consists of multiple services, each can be monitored separately to ensure optimal performance.
+
+Access detailed logs for each service through the Dokploy log viewer, which can help in troubleshooting and ensuring the stability of your services.
+
+You can view the last 10 deployments of your application. When you deploy your application in real time, a new deployment record will be created and it will gradually show you how your application is being built.
+
+We also offer a button to cancel deployments that are in queue. Note that those in progress cannot be canceled.
+
+We provide a webhook so that you can trigger your own deployments by pushing to your GitHub, Gitea, GitLab, Bitbucket repository.
+
+This section provides advanced configuration options for experienced users. It includes tools for custom commands within the container and volumes.
+
+* **Command**: Dokploy has a defined command to run the Docker Compose file, ensuring complete control through the UI. However, you can append flags or options to the command.
+
+<Callout type="info" title="Using Private Registries with Docker Stack">
+    If you're deploying with **Docker Stack** (Docker Swarm mode) using **replicas** and a **private registry**, you need to add the `--with-registry-auth` flag to ensure that registry credentials are properly distributed to all nodes in your swarm.
+
+Without this flag, worker nodes may fail to pull images from private registries, resulting in authentication errors like "no such image" or "docker authentication failed".
+
+This flag ensures that Docker shares the registry credentials with all swarm nodes during deployment, enabling them to authenticate and pull images from your private registry (GitHub Container Registry, Docker Hub private repos, etc.).
+  </Callout>
+
+* **Volumes**: To ensure data persistence across deployments, configure storage volumes for your application.
+
+<ImageZoom src="/assets/images/compose/overview.png" width={800} height={630} quality={100} priority alt="home og image" className="rounded-lg" />
+
+<Callout title="Volumes">
+  Docker volumes are a way to persist data generated and used by Docker containers. They are particularly useful for maintaining data between container restarts or for sharing data among different containers.
+
+Dokploy supports two methods for data persistence in Docker Compose:
+
+### Method 1: Bind Mounts (../files folder)
+
+Use bind mounts for simple persistence needs, configuration files, or when you need direct access to files on the host. This method maps a directory from the host machine into the container.
+
+**Important:** Avoid using absolute host paths, as they will be cleaned up during deployments:
+
+Instead, use the `../files` folder to ensure your data persists between deployments:
+
+**Use bind mounts when:**
+
+* You need simple data persistence
+  * You're mounting configuration files or small datasets
+  * You want direct file access on the host
+  * You don't need automated backups via Dokploy's Volume Backups feature
+
+### Method 2: Docker Named Volumes
+
+Use Docker named volumes when you need automated backups, better portability, or Docker-managed storage. Named volumes are managed by Docker and can be backed up automatically using Dokploy's [Volume Backups](/docs/core/volume-backups) feature.
+
+**Use named volumes when:**
+
+* You need automated backups to S3 (via Volume Backups)
+  * You want Docker-managed storage (better portability)
+  * You're storing databases or large datasets
+  * You need backup and restore capabilities
+
+**Note:** Volume Backups only work with Docker named volumes, not with bind mounts (`../files`). If you need backup functionality, use named volumes instead of bind mounts.
+
+### Choosing the Right Method
+
+| Feature               | Bind Mounts (../files) | Named Volumes               |
+  | --------------------- | ---------------------- | --------------------------- |
+  | Simple persistence    | ✅ Yes                  | ✅ Yes                       |
+  | Direct host access    | ✅ Yes                  | ❌ No                        |
+  | Automated backups     | ❌ No                   | ✅ Yes                       |
+  | Docker-managed        | ❌ No                   | ✅ Yes                       |
+  | Best for config files | ✅ Yes                  | ⚠️ Possible but less common |
+  | Best for databases    | ⚠️ Possible            | ✅ Recommended               |
+
+**Important:** If you need to use files from your repository (configuration files, scripts, etc.), you must move them to Dokploy's File Mounts (via Advanced → Mounts) instead of mounting them directly from the repository. When using AutoDeploy, Dokploy performs a `git clone` on each deployment, which clears the repository directory. Mounting files directly from your repository using relative paths (e.g., `./` or `./config/file.conf`) will cause them to be lost or empty in subsequent deployments. See the [Troubleshooting guide](/docs/core/troubleshooting#using-files-from-your-repository) for more details.
+</Callout>
+
+## Keyboard Shortcuts
+
+To help speed up navigating there are some built in keyboard shortcuts for
+navigating tabs on docker compose pages. Similar to GitHub these are all prefixed
+with the `g` key so to use them press `g` and then the shortcut key.
+
+| Key | Tab            |
+| --- | -------------- |
+| `g` | General        |
+| `e` | Environment    |
+| `u` | Domains        |
+| `d` | Deployments    |
+| `b` | Backups        |
+| `s` | Schedules      |
+| `v` | Volume Backups |
+| `l` | Logs           |
+| `m` | Monitoring     |
+| `a` | Advanced       |
+
+**Examples:**
+
+Example 1 (yaml):
+```yaml
+volumes:
+    - "/folder:/path/in/container" ❌
+```
+
+Example 2 (yaml):
+```yaml
+volumes:
+    - "../files/my-database:/var/lib/mysql" ✅
+    - "../files/my-configs:/etc/my-app/config" ✅
+```
+
+Example 3 (yaml):
+```yaml
+services:
+    app:
+      image: dokploy/dokploy:latest
+      volumes:
+        - my-database:/var/lib/mysql
+        - my-app-data:/app/data
+
+  volumes:
+    my-database:
+    my-app-data:
+```
+
+---
+
+## Backup
+
+**URL:** llms-txt#backup
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/backup.create"},{"method":"get","path":"/backup.one"},{"method":"post","path":"/backup.update"},{"method":"post","path":"/backup.remove"},{"method":"post","path":"/backup.manualBackupPostgres"},{"method":"post","path":"/backup.manualBackupMySql"},{"method":"post","path":"/backup.manualBackupMariadb"},{"method":"post","path":"/backup.manualBackupCompose"},{"method":"post","path":"/backup.manualBackupMongo"},{"method":"post","path":"/backup.manualBackupWebServer"},{"method":"get","path":"/backup.listBackupFiles"}]} hasHead={true} />
+
+---
+
+## Ntfy
+
+**URL:** llms-txt#ntfy
+
+**Contents:**
+- Ntfy Notifications
+
+Ntfy notifications are a great way to stay up to date with important events in your Dokploy panel. You can choose to receive notifications for specific events or all events.
+
+## Ntfy Notifications
+
+For start receiving ntfy notifications, you need to fill the form with the following details:
+
+* **Name**: Enter any name you want.
+* **Server URL**: Enter the ntfy server URL. eg. `https://ntfy.example.com`
+* **Access Token**: Enter the ntfy token. You can create one under `https://ntfy.example.com/account`
+* **Topic**: Enter the topic you want the notifications to be received.
+* **Priority**: Enter the priority of the notification, default is `3` (1-5).
+
+To Setup the ntfy notifications, you can read the [Notify Documentation](https://docs.ntfy.sh/).
+
+---
+
+## Create the dokploy service
+
+**URL:** llms-txt#create-the-dokploy-service
+
+**Contents:**
+  - Final Notes
+
+docker service create \
+  --name dokploy \
+  --replicas 1 \
+  --network dokploy-network \
+  --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
+  --mount type=bind,source=/etc/dokploy,target=/etc/dokploy \
+  --mount type=volume,source=dokploy,target=/root/.docker \
+  --publish published=3000,target=3000,mode=host \
+  --update-parallelism 1 \
+  --update-order stop-first \
+  --constraint 'node.role == manager' \
+  -e ADVERTISE_ADDR="Eg: 192.168.1.100" \
+  dokploy/dokploy:latest
+```
+
+While the specific issues may vary, the general troubleshooting approach remains similar to what we've described above, and is the general way we always follow when correcting a problem related to the dokploy instance not starting.. If you still can't access the user interface:
+
+1. Check that all containers are running properly
+2. Review the logs of each container for specific error messages
+3. Verify all configuration files
+4. Make sure to read the Traefik documentation for detailed configuration options: [https://doc.traefik.io/traefik/](https://doc.traefik.io/traefik/)
+
+<Callout title="Dokploy Cloud" type="info">
+  If you are using Dokploy Cloud, you don't need to worry about this, our team will handle the infrastructure for you.
+
+Start using Dokploy Cloud [https://app.dokploy.com/](https://app.dokploy.com/)
+</Callout>
+
+---
+
+## GHCR
+
+**URL:** llms-txt#ghcr
+
+To configure a GitHub Container Registry, you need to fill the form with the following details:
+
+1. Insert the Registry Name eg. `My Registry`.
+2. Insert the Username eg. `github_username`.
+3. Insert the Password, you can use your own github password or generate a token here `https://github.com/settings/tokens`
+4. Click on Generate Token (Classic).
+5. Insert the Note Description eg. `github_token`.
+6. In permissions make sure to select `write:packages`.
+7. Click on `Create`.
+8. Copy the `access token` and paste it in Dokploy Modal as a Password field.
+9. (Optional) If you pretend to use Cluster Feature, make sure to set a `Image Prefix`.
+10. Registry URL: set `ghcr.io`
+11. Click on `Test` to make sure everything is working.
+12. Click on `Create` to save the registry.
+
+---
+
+## Permissions
+
+**URL:** llms-txt#permissions
+
+**Contents:**
+- Roles
+  - Owner
+  - Admin
+  - Members
+
+Manage user roles and permissions within Dokploy. Dokploy handles three distinct roles with different levels of access and capabilities.
+
+Dokploy supports three roles for managing user access:
+
+The **Owner** is the creator of the organization and has the highest level of access:
+
+* Full administrative privileges
+* Can perform all actions that admins can do
+* Can delete and edit the role of admins
+* **Intransferable**: The owner role cannot be transferred to another user
+* Only one owner exists per organization
+
+**Admin** users have extensive administrative capabilities:
+
+* Can perform all actions that the owner can do
+* Full access to all features and settings
+* **Limitations**: Cannot delete or edit the role of other admins
+* **Limitations**: Cannot delete or edit the role of the owner
+
+**Members** are regular users who have access based on the permissions assigned to them. Members can be granted specific permissions to manage applications and services.
+
+The following permissions are available for **Members** to manage your users effectively:
+
+* **Create Projects**: Allow the user to create projects.
+* **Delete Projects**: Allow the user to delete projects.
+* **Create Services**: Allow the user to create services.
+* **Delete Services**: Allow the user to delete services.
+* **Create Environments**: Allow the user to create environments.
+* **Delete Environments**: Allow the user to delete environments.
+* **Access to Traefik Files**: Allow the user to access to the Traefik Tab Files.
+* **Access to Docker**: Allow the user to access to the Docker Tab.
+* **Access to API/CLI**: Allow the user to access to the API/CLI.
+* **Access to SSH Keys**: Allow to users to access to the SSH Keys section.
+* **Access to Git Providers**: Allow to users to access to the Git Providers section.
+
+You can also grant permissions to specific users for accessing particular projects or services.
+
+#### Project Permissions
+
+Based on your projects and services, you can assign permissions to specific users to give them access to particular projects or services. You can also select specific environments within projects, allowing you to grant granular access control at the environment level.
+
+---
+
+## MySQL
+
+**URL:** llms-txt#mysql
+
+1. Download and install Beekeeper Studio [Beekeeper Studio](https://www.beekeeperstudio.io/get).
+2. Go to your `mysql` databases.
+3. In External Credentials, enter the `External Port (Internet)` make sure the port is not in use by another service eg. `3306` and click `Save`.
+4. It will display the `External Connection URL` eg. `mysql://user:password@1.2.4.5:3306/database`.
+
+Open Beekeeper Studio and follow the steps:
+
+1. Click on `Add New Server`.
+2. Select `MySQL` as the `Database Type`.
+3. Use `Import URL` to enter the `External Connection URL` from Dokploy eg. `mysql://user:password@1.2.4.5:3306/database`.
+4. Click on `Connect`.
+5. Click on `Save`.
+
+Done! now you can manage the database from Beekeeper Studio.
+
+---
+
+## Enviroment
+
+**URL:** llms-txt#enviroment
+
+**Contents:**
+- Requirements
+- Commands
+
+The Dokploy CLI can be used to create, deploy, and manage enviroments.
+
+Is required to be already authenticated with the Dokploy CLI.
+
+1. `dokploy env pull <file>` -  Pull environment variables from Dokploy in a file.
+2. `dokploy env push <file>` - Push environment variables to Dokploy from a file.
+
+---
+
+## Admin
+
+**URL:** llms-txt#admin
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/admin.setupMonitoring"}]} hasHead={true} />
+
+---
+
+## Introduction
+
+**URL:** llms-txt#introduction
+
+**Contents:**
+- Server Types
+  - Deployment Servers
+  - Build Servers
+- Features
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+Remote servers allows you to deploy your apps remotely to different servers without needing to build and run them where the Dokploy UI is installed.
+
+To use the remote servers feature, you need to have Dokploy UI installed either locally or on a remote server. We recommend using a remote server for better connectivity, security, and isolation, for remote instances we install only a traefik instance.
+
+If you plan to only deploy apps to remote servers and use Dokploy UI for managing deployments, Dokploy will use around 250 MB of RAM and minimal CPU, so a low-resource server should be sufficient.
+
+All the features we have documented previously are supported by Dokploy Remote Servers. The only feature not supported is remote server monitoring, due to performance reasons. However, all functionalities should work the same as when deploying on the same server where Dokploy UI is installed.
+
+Dokploy supports two types of remote servers:
+
+### Deployment Servers
+
+**Deployment servers** are used to run and host your applications. These servers:
+
+* Run your containerized applications
+* Handle traffic routing through Traefik
+* Manage application deployments and updates
+* Store application data and volumes
+
+When you deploy an application, it runs on a deployment server. You can have multiple deployment servers to distribute your applications across different locations or for redundancy.
+
+**Build servers** are dedicated servers used to compile and build your applications. These servers:
+
+* Clone your repository
+* Build Docker images from your source code
+* Push built images to a Docker registry
+* Do not run any containers or active processes
+
+Build servers are particularly useful when you want to:
+
+* Separate the build process from deployment
+* Use powerful build resources without paying for expensive deployment servers
+* Build once and deploy to multiple servers
+* Keep your deployment servers lightweight
+
+<Callout type="info">
+  Build servers are currently **only available for Applications**. This feature is not supported for Docker Compose deployments.
+</Callout>
+
+You can configure an application to use a build server by selecting it in the application's **Advanced** settings. The built image will be pushed to a Docker registry, and then pulled by your deployment server(s) for deployment.
+
+1. **Enter the terminal**: Allows you to access the terminal of the remote server.
+2. **Setup Server**: Allows you to configure the remote server.
+   * **SSH Keys**: Steps to add SSH keys to the remote server.
+   * **Deployments**: Steps to configure the remote server for deploying applications.
+3. **Edit Server**: Allows you to modify the remote server's details, such as SSH key, name, description, IP, etc.
+4. **View Actions**: Lets you perform actions like managing the Traefik instance, storage, and activating Docker cleanup.
+5. **Show Traefik File System**: Displays the contents of the remote server's directory.
+6. **Show Docker Containers**: Shows the Docker containers running on the remote server.
+7. **Show Docker Swarm Overview**: Shows the Docker Swarm overview of the remote server.
+
+---
+
+## Next.js
+
+**URL:** llms-txt#next.js
+
+This example will deploy a simple Next.js application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/nextjs`
+
+2. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+3. **Generate a Domain**:
+   1. Click on generate domain button.
+   2. A new domain will be generated for you.
+   3. You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+---
+
+## SSH Keys
+
+**URL:** llms-txt#ssh-keys
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Dokploy provides a section exclusively for SSH keys, allowing you to manage your SSH keys in a centralized location.
+
+SSH Keys can be used for two purposes:
+
+* **Private Repositories**: You can use SSH Keys, to access to private repositories, this is only for `Git` provider
+  in your application or docker compose.
+* **Multi Server**: You can use SSH Keys, to access remotely to your servers via SSH.
+
+To create a SSH Key, is a very easy process, just click on `Create SSH Key`
+
+We offer two SSH Keys Generation types:
+
+1. **RSA Key**: This is the most commonly used key type, and generates a 2048-bit RSA key.
+2. **Ed25519 Key**: This is a newer key type that generates a 256-bit Ed25519 key.
+
+<Callout>
+  You can also create or paste your own SSH Key, you can edit the `Private Key` and `Public Key` fields without restrictions,
+  make sure to use the correct format for the key type you are using.
+</Callout>
+
+<Callout type="warn">
+  Once you create a SSH Key you will not be able to read the `Private Key` anymore.
+</Callout>
+
+---
+
+## Features
+
+**URL:** llms-txt#features
+
+**Contents:**
+- Application Deployment
+  - Applications Management
+  - Docker Compose Management
+- Database Deployment
+
+Dokploy provides a comprehensive suite of features designed to simplify and enhance the application deployment process.
+
+## Application Deployment
+
+Dokploy supports two primary methods for deploying applications:
+
+1. **Applications**: This straightforward method allows for effortless deployment. Ideal for single applications, it offers a near plug-and-play experience.
+2. **Docker Compose**: A more advanced option, requiring the creation of Dockerfiles and `docker-compose.yml`. This method provides greater control over deployment settings and full utilization of Docker Compose capabilities.
+
+### Applications Management
+
+Manage your applications through a range of features:
+
+**Basic Operations**:
+
+1. Deploy, stop, and delete applications.
+2. Open a terminal directly in the application container.
+
+**Source and Build Configuration**:
+
+1. Choose source providers (GitHub, Git, Docker).
+2. Select build types (Docker, Nixpacks, Heroku Buildpacks, Paketo Buildpacks).
+
+**Environment Management**:
+
+1. Add and manage environment variables.
+
+**Monitoring Tools**:
+
+1. Monitor CPU, memory, disk, and network usage.
+
+1. Access real-time logs.
+
+1. View and manage deployments, you can see the logs of the building application.
+2. Cancel queued deployments in case you have a lot of deployments in the queue, the most common is when you push alot of times in your repository, you can cancel the incoming queues, not the deployments that are already running.
+
+**Domain Management**:
+
+1. Add, delete, and generate domains.
+
+**Advanced Settings**:
+
+1. Customize initial commands and cluster settings.
+2. Set resource limits and manage volumes for data persistence.
+3. Configure redirects, security headers, and port settings.
+4. Detailed Traefik configuration for specific needs.
+
+### Docker Compose Management
+
+Enhance your Docker Compose experience with these advanced functionalities:
+
+**Lifecycle Management**:
+
+1. Deploy, stop, and delete Docker Compose setups.
+2. Open a terminal with service selection capability.
+
+**Source Configuration**:
+
+1. Choose source providers (GitHub, Git, Raw).
+
+**Environment Management**:
+
+1. Add and manage environment variables.
+
+**Monitoring Tools**:
+
+1. Monitor CPU, memory, disk, and network usage of each service.
+
+1. View real-time logs of each service.
+
+1. View and manage deployments, you can see the logs of the building application.
+2. Cancel queued deployments in case you have a lot of deployments in the queue, the most common is when you push alot of times in your repository, you can cancel the incoming queues, not the deployments that are already running.
+
+**Advanced Settings**:
+
+1. Append command, by default we use a internal command to build the docker compose however, you can append a command to the existing one.
+2. Manage volumes and mounts.
+
+## Database Deployment
+
+Deploy and manage a variety of databases:
+
+**Supported Databases**:
+
+1. MySQL, PostgreSQL, MongoDB, Redis, MariaDB.
+
+**General Management**:
+
+1. Deploy, stop, and delete databases.
+2. Open a terminal within the database container.
+
+**Environment and Monitoring**:
+
+1. Manage environment variables.
+2. Monitor CPU, memory, disk, and network usage.
+
+**Backups and Logs**:
+
+1. Configure manual and scheduled backups.
+2. View real-time logs.
+
+**Advanced Configuration**:
+
+1. Use custom Docker images and initial commands.
+2. Configure volumes and resource limits.
+
+These features are designed to offer flexibility and control over your deployment environments, ensuring that Dokploy meets the diverse needs of modern application deployment and management.
+
+---
+
+## PG Admin
+
+**URL:** llms-txt#pg-admin
+
+1. Download and install pgAdmin [pgAdmin](https://www.pgadmin.org/download/).
+2. Go to your `postgres` databases.
+3. In External Credentials, enter the `External Port (Internet)` make sure the port is not in use by another service eg. `5433` and click `Save`.
+4. It will display the `External Connection URL` eg. `postgres://user:password@1.2.4.5:5433/database`.
+
+Open pgAdmin and follow the steps:
+
+1. Click on `Add New Server`.
+2. Enter the `Server Name` eg. `dokploy`.
+3. Enter to `Connection`.
+4. In Hostname/Address enter the IP from the server where the database is hosted eg. `1.2.4.5`.
+5. In Port enter the port where the database is running eg. `5433`.
+6. In Database enter the name of the database eg. `database`.
+7. In Username enter the username eg. `user`.
+8. In Password enter the password eg. `password`.
+9. Click on `Save`.
+
+Done! now you can manage the database from pgAdmin.
+
+---
+
+## Volume Backups
+
+**URL:** llms-txt#volume-backups
+
+**Contents:**
+- Supported Services
+- Setting Up Volume Mounts
+  - For Applications
+  - For Docker Compose
+- Practical Example: N8N Backup
+  - N8N Docker Compose Configuration
+- Creating Volume Backups
+  - Backup Configuration
+  - Safety Considerations
+- Restoring Volume Backups
+
+Volume backups are essential when your service doesn't fit the traditional database backup solutions. This is common when your application uses SQLite databases or doesn't have a database at all, making Dokploy's dedicated database backup features (PostgreSQL, MySQL, MongoDB, etc.) unsuitable for your use case.
+
+Volume backups allow you to backup [Docker named volumes](https://docs.docker.com/engine/storage/volumes/) to S3 destinations, providing a comprehensive backup solution for any type of data stored in volumes.
+
+<Callout type="info">
+  **Important:** Volume Backups only work with Docker named volumes, not with bind mounts (like the `../files` folder). If you're currently using bind mounts and need backup functionality, you'll need to migrate to named volumes. See the [Docker Compose guide](/docs/core/docker-compose#volumes) for a comparison of both methods and guidance on choosing the right approach for your needs.
+</Callout>
+
+## Supported Services
+
+Volume backups are available for:
+
+1. **Applications** - Single container applications
+2. **Docker Compose** - Multi-container applications
+
+## Setting Up Volume Mounts
+
+Volume Backups require Docker named volumes. If you're using bind mounts (like `../files`), you'll need to switch to named volumes to use this feature.
+
+1. Navigate to your application
+2. Go to **Advanced** → **Mounts**
+3. Create a new mount and select **Volume Mount** option
+
+### For Docker Compose
+
+Define named volumes directly in your `docker-compose.yml` file. **Note:** Bind mounts (e.g., `../files/my-data:/app/data`) cannot be backed up using Volume Backups—you must use named volumes:
+
+For more information on choosing between bind mounts and named volumes, see the [Docker Compose volumes section](/docs/core/docker-compose#volumes).
+
+## Practical Example: N8N Backup
+
+Let's walk through a common scenario using N8N, which runs on SQLite and stores data in Docker volumes.
+
+### N8N Docker Compose Configuration
+
+Since N8N uses SQLite (stored in the `n8n_data` volume), we can't use Dokploy's database backup features. Instead, we'll backup the entire volume.
+
+## Creating Volume Backups
+
+### Backup Configuration
+
+1. Deploy your N8N template
+2. Navigate to **Volume Backups** section
+3. Create a new volume backup with these settings:
+
+| Setting                | Value               | Description                                   |
+| ---------------------- | ------------------- | --------------------------------------------- |
+| **Name**               | `my-n8n-backup`     | Unique identifier for your backup             |
+| **Schedule**           | `0 0 * * *`         | Daily backup at midnight (cron format)        |
+| **Destination**        | Your S3 destination | Must be configured in your account            |
+| **Service Name**       | `n8n`               | Auto-complete will suggest available services |
+| **Volume Name**        | `n8n_data`          | Auto-filled when service is selected          |
+| **Backup Prefix**      | Optional            | Additional prefix for backup files            |
+| **Turn off Container** | Optional            | See safety considerations below               |
+| **Enabled**            | ✓                   | Enable the backup schedule                    |
+
+### Safety Considerations
+
+**Turn off Container during backup** option provides two approaches:
+
+* **Container OFF** (Recommended): Safer option that prevents data corruption during backup, this will stop the container during the backup, and then start it again after the backup is done.
+* **Container ON**: Faster but may cause inconsistencies if the service is actively writing to the volume
+
+<Callout type="warning">
+  When backing up with the container running, there's a risk of data corruption if the application is actively writing to the volume during backup.
+</Callout>
+
+## Restoring Volume Backups
+
+1. Navigate to **Volume Backups** section
+2. Select **Restore Volume** option
+3. Choose your S3 destination where the backup is stored
+4. Select the specific backup you want to restore
+5. Enter the target volume name for restoration
+
+### Volume Naming for Docker Compose
+
+For Docker Compose services, volume names follow a specific pattern:
+`{appName}_{volumeName}`
+
+**Example**: If your app name is `n8n-n8n-kqlble`, the volume name would be:
+`n8n-n8n-kqlble_n8n_data`
+
+### Important Restore Considerations
+
+<Callout type="warning">
+  **Before restoring:**
+
+* Ensure the target volume doesn't already exist
+  * Stop any containers using the volume
+  * Remove the existing volume if necessary
+
+The restore will fail if the volume is in use or already exists.
+</Callout>
+
+### Finding the Correct Volume Name
+
+1. **Check your Docker Compose file** to understand the volume structure
+2. **Verify the app name** in Dokploy (usually under the name of your service)
+3. **Use the pattern**: `{appName}_{volumeName}` for Docker Compose services
+4. **For single applications**: Volume names are typically simpler and match your mount configuration
+
+This ensures your restored volume will be properly recognized and used by your Docker Compose services when they restart.
+
+**Examples:**
+
+Example 1 (yaml):
+```yaml
+services:
+  app:
+    image: dokploy/dokploy:latest
+    volumes:
+      - my-volume:/app/data
+
+volumes:
+  my-volume:
+```
+
+Example 2 (yaml):
+```yaml
+version: "3.8"
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:1.83.2
+    restart: always
+    environment:
+      - N8N_HOST=${N8N_HOST}
+      - N8N_PORT=${N8N_PORT}
+      - N8N_PROTOCOL=http
+      - NODE_ENV=production
+      - WEBHOOK_URL=https://${N8N_HOST}/
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
+      - N8N_SECURE_COOKIE=false
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_data:
+```
+
+---
+
+## User
+
+**URL:** llms-txt#user
+
+{/* This file was generated by Fumadocs. Do not edit this file directly. Any changes should be made by running the generation command again. */}
+
+<APIPage document={"./public/openapi.json"} webhooks={[]} operations={[{"path":"/user.all","method":"get"},{"path":"/user.one","method":"get"},{"path":"/user.get","method":"get"},{"path":"/user.haveRootAccess","method":"get"},{"path":"/user.getBackups","method":"get"},{"path":"/user.getServerMetrics","method":"get"},{"path":"/user.update","method":"post"},{"path":"/user.getUserByToken","method":"get"},{"path":"/user.getMetricsToken","method":"get"},{"path":"/user.remove","method":"post"},{"path":"/user.assignPermissions","method":"post"},{"path":"/user.getInvitations","method":"get"},{"path":"/user.getContainerMetrics","method":"get"},{"path":"/user.generateToken","method":"post"},{"path":"/user.deleteApiKey","method":"post"},{"path":"/user.createApiKey","method":"post"},{"path":"/user.checkUserOrganizations","method":"get"},{"path":"/user.sendInvitation","method":"post"}]} showTitle={true} />
+
+---
+
+## Deployment
+
+**URL:** llms-txt#deployment
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"get","path":"/deployment.all"},{"method":"get","path":"/deployment.allByCompose"},{"method":"get","path":"/deployment.allByServer"},{"method":"get","path":"/deployment.allByType"},{"method":"post","path":"/deployment.killProcess"}]} hasHead={true} />
+
+---
+
+## Discord
+
+**URL:** llms-txt#discord
+
+**Contents:**
+- Discord Notifications
+
+Discord notifications are a great way to stay up to date with important events in your Dokploy panel. You can choose to receive notifications for specific events or all events.
+
+## Discord Notifications
+
+For start receiving discord notifications, you need to fill the form with the following details:
+
+* **Name**: Enter any name you want.
+* **Webhook URL**: Enter the webhook URL. eg. `https://discord.com/api/webhooks/000000000000000/00000000-0000-0000-0000-000000000000`
+
+To Setup the Discord notifications, follow these steps:
+
+1. Go to Discord, and search your Discord server.
+2. Go to `Server Settings` and click on `Integrations`.
+3. Click on `Create a Webhook`.
+4. Set a name for your webhook, eg. `dokploy_webhook`.
+5. Click on the `Webhook` you've created and click on copy the `Webhook URL`.
+6. Go to Dokploy `Notifications` and select `Discord` as the notification provider.
+7. Use the `Webhook URL` you copied in the previous step.
+8. Click on `Test` to make sure everything is working.
+9. Click on `Create` to save the notification.
+
+---
+
+## Preview Deployments
+
+**URL:** llms-txt#preview-deployments
+
+**Contents:**
+- Configuration
+  - Custom Domains
+- How It Works
+  - Filtering labels
+  - Monitoring Deployments
+  - Automatic Updates
+
+Preview deployments are a powerful feature specifically designed for applications with GitHub integration. This feature is disabled by default but can be easily enabled to enhance your development workflow.
+
+<ImageZoom src="/assets/images/preview-deployments.png" width={800} height={630} alt="Preview deployments" className="rounded-lg" />
+
+<Callout type="info">
+  We recommend not using preview deployments for public repositories, since external people can execute builds and deployments in your server.
+</Callout>
+
+By default, Dokploy generates dynamic domains using traefik.me domains, which are free and require no additional configuration. The default port is 3000, but you can adjust this based on your application's requirements. You can also limit the number of  preview deployments per application (default is 3).
+
+If you prefer using a custom domain, you can configure it like this:
+
+Dokploy will generate domains following this pattern:
+
+To make this work, you need to point your wildcard DNS record (\*) to your server's IP address.
+
+Once enabled, preview deployments are automatically created whenever a pull request is opened against your target branch (configured in your provider settings).
+
+* If your provider is configured to use the `main` branch
+* And you create a pull request from `feature/new-feature` to `main`
+* A preview deployment will be automatically created for the `feature/new-feature` branch
+
+Note: Pull requests to branches other than your configured target branch will not trigger preview deployments.
+
+If you only want pull requests with a specific label to create preview deployments, you can specify one or multiple in the preview settings.
+Dokploy will check that at least one of the labels is present on the pull request. If you leave the settings field empty, Dokploy will create
+preview deployments for all pull requests, regardless of labels.
+
+### Monitoring Deployments
+
+When you open a pull request, you can monitor the deployment progress in the preview deployments section:
+
+<ImageZoom src="/assets/images/preview-deploy.png" width={800} height={630} alt="Preview deployments build" className="rounded-lg" />
+
+In this section, you can:
+
+* View the deployment status
+* Access the preview URL once deployed
+* Check build and deployment logs
+* Monitor deployment updates
+* Update domain configuration
+
+### Automatic Updates
+
+The preview deployment will automatically:
+
+* Update with each new commit to the pull request
+* Create a new build and deployment
+* Clean up when the pull request is closed or merged
+
+This continuous preview system allows teams to review and test changes in isolation before merging to production.
+
+<Callout type="info">
+  If you have security or redirects created in your application, it will inherit the same configuration for the preview deployment.
+</Callout>
+
+**Examples:**
+
+Example 1 (unknown):
+```unknown
+*.mydomain.com
+```
+
+Example 2 (unknown):
+```unknown
+preview-${appName}-${uniqueId}.traefik.me
+```
+
+---
+
+## Actions
+
+**URL:** llms-txt#actions
+
+**Contents:**
+- Actions:
+  - Create
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+The S3 Destinations section are essential for backing up your databases.
+
+1. **Create**: Create a new S3 destination.
+2. **Delete**: Delete a S3 destination.
+3. **Edit**: Edit a S3 destination.
+4. **Test**: Test a S3 destination.
+
+In order to create a new S3 Bucket, you need to fill the form.
+
+* **Name**: This could be anything you want, it will be the name.
+* **Access Key**: This is the access key that you will use to access your bucket.
+* **Secret Key**: This is the secret key that you will use to access your bucket.
+* **Bucket**: This is the bucket that you will use to access your bucket.
+* **Region**: This is the region that you will use to access your bucket.
+* **Endpoint**: This is the endpoint that you will use to access your bucket.
+
+<Callout type="info">
+  There is a Button `Test` that will test the connection to your bucket, if it is correct it will show you a success message.
+</Callout>
+
+---
+
+## Main script execution
+
+**URL:** llms-txt#main-script-execution
+
+**Contents:**
+- Customize install
+- Existing Docker swarm
+
+if [ "$1" = "update" ]; then
+    update_dokploy
+else
+    install_dokploy
+fi
+
+bash
+docker network create --driver overlay --attachable dokploy-network
+
+mkdir -p /etc/dokploy
+
+chmod -R 777 /etc/dokploy
+
+docker pull dokploy/dokploy:latest
+
+**Examples:**
+
+Example 1 (unknown):
+```unknown
+This script includes checks for common pitfalls, installs Docker if it’s not already installed, initializes a Docker Swarm, creates a network, and then pulls and deploys Dokploy. After the script runs, it provides a success message and instructions for accessing Dokploy.
+
+This structured format clearly lays out the prerequisites, steps, and post-installation information, making it user-friendly and accessible for those performing manual installations.
+
+## Customize install
+
+#### Customize swarm advertise address
+
+The --advertise-addr parameter in the docker swarm init command specifies the IP address or interface that the Docker Swarm manager node should advertise to other nodes in the Swarm. This address is used by other nodes to communicate with the manager.
+
+By default, this script uses the external IP address of the server, obtained using the `curl -s ifconfig.me` command. However, you might need to customize this address based on your network configuration, especially if your server has multiple network interfaces or if you're setting up Swarm in a private network.
+
+To customize the --advertise-addr parameter, replace the line: `advertise_addr=$(curl -s ifconfig.me)` with your desired IP address or interface, for example:
+`advertise_addr="192.168.1.100"`
+
+:warning: This IP address should be accessible to all nodes that will join the Swarm.
+
+## Existing Docker swarm
+
+If you already have a Docker swarm running on your server and you want to use dokploy, you can use the following command to join it:
+```
+
+---
+
+## Others
+
+**URL:** llms-txt#others
+
+**Contents:**
+  - Important Clarification on Container Ports
+
+In the case you don't want to use Cloudflare, you can use any domain from any provider:
+
+1. Go to your DNS Panel.
+2. Go to `Records` section.
+3. Click on `Add Record`.
+4. Select `A` record type.
+5. Enter the `Host` name, eg. `api` so it will be `api.dokploy.com`.
+6. Enter the `IPv4 Address` from your server where the application is hosted eg. `1.2.3.4`.
+7. Click `Save`.
+8. Go to dokploy panel and now you can assign either for `Applications` or `Docker Compose`.
+9. Go to `Domains` section.
+10. Click `Create Domain`.
+11. In the `Host` field, enter the domain name eg. `api.dokploy.com`.
+12. In the `Path` field, enter the path eg. `/`.
+13. In the `Container Port` field, enter the port where your application is running eg. `3000`.
+14. In the `HTTPS` field enable `ON`.
+15. In the `Certificate` field select `Let's Encrypt`.
+16. Click `Create`.
+17. A domain will be automatically assigned to your application.
+18. Wait a few seconds and refresh the application.
+19. You should see the application running on the domain you just created.
+
+### Important Clarification on Container Ports
+
+The "Container Port" specified in the domain settings is exclusively for routing traffic to the correct application container through Traefik, and does not expose the port directly to the internet. This is fundamentally different from the port settings in the "Advanced -> Ports" section, which are used to directly expose application ports. The container port in the domain settings ensures that Traefik can internally direct traffic to the specified port within the container based on the domain configuration.
+
+---
+
+## Create a new dokploy service
+
+**URL:** llms-txt#create-a-new-dokploy-service
+
+---
+
+## Upload to S3 (if needed)
+
+**URL:** llms-txt#upload-to-s3-(if-needed)
+
+---
+
+## Security
+
+**URL:** llms-txt#security
+
+**Contents:**
+- Security Recommendations
+  - Operating System
+  - UFW (Uncomplicated Firewall)
+  - SSH Security
+  - Fail2Ban Protection
+- Security Status Check
+- Warning
+
+Dokploy provides comprehensive security recommendations to protect your remote server. Our security checks ensure your server follows best practices for a secure deployment environment.
+
+## Security Recommendations
+
+* Currently supports Ubuntu/Debian OS (Experimental)
+* Regular system updates recommended
+
+### UFW (Uncomplicated Firewall)
+
+UFW is an essential security component that manages incoming and outgoing network traffic.
+
+**Recommended Configuration:**
+
+* ✅ UFW should be installed
+* ✅ UFW should be active
+* ✅ Default incoming policy should be set to 'deny'
+* ✅ Only necessary ports should be opened
+
+<Callout type="warn">
+  **Important: Docker Bypasses UFW Rules**
+
+Docker directly modifies `iptables` rules, which means it bypasses UFW firewall rules. This is a critical security issue: **ports exposed by Docker containers remain accessible from the public internet even when UFW rules should block them**, creating a false sense of security.
+
+For example, if you have UFW configured to deny all incoming traffic by default, but you run a Docker container with `-p 3000:3000`, port 3000 will still be accessible from the internet despite your UFW configuration.
+
+* **ufw-docker**: Use the [ufw-docker](https://github.com/chaifeng/ufw-docker) utility to properly integrate Docker with UFW, ensuring that Docker containers respect UFW firewall rules.
+
+* **VPS Provider Firewall**: Configure your cloud provider's firewall (e.g., AWS Security Groups, DigitalOcean Firewalls) to block public access to Docker-exposed ports. This operates before Docker's iptables rules and provides reliable protection.
+</Callout>
+
+Secure Shell (SSH) configuration is crucial for safe remote server access.
+
+* ✅ SSH service should be enabled
+* ✅ Key-based authentication should be enabled
+* ❌ Password authentication should be disabled
+* ❌ PAM should be disabled when using key-based authentication
+* ✅ Use non-standard SSH port (optional)
+
+### Fail2Ban Protection
+
+Fail2Ban helps prevent brute force attacks by temporarily banning IPs that show malicious behavior.
+
+**Recommended Setup:**
+
+* ✅ Fail2Ban should be installed
+* ✅ Service should be enabled and running
+* ✅ SSH protection should be enabled
+* ✅ Use aggressive mode for enhanced security
+
+## Security Status Check
+
+Dokploy automatically validates these security configurations and provides recommendations:
+
+<ImageZoom src="/assets/images/server-security.png" alt="Security" width={1000} height={600} />
+
+These security measures are essential baseline recommendations. Depending on your specific use case, additional security measures might be necessary.
+
+---
+
+## Deno
+
+**URL:** llms-txt#deno
+
+This example will deploy a simple Deno application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/deno`
+   * Select `Dockerfile` as Build Type
+   * Type `Dockerfile` in the Dockerfile path field
+
+2. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+3. **Generate a Domain**:
+   * Click on generate domain button.
+
+* A new domain will be generated for you.
+
+* You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+---
+
+## Zero Downtime
+
+**URL:** llms-txt#zero-downtime
+
+**Contents:**
+- Steps to configure Zero Downtime Deployments
+- Example
+
+Dokploy allows you to configure zero downtime deployments, which means that you can deploy your application without any downtime.
+
+By default when you create a new deployment it will stop the latest running container and start the new one. This is the default behavior of Docker Swarm and this leads to Bad Gateway since
+the containers are initializing at the same time,
+but Dokploy allows you to configure zero downtime deployments.
+
+## Steps to configure Zero Downtime Deployments
+
+Let's suppose we have a NodeJS application that has a health check route `/api/health` that returns a 200 status code and running in the port 3000.
+
+1. In your application is necessary to have a `Path` or `Health Route` to be able to achieve zero downtime deployments eg. in the case of a NodeJS app you can have a route `/api/health` that returns a 200 status code.
+2. Go to `Advanced` Tab and go to Cluster Settings and enter to `Swarm Settings`
+3. There are a couple options that you can use, in this case we will focus on `Health Check`.
+4. Paste this code in the health check field:
+   Make sure the API Route exists in your application
+
+1. We will use this example [Github Repo](https://github.com/Dokploy/swarm-test)
+
+2. It Have a endpoint called `health` [endpoint](https://github.com/Dokploy/swarm-test/blob/main/index.js#L20) which is the one that will tell us if our application is healthy.
+
+3. For testing purpose I've added a sleep to simulate the delay between the deployments and you can see the bad gateway error.
+
+4. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/swarm-test`
+   * Branch: `main`
+   * Build path: `/`
+
+If you want to test that there is no zero downtime yet, you can simply deploy the application and then create another deployment and while doing the deployment reload the page in the path /health and you will see that a bad gateway will appear.
+
+Now go to the advanced section of our application, and go to the Swarm Settings section, we are going to modify the first section of Healtchecks.
+
+We will use this configuration specifically, paste and save it
+
+This configuration basically tells to Docker to do:
+
+Make a request inside the container to [http://localhost:3000/health](http://localhost:3000/health) and then we are also saying to make in interval of 30000000000 nanosec, and also makes 3 retries before switching to the new container
+
+that would be all, Now you have Zero Downtime Deployments 🎊.
+
+**Examples:**
+
+Example 1 (json):
+```json
+{
+  "Test": [
+    "CMD",
+    "curl",
+    "-f",
+    "http://localhost:3000/api/health"
+  ],
+  "Interval": 30000000000,
+  "Timeout": 10000000000,
+  "StartPeriod": 30000000000,
+  "Retries": 3
+}
+```
+
+Example 2 (json):
+```json
+{
+  "Test": [
+    "CMD",
+    "curl",
+    "-f",
+    "http://localhost:3000/health"
+  ],
+  "Interval": 30000000000,
+  "Timeout": 10000000000,
+  "StartPeriod": 30000000000,
+  "Retries": 3
+}
+```
+
+---
+
+## Project
+
+**URL:** llms-txt#project
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/project.create"},{"method":"get","path":"/project.one"},{"method":"get","path":"/project.all"},{"method":"post","path":"/project.remove"},{"method":"post","path":"/project.update"},{"method":"post","path":"/project.duplicate"}]} hasHead={true} />
+
+---
+
+## Docker
+
+**URL:** llms-txt#docker
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"get","path":"/docker.getContainers"},{"method":"post","path":"/docker.restartContainer"},{"method":"get","path":"/docker.getConfig"},{"method":"get","path":"/docker.getContainersByAppNameMatch"},{"method":"get","path":"/docker.getContainersByAppLabel"},{"method":"get","path":"/docker.getStackContainersByAppName"},{"method":"get","path":"/docker.getServiceContainersByAppName"}]} hasHead={true} />
+
+---
+
+## Example
+
+**URL:** llms-txt#example
+
+**Contents:**
+- Tutorial
+  - Steps
+  - Updating Your `docker-compose.yml`
+
+In this tutorial, we will create a simple application using Docker Compose and route the traffic to an accessible domain.
+
+<Callout type="info">
+  **Note**: There are two ways to configure domains for Docker Compose applications:
+
+1. **Using Dokploy Domains** (Recommended): Configure domains directly in the Dokploy UI through the **Domains** tab. See the [Domains guide](/docs/core/domains) for details.
+  2. **Manual Configuration**: Configure domains using Traefik labels in your Docker Compose file (shown in this tutorial).
+
+This tutorial demonstrates the manual method. For most users, we recommend using the Dokploy Domains feature as it's simpler and doesn't require editing your Docker Compose file.
+</Callout>
+
+1. Create a new project.
+2. Create a new service `Compose` and select the Compose Type `Docker Compose`.
+3. Fork this repository: [Repo](https://github.com/Dokploy/docker-compose-test).
+4. Select Provider type: GitHub or Git.
+5. Select the repository: `Dokploy/docker-compose-test`.
+6. Select the branch: `main`.
+7. Set the Compose Path to `./docker-compose.yml` and save.
+   <img alt="Docker compose configuration" src={__img0} placeholder="blur" />
+
+### Updating Your `docker-compose.yml`
+
+Add the following to your existing `docker-compose.yml` file:
+
+1. Add the network `dokploy-network` to each service.
+2. Add labels for Traefik to make the service accessible through the domain.
+
+Let's modify the following compose file to make it work with Dokploy:
+
+Updated version with dokploy-network and Traefik labels:
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="warn">
+  Don't set container\_name property to the each service, it will cause issues with logs, metrics and other features
+</Callout>
+
+{/* :::danger
+Don't set container_name property to the each service, it will cause issues with logs, metrics and other features
+
+Make sure to point the A record to the domain you want to use for your service.
+
+<ImageZoom src="/assets/images/compose/domain.png" width={800} height={630} alt="home og image" className="rounded-lg" />
+
+Deploy the application by clicking on "deploy" and wait for the deployment to complete. Then give Traefik about 10 seconds to generate the certificates. You can then access the application through the domain you have set.
+
+<ImageZoom src="/assets/images/compose/application.png" width={800} height={630} alt="home og image" className="rounded-lg" />
+
+1. Set unique names for each router: `traefik.http.routers.<unique-name>`
+2. Set unique names for each service: `traefik.http.services.<unique-name>`
+3. Ensure the network is linked to the `dokploy-network`
+4. Set the entry point to websecure and the certificate resolver to letsencrypt to generate certificates.
+5. **For Docker Stack**: If you're using Docker Stack (Docker Swarm mode), place the labels under `deploy.labels` instead of directly under `labels`. See the [Domains guide](/docs/core/docker-compose/domains) for the Docker Stack configuration example.
+
+**Examples:**
+
+Example 1 (yaml):
+```yaml
+version: "3"
+
+services:
+  next-app:
+    build:
+      context: ./next-app
+      dockerfile: prod.Dockerfile
+      args:
+        ENV_VARIABLE: ${ENV_VARIABLE}
+        NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - my_network
+networks:
+  my_network:
+    external: true
+```
+
+Example 2 (yaml):
+```yaml
+version: "3"
+
+services:
+  next-app:
+    build:
+      context: ./next-app
+      dockerfile: prod.Dockerfile
+      args:
+        ENV_VARIABLE: ${ENV_VARIABLE}
+        NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
+    restart: always
+    ports:
+      - 3000
+    networks:
+      - dokploy-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.<unique-name>.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.<unique-name>.entrypoints=websecure"
+      - "traefik.http.routers.<unique-name>.tls.certResolver=letsencrypt"
+      - "traefik.http.services.<unique-name>.loadbalancer.server.port=3000"
+networks:
+  dokploy-network:
+    external: true
+```
+
+---
+
+## Telegram
+
+**URL:** llms-txt#telegram
+
+**Contents:**
+- Telegram Notifications
+
+Telegram notifications are a great way to stay up to date with important events in your Dokploy panel. You can choose to receive notifications for specific events or all events.
+
+## Telegram Notifications
+
+For start receiving telegram notifications, you need to fill the form with the following details:
+
+* **Name**: Enter any name you want.
+* **Bot Token**: Enter the bot token. eg. `123456789:ABCdefGHIjklMNOPqrstUVWXYZ`
+* **Chat ID**: Enter the chat ID. eg. `123456789`
+
+To Setup the telegram notifications, follow these steps:
+
+1. Go to `https://telegram.me/botfather` and click on `Start Bot`.
+2. Type `/newbot` and click on `Start`.
+3. Set a name for your bot, eg. `dokploy_bot` make sure the name ends with `_bot`.
+4. Copy the `Bot Token` and paste it in Dokploy `Telegram` Modal section.
+5. Now you need to get the Chat ID, or create a new Channel
+6. Search this bot in the search bar `@userinfobot`.
+7. Type `/start` and it will return the chat ID.
+8. Copy the `Chat ID` and paste it in Dokploy `Telegram` Modal section.
+9. Click on test to make sure everything is working.
+10. Click on `Create` to save the notification.
+
+---
+
+## Gitlab
+
+**URL:** llms-txt#gitlab
+
+**Contents:**
+- Setup Automatic Deployments
+- Clarification on Automatic Deployments
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Dokploy offer a way to connect your Gitlab Repository to your Dokploy panel, you can use Groups Names or personal accounts.
+
+Go to `Git` and select `Gitlab` as the source, then you can use the following options:
+
+* **Application ID**: Select the application ID that you want to connect to Dokploy.
+* **Personal Secret**: Select the secret that you want to connect to Dokploy.
+* **Group Name(Optional)**: Select the group name that you want to connect to Dokploy(Ideal for Gitlab Groups).
+
+Follow the steps to connect your Gitlab account to Dokploy.
+
+1. Go to `https://gitlab.com/-/profile/applications` and click on ` Add New Application`.
+2. Set Application Name: eg. `Dokploy-Gitlab-App`. choose any name that you want.
+3. Redirect URI: Copy the `Redirect URI` from Dokploy. eg. `https://dokploy.com/api/providers/gitlab/callback`.
+4. Select Permissions: `api`, `read_user`, `read_repository`.
+5. Click on `Save Application`.
+6. Copy the `Application ID` and `Secret` from Gitlab and paste it in Dokploy `Gitlab` Modal section.
+7. (Optional) If you want to use Groups, go to `https://gitlab.com/dashboard/groups` enter the group name you
+   want to connect, and look at the URL in the address bar, it will be something like this
+   `https://gitlab.com/dokploy-panel/frontend` you can use Nested Groups and SubGroups and copy the `dokploy-panel/frontend` from Gitlab and paste
+   it in Dokploy `Gitlab` Modal section.
+8. Click on `Continue`.
+9. Go Back to Dokploy and click on `Install` button.
+10. Click on `Authorize`.
+11. You will be redirected to the `Git` section of Dokploy.
+12. Now you can use the repositories from your Gitlab Account in `Applications` or `Docker Compose` services.
+
+<Callout type="warn">
+  Dokploy doesn't support Gitlab Automatic deployments on each push you make to your repository.
+</Callout>
+
+## Setup Automatic Deployments
+
+You can configure automatic deployments in Dokploy for the Following Services:
+
+1. **Applications**
+2. **Docker Compose**
+
+The steps are the same for both services.
+
+1. Go to either `Applications` or `Docker Compose` and go to `Deployments` Tab.
+2. Copy the `Webhook URL`.
+3. Go to your Gitlab Account and select the repository.
+4. In the left menu, select `Settings` and then `Webhooks`.
+5. Click on `Add Webhook`.
+6. Set the `URL` to the one you copied in the previous step.
+7. In the Trigger section, select `Push Events`.
+8. Click on `Add Webhook`.
+9. Click on `Save`.
+10. Now you have automatic deployments enabled for the selected repository.
+
+## Clarification on Automatic Deployments
+
+By default, Dokploy will automatically deploy your application on the Branch you have selected.
+
+eg. Let's suppose you have a `application` in this way:
+
+Repository: `my-app`
+Branch: `feature`
+
+If you try to make a push on another branch eg. `main`, Dokploy will not automatically deploy your application, because
+your application have selected `feature` as the Branch.
+
+<Callout>
+  In the case you want to have multiple applications in the same repository, eg. (development, staging, production), you can create 3 `Applications` in Dokploy
+  and select the branch in each of them.
+
+This is very usefull if you want to have multiple environments for the same application.
+</Callout>
+
+---
+
+## Comparison
+
+**URL:** llms-txt#comparison
+
+Comparison of the following deployment tools:
+
+| Feature                                 | Dokploy | CapRover              | Dokku                 | Coolify |
+| --------------------------------------- | ------- | --------------------- | --------------------- | ------- |
+| **User Interface**                      | ✅       | ✅                     | ❌                     | ✅       |
+| **Docker compose support**              | ✅       | ❌                     | ❌                     | ✅       |
+| **API/CLI**                             | ✅       | ✅                     | ✅                     | ✅       |
+| **Multi node support**                  | ✅       | ✅                     | ❌                     | ✅       |
+| **Traefik Integration**                 | ✅       | ✅                     | Available via Plugins | ✅       |
+| **User Permission Management**          | ✅       | ❌                     | ❌                     | ✅       |
+| **Bitbucket Integration**               | ✅       | ❌                     | ❌                     | ❌       |
+| **Gitlab Integration**                  | ✅       | ❌                     | ❌                     | ❌       |
+| **Gitea Integration**                   | ✅       | ❌                     | ✅                     | ❌       |
+| **Advanced User Permission Management** | ✅       | ❌                     | ❌                     | ❌       |
+| **Terminal Access Built In**            | ✅       | ❌                     | ❌                     | ✅       |
+| **Database Support**                    | ✅       | ✅                     | ❌                     | ✅       |
+| **Monitoring**                          | ✅       | ✅                     | ❌                     | ❌       |
+| **Backups**                             | ✅       | Available via Plugins | Available via Plugins | ✅       |
+| **Open Source**                         | ✅       | ✅                     | ✅                     | ✅       |
+| **Notifications**                       | ✅       | ❌                     | ❌                     | ✅       |
+| **Multi Server Support**                | ✅       | ❌                     | ❌                     | ✅       |
+| **Open Source Templates**               | ✅       | ✅                     | ❌                     | ✅       |
+| **Rollbacks**                           | ✅       | ✅                     | ❌                     | ✅       |
+| **Shared Enviroment Variables**         | ✅       | ❌                     | ❌                     | ✅       |
+| **Environments**                        | ✅       | ❌                     | ❌                     | ✅       |
+| **Schedules Jobs**                      | ✅       | ❌                     | ❌                     | ✅       |
+| **Cloudflare Tunnels**                  | ✅       | ❌                     | ❌                     | ✅       |
+| **Custom Build Server**                 | ✅       | ❌                     | ❌                     | ✅       |
+| **Volume Backups**                      | ✅       | ❌                     | ❌                     | ❌       |
+| **Preview Deployments**                 | ✅       | ❌                     | ❌                     | ✅       |
+| **Teams**                               | ✅       | ❌                     | ❌                     | ✅       |
+| **Cloud/Paid Version**                  | ✅       | ✅                     | ✅                     | ✅       |
+
+---
+
+## Manual Installation
+
+**URL:** llms-txt#manual-installation
+
+**Contents:**
+- Installation Script
+
+If you wish to customize the Dokploy installation on your server, you can modify several enviroment variables:
+
+1. **PORT** - Ideal for avoiding conflicts with other services.
+2. **TRAEFIK\_SSL\_PORT** - Set to another port if you want to use a different port for SSL.
+3. **TRAEFIK\_PORT** - Set to another port if you want to use a different port for Traefik.
+4. **ADVERTISE\_ADDR** - Set to another IP address if you want to use a different IP address for Swarm.
+5. **RELEASE\_TAG** - Set to a dokploy docker hub tag(latest, canary, feature, etc)
+6. **DATABASE\_URL** - Set to another database url if you want to use a different database.
+7. **REDIS\_HOST** - Set to another redis url if you want to use a different redis.
+8. **TZ** - Set to another timezone if you want to use a different timezone.
+
+## Installation Script
+
+Here is a Bash script for installing Dokploy on a Linux server. Make sure you run this as root on a Linux environment that is not a container, and ensure ports 80, 443, and 3000 are free.
+
+```bash
+#!/bin/bash
+install_dokploy() {
+    if [ "$(id -u)" != "0" ]; then
+        echo "This script must be run as root" >&2
+        exit 1
+    fi
+
+# check if is Mac OS
+    if [ "$(uname)" = "Darwin" ]; then
+        echo "This script must be run on Linux" >&2
+        exit 1
+    fi
+
+# check if is running inside a container
+    if [ -f /.dockerenv ]; then
+        echo "This script must be run on Linux" >&2
+        exit 1
+    fi
+
+# check if something is running on port 80
+    if ss -tulnp | grep ':80 ' >/dev/null; then
+        echo "Error: something is already running on port 80" >&2
+        exit 1
+    fi
+
+# check if something is running on port 443
+    if ss -tulnp | grep ':443 ' >/dev/null; then
+        echo "Error: something is already running on port 443" >&2
+        exit 1
+    fi
+
+# check if something is running on port 3000
+    if ss -tulnp | grep ':3000 ' >/dev/null; then
+        echo "Error: something is already running on port 3000" >&2
+        echo "Dokploy requires port 3000 to be available. Please stop any service using this port." >&2
+        exit 1
+    fi
+
+command_exists() {
+      command -v "$@" > /dev/null 2>&1
+    }
+
+if command_exists docker; then
+      echo "Docker already installed"
+    else
+      curl -sSL https://get.docker.com | sh
+    fi
+
+docker swarm leave --force 2>/dev/null
+
+get_ip() {
+        local ip=""
+        
+        # Try IPv4 first
+        # First attempt: ifconfig.io
+        ip=$(curl -4s --connect-timeout 5 https://ifconfig.io 2>/dev/null)
+        
+        # Second attempt: icanhazip.com
+        if [ -z "$ip" ]; then
+            ip=$(curl -4s --connect-timeout 5 https://icanhazip.com 2>/dev/null)
+        fi
+        
+        # Third attempt: ipecho.net
+        if [ -z "$ip" ]; then
+            ip=$(curl -4s --connect-timeout 5 https://ipecho.net/plain 2>/dev/null)
+        fi
+
+# If no IPv4, try IPv6
+        if [ -z "$ip" ]; then
+            # Try IPv6 with ifconfig.io
+            ip=$(curl -6s --connect-timeout 5 https://ifconfig.io 2>/dev/null)
+            
+            # Try IPv6 with icanhazip.com
+            if [ -z "$ip" ]; then
+                ip=$(curl -6s --connect-timeout 5 https://icanhazip.com 2>/dev/null)
+            fi
+            
+            # Try IPv6 with ipecho.net
+            if [ -z "$ip" ]; then
+                ip=$(curl -6s --connect-timeout 5 https://ipecho.net/plain 2>/dev/null)
+            fi
+        fi
+
+if [ -z "$ip" ]; then
+            echo "Error: Could not determine server IP address automatically (neither IPv4 nor IPv6)." >&2
+            echo "Please set the ADVERTISE_ADDR environment variable manually." >&2
+            echo "Example: export ADVERTISE_ADDR=<your-server-ip>" >&2
+            exit 1
+        fi
+
+advertise_addr="${ADVERTISE_ADDR:-$(get_ip)}"
+    echo "Using advertise address: $advertise_addr"
+
+docker swarm init --advertise-addr $advertise_addr
+    
+     if [ $? -ne 0 ]; then
+        echo "Error: Failed to initialize Docker Swarm" >&2
+        exit 1
+    fi
+
+echo "Swarm initialized"
+
+docker network rm -f dokploy-network 2>/dev/null
+    docker network create --driver overlay --attachable dokploy-network
+
+echo "Network created"
+
+mkdir -p /etc/dokploy
+
+chmod 777 /etc/dokploy
+
+docker service create \
+    --name dokploy-postgres \
+    --constraint 'node.role==manager' \
+    --network dokploy-network \
+    --env POSTGRES_USER=dokploy \
+    --env POSTGRES_DB=dokploy \
+    --env POSTGRES_PASSWORD=amukds4wi9001583845717ad2 \
+    --mount type=volume,source=dokploy-postgres,target=/var/lib/postgresql/data \
+    postgres:16
+
+docker service create \
+    --name dokploy-redis \
+    --constraint 'node.role==manager' \
+    --network dokploy-network \
+    --mount type=volume,source=dokploy-redis,target=/data \
+    redis:7
+
+docker pull traefik:v3.6.1
+    docker pull dokploy/dokploy:latest
+
+# Installation
+    docker service create \
+      --name dokploy \
+      --replicas 1 \
+      --network dokploy-network \
+      --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
+      --mount type=bind,source=/etc/dokploy,target=/etc/dokploy \
+      --mount type=volume,source=dokploy,target=/root/.docker \
+      --publish published=3000,target=3000,mode=host \
+      --update-parallelism 1 \
+      --update-order stop-first \
+      --constraint 'node.role == manager' \
+      -e ADVERTISE_ADDR=$advertise_addr \
+      dokploy/dokploy:latest
+
+docker run -d \
+        --name dokploy-traefik \
+        --restart always \
+        -v /etc/dokploy/traefik/traefik.yml:/etc/traefik/traefik.yml \
+        -v /etc/dokploy/traefik/dynamic:/etc/dokploy/traefik/dynamic \
+        -v /var/run/docker.sock:/var/run/docker.sock:ro \
+        -p 80:80/tcp \
+        -p 443:443/tcp \
+        -p 443:443/udp \
+        traefik:v3.6.1
+
+docker network connect dokploy-network dokploy-traefik
+
+# Optional: Use docker service create instead of docker run
+    #   docker service create \
+    #     --name dokploy-traefik \
+    #     --constraint 'node.role==manager' \
+    #     --network dokploy-network \
+    #     --mount type=bind,source=/etc/dokploy/traefik/traefik.yml,target=/etc/traefik/traefik.yml \
+    #     --mount type=bind,source=/etc/dokploy/traefik/dynamic,target=/etc/dokploy/traefik/dynamic \
+    #     --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock,readonly \
+    #     --publish mode=host,published=443,target=443 \
+    #     --publish mode=host,published=80,target=80 \
+    #     --publish mode=host,published=443,target=443,protocol=udp \
+    #     traefik:v3.6.1
+
+GREEN="\033[0;32m"
+    YELLOW="\033[1;33m"
+    BLUE="\033[0;34m"
+    NC="\033[0m" # No Color
+
+format_ip_for_url() {
+        local ip="$1"
+        if echo "$ip" | grep -q ':'; then
+            # IPv6
+            echo "[${ip}]"
+        else
+            # IPv4
+            echo "${ip}"
+        fi
+    }
+
+formatted_addr=$(format_ip_for_url "$advertise_addr")
+    echo ""
+    printf "${GREEN}Congratulations, Dokploy is installed!${NC}\n"
+    printf "${BLUE}Wait 15 seconds for the server to start${NC}\n"
+    printf "${YELLOW}Please go to http://${formatted_addr}:3000${NC}\n\n"
+}
+
+update_dokploy() {
+    echo "Updating Dokploy..."
+    
+    # Pull the latest image
+    docker pull dokploy/dokploy:latest
+
+# Update the service
+    docker service update --image dokploy/dokploy:latest dokploy
+
+echo "Dokploy has been updated to the latest version."
+}
+
+---
+
+## Email
+
+**URL:** llms-txt#email
+
+**Contents:**
+- Email Notifications
+
+Email notifications are a great way to stay up to date with important events in your Dokploy panel. You can choose to receive notifications for specific events or all events.
+
+## Email Notifications
+
+For start receiving email notifications, you need to fill the form with the following details:
+
+1. **Name**: Enter any name you want.
+2. **SMTP Server**: Enter the SMTP server address. eg. `smtp.gmail.com`
+3. **SMTP Port**: Enter the SMTP server port. eg. `587`
+4. **SMTP Username**: Enter the SMTP server username. eg. `your-email@gmail.com`
+5. **SMTP Password**: Enter the SMTP server password.
+6. **From Address** Enter the email address that will be used as the sender.
+7. **To Address** Enter the email address that will be used as the recipient, you can add multiple addresses.
+
+---
+
+## Validate
+
+**URL:** llms-txt#validate
+
+**Contents:**
+- Deployment Servers
+- Build Servers
+- Validation Status
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Dokploy validates different components depending on the type of remote server you're configuring. The validation requirements differ between **Deployment Servers** and **Build Servers**.
+
+## Deployment Servers
+
+For **Deployment Servers**, Dokploy requires the following 7 components to be properly configured:
+
+1. **Docker Installed**: Docker must be installed on the remote server.
+2. **RClone Installed**: RClone must be installed on the remote server.
+3. **Nixpacks Installed**: Nixpacks must be installed on the remote server.
+4. **Railpack Installed**: Railpack must be installed on the remote server.
+5. **Buildpacks Installed**: Buildpacks must be installed on the remote server.
+6. **Docker Swarm Initialized**: Docker Swarm must be initialized on the remote server.
+7. **Dokploy Network Created**: A Docker network for Dokploy must be created on the remote server.
+8. **Main Directory Created**: A directory must be created on the remote server to store applications.
+
+<Callout type="info">
+  Deployment servers are used to run and host your applications. They require Docker Swarm and network configuration since they need to run containers and manage deployments.
+</Callout>
+
+For **Build Servers**, Dokploy only validates the following components:
+
+1. **Docker Installed**: Docker must be installed on the remote server.
+2. **RClone Installed**: RClone must be installed on the remote server.
+3. **Nixpacks Installed**: Nixpacks must be installed on the remote server.
+4. **Railpack Installed**: Railpack must be installed on the remote server.
+5. **Buildpacks Installed**: Buildpacks must be installed on the remote server.
+6. **Main Directory Created**: A directory must be created on the remote server to store applications.
+
+<Callout type="info">
+  Build servers are dedicated to building and compiling applications. They don't require Docker Swarm or network configuration since they only build images and push them to a registry, without running any containers.
+</Callout>
+
+Once all requirements are met for your server type, you will see a green checkmark next to each item in the validation section.
+
+<ImageZoom src="/assets/images/server-validate.png" alt="Multi-Server Setup" width={1000} height={600} />
+
+---
+
+## EC2 Instructions
+
+**URL:** llms-txt#ec2-instructions
+
+**Contents:**
+- Requirements
+- 1. Create an SSH Key
+- 2. Create an EC2 Instance
+- 3. Add the Server to Dokploy
+- 4. Setup the Server
+- 5. Deploy your application
+
+import { ImageZoom } from "fumadocs-ui/components/image-zoom";
+import { Callout } from "fumadocs-ui/components/callout";
+
+In this guide we will show you how to setup a remote server on AWS EC2 and add an SSH Key on dokploy to connect to the server and start deploying your applications.
+
+1. An AWS account
+2. A domain that is managed by AWS Route53
+
+## 1. Create an SSH Key
+
+<Callout type="info">
+  If you already have an SSH Key you can skip this step and simply go to settings -> SSH Keys and add the SSH Key you have stored on your machine
+</Callout>
+
+Navigate to Dokploy Settings -> SSH Keys and add a new key
+
+You will receive a public key and a private key. Copy the public key and save it.
+
+<ImageZoom src="/assets/ssh-keys.png" alt="SSH Keys" width={1000} height={600} className="rounded-lg" />
+
+## 2. Create an EC2 Instance
+
+Login to your AWS account, navigate to EC2 and click on Launch Instance.
+
+We will then be prompted to select an AMI (Amazon Machine Image) and we will select the Ubuntu Server 22.04 LTS AMI.
+
+<ImageZoom src="/assets/images/deployment/oracle/oracle-shape.png" alt="EC2 AMI" width={1000} height={600} className="rounded-lg" />
+
+Select the instance type you want to use. For this guide we will use the `t2.micro` instance type which is free tier eligible.
+
+Now we need to add the SSH Key we created in step 1 to the EC2 instance.
+
+Click on Security Group and then add a new key pair.
+
+Add the name of your SSH Key and paste the public key you copied in step 1.
+
+<ImageZoom src="/assets/hostinger-add-sshkey.png" alt="Add SSH Key" width={1000} height={600} className="rounded-lg" />
+
+You will have to create a security group that allows SSH (port 22) access from your IP address. and open all HTTP and HTTPS ports for ingress and egress traffic (Port 80 and 443).
+
+<Callout type="warn">
+  Opening port 22 to the internet is a security risk. It is recommended to use a bastion host or a VPN to access your EC2 instance securely.
+</Callout>
+
+Now click on Launch Instance and wait for the instance to be created.
+
+## 3. Add the Server to Dokploy
+
+Now that we have the EC2 instance running, we can add it to Dokploy.
+
+Navigate to Dokploy -> Settings -> Servers and click on Add Server and copy the server IP Address.
+
+## 4. Setup the Server
+
+Navigate to Dokploy -> Settings -> Servers -> Setup Server and follow the instructions.
+
+## 5. Deploy your application
+
+Now that the server is setup, you can deploy your application to the server.
+
+---
+
+## Generated
+
+**URL:** llms-txt#generated
+
+**Contents:**
+  - Important Clarification on Container Ports
+
+Dokploy use [https://traefik.me](https://traefik.me) to generate free domains for you.
+Quickly set up a domain for development or testing purposes without needing to register a domain.
+
+#### Steps to Generate a Domain
+
+1. Go to the `domains` section.
+2. Click `Create Domain`.
+3. Click on the `Dice` Icon next to `Host` field it will generate a free domain for you.
+4. Path is `/`.
+5. `Container Port`, set the port where your application is running, eg usually for Next.js it is `3000`, for Astro is `4321`
+6. HTTPS is `OFF`.
+7. Certificate is `None`.
+8. Click `Create`.
+9. A free domain will be automatically assigned to your application.
+
+### Important Clarification on Container Ports
+
+The "Container Port" specified in the domain settings is exclusively for routing traffic to the correct application container through Traefik, and does not expose the port directly to the internet. This is fundamentally different from the port settings in the "Advanced -> Ports" section, which are used to directly expose application ports. The container port in the domain settings ensures that Traefik can internally direct traffic to the specified port within the container based on the domain configuration.
+
+---
+
+## Swarm
+
+**URL:** llms-txt#swarm
+
+{/* This file was generated by Fumadocs. Do not edit this file directly. Any changes should be made by running the generation command again. */}
+
+<APIPage document={"./public/openapi.json"} webhooks={[]} operations={[{"path":"/swarm.getNodes","method":"get"},{"path":"/swarm.getNodeInfo","method":"get"},{"path":"/swarm.getNodeApps","method":"get"}]} showTitle={true} />
+
+---
+
+## Troubleshooting
+
+**URL:** llms-txt#troubleshooting
+
+**Contents:**
+- Applications Domain Not Working?
+- Logs and Monitoring Not Working After Changing Application Placement?
+- Mounts Are Causing My Application Not to Run?
+- Volumes in Docker Compose Not Working?
+- I added a volume to my docker compose, but is not finding the volume?
+  - Using Files from Your Repository
+- Logs Not Loading When Deploying to a Remote Server?
+- Docker Compose Domain Not Working?
+- Templates and Compose Services Returning 404
+  - Understanding the Difference
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+## Applications Domain Not Working?
+
+You see the deployment succeeded, and logs are running, but the domain isn't working? Here's what to check:
+
+1. **Correct Port Mapping**: Ensure the domain is using the correct port for your application. For example, if you're using Next.js, the port should be `3000`, or for Laravel, it should be `8000`. If you change the app port, update the domain to reflect that.
+
+2. **Avoid Using `Ports` in Advanced Settings**: Generally, there's no need to use the `Ports` feature unless you want to access your app via `IP:port`. Leaving this feature enabled may interfere with your domain.
+
+3. **Let's Encrypt Certificates**: It's crucial to point the domain to your server's IP **before** adding it in Dokploy. If the domain is added first, the certificate won't be generated, and you may need to recreate the domain or restart Traefik.
+
+4. **Listen on 0.0.0.0, Not 127.0.0.1**: If your app is bound to `127.0.0.1` (which is common in Vite apps), switch it to `0.0.0.0` to allow external access.
+
+## Logs and Monitoring Not Working After Changing Application Placement?
+
+This is expected behavior. If the application is running on a different node (worker), the UI won't have access to logs or monitoring, as they're not on the same node.
+
+## Mounts Are Causing My Application Not to Run?
+
+Docker Swarm won't run your application if there are invalid mounts, even if the deployment shows as successful. Double-check your mounts to ensure they are valid or check the General Swarm Section
+and find your application, and you will see the real error.
+
+## Volumes in Docker Compose Not Working?
+
+For Docker Compose, all file mounts defined in the `volumes` section will be stored in the `files` folder. This is the default directory structure:
+
+## I added a volume to my docker compose, but is not finding the volume?
+
+For docker compose all the file mounts you've created in the volumes section will be stored to files folder, this is the default structure of the docker compose.
+
+So instead of using this invalid way to mount a volume:
+
+You should use this format:
+
+### Using Files from Your Repository
+
+<Callout type="warning">
+  If you need to use files from your repository (e.g., configuration files, scripts, or directories), you **must** move them to Dokploy's file mounts and reference them manually using the Dokploy interface. This is because when using AutoDeploy, Dokploy performs a `git clone` operation on each deployment, which clears the repository directory. If you mount files directly from your repository using relative paths like `./` or `./docker/config/odoo.conf`, these files will be lost or empty in subsequent deployments, even though the first deployment may work correctly.
+</Callout>
+
+**Why this happens:**
+
+* On the first deployment, the files exist and are mounted correctly
+* On subsequent deployments, Dokploy cleans the directory and performs a fresh `git clone`
+* Docker loses the reference to the files that were in the filesystem, and the new files have a new reference
+* This causes mounted directories and files to be empty or missing inside the container
+
+1. Go to **Advanced** → **Mounts** in your Docker Compose application
+2. Create a new **File Mount** for each file or directory you need from your repository
+3. Copy the content from your repository files into the File Mount content field
+4. Specify the file path for your configuration
+5. Reference the file mount in your `docker-compose.yml` using the `../files/` path:
+
+**Example:**
+Instead of mounting directly from your repository:
+
+Use Dokploy's file mounts:
+
+## Logs Not Loading When Deploying to a Remote Server?
+
+There are a few potential reasons for this:
+
+1. **Slow Server:**: If the server is too slow, it may struggle to handle concurrent requests, leading to SSL handshake errors.
+2. **Insufficient Disk Space:** If the server doesn't have enough disk space, the logs may not load.
+
+## Docker Compose Domain Not Working?
+
+When adding a domain in your Docker Compose file, it's not necessary to expose the ports directly. Simply specify the port where your app is running. Exposing the ports can lead to conflicts with other applications or ports.
+
+Example of what not to do:
+
+Recommended approach:
+
+This is only valid for Docker Compose not for Docker Stack.
+
+When using Docker Stack, the ports are exposed automatically, so you don't need to specify them explicitly.
+
+Example of what not to do:
+
+Recommended approach:
+
+Then, when creating the domain in Dokploy, specify the service name and port, like this:
+
+* Another reason of the domains are not working it may be because the healthchecks you've defined are not working, so this will cause the domains never work, so you have two options:
+
+1. Remove the healthcheck from the service
+2. Make sure the healthcheck is working
+
+## Templates and Compose Services Returning 404
+
+If you're experiencing 404 errors when accessing services created from templates (like Docker Registry, Stalwart, Uptime Kuma, etc.) or Docker Compose services, this is usually related to how Traefik handles routing for different service types.
+
+### Understanding the Difference
+
+Dokploy uses two different methods for configuring Traefik routing:
+
+1. **Applications** (Nixpacks, Dockerfile, Buildpacks): Use the Traefik **file system** for routing configuration
+   * Domain changes are applied automatically
+   * No need to redeploy after updating domains
+   * Configuration files are created in Traefik's dynamic configuration directory
+
+2. **Templates and Compose Services**: Use Traefik **labels** for routing configuration
+   * Require redeployment after any domain changes
+   * Labels are read from Docker container metadata
+   * Learn more about Traefik labels in the [official documentation](https://doc.traefik.io/traefik/reference/routing-configuration/other-providers/docker/#configuration-examples)
+
+When working with Templates or Compose services:
+
+1. **Configure your domain** in the Domains section of your service
+2. **Redeploy the service** - This is crucial! The domain changes won't take effect until you redeploy
+3. Wait for the deployment to complete
+4. Your service should now be accessible via the configured domain
+
+<Callout type="info">
+  **Key Tip:** Every time you add, modify, or remove a domain from a Template or Compose service, you must redeploy for the changes to take effect.
+</Callout>
+
+## Getting "Bad Gateway Error" When Accessing Your Application Domain
+
+If you're encountering a Bad Gateway Error when accessing your application through its domain, this typically indicates one of several common configuration issues:
+
+1. **Port Mismatch**: The configured port might be incorrect
+2. **Listen Address Configuration**: The service might be listening only on `127.0.0.1` instead of `0.0.0.0`
+
+### Common Solution for Modern JavaScript Frameworks
+
+This issue frequently occurs with modern JavaScript frameworks like Vite, Astro, or Vue.js applications. By default, these frameworks often listen only on localhost (`127.0.0.1`).
+
+To resolve this, you need to configure your application to listen on all available network interfaces (`0.0.0.0`).
+
+#### Example Configuration for Vite
+
+Here's how to properly configure a Vite application:
+
+### Framework-Specific Notes
+
+* **Vite Apps**: Use the configuration above
+* **Astro**: Similar configuration in `astro.config.mjs`
+* **Vue.js**: Configure in `vite.config.js` if using Vite
+* **Other Frameworks**: Check your framework's documentation for network interface configuration
+
+Remember to deploy again your application after making these changes for them to take effect.
+
+## Docker Compose Volume Mounts
+
+When using Docker Compose, you can configure volume mounts in your `docker-compose.yml` file:
+
+### Use of closed network when restarting Traefik
+
+If you see this error in the logs of Traefik, it means that the network is being closed, this is the normal behavior when restarting Traefik.
+
+### Creating Configuration Files
+
+If you need to create configuration files before deploying your compose setup:
+
+1. Go to Advanced -> Mounts
+2. Create a new File Mount
+3. Add your configuration content in the content field
+4. Specify the file path for your configuration
+
+Note: All File Mounts are automatically created in the `/files` directory. For example, if you create a file named `my-config.json`, it will be available at `/files/my-config.json`.
+
+You can then reference this configuration file in your `docker-compose.yml`:
+
+<Callout type="info">
+  **Important for AutoDeploy users:** If you have configuration files or directories in your repository that you need to mount into your containers, you must copy their content to Dokploy's File Mounts (via Advanced → Mounts) instead of mounting them directly from the repository. This ensures the files persist across deployments, as the repository directory is cleaned and re-cloned on each AutoDeploy.
+</Callout>
+
+## Failed to initialize Docker Swarm
+
+Error response from daemon: must specify a listening address because the address to advertise is not recognized as a system address, and a system's IP address to use could not be uniquely identified
+
+This error occurs when the Docker Swarm is not properly initialized.
+
+To fix this, you need to assign a the public IP address to the Docker Swarm, ideally you can use a private IP address from your network, but if you require features from docker swarm, you
+will need to use a public IP address.
+
+## My Dokploy UI Instance is Not Accessible
+
+If you can't access your Dokploy UI instance, there could be several causes. While this issue won't occur with Dokploy Cloud (where our team manages the infrastructure), self-hosted instances might encounter configuration problems.
+
+Let's go through the possible cases where your Dokploy UI instance might be inaccessible:
+
+### 1. Insufficient Storage Space
+
+If you've made many deployments and don't have available space on your server, the Dokploy database might enter recovery mode, preventing access to the user interface. Here's a quick solution to clear cache and free up server space:
+
+### 2. Container Race Condition During Restart
+
+During a restart, a race condition might occur where Dokploy's dependent containers don't start in the correct order. To troubleshoot this:
+
+First, verify the running containers:
+
+You should see all four of these containers running:
+
+If all four containers are running but you still can't access the interface, it's time to debug:
+
+### Debugging Process
+
+#### 1. Check Container Logs
+
+Start by examining the logs of each container:
+
+#### 2. Common Database Connection Issue
+
+A common case is when the Postgres container starts after the Dokploy container, preventing Dokploy from connecting to the database. You might see logs like this when running `docker service logs dokploy`:
+
+To fix this, restart the Dokploy service:
+
+```bash
+docker service scale dokploy=0
+
+**Examples:**
+
+Example 1 (unknown):
+```unknown
+/application-name
+    /code
+    /files
+```
+
+Example 2 (yaml):
+```yaml
+volumes:
+    - "/folder:/path/in/container" ❌
+```
+
+Example 3 (yaml):
+```yaml
+volumes:
+    - "../files/my-database:/var/lib/mysql" ✅
+    - "../files/my-configs:/etc/my-app/config" ✅
+```
+
+Example 4 (yaml):
+```yaml
+volumes:
+  - "../files/my-config.json:/etc/my-app/config" ✅
+  - "../files/my-directory:/path/in/container" ✅
+```
+
+---
+
+## Architecture of Dokploy
+
+**URL:** llms-txt#architecture-of-dokploy
+
+**Contents:**
+- Installation Process
+- Purpose and Functionality
+
+Understanding the architecture of Dokploy is crucial for both deploying and scaling applications. Below is a diagram illustrating the core components:
+
+<ImageZoom src="/assets/architecture.png" alt="Architecture Diagram" width={1000} height={600} className="rounded-lg" />
+
+## Installation Process
+
+When Dokploy is installed, it automatically sets up the following components:
+
+1. **Next.js Application**: Serves as the frontend interface. Utilizing Next.js allows for an integrated server-side rendering experience, streamlining the UI and backend into a single cohesive application.
+2. **PostgreSQL Database**: Acts as the primary database for Dokploy, chosen for its robustness and widespread adoption. It stores all the configuration and operational data.
+3. **Redis Database**: Employed for managing deployment queues. This ensures that multiple deployments do not trigger simultaneously, which could lead to high server load and potential freezing.
+4. **Traefik**: Used as a reverse proxy and load balancer. Traefik facilitates dynamic routing and service discovery which simplifies the configuration process by allowing declarative setup through the UI.
+
+## Purpose and Functionality
+
+Each component in the Dokploy architecture plays a vital role:
+
+* **Next.js**: Provides a scalable and easy-to-manage frontend framework, encapsulating both server and client-side logic in one platform. This simplifies deployment and development workflows.
+* **PostgreSQL**: Delivers reliable and secure data storage capabilities. Its use within Dokploy ensures consistency and high performance for all database operations.
+* **Redis**: Handles concurrency and job scheduling. By using Redis, Dokploy can efficiently manage deployment tasks, avoiding collisions and server overload during simultaneous operations.
+* **Traefik**: Enhances Docker integration. Its ability to read from and write to Docker configurations declaratively allows Dokploy to automate and streamline network traffic management and service discovery.
+
+This structure ensures that Dokploy is not only efficient in deploying applications but also robust in handling traffic and data at scale.
+
+---
+
+## Cluster
+
+**URL:** llms-txt#cluster
+
+**Contents:**
+- Server Scaling Methods
+  - Vertical Scaling
+  - Horizontal Scaling
+- Requirements for Cluster Setup
+- Configuring the Docker Registry
+  - External Registry
+- Understanding Docker Swarm
+- Managing Your Cluster
+- Adding Nodes
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+When you deploy applications in dokploy, all of them run on the same node. If you wish to run an application on a different server, you can use the cluster feature.
+
+The idea of using clusters is to allow each server to host a different application and, using Traefik along with the load balancer, redirect the traffic from the dokploy server to the servers you choose.
+
+## Server Scaling Methods
+
+There are two primary ways to scale your server:
+
+1. **Vertical Scaling**: This involves adding more resources to the same dokploy server, such as more CPU and RAM.
+2. **Horizontal Scaling**: This method involves adding multiple servers.
+
+We recommend using vertical scaling to increase the processing capacity of your applications since it's faster and requires less additional configuration.
+
+To perform vertical scaling, you need to add more resources to your dokploy server, that is, more CPU and RAM. This is done through your VPS provider.
+
+It's ideal to first check the vertical scaling limit you can handle. If you find it insufficient, you may consider horizontal scaling.
+
+### Horizontal Scaling
+
+Horizontal scaling usually requires more additional configuration and involves adding more servers (VPS).
+
+If you choose the second option, we will proceed to configure the different servers.
+
+## Requirements for Cluster Setup
+
+1. dokploy server running (Manager).
+2. Have at least one extra server with the same architecture as the dokploy server.
+3. Have a Docker registry.
+
+## Configuring the Docker Registry
+
+To start, we need to configure a Docker registry, as when deploying an application, you need a registry to deploy and download the application image on the other servers.
+
+### External Registry
+
+You can use any external registry of your choice. Here are some popular options:
+
+1. **Docker Hub** - Free tier available, easy to set up
+2. **GitHub Container Registry (ghcr.io)** - Free for public repositories
+3. **DigitalOcean Container Registry** - Simple setup with good integration
+4. **Amazon ECR** - AWS's managed container registry
+5. **Google Container Registry** - Google Cloud's managed registry
+6. **Azure Container Registry** - Microsoft's managed registry
+
+Make sure to enter the correct credentials and test the connection before adding the registry to your cluster configuration.
+
+Once configured, the Cluster section will be unlocked.
+
+## Understanding Docker Swarm
+
+We suggest you read this information to better understand how Docker Swarm works and its orchestration: [Docker Swarm documentation](https://docs.docker.com/engine/swarm/) and its architecture: [How Swarm mode works](https://docs.docker.com/engine/swarm/how-swarm-mode-works/nodes/).
+
+## Managing Your Cluster
+
+Now you can do two things:
+
+1. Add workers.
+2. Add managers.
+
+Managers have two functionalities:
+
+1. Manage the cluster state.
+2. Schedule the services.
+
+Workers have a single purpose, which is to run the containers, acting under the rules created or established by the manager.
+
+You can click the 'Add Node' button, which will display the instructions you need to follow to add your servers as nodes and join them to the dokploy manager node.
+
+<ImageZoom src="/assets/add-node.png" width={800} height={630} className="rounded-lg" />
+
+Once you follow the instructions, the workers or managers will appear in the table.
+
+<ImageZoom src="/assets/nodes.png" width={800} height={630} className="rounded-lg" />
+
+<Callout type="info">
+  **Storage Cleanup Note**: Dokploy does not perform automatic cleanup of storage for workers or other associated nodes that are not the Dokploy server. For automatic cleanup, you can add your node as a remote server and configure cleanups, or create a schedule that performs that cleanup. Additionally, you don't need to perform setup when you only add the node as a remote server. For more information, see the [Remote Servers documentation](/docs/core/remote-servers).
+</Callout>
+
+---
+
+## Tanstack
+
+**URL:** llms-txt#tanstack
+
+This example will deploy a simple Tanstack application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/tanstack`
+   * use `Nixpacks` as build type
+
+2. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+3. **Generate a Domain**:
+   * Click on generate domain button.
+   * A new domain will be generated for you.
+   * Set Port `3000`
+   * You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+---
+
+## Build Type
+
+**URL:** llms-txt#build-type
+
+**Contents:**
+  - Nixpacks
+  - Railpack (NEW)
+  - Specifying Railpack Version
+  - Dockerfile
+  - Buildpack
+  - Static
+- Recomendations
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Dokploy offers three distinct build types for deploying applications, each suited to different development needs and preferences.
+
+This is the default build type in Dokploy. When you select Nixpacks, Dokploy builds your application as a Nixpack, which is optimized for ease of use and efficiency.
+
+Nixpacks expose multiples variables to be configured via environment variables. All of these variables are prefixed with `NIXPACKS_`, you can define them in the `Environment Variables` tab.
+
+| Variable                      | Description                                                                                  |
+| :---------------------------- | :------------------------------------------------------------------------------------------- |
+| `NIXPACKS_INSTALL_CMD`        | Override the install command to use                                                          |
+| `NIXPACKS_BUILD_CMD`          | Override the build command to use                                                            |
+| `NIXPACKS_START_CMD`          | Override command to run when starting the container                                          |
+| `NIXPACKS_PKGS`               | Add additional [Nix packages](https://search.nixos.org/packages?channel=unstable) to install |
+| `NIXPACKS_APT_PKGS`           | Add additional Apt packages to install (comma delimited)                                     |
+| `NIXPACKS_LIBS`               | Add additional Nix libraries to make available                                               |
+| `NIXPACKS_INSTALL_CACHE_DIRS` | Add additional directories to cache during the install phase                                 |
+| `NIXPACKS_BUILD_CACHE_DIRS`   | Add additional directories to cache during the build phase                                   |
+| `NIXPACKS_NO_CACHE`           | Disable caching for the build                                                                |
+| `NIXPACKS_CONFIG_FILE`        | Location of the Nixpacks configuration file relative to the root of the app                  |
+| `NIXPACKS_DEBIAN`             | Enable Debian base image, used for supporting OpenSSL 1.1                                    |
+
+If you need more manage about nixpacks process, you can create a `nixpacks.toml` file in the root of your application you can read here [Nixpacks Configuration](https://nixpacks.com/docs/configuration/file).
+
+Nixpacks support monorepo such as NX Monorepo, Turborepo, Moon Repo, you can read more about it [here](https://nixpacks.com/docs/providers/node#build).
+
+You can read more about Nixpacks [here](https://nixpacks.com/).
+
+Since Nixpacks have a [static builder](https://nixpacks.com/docs/providers/staticfile) Dokploy expose a field called `Publish Directory`  where basically you can specify
+the directory that you want to publish after the build process is finished, example:
+
+Astro applications after you build it usually create a `dist` directory, so you can specify the `dist` directory as the publish directory and then Dokploy will
+copy all the files in the `dist` directory to the root of your application, and will use a NGINX Optimized Dockerfile to run your application.
+
+Railpack is a new build type optimized and is the successor of Nixpacks.
+
+Railpack exposes multiple Build Variables, you can define them in the `Environment Variables` tab.
+
+| Name                           | Description                                                                                                |
+| :----------------------------- | :--------------------------------------------------------------------------------------------------------- |
+| `RAILPACK_BUILD_CMD`           | Set the command to run for the build step. This overwrites any commands that come from providers           |
+| `RAILPACK_START_CMD`           | Set the command to run when the container starts                                                           |
+| `RAILPACK_PACKAGES`            | Install additional Mise packages. In the format `pkg@version`. The latest version is used if not provided. |
+| `RAILPACK_BUILD_APT_PACKAGES`  | Install additional Apt packages during build                                                               |
+| `RAILPACK_DEPLOY_APT_PACKAGES` | Install additional Apt packages in the final image                                                         |
+
+### Specifying Railpack Version
+
+Dokploy provides a **Railpack Version** field in the application settings where you can specify a specific version of Railpack to use. This allows you to:
+
+* **Pin to a specific version**: Ensure consistent builds across deployments
+* **Use a newer version**: Test or use features from a specific release
+* **Stay on a stable version**: Avoid potential issues from automatic updates
+
+1. Navigate to your application settings
+2. Find the **Railpack Version** field
+3. Enter the version you want to use (e.g., `0.15.1`)
+4. Dokploy will automatically download and use the specified version for your builds
+
+To use Railpack version `0.15.1`, simply enter `0.15.1` in the Railpack Version field.
+
+<Callout type="warn">
+  If you specify an invalid version, Dokploy will show an error. Make sure to use a valid version from the [Railpack releases page](https://github.com/railwayapp/railpack/releases).
+</Callout>
+
+You can read more about Railpack [here](https://railpack.com/config/environment-variables).
+
+Railpack supports Nodejs, Python, Go, PHP, Go, StaticFile, Shell Scripts.
+
+If your project includes a Dockerfile, you can specify its path. Dokploy will use this Dockerfile to build your application directly, giving you full control over the build environment and dependencies
+
+Dokploy expose 3 Fields to be configured:
+
+* `Dockerfile Path (Required)`: The path to the Dockerfile to use for building the application, eg. If your Dockerfile is in the root of your application you can just specify the `Dockerfile` file.
+* `Docker Context Path`: This is where the Dockerfile is located, eg. If your Dockerfile is in the root of your application you can just specify the `.` (dot) character, is basically to tell docker what context will use to build your application, you can read [Dockerfile Context](https://docs.docker.com/build/concepts/context/) for more information.
+* `Docker Build Stage`: This is the build stage to use for building the application, eg. If you want to use the `builder` stage you can specify the `builder` stage, read more about build stages [here](https://docs.docker.com/build/building/multi-stage/).
+
+#### Environment Variables for Dockerfile Builds
+
+When you enable the Dockerfile build type, two additional fields become available in the **Environment** tab:
+
+* **Build Time Arguments**: Configure [build arguments (ARG)](https://docs.docker.com/build/building/variables/) that are passed to your Dockerfile during the build process. Build arguments allow you to parameterize your Dockerfile, making it more flexible and reusable. For example, you can specify versions of dependencies, feature flags, or other build-time configurations.
+
+* **Build-time Secrets**: Configure [build secrets](https://docs.docker.com/build/building/secrets/) to securely pass sensitive information (such as API tokens, passwords, or SSH keys) to your build process. Unlike build arguments, secrets are not exposed in the final image or build history, making them the recommended way to handle sensitive data during builds.
+
+<Callout type="info">
+  Build arguments and environment variables are inappropriate for passing secrets, as they persist in the final image. Always use build-time secrets for sensitive information like API tokens or passwords.
+</Callout>
+
+Dokploy supports two types of buildpacks:
+
+* **Heroku**: Adapted from Heroku's popular cloud platform, these buildpacks are designed for compatibility and ease of migration, you can optional specify the Heroku Version to use, by default Dokploy will use the 24.
+* **Paketo**: Provides cloud-native buildpacks that leverage modern standards and practices for building applications.
+
+By choosing the appropriate build type, you can tailor the deployment process to best fit your application's requirements and your operational preferences.
+
+Static build type is used to server static applications, it will use a NGINX Optimized Dockerfile to run your application.
+
+Dokploy will copy everything from the `Root` directory and will mount it to the `/usr/share/nginx/html` directory, and will use a NGINX Optimized Dockerfile to run your application.
+
+<Callout type="info">
+  Ensure to use the port `80` when creating a domain.
+</Callout>
+
+* For prototyping and development purposes, we recommend using the `Nixpacks` build type.
+* For production purposes, we recommend follow this [Production Guide](/docs/core/applications/going-production) to have a rock solid deployment.
+* For static applications, we recommend using the `Static` build type.
+
+---
+
+## Videos
+
+**URL:** llms-txt#videos
+
+**Contents:**
+- Dokploy Cloud - Introduction
+- My Favorite Way to deploy Applications
+- Introduction to Dokploy
+- Deploy docker compose on a VPS \[Dokploy]
+- How to Setup Dokploy Self-Hosting on A Hetzner Server | BEST Coolify Alternative
+- FREE: Dokploy Self-Hosted 🐳 CANCEL VERCEL! 🚨 Coolify, Caprover, Alternative - Open Source
+- Say Goodbye to Vercel and Heroku with Dokploy Install
+
+import { Card, Cards } from 'fumadocs-ui/components/card';
+
+## Dokploy Cloud - Introduction
+
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/x2s_Y5ON-ms?si=nFQ-oyvcomDIIRU0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+
+## My Favorite Way to deploy Applications
+
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/2Q4-EgYS0u4?si=K7wls46laSU_W3c_" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+
+<div className="border-2 mt-10" />
+
+## Introduction to Dokploy
+
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/mznYKPvhcfw?si=9r6ws_bJF45QSZgb" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+
+<div className="border-2 mt-10" />
+
+## Deploy docker compose on a VPS \[Dokploy]
+
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/3qr_celxISA?si=N72toqtyC_sxlucH" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+
+<div className="border-2 mt-10" />
+
+## How to Setup Dokploy Self-Hosting on A Hetzner Server | BEST Coolify Alternative
+
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/83UX8TfuDis?si=SLQr7Q8I2PpUjNlH" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+
+<div className="border-2 mt-10" />
+
+## FREE: Dokploy Self-Hosted 🐳 CANCEL VERCEL! 🚨 Coolify, Caprover, Alternative - Open Source
+
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/8kHeKBd1rlU?si=LmUiT7mu9I9micy3" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+
+<div className="border-2 mt-10" />
+
+## Say Goodbye to Vercel and Heroku with Dokploy Install
+
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/XohTt3lh9qg?si=N4alYYsfSzNsFOmb" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+
+---
+
+## Astro
+
+**URL:** llms-txt#astro
+
+This example will deploy a simple Astro application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/astro`
+   * Publish Directory: `./dist` (Nixpacks)
+
+2. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+3. **Generate a Domain**:
+   * Click on generate domain button.
+   * A new domain will be generated for you.
+   * Set Port `80`
+   * You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+---
+
+## Notification
+
+**URL:** llms-txt#notification
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/notification.createSlack"},{"method":"post","path":"/notification.updateSlack"},{"method":"post","path":"/notification.testSlackConnection"},{"method":"post","path":"/notification.createTelegram"},{"method":"post","path":"/notification.updateTelegram"},{"method":"post","path":"/notification.testTelegramConnection"},{"method":"post","path":"/notification.createDiscord"},{"method":"post","path":"/notification.updateDiscord"},{"method":"post","path":"/notification.testDiscordConnection"},{"method":"post","path":"/notification.createEmail"},{"method":"post","path":"/notification.updateEmail"},{"method":"post","path":"/notification.testEmailConnection"},{"method":"post","path":"/notification.remove"},{"method":"get","path":"/notification.one"},{"method":"get","path":"/notification.all"},{"method":"post","path":"/notification.receiveNotification"},{"method":"post","path":"/notification.createGotify"},{"method":"post","path":"/notification.updateGotify"},{"method":"post","path":"/notification.testGotifyConnection"},{"method":"post","path":"/notification.createNtfy"},{"method":"post","path":"/notification.updateNtfy"},{"method":"post","path":"/notification.testNtfyConnection"},{"method":"post","path":"/notification.createLark"},{"method":"post","path":"/notification.updateLark"},{"method":"post","path":"/notification.testLarkConnection"},{"method":"get","path":"/notification.getEmailProviders"}]} hasHead={true} />
+
+---
+
+## Mounts
+
+**URL:** llms-txt#mounts
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/mounts.create"},{"method":"post","path":"/mounts.remove"},{"method":"get","path":"/mounts.one"},{"method":"post","path":"/mounts.update"},{"method":"get","path":"/mounts.allNamedByApplicationId"}]} hasHead={true} />
+
+---
+
+## HTML
+
+**URL:** llms-txt#html
+
+This example will deploy a simple HTML application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/html`
+   * use `Static` as build type
+
+2. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+3. **Generate a Domain**:
+   * Click on generate domain button.
+   * A new domain will be generated for you.
+   * Set Port `80`
+   * You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+---
+
+## Watch Paths
+
+**URL:** llms-txt#watch-paths
+
+**Contents:**
+- Overview
+- Supported Source Providers
+- Basic Usage
+- Configuration
+- Pattern Matching Features
+
+Watch paths are a feature that allows you to monitor specific directories or files for changes and automatically trigger actions when modifications occur.
+
+Watch paths functionality is available for both standalone applications and Docker Compose configurations. This feature helps automate deployments based on file changes in your repository.
+
+## Supported Source Providers
+
+The following source control providers are supported:
+
+* GitHub
+* GitLab
+* Bitbucket
+* Git (works with Bitbucket, Github, and GitLab repositories)
+
+Let's say you have a project with the following directory structure:
+
+By default, dokploy accepts an array of paths, allowing you to monitor multiple locations. For example:
+
+* To trigger deployments when any file in the `src/` directory changes, use the pattern: `src/*`
+* To monitor a specific file, simply specify its path: `src/index.js`
+
+Watch Paths works out of the box with zero configuration when using GitHub as your provider. For other providers, you'll need to first set up auto-deploys as explained in:
+
+* [Auto Deploy](/docs/core/auto-deploy)
+* [Bitbucket Integration](/docs/core/bitbucket)
+* [GitLab Integration](/docs/core/gitlab)
+* [GitHub Integration](/docs/core/github)
+* [Gitea Integration](/docs/core/gitea)
+
+Note: When using the Git provider, the functionality will only work with GitHub, GitLab, Bitbucket, or Gitea repositories.
+
+## Pattern Matching Features
+
+We support a wide range of pattern matching features:
+
+* Multiple glob patterns
+* Wildcards:
+  * `**` (matches any number of directories)
+  * `*.js` (matches all JavaScript files)
+* Negation patterns:
+  * `!a/*.js` (excludes JavaScript files in directory 'a')
+  * `*!(b).js` (matches all JavaScript files except those ending with 'b')
+* Extended glob patterns:
+  * `+(x|y)` (matches 'x' or 'y' one or more times)
+  * `!(a|b)` (matches anything except 'a' or 'b')
+* POSIX character classes:
+  * `[[:alpha:][:digit:]]` (matches any letter or number)
+* Brace expansion:
+  * `foo/{1..5}.md` (matches foo/1.md through foo/5.md)
+  * `bar/{a,b,c}.js` (matches bar/a.js, bar/b.js, bar/c.js)
+* Regex character classes:
+  * `foo-[1-5].js` (matches foo-1.js through foo-5.js)
+* Regex logical "or":
+  * `foo/(abc|xyz).js` (matches foo/abc.js or foo/xyz.js)
+
+<userStyle>
+  Normal
+</userStyle>
+
+**Examples:**
+
+Example 1 (unknown):
+```unknown
+my-app/	
+├── src/	
+│   ├── index.js	
+├── public/
+```
+
+---
+
+## Connection
+
+**URL:** llms-txt#connection
+
+**Contents:**
+  - Internal Credentials
+  - External Credentials
+  - Important Note
+
+This section explains how to configure database access for applications in Dokploy, including both internal connections within your network and external connections accessible over the internet.
+
+### Internal Credentials
+
+Used for connecting to the database from within the same network, without exposing the database to the internet.
+
+* **User**: Username for the database access.
+* **Password**: Secure password for database access.
+* **Database Name**: The name of the database to connect to.
+* **Internal Host**: The hostname or internal identifier for the database within the network.
+* **Internal Port (Container)**: The port used within the container to connect to the database.
+* **Internal Connection URL**: The full connection string used internally to connect to the database.
+
+### External Credentials
+
+Enables the database to be reachable from the internet, necessary for remote management or external applications.
+
+* **External Port (Internet)**: Assign a port that is not currently used by another service to expose the database externally.
+
+#### Steps to Configure External Access
+
+1. Ensure the external port is available and not in conflict with other services.
+2. Enter the external port you wish to use to expose your database.
+3. The system will automatically generate an external connection URL, which can be used to access the database from any database management tool over the internet, like phpMyAdmin, MySQL Workbench, PgAdmin, etc.
+
+For security reasons, internal credentials should be used for applications running within the same network or environment to prevent unauthorized access. External credentials should only be used when necessary and with proper security measures in place, such as VPNs or IP whitelisting.
+
+---
+
+## Bitbucket
+
+**URL:** llms-txt#bitbucket
+
+**Contents:**
+- Setup Automatic Deployments
+- Clarification on Automatic Deployments
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Dokploy offer a way to connect your Bitbucket Repository to your Dokploy panel, you can use Groups Names or personal accounts.
+
+Go to `Git` and select `Bitbucket` as the source, then you can use the following options:
+
+* **Bitbucket Username**: Set the username that you want to connect to Dokploy.
+* **App Password**: Set the app password you've created.
+* **Workspace(Optional)**: Assign a workspace name, this is useful if you want to connect to another workspace.
+
+Follow the steps to connect your Bitbucket account to Dokploy.
+
+1. Go to `https://bitbucket.org/account/settings/app-passwords/new` .
+2. Set Label: eg. `Dokploy-Bitbucket-App`. you can choose any name that you want.
+3. In permissions make sure to select `Account: Read`, `Workspace membership: Read`, `Projects: Read`
+   , `Repositories: Read` `Pull requests: Read` and `Webhooks: Read and write`.
+4. Click on `Create`.
+5. Copy the `App Password` and paste it in Dokploy `Bitbucket` Modal section.
+6. Set your `Bitbucket Username`.
+7. (Optional) If you want to use Workspaces, go to `https://bitbucket.org/account/workspaces/`, eg. If you have
+   `dokploy-workspace` copy and paste it in Workspace Name, please make sure to use the slugified name, if you use names like Dokploy Workspace in this field can cause issues.
+8. Click on `Configure Bitbucket`.
+9. If everything is correct, you can update enter to the Update Icon, and click on `Test Connection` to make sure everything is working.
+10. Now you can use the repositories from your Gitlab Account in `Applications` or `Docker Compose` services.
+
+<Callout type="warn">
+  Dokploy doesn't support Bitbucket Automatic deployments on each push you make to your repository.
+</Callout>
+
+## Setup Automatic Deployments
+
+You can configure automatic deployments in Dokploy for the Following Services:
+
+1. **Applications**
+2. **Docker Compose**
+
+The steps are the same for both services.
+
+1. Go to either `Applications` or `Docker Compose` and go to `Deployments` Tab.
+2. Copy the `Webhook URL`.
+3. Go to your Bitbucket Account and select the repository.
+4. In the left menu, select `Repository Settings` and then `Webhooks`.
+5. Click on `Add Webhook`.
+6. Set any `Title` and the `URL` to the one you copied in the previous step.
+7. In the Trigger section, select `Push Events`.
+8. Click on `Add Webhook`.
+9. Now you have automatic deployments enabled for the selected repository.
+
+## Clarification on Automatic Deployments
+
+By default, Dokploy will automatically deploy your application on the Branch you have selected.
+
+eg. Let's suppose you have a `application` in this way:
+
+Repository: `my-app`
+Branch: `feature`
+
+If you try to make a push on another branch eg. `main`, Dokploy will not automatically deploy your application, because
+your application have selected `feature` as the Branch.
+
+<Callout>
+  In the case you want to have multiple applications in the same repository, eg. (development, staging, production), you can create 3 `Applications` in Dokploy
+  and select the branch in each of them.
+
+This is very usefull if you want to have multiple environments for the same application.
+</Callout>
+
+---
+
+## Welcome to Dokploy
+
+**URL:** llms-txt#welcome-to-dokploy
+
+**Contents:**
+- Why Choose Dokploy?
+- Setting up Dokploy
+- Setting up
+
+import { Card, Cards } from 'fumadocs-ui/components/card';
+
+Dokploy is a stable, easy-to-use deployment solution designed to simplify the application management process. Think of Dokploy as your free self hostable alternative to platforms like Heroku, Vercel, and Netlify, leveraging the robustness of [Docker](https://www.docker.com/) and the flexibility of [Traefik](https://traefik.io/).
+
+{/* <ImageZoom  src="/logo.png" width={1300} height={630} alt='home og image' /> */}
+
+<img alt="Logo" src={__img0} placeholder="blur" />
+
+## Why Choose Dokploy?
+
+* **Simplicity:** Easy setup and management of deployments.
+* **Flexibility:** Supports a wide range of applications and databases.
+* **Open Source:** Free and open-source software, available for anyone to use.
+
+## Setting up Dokploy
+
+Getting started with Dokploy is straightforward. Follow our guides to install and configure your applications and databases effectively.
+
+Please go to get started.
+
+<Cards>
+  <Card href="/docs/core/installation" title="Installation" description="Learn how to install Dokploy." />
+
+<Card href="/docs/core/applications" title="Applications" description="Learn how to deploy applications." />
+
+<Card href="/docs/core/databases" title="Databases" description="Learn how to deploy databases." />
+
+<Card href="/docs/core/docker-compose" title="Docker Compose" description="Learn how to use Docker Compose with Dokploy." />
+</Cards>
+
+---
+
+## Application
+
+**URL:** llms-txt#application
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/application.create"},{"method":"get","path":"/application.one"},{"method":"post","path":"/application.reload"},{"method":"post","path":"/application.delete"},{"method":"post","path":"/application.stop"},{"method":"post","path":"/application.start"},{"method":"post","path":"/application.redeploy"},{"method":"post","path":"/application.saveEnvironment"},{"method":"post","path":"/application.saveBuildType"},{"method":"post","path":"/application.saveGithubProvider"},{"method":"post","path":"/application.saveGitlabProvider"},{"method":"post","path":"/application.saveBitbucketProvider"},{"method":"post","path":"/application.saveGiteaProvider"},{"method":"post","path":"/application.saveDockerProvider"},{"method":"post","path":"/application.saveGitProvider"},{"method":"post","path":"/application.disconnectGitProvider"},{"method":"post","path":"/application.markRunning"},{"method":"post","path":"/application.update"},{"method":"post","path":"/application.refreshToken"},{"method":"post","path":"/application.deploy"},{"method":"post","path":"/application.cleanQueues"},{"method":"post","path":"/application.killBuild"},{"method":"get","path":"/application.readTraefikConfig"},{"method":"post","path":"/application.updateTraefikConfig"},{"method":"get","path":"/application.readAppMonitoring"},{"method":"post","path":"/application.move"},{"method":"post","path":"/application.cancelDeployment"}]} hasHead={true} />
+
+---
+
+## Environment
+
+**URL:** llms-txt#environment
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/environment.create"},{"method":"get","path":"/environment.one"},{"method":"get","path":"/environment.byProjectId"},{"method":"post","path":"/environment.remove"},{"method":"post","path":"/environment.update"},{"method":"post","path":"/environment.duplicate"}]} hasHead={true} />
+
+---
+
+## Mongo Compass
+
+**URL:** llms-txt#mongo-compass
+
+1. Download and install Mongo Compass [Mongo Compass](https://www.mongodb.com/try/download/compass).
+2. Go to your `MongoDB` databases.
+3. In External Credentials, enter the `External Port (Internet)` make sure the port is not in use by another service eg. `27017` and click `Save`.
+4. It will display the `External Connection URL` eg. `mongodb://user:password@1.2.4.5:27017/database`.
+
+Open Mongo Compass and follow the steps:
+
+1. Click on `Add Connection`.
+2. Copy and paste the `External Connection URL` eg. `mongodb://user:password@1.2.4.5:27017/database`.
+3. Click on `Connect`.
+
+Done! now you can manage the database from Mongo Compass.
+
+---
+
+## search the container name
+
+**URL:** llms-txt#search-the-container-name
+
+container_name=$(docker ps --filter "name=clickhouse" --format "{{.Names}}")
+
+---
+
+## Databases
+
+**URL:** llms-txt#databases
+
+**Contents:**
+- Database Support
+- General
+- Environment
+- Monitoring
+- Backups
+- Logs
+- Advanced
+- Keyboard Shortcuts
+
+Dokploy simplifies the process of creating and managing databases, offering robust options for both setup and backups.
+
+Dokploy currently supports a range of popular database systems, ensuring compatibility and flexibility for your projects:
+
+* **Postgres**: Robust, SQL-compliant and highly reliable.
+* **MySQL**: Widely used relational database known for its performance and flexibility.
+* **MariaDB**: A fork of MySQL with additional features and improved performance.
+* **MongoDB**: A NoSQL database known for its high scalability and flexibility.
+* **Redis**: An in-memory key-value store often used as a database, cache, and message broker.
+
+We offer multiple functionalities that you can use to manage your databases, such as:
+
+Actions like deploying, updating, and deleting your database, and stopping it.
+
+If you need to assign environment variables to your application, you can do so here.
+
+In case you need to use a multiline variable, you can wrap it in double quotes just like this `'"here_is_my_private_key"'`.
+
+Four graphs will be displayed for the use of memory, CPU, disk, and network. Note that the information is only updated if you are viewing the current page, otherwise it will not be updated.
+
+We offer automated backups for your databases, ensuring that you can recover your data quickly and easily in case of any issues, you can setup a S3 Destinations in settings to store your backups.
+
+If you want to see any important logs from your application that is running, you can do so here and determine if your application is displaying any errors or not.
+
+This section provides advanced configuration options for experienced users. It includes tools for custom commands within the container, managing Docker Swarm settings, and adjusting cluster settings such as replicas and registry selection. These tools are typically not required for standard application deployment and are intended for complex management and troubleshooting tasks.
+
+* **Custom Docker Image**: You can change the Docker image used to run your database.
+* **Run Command**: Execute custom commands directly in the container for advanced management or troubleshooting.
+* **Volumes**: To ensure data persistence across deployments, configure storage volumes for your application.
+* **Resources**: Adjust the CPU and memory allocation for your application.
+* **Danger Zone**: If for some reason you want to start again and delete all the data, tables, etc. you can do it here.
+
+## Keyboard Shortcuts
+
+To help speed up navigating there are some built in keyboard shortcuts for
+navigating tabs on database pages. Similar to GitHub these are all prefixed
+with the `g` key so to use them press `g` and then the shortcut key.
+
+| Key | Tab         |
+| --- | ----------- |
+| `g` | General     |
+| `e` | Environment |
+| `l` | Logs        |
+| `m` | Monitoring  |
+| `b` | Backups     |
+| `a` | Advanced    |
+
+---
+
+## Ssh Router
+
+**URL:** llms-txt#ssh-router
+
+{/* This file was generated by Fumadocs. Do not edit this file directly. Any changes should be made by running the generation command again. */}
+
+<APIPage document={"./public/openapi.json"} webhooks={[]} operations={[]} showTitle={true} />
+
+---
+
+## MariaDB
+
+**URL:** llms-txt#mariadb
+
+1. Download and install Beekeeper Studio [Beekeeper Studio](https://www.beekeeperstudio.io/get).
+2. Go to your `mariadb` databases.
+3. In External Credentials, enter the `External Port (Internet)` make sure the port is not in use by another service eg. `3307` and click `Save`.
+4. It will display the `External Connection URL` eg. `mysql://user:password@1.2.4.5:3306/database`.
+
+Open Beekeeper Studio and follow the steps:
+
+1. Click on `Add New Server`.
+2. Select `MariaDB` as the `Database Type`.
+3. Use `Import URL` to enter the `External Connection URL` from Dokploy eg. `mysql://user:password@1.2.4.5:3306/database`.
+4. Click on `Connect`.
+5. Click on `Save`.
+
+Done! now you can manage the database from Beekeeper Studio.
+
+---
+
+## Lark
+
+**URL:** llms-txt#lark
+
+**Contents:**
+- Lark Notifications
+
+Lark notifications are a great way to stay up to date with important events in your Dokploy panel. You can choose to receive notifications for specific events or all events.
+
+## Lark Notifications
+
+To start receiving Lark notifications, you need to fill the form with the following details:
+
+* **Name**: Enter any name you want.
+* **Webhook URL**: Enter the webhook URL. eg. `https://open.larksuite.com/open-apis/bot/v2/hook/xxxxxxxxxxxxxxxxxxxxxxxx`
+
+To setup Lark notifications, follow these steps:
+
+1. Go to your Lark workspace and navigate to the bot configuration.
+2. Create a new bot or use an existing one.
+3. Copy the webhook URL from your Lark bot settings.
+4. Go to Dokploy **Notifications** and select **Lark** as the notification provider.
+5. Enter a name for your notification configuration.
+6. Paste the webhook URL you copied in the previous step.
+7. Click on **Test** to make sure everything is working.
+8. Click on **Create** to save the notification.
+
+---
+
+## Digital Ocean
+
+**URL:** llms-txt#digital-ocean
+
+To configure a Digital Ocean Container Registry, you need to fill the form with the following details:
+
+1. Insert the Registry Name eg. `My Registry`.
+2. Go to `https://cloud.digitalocean.com/registry/new` and click on `Create a Container Registry`.
+3. Insert a lowercase name eg. `dokploy-username`.
+4. Click on `Create Registry`.
+5. Click on `Actions` and then `Download Docker Credentials`.
+6. In Permissions select `Read` and `Write`.
+7. Open the downloaded file and copy the auth value and type as `Password` in Dokploy Modal.
+8. Go to `https://cloud.digitalocean.com/account/api/tokens` and click on `Generate New Token`.
+9. In permissions select `Registry`.
+10. Click on `Create`.
+11. Copy the `access token` and paste it in Dokploy Modal as a `Username` field.
+12. (Optional) If you pretend to use Cluster Feature, make sure to set a `Image Prefix`.
+13. Registry URL: set `registry.digitalocean.com`
+14. Click on `Test` to make sure everything is working.
+15. Click on `Create` to save the registry.
+
+---
+
+## Nest.js
+
+**URL:** llms-txt#nest.js
+
+This example will deploy a simple Nest.js application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/nestjs`
+
+2. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+3. **Generate a Domain**:
+   * Click on generate domain button.
+   * A new domain will be generated for you.
+   * You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+---
+
+## Git Provider
+
+**URL:** llms-txt#git-provider
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"get","path":"/gitProvider.getAll"},{"method":"post","path":"/gitProvider.remove"}]} hasHead={true} />
+
+---
+
+## Add your backup commands here
+
+**URL:** llms-txt#add-your-backup-commands-here
+
+docker exec -it $container_name clickhouse-client --query "BACKUP DATABASE mydb TO '/backups/$backup_file'"
+
+---
+
+## Vue.js
+
+**URL:** llms-txt#vue.js
+
+This example will deploy a simple Vue.js application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/vuejs`
+   * Publish Directory: `./dist` (Nixpacks)
+
+2. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+3. **Generate a Domain**:
+   * Click on generate domain button.
+   * A new domain will be generated for you.
+   * Set Port `80`
+   * You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+---
+
+## Then
+
+**URL:** llms-txt#then
+
+**Contents:**
+- Recreate dokploy containers
+
+docker service scale dokploy=1
+shell
+2025-04-07T15:20:18Z ERR Error occurred during watcher callback error="/etc/dokploy/traefik/dynamic/dokploy.yml: field not found, node: passHostHeader" providerName=file
+bash
+docker restart dokploy-traefik
+yaml
+http:
+  routers:
+    dokploy-router-app:
+      rule: Host(`my-domain.com`)
+      service: dokploy-service-app
+      entryPoints:
+        - web
+      middlewares:
+        - redirect-to-https
+    dokploy-router-app-secure:
+      rule: Host(`my-domain.com`)
+      service: dokploy-service-app
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt
+  services:
+    dokploy-service-app:
+      loadBalancer:
+        servers:
+          - url: http://dokploy:3000
+          - passHostHeader: true
+yaml
+http:
+  routers:
+    dokploy-router-app:
+      rule: Host(`my-domain.com`)
+      service: dokploy-service-app
+      entryPoints:
+        - web
+      middlewares:
+        - redirect-to-https
+    dokploy-router-app-secure:
+      rule: Host(`my-domain.com`)
+      service: dokploy-service-app
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt
+  services:
+    dokploy-service-app:
+      loadBalancer:
+        servers:
+          - url: http://dokploy:3000
+        passHostHeader: true
+bash
+docker restart dokploy-traefik
+bash
+docker service rm dokploy-redis
+
+**Examples:**
+
+Example 1 (unknown):
+```unknown
+#### 3. Traefik Configuration Issues
+
+If all containers are running but you still can't access the UI, and Dokploy logs show no errors, the Traefik container might have configuration issues.
+
+When running `docker logs dokploy-traefik`, you might see errors like:
+```
+
+Example 2 (unknown):
+```unknown
+First, try restarting Traefik:
+```
+
+Example 3 (unknown):
+```unknown
+If you still can't access it and the same error persists in the Traefik logs, you'll need to check the Traefik configuration. In this case, the error indicates that the `passHostHeader` field is missing in the configuration.
+
+If you've modified any Traefik configuration for an `application` and added invalid configuration, the logs will point to the error. For example, the error above mentions `field not found, node: passHostHeader`, which means we need to manually modify the configuration files in `/etc/dokploy/traefik`.
+
+Here's an example of an invalid configuration:
+```
+
+Example 4 (unknown):
+```unknown
+The correct configuration should be:
+```
+
+---
+
+## Turborepo
+
+**URL:** llms-txt#turborepo
+
+This repository contains an example of turborepo application that is deployed on Dokploy.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/turborepo` (Nixpacks)
+
+2. **Environment Variables**:
+
+* Add environment variables to the env tab.
+
+3. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+4. **Generate a Domain**:
+   * Click on generate domain button.
+
+* A new domain will be generated for you.
+
+* You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+**Examples:**
+
+Example 1 (bash):
+```bash
+NIXPACKS_TURBO_APP_NAME="web"
+   NIXPACKS_BUILD_CMD="turbo run build --filter=web"
+   NIXPACKS_START_CMD="turbo run start --filter=web"
+```
+
+---
+
+## Copy only the necessary files
+
+**URL:** llms-txt#copy-only-the-necessary-files
+
+**Contents:**
+  - Auto deploy
+- Healthcheck & Rollbacks
+
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/node_modules ./node_modules
+
+EXPOSE 3000
+CMD ["pnpm", "start"]
+yaml
+name: Build Docker images
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build-and-push-dockerfile-image:
+    runs-on: ubuntu-latest
+
+steps:
+       ...Same as step 7 from the previous example
+          
+      - name: Trigger Dokploy Deployment
+        uses: dokploy/dokploy-action@v1
+        run: |
+            curl -X 'POST' \
+            'https://<your-dokploy-domain>/api/application.deploy' \
+            -H 'accept: application/json' \
+            -H 'x-api-key: YOUR-GENERATED-API-KEY' \
+            -H 'Content-Type: application/json' \
+            -d '{
+                 "applicationId": "YOUR-APPLICATION-ID"
+            }'
+json
+{
+  "Test": [
+    "CMD",
+    "curl",
+    "-f",
+    "http://localhost:3000/health"
+  ],
+  "Interval": 30000000000,
+  "Timeout": 10000000000,
+  "StartPeriod": 30000000000,
+  "Retries": 3
+}
+json
+{
+  "Parallelism": 1,
+  "Delay": 10000000000,
+  "FailureAction": "rollback",
+  "Order": "start-first"
+}
+```
+
+Now you everything a production ready application with automated deployments, zero downtime, rollbacks and healthchecks.
+
+We recommend strongly to use this approach in production since this will make your server never build the application, will only in charge of the deployment keeping your server without any downtime.
+
+**Examples:**
+
+Example 1 (unknown):
+```unknown
+9. Now when you make a commit to your repository, the workflow will be triggered and the application will build and push to `Dockerhub`.
+10. Now let's create application in Dokploy.
+11. In `Source Type` select `Docker`
+12. In the docker image field enter `namespace/example:latest`
+13. Click on `Save`.
+14. Click on `Deploy`.
+15. Go to `Domains` and click `Dices` icon to generate a domain and the port set to `3000`.
+16. Now you can access your application.
+
+### Auto deploy
+
+When using Dockerhub as a registry you can also enable auto deploy, this will automatically deploy your application whenever you push to your repository.
+
+To setup auto deploys for Dockerhub, follow the steps below:
+
+1. Go to your application and select `Deployments` tab.
+2. Copy the `Webhook URL`.
+3. Go to your Dockerhub repository and select `Webhooks` tab.
+4. Set a name for the webhook and paste the `Webhook URL` copied in step 2.
+5. That's it, now every time you push to your repository, your application will trigger a deployment in dokploy.
+
+The deployment will trigger only if the `Tag` matches the one specified in Dokploy.
+
+#### External Registry
+
+If you have a registry that is not Dockerhub, you can trigger a deployment after pushing to your repository in Github Actions.
+
+Your workflow will look like this:
+
+This method use the [Api Method](/docs/core/auto-deploy#api-method) to trigger a deployment.
+```
+
+Example 2 (unknown):
+```unknown
+You can also use this Github Action [Action](https://github.com/marketplace/actions/dokploy-deployment) to automate the deployment.
+
+## Healthcheck & Rollbacks
+
+When using Dokploy you can also configure healthchecks and rollbacks, this will allow you to configure your application to be able to recover from failures.
+
+In the repo we are using from the `Step 1.` we have a healthcheck endpoint `/health` that returns a 200 status code and running in the port 3000.
+
+Go to `Advanced` Tab and go to Cluster Settings and enter to `Swarm Settings`
+
+There are a couple options that you can use, in this case we will focus on `Health Check` and `Update Config`.
+
+Make sure the API Route exists in your application
+```
+
+Example 3 (unknown):
+```unknown
+Now in the `Update Config`
+
+Now when the application is getting unhealthy response from the health check, the container will rollback to the previous version.
+
+Paste the following code:
+```
+
+---
+
+## Organization
+
+**URL:** llms-txt#organization
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/organization.create"},{"method":"get","path":"/organization.all"},{"method":"get","path":"/organization.one"},{"method":"post","path":"/organization.update"},{"method":"post","path":"/organization.delete"},{"method":"get","path":"/organization.allInvitations"},{"method":"post","path":"/organization.removeInvitation"},{"method":"post","path":"/organization.setDefault"}]} hasHead={true} />
+
+---
+
+## Dokploy Cloud
+
+**URL:** llms-txt#dokploy-cloud
+
+Dokploy Cloud allows you to deploy your apps to a cloud provider of your choice. This means that you can deploy your apps to any cloud provider, such as AWS, GCP, Azure, or DigitalOcean, without having to worry about the underlying infrastructure.
+
+By default when you install Dokploy in a Self Hosted version, if you deploy all your applications by default they will be deployed on the same server where Dokploy UI is installed. This means that you will need to build and run your applications where Dokploy
+UI is installed, which can be a challenge if you don't have the resources to do so, also self hosted support for remote instances.
+
+Dokploy cloud starts from $4.50 per month per server, the next is 3.50$, and you can deploy as many applications you want to your remote server connected to a dokploy cloud, multi server feature is recommended for HA and scalability projects.
+
+You can start by registering on the [Dokploy Cloud](https://app.dokploy.com) website and follow the steps to deploy your apps, see the [Pricing](https://dokploy.com#pricing) page for more information.
+
+---
+
+## Deployments
+
+**URL:** llms-txt#deployments
+
+**Contents:**
+- Server Setup
+
+import { ImageZoom } from "fumadocs-ui/components/image-zoom";
+import { Callout } from "fumadocs-ui/components/callout";
+
+To get started with remote servers, you'll need to configure the initial setup for your remote server.
+
+The server setup process prepares the necessary environment for securely and efficiently deploying applications.
+
+<Callout title="Important" type="info">
+  Root access to the server is required. We currently do not support non-root deployments.
+</Callout>
+
+<Callout type="warning">
+  If your remote server is configured with a different shell (other than bash), you must configure bash as the default shell, as Dokploy has been developed and tested with bash.
+</Callout>
+
+<ImageZoom src="/assets/images/server-deploy.png" alt="Remote Server Setup" width={1000} height={600} />
+
+We provide two main actions to configure your server:
+
+* **Modify Script**: Allows you to view and customize the installation script that will be executed on your server. You can adjust it according to your specific needs.
+* **Setup Server**: Initiates the configuration process on the remote server. When clicked, it will open a modal window showing real-time logs of the script execution.
+
+Example of the server setup logs:
+
+<ImageZoom src="/assets/images/server-drawer.png" alt="Remote Server Setup" width={1000} height={600} />
+
+---
+
+## GitHub
+
+**URL:** llms-txt#github
+
+**Contents:**
+- Clarification on Automatic Deployments
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Dokploy offer a way to connect your Github Repository to your Dokploy panel, you can use organizations or personal accounts.
+
+Go to `Git` and select `Github` as the source, then you can use the following options:
+
+* **Organization**: Select the organization that you want to connect to Dokploy.
+* **Personal Account(Default)**: Select the account that you want to connect to Dokploy.
+
+Follow the steps to connect your Github account to Dokploy.
+
+1. Click on `Create Github App` to create a new Github App.
+2. Set Github App Name: eg. `Dokploy-Github-App`. make sure this name is unique.
+3. Click on `Create Github App`, then you will redirect to the `Git` section of Dokploy.
+4. Now it will show a `Install` Button, click on it.
+5. You can select the repositories that you want to dokploy be able to access, you can choose
+   select all repositories or select specific repositories.
+6. Click on `Install & Authorize` to install the Dokploy App.
+7. You will be redirected to the `Git` section of Dokploy.
+8. Now you can use the repositories from your Github Account in `Applications` or `Docker Compose` services.
+
+<Callout>
+  When you use this method, By default you will have Automatic deployments on each push you make to your repository.
+</Callout>
+
+## Clarification on Automatic Deployments
+
+By default, Dokploy will automatically deploy your application on the Branch you have selected.
+
+eg. Let's suppose you have a `application` in this way:
+
+Repository: `my-app`
+Branch: `feature`
+
+If you try to make a push on another branch eg. `main`, Dokploy will not automatically deploy your application, because
+your application have selected `feature` as the Branch.
+
+<Callout>
+  In the case you want to have multiple applications in the same repository, eg. (development, staging, production), you can create 3 `Applications` in Dokploy
+  and select the branch in each of them.
+
+This is very usefull if you want to have multiple environments for the same application.
+</Callout>
+
+---
+
+## Gotify
+
+**URL:** llms-txt#gotify
+
+**Contents:**
+- Gotify Notifications
+
+Gotify notifications are a great way to stay up to date with important events in your Dokploy panel. You can choose to receive notifications for specific events or all events.
+
+## Gotify Notifications
+
+For start receiving gotify notifications, you need to fill the form with the following details:
+
+* **Name**: Enter any name you want.
+* **Server URL**: Enter the gotify server URL. eg. `https://gotify.example.com`
+* **App Token**: Enter the gotify token.
+* **Priority**: Enter the priority of the notification, default is `5` (1-10).
+
+To Setup the Gotify notifications, you can read the [Gotify Documentation](https://gotify.net/docs/install).
+
+---
+
+## If you are using docker service traefik
+
+**URL:** llms-txt#if-you-are-using-docker-service-traefik
+
+docker service rm dokploy-traefik
+
+---
+
+## Cloudflare R2
+
+**URL:** llms-txt#cloudflare-r2
+
+Cloudflare is a popular choice for hosting static assets, such as images, videos, and documents. It is a cloud-based service that allows you to store and retrieve data from anywhere in the world. This is a great option for storing backups, as it is easy to set up and manage.
+
+1. Go to `R2 Object Storage`, and create a new bucket with any name you want by clicking `Create bucket` button.
+2. Go back to `R2 Object Storage`, and select `Manage API tokens` from the select box.
+3. Create a new `User API Token`, and give it a meaninful name.
+4. Set `Object Read & Write` Permission.
+5. (Optional) Set Specify bucket, by default it will include all buckets.
+6. Create the token.
+
+Now copy the following variables:
+
+| (from) Cloudflare   | (to) Dokploy        | Example value                                                        |
+| ------------------- | ------------------- | -------------------------------------------------------------------- |
+| `Access Key ID`     | `Access Key Id`     | `f3811c6d27415a9s6cv943b6743ad784`                                   |
+| `Secret Access Key` | `Secret Access Key` | `aa55ee40b4049e93b7252bf698408cc22a3c2856d2530s7c1cb7670e318f15e58`  |
+| `Region`            | `Region`            | `WNAM, ENAM, etc` it will depend on the region you are using.        |
+| `Endpoint`          | `Endpoint`          | `https://8ah554705io7842d54c499fbee1156c1c.r2.cloudflarestorage.com` |
+| `Bucket`            | `Bucket`            | `dokploy-backups` use the name of the bucket you created.            |
+
+Test the connection and you should see a success message.
+
+---
+
+## AWS S3
+
+**URL:** llms-txt#aws-s3
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+AWS provides a simple and cost-effective way to store and retrieve data. It is a cloud-based service that allows you to store and retrieve data from anywhere in the world. This is a great option for storing backups, as it is easy to set up and manage.
+
+1. Create a new bucket and set any name you want.
+2. Search for `IAM` in the search bar.
+3. Click on `Policies` in the left menu.
+4. Click on `Create Policy`.
+5. Select `JSON` and paste the following policy:
+   Make sure to replace the bucket name with your bucket name.
+
+6. Click on `Review Policy`.
+7. Assign a name to the policy.
+8. Click on `Create Policy`.
+9. Click on User Group and assign a Name.
+10. Click on `Add User to Group`.
+11. Add the user you want to assign to the group.
+12. In the `Attached Policies` section, filter by type `Customer Managed` and select the policy you created.
+13. Click on `Attach Policy`.
+14. Go to `Users` and select the user you've assigned to the group.
+15. Go to Security Credentials.
+16. Click on `Create Access Key`.
+17. Select `Programmatic Access`.
+18. Click on `Create New Access Key`.
+
+Now copy the following variables:
+
+* `Access Key` -> `Access Key (Dokploy)` = eg. `AK2AV244NFLS5JTUZ554`
+* `Secret Key` -> `Secret Key (Dokploy)` = eg. `I0GWCo9fSGOr7z6Lh+NvHmSsaE+62Vwk2ua2CEwR`
+* `Bucket` -> `Bucket (Dokploy)` = eg. `dokploy-backups` use the name of the bucket you created.
+* `Region` -> `Region (Dokploy)` = eg. `us-east-1, us-west-2, etc` it will depend on the region you are using.
+* `Endpoint` -> `Endpoint (Dokploy) (Optional)` = eg. `https://s3.<region>.amazonaws.com` you will find this endpoint in the Bucket Card at the Home Page.
+
+Test the connection and you should see a success message.
+
+**Examples:**
+
+Example 1 (json):
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowListBucket",
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::bucket-name"
+    },
+    {
+      "Sid": "AllowBucketObjectActions",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      // Make sure to set the name of your bucket
+      "Resource": "arn:aws:s3:::bucket-name/*"
+    }
+  ]
+}
+```
+
+---
+
+## Backblaze B2
+
+**URL:** llms-txt#backblaze-b2
+
+**Contents:**
+- Backblaze B2 Example Bucket
+
+Backblaze B2 is a cloud-based service that allows you to store and retrieve data from anywhere in the world. This is a great option for storing backups, as it is easy to set up and manage.
+
+## Backblaze B2 Example Bucket
+
+1. Create a new bucket and set any name you want.
+2. Go to `Application Keys` and create a new key.
+3. Set a Key Name.
+4. Set the Allow Access to Bucket(s) to `All Buckets` or `Specific Buckets`.
+5. Set type of access `Read & Write` Permission.
+
+Now copy the following variables:
+
+* `Access Key` -> `Access Key (Dokploy)` = eg. `002s6acf2639910000d000005`
+* `Secret Key` -> `Secret Key (Dokploy)` = eg. `K00+rIsWqPMhmcgqcyOyb9bqby7pbpE`
+* `Region` -> `Region (Dokploy)` = eg. `eu-central-003, us-east-005, us-west-002, us-west-001, us-west-004, etc` it will depend on the region you are using.
+* `Endpoint` -> `Endpoint (Dokploy)` = eg. `https://s3.us-west-002.backblazeb2.com` you will find this endpoint in the Bucket Card at the Home Page.
+* `Bucket` -> `Bucket (Dokploy)` = eg. `dokploy-backups` use the name of the bucket you created.
+
+Test the connection and you should see a success message.
+
+---
+
+## Svelte
+
+**URL:** llms-txt#svelte
+
+This example will deploy a simple Svelte application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/svelte`
+   * Publish Directory: `./dist` (Nixpacks)
+
+2. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+3. **Generate a Domain**:
+   * Click on generate domain button.
+   * A new domain will be generated for you.
+   * Set Port `80`
+   * You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+---
+
+## Goodies
+
+**URL:** llms-txt#goodies
+
+1. **Ansible Dokploy**: Ansible role to deploy Dokploy [Ansible Role](https://github.com/jacobtipp/ansible-dokploy)
+2. **Dokploy Oracle infrastructure**: Deploy Dokploy on Oracle infrastructure [Github](https://github.com/statickidz/dokploy-oci-free)
+3. **Dokploy Deploy Action 1**: Automatic Dokploy deployments on Github [Github](https://github.com/benbristow/dokploy-deploy-action)
+4. **Dokploy Deploy Action 2**: Automatic Dokploy deployments on Github [Github](https://github.com/jmischler72/dokploy-deploy-action)
+5. **Dokploy Deploy Action 3**: Automatic Dokploy deployments on Github (Support both `application` and `compose` deployment) [Github](https://github.com/nhridoy/dokploy-deploy-action)
+6. **Dokploy JS Sdk**: Dokploy JS SDK [Github](https://github.com/quiint/dokploy.js)
+7. **Templates Collection** : Docker compose collection for Dokploy [Github](https://github.com/benbristow/dokploy-compose-templates)
+8. **Dokploy Port Updater**: Dokploy Port Updater [Github](https://github.com/clockradios/dokploy-port-updater)
+9. **Dokli TUI**: Dokli TUI [Github](https://github.com/jonykalavera/dokli)
+
+Want to submit your own? [Submit a PR](https://github.com/Dokploy/website/blob/main/README.md)
+
+---
+
+## Astro SSR
+
+**URL:** llms-txt#astro-ssr
+
+This example will deploy a simple Astro SSR application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/astro-ssr`
+
+2. **Add Environment Variables**:
+
+* Navigate to the "Environments" tab and add the following variable:
+
+3. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+4. **Generate a Domain**:
+   * Click on generate domain button.
+   * A new domain will be generated for you.
+   * You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+**Examples:**
+
+Example 1 (cmd):
+```cmd
+NIXPACKS_START_CMD="pnpm run preview"
+```
+
+---
+
+## Open Source Templates
+
+**URL:** llms-txt#open-source-templates
+
+**Contents:**
+- Templates
+- Create your own template
+
+By default we include a set of templates, that you can use to spin up templates quickly. You can also create your own templates.
+
+The following templates are available (100):
+
+* **Appwrite**: End-to-end backend server for Web, Mobile, Native, or Backend apps with user authentication, database, storage, and more.
+* **Outline**: Self-hosted knowledge base and documentation platform.
+* **Supabase**: The open-source Firebase alternative with a dedicated Postgres database for web, mobile, and AI applications.
+* **Pocketbase**: Open-source backend for your next SaaS and Mobile app in 1 file.
+* **Plausible**: Open-source, privacy-focused, self-hosted web analytics platform.
+* **Calcom**: Open-source alternative to Calendly for creating scheduling and booking services.
+* **Grafana**: Open-source platform for data visualization and monitoring.
+* **Directus**: API-first, open-source headless CMS for building custom backends.
+* **Baserow**: Open-source database management tool.
+* **Budibase**: Open-source low-code platform for building forms, portals, and approval apps.
+* **Ghost**: Professional publishing platform built on Node.js.
+* **Uptime Kuma**: Free and open-source monitoring tool.
+* **n8n**: Open-source low-code platform for automating workflows.
+* **Wordpress**: Free and open-source CMS for publishing websites.
+* **Odoo**: Free and open-source business management software.
+* **Appsmith**: Open-source platform for building internal tools.
+* **Excalidraw**: Open-source online diagramming tool.
+* **Documenso**: Open-source alternative to DocuSign.
+* **NocoDB**: Airtable alternative for databases.
+* **Meilisearch**: Free and open-source search engine.
+* **Phpmyadmin**: Web interface for MySQL/MariaDB management.
+* **Rocketchat**: Open-source web chat platform.
+* **Minio**: Open-source object storage server.
+* **Metabase**: Open-source business intelligence tool.
+* **Glitchtip**: Simple, open-source error tracking.
+* **Open WebUI**: Open-source ChatGPT alternative.
+* **Listmonk**: Self-hosted newsletter manager.
+* **Double Zero**: Self-hostable SES dashboard.
+* **Umami**: Privacy-focused analytics alternative.
+* **Jellyfin**: Free software media system.
+* **Teable**: No-code database with spreadsheet interface.
+* **Zipline**: ShareX/file upload server.
+* **Soketi**: Open-source WebSockets server.
+* **Aptabase**: Self-hosted analytics platform.
+* **Typebot**: Open-source chatbot builder.
+* **Gitea**: Self-hosted software development service.
+* **Roundcube**: Open-source webmail software.
+* **File Browser**: Web-based file manager.
+* **Tolgee**: Web-based localization platform.
+* **Portainer**: Container management tool.
+* **InfluxDB**: Time-series data platform.
+* **Infisical**: Configuration and secrets manager.
+* **Docmost**: Collaborative wiki software.
+* **Vaultwarden**: Bitwarden-compatible server.
+* **Hi.events**: Event management platform.
+* **Windows/MacOS**: Dockerized operating systems.
+* **Coder**: Cloud development environment.
+* **Stirling PDF**: PDF tools suite.
+* **Lobe Chat**: Modern AI chat framework.
+* **Peppermint**: API development platform.
+* **Windmill**: Workflow and internal apps platform.
+* **Activepieces**: No-code automation tool.
+* **InvoiceShelf**: Self-hosted invoicing system.
+* **Postiz**: Content management platform.
+* **Slash**: Bookmarking and link shortener.
+* **Discord Tickets**: Support ticket bot.
+* **Nextcloud AIO**: File storage and collaboration.
+* **Blender**: 3D creation suite.
+* **HeyForm**: Conversational form builder.
+* **Chatwoot**: Customer engagement platform.
+* **Discourse**: Modern forum software.
+* **Immich**: Photo/video backup solution.
+* **Twenty CRM**: Modern CRM alternative.
+* **YOURLS**: URL shortening service.
+* **Ryot**: Media tracking platform.
+* **PhotoPrism**: AI-powered photos app.
+* **Ontime**: Event rundown manager.
+* **Trigger.dev**: Event-driven application platform.
+* **Browserless**: Headless browser automation.
+* **draw\.io**: Diagramming application.
+* **Kimai**: Time-tracking application.
+* **Logto**: Identity management platform.
+* **Penpot**: Open-source design tool.
+* **Huly**: Project management platform.
+* **Unsend**: Email service platform.
+* **Langflow**: Low-code AI application builder.
+* **Elasticsearch**: Search and analytics engine.
+* **OneDev**: Git server with CI/CD.
+* **Unifi Network**: Network management platform.
+* **GLPI**: Service management software.
+* **Checkmate**: Server monitoring tool.
+* **Gotenberg**: PDF generation API.
+* **Actual Budget**: Privacy-focused finance app.
+* **Conduit/Conduwuit**: Matrix chat servers.
+* **Cloudflared**: Cloudflare Tunnel daemon.
+* **CouchDB**: Document-oriented database.
+* **IT Tools**: Developer utilities collection.
+* **Superset**: Data visualization platform.
+* **Glance/Homarr**: Dashboard solutions.
+* **ERPNext**: Open-source ERP software.
+* **Maybe**: Finance tracking application.
+* **Spacedrive**: Cross-platform file manager.
+* **AList**: Multi-storage file manager.
+* **Answer**: Q\&A platform.
+* **Shlink**: URL shortener.
+* **Frappe HR**: HR & Payroll software.
+* **Formbricks**: Survey platform.
+* **Trilium**: Note-taking application.
+* **Convex**: Reactive database platform.
+
+For an up to date list of available template you can visit [Dokploy templates website](https://templates.dokploy.com/).
+
+## Create your own template
+
+We accept contributions to upload new templates to the dokploy repository.
+
+Make sure to follow the guidelines for creating a template:
+
+[Steps to create your own template](https://github.com/Dokploy/templates)
+
+[^1]: Please note that if you're self-hosting a mail server you need port 25 to be open for SMTP (Mail Transmission Protocol that allows you to send and receive) to work properly. Some VPS providers like [Hetzner](https://docs.hetzner.com/cloud/servers/faq/#why-can-i-not-send-any-mails-from-my-server) block this port by default for new clients.
+
+---
+
+## Preact
+
+**URL:** llms-txt#preact
+
+This example will deploy a simple Preact application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/preact`
+   * Publish Directory: `./dist` (Nixpacks)
+
+2. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+3. **Generate a Domain**:
+   * Click on generate domain button.
+   * A new domain will be generated for you.
+   * Set Port `80`
+   * You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+---
+
+## Schedule
+
+**URL:** llms-txt#schedule
+
+{/* This file was generated by Fumadocs. Do not edit this file directly. Any changes should be made by running the generation command again. */}
+
+<APIPage document={"./public/openapi.json"} webhooks={[]} operations={[{"path":"/schedule.create","method":"post"},{"path":"/schedule.update","method":"post"},{"path":"/schedule.delete","method":"post"},{"path":"/schedule.list","method":"get"},{"path":"/schedule.one","method":"get"},{"path":"/schedule.runManually","method":"post"}]} showTitle={true} />
+
+---
+
+## aws s3 cp /backups/$backup_file s3://your-bucket/backups/
+
+**URL:** llms-txt#aws-s3-cp-/backups/$backup_file-s3://your-bucket/backups/
+
+**Contents:**
+- Best Practices
+
+1. Always test your commands or scripts manually before scheduling them
+2. Use appropriate error handling in your scripts
+3. Consider the impact of scheduled jobs on system resources
+
+---
+
+## Domain
+
+**URL:** llms-txt#domain
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"post","path":"/domain.create"},{"method":"get","path":"/domain.byApplicationId"},{"method":"get","path":"/domain.byComposeId"},{"method":"post","path":"/domain.generateDomain"},{"method":"get","path":"/domain.canGenerateTraefikMeDomains"},{"method":"post","path":"/domain.update"},{"method":"get","path":"/domain.one"},{"method":"post","path":"/domain.delete"},{"method":"post","path":"/domain.validateDomain"}]} hasHead={true} />
+
+---
+
+## Gitea
+
+**URL:** llms-txt#gitea
+
+**Contents:**
+- Setup Automatic Deployments
+- Clarification on Automatic Deployments
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Dokploy offers a way to connect your Gitea Repository to your Dokploy panel, you can use Organizations or personal accounts.
+
+Go to `Git` and select `Gitea` as the source, then you can use the following options:
+
+* **Application ID**: Select the application ID that you want to connect to Dokploy.
+* **Personal Secret**: Select the secret that you want to connect to Dokploy.
+* **Organization Name(Optional)**: Select the organization name that you want to connect to Dokploy (Ideal for Gitea Organizations).
+
+Follow the steps to connect your Gitea account to Dokploy:
+
+1. Go to your Gitea instance's settings (e.g., `https://gitea.com/user/settings/applications`) and scroll to the `Create a new OAuth2 Application`.
+2. Set Application Name: e.g., `Dokploy-Gitea-App`. Choose any name you want.
+3. Redirect URI: Copy the `Redirect URI` from Dokploy. e.g., `https://dokploy.com/api/providers/gitea/callback`.
+4. Check Confidential Client
+5. Click on `Create Application`.
+6. Copy the `Client ID` and `Client Secret` from Gitea and paste them in Dokploy's `Gitea` Modal section.
+7. Click on `Configure Gitea App`.
+8. That operation will save the Gitea Provider configuration and redirect you to Gitia to authorize Dokploy to have access.
+9. Click on `Authorize`.
+10. You will be redirected to the `Git` section of Dokploy.
+11. Now you can use the repositories from your Gitea Account in `Applications` or `Docker Compose` services.
+
+<Callout type="warn">
+  Dokploy doesn't support Gitea Automatic deployments on each push you make to your repository.
+</Callout>
+
+## Setup Automatic Deployments
+
+You can configure automatic deployments in Dokploy for the Following Services:
+
+1. **Applications**
+2. **Docker Compose**
+
+The steps are the same for both services.
+
+1. Go to either `Applications` or `Docker Compose` and go to `Deployments` Tab.
+2. Copy the `Webhook URL`.
+3. Go to your Gitea Account and select the repository.
+4. In the left menu, select `Settings` and then `Webhooks`.
+5. Click on `Add Webhook`.
+6. Set the `URL` to the one you copied in the previous step.
+7. In the Trigger section, select `Push Events`.
+8. Click on `Add Webhook`.
+9. Click on `Save`.
+10. Now you have automatic deployments enabled for the selected repository.
+
+## Clarification on Automatic Deployments
+
+By default, Dokploy will automatically deploy your application on the Branch you have selected.
+
+e.g., Let's suppose you have an `application` in this way:
+
+Repository: `my-app`
+Branch: `feature`
+
+If you try to make a push on another branch e.g., `main`, Dokploy will not automatically deploy your application, because
+your application has selected `feature` as the Branch.
+
+<Callout>
+  In the case you want to have multiple applications in the same repository, e.g., (development, staging, production), you can create 3 `Applications` in Dokploy
+  and select the branch in each of them.
+
+This is very useful if you want to have multiple environments for the same application.
+</Callout>
+
+<userStyle>
+  Normal
+</userStyle>
+
+---
+
+## Preview Deployment
+
+**URL:** llms-txt#preview-deployment
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"get","path":"/previewDeployment.all"},{"method":"post","path":"/previewDeployment.delete"},{"method":"get","path":"/previewDeployment.one"}]} hasHead={true} />
+
+---
+
+## Rollback
+
+**URL:** llms-txt#rollback
+
+{/* This file was generated by Fumadocs. Do not edit this file directly. Any changes should be made by running the generation command again. */}
+
+<APIPage document={"./public/openapi.json"} webhooks={[]} operations={[{"path":"/rollback.delete","method":"post"},{"path":"/rollback.rollback","method":"post"}]} showTitle={true} />
+
+---
+
+## Docker Registry
+
+**URL:** llms-txt#docker-registry
+
+**Contents:**
+- Configuration Overview
+- Docker Hub Integration
+  - Method 1: Username and Password
+  - Method 2: Access Token (Recommended)
+- GitHub Container Registry (GHCR)
+  - Prerequisites
+  - Setup Process
+  - Public Images
+- Best Practices
+- Troubleshooting
+
+Dokploy provides seamless integration with Docker Registry repositories, allowing you to deploy applications directly from your container images. This feature is available for single applications and supports both public and private registries.
+
+## Configuration Overview
+
+To connect a Docker Registry to your application:
+
+1. Navigate to your application's **General** tab
+2. Select **Docker** as the source
+3. Configure the following settings:
+
+| Setting                      | Description                                                              |
+| ---------------------------- | ------------------------------------------------------------------------ |
+| **Docker Image**             | Full name of the Docker image (e.g., `nginx:latest`, `myorg/myapp:v1.0`) |
+| **Docker Registry URL**      | Registry URL (defaults to Docker Hub if not specified)                   |
+| **Docker Registry Username** | Username for registry authentication                                     |
+| **Docker Registry Password** | Password or access token for authentication                              |
+
+<Callout type="info">
+  For private registries, authentication is required. For public images, you can leave the username and password fields empty.
+</Callout>
+
+## Docker Hub Integration
+
+Docker Hub is the default registry and supports both username/password and token-based authentication.
+
+### Method 1: Username and Password
+
+1. **Username**: Enter your Docker Hub username
+2. **Password**: Enter your Docker Hub password
+
+### Method 2: Access Token (Recommended)
+
+Using access tokens is more secure and allows fine-grained permissions:
+
+1. **Create Access Token**:
+   * Go to [Docker Hub Settings](https://hub.docker.com/settings/security) → **Personal Access Tokens**
+   * Click **Generate New Token**
+   * Set description: `Dokploy-Docker-Hub-Token`
+   * Select **Read-only** permissions
+   * Click **Generate**
+
+2. **Configure in Dokploy**:
+   * **Username**: Your Docker Hub username
+   * **Password**: Paste the generated access token
+   * **Registry URL**: Leave empty (defaults to Docker Hub)
+
+3. **Deploy**: Click **Save** and then **Deploy** from the General tab
+
+## GitHub Container Registry (GHCR)
+
+GHCR allows you to store container images alongside your GitHub repositories.
+
+* Your Docker image must already be published to GHCR
+* You need a GitHub Personal Access Token with appropriate permissions
+
+1. **Create GitHub Personal Access Token**:
+   * Go to [GitHub Settings](https://github.com/settings/tokens) → **Personal Access Tokens**
+   * Click **Generate new token (classic)**
+   * Set token name: `Dokploy-GHCR-Token`
+   * Select the following scopes:
+     * `repo` - Access to repositories
+     * `workflow` - Access to GitHub Actions
+     * `write:packages` - Upload packages
+     * `delete:packages` - Delete packages
+   * Click **Generate token**
+
+2. **Configure in Dokploy**:
+   * **Docker Image**: `ghcr.io/username/repository:tag`
+   * **Registry URL**: `ghcr.io`
+   * **Username**: Your GitHub username
+   * **Password**: Paste the generated personal access token
+
+3. **Deploy**: Click **Save** and then **Deploy** from the General tab
+
+For public images from any registry:
+
+* **Docker Image**: Full image path (e.g., `quay.io/prometheus/prometheus:latest`)
+* **Registry URL**: Registry domain (if not Docker Hub)
+* **Username**: Leave empty
+* **Password**: Leave empty
+
+<Callout type="tip">
+  **Security Recommendations:**
+
+* Use access tokens instead of passwords when possible
+  * Grant minimal required permissions to tokens
+  * Regularly rotate access tokens
+  * Use private registries for sensitive applications
+</Callout>
+
+Common issues and solutions:
+
+* **Authentication Failed**: Verify your credentials and token permissions
+* **Image Not Found**: Check the image name and tag spelling
+* **Pull Rate Limits**: Consider using authenticated requests or private registries
+* **Registry Timeout**: Verify the registry URL is accessible from your Dokploy instance
+
+---
+
+## Remix
+
+**URL:** llms-txt#remix
+
+This example will deploy a simple Remix application.
+
+1. **Use Git Provider in Your Application**:
+   * Repository: `https://github.com/Dokploy/examples.git`
+   * Branch: `main`
+   * Build path: `/remix`
+
+2. **Click on Deploy**:
+   * Deploy your application by clicking the deploy button.
+
+3. **Generate a Domain**:
+   * Click on generate domain button.
+   * A new domain will be generated for you.
+   * You can use this domain to access your application.
+
+If you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).
+
+---
+
+## Create a new dokploy-traefik service
+
+**URL:** llms-txt#create-a-new-dokploy-traefik-service
+
+docker service create \
+  --name dokploy-traefik \
+  --constraint 'node.role==manager' \
+  --network dokploy-network \
+  --mount type=bind,source=/etc/dokploy/traefik/traefik.yml,target=/etc/traefik/traefik.yml \
+  --mount type=bind,source=/etc/dokploy/traefik/dynamic,target=/etc/dokploy/traefik/dynamic \
+  --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
+  --publish mode=host,published=443,target=443 \
+  --publish mode=host,published=80,target=80 \
+  --publish mode=host,published=443,target=443,protocol=udp \
+  traefik:v3.6.1
+bash
+docker service rm dokploy
+
+**Examples:**
+
+Example 1 (unknown):
+```unknown
+Remove the dokploy service:
+```
+
+---
+
+## Tailscale
+
+**URL:** llms-txt#tailscale
+
+**Contents:**
+- What is Tailscale?
+  - Benefits
+- Prerequisites
+- Tailscale Setup
+  - Step 1: Prerequisites
+  - Step 2: Get Docker Network Subnet
+  - Step 3: Configure Tailscale Server
+  - Step 4: Configure Client Devices
+  - Step 5: Access Dokploy via Tailscale
+- Configuring Applications
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Tailscale creates a secure, private network that connects your devices and servers using WireGuard. This allows you to access your Dokploy applications and servers securely without opening ports on your firewall or exposing services to the public internet.
+
+**Tailscale is particularly useful for preventing unauthorized access to your services.** By keeping your Dokploy instance and applications on a private network, only devices that are explicitly added to your Tailscale network can access them. This means your services remain completely private and invisible to the public internet, significantly reducing the attack surface and preventing unauthorized users from discovering or accessing your infrastructure.
+
+## What is Tailscale?
+
+Tailscale is a zero-config VPN that creates a mesh network between your devices and servers. It uses the WireGuard protocol to establish encrypted connections, making it easy to access your infrastructure securely from anywhere.
+
+* **Zero-Config VPN**: Automatic key management and network setup
+* **No Port Forwarding**: Access services without opening firewall ports
+* **Secure by Default**: All traffic is encrypted end-to-end
+* **Private Services**: Keep your services completely private and prevent unauthorized access
+* **Easy Access**: Connect from any device with Tailscale installed
+* **Private IPs**: Each device gets a private IP address (100.x.x.x)
+* **Free Tier Available**: Up to 100 devices for personal use
+* **ACLs**: Fine-grained access control lists for security
+
+Before setting up Tailscale with Dokploy, ensure you have:
+
+* A Tailscale account (free tier works)
+* Dokploy installed and running
+* Access to your server via SSH or console
+* Tailscale installed on your client devices (optional, for accessing services)
+
+<Callout type="info">
+  Tailscale works great for accessing Dokploy's admin interface and your applications from anywhere, without exposing them to the public internet. This keeps your services private and prevents unauthorized users from discovering or accessing them.
+</Callout>
+
+This guide will walk you through setting up Tailscale to securely access your Dokploy server and applications through a private network.
+
+### Step 1: Prerequisites
+
+Before starting, ensure you have:
+
+1. **Dokploy installed and running** - Follow the [installation guide](/docs/core/installation) if needed
+2. **A Tailscale account** - Create one at [tailscale.com](https://login.tailscale.com/login) (free tier works)
+
+### Step 2: Get Docker Network Subnet
+
+First, we need to identify the Docker network subnet that Dokploy uses. This will be advertised to the Tailscale network to allow access to your containers.
+
+Run the following command on your Dokploy server:
+
+You should see output like this:
+
+Copy the subnet value (e.g., `10.254.0.0/24`) - you'll need it in the next step.
+
+### Step 3: Configure Tailscale Server
+
+Now we'll set up Tailscale on your Dokploy server with subnet routing enabled.
+
+#### 3.1: Create Server in Tailscale Admin
+
+1. Go to [Tailscale Admin Console](https://login.tailscale.com/admin/machines/new-linux)
+2. Click **Add a device** → **Linux**
+3. Scroll down and click **Generate install script**
+
+You'll see a script like this:
+
+#### 3.2: Modify the Install Command
+
+We need to modify this command to:
+
+* Enable SSH access with the `--ssh` flag
+* Advertise the Docker subnet with `--advertise-routes` flag
+
+Replace `subnet-of-docker` with the subnet you copied in Step 2:
+
+<Callout type="warn">
+  Replace `10.254.0.0/24` with your actual Docker network subnet from Step 2.
+</Callout>
+
+#### 3.3: Run the Command
+
+Execute the modified command on your Dokploy server terminal.
+
+#### 3.4: Approve Subnet Routes
+
+After running the command, you need to approve the subnet routes in Tailscale:
+
+1. Go to [Tailscale Admin Console](https://login.tailscale.com/admin/machines/)
+2. Find your server and approve the advertised routes
+
+#### 3.5: Verify Server Connection
+
+Verify that your server is connected to Tailscale:
+
+You should see your server listed. Get the server's Tailscale IP address:
+
+This will return something like:
+
+Copy this IPv4 address - you'll use it to access your server and Dokploy.
+
+### Step 4: Configure Client Devices
+
+Now you'll set up client devices (your computer, phone, etc.) to connect to the Tailscale network.
+
+#### 4.1: Add Client Device
+
+1. Go to [Tailscale Admin Console](https://login.tailscale.com/admin/machines)
+2. Click **Add a device** → **Client device**
+3. Select your device type:
+   * Windows
+   * macOS
+   * Linux
+   * Android
+   * iPhone & iPad
+   * Synology
+
+#### 4.2: Install Tailscale on Client
+
+* Download the native app from [tailscale.com/download/macos](https://tailscale.com/download/macos)
+* Install and authenticate with your Tailscale account
+
+**For other platforms:**
+
+* Visit [tailscale.com/download](https://tailscale.com/download) for your specific platform
+* Follow the installation instructions
+
+Login to your Tailscale account and you should see both your server and client device connected to the network it will also display in the tailscale dashboard.
+
+### Step 5: Access Dokploy via Tailscale
+
+Now you can access Dokploy and your applications through the Tailscale network.
+
+#### Access Dokploy Dashboard
+
+1. Use your server's Tailscale IP address (from Step 3.5):
+   
+   Replace `100.100.100.100` with your actual Tailscale IP.
+
+2. Or use the Tailscale hostname (if MagicDNS is enabled):
+
+You can also SSH into your server using the Tailscale IP:
+
+Replace `100.100.100.100` with your server's Tailscale IP address.
+
+<Callout type="info">
+  With this setup, you can access Dokploy and your applications without any port forwarding or exposing services to the public internet. Only devices in your Tailscale network can access these services, ensuring they remain private and protected from unauthorized access.
+</Callout>
+
+## Configuring Applications
+
+### Accessing Applications via Tailscale
+
+Once Tailscale is set up, you can access your Dokploy applications through the Tailscale network:
+
+1. **Using Tailscale IP**: Access applications directly using your server's Tailscale IP and the port configured in Dokploy
+2. **Using Tailscale DNS**: Use your server's Tailscale hostname (e.g., `your-server.tailscale.ts.net`)
+
+### Example: Accessing an Application
+
+If you have an application running on port `8080`:
+
+1. Get your server's Tailscale IP:
+
+2. Access your application your application/compose should expose the port:
+
+You can access from your client device or any device in the Tailscale network.
+
+## Advanced Configuration
+
+### Enabling MagicDNS
+
+MagicDNS provides automatic DNS resolution for devices in your Tailscale network:
+
+1. Go to [Tailscale Admin Console](https://login.tailscale.com/admin/dns)
+2. Enable **MagicDNS**
+3. Optionally add custom DNS names for your devices
+
+With MagicDNS enabled, you can access your server using its hostname.
+
+For example, to access the Dokploy dashboard (which runs on port 3000):
+
+### Using Custom Domains with MagicDNS
+
+If you want to use a custom domain for your Dokploy server, you'll need to find the Full Domain assigned by Tailscale:
+
+1. Go to [Tailscale Admin Console](https://login.tailscale.com/admin/machines/)
+2. Navigate to **Machines** and search for your server
+3. Scroll down to find the **Full Domain** field
+4. The Full Domain will look something like: `ubuntu-2gb-ash-4.tail1ff529.ts.net`
+
+Once you have the Full Domain, you can use it to access your Dokploy server:
+
+<Callout type="info">
+  Replace `ubuntu-2gb-ash-4.tail1ff529.ts.net` with your actual server's Full Domain from the Tailscale admin console.
+</Callout>
+
+## Securing Your Server with UFW
+
+Once Tailscale is configured, you can further enhance your server's security by using UFW (Uncomplicated Firewall) to block all public internet traffic and only allow connections through Tailscale. This prevents unauthorized access attempts and bot attacks that are common on public-facing servers.
+
+<Callout type="warn">
+  **Important**: Before proceeding, ensure you can SSH into your server using the Tailscale IP address (from Step 3.5). If you lock down SSH access and lose Tailscale connectivity, you may need console access to your server to regain access.
+</Callout>
+
+### Why Use UFW with Tailscale?
+
+Servers on the public internet are constantly scanned and attacked by bots looking for vulnerabilities. By using UFW to block all public traffic and only allowing Tailscale connections, you:
+
+* **Eliminate attack surface**: Your server becomes invisible to attackers on the public internet
+* **Prevent bot scans**: No more failed login attempts in your logs
+* **Maintain easy access**: You can still access everything through your private Tailscale network
+* **Keep services private**: Dokploy (port 3000) and Traefik (ports 80/443) are only accessible through Tailscale
+
+### Step 1: SSH Over Tailscale
+
+Before locking down public access, verify you can SSH using your Tailscale IP:
+
+1. Get your server's Tailscale IP:
+
+2. Exit your current SSH session and reconnect using the Tailscale IP:
+
+If you can successfully connect, you're ready to proceed.
+
+### Step 2: Enable UFW
+
+UFW comes pre-installed on Ubuntu. Enable it:
+
+### Step 3: Configure Default Rules
+
+Set UFW to deny all incoming traffic by default, but allow all outgoing traffic:
+
+### Step 4: Allow Tailscale Traffic
+
+Allow all traffic on the Tailscale interface (`tailscale0`):
+
+This ensures all Tailscale connections work properly, including:
+
+* SSH access
+* Dokploy dashboard (port 3000)
+* Traefik (ports 80/443)
+* All your applications
+
+### Step 5: Review and Remove Public Access Rules
+
+Check your current firewall rules:
+
+You might see rules like:
+
+Since we're using Tailscale for all access, your server is now configured to only accept connections through the Tailscale network. This means:
+
+* ✅ **SSH access**: Only available via Tailscale IP
+* ✅ **Dokploy dashboard**: Only accessible via Tailscale IP
+* ✅ **Traefik**: Only accessible via Tailscale IP
+* ✅ **All applications**: Only accessible via Tailscale IP
+
+<Callout type="warn">
+  **Important Note About Docker and UFW**: Docker directly manipulates `iptables`, which can bypass UFW rules. This means Docker-published ports (like Dokploy on port 3000 or Traefik on ports 80/443) might still be accessible from the public internet even with UFW configured.
+
+1. **Use your VPS provider's firewall** (recommended): Configure your cloud provider's firewall to block public access to ports 22, 80, 443, and 3000. This operates before Docker's iptables rules.
+
+2. **Use ufw-docker utility**: This tool integrates Docker with UFW properly. However, with Tailscale and subnet routing, this is usually not necessary since all access goes through Tailscale.
+
+3. **Bind Docker ports to localhost**: Modify Docker services to bind to `127.0.0.1` instead of `0.0.0.0`, but this may break Tailscale access unless configured carefully.
+
+For Dokploy with Tailscale, the recommended approach is to use your VPS provider's firewall to block public access, as this provides the most reliable protection.
+</Callout>
+
+With this configuration, your server is now protected from public internet access. All services (SSH, Dokploy, Traefik, and applications) are only accessible through your private Tailscale network, ensuring they remain secure and invisible to unauthorized users.
+
+**Examples:**
+
+Example 1 (bash):
+```bash
+docker network inspect dokploy-network | grep Subnet
+```
+
+Example 2 (unknown):
+```unknown
+"Subnet": "10.254.0.0/24",
+```
+
+Example 3 (bash):
+```bash
+curl -fsSL https://tailscale.com/install.sh | sh && sudo tailscale up --auth-key=tskey-auth-something-random
+```
+
+Example 4 (bash):
+```bash
+curl -fsSL https://tailscale.com/install.sh | sh && sudo tailscale up --ssh --advertise-routes=10.254.0.0/24 --auth-key=tskey-auth-something-random
+```
+
+---
+
+## Overview
+
+**URL:** llms-txt#overview
+
+**Contents:**
+- Actions
+- Providers
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Dokploy offers multiple notification options to notify you about important events in your applications and services.
+
+You can select which actions trigger notifications:
+
+1. **App Deploy**: Trigger the action when an app is deployed.
+2. **App Build Error**: Trigger the action when the build fails.
+3. **Database Backup**: Trigger the action when a database backup is created.
+4. **Volume Backup**: Trigger the action when a volume backup is created.
+5. **Docker Cleanup**: Trigger the action when the docker cleanup is performed.
+6. **Dokploy Restart**: Trigger the action when Dokploy is restarted.
+
+Dokploy supports the following notification providers:
+
+1. **Slack**: Slack is a platform for team communication and collaboration.
+2. **Telegram**: Telegram is a messaging platform that allows users to send and receive messages.
+3. **Discord**: Discord is generally used for communication between users in a chat or voice channel.
+4. **Lark**: Lark is a collaboration platform that provides messaging and team communication features.
+5. **Email**: Email is a popular method for sending messages to a group of recipients.
+6. **Gotify**: Gotify is a self-hosted push notification service.
+7. **Ntfy**: Ntfy is a simple HTTP-based pub-sub notification service.
+8. **Webhook**: Webhook is a generic webhook notification service.
+
+---
+
+## Create a new dokploy-postgres service
+
+**URL:** llms-txt#create-a-new-dokploy-postgres-service
+
+docker service create \
+  --name dokploy-postgres \
+  --constraint 'node.role==manager' \
+  --network dokploy-network \
+  --env POSTGRES_USER=dokploy \
+  --env POSTGRES_DB=dokploy \
+  --env POSTGRES_PASSWORD=amukds4wi9001583845717ad2 \
+  --mount type=volume,source=dokploy-postgres,target=/var/lib/postgresql/data \
+  postgres:16
+bash
+
+**Examples:**
+
+Example 1 (unknown):
+```unknown
+Remove the dokploy-traefik service:
+```
+
+---
+
+## Stripe
+
+**URL:** llms-txt#stripe
+
+<APIPage document={"./public/openapi.json"} operations={[{"method":"get","path":"/stripe.getProducts"},{"method":"post","path":"/stripe.createCheckoutSession"},{"method":"post","path":"/stripe.createCustomerPortalSession"},{"method":"get","path":"/stripe.canCreateMoreServers"}]} hasHead={true} />
+
+---
