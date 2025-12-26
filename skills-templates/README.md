@@ -31,11 +31,13 @@ This directory contains production-ready skill templates and examples for Claude
 | **[slack-gif-creator](slack-gif-creator/)** | Creates animated GIFs optimized for Slack with validators for size constraints |
 | **[theme-factory](theme-factory/)** | Applies professional font and color themes to artifacts (10 pre-set themes included) |
 
-### Development (3 skills)
+### Development (5 skills)
 | Skill | Description |
 |-------|-------------|
 | **[changelog-generator](changelog-generator/)** | Automatically creates user-facing changelogs from git commits by analyzing history |
+| **[fastapi](fastapi/)** | FastAPI modern Python web framework guide with 102 pages covering APIs, async endpoints, dependency injection, and backend development |
 | **[mcp-builder](mcp-builder/)** | Guide for creating high-quality MCP (Model Context Protocol) servers for external service integration |
+| **[software-architecture](software-architecture/)** | Clean Architecture and Domain Driven Design principles for quality-focused software development |
 | **[webapp-testing](webapp-testing/)** | Toolkit for testing local web applications using Playwright for verifying frontend functionality |
 
 ### Document Processing (5 skills)
@@ -228,5 +230,5 @@ Individual skills may have different licenses. Check each skill's directory for 
 ---
 
 **Last Updated**: 2025-12-26
-**Total Skills**: 32
+**Total Skills**: 33
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)

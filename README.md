@@ -196,6 +196,7 @@ Multi-agent coordination and parallel execution specialists:
 - **[env-check.md](templates/commands/env-check.md)** - Validate development environment
 
 #### Integration & Maintenance Commands
+- **[create-skill.md](.claude/commands/create-skill.md)** - Generate Claude AI skills from documentation, GitHub repos, or PDFs using Skill Seekers
 - **[integration-scan.md](.claude/commands/integration-scan.md)** - Scan and categorize files in /INTEGRATION/incoming directory
 - **[maintenance-scan.md](.claude/commands/maintenance-scan.md)** - Identify stale files (>30 days) and generate maintenance reports
 
@@ -267,6 +268,7 @@ Essential planning documents for skills-first and multi-agent workflows:
 | **[document-skills/xlsx](skills-templates/document-skills/xlsx/)** | Excel spreadsheet toolkit | Working with spreadsheets, formulas, or data analysis |
 | **documentation-update** | Update repository documentation tables and indices | Adding entries to README, maintaining indices |
 | **[domain-name-brainstormer](skills-templates/domain-name-brainstormer/)** | Domain name generation and availability checking | Finding available domain names for projects |
+| **[fastapi](skills-templates/fastapi/)** | FastAPI modern Python web framework | Building APIs, async endpoints, dependency injection, Python backend development |
 | **file-categorization** | Categorize files as Command/Agent/Skill/Doc | Processing files in integration pipelines |
 | **[file-organizer](skills-templates/file-organizer/)** | Intelligent file organization | Organizing files, finding duplicates, or cleaning up directories |
 | **[image-enhancer](skills-templates/image-enhancer/)** | Image quality improvement | Enhancing screenshots or images for presentations |
@@ -383,8 +385,22 @@ The Integration System provides automated workflows for:
 
 ### How It Works
 
+**Step 0: Generate Skills (NEW)**
+Create skills automatically from documentation, GitHub repos, or PDFs:
+```bash
+# From documentation
+/create-skill --url https://fastapi.tiangolo.com --name fastapi
+
+# From GitHub repository
+/create-skill --github facebook/react --enhance
+
+# From PDF
+/create-skill --pdf /path/to/manual.pdf --name api-guide
+```
+Skills are auto-generated and placed in `/INTEGRATION/incoming/`, ready for integration.
+
 **Step 1: Add Content**
-Place new files in `/INTEGRATION/incoming/`:
+Or manually place files in `/INTEGRATION/incoming/`:
 ```bash
 cp my-new-command.md /INTEGRATION/incoming/
 ```
@@ -393,7 +409,7 @@ cp my-new-command.md /INTEGRATION/incoming/
 ```
 /integration-scan
 ```
-Categorizes files and generates detailed report.
+Categorizes files and generates detailed report (auto-run by `/create-skill`).
 
 **Step 3: Review**
 Check the scan report at `/INTEGRATION/logs/scan-report-[timestamp].md`
