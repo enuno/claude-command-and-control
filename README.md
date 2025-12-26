@@ -275,6 +275,8 @@ Essential planning documents for skills-first and multi-agent workflows:
 | **[lead-research-assistant](skills-templates/lead-research-assistant/)** | Lead identification and qualification | Sales, business development, or marketing research |
 | **[mcp-builder](skills-templates/mcp-builder/)** | MCP server development guide | Building Model Context Protocol servers |
 | **[meeting-insights-analyzer](skills-templates/meeting-insights-analyzer/)** | Meeting transcript analysis | Improving communication or leadership skills |
+| **[pict-test-designer](skills-templates/pict-test-designer/)** | PICT pairwise test case design | Designing comprehensive test cases with minimal coverage |
+| **[prompt-engineering](skills-templates/prompt-engineering/)** | Advanced prompt engineering patterns | Writing commands, hooks, skills, or optimizing LLM interactions |
 | **[raffle-winner-picker](skills-templates/raffle-winner-picker/)** | Random winner selection | Running giveaways, raffles, or contests |
 | **root-cause-tracing** | Systematic debugging through call stack | Tracing bugs deep in execution |
 | **sharing-skills** | Contribute skills upstream via PR | Sharing broadly useful patterns |
