@@ -27,6 +27,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 | Skill | Description | Key Use Cases |
 |-------|-------------|---------------|
 | **[documentation-update](documentation-update/SKILL.md)** | Reusable logic for updating repository documentation (README, indices, tables) while preserving formatting | Adding entries to README tables after integration, maintaining indices |
+| **[dokploy-mcp](../skills-templates/dokploy-mcp/SKILL.md)** | AI-driven deployment management using Dokploy MCP server with 43 tools for projects, applications, and databases | Deploying apps, provisioning PostgreSQL databases, multi-environment management, CI/CD integration |
 | **[file-categorization](file-categorization/SKILL.md)** | Categorizes files as Command, Agent, Skill, or Documentation based on structure and content analysis | Processing files in integration pipelines, auto-routing files |
 
 ### Design & UI/UX Skills
