@@ -1036,6 +1036,7 @@ version: 1.0.0
 | Skill | Purpose | Use When |
 |-------|---------|----------|
 | **agent-skill-bridge** | Integrates agents and skills | Coordinating agents with skills |
+| **[ar-io-build](skills-templates/ar-io-build/)** | Comprehensive AR.IO build documentation | Building with AR.IO, implementing AR.IO solutions, debugging AR.IO code |
 | **[arweave-ao-cookbook](skills-templates/arweave-ao-cookbook/)** | Build decentralized applications on AO | Building decentralized apps on Arweave with permanent storage |
 | **[artifacts-builder](skills-templates/artifacts-builder/)** | React/Tailwind/shadcn UI artifact builder | Complex artifacts requiring state management or shadcn/ui components |
 | **[brand-guidelines](skills-templates/brand-guidelines/)** | Anthropic brand colors and typography | Applying brand standards to artifacts |
