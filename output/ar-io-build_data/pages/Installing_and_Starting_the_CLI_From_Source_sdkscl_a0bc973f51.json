@@ -1,0 +1,21 @@
+{
+  "title": "Installing and Starting the CLI From Source (/sdks/(clis)/ardrive-cli/(build-and-run-from-source)/installing-and-starting-the-cli-from-source)",
+  "content": "Now that your runtime and/or development environment is set up, to install the package simply run:\n\nAnd then start the CLI (always from the root of this repository):\n\nFor convenience in the **non-developer case**, you can install the CLI globally on your system by performing the following step:",
+  "code_samples": [
+    {
+      "code": "yarn && yarn build",
+      "language": "shell"
+    },
+    {
+      "code": "yarn ardrive",
+      "language": "shell"
+    },
+    {
+      "code": "yarn pack\n\nnpm install i -g /path/to/package.tgz\n\nardrive",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#installing-and-starting-the-cli-from-source-(/sdks/(clis)/ardrive-cli/(build-and-run-from-source)/installing-and-starting-the-cli-from-source)",
+  "links": []
+}

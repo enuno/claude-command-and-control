@@ -1,0 +1,23 @@
+{
+  "title": "Running multiple processes",
+  "content": "Source: https://docs.conductor.build/tips/multiple-processes\n\nIf your run script spawns multiple processes, make sure they're in the same process group so they can be properly cleaned up by using [concurrently](https://www.npmjs.com/package/concurrently) or a similar tool:\n\n## Avoid & for backgrounding\n\nIf you use & to background a process, it will run in a separate process group. This can lead to \"port already in use\" and similar errors.\n\nWhen Conductor stops the run script, only the worker will be terminated. The server will continue to run, holding ports, memory, and other resources.",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## Avoid & for backgrounding\n\nIf you use & to background a process, it will run in a separate process group. This can lead to \"port already in use\" and similar errors.\n\nFor example:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Avoid & for backgrounding",
+      "id": "avoid-&-for-backgrounding"
+    }
+  ],
+  "url": "llms-txt#running-multiple-processes",
+  "links": []
+}

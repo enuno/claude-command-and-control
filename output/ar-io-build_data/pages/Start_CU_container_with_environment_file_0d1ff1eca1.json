@@ -1,0 +1,8 @@
+{
+  "title": "Start CU container with environment file",
+  "content": "docker compose --env-file .env.ao -f docker-compose.ao.yaml up -d",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#start-cu-container-with-environment-file",
+  "links": []
+}

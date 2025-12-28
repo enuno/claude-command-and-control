@@ -1,0 +1,1185 @@
+{
+  "url": "https://fastapi.tiangolo.com/reference/responses/",
+  "title": "Custom Response Classes - File, HTML, Redirect, Streaming, etc.¶",
+  "content": "There are several custom response classes you can use to create an instance and return them directly from your path operations.\n\nRead more about it in the FastAPI docs for Custom Response - HTML, Stream, File, others.\n\nYou can import them directly from fastapi.responses:\n\nThere are a couple of custom FastAPI response classes, you can use them to optimize JSON performance.\n\nJSON response using the high-performance ujson library to serialize data to JSON.\n\nRead more about it in the FastAPI docs for Custom Response - HTML, Stream, File, others.\n\nJSON response using the high-performance orjson library to serialize data to JSON.\n\nRead more about it in the FastAPI docs for Custom Response - HTML, Stream, File, others.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Custom Response Classes - File, HTML, Redirect, Streaming, etc.¶",
+      "id": "custom-response-classes-file-html-redirect-streaming-etc"
+    },
+    {
+      "level": "h2",
+      "text": "FastAPI Responses¶",
+      "id": "fastapi-responses"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.responses.UJSONResponse ¶",
+      "id": "fastapi.responses.UJSONResponse"
+    },
+    {
+      "level": "h3",
+      "text": "charset class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.UJSONResponse.charset"
+    },
+    {
+      "level": "h3",
+      "text": "status_code instance-attribute ¶",
+      "id": "fastapi.responses.UJSONResponse.status_code"
+    },
+    {
+      "level": "h3",
+      "text": "media_type class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.UJSONResponse.media_type"
+    },
+    {
+      "level": "h3",
+      "text": "body instance-attribute ¶",
+      "id": "fastapi.responses.UJSONResponse.body"
+    },
+    {
+      "level": "h3",
+      "text": "background instance-attribute ¶",
+      "id": "fastapi.responses.UJSONResponse.background"
+    },
+    {
+      "level": "h3",
+      "text": "headers property ¶",
+      "id": "fastapi.responses.UJSONResponse.headers"
+    },
+    {
+      "level": "h3",
+      "text": "render ¶",
+      "id": "fastapi.responses.UJSONResponse.render"
+    },
+    {
+      "level": "h3",
+      "text": "init_headers ¶",
+      "id": "fastapi.responses.UJSONResponse.init_headers"
+    },
+    {
+      "level": "h3",
+      "text": "set_cookie ¶",
+      "id": "fastapi.responses.UJSONResponse.set_cookie"
+    },
+    {
+      "level": "h3",
+      "text": "delete_cookie ¶",
+      "id": "fastapi.responses.UJSONResponse.delete_cookie"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.responses.ORJSONResponse ¶",
+      "id": "fastapi.responses.ORJSONResponse"
+    },
+    {
+      "level": "h3",
+      "text": "charset class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.ORJSONResponse.charset"
+    },
+    {
+      "level": "h3",
+      "text": "status_code instance-attribute ¶",
+      "id": "fastapi.responses.ORJSONResponse.status_code"
+    },
+    {
+      "level": "h3",
+      "text": "media_type class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.ORJSONResponse.media_type"
+    },
+    {
+      "level": "h3",
+      "text": "body instance-attribute ¶",
+      "id": "fastapi.responses.ORJSONResponse.body"
+    },
+    {
+      "level": "h3",
+      "text": "background instance-attribute ¶",
+      "id": "fastapi.responses.ORJSONResponse.background"
+    },
+    {
+      "level": "h3",
+      "text": "headers property ¶",
+      "id": "fastapi.responses.ORJSONResponse.headers"
+    },
+    {
+      "level": "h3",
+      "text": "render ¶",
+      "id": "fastapi.responses.ORJSONResponse.render"
+    },
+    {
+      "level": "h3",
+      "text": "init_headers ¶",
+      "id": "fastapi.responses.ORJSONResponse.init_headers"
+    },
+    {
+      "level": "h3",
+      "text": "set_cookie ¶",
+      "id": "fastapi.responses.ORJSONResponse.set_cookie"
+    },
+    {
+      "level": "h3",
+      "text": "delete_cookie ¶",
+      "id": "fastapi.responses.ORJSONResponse.delete_cookie"
+    },
+    {
+      "level": "h2",
+      "text": "Starlette Responses¶",
+      "id": "starlette-responses"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.responses.FileResponse ¶",
+      "id": "fastapi.responses.FileResponse"
+    },
+    {
+      "level": "h3",
+      "text": "chunk_size class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.FileResponse.chunk_size"
+    },
+    {
+      "level": "h3",
+      "text": "charset class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.FileResponse.charset"
+    },
+    {
+      "level": "h3",
+      "text": "status_code instance-attribute ¶",
+      "id": "fastapi.responses.FileResponse.status_code"
+    },
+    {
+      "level": "h3",
+      "text": "media_type instance-attribute ¶",
+      "id": "fastapi.responses.FileResponse.media_type"
+    },
+    {
+      "level": "h3",
+      "text": "body instance-attribute ¶",
+      "id": "fastapi.responses.FileResponse.body"
+    },
+    {
+      "level": "h3",
+      "text": "background instance-attribute ¶",
+      "id": "fastapi.responses.FileResponse.background"
+    },
+    {
+      "level": "h3",
+      "text": "headers property ¶",
+      "id": "fastapi.responses.FileResponse.headers"
+    },
+    {
+      "level": "h3",
+      "text": "render ¶",
+      "id": "fastapi.responses.FileResponse.render"
+    },
+    {
+      "level": "h3",
+      "text": "init_headers ¶",
+      "id": "fastapi.responses.FileResponse.init_headers"
+    },
+    {
+      "level": "h3",
+      "text": "set_cookie ¶",
+      "id": "fastapi.responses.FileResponse.set_cookie"
+    },
+    {
+      "level": "h3",
+      "text": "delete_cookie ¶",
+      "id": "fastapi.responses.FileResponse.delete_cookie"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.responses.HTMLResponse ¶",
+      "id": "fastapi.responses.HTMLResponse"
+    },
+    {
+      "level": "h3",
+      "text": "charset class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.HTMLResponse.charset"
+    },
+    {
+      "level": "h3",
+      "text": "status_code instance-attribute ¶",
+      "id": "fastapi.responses.HTMLResponse.status_code"
+    },
+    {
+      "level": "h3",
+      "text": "media_type class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.HTMLResponse.media_type"
+    },
+    {
+      "level": "h3",
+      "text": "body instance-attribute ¶",
+      "id": "fastapi.responses.HTMLResponse.body"
+    },
+    {
+      "level": "h3",
+      "text": "background instance-attribute ¶",
+      "id": "fastapi.responses.HTMLResponse.background"
+    },
+    {
+      "level": "h3",
+      "text": "headers property ¶",
+      "id": "fastapi.responses.HTMLResponse.headers"
+    },
+    {
+      "level": "h3",
+      "text": "render ¶",
+      "id": "fastapi.responses.HTMLResponse.render"
+    },
+    {
+      "level": "h3",
+      "text": "init_headers ¶",
+      "id": "fastapi.responses.HTMLResponse.init_headers"
+    },
+    {
+      "level": "h3",
+      "text": "set_cookie ¶",
+      "id": "fastapi.responses.HTMLResponse.set_cookie"
+    },
+    {
+      "level": "h3",
+      "text": "delete_cookie ¶",
+      "id": "fastapi.responses.HTMLResponse.delete_cookie"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.responses.JSONResponse ¶",
+      "id": "fastapi.responses.JSONResponse"
+    },
+    {
+      "level": "h3",
+      "text": "charset class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.JSONResponse.charset"
+    },
+    {
+      "level": "h3",
+      "text": "status_code instance-attribute ¶",
+      "id": "fastapi.responses.JSONResponse.status_code"
+    },
+    {
+      "level": "h3",
+      "text": "media_type class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.JSONResponse.media_type"
+    },
+    {
+      "level": "h3",
+      "text": "body instance-attribute ¶",
+      "id": "fastapi.responses.JSONResponse.body"
+    },
+    {
+      "level": "h3",
+      "text": "background instance-attribute ¶",
+      "id": "fastapi.responses.JSONResponse.background"
+    },
+    {
+      "level": "h3",
+      "text": "headers property ¶",
+      "id": "fastapi.responses.JSONResponse.headers"
+    },
+    {
+      "level": "h3",
+      "text": "render ¶",
+      "id": "fastapi.responses.JSONResponse.render"
+    },
+    {
+      "level": "h3",
+      "text": "init_headers ¶",
+      "id": "fastapi.responses.JSONResponse.init_headers"
+    },
+    {
+      "level": "h3",
+      "text": "set_cookie ¶",
+      "id": "fastapi.responses.JSONResponse.set_cookie"
+    },
+    {
+      "level": "h3",
+      "text": "delete_cookie ¶",
+      "id": "fastapi.responses.JSONResponse.delete_cookie"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.responses.PlainTextResponse ¶",
+      "id": "fastapi.responses.PlainTextResponse"
+    },
+    {
+      "level": "h3",
+      "text": "charset class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.PlainTextResponse.charset"
+    },
+    {
+      "level": "h3",
+      "text": "status_code instance-attribute ¶",
+      "id": "fastapi.responses.PlainTextResponse.status_code"
+    },
+    {
+      "level": "h3",
+      "text": "media_type class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.PlainTextResponse.media_type"
+    },
+    {
+      "level": "h3",
+      "text": "body instance-attribute ¶",
+      "id": "fastapi.responses.PlainTextResponse.body"
+    },
+    {
+      "level": "h3",
+      "text": "background instance-attribute ¶",
+      "id": "fastapi.responses.PlainTextResponse.background"
+    },
+    {
+      "level": "h3",
+      "text": "headers property ¶",
+      "id": "fastapi.responses.PlainTextResponse.headers"
+    },
+    {
+      "level": "h3",
+      "text": "render ¶",
+      "id": "fastapi.responses.PlainTextResponse.render"
+    },
+    {
+      "level": "h3",
+      "text": "init_headers ¶",
+      "id": "fastapi.responses.PlainTextResponse.init_headers"
+    },
+    {
+      "level": "h3",
+      "text": "set_cookie ¶",
+      "id": "fastapi.responses.PlainTextResponse.set_cookie"
+    },
+    {
+      "level": "h3",
+      "text": "delete_cookie ¶",
+      "id": "fastapi.responses.PlainTextResponse.delete_cookie"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.responses.RedirectResponse ¶",
+      "id": "fastapi.responses.RedirectResponse"
+    },
+    {
+      "level": "h3",
+      "text": "charset class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.RedirectResponse.charset"
+    },
+    {
+      "level": "h3",
+      "text": "status_code instance-attribute ¶",
+      "id": "fastapi.responses.RedirectResponse.status_code"
+    },
+    {
+      "level": "h3",
+      "text": "media_type class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.RedirectResponse.media_type"
+    },
+    {
+      "level": "h3",
+      "text": "body instance-attribute ¶",
+      "id": "fastapi.responses.RedirectResponse.body"
+    },
+    {
+      "level": "h3",
+      "text": "background instance-attribute ¶",
+      "id": "fastapi.responses.RedirectResponse.background"
+    },
+    {
+      "level": "h3",
+      "text": "headers property ¶",
+      "id": "fastapi.responses.RedirectResponse.headers"
+    },
+    {
+      "level": "h3",
+      "text": "render ¶",
+      "id": "fastapi.responses.RedirectResponse.render"
+    },
+    {
+      "level": "h3",
+      "text": "init_headers ¶",
+      "id": "fastapi.responses.RedirectResponse.init_headers"
+    },
+    {
+      "level": "h3",
+      "text": "set_cookie ¶",
+      "id": "fastapi.responses.RedirectResponse.set_cookie"
+    },
+    {
+      "level": "h3",
+      "text": "delete_cookie ¶",
+      "id": "fastapi.responses.RedirectResponse.delete_cookie"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.responses.Response ¶",
+      "id": "fastapi.responses.Response"
+    },
+    {
+      "level": "h3",
+      "text": "charset class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.Response.charset"
+    },
+    {
+      "level": "h3",
+      "text": "status_code instance-attribute ¶",
+      "id": "fastapi.responses.Response.status_code"
+    },
+    {
+      "level": "h3",
+      "text": "media_type class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.Response.media_type"
+    },
+    {
+      "level": "h3",
+      "text": "body instance-attribute ¶",
+      "id": "fastapi.responses.Response.body"
+    },
+    {
+      "level": "h3",
+      "text": "background instance-attribute ¶",
+      "id": "fastapi.responses.Response.background"
+    },
+    {
+      "level": "h3",
+      "text": "headers property ¶",
+      "id": "fastapi.responses.Response.headers"
+    },
+    {
+      "level": "h3",
+      "text": "render ¶",
+      "id": "fastapi.responses.Response.render"
+    },
+    {
+      "level": "h3",
+      "text": "init_headers ¶",
+      "id": "fastapi.responses.Response.init_headers"
+    },
+    {
+      "level": "h3",
+      "text": "set_cookie ¶",
+      "id": "fastapi.responses.Response.set_cookie"
+    },
+    {
+      "level": "h3",
+      "text": "delete_cookie ¶",
+      "id": "fastapi.responses.Response.delete_cookie"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.responses.StreamingResponse ¶",
+      "id": "fastapi.responses.StreamingResponse"
+    },
+    {
+      "level": "h3",
+      "text": "body_iterator instance-attribute ¶",
+      "id": "fastapi.responses.StreamingResponse.body_iterator"
+    },
+    {
+      "level": "h3",
+      "text": "charset class-attribute instance-attribute ¶",
+      "id": "fastapi.responses.StreamingResponse.charset"
+    },
+    {
+      "level": "h3",
+      "text": "status_code instance-attribute ¶",
+      "id": "fastapi.responses.StreamingResponse.status_code"
+    },
+    {
+      "level": "h3",
+      "text": "media_type instance-attribute ¶",
+      "id": "fastapi.responses.StreamingResponse.media_type"
+    },
+    {
+      "level": "h3",
+      "text": "body instance-attribute ¶",
+      "id": "fastapi.responses.StreamingResponse.body"
+    },
+    {
+      "level": "h3",
+      "text": "background instance-attribute ¶",
+      "id": "fastapi.responses.StreamingResponse.background"
+    },
+    {
+      "level": "h3",
+      "text": "headers property ¶",
+      "id": "fastapi.responses.StreamingResponse.headers"
+    },
+    {
+      "level": "h3",
+      "text": "render ¶",
+      "id": "fastapi.responses.StreamingResponse.render"
+    },
+    {
+      "level": "h3",
+      "text": "init_headers ¶",
+      "id": "fastapi.responses.StreamingResponse.init_headers"
+    },
+    {
+      "level": "h3",
+      "text": "set_cookie ¶",
+      "id": "fastapi.responses.StreamingResponse.set_cookie"
+    },
+    {
+      "level": "h3",
+      "text": "delete_cookie ¶",
+      "id": "fastapi.responses.StreamingResponse.delete_cookie"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from fastapi.responses import (\n    FileResponse,\n    HTMLResponse,\n    JSONResponse,\n    ORJSONResponse,\n    PlainTextResponse,\n    RedirectResponse,\n    Response,\n    StreamingResponse,\n    UJSONResponse,\n)",
+      "language": "sql"
+    },
+    {
+      "code": "UJSONResponse(\n    content,\n    status_code=200,\n    headers=None,\n    media_type=None,\n    background=None,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(\n    self,\n    content: Any,\n    status_code: int = 200,\n    headers: Mapping[str, str] | None = None,\n    media_type: str | None = None,\n    background: BackgroundTask | None = None,\n) -> None:\n    super().__init__(content, status_code, headers, media_type, background)",
+      "language": "python"
+    },
+    {
+      "code": "charset = 'utf-8'",
+      "language": "unknown"
+    },
+    {
+      "code": "status_code = status_code",
+      "language": "unknown"
+    },
+    {
+      "code": "media_type = 'application/json'",
+      "language": "unknown"
+    },
+    {
+      "code": "body = render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "background = background",
+      "language": "unknown"
+    },
+    {
+      "code": "render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "def render(self, content: Any) -> bytes:\n    assert ujson is not None, \"ujson must be installed to use UJSONResponse\"\n    return ujson.dumps(content, ensure_ascii=False).encode(\"utf-8\")",
+      "language": "python"
+    },
+    {
+      "code": "init_headers(headers=None)",
+      "language": "rust"
+    },
+    {
+      "code": "def init_headers(self, headers: Mapping[str, str] | None = None) -> None:\n    if headers is None:\n        raw_headers: list[tuple[bytes, bytes]] = []\n        populate_content_length = True\n        populate_content_type = True\n    else:\n        raw_headers = [(k.lower().encode(\"latin-1\"), v.encode(\"latin-1\")) for k, v in headers.items()]\n        keys = [h[0] for h in raw_headers]\n        populate_content_length = b\"content-length\" not in keys\n        populate_content_type = b\"content-type\" not in keys\n\n    body = getattr(self, \"body\", None)\n    if (\n        body is not None\n        and populate_content_length\n        and not (self.status_code < 200 or self.status_code in (204, 304))\n    ):\n        content_length = str(len(body))\n        raw_headers.append((b\"content-length\", content_length.encode(\"latin-1\")))\n\n    content_type = self.media_type\n    if content_type is not None and populate_content_type:\n        if content_type.startswith(\"text/\") and \"charset=\" not in content_type.lower():\n            content_type += \"; charset=\" + self.charset\n        raw_headers.append((b\"content-type\", content_type.encode(\"latin-1\")))\n\n    self.raw_headers = raw_headers",
+      "language": "python"
+    },
+    {
+      "code": "set_cookie(\n    key,\n    value=\"\",\n    max_age=None,\n    expires=None,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n    partitioned=False,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def set_cookie(\n    self,\n    key: str,\n    value: str = \"\",\n    max_age: int | None = None,\n    expires: datetime | str | int | None = None,\n    path: str | None = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n    partitioned: bool = False,\n) -> None:\n    cookie: http.cookies.BaseCookie[str] = http.cookies.SimpleCookie()\n    cookie[key] = value\n    if max_age is not None:\n        cookie[key][\"max-age\"] = max_age\n    if expires is not None:\n        if isinstance(expires, datetime):\n            cookie[key][\"expires\"] = format_datetime(expires, usegmt=True)\n        else:\n            cookie[key][\"expires\"] = expires\n    if path is not None:\n        cookie[key][\"path\"] = path\n    if domain is not None:\n        cookie[key][\"domain\"] = domain\n    if secure:\n        cookie[key][\"secure\"] = True\n    if httponly:\n        cookie[key][\"httponly\"] = True\n    if samesite is not None:\n        assert samesite.lower() in [\n            \"strict\",\n            \"lax\",\n            \"none\",\n        ], \"samesite must be either 'strict', 'lax' or 'none'\"\n        cookie[key][\"samesite\"] = samesite\n    if partitioned:\n        if sys.version_info < (3, 14):\n            raise ValueError(\"Partitioned cookies are only supported in Python 3.14 and above.\")  # pragma: no cover\n        cookie[key][\"partitioned\"] = True  # pragma: no cover\n\n    cookie_val = cookie.output(header=\"\").strip()\n    self.raw_headers.append((b\"set-cookie\", cookie_val.encode(\"latin-1\")))",
+      "language": "python"
+    },
+    {
+      "code": "delete_cookie(\n    key,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def delete_cookie(\n    self,\n    key: str,\n    path: str = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n) -> None:\n    self.set_cookie(\n        key,\n        max_age=0,\n        expires=0,\n        path=path,\n        domain=domain,\n        secure=secure,\n        httponly=httponly,\n        samesite=samesite,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "ORJSONResponse(\n    content,\n    status_code=200,\n    headers=None,\n    media_type=None,\n    background=None,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(\n    self,\n    content: Any,\n    status_code: int = 200,\n    headers: Mapping[str, str] | None = None,\n    media_type: str | None = None,\n    background: BackgroundTask | None = None,\n) -> None:\n    super().__init__(content, status_code, headers, media_type, background)",
+      "language": "python"
+    },
+    {
+      "code": "charset = 'utf-8'",
+      "language": "unknown"
+    },
+    {
+      "code": "status_code = status_code",
+      "language": "unknown"
+    },
+    {
+      "code": "media_type = 'application/json'",
+      "language": "unknown"
+    },
+    {
+      "code": "body = render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "background = background",
+      "language": "unknown"
+    },
+    {
+      "code": "render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "def render(self, content: Any) -> bytes:\n    assert orjson is not None, \"orjson must be installed to use ORJSONResponse\"\n    return orjson.dumps(\n        content, option=orjson.OPT_NON_STR_KEYS | orjson.OPT_SERIALIZE_NUMPY\n    )",
+      "language": "python"
+    },
+    {
+      "code": "init_headers(headers=None)",
+      "language": "rust"
+    },
+    {
+      "code": "def init_headers(self, headers: Mapping[str, str] | None = None) -> None:\n    if headers is None:\n        raw_headers: list[tuple[bytes, bytes]] = []\n        populate_content_length = True\n        populate_content_type = True\n    else:\n        raw_headers = [(k.lower().encode(\"latin-1\"), v.encode(\"latin-1\")) for k, v in headers.items()]\n        keys = [h[0] for h in raw_headers]\n        populate_content_length = b\"content-length\" not in keys\n        populate_content_type = b\"content-type\" not in keys\n\n    body = getattr(self, \"body\", None)\n    if (\n        body is not None\n        and populate_content_length\n        and not (self.status_code < 200 or self.status_code in (204, 304))\n    ):\n        content_length = str(len(body))\n        raw_headers.append((b\"content-length\", content_length.encode(\"latin-1\")))\n\n    content_type = self.media_type\n    if content_type is not None and populate_content_type:\n        if content_type.startswith(\"text/\") and \"charset=\" not in content_type.lower():\n            content_type += \"; charset=\" + self.charset\n        raw_headers.append((b\"content-type\", content_type.encode(\"latin-1\")))\n\n    self.raw_headers = raw_headers",
+      "language": "python"
+    },
+    {
+      "code": "set_cookie(\n    key,\n    value=\"\",\n    max_age=None,\n    expires=None,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n    partitioned=False,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def set_cookie(\n    self,\n    key: str,\n    value: str = \"\",\n    max_age: int | None = None,\n    expires: datetime | str | int | None = None,\n    path: str | None = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n    partitioned: bool = False,\n) -> None:\n    cookie: http.cookies.BaseCookie[str] = http.cookies.SimpleCookie()\n    cookie[key] = value\n    if max_age is not None:\n        cookie[key][\"max-age\"] = max_age\n    if expires is not None:\n        if isinstance(expires, datetime):\n            cookie[key][\"expires\"] = format_datetime(expires, usegmt=True)\n        else:\n            cookie[key][\"expires\"] = expires\n    if path is not None:\n        cookie[key][\"path\"] = path\n    if domain is not None:\n        cookie[key][\"domain\"] = domain\n    if secure:\n        cookie[key][\"secure\"] = True\n    if httponly:\n        cookie[key][\"httponly\"] = True\n    if samesite is not None:\n        assert samesite.lower() in [\n            \"strict\",\n            \"lax\",\n            \"none\",\n        ], \"samesite must be either 'strict', 'lax' or 'none'\"\n        cookie[key][\"samesite\"] = samesite\n    if partitioned:\n        if sys.version_info < (3, 14):\n            raise ValueError(\"Partitioned cookies are only supported in Python 3.14 and above.\")  # pragma: no cover\n        cookie[key][\"partitioned\"] = True  # pragma: no cover\n\n    cookie_val = cookie.output(header=\"\").strip()\n    self.raw_headers.append((b\"set-cookie\", cookie_val.encode(\"latin-1\")))",
+      "language": "python"
+    },
+    {
+      "code": "delete_cookie(\n    key,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def delete_cookie(\n    self,\n    key: str,\n    path: str = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n) -> None:\n    self.set_cookie(\n        key,\n        max_age=0,\n        expires=0,\n        path=path,\n        domain=domain,\n        secure=secure,\n        httponly=httponly,\n        samesite=samesite,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "FileResponse(\n    path,\n    status_code=200,\n    headers=None,\n    media_type=None,\n    background=None,\n    filename=None,\n    stat_result=None,\n    method=None,\n    content_disposition_type=\"attachment\",\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(\n    self,\n    path: str | os.PathLike[str],\n    status_code: int = 200,\n    headers: Mapping[str, str] | None = None,\n    media_type: str | None = None,\n    background: BackgroundTask | None = None,\n    filename: str | None = None,\n    stat_result: os.stat_result | None = None,\n    method: str | None = None,\n    content_disposition_type: str = \"attachment\",\n) -> None:\n    self.path = path\n    self.status_code = status_code\n    self.filename = filename\n    if method is not None:\n        warnings.warn(\n            \"The 'method' parameter is not used, and it will be removed.\",\n            DeprecationWarning,\n        )\n    if media_type is None:\n        media_type = guess_type(filename or path)[0] or \"text/plain\"\n    self.media_type = media_type\n    self.background = background\n    self.init_headers(headers)\n    self.headers.setdefault(\"accept-ranges\", \"bytes\")\n    if self.filename is not None:\n        content_disposition_filename = quote(self.filename)\n        if content_disposition_filename != self.filename:\n            content_disposition = f\"{content_disposition_type}; filename*=utf-8''{content_disposition_filename}\"\n        else:\n            content_disposition = f'{content_disposition_type}; filename=\"{self.filename}\"'\n        self.headers.setdefault(\"content-disposition\", content_disposition)\n    self.stat_result = stat_result\n    if stat_result is not None:\n        self.set_stat_headers(stat_result)",
+      "language": "python"
+    },
+    {
+      "code": "chunk_size = 64 * 1024",
+      "language": "unknown"
+    },
+    {
+      "code": "charset = 'utf-8'",
+      "language": "unknown"
+    },
+    {
+      "code": "status_code = status_code",
+      "language": "unknown"
+    },
+    {
+      "code": "media_type = media_type",
+      "language": "unknown"
+    },
+    {
+      "code": "body = render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "background = background",
+      "language": "unknown"
+    },
+    {
+      "code": "render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "def render(self, content: Any) -> bytes | memoryview:\n    if content is None:\n        return b\"\"\n    if isinstance(content, bytes | memoryview):\n        return content\n    return content.encode(self.charset)  # type: ignore",
+      "language": "python"
+    },
+    {
+      "code": "init_headers(headers=None)",
+      "language": "rust"
+    },
+    {
+      "code": "def init_headers(self, headers: Mapping[str, str] | None = None) -> None:\n    if headers is None:\n        raw_headers: list[tuple[bytes, bytes]] = []\n        populate_content_length = True\n        populate_content_type = True\n    else:\n        raw_headers = [(k.lower().encode(\"latin-1\"), v.encode(\"latin-1\")) for k, v in headers.items()]\n        keys = [h[0] for h in raw_headers]\n        populate_content_length = b\"content-length\" not in keys\n        populate_content_type = b\"content-type\" not in keys\n\n    body = getattr(self, \"body\", None)\n    if (\n        body is not None\n        and populate_content_length\n        and not (self.status_code < 200 or self.status_code in (204, 304))\n    ):\n        content_length = str(len(body))\n        raw_headers.append((b\"content-length\", content_length.encode(\"latin-1\")))\n\n    content_type = self.media_type\n    if content_type is not None and populate_content_type:\n        if content_type.startswith(\"text/\") and \"charset=\" not in content_type.lower():\n            content_type += \"; charset=\" + self.charset\n        raw_headers.append((b\"content-type\", content_type.encode(\"latin-1\")))\n\n    self.raw_headers = raw_headers",
+      "language": "python"
+    },
+    {
+      "code": "set_cookie(\n    key,\n    value=\"\",\n    max_age=None,\n    expires=None,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n    partitioned=False,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def set_cookie(\n    self,\n    key: str,\n    value: str = \"\",\n    max_age: int | None = None,\n    expires: datetime | str | int | None = None,\n    path: str | None = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n    partitioned: bool = False,\n) -> None:\n    cookie: http.cookies.BaseCookie[str] = http.cookies.SimpleCookie()\n    cookie[key] = value\n    if max_age is not None:\n        cookie[key][\"max-age\"] = max_age\n    if expires is not None:\n        if isinstance(expires, datetime):\n            cookie[key][\"expires\"] = format_datetime(expires, usegmt=True)\n        else:\n            cookie[key][\"expires\"] = expires\n    if path is not None:\n        cookie[key][\"path\"] = path\n    if domain is not None:\n        cookie[key][\"domain\"] = domain\n    if secure:\n        cookie[key][\"secure\"] = True\n    if httponly:\n        cookie[key][\"httponly\"] = True\n    if samesite is not None:\n        assert samesite.lower() in [\n            \"strict\",\n            \"lax\",\n            \"none\",\n        ], \"samesite must be either 'strict', 'lax' or 'none'\"\n        cookie[key][\"samesite\"] = samesite\n    if partitioned:\n        if sys.version_info < (3, 14):\n            raise ValueError(\"Partitioned cookies are only supported in Python 3.14 and above.\")  # pragma: no cover\n        cookie[key][\"partitioned\"] = True  # pragma: no cover\n\n    cookie_val = cookie.output(header=\"\").strip()\n    self.raw_headers.append((b\"set-cookie\", cookie_val.encode(\"latin-1\")))",
+      "language": "python"
+    },
+    {
+      "code": "delete_cookie(\n    key,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def delete_cookie(\n    self,\n    key: str,\n    path: str = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n) -> None:\n    self.set_cookie(\n        key,\n        max_age=0,\n        expires=0,\n        path=path,\n        domain=domain,\n        secure=secure,\n        httponly=httponly,\n        samesite=samesite,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "HTMLResponse(\n    content=None,\n    status_code=200,\n    headers=None,\n    media_type=None,\n    background=None,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(\n    self,\n    content: Any = None,\n    status_code: int = 200,\n    headers: Mapping[str, str] | None = None,\n    media_type: str | None = None,\n    background: BackgroundTask | None = None,\n) -> None:\n    self.status_code = status_code\n    if media_type is not None:\n        self.media_type = media_type\n    self.background = background\n    self.body = self.render(content)\n    self.init_headers(headers)",
+      "language": "python"
+    },
+    {
+      "code": "charset = 'utf-8'",
+      "language": "unknown"
+    },
+    {
+      "code": "status_code = status_code",
+      "language": "unknown"
+    },
+    {
+      "code": "media_type = 'text/html'",
+      "language": "unknown"
+    },
+    {
+      "code": "body = render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "background = background",
+      "language": "unknown"
+    },
+    {
+      "code": "render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "def render(self, content: Any) -> bytes | memoryview:\n    if content is None:\n        return b\"\"\n    if isinstance(content, bytes | memoryview):\n        return content\n    return content.encode(self.charset)  # type: ignore",
+      "language": "python"
+    },
+    {
+      "code": "init_headers(headers=None)",
+      "language": "rust"
+    },
+    {
+      "code": "def init_headers(self, headers: Mapping[str, str] | None = None) -> None:\n    if headers is None:\n        raw_headers: list[tuple[bytes, bytes]] = []\n        populate_content_length = True\n        populate_content_type = True\n    else:\n        raw_headers = [(k.lower().encode(\"latin-1\"), v.encode(\"latin-1\")) for k, v in headers.items()]\n        keys = [h[0] for h in raw_headers]\n        populate_content_length = b\"content-length\" not in keys\n        populate_content_type = b\"content-type\" not in keys\n\n    body = getattr(self, \"body\", None)\n    if (\n        body is not None\n        and populate_content_length\n        and not (self.status_code < 200 or self.status_code in (204, 304))\n    ):\n        content_length = str(len(body))\n        raw_headers.append((b\"content-length\", content_length.encode(\"latin-1\")))\n\n    content_type = self.media_type\n    if content_type is not None and populate_content_type:\n        if content_type.startswith(\"text/\") and \"charset=\" not in content_type.lower():\n            content_type += \"; charset=\" + self.charset\n        raw_headers.append((b\"content-type\", content_type.encode(\"latin-1\")))\n\n    self.raw_headers = raw_headers",
+      "language": "python"
+    },
+    {
+      "code": "set_cookie(\n    key,\n    value=\"\",\n    max_age=None,\n    expires=None,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n    partitioned=False,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def set_cookie(\n    self,\n    key: str,\n    value: str = \"\",\n    max_age: int | None = None,\n    expires: datetime | str | int | None = None,\n    path: str | None = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n    partitioned: bool = False,\n) -> None:\n    cookie: http.cookies.BaseCookie[str] = http.cookies.SimpleCookie()\n    cookie[key] = value\n    if max_age is not None:\n        cookie[key][\"max-age\"] = max_age\n    if expires is not None:\n        if isinstance(expires, datetime):\n            cookie[key][\"expires\"] = format_datetime(expires, usegmt=True)\n        else:\n            cookie[key][\"expires\"] = expires\n    if path is not None:\n        cookie[key][\"path\"] = path\n    if domain is not None:\n        cookie[key][\"domain\"] = domain\n    if secure:\n        cookie[key][\"secure\"] = True\n    if httponly:\n        cookie[key][\"httponly\"] = True\n    if samesite is not None:\n        assert samesite.lower() in [\n            \"strict\",\n            \"lax\",\n            \"none\",\n        ], \"samesite must be either 'strict', 'lax' or 'none'\"\n        cookie[key][\"samesite\"] = samesite\n    if partitioned:\n        if sys.version_info < (3, 14):\n            raise ValueError(\"Partitioned cookies are only supported in Python 3.14 and above.\")  # pragma: no cover\n        cookie[key][\"partitioned\"] = True  # pragma: no cover\n\n    cookie_val = cookie.output(header=\"\").strip()\n    self.raw_headers.append((b\"set-cookie\", cookie_val.encode(\"latin-1\")))",
+      "language": "python"
+    },
+    {
+      "code": "delete_cookie(\n    key,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def delete_cookie(\n    self,\n    key: str,\n    path: str = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n) -> None:\n    self.set_cookie(\n        key,\n        max_age=0,\n        expires=0,\n        path=path,\n        domain=domain,\n        secure=secure,\n        httponly=httponly,\n        samesite=samesite,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "JSONResponse(\n    content,\n    status_code=200,\n    headers=None,\n    media_type=None,\n    background=None,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(\n    self,\n    content: Any,\n    status_code: int = 200,\n    headers: Mapping[str, str] | None = None,\n    media_type: str | None = None,\n    background: BackgroundTask | None = None,\n) -> None:\n    super().__init__(content, status_code, headers, media_type, background)",
+      "language": "python"
+    },
+    {
+      "code": "charset = 'utf-8'",
+      "language": "unknown"
+    },
+    {
+      "code": "status_code = status_code",
+      "language": "unknown"
+    },
+    {
+      "code": "media_type = 'application/json'",
+      "language": "unknown"
+    },
+    {
+      "code": "body = render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "background = background",
+      "language": "unknown"
+    },
+    {
+      "code": "render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "def render(self, content: Any) -> bytes:\n    return json.dumps(\n        content,\n        ensure_ascii=False,\n        allow_nan=False,\n        indent=None,\n        separators=(\",\", \":\"),\n    ).encode(\"utf-8\")",
+      "language": "python"
+    },
+    {
+      "code": "init_headers(headers=None)",
+      "language": "rust"
+    },
+    {
+      "code": "def init_headers(self, headers: Mapping[str, str] | None = None) -> None:\n    if headers is None:\n        raw_headers: list[tuple[bytes, bytes]] = []\n        populate_content_length = True\n        populate_content_type = True\n    else:\n        raw_headers = [(k.lower().encode(\"latin-1\"), v.encode(\"latin-1\")) for k, v in headers.items()]\n        keys = [h[0] for h in raw_headers]\n        populate_content_length = b\"content-length\" not in keys\n        populate_content_type = b\"content-type\" not in keys\n\n    body = getattr(self, \"body\", None)\n    if (\n        body is not None\n        and populate_content_length\n        and not (self.status_code < 200 or self.status_code in (204, 304))\n    ):\n        content_length = str(len(body))\n        raw_headers.append((b\"content-length\", content_length.encode(\"latin-1\")))\n\n    content_type = self.media_type\n    if content_type is not None and populate_content_type:\n        if content_type.startswith(\"text/\") and \"charset=\" not in content_type.lower():\n            content_type += \"; charset=\" + self.charset\n        raw_headers.append((b\"content-type\", content_type.encode(\"latin-1\")))\n\n    self.raw_headers = raw_headers",
+      "language": "python"
+    },
+    {
+      "code": "set_cookie(\n    key,\n    value=\"\",\n    max_age=None,\n    expires=None,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n    partitioned=False,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def set_cookie(\n    self,\n    key: str,\n    value: str = \"\",\n    max_age: int | None = None,\n    expires: datetime | str | int | None = None,\n    path: str | None = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n    partitioned: bool = False,\n) -> None:\n    cookie: http.cookies.BaseCookie[str] = http.cookies.SimpleCookie()\n    cookie[key] = value\n    if max_age is not None:\n        cookie[key][\"max-age\"] = max_age\n    if expires is not None:\n        if isinstance(expires, datetime):\n            cookie[key][\"expires\"] = format_datetime(expires, usegmt=True)\n        else:\n            cookie[key][\"expires\"] = expires\n    if path is not None:\n        cookie[key][\"path\"] = path\n    if domain is not None:\n        cookie[key][\"domain\"] = domain\n    if secure:\n        cookie[key][\"secure\"] = True\n    if httponly:\n        cookie[key][\"httponly\"] = True\n    if samesite is not None:\n        assert samesite.lower() in [\n            \"strict\",\n            \"lax\",\n            \"none\",\n        ], \"samesite must be either 'strict', 'lax' or 'none'\"\n        cookie[key][\"samesite\"] = samesite\n    if partitioned:\n        if sys.version_info < (3, 14):\n            raise ValueError(\"Partitioned cookies are only supported in Python 3.14 and above.\")  # pragma: no cover\n        cookie[key][\"partitioned\"] = True  # pragma: no cover\n\n    cookie_val = cookie.output(header=\"\").strip()\n    self.raw_headers.append((b\"set-cookie\", cookie_val.encode(\"latin-1\")))",
+      "language": "python"
+    },
+    {
+      "code": "delete_cookie(\n    key,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def delete_cookie(\n    self,\n    key: str,\n    path: str = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n) -> None:\n    self.set_cookie(\n        key,\n        max_age=0,\n        expires=0,\n        path=path,\n        domain=domain,\n        secure=secure,\n        httponly=httponly,\n        samesite=samesite,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "PlainTextResponse(\n    content=None,\n    status_code=200,\n    headers=None,\n    media_type=None,\n    background=None,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(\n    self,\n    content: Any = None,\n    status_code: int = 200,\n    headers: Mapping[str, str] | None = None,\n    media_type: str | None = None,\n    background: BackgroundTask | None = None,\n) -> None:\n    self.status_code = status_code\n    if media_type is not None:\n        self.media_type = media_type\n    self.background = background\n    self.body = self.render(content)\n    self.init_headers(headers)",
+      "language": "python"
+    },
+    {
+      "code": "charset = 'utf-8'",
+      "language": "unknown"
+    },
+    {
+      "code": "status_code = status_code",
+      "language": "unknown"
+    },
+    {
+      "code": "media_type = 'text/plain'",
+      "language": "unknown"
+    },
+    {
+      "code": "body = render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "background = background",
+      "language": "unknown"
+    },
+    {
+      "code": "render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "def render(self, content: Any) -> bytes | memoryview:\n    if content is None:\n        return b\"\"\n    if isinstance(content, bytes | memoryview):\n        return content\n    return content.encode(self.charset)  # type: ignore",
+      "language": "python"
+    },
+    {
+      "code": "init_headers(headers=None)",
+      "language": "rust"
+    },
+    {
+      "code": "def init_headers(self, headers: Mapping[str, str] | None = None) -> None:\n    if headers is None:\n        raw_headers: list[tuple[bytes, bytes]] = []\n        populate_content_length = True\n        populate_content_type = True\n    else:\n        raw_headers = [(k.lower().encode(\"latin-1\"), v.encode(\"latin-1\")) for k, v in headers.items()]\n        keys = [h[0] for h in raw_headers]\n        populate_content_length = b\"content-length\" not in keys\n        populate_content_type = b\"content-type\" not in keys\n\n    body = getattr(self, \"body\", None)\n    if (\n        body is not None\n        and populate_content_length\n        and not (self.status_code < 200 or self.status_code in (204, 304))\n    ):\n        content_length = str(len(body))\n        raw_headers.append((b\"content-length\", content_length.encode(\"latin-1\")))\n\n    content_type = self.media_type\n    if content_type is not None and populate_content_type:\n        if content_type.startswith(\"text/\") and \"charset=\" not in content_type.lower():\n            content_type += \"; charset=\" + self.charset\n        raw_headers.append((b\"content-type\", content_type.encode(\"latin-1\")))\n\n    self.raw_headers = raw_headers",
+      "language": "python"
+    },
+    {
+      "code": "set_cookie(\n    key,\n    value=\"\",\n    max_age=None,\n    expires=None,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n    partitioned=False,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def set_cookie(\n    self,\n    key: str,\n    value: str = \"\",\n    max_age: int | None = None,\n    expires: datetime | str | int | None = None,\n    path: str | None = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n    partitioned: bool = False,\n) -> None:\n    cookie: http.cookies.BaseCookie[str] = http.cookies.SimpleCookie()\n    cookie[key] = value\n    if max_age is not None:\n        cookie[key][\"max-age\"] = max_age\n    if expires is not None:\n        if isinstance(expires, datetime):\n            cookie[key][\"expires\"] = format_datetime(expires, usegmt=True)\n        else:\n            cookie[key][\"expires\"] = expires\n    if path is not None:\n        cookie[key][\"path\"] = path\n    if domain is not None:\n        cookie[key][\"domain\"] = domain\n    if secure:\n        cookie[key][\"secure\"] = True\n    if httponly:\n        cookie[key][\"httponly\"] = True\n    if samesite is not None:\n        assert samesite.lower() in [\n            \"strict\",\n            \"lax\",\n            \"none\",\n        ], \"samesite must be either 'strict', 'lax' or 'none'\"\n        cookie[key][\"samesite\"] = samesite\n    if partitioned:\n        if sys.version_info < (3, 14):\n            raise ValueError(\"Partitioned cookies are only supported in Python 3.14 and above.\")  # pragma: no cover\n        cookie[key][\"partitioned\"] = True  # pragma: no cover\n\n    cookie_val = cookie.output(header=\"\").strip()\n    self.raw_headers.append((b\"set-cookie\", cookie_val.encode(\"latin-1\")))",
+      "language": "python"
+    },
+    {
+      "code": "delete_cookie(\n    key,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def delete_cookie(\n    self,\n    key: str,\n    path: str = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n) -> None:\n    self.set_cookie(\n        key,\n        max_age=0,\n        expires=0,\n        path=path,\n        domain=domain,\n        secure=secure,\n        httponly=httponly,\n        samesite=samesite,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "RedirectResponse(\n    url, status_code=307, headers=None, background=None\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(\n    self,\n    url: str | URL,\n    status_code: int = 307,\n    headers: Mapping[str, str] | None = None,\n    background: BackgroundTask | None = None,\n) -> None:\n    super().__init__(content=b\"\", status_code=status_code, headers=headers, background=background)\n    self.headers[\"location\"] = quote(str(url), safe=\":/%#?=@[]!$&'()*+,;\")",
+      "language": "python"
+    },
+    {
+      "code": "charset = 'utf-8'",
+      "language": "unknown"
+    },
+    {
+      "code": "status_code = status_code",
+      "language": "unknown"
+    },
+    {
+      "code": "media_type = None",
+      "language": "rust"
+    },
+    {
+      "code": "body = render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "background = background",
+      "language": "unknown"
+    },
+    {
+      "code": "render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "def render(self, content: Any) -> bytes | memoryview:\n    if content is None:\n        return b\"\"\n    if isinstance(content, bytes | memoryview):\n        return content\n    return content.encode(self.charset)  # type: ignore",
+      "language": "python"
+    },
+    {
+      "code": "init_headers(headers=None)",
+      "language": "rust"
+    },
+    {
+      "code": "def init_headers(self, headers: Mapping[str, str] | None = None) -> None:\n    if headers is None:\n        raw_headers: list[tuple[bytes, bytes]] = []\n        populate_content_length = True\n        populate_content_type = True\n    else:\n        raw_headers = [(k.lower().encode(\"latin-1\"), v.encode(\"latin-1\")) for k, v in headers.items()]\n        keys = [h[0] for h in raw_headers]\n        populate_content_length = b\"content-length\" not in keys\n        populate_content_type = b\"content-type\" not in keys\n\n    body = getattr(self, \"body\", None)\n    if (\n        body is not None\n        and populate_content_length\n        and not (self.status_code < 200 or self.status_code in (204, 304))\n    ):\n        content_length = str(len(body))\n        raw_headers.append((b\"content-length\", content_length.encode(\"latin-1\")))\n\n    content_type = self.media_type\n    if content_type is not None and populate_content_type:\n        if content_type.startswith(\"text/\") and \"charset=\" not in content_type.lower():\n            content_type += \"; charset=\" + self.charset\n        raw_headers.append((b\"content-type\", content_type.encode(\"latin-1\")))\n\n    self.raw_headers = raw_headers",
+      "language": "python"
+    },
+    {
+      "code": "set_cookie(\n    key,\n    value=\"\",\n    max_age=None,\n    expires=None,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n    partitioned=False,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def set_cookie(\n    self,\n    key: str,\n    value: str = \"\",\n    max_age: int | None = None,\n    expires: datetime | str | int | None = None,\n    path: str | None = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n    partitioned: bool = False,\n) -> None:\n    cookie: http.cookies.BaseCookie[str] = http.cookies.SimpleCookie()\n    cookie[key] = value\n    if max_age is not None:\n        cookie[key][\"max-age\"] = max_age\n    if expires is not None:\n        if isinstance(expires, datetime):\n            cookie[key][\"expires\"] = format_datetime(expires, usegmt=True)\n        else:\n            cookie[key][\"expires\"] = expires\n    if path is not None:\n        cookie[key][\"path\"] = path\n    if domain is not None:\n        cookie[key][\"domain\"] = domain\n    if secure:\n        cookie[key][\"secure\"] = True\n    if httponly:\n        cookie[key][\"httponly\"] = True\n    if samesite is not None:\n        assert samesite.lower() in [\n            \"strict\",\n            \"lax\",\n            \"none\",\n        ], \"samesite must be either 'strict', 'lax' or 'none'\"\n        cookie[key][\"samesite\"] = samesite\n    if partitioned:\n        if sys.version_info < (3, 14):\n            raise ValueError(\"Partitioned cookies are only supported in Python 3.14 and above.\")  # pragma: no cover\n        cookie[key][\"partitioned\"] = True  # pragma: no cover\n\n    cookie_val = cookie.output(header=\"\").strip()\n    self.raw_headers.append((b\"set-cookie\", cookie_val.encode(\"latin-1\")))",
+      "language": "python"
+    },
+    {
+      "code": "delete_cookie(\n    key,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def delete_cookie(\n    self,\n    key: str,\n    path: str = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n) -> None:\n    self.set_cookie(\n        key,\n        max_age=0,\n        expires=0,\n        path=path,\n        domain=domain,\n        secure=secure,\n        httponly=httponly,\n        samesite=samesite,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "Response(\n    content=None,\n    status_code=200,\n    headers=None,\n    media_type=None,\n    background=None,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(\n    self,\n    content: Any = None,\n    status_code: int = 200,\n    headers: Mapping[str, str] | None = None,\n    media_type: str | None = None,\n    background: BackgroundTask | None = None,\n) -> None:\n    self.status_code = status_code\n    if media_type is not None:\n        self.media_type = media_type\n    self.background = background\n    self.body = self.render(content)\n    self.init_headers(headers)",
+      "language": "python"
+    },
+    {
+      "code": "charset = 'utf-8'",
+      "language": "unknown"
+    },
+    {
+      "code": "status_code = status_code",
+      "language": "unknown"
+    },
+    {
+      "code": "media_type = None",
+      "language": "rust"
+    },
+    {
+      "code": "body = render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "background = background",
+      "language": "unknown"
+    },
+    {
+      "code": "render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "def render(self, content: Any) -> bytes | memoryview:\n    if content is None:\n        return b\"\"\n    if isinstance(content, bytes | memoryview):\n        return content\n    return content.encode(self.charset)  # type: ignore",
+      "language": "python"
+    },
+    {
+      "code": "init_headers(headers=None)",
+      "language": "rust"
+    },
+    {
+      "code": "def init_headers(self, headers: Mapping[str, str] | None = None) -> None:\n    if headers is None:\n        raw_headers: list[tuple[bytes, bytes]] = []\n        populate_content_length = True\n        populate_content_type = True\n    else:\n        raw_headers = [(k.lower().encode(\"latin-1\"), v.encode(\"latin-1\")) for k, v in headers.items()]\n        keys = [h[0] for h in raw_headers]\n        populate_content_length = b\"content-length\" not in keys\n        populate_content_type = b\"content-type\" not in keys\n\n    body = getattr(self, \"body\", None)\n    if (\n        body is not None\n        and populate_content_length\n        and not (self.status_code < 200 or self.status_code in (204, 304))\n    ):\n        content_length = str(len(body))\n        raw_headers.append((b\"content-length\", content_length.encode(\"latin-1\")))\n\n    content_type = self.media_type\n    if content_type is not None and populate_content_type:\n        if content_type.startswith(\"text/\") and \"charset=\" not in content_type.lower():\n            content_type += \"; charset=\" + self.charset\n        raw_headers.append((b\"content-type\", content_type.encode(\"latin-1\")))\n\n    self.raw_headers = raw_headers",
+      "language": "python"
+    },
+    {
+      "code": "set_cookie(\n    key,\n    value=\"\",\n    max_age=None,\n    expires=None,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n    partitioned=False,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def set_cookie(\n    self,\n    key: str,\n    value: str = \"\",\n    max_age: int | None = None,\n    expires: datetime | str | int | None = None,\n    path: str | None = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n    partitioned: bool = False,\n) -> None:\n    cookie: http.cookies.BaseCookie[str] = http.cookies.SimpleCookie()\n    cookie[key] = value\n    if max_age is not None:\n        cookie[key][\"max-age\"] = max_age\n    if expires is not None:\n        if isinstance(expires, datetime):\n            cookie[key][\"expires\"] = format_datetime(expires, usegmt=True)\n        else:\n            cookie[key][\"expires\"] = expires\n    if path is not None:\n        cookie[key][\"path\"] = path\n    if domain is not None:\n        cookie[key][\"domain\"] = domain\n    if secure:\n        cookie[key][\"secure\"] = True\n    if httponly:\n        cookie[key][\"httponly\"] = True\n    if samesite is not None:\n        assert samesite.lower() in [\n            \"strict\",\n            \"lax\",\n            \"none\",\n        ], \"samesite must be either 'strict', 'lax' or 'none'\"\n        cookie[key][\"samesite\"] = samesite\n    if partitioned:\n        if sys.version_info < (3, 14):\n            raise ValueError(\"Partitioned cookies are only supported in Python 3.14 and above.\")  # pragma: no cover\n        cookie[key][\"partitioned\"] = True  # pragma: no cover\n\n    cookie_val = cookie.output(header=\"\").strip()\n    self.raw_headers.append((b\"set-cookie\", cookie_val.encode(\"latin-1\")))",
+      "language": "python"
+    },
+    {
+      "code": "delete_cookie(\n    key,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def delete_cookie(\n    self,\n    key: str,\n    path: str = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n) -> None:\n    self.set_cookie(\n        key,\n        max_age=0,\n        expires=0,\n        path=path,\n        domain=domain,\n        secure=secure,\n        httponly=httponly,\n        samesite=samesite,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "StreamingResponse(\n    content,\n    status_code=200,\n    headers=None,\n    media_type=None,\n    background=None,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(\n    self,\n    content: ContentStream,\n    status_code: int = 200,\n    headers: Mapping[str, str] | None = None,\n    media_type: str | None = None,\n    background: BackgroundTask | None = None,\n) -> None:\n    if isinstance(content, AsyncIterable):\n        self.body_iterator = content\n    else:\n        self.body_iterator = iterate_in_threadpool(content)\n    self.status_code = status_code\n    self.media_type = self.media_type if media_type is None else media_type\n    self.background = background\n    self.init_headers(headers)",
+      "language": "python"
+    },
+    {
+      "code": "body_iterator",
+      "language": "unknown"
+    },
+    {
+      "code": "charset = 'utf-8'",
+      "language": "unknown"
+    },
+    {
+      "code": "status_code = status_code",
+      "language": "unknown"
+    },
+    {
+      "code": "media_type = (\n    media_type if media_type is None else media_type\n)",
+      "language": "rust"
+    },
+    {
+      "code": "body = render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "background = background",
+      "language": "unknown"
+    },
+    {
+      "code": "render(content)",
+      "language": "unknown"
+    },
+    {
+      "code": "def render(self, content: Any) -> bytes | memoryview:\n    if content is None:\n        return b\"\"\n    if isinstance(content, bytes | memoryview):\n        return content\n    return content.encode(self.charset)  # type: ignore",
+      "language": "python"
+    },
+    {
+      "code": "init_headers(headers=None)",
+      "language": "rust"
+    },
+    {
+      "code": "def init_headers(self, headers: Mapping[str, str] | None = None) -> None:\n    if headers is None:\n        raw_headers: list[tuple[bytes, bytes]] = []\n        populate_content_length = True\n        populate_content_type = True\n    else:\n        raw_headers = [(k.lower().encode(\"latin-1\"), v.encode(\"latin-1\")) for k, v in headers.items()]\n        keys = [h[0] for h in raw_headers]\n        populate_content_length = b\"content-length\" not in keys\n        populate_content_type = b\"content-type\" not in keys\n\n    body = getattr(self, \"body\", None)\n    if (\n        body is not None\n        and populate_content_length\n        and not (self.status_code < 200 or self.status_code in (204, 304))\n    ):\n        content_length = str(len(body))\n        raw_headers.append((b\"content-length\", content_length.encode(\"latin-1\")))\n\n    content_type = self.media_type\n    if content_type is not None and populate_content_type:\n        if content_type.startswith(\"text/\") and \"charset=\" not in content_type.lower():\n            content_type += \"; charset=\" + self.charset\n        raw_headers.append((b\"content-type\", content_type.encode(\"latin-1\")))\n\n    self.raw_headers = raw_headers",
+      "language": "python"
+    },
+    {
+      "code": "set_cookie(\n    key,\n    value=\"\",\n    max_age=None,\n    expires=None,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n    partitioned=False,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def set_cookie(\n    self,\n    key: str,\n    value: str = \"\",\n    max_age: int | None = None,\n    expires: datetime | str | int | None = None,\n    path: str | None = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n    partitioned: bool = False,\n) -> None:\n    cookie: http.cookies.BaseCookie[str] = http.cookies.SimpleCookie()\n    cookie[key] = value\n    if max_age is not None:\n        cookie[key][\"max-age\"] = max_age\n    if expires is not None:\n        if isinstance(expires, datetime):\n            cookie[key][\"expires\"] = format_datetime(expires, usegmt=True)\n        else:\n            cookie[key][\"expires\"] = expires\n    if path is not None:\n        cookie[key][\"path\"] = path\n    if domain is not None:\n        cookie[key][\"domain\"] = domain\n    if secure:\n        cookie[key][\"secure\"] = True\n    if httponly:\n        cookie[key][\"httponly\"] = True\n    if samesite is not None:\n        assert samesite.lower() in [\n            \"strict\",\n            \"lax\",\n            \"none\",\n        ], \"samesite must be either 'strict', 'lax' or 'none'\"\n        cookie[key][\"samesite\"] = samesite\n    if partitioned:\n        if sys.version_info < (3, 14):\n            raise ValueError(\"Partitioned cookies are only supported in Python 3.14 and above.\")  # pragma: no cover\n        cookie[key][\"partitioned\"] = True  # pragma: no cover\n\n    cookie_val = cookie.output(header=\"\").strip()\n    self.raw_headers.append((b\"set-cookie\", cookie_val.encode(\"latin-1\")))",
+      "language": "python"
+    },
+    {
+      "code": "delete_cookie(\n    key,\n    path=\"/\",\n    domain=None,\n    secure=False,\n    httponly=False,\n    samesite=\"lax\",\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def delete_cookie(\n    self,\n    key: str,\n    path: str = \"/\",\n    domain: str | None = None,\n    secure: bool = False,\n    httponly: bool = False,\n    samesite: Literal[\"lax\", \"strict\", \"none\"] | None = \"lax\",\n) -> None:\n    self.set_cookie(\n        key,\n        max_age=0,\n        expires=0,\n        path=path,\n        domain=domain,\n        secure=secure,\n        httponly=httponly,\n        samesite=samesite,\n    )",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "title": "Test admin endpoint access",
+  "content": "curl -H \"Authorization: Bearer your_secure_admin_key_here\" \\\n  http://localhost:3000/ar-io/admin/debug\nbash\ncurl -X 'PUT' \\\n  'http://localhost:3000/ar-io/admin/block-data' \\\n  -H 'accept: */*' \\\n  -H 'Authorization: Bearer your_secure_admin_key_here' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"id\": \"3lyxgbgEvqNSvJrTX2J7CfRychUD5KClFhhVLyTPNCQ\",\n  \"notes\": \"Content violates our policies\",\n  \"source\": \"Manual Review\"\n}'\nbash {{ title: 'curl' }}\ncurl -X 'PUT' \\\n  'http://localhost:3000/ar-io/admin/block-data' \\\n  -H 'accept: */*' \\\n  -H 'Authorization: Bearer secret' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"id\": \"3lyxgbgEvqNSvJrTX2J7CfRychUD5KClFhhVLyTPNCQ\",\n  \"notes\": \"This content is offensive\",\n  \"source\": \"Public Block list\"\n}'\nbash {{ title: 'id' }}\nsqlite3 data/sqlite/moderation.db \"DELETE FROM blocked_ids WHERE id=X'de5cb181b804bea352bc9ad35f627b09f472721503e4a0a51618552f24cf3424';\"",
+  "code_samples": [
+    {
+      "code": "### Block Your First Content\n\nBlock a specific transaction ID:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Authentication\n\nModeration requests must contain the gateway's `ADMIN_API_KEY` in the request Header, as `Authorization: Bearer`.\n\nFor example, if a gateway's `ADMIN_API_KEY` is set to `secret`, any request must contain `Authorization: Bearer secret` in the Header.\n\n## Block Data\n\nSpecific data items can be blocked by a gateway operator by submitting a `PUT` request containing a json object with three keys:\n\n- **id**: The Arweave transaction Id of the data item to be blocked.\n- **notes**: Any note the gateway operator wants to leave him/herself as to the reason the content is blocked.\n- **source**: A note as to where the content was identified as requiring moderation. i.e. a public block list.\n\nRequests to block data must be submitted to the gateway's `/ar-io/admin/block-data` endpoint.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Unblock Data\n\nAt this time, blocked data items can only be unblocked by manually deleting the corresponding row from the `data/sqlite/moderation.db` database.\nThe Arweave transaction Id of the blocked data item is stored in the database as raw bytes, which sqlite3 accepts as a BLOB (Binary Large OBject), and so cannot be accessed easily using the original transaction Id, which is a base64url.\nSqlite3 is able to interact with a hexadecimal representation of the BLOB, by using a BLOB literal. To do so, wrap a hexadecimal representation of the Arweave transaction Id in single quotes, and prepend an `X` i.e. `X'de5cb181b804bea352bc9ad35f627b09f472721503e4a0a51618552f24cf3424'`.\n\nWhere possible, consider using the `notes` or `source` values to identify rows for deletion rather than the `id`.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Block Your First Content",
+      "id": "block-your-first-content"
+    },
+    {
+      "level": "h2",
+      "text": "Authentication",
+      "id": "authentication"
+    },
+    {
+      "level": "h2",
+      "text": "Block Data",
+      "id": "block-data"
+    },
+    {
+      "level": "h3",
+      "text": "Unblock Data",
+      "id": "unblock-data"
+    }
+  ],
+  "url": "llms-txt#test-admin-endpoint-access",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Upload HTML/CSS/JS files",
+  "content": "APEX_ARNS_NAME=my-gateway-website\nbash",
+  "code_samples": [
+    {
+      "code": "**Single Page Application:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#upload-html/css/js-files",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Redis configuration",
+  "content": "CHAIN_CACHE_TYPE=redis\nREDIS_CACHE_URL=redis://redis:6379\nREDIS_USE_TLS=false\nREDIS_CACHE_TTL_SECONDS=28800",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#redis-configuration",
+  "links": []
+}

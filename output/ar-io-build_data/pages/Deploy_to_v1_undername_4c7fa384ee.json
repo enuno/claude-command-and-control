@@ -1,0 +1,13 @@
+{
+  "title": "Deploy to v1 undername",
+  "content": "npx permaweb-deploy --arns-name myapp --undername v1 --deploy-folder ./v1-build\nbash",
+  "code_samples": [
+    {
+      "code": "**Deploy version 2:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#deploy-to-v1-undername",
+  "links": []
+}

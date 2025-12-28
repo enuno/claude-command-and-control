@@ -1,0 +1,59 @@
+{
+  "title": "Observer Selection (/learn/oip/observer-selection)",
+  "content": "## Epochs and Selection Timeline\n\nThe AR.IO network operates on **24-hour epochs**, during which the observer selection and evaluation process takes place. At the start of each epoch:\n\n- **50 observers** are selected to monitor the network\n- **2 prescribed ArNS names** are chosen for all observers to test\n- **8 additional names** are selected by each observer individually\n- **Gateway subset** is selected for chunk/offset validation based on sampling rate\n\nThis creates a consistent evaluation framework where all observers test the same baseline names while having flexibility to choose additional targets for comprehensive network monitoring, plus advanced data integrity verification.\n\nUp to **fifty (50)** gateways are selected as observers per epoch using a sophisticated weighted random selection system. The selection uses **hashchain entropy** from previous AR.IO contract state messages to ensure unpredictable and tamper-resistant selection.\n\nThe hashchain-based entropy provides cryptographic randomness for selecting:\n\n- **Observer Gateways**: The 50 gateways chosen to perform observations\n- **Prescribed ArNS Names**: The 2 common names all observers must evaluate\n\nThis approach prevents manipulation while maintaining weighted probabilities based on gateway performance and commitment.\n\n![Current epoch observers showing their observation chance (normalized composite weight) and report status](/observers.png)\n\ngateways.ar.io/#/observers\n  {\" \"}\n  shows the current epoch prescribed observers and arns names, as well as their\n  submission status\n\n## Weighted Selection Criteria\n\nObserver selection is based on **normalized composite weights** that combine multiple performance and commitment factors. These weights determine each gateway's probability of being selected as an observer for the epoch.\n\nThe selection considers four key factors that are multiplied together to create a composite weight (CW):\n\n- **Stake Weight (SW)**: Financial commitment to the network\n- **Tenure Weight (TW)**: Length of network participation\n- **Gateway Performance Ratio Weight (GPRW)**: Historical gateway performance\n- **Observer Performance Ratio Weight (OPRW)**: Historical observer performance\n\nThese weights are then normalized across all eligible gateways to create selection probabilities. For detailed weight calculations and formulas, see [Performance Evaluation](/learn/oip/performance-evaluation).\n\n## Hashchain Random Selection\n\nThe selection process uses **hashchain entropy** from previous AR.IO contract state messages to achieve cryptographically secure randomness:\n\n### How Hashchain Selection Works\n\n1. **Entropy Source**: Random numbers are generated from the hashchain of previous contract state messages\n2. **Weighted Mapping**: Each random number maps to normalized weight ranges of eligible gateways\n3. **Observer Selection**: The gateway whose weight range contains each random number is selected\n4. **Prescribed Names**: The same entropy selects 2 ArNS names that all observers must test\n\nThis creates tamper-resistant selection where higher-weighted gateways have proportionally better chances of selection, while maintaining true randomness that cannot be predicted or manipulated.\n\n## Chunk/Offset Sampling\n\nIn addition to observer selection, the protocol includes a separate sampling process for chunk/offset validation:\n\n### Gateway Selection for Chunk Validation\n\n- **Deterministic Selection**: Uses PRNG seeded with observation entropy to select gateway subset\n- **Sampling Rate**: Configurable percentage of gateways tested per observation (default: 1%)\n- **Minimum Guarantee**: At least 1 gateway is always selected for testing\n- **Offset Selection**: Random offsets within the stable weave range are chosen for each selected gateway\n\n**Initial Implementation**: During the initial rollout phase, only a very\n  small portion of gateways will be checked for chunk/offset validation, and the\n  current validation criteria are extremely lenient to ensure smooth network\n  operation.\n\n### Validation Process\n\n- **Chunk Retrieval**: Observers request chunk data using `GET /chunk/{offset}`\n- **Merkle Proof Verification**: Cryptographic validation ensures data integrity\n- **Early Stopping**: Tests stop immediately upon first successful validation\n- **Performance Optimization**: Uses LRU caching for efficient transaction lookup\n\n## Fairness and Meritocracy\n\n- **Meritocratic Selection**: Higher-performing gateways have better selection odds\n- **Fair Opportunity**: All gateways maintain non-zero selection probability\n- **Tamper Resistance**: Hashchain entropy prevents manipulation\n- **Consistent Standards**: Prescribed names create common evaluation baseline\n\nThe selection is saved in the contract state at epoch start to ensure that activities during the epoch do not affect selection or reward distribution.\n\nReady to understand how performance is evaluated? Learn about [Performance Evaluation](/learn/oip/performance-evaluation) to see how gateways are scored, or explore [Reward Distribution](/learn/oip/reward-distribution) to understand how rewards are calculated and distributed.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Epochs and Selection Timeline",
+      "id": "epochs-and-selection-timeline"
+    },
+    {
+      "level": "h2",
+      "text": "Selection Process",
+      "id": "selection-process"
+    },
+    {
+      "level": "h2",
+      "text": "Weighted Selection Criteria",
+      "id": "weighted-selection-criteria"
+    },
+    {
+      "level": "h2",
+      "text": "Hashchain Random Selection",
+      "id": "hashchain-random-selection"
+    },
+    {
+      "level": "h3",
+      "text": "How Hashchain Selection Works",
+      "id": "how-hashchain-selection-works"
+    },
+    {
+      "level": "h2",
+      "text": "Chunk/Offset Sampling",
+      "id": "chunk/offset-sampling"
+    },
+    {
+      "level": "h3",
+      "text": "Gateway Selection for Chunk Validation",
+      "id": "gateway-selection-for-chunk-validation"
+    },
+    {
+      "level": "h3",
+      "text": "Validation Process",
+      "id": "validation-process"
+    },
+    {
+      "level": "h2",
+      "text": "Fairness and Meritocracy",
+      "id": "fairness-and-meritocracy"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#observer-selection-(/learn/oip/observer-selection)",
+  "links": []
+}

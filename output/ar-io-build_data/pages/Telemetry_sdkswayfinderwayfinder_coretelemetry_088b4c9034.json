@@ -1,0 +1,13 @@
+{
+  "title": "Telemetry (/sdks/wayfinder/wayfinder-core/telemetry)",
+  "content": "Wayfinder can optionally emit OpenTelemetry spans for every request. **By default, telemetry is disabled**. You can control this behavior with the `telemetrySettings` option.",
+  "code_samples": [
+    {
+      "code": "const wayfinder = createWayfinderClient({\n  ario: ARIO.mainnet(),\n  // other settings...\n  telemetrySettings: {\n    enabled: true, // disabled by default (must be explicitly enabled)\n    sampleRate: 0.1, // 10% sample rate by default\n    exporterUrl: 'https://your-custom-otel-exporter', // optional, defaults to https://api.honeycomb.io/v1/traces\n    clientName: 'my-custom-client-name', // optional, defaults to wayfinder-core\n    clientVersion: '1.0.0', // optional, defaults to empty\n  },\n});",
+      "language": "javascript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#telemetry-(/sdks/wayfinder/wayfinder-core/telemetry)",
+  "links": []
+}

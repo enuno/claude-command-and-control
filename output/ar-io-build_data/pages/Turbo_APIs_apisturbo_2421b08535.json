@@ -1,0 +1,34 @@
+{
+  "title": "Turbo APIs (/apis/turbo)",
+  "content": "Turbo provides high-performance upload and payment services for the Arweave network, offering fast, reliable data uploads with instant confirmation and transparent pricing.\n\n}\n    title=\"Upload Service\"\n    description=\"Fast, reliable data uploads to Arweave with instant confirmation and metadata management\"\n    href=\"/apis/turbo/upload-service/upload\"\n  />\n  }\n    title=\"Payment Service\"\n    description=\"Transparent pricing, payment processing, and credit management for Turbo uploads\"\n    href=\"/apis/turbo/payment-service/payments\"\n  />\n\nThe Turbo Upload Service provides high-performance data uploads to the Arweave network with features including:\n\n- **Fast Uploads** - Optimized upload processing for quick data submission\n- **Instant Confirmation** - Immediate upload confirmations and transaction IDs\n- **Metadata Management** - Comprehensive data tagging and organization\n- **Account Management** - User account and upload history tracking\n- **Service Information** - Real-time service status and capabilities\n\nKey endpoints include account management, upload processing, pricing information, and transaction data retrieval.\n\nThe Turbo Payment Service handles all financial aspects of data uploads with transparent and flexible payment options:\n\n- **Transparent Pricing** - Clear, upfront costs for all upload operations\n- **Multiple Currencies** - Support for various payment methods and currencies\n- **Credit Management** - Prepaid credits and balance tracking\n- **Payment Processing** - Secure payment handling and transaction management\n- **Approval Workflows** - Payment authorization and confirmation flows\n\nKey endpoints include balance management, payment processing, pricing calculations, and credit redemption.\n\n## Getting Started with Turbo\n\n1. **Choose your service** - Upload for data submission, Payment for financial operations\n2. **Review the APIs documentation** - Detailed endpoint specifications and examples\n3. **Test with sample data** - Try uploads and payment flows with test data\n4. **Integrate into your application** - Implement the APIs in your workflow\n\nFor a more convenient integration experience, consider using the Turbo SDK instead of direct API calls:\n\n}\n  title=\"Interact with Turbo via the SDK\"\n  description=\"Use the Turbo SDK for simplified integration with built-in error handling, retries, and TypeScript support\"\n  href=\"/sdks/turbo-sdk/events\"\n/>\n\nThe SDK provides a higher-level interface with built-in error handling, automatic retries, and full TypeScript support, making it easier to integrate Turbo services into your applications.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Services",
+      "id": "services"
+    },
+    {
+      "level": "h2",
+      "text": "Upload Service",
+      "id": "upload-service"
+    },
+    {
+      "level": "h2",
+      "text": "Payment Service",
+      "id": "payment-service"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Started with Turbo",
+      "id": "getting-started-with-turbo"
+    },
+    {
+      "level": "h2",
+      "text": "Use the Turbo SDK",
+      "id": "use-the-turbo-sdk"
+    }
+  ],
+  "url": "llms-txt#turbo-apis-(/apis/turbo)",
+  "links": []
+}

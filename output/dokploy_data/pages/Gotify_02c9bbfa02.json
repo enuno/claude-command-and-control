@@ -1,0 +1,14 @@
+{
+  "title": "Gotify",
+  "content": "Gotify notifications are a great way to stay up to date with important events in your Dokploy panel. You can choose to receive notifications for specific events or all events.\n\n## Gotify Notifications\n\nFor start receiving gotify notifications, you need to fill the form with the following details:\n\n* **Name**: Enter any name you want.\n* **Server URL**: Enter the gotify server URL. eg. `https://gotify.example.com`\n* **App Token**: Enter the gotify token.\n* **Priority**: Enter the priority of the notification, default is `5` (1-10).\n\nTo Setup the Gotify notifications, you can read the [Gotify Documentation](https://gotify.net/docs/install).",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Gotify Notifications",
+      "id": "gotify-notifications"
+    }
+  ],
+  "url": "llms-txt#gotify",
+  "links": []
+}

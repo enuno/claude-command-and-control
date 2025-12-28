@@ -1,0 +1,21 @@
+{
+  "title": "Uploading a Single File (/sdks/(clis)/ardrive-cli/(working-with-files)/uploading-a-single-file)",
+  "content": "To upload a file, you'll need a parent folder id, the file to upload's file path, and the path to your wallet:\n\nNOTE: To upload to the root of a drive, specify its root folder ID as the parent folder ID for the upload destination. You can retrieve it like so:",
+  "code_samples": [
+    {
+      "code": "ardrive upload-file --local-path /path/to/file.txt  --parent-folder-id \"9af694f6-4cfc-4eee-88a8-1b02704760c0\" -w /path/to/wallet.json",
+      "language": "shell"
+    },
+    {
+      "code": "{\n    \"created\": [\n        {\n            \"type\": \"file\",\n            \"entityName\": \"file.txt\"\n            \"entityId\": \"6613395a-cf19-4420-846a-f88b7b765c05\"\n            \"dataTxId\": \"l4iNWyBapfAIj7OU-nB8z9XrBhawyqzs5O9qhk-3EnI\",\n            \"metadataTxId\": \"YfdDXUyerPCpBbGTm_gv_x5hR3tu5fnz8bM-jPL__JE\",\n            \"bundledIn\": \"1zwdfZAIV8E26YjBs2ZQ4xjjP_1ewalvRgD_GyYw7f8\",\n            \"sourceUri\": \"file:///path/to/file.txt\"\n        },\n        {\n            \"type\": \"bundle\",\n            \"bundleTxId\": \"1zwdfZAIV8E26YjBs2ZQ4xjjP_1ewalvRgD_GyYw7f8\"\n        }\n    ],\n    \"tips\": [\n        {\n            \"txId\": \"1zwdfZAIV8E26YjBs2ZQ4xjjP_1ewalvRgD_GyYw7f8\",\n            \"recipient\": {\n                \"address\": \"3mxGJ4xLcQQNv6_TiKx0F0d5XVE0mNvONQI5GZXJXkt\"\n            },\n            \"winston\": \"10000000\"\n        }\n    ],\n    \"fees\": {\n        \"1zwdfZAIV8E26YjBs2ZQ4xjjP_1ewalvRgD_GyYw7f8\": 42819829\n    }\n}",
+      "language": "shell"
+    },
+    {
+      "code": "ardrive drive-info -d \"c7f87712-b54e-4491-bc96-1c5fa7b1da50\" | jq -r '.rootFolderId'",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#uploading-a-single-file-(/sdks/(clis)/ardrive-cli/(working-with-files)/uploading-a-single-file)",
+  "links": []
+}

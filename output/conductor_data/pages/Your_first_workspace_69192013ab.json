@@ -1,0 +1,19 @@
+{
+  "title": "Your first workspace",
+  "content": "Source: https://docs.conductor.build/first-workspace\n\nOnce you've [installed Conductor](./installation), it's time to add your first repository.\n\nYou can add a repo from a local folder or from a Git URL.\n\n<img alt=\"Add Repo\" />\n\n<Note>\n  Conductor requires you to be logged in to GitHub in your terminal\n  environment. To confirm you're logged in, run `gh auth status` in your\n  terminal.\n</Note>\n\nAfter you add a repo, Conductor will create a new workspace for you.\n\n<img alt=\"New Workspace\" />\n\n<Note>\n  Each workspace is an isolated copy and branch of your Git repo. Conductor only copies files tracked in git, but you can use a [setup script](/core/scripts) to automatically copy files (like `.env` or run `pnpm install`) into the workspace. We'll get to that later!\n</Note>\n\n### Creating additional workspaces\n\nYou can create new workspaces at any time by using **⌘⇧N** or clicking the three dots (•••) button next to the \"New workspace\" button.\n\n<img alt=\"Create workspace from button\" />\n\nThis allows you to create a workspace from:\n\n* A specific branch\n* A GitHub pull request\n* A Linear issue\n\nThis is useful when you want to work on multiple features in parallel or start work on an existing issue or PR.\n\nYou now have two choices:\n\n1. You can open the workspace in your favorite IDE (⌘O) and keep developing there.\n2. You can use the built in chat to ask Claude Code to help you with your project.\n\nNext, let's learn the [Conductor workflow →](/workflow).",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "New workspace",
+      "id": "new-workspace"
+    },
+    {
+      "level": "h3",
+      "text": "Creating additional workspaces",
+      "id": "creating-additional-workspaces"
+    }
+  ],
+  "url": "llms-txt#your-first-workspace",
+  "links": []
+}

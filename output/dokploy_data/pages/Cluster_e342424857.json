@@ -1,0 +1,54 @@
+{
+  "title": "Cluster",
+  "content": "import { Callout } from \"fumadocs-ui/components/callout\";\n\nWhen you deploy applications in dokploy, all of them run on the same node. If you wish to run an application on a different server, you can use the cluster feature.\n\nThe idea of using clusters is to allow each server to host a different application and, using Traefik along with the load balancer, redirect the traffic from the dokploy server to the servers you choose.\n\n## Server Scaling Methods\n\nThere are two primary ways to scale your server:\n\n1. **Vertical Scaling**: This involves adding more resources to the same dokploy server, such as more CPU and RAM.\n2. **Horizontal Scaling**: This method involves adding multiple servers.\n\nWe recommend using vertical scaling to increase the processing capacity of your applications since it's faster and requires less additional configuration.\n\nTo perform vertical scaling, you need to add more resources to your dokploy server, that is, more CPU and RAM. This is done through your VPS provider.\n\nIt's ideal to first check the vertical scaling limit you can handle. If you find it insufficient, you may consider horizontal scaling.\n\n### Horizontal Scaling\n\nHorizontal scaling usually requires more additional configuration and involves adding more servers (VPS).\n\nIf you choose the second option, we will proceed to configure the different servers.\n\n## Requirements for Cluster Setup\n\n1. dokploy server running (Manager).\n2. Have at least one extra server with the same architecture as the dokploy server.\n3. Have a Docker registry.\n\n## Configuring the Docker Registry\n\nTo start, we need to configure a Docker registry, as when deploying an application, you need a registry to deploy and download the application image on the other servers.\n\n### External Registry\n\nYou can use any external registry of your choice. Here are some popular options:\n\n1. **Docker Hub** - Free tier available, easy to set up\n2. **GitHub Container Registry (ghcr.io)** - Free for public repositories\n3. **DigitalOcean Container Registry** - Simple setup with good integration\n4. **Amazon ECR** - AWS's managed container registry\n5. **Google Container Registry** - Google Cloud's managed registry\n6. **Azure Container Registry** - Microsoft's managed registry\n\nMake sure to enter the correct credentials and test the connection before adding the registry to your cluster configuration.\n\nOnce configured, the Cluster section will be unlocked.\n\n## Understanding Docker Swarm\n\nWe suggest you read this information to better understand how Docker Swarm works and its orchestration: [Docker Swarm documentation](https://docs.docker.com/engine/swarm/) and its architecture: [How Swarm mode works](https://docs.docker.com/engine/swarm/how-swarm-mode-works/nodes/).\n\n## Managing Your Cluster\n\nNow you can do two things:\n\n1. Add workers.\n2. Add managers.\n\nManagers have two functionalities:\n\n1. Manage the cluster state.\n2. Schedule the services.\n\nWorkers have a single purpose, which is to run the containers, acting under the rules created or established by the manager.\n\nYou can click the 'Add Node' button, which will display the instructions you need to follow to add your servers as nodes and join them to the dokploy manager node.\n\n<ImageZoom src=\"/assets/add-node.png\" width={800} height={630} className=\"rounded-lg\" />\n\nOnce you follow the instructions, the workers or managers will appear in the table.\n\n<ImageZoom src=\"/assets/nodes.png\" width={800} height={630} className=\"rounded-lg\" />\n\n<Callout type=\"info\">\n  **Storage Cleanup Note**: Dokploy does not perform automatic cleanup of storage for workers or other associated nodes that are not the Dokploy server. For automatic cleanup, you can add your node as a remote server and configure cleanups, or create a schedule that performs that cleanup. Additionally, you don't need to perform setup when you only add the node as a remote server. For more information, see the [Remote Servers documentation](/docs/core/remote-servers).\n</Callout>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Server Scaling Methods",
+      "id": "server-scaling-methods"
+    },
+    {
+      "level": "h3",
+      "text": "Vertical Scaling",
+      "id": "vertical-scaling"
+    },
+    {
+      "level": "h3",
+      "text": "Horizontal Scaling",
+      "id": "horizontal-scaling"
+    },
+    {
+      "level": "h2",
+      "text": "Requirements for Cluster Setup",
+      "id": "requirements-for-cluster-setup"
+    },
+    {
+      "level": "h2",
+      "text": "Configuring the Docker Registry",
+      "id": "configuring-the-docker-registry"
+    },
+    {
+      "level": "h3",
+      "text": "External Registry",
+      "id": "external-registry"
+    },
+    {
+      "level": "h2",
+      "text": "Understanding Docker Swarm",
+      "id": "understanding-docker-swarm"
+    },
+    {
+      "level": "h2",
+      "text": "Managing Your Cluster",
+      "id": "managing-your-cluster"
+    },
+    {
+      "level": "h2",
+      "text": "Adding Nodes",
+      "id": "adding-nodes"
+    }
+  ],
+  "url": "llms-txt#cluster",
+  "links": []
+}

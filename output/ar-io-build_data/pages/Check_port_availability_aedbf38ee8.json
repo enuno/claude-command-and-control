@@ -1,0 +1,14 @@
+{
+  "title": "Check port availability",
+  "content": "netstat -tulpn | grep :1024\n```\n\nNow that you have monitoring set up, continue building your gateway infrastructure:\n\n}\n    title=\"Optimize Performance\"\n    description=\"Learn advanced gateway optimization techniques for better performance\"\n    href=\"/build/run-a-gateway/manage/filters\"\n  />\n  }\n    title=\"Add ClickHouse\"\n    description=\"Improve query performance with ClickHouse and Parquet integration\"\n    href=\"/build/extensions/clickhouse\"\n  />\n  }\n    title=\"Deploy Bundler\"\n    description=\"Accept data uploads directly through your gateway\"\n    href=\"/build/extensions/bundler\"\n  />\n  }\n    title=\"Run Compute Unit\"\n    description=\"Execute AO processes locally for maximum efficiency\"\n    href=\"/build/extensions/compute-unit\"\n  />",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#check-port-availability",
+  "links": []
+}

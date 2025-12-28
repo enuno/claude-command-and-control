@@ -1,0 +1,13 @@
+{
+  "title": "Creating Drives (/sdks/(clis)/ardrive-cli/(working-with-drives)/creating-drives)",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "ardrive create-drive --wallet-file /path/to/my/wallet.json --drive-name \"My Public Archive\"\n\nardrive create-drive --wallet-file /path/to/my/wallet.json --drive-name \"Teenage Love Poetry\" -P",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#creating-drives-(/sdks/(clis)/ardrive-cli/(working-with-drives)/creating-drives)",
+  "links": []
+}

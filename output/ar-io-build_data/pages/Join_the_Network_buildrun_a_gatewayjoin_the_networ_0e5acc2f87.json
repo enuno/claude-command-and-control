@@ -1,0 +1,42 @@
+{
+  "title": "Join the Network (/build/run-a-gateway/join-the-network)",
+  "content": "Take control of the permanent web by running your own **AR.IO Gateway**. Join the decentralized network that powers the permaweb and earn rewards for providing infrastructure services.\n\n### Running Gateway Required\n\nYou must have a fully functional AR.IO Gateway running with a custom domain and SSL certificates. \n    \n    **Don't have a gateway yet?** Follow our [Production Setup Guide](/build/run-a-gateway/quick-start#production-setup-with-custom-domain) to get your gateway running with proper DNS configuration.\n\n**Requirements:**\n    - Gateway accessible via your custom domain (e.g., `https://yourdomain.com`)\n    - SSL certificates properly configured\n    - ArNS subdomain resolution working\n    - Gateway responding to test requests\n\n### Minimum Stake Requirement\n\nTo join the network as a gateway operator, you need **10,000 ARIO tokens** as the minimum stake requirement.\n\n**Need to acquire ARIO tokens?** Visit our [Get the Token guide](/learn/token/get-the-token) to learn about all available methods including exchanges, DEXs, and network participation.\n\n**Acquisition Options:**\n    - Purchase on centralized exchanges like Gate.io\n    - Trade on decentralized exchanges (Dexi, Botega, Vento)\n    - Use Wander wallet for easy exchange and swap functionality\n    - Earn through network participation and community programs\n\nChoose your preferred method to register your gateway:\n\n### Visit the Network Portal\n\nGo to [gateways.ar.io](https://gateways.ar.io/#/gateways) to access the AR.IO Network Portal.\n\nThe portal shows all active gateways on the network and provides the interface to register your own gateway.\n\n### Connect Your Wallet\n\nClick the \"Start your own gateway\" button to begin the registration process. You'll be prompted to connect your wallet.\n\nChoose your preferred wallet (Wander, Metamask, or Beacon) to connect.\n\nUse the same wallet address that you configured in your gateway's `AR_IO_WALLET` environment variable. This wallet will be the owner of your gateway registration.\n\n### Fill Out Gateway Information\n\nComplete the gateway registration form with your gateway details:\n\n**Required Fields:**\n    - **Label**: A display name for your gateway (e.g., \"My New Gateway\")\n    - **Address**: Your gateway's domain with port (e.g., `https://fastandfurious.io:443`)\n    - **Observer Wallet**: The public address of your observer wallet\n    - **Properties ID**: Transaction ID of your gateway properties\n    - **Stake (ARIO)**: Minimum stake required (typically 10,000 ARIO)\n    - **Delegated Staking**: Enable to allow others to delegate stake to your gateway\n    - **Minimum Delegated Stake**: Set minimum delegation amount (e.g., 100 ARIO)\n    - **Reward Share Ratio**: Percentage of rewards shared with delegators (e.g., 50%)\n    - **Note**: Additional information about your gateway (e.g., \"AR.IO rules!\")\n\n### Confirm Registration\n\nReview all information carefully and click \"Confirm\" to submit your gateway registration to the network.\n\n**What happens next:**\n    - Your gateway will be added to the Gateway Address Registry\n    - Observers will start observing your gateway at the next Epoch (day)\n    - You will begin to receive rewards based on your gateway performance\n    - You can monitor your gateway's performance in the portal\n\n**Confirm your gateway registration:**\n\nYour gateway should now be viewable at `gateways.ar.io/#/` with the wallet address you used to join.\n\nThis dashboard shows your gateway's information, stats, and performance metrics including join date, uptime, operator stake, and delegated stake details.\n\n### Install the AR.IO CLI\n\nFirst, install the AR.IO CLI tool if you haven't already:\n\n### Run the Join Network Command\n\nUse the `ar.io join-network` command with your gateway configuration:\n\nThe wallet file used in the `--wallet-file` parameter must be the same wallet configured in your AR.IO Gateway's `AR_IO_WALLET` environment variable. This ensures your gateway registration is properly linked to your running gateway instance.\n\n**Parameter explanations:**\n        - `--qty 10000000000` - 10,000 ARIO in mARIO (multiply by 1,000,000)\n        - `--min-delegated-stake 100000000` - 100 ARIO in mARIO\n        - `--delegate-reward-share-ratio 10` - 10% shared with delegators\n        - `--observer-wallet` - Must match your gateway's OBSERVER_WALLET env var\n        - `--fqdn` - Your gateway's domain name\n\n### Verify Registration\n\nAfter running the command, verify your gateway registration using the CLI:\n\nThe status should show `joined` when your gateway is successfully registered.\n\nYou can also verify by visiting: `gateways.ar.io/#/`\n\nThe CLI will output transaction details and your gateway should appear in the network portal within a few minutes.\n\n## What Happens After Registration\n\nAfter joining the network:\n\n- Your gateway will be monitored by the Observer system\n- You'll earn rewards for providing reliable service\n- You can monitor your gateway's performance and earnings in the portal\n- You may be selected as an Observer to help monitor other gateways\n\nYour gateway is now part of the AR.IO Network! Here are some next steps to maximize your participation:\n\n}\n  />\n  }\n  />\n  }\n  />\n  }\n  />",
+  "code_samples": [
+    {
+      "code": "npm install -g @ar.io/sdk",
+      "language": "npm"
+    },
+    {
+      "code": "ar.io join-network \\\n          --wallet-file ./path/to/wallet.json \\\n          --qty 10000000000 \\\n          --auto-stake true \\\n          --allow-delegated-staking true \\\n          --min-delegated-stake 100000000 \\\n          --delegate-reward-share-ratio 10 \\\n          --label \"My Test Gateway\" \\\n          --note \"Test gateway for development\" \\\n          --observer-wallet 0VE0wIhDy90WiQoV3U2PeY44FH1aVetOoulPGqgYukj \\\n          --fqdn my-gateway.example.com \\\n          --port 443 \\\n          --protocol https \\\n          --mainnet",
+      "language": "bash"
+    },
+    {
+      "code": "ar.io get-gateway 0VE0wIhDy90WiQoV3U2PeY44FH1aVetOoulPGqgYukj",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Join the Network",
+      "id": "join-the-network"
+    },
+    {
+      "level": "h2",
+      "text": "What Happens After Registration",
+      "id": "what-happens-after-registration"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#join-the-network-(/build/run-a-gateway/join-the-network)",
+  "links": []
+}

@@ -1,0 +1,39 @@
+{
+  "title": "Then",
+  "content": "docker service scale dokploy=1\nshell\n2025-04-07T15:20:18Z ERR Error occurred during watcher callback error=\"/etc/dokploy/traefik/dynamic/dokploy.yml: field not found, node: passHostHeader\" providerName=file\nbash\ndocker restart dokploy-traefik\nyaml\nhttp:\n  routers:\n    dokploy-router-app:\n      rule: Host(`my-domain.com`)\n      service: dokploy-service-app\n      entryPoints:\n        - web\n      middlewares:\n        - redirect-to-https\n    dokploy-router-app-secure:\n      rule: Host(`my-domain.com`)\n      service: dokploy-service-app\n      entryPoints:\n        - websecure\n      tls:\n        certResolver: letsencrypt\n  services:\n    dokploy-service-app:\n      loadBalancer:\n        servers:\n          - url: http://dokploy:3000\n          - passHostHeader: true\nyaml\nhttp:\n  routers:\n    dokploy-router-app:\n      rule: Host(`my-domain.com`)\n      service: dokploy-service-app\n      entryPoints:\n        - web\n      middlewares:\n        - redirect-to-https\n    dokploy-router-app-secure:\n      rule: Host(`my-domain.com`)\n      service: dokploy-service-app\n      entryPoints:\n        - websecure\n      tls:\n        certResolver: letsencrypt\n  services:\n    dokploy-service-app:\n      loadBalancer:\n        servers:\n          - url: http://dokploy:3000\n        passHostHeader: true\nbash\ndocker restart dokploy-traefik\nbash\ndocker service rm dokploy-redis",
+  "code_samples": [
+    {
+      "code": "#### 3. Traefik Configuration Issues\n\nIf all containers are running but you still can't access the UI, and Dokploy logs show no errors, the Traefik container might have configuration issues.\n\nWhen running `docker logs dokploy-traefik`, you might see errors like:",
+      "language": "unknown"
+    },
+    {
+      "code": "First, try restarting Traefik:",
+      "language": "unknown"
+    },
+    {
+      "code": "If you still can't access it and the same error persists in the Traefik logs, you'll need to check the Traefik configuration. In this case, the error indicates that the `passHostHeader` field is missing in the configuration.\n\nIf you've modified any Traefik configuration for an `application` and added invalid configuration, the logs will point to the error. For example, the error above mentions `field not found, node: passHostHeader`, which means we need to manually modify the configuration files in `/etc/dokploy/traefik`.\n\nHere's an example of an invalid configuration:",
+      "language": "unknown"
+    },
+    {
+      "code": "The correct configuration should be:",
+      "language": "unknown"
+    },
+    {
+      "code": "After fixing the configuration, restart Traefik:",
+      "language": "unknown"
+    },
+    {
+      "code": "You should now be able to access the user interface.\n\n## Recreate dokploy containers\n\nIn the case you want to recreate the dokploy services, you can do the following:\n\nRemove the dokploy-redis service:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Recreate dokploy containers",
+      "id": "recreate-dokploy-containers"
+    }
+  ],
+  "url": "llms-txt#then",
+  "links": []
+}

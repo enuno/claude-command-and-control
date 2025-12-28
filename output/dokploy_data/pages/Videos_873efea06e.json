@@ -1,0 +1,44 @@
+{
+  "title": "Videos",
+  "content": "import { Card, Cards } from 'fumadocs-ui/components/card';\n\n## Dokploy Cloud - Introduction\n\n<iframe width=\"100%\" height=\"315\" src=\"https://www.youtube.com/embed/x2s_Y5ON-ms?si=nFQ-oyvcomDIIRU0\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerPolicy=\"strict-origin-when-cross-origin\" allowFullScreen />\n\n## My Favorite Way to deploy Applications\n\n<iframe width=\"100%\" height=\"315\" src=\"https://www.youtube.com/embed/2Q4-EgYS0u4?si=K7wls46laSU_W3c_\" title=\"YouTube video player\" frameBorder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerPolicy=\"strict-origin-when-cross-origin\" allowFullScreen />\n\n<div className=\"border-2 mt-10\" />\n\n## Introduction to Dokploy\n\n<iframe width=\"100%\" height=\"315\" src=\"https://www.youtube.com/embed/mznYKPvhcfw?si=9r6ws_bJF45QSZgb\" title=\"YouTube video player\" frameBorder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerPolicy=\"strict-origin-when-cross-origin\" allowFullScreen />\n\n<div className=\"border-2 mt-10\" />\n\n## Deploy docker compose on a VPS \\[Dokploy]\n\n<iframe width=\"100%\" height=\"315\" src=\"https://www.youtube.com/embed/3qr_celxISA?si=N72toqtyC_sxlucH\" title=\"YouTube video player\" frameBorder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerPolicy=\"strict-origin-when-cross-origin\" allowFullScreen />\n\n<div className=\"border-2 mt-10\" />\n\n## How to Setup Dokploy Self-Hosting on A Hetzner Server | BEST Coolify Alternative\n\n<iframe width=\"100%\" height=\"315\" src=\"https://www.youtube.com/embed/83UX8TfuDis?si=SLQr7Q8I2PpUjNlH\" title=\"YouTube video player\" frameBorder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerPolicy=\"strict-origin-when-cross-origin\" allowFullScreen />\n\n<div className=\"border-2 mt-10\" />\n\n## FREE: Dokploy Self-Hosted 🐳 CANCEL VERCEL! 🚨 Coolify, Caprover, Alternative - Open Source\n\n<iframe width=\"100%\" height=\"315\" src=\"https://www.youtube.com/embed/8kHeKBd1rlU?si=LmUiT7mu9I9micy3\" title=\"YouTube video player\" frameBorder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerPolicy=\"strict-origin-when-cross-origin\" allowFullScreen />\n\n<div className=\"border-2 mt-10\" />\n\n## Say Goodbye to Vercel and Heroku with Dokploy Install\n\n<iframe width=\"100%\" height=\"315\" src=\"https://www.youtube.com/embed/XohTt3lh9qg?si=N4alYYsfSzNsFOmb\" title=\"YouTube video player\" frameBorder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerPolicy=\"strict-origin-when-cross-origin\" allowFullScreen />",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Dokploy Cloud - Introduction",
+      "id": "dokploy-cloud---introduction"
+    },
+    {
+      "level": "h2",
+      "text": "My Favorite Way to deploy Applications",
+      "id": "my-favorite-way-to-deploy-applications"
+    },
+    {
+      "level": "h2",
+      "text": "Introduction to Dokploy",
+      "id": "introduction-to-dokploy"
+    },
+    {
+      "level": "h2",
+      "text": "Deploy docker compose on a VPS \\[Dokploy]",
+      "id": "deploy-docker-compose-on-a-vps-\\[dokploy]"
+    },
+    {
+      "level": "h2",
+      "text": "How to Setup Dokploy Self-Hosting on A Hetzner Server | BEST Coolify Alternative",
+      "id": "how-to-setup-dokploy-self-hosting-on-a-hetzner-server-|-best-coolify-alternative"
+    },
+    {
+      "level": "h2",
+      "text": "FREE: Dokploy Self-Hosted 🐳 CANCEL VERCEL! 🚨 Coolify, Caprover, Alternative - Open Source",
+      "id": "free:-dokploy-self-hosted-🐳-cancel-vercel!-🚨-coolify,-caprover,-alternative---open-source"
+    },
+    {
+      "level": "h2",
+      "text": "Say Goodbye to Vercel and Heroku with Dokploy Install",
+      "id": "say-goodbye-to-vercel-and-heroku-with-dokploy-install"
+    }
+  ],
+  "url": "llms-txt#videos",
+  "links": []
+}

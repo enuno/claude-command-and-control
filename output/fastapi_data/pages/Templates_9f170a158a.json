@@ -1,0 +1,194 @@
+{
+  "url": "https://fastapi.tiangolo.com/advanced/templates/",
+  "title": "Templates¶",
+  "content": "You can use any template engine you want with FastAPI.\n\nA common choice is Jinja2, the same one used by Flask and other tools.\n\nThere are utilities to configure it easily that you can use directly in your FastAPI application (provided by Starlette).\n\nMake sure you create a virtual environment, activate it, and install jinja2:\n\nBefore FastAPI 0.108.0, Starlette 0.29.0, the name was the first parameter.\n\nAlso, before that, in previous versions, the request object was passed as part of the key-value pairs in the context for Jinja2.\n\nBy declaring response_class=HTMLResponse the docs UI will be able to know that the response will be HTML.\n\nYou could also use from starlette.templating import Jinja2Templates.\n\nFastAPI provides the same starlette.templating as fastapi.templating just as a convenience for you, the developer. But most of the available responses come directly from Starlette. The same with Request and StaticFiles.\n\nThen you can write a template at templates/item.html with, for example:\n\nIn the HTML that contains:\n\n...it will show the id taken from the \"context\" dict you passed:\n\nFor example, with an ID of 42, this would render:\n\nYou can also use url_for() inside of the template, it takes as arguments the same arguments that would be used by your path operation function.\n\nSo, the section with:\n\n...will generate a link to the same URL that would be handled by the path operation function read_item(id=id).\n\nFor example, with an ID of 42, this would render:\n\nYou can also use url_for() inside of the template, and use it, for example, with the StaticFiles you mounted with the name=\"static\".\n\nIn this example, it would link to a CSS file at static/styles.css with:\n\nAnd because you are using StaticFiles, that CSS file would be served automatically by your FastAPI application at the URL /static/styles.css.\n\nFor more details, including how to test templates, check Starlette's docs on templates.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Templates¶",
+      "id": "templates"
+    },
+    {
+      "level": "h2",
+      "text": "Install dependencies¶",
+      "id": "install-dependencies"
+    },
+    {
+      "level": "h2",
+      "text": "Using Jinja2Templates¶",
+      "id": "using-jinja2templates"
+    },
+    {
+      "level": "h2",
+      "text": "Writing templates¶",
+      "id": "writing-templates"
+    },
+    {
+      "level": "h3",
+      "text": "Template Context Values¶",
+      "id": "template-context-values"
+    },
+    {
+      "level": "h3",
+      "text": "Template url_for Arguments¶",
+      "id": "template-url-for-arguments"
+    },
+    {
+      "level": "h2",
+      "text": "Templates and static files¶",
+      "id": "templates-and-static-files"
+    },
+    {
+      "level": "h2",
+      "text": "More details¶",
+      "id": "more-details"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ pip install jinja2\n\n---> 100%",
+      "language": "php"
+    },
+    {
+      "code": "from fastapi import FastAPI, Request\nfrom fastapi.responses import HTMLResponse\nfrom fastapi.staticfiles import StaticFiles\nfrom fastapi.templating import Jinja2Templates\n\napp = FastAPI()\n\napp.mount(\"/static\", StaticFiles(directory=\"static\"), name=\"static\")\n\n\ntemplates = Jinja2Templates(directory=\"templates\")\n\n\n@app.get(\"/items/{id}\", response_class=HTMLResponse)\nasync def read_item(request: Request, id: str):\n    return templates.TemplateResponse(\n        request=request, name=\"item.html\", context={\"id\": id}\n    )",
+      "language": "python"
+    },
+    {
+      "code": "<html>\n<head>\n    <title>Item Details</title>\n    <link href=\"{{ url_for('static', path='/styles.css') }}\" rel=\"stylesheet\">\n</head>\n<body>\n    <h1><a href=\"{{ url_for('read_item', id=id) }}\">Item ID: {{ id }}</a></h1>\n</body>\n</html>",
+      "language": "html"
+    },
+    {
+      "code": "Item ID: {{ id }}",
+      "language": "json"
+    },
+    {
+      "code": "Item ID: 42",
+      "language": "json"
+    },
+    {
+      "code": "<a href=\"{{ url_for('read_item', id=id) }}\">",
+      "language": "jsx"
+    },
+    {
+      "code": "<a href=\"/items/42\">",
+      "language": "jsx"
+    },
+    {
+      "code": "<html>\n<head>\n    <title>Item Details</title>\n    <link href=\"{{ url_for('static', path='/styles.css') }}\" rel=\"stylesheet\">\n</head>\n<body>\n    <h1><a href=\"{{ url_for('read_item', id=id) }}\">Item ID: {{ id }}</a></h1>\n</body>\n</html>",
+      "language": "html"
+    },
+    {
+      "code": "h1 {\n    color: green;\n}",
+      "language": "css"
+    }
+  ],
+  "patterns": [
+    {
+      "description": "Then you can write a template at templates/item.html with, for example:",
+      "code": "templates/item.html"
+    }
+  ],
+  "links": [
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "title": "Progress Tracking (/sdks/ardrive-core-js/(advanced-features)/progress-tracking)",
+  "content": "Enable upload progress logging:\n\nProgress will be logged to stderr:",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "bash"
+    },
+    {
+      "code": "Uploading file transaction 1 of total 2 transactions...\nTransaction _GKQasQX194a364Hph8Oe-oku1AdfHwxWOw9_JC1yjc Upload Progress: 0%\nTransaction _GKQasQX194a364Hph8Oe-oku1AdfHwxWOw9_JC1yjc Upload Progress: 35%\nTransaction _GKQasQX194a364Hph8Oe-oku1AdfHwxWOw9_JC1yjc Upload Progress: 66%\nTransaction _GKQasQX194a364Hph8Oe-oku1AdfHwxWOw9_JC1yjc Upload Progress: 100%",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#progress-tracking-(/sdks/ardrive-core-js/(advanced-features)/progress-tracking)",
+  "links": []
+}

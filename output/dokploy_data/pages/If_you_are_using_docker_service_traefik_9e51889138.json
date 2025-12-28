@@ -1,0 +1,8 @@
+{
+  "title": "If you are using docker service traefik",
+  "content": "docker service rm dokploy-traefik",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#if-you-are-using-docker-service-traefik",
+  "links": []
+}

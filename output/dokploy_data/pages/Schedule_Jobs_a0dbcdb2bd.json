@@ -1,0 +1,62 @@
+{
+  "title": "Schedule Jobs",
+  "content": "Schedule Jobs in Dokploy allows you to create and manage automated tasks that run on a specified schedule using cron expressions. Each job execution creates a log entry where you can monitor the output and execution status.\n\nDokploy supports four types of scheduled jobs:\n\n1. **Application Jobs**: Run commands inside specific application containers\n2. **Compose Jobs**: Execute commands in Docker Compose services\n3. **Server Jobs**: Run scripts on remote servers (executed on the host)\n4. **Dokploy Server Jobs**: Execute tasks at the container level within the Dokploy container. These jobs can interact with commands inside the Dokploy container (e.g., `docker ps`, `docker image prune`), but they are not executed directly on the host system\n\n## Container-based Jobs (Application and Compose)\n\nFor application and compose jobs, you can run single commands that will be executed inside the target container. Dokploy internally uses Docker exec to run these commands:\n\nAssuming you with a nginx container and you want to check the nginx version in a container:\n\n1. Create a new schedule job\n2. Set the command to: `nginx -v`\n3. Configure your desired schedule using cron syntax\n4. Save and monitor the execution logs\n\n<Callout>\n  The target container must be running for the job to execute successfully.\n</Callout>\n\n<Callout>\n  For docker compose jobs, is required to not change the COMPOSE\\_PROJECT\\_NAME environment variable, since this is used to identify the project.\n</Callout>\n\n## Server-based Jobs (Server and Dokploy Server)\n\nFor remote servers, you can write bash scripts to perform various tasks. These scripts are executed directly on the host system and can use any command or tool available on the target server.\n\n### Dokploy Server Jobs\n\nDokploy Server Jobs are executed at the container level within the Dokploy container. This means:\n\n* Commands run inside the Dokploy container environment\n* You can interact with Docker commands (e.g., `docker ps`, `docker image prune`, `docker system prune`)\n* Scripts have access to the Docker socket and can manage containers and images\n* Jobs do not execute directly on the host system, but within the containerized Dokploy environment\n\n**Example**: You can create a scheduled job to clean up unused Docker images:\n\nThis command will run inside the Dokploy container and can interact with Docker to clean up images.\n\n<Callout type=\"info\">\n  Make sure any required dependencies are installed on the target server before using them in your scripts.\n</Callout>\n\n### Example 1: Automatic Docker Cleanup\n\nThis script cleans up unused Docker containers. You could schedule it to run every 15 minutes using the cron expression `*/15 * * * *`:\n\n### Example 2: Custom Database Backup\n\nYou can create scripts to backup databases that aren't natively supported by Dokploy. Here's an example structure for a custom backup script:",
+  "code_samples": [
+    {
+      "code": "docker exec -it <container_id> <command>",
+      "language": "bash"
+    },
+    {
+      "code": "#!/bin/bash\ndocker image prune -af",
+      "language": "bash"
+    },
+    {
+      "code": "#!/bin/bash\ndocker system prune --force",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Job Types",
+      "id": "job-types"
+    },
+    {
+      "level": "h2",
+      "text": "Container-based Jobs (Application and Compose)",
+      "id": "container-based-jobs-(application-and-compose)"
+    },
+    {
+      "level": "h3",
+      "text": "Example",
+      "id": "example"
+    },
+    {
+      "level": "h2",
+      "text": "Server-based Jobs (Server and Dokploy Server)",
+      "id": "server-based-jobs-(server-and-dokploy-server)"
+    },
+    {
+      "level": "h3",
+      "text": "Server Jobs",
+      "id": "server-jobs"
+    },
+    {
+      "level": "h3",
+      "text": "Dokploy Server Jobs",
+      "id": "dokploy-server-jobs"
+    },
+    {
+      "level": "h3",
+      "text": "Example 1: Automatic Docker Cleanup",
+      "id": "example-1:-automatic-docker-cleanup"
+    },
+    {
+      "level": "h3",
+      "text": "Example 2: Custom Database Backup",
+      "id": "example-2:-custom-database-backup"
+    }
+  ],
+  "url": "llms-txt#schedule-jobs",
+  "links": []
+}

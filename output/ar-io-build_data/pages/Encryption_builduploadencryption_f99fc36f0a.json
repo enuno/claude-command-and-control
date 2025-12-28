@@ -1,0 +1,68 @@
+{
+  "title": "Encryption (/build/upload/encryption)",
+  "content": "**Arweave has no built-in encryption.** All encryption and decryption must be handled client-side before uploading data to the network. Arweave is completely data-agnostic - it stores whatever data you provide without any knowledge of whether it's encrypted or not.\n\n## How Encryption Works on Arweave\n\n- **No native encryption**: Arweave provides no encryption services whatsoever\n- **Client-side only**: You must encrypt data before uploading\n- **Data-agnostic storage**: Arweave stores any data type, including encrypted data\n- **Your responsibility**: You handle all encryption, key management, and decryption\n- **Permanent security**: Once encrypted and stored, data remains secure forever\n\n## Encryption Options\n\n### 1. Manual Client-Side Encryption\n\nEncrypt your data before uploading with Turbo:\n\n## Encryption Standards\n\n### Encryption Methods\n\n- **AES-256-GCM**: Authenticated encryption (recommended)\n- **AES-256-CTR**: Stream cipher for large files\n- **Any encryption method**: Arweave supports any encryption you choose (must be indicated in `Cipher` tag for ArFS compliance)\n\nWhen uploading encrypted data, include these tags:\n\n## ArFS Protocol (Optional Standardization)\n\nThe [Arweave File System (ArFS)](/build/advanced/arfs) protocol provides optional standardization for encrypted storage:\n\n- **Private Drives**: Encrypt entire file systems\n- **File-level encryption**: Each file has its own encryption key\n- **Selective sharing**: Share individual files without exposing the entire drive\n- **Key derivation**: Uses HKDF-SHA256 with wallet signatures\n- **Completely optional**: You can use any encryption method you prefer\n\n**ArDrive Web App:** Data uploaded through the ArDrive web app to Private\n  Drives is encrypted for you using the standards set in the ArFS protocol.\n  ArDrive is simply a web application that implements ArFS - there is no\n  separate \"ArDrive Encryption Service.\"\n\n**ArFS Privacy:** To learn more about ArFS encryption schema, key derivation,\n  and private drive management, see our detailed [ArFS Privacy & Encryption\n  documentation](/build/advanced/arfs/privacy).\n\nFor most users, the ArDrive web app provides the easiest way to encrypt and store data using ArFS standards:\n\n**Create a private drive** in the ArDrive web app\n\n**Set a strong password** for your drive\n\n**Upload files** - they're automatically encrypted using ArFS\n\n**Access files** using your password and wallet\n\nFor developers who need custom encryption:\n\n**Choose an encryption library** (Crypto-JS, Web Crypto API)\n\n**Encrypt your data** before uploading\n\n**Add proper tags** to indicate encryption\n\n**Store keys securely** for decryption\n\n## Security Considerations\n\n**Important:** Never store encryption keys in your code or public\n  repositories. Use secure key management practices and consider hardware\n  security modules for production applications.\n\n- Use strong, randomly generated keys\n- Implement proper key rotation\n- Store keys securely (not in code)\n- Use authenticated encryption (AES-GCM)\n- Validate data integrity after decryption\n\n}\n    arrow\n  >\n    Use the ArDrive web app for easy encrypted file storage using ArFS.\n\n}>\n  Explore the Arweave File System protocol for structured storage.\n\n}\n  >\n    Purchase credits for programmatic uploads.",
+  "code_samples": [
+    {
+      "code": "// Encrypt sensitive data\nconst data = \"Sensitive information\";\nconst secretKey = \"your-secret-key\";\nconst encryptedData = CryptoJS.AES.encrypt(data, secretKey).toString();\n\n// Upload encrypted data\nconst result = await turbo.upload({\n  data: encryptedData,\n  dataItemOpts: {\n    tags: [\n      { name: \"Content-Type\", value: \"application/octet-stream\" },\n      { name: \"Encrypted\", value: \"true\" },\n      { name: \"Cipher\", value: \"AES-256-GCM\" },\n      { name: \"Cipher-IV\", value: \"YWJjZGVmZ2hpams=\" }, // 12 byte initialization vector as Base64\n    ],\n  },\n});",
+      "language": "js"
+    },
+    {
+      "code": "{\n  name: \"Content-Type\",\n  value: \"application/octet-stream\"  // Required for encrypted data\n},\n{\n  name: \"Cipher\",\n  value: \"AES-256-GCM\"  // Specify encryption method\n},\n{\n  name: \"Cipher-IV\",\n  value: \"base64-encoded-iv\"  // Initialization vector\n}",
+      "language": "js"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "How Encryption Works on Arweave",
+      "id": "how-encryption-works-on-arweave"
+    },
+    {
+      "level": "h2",
+      "text": "Encryption Options",
+      "id": "encryption-options"
+    },
+    {
+      "level": "h3",
+      "text": "1. Manual Client-Side Encryption",
+      "id": "1.-manual-client-side-encryption"
+    },
+    {
+      "level": "h2",
+      "text": "Encryption Standards",
+      "id": "encryption-standards"
+    },
+    {
+      "level": "h3",
+      "text": "Encryption Methods",
+      "id": "encryption-methods"
+    },
+    {
+      "level": "h3",
+      "text": "Required Tags",
+      "id": "required-tags"
+    },
+    {
+      "level": "h2",
+      "text": "ArFS Protocol (Optional Standardization)",
+      "id": "arfs-protocol-(optional-standardization)"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Started",
+      "id": "getting-started"
+    },
+    {
+      "level": "h2",
+      "text": "Security Considerations",
+      "id": "security-considerations"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#encryption-(/build/upload/encryption)",
+  "links": []
+}

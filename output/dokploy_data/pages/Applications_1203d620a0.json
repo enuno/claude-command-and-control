@@ -1,0 +1,54 @@
+{
+  "title": "Applications",
+  "content": "Applications in Dokploy are treated as a single service, entity or container, making it easy and intuitive for users to work with each application in its own workspace.\n\nWe offer multiple functionalities that you can use to manage your applications, such as:\n\nConfigure the source of your code, the way your application is built, and also manage actions like deploying, updating, and deleting your application, and stopping it.\n\nIf you need to assign environment variables to your application, you can do so here.\n\nIn case you need to use a multiline variable, you can wrap it in double quotes just like this `'\"here_is_my_private_key\"'`.\n\nFour graphs will be displayed for the use of memory, CPU, disk, and network. Note that the information is only updated if you are viewing the current page, otherwise it will not be updated.\n\nIf you want to see any important logs from your application that is running, you can do so here and determine if your application is displaying any errors or not.\n\nYou can view the last 10 deployments of your application. When you deploy your application in real time, a new deployment record will be created and it will gradually show you how your application is being built.\n\nWe also offer a button to cancel deployments that are in queue. Note that those in progress cannot be canceled.\n\nWe provide a webhook so that you can trigger your own deployments by pushing to your GitHub, Gitea, GitLab, Bitbucket, DockerHub repository.\n\nThis is where you will assign your domain so that your application can be accessed from the internet.\n\nThere are two ways to assign a domain:\n\n1. Create a custom domain.\n2. Use a generated domain, we use traefik.me to generate free domains.\n\nThis section provides advanced configuration options for experienced users. It includes tools for custom commands within the container, managing Docker Swarm settings, and adjusting cluster settings such as replicas and registry selection. These tools are typically not required for standard application deployment and are intended for complex management and troubleshooting tasks.\n\n* **Run Command**: Execute custom commands directly in the container, after the application has been build & running.\n* **Cluster Settings**: Configure the number of replicas and select the Docker registry for your deployment to manage how your application scales and where it pulls images from.\n* **Swarm Settings**: Access additional Docker Swarm configurations for detailed orchestration and scaling across multiple nodes.\n* **Resources**: Adjust the CPU and memory allocation for your application.\n* **Volumes**: To ensure data persistence across deployments, configure storage volumes for your application, you can create Volumes, Binds, File Mounts.\n* **Ports**: Expose your application to the internet by configuring network ports.\n* **Traefik**: Modify Traefik settings to manage HTTP request handling for your application.\n\n## Keyboard Shortcuts\n\nTo help speed up navigating there are some built in keyboard shortcuts for\nnavigating tabs on application pages. Similar to GitHub these are all prefixed\nwith the `g` key so to use them press `g` and then the shortcut key.\n\n| Key | Tab                 |\n| --- | ------------------- |\n| `g` | General             |\n| `e` | Environment         |\n| `u` | Domains             |\n| `p` | Preview Deployments |\n| `s` | Schedules           |\n| `v` | Volume Backups      |\n| `d` | Deployments         |\n| `l` | Logs                |\n| `m` | Monitoring          |\n| `a` | Advanced            |\n\nAdjust these settings carefully as incorrect configurations can significantly impact your application’s functionality and availability.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "General",
+      "id": "general"
+    },
+    {
+      "level": "h2",
+      "text": "Environment",
+      "id": "environment"
+    },
+    {
+      "level": "h2",
+      "text": "Monitoring",
+      "id": "monitoring"
+    },
+    {
+      "level": "h2",
+      "text": "Logs",
+      "id": "logs"
+    },
+    {
+      "level": "h2",
+      "text": "Deployments",
+      "id": "deployments"
+    },
+    {
+      "level": "h2",
+      "text": "Domains",
+      "id": "domains"
+    },
+    {
+      "level": "h2",
+      "text": "Advanced Settings",
+      "id": "advanced-settings"
+    },
+    {
+      "level": "h2",
+      "text": "Keyboard Shortcuts",
+      "id": "keyboard-shortcuts"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": "note"
+    }
+  ],
+  "url": "llms-txt#applications",
+  "links": []
+}

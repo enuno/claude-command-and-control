@@ -1,0 +1,195 @@
+{
+  "url": "https://fastapi.tiangolo.com/reference/templating/",
+  "title": "Templating - Jinja2Templates¶",
+  "content": "You can use the Jinja2Templates class to render Jinja templates.\n\nRead more about it in the FastAPI docs for Templates.\n\nYou can import it directly from fastapi.templating:\n\ntemplates = Jinja2Templates(\"templates\")\n\nreturn templates.TemplateResponse(\"index.html\", {\"request\": request})",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Templating - Jinja2Templates¶",
+      "id": "templating-jinja2templates"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.templating.Jinja2Templates ¶",
+      "id": "fastapi.templating.Jinja2Templates"
+    },
+    {
+      "level": "h3",
+      "text": "context_processors instance-attribute ¶",
+      "id": "fastapi.templating.Jinja2Templates.context_processors"
+    },
+    {
+      "level": "h3",
+      "text": "env instance-attribute ¶",
+      "id": "fastapi.templating.Jinja2Templates.env"
+    },
+    {
+      "level": "h3",
+      "text": "get_template ¶",
+      "id": "fastapi.templating.Jinja2Templates.get_template"
+    },
+    {
+      "level": "h3",
+      "text": "TemplateResponse ¶",
+      "id": "fastapi.templating.Jinja2Templates.TemplateResponse"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from fastapi.templating import Jinja2Templates",
+      "language": "sql"
+    },
+    {
+      "code": "Jinja2Templates(\n    directory: (\n        str | PathLike[str] | Sequence[str | PathLike[str]]\n    ),\n    *,\n    context_processors: (\n        list[Callable[[Request], dict[str, Any]]] | None\n    ) = None,\n    **env_options: Any\n)",
+      "language": "rust"
+    },
+    {
+      "code": "Jinja2Templates(\n    *,\n    env: Environment,\n    context_processors: (\n        list[Callable[[Request], dict[str, Any]]] | None\n    ) = None\n)",
+      "language": "rust"
+    },
+    {
+      "code": "Jinja2Templates(\n    directory=None,\n    *,\n    context_processors=None,\n    env=None,\n    **env_options\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(\n    self,\n    directory: str | PathLike[str] | Sequence[str | PathLike[str]] | None = None,\n    *,\n    context_processors: list[Callable[[Request], dict[str, Any]]] | None = None,\n    env: jinja2.Environment | None = None,\n    **env_options: Any,\n) -> None:\n    if env_options:\n        warnings.warn(\n            \"Extra environment options are deprecated. Use a preconfigured jinja2.Environment instead.\",\n            DeprecationWarning,\n        )\n    assert jinja2 is not None, \"jinja2 must be installed to use Jinja2Templates\"\n    assert bool(directory) ^ bool(env), \"either 'directory' or 'env' arguments must be passed\"\n    self.context_processors = context_processors or []\n    if directory is not None:\n        self.env = self._create_env(directory, **env_options)\n    elif env is not None:  # pragma: no branch\n        self.env = env\n\n    self._setup_env_defaults(self.env)",
+      "language": "python"
+    },
+    {
+      "code": "context_processors = context_processors or []",
+      "language": "unknown"
+    },
+    {
+      "code": "env = _create_env(directory, **env_options)",
+      "language": "unknown"
+    },
+    {
+      "code": "get_template(name)",
+      "language": "unknown"
+    },
+    {
+      "code": "def get_template(self, name: str) -> jinja2.Template:\n    return self.env.get_template(name)",
+      "language": "python"
+    },
+    {
+      "code": "TemplateResponse(\n    request: Request,\n    name: str,\n    context: dict[str, Any] | None = None,\n    status_code: int = 200,\n    headers: Mapping[str, str] | None = None,\n    media_type: str | None = None,\n    background: BackgroundTask | None = None,\n) -> _TemplateResponse",
+      "language": "typescript"
+    },
+    {
+      "code": "TemplateResponse(\n    name: str,\n    context: dict[str, Any] | None = None,\n    status_code: int = 200,\n    headers: Mapping[str, str] | None = None,\n    media_type: str | None = None,\n    background: BackgroundTask | None = None,\n) -> _TemplateResponse",
+      "language": "typescript"
+    },
+    {
+      "code": "TemplateResponse(*args, **kwargs)",
+      "language": "unknown"
+    },
+    {
+      "code": "def TemplateResponse(self, *args: Any, **kwargs: Any) -> _TemplateResponse:\n    if args:\n        if isinstance(args[0], str):  # the first argument is template name (old style)\n            warnings.warn(\n                \"The `name` is not the first parameter anymore. \"\n                \"The first parameter should be the `Request` instance.\\n\"\n                'Replace `TemplateResponse(name, {\"request\": request})` by `TemplateResponse(request, name)`.',\n                DeprecationWarning,\n            )\n\n            name = args[0]\n            context = args[1] if len(args) > 1 else kwargs.get(\"context\", {})\n            status_code = args[2] if len(args) > 2 else kwargs.get(\"status_code\", 200)\n            headers = args[3] if len(args) > 3 else kwargs.get(\"headers\")\n            media_type = args[4] if len(args) > 4 else kwargs.get(\"media_type\")\n            background = args[5] if len(args) > 5 else kwargs.get(\"background\")\n\n            if \"request\" not in context:\n                raise ValueError('context must include a \"request\" key')\n            request = context[\"request\"]\n        else:  # the first argument is a request instance (new style)\n            request = args[0]\n            name = args[1] if len(args) > 1 else kwargs[\"name\"]\n            context = args[2] if len(args) > 2 else kwargs.get(\"context\", {})\n            status_code = args[3] if len(args) > 3 else kwargs.get(\"status_code\", 200)\n            headers = args[4] if len(args) > 4 else kwargs.get(\"headers\")\n            media_type = args[5] if len(args) > 5 else kwargs.get(\"media_type\")\n            background = args[6] if len(args) > 6 else kwargs.get(\"background\")\n    else:  # all arguments are kwargs\n        if \"request\" not in kwargs:\n            warnings.warn(\n                \"The `TemplateResponse` now requires the `request` argument.\\n\"\n                'Replace `TemplateResponse(name, {\"context\": context})` by `TemplateResponse(request, name)`.',\n                DeprecationWarning,\n            )\n            if \"request\" not in kwargs.get(\"context\", {}):\n                raise ValueError('context must include a \"request\" key')\n\n        context = kwargs.get(\"context\", {})\n        request = kwargs.get(\"request\", context.get(\"request\"))\n        name = cast(str, kwargs[\"name\"])\n        status_code = kwargs.get(\"status_code\", 200)\n        headers = kwargs.get(\"headers\")\n        media_type = kwargs.get(\"media_type\")\n        background = kwargs.get(\"background\")\n\n    context.setdefault(\"request\", request)\n    for context_processor in self.context_processors:\n        context.update(context_processor(request))\n\n    template = self.get_template(name)\n    return _TemplateResponse(\n        template,\n        context,\n        status_code=status_code,\n        headers=headers,\n        media_type=media_type,\n        background=background,\n    )",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "title": "APIs Reference (/apis)",
+  "content": "Explore the REST APIs available in the AR.IO ecosystem. Our services are built with a commitment to open source principles, and all repositories are publicly available under AGPL-3 licenses.\n\n## Available Services\n\n}\n    title=\"AR.IO Gateway\"\n    description=\"The core gateway software providing access to data on Arweave. Includes data retrieval, ArNS resolution, and network management.\"\n    href=\"/apis/ar-io-node\"\n  />\n  }\n    title=\"Turbo\"\n    description=\"Upload and payment services providing fast, reliable data uploads to Arweave with instant confirmation and transparent pricing.\"\n    href=\"/apis/turbo\"\n  />\n\n## AR.IO Gateway APIs\n\nThe AR.IO Gateway serves as the primary interface for accessing Arweave data through the AR.IO network. Key endpoints include:\n\n- **Data Access** - Retrieve transaction data and files from Arweave\n- **ArNS Resolution** - Resolve human-readable names to Arweave transaction IDs\n- **Network Information** - Query gateway health, pricing, and network status\n- **Transaction Management** - Submit and track transactions\n- **Admin Functions** - Gateway administration and configuration\n\nTurbo provides high-performance upload services for the Arweave network with additional features:\n\n- **Data Upload** - Fast, reliable uploads with instant confirmation\n- **Payment Processing** - Transparent pricing and payment management\n- **Upload Tracking** - Monitor upload status and metadata\n- **Credit Management** - Handle payment credits and billing\n\n## Open Source Commitment\n\nWe believe strongly in open source development. All AR.IO services are:\n\n- **Publicly Available** - Source code is open and accessible\n- **AGPL-3 Licensed** - Ensuring software freedom and transparency\n- **Community Driven** - Built with input from the developer community\n- **Auditable** - Code can be reviewed and verified by anyone\n\n1. **Choose your service** - Select the APIs that fit your needs\n2. **Review the documentation** - Each service has comprehensive APIs documentation\n3. **Test endpoints** - Use the interactive examples to explore functionality\n4. **Integrate** - Implement the APIs in your applications\n\nFor SDK alternatives to these REST APIs, visit our [SDK documentation](/sdks).\n\n}\n    title=\"SDK Documentation\"\n    description=\"Use our TypeScript SDKs for easier integration and development\"\n    href=\"/sdks\"\n  />\n  }\n    title=\"Quick Start - Upload\"\n    description=\"Start uploading data to Arweave with our upload guides\"\n    href=\"/build/upload\"\n  />\n  }\n    title=\"Quick Start - Access\"\n    description=\"Learn how to retrieve and query data from Arweave\"\n    href=\"/build/access\"\n  />\n  }\n    title=\"Run a Gateway\"\n    description=\"Deploy your own AR.IO gateway and access these APIs directly\"\n    href=\"/build/run-a-gateway\"\n  />",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Available Services",
+      "id": "available-services"
+    },
+    {
+      "level": "h2",
+      "text": "AR.IO Gateway APIs",
+      "id": "ar.io-gateway-apis"
+    },
+    {
+      "level": "h2",
+      "text": "Turbo APIs",
+      "id": "turbo-apis"
+    },
+    {
+      "level": "h2",
+      "text": "Open Source Commitment",
+      "id": "open-source-commitment"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Started",
+      "id": "getting-started"
+    },
+    {
+      "level": "h2",
+      "text": "Explore More",
+      "id": "explore-more"
+    }
+  ],
+  "url": "llms-txt#apis-reference-(/apis)",
+  "links": []
+}

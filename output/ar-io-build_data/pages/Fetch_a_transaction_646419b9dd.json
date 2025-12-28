@@ -1,0 +1,19 @@
+{
+  "title": "Fetch a transaction",
+  "content": "curl localhost:4000/4jBV3ofWh41KhuTs2pFvj-KBZWUkbrbCYlJH0vLA6LM\n```\n\nYour gateway is now serving Arweave data! This local setup is perfect for:\n- Testing gateway functionality\n- Developing applications\n- Understanding gateway operations\n\n## Learn Before You Build\n\nUnderstanding gateways helps you make informed infrastructure decisions.\n\n}\n  />\n  }\n  />\n  }\n  />\n\nWhether you're exploring gateway capabilities or ready to join the network, we have resources to help:",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Learn Before You Build",
+      "id": "learn-before-you-build"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to Deploy?",
+      "id": "ready-to-deploy?"
+    }
+  ],
+  "url": "llms-txt#fetch-a-transaction",
+  "links": []
+}

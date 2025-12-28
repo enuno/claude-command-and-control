@@ -1,0 +1,8 @@
+{
+  "title": "Mounts",
+  "content": "<APIPage document={\"./public/openapi.json\"} operations={[{\"method\":\"post\",\"path\":\"/mounts.create\"},{\"method\":\"post\",\"path\":\"/mounts.remove\"},{\"method\":\"get\",\"path\":\"/mounts.one\"},{\"method\":\"post\",\"path\":\"/mounts.update\"},{\"method\":\"get\",\"path\":\"/mounts.allNamedByApplicationId\"}]} hasHead={true} />",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#mounts",
+  "links": []
+}

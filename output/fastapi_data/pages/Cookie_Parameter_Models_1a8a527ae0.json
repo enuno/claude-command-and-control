@@ -1,0 +1,174 @@
+{
+  "url": "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+  "title": "Cookie Parameter Models¶",
+  "content": "If you have a group of cookies that are related, you can create a Pydantic model to declare them. 🍪\n\nThis would allow you to re-use the model in multiple places and also to declare validations and metadata for all the parameters at once. 😎\n\nThis is supported since FastAPI version 0.115.0. 🤓\n\nThis same technique applies to Query, Cookie, and Header. 😎\n\nDeclare the cookie parameters that you need in a Pydantic model, and then declare the parameter as Cookie:\n\nPrefer to use the Annotated version if possible.\n\nPrefer to use the Annotated version if possible.\n\nFastAPI will extract the data for each field from the cookies received in the request and give you the Pydantic model you defined.\n\nYou can see the defined cookies in the docs UI at /docs:\n\nHave in mind that, as browsers handle cookies in special ways and behind the scenes, they don't easily allow JavaScript to touch them.\n\nIf you go to the API docs UI at /docs you will be able to see the documentation for cookies for your path operations.\n\nBut even if you fill the data and click \"Execute\", because the docs UI works with JavaScript, the cookies won't be sent, and you will see an error message as if you didn't write any values.\n\nIn some special use cases (probably not very common), you might want to restrict the cookies that you want to receive.\n\nYour API now has the power to control its own cookie consent. 🤪🍪\n\nYou can use Pydantic's model configuration to forbid any extra fields:\n\nPrefer to use the Annotated version if possible.\n\nPrefer to use the Annotated version if possible.\n\nIf a client tries to send some extra cookies, they will receive an error response.\n\nPoor cookie banners with all their effort to get your consent for the API to reject it. 🍪\n\nFor example, if the client tries to send a santa_tracker cookie with a value of good-list-please, the client will receive an error response telling them that the santa_tracker cookie is not allowed:\n\nYou can use Pydantic models to declare cookies in FastAPI. 😎",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Cookie Parameter Models¶",
+      "id": "cookie-parameter-models"
+    },
+    {
+      "level": "h2",
+      "text": "Cookies with a Pydantic Model¶",
+      "id": "cookies-with-a-pydantic-model"
+    },
+    {
+      "level": "h2",
+      "text": "Check the Docs¶",
+      "id": "check-the-docs"
+    },
+    {
+      "level": "h2",
+      "text": "Forbid Extra Cookies¶",
+      "id": "forbid-extra-cookies"
+    },
+    {
+      "level": "h2",
+      "text": "Summary¶",
+      "id": "summary"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Cookie, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Cookies(BaseModel):\n    session_id: str\n    fatebook_tracker: str | None = None\n    googall_tracker: str | None = None\n\n\n@app.get(\"/items/\")\nasync def read_items(cookies: Annotated[Cookies, Cookie()]):\n    return cookies",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated, Union\n\nfrom fastapi import Cookie, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Cookies(BaseModel):\n    session_id: str\n    fatebook_tracker: Union[str, None] = None\n    googall_tracker: Union[str, None] = None\n\n\n@app.get(\"/items/\")\nasync def read_items(cookies: Annotated[Cookies, Cookie()]):\n    return cookies",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Cookie, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Cookies(BaseModel):\n    session_id: str\n    fatebook_tracker: str | None = None\n    googall_tracker: str | None = None\n\n\n@app.get(\"/items/\")\nasync def read_items(cookies: Cookies = Cookie()):\n    return cookies",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import Cookie, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Cookies(BaseModel):\n    session_id: str\n    fatebook_tracker: Union[str, None] = None\n    googall_tracker: Union[str, None] = None\n\n\n@app.get(\"/items/\")\nasync def read_items(cookies: Cookies = Cookie()):\n    return cookies",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Cookie, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Cookies(BaseModel):\n    model_config = {\"extra\": \"forbid\"}\n\n    session_id: str\n    fatebook_tracker: str | None = None\n    googall_tracker: str | None = None\n\n\n@app.get(\"/items/\")\nasync def read_items(cookies: Annotated[Cookies, Cookie()]):\n    return cookies",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated, Union\n\nfrom fastapi import Cookie, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Cookies(BaseModel):\n    model_config = {\"extra\": \"forbid\"}\n\n    session_id: str\n    fatebook_tracker: Union[str, None] = None\n    googall_tracker: Union[str, None] = None\n\n\n@app.get(\"/items/\")\nasync def read_items(cookies: Annotated[Cookies, Cookie()]):\n    return cookies",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Cookie, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Cookies(BaseModel):\n    model_config = {\"extra\": \"forbid\"}\n\n    session_id: str\n    fatebook_tracker: str | None = None\n    googall_tracker: str | None = None\n\n\n@app.get(\"/items/\")\nasync def read_items(cookies: Cookies = Cookie()):\n    return cookies",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import Cookie, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Cookies(BaseModel):\n    model_config = {\"extra\": \"forbid\"}\n\n    session_id: str\n    fatebook_tracker: Union[str, None] = None\n    googall_tracker: Union[str, None] = None\n\n\n@app.get(\"/items/\")\nasync def read_items(cookies: Cookies = Cookie()):\n    return cookies",
+      "language": "python"
+    },
+    {
+      "code": "{\n    \"detail\": [\n        {\n            \"type\": \"extra_forbidden\",\n            \"loc\": [\"cookie\", \"santa_tracker\"],\n            \"msg\": \"Extra inputs are not permitted\",\n            \"input\": \"good-list-please\",\n        }\n    ]\n}",
+      "language": "json"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

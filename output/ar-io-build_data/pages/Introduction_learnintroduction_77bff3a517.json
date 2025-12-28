@@ -1,0 +1,29 @@
+{
+  "title": "Introduction (/learn/(introduction))",
+  "content": "import {\n  BookOpen,\n  Wrench,\n  Package,\n  Code,\n  Server,\n  Globe,\n  ArrowRight,\n  Zap,\n  Shield,\n  Infinity,\n} from \"lucide-react\";\n\nAR.IO is the decentralized gateway protocol for Arweave. Deploy gateways, register permanent names, and build applications with enterprise-grade infrastructure that lasts forever.\n\n**For AI and LLM users**: Access the complete documentation in plain text\n  format at [llms-full.txt](/llms-full.txt) for easy consumption by AI agents\n  and language models.\n\n## Explore the Documentation\n\n}\n    title=\"What is AR.IO?\"\n    description=\"Learn about the decentralized gateway protocol and how it powers the permanent web\"\n    href=\"/learn/what-is-ario\"\n  />\n  }\n    title=\"Build\"\n    description=\"Get started building applications, running gateways, and uploading data\"\n    href=\"/build\"\n  />\n  }\n    title=\"SDKs\"\n    description=\"Integrate AR.IO services into your applications with our developer SDKs\"\n    href=\"/sdks\"\n  />\n  }\n    title=\"API Reference\"\n    description=\"Complete API documentation for AR.IO Node and Turbo services\"\n    href=\"/apis\"\n  />\n\n## Quick Start Guides\n\n}\n    title=\"Upload Data to Arweave\"\n    description=\"Learn how to permanently store files and data using Turbo SDK\"\n    href=\"/build/upload\"\n  />\n  }\n    title=\"Run a Gateway\"\n    description=\"Deploy your own AR.IO gateway and participate in the network\"\n    href=\"/build/run-a-gateway\"\n  />\n  }\n    title=\"Register ArNS Names\"\n    description=\"Get human-readable names for your permanent applications\"\n    href=\"/learn/arns\"\n  />\n\n}\n    title=\"ArNS Registry\"\n    description=\"Register and manage permanent names for your applications\"\n    href=\"https://arns.app\"\n  />\n  }\n    title=\"Network Portal\"\n    description=\"Monitor gateway performance and network statistics\"\n    href=\"https://gateways.ar.io\"\n  />\n  }\n    title=\"ArDrive\"\n    description=\"User-friendly permanent storage for files and folders\"\n    href=\"https://ardrive.io\"\n  />\n\n## Join the Community\n\nConnect with developers, gateway operators, and the AR.IO team. Get help, share ideas, and stay updated on the latest developments.\n\n- [Join Discord](https://discord.com/invite/HGG52EtTc2)\n- [View Guides](/build/guides)",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Explore the Documentation",
+      "id": "explore-the-documentation"
+    },
+    {
+      "level": "h2",
+      "text": "Quick Start Guides",
+      "id": "quick-start-guides"
+    },
+    {
+      "level": "h2",
+      "text": "AR.IO Ecosystem",
+      "id": "ar.io-ecosystem"
+    },
+    {
+      "level": "h2",
+      "text": "Join the Community",
+      "id": "join-the-community"
+    }
+  ],
+  "url": "llms-txt#introduction-(/learn/(introduction))",
+  "links": []
+}

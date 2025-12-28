@@ -1,0 +1,13 @@
+{
+  "title": "Pricing & Cost Estimation (/sdks/ardrive-core-js/(api-reference)/pricing-cost-estimation)",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "// Get price estimator\nconst priceEstimator = arDrive.getArDataPriceEstimator();\n\n// Estimate cost for data size\nconst cost = await priceEstimator.getARPriceForByteCount(\n  new ByteCount(1024 * 1024) // 1MB\n);\n\n// Get base Winston price (without tips)\nconst basePrice = await priceEstimator.getBaseWinstonPriceForByteCount(\n  new ByteCount(5 * 1024 * 1024) // 5MB\n);",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#pricing-&-cost-estimation-(/sdks/ardrive-core-js/(api-reference)/pricing-cost-estimation)",
+  "links": []
+}

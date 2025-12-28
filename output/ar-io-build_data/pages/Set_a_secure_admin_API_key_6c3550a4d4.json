@@ -1,0 +1,19 @@
+{
+  "title": "Set a secure admin API key",
+  "content": "ADMIN_API_KEY=your_secure_admin_key_here\nbash",
+  "code_samples": [
+    {
+      "code": "Choose a strong, unique admin API key. This key provides administrative access\n  to your gateway and should be kept secure.\n\n### Test API Access\n\nVerify your admin API key is working:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Test API Access",
+      "id": "test-api-access"
+    }
+  ],
+  "url": "llms-txt#set-a-secure-admin-api-key",
+  "links": []
+}

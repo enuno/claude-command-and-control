@@ -1,0 +1,8 @@
+{
+  "title": "If you are using docker standalone traefik",
+  "content": "docker rm -f dokploy-traefik\n\ndocker run -d \\\n    --name dokploy-traefik \\\n    --restart always \\\n    -v /etc/dokploy/traefik/traefik.yml:/etc/traefik/traefik.yml \\\n    -v /etc/dokploy/traefik/dynamic:/etc/dokploy/traefik/dynamic \\\n    -v /var/run/docker.sock:/var/run/docker.sock:ro \\\n    -p 80:80/tcp \\\n    -p 443:443/tcp \\\n    -p 443:443/udp \\\n    traefik:v3.6.1\n\ndocker network connect dokploy-network dokploy-traefik",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#if-you-are-using-docker-standalone-traefik",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Upgrade (/sdks/ar-io-sdk/(ant-contracts)/upgrade)",
+  "content": "Upgrades an ANT by forking it to the latest version from the ANT registry and optionally reassigning ArNS names to the new process. This function first checks the version of the existing ANT, creates a new ANT using `.fork()` to the latest version, and then reassigns the ArNS names affiliated with this process to the new process.\n\n_Note: Requires `signer` to be provided on `ANT.init` to sign the transaction._\n\n- `reassignAffiliatedNames?: boolean` - If true, reassigns all names associated with this process to the new forked process (defaults to true when names is empty)\n- `names?: string[]` - Optional array of specific names to reassign (cannot be used with `reassignAffiliatedNames: true`). These names must be affiliated with this ANT on the provided ARIO process.\n- `arioProcessId?: string` - Optional ARIO process ID (defaults to mainnet)\n- `antRegistryId?: string` - Optional ANT registry process ID used to resolve the latest version (defaults to mainnet registry)\n- `skipVersionCheck?: boolean` - Skip checking if ANT is already latest version (defaults to false)\n- `onSigningProgress?: Function` - Optional progress callback for tracking upgrade steps\n\n**Returns:** `Promise, failedReassignedNames: Record }>`",
+  "code_samples": [
+    {
+      "code": "// Upgrade ANT and reassign all affiliated ArNS names to the new process\nconst result = await ant.upgrade();\n\n// Upgrade ANT and reassign specific ArNS names to the new process\nconst result = await ant.upgrade({\n  names: ['ardrive', 'example'],\n});\n\n// with callbacks\nconst result = await ant.upgrade({\n  names: ['ardrive', 'example'],\n  onSigningProgress: (event, payload) => {\n    console.log(`${event}:`, payload);\n    if (event === 'checking-version') {\n      console.log(`Checking version: ${payload.antProcessId}`);\n    }\n    if (event === 'fetching-affiliated-names') {\n      console.log(`Fetching affiliated names: ${payload.arioProcessId}`);\n    }\n    if (event === 'reassigning-name') {\n      console.log(`Reassigning name: ${payload.name}`);\n    }\n    if (event === 'validating-names') {\n      console.log(`Validating names: ${payload.names}`);\n    }\n    // other callback events...\n  },\n});\n\nconsole.log(`Upgraded to process: ${result.forkedProcessId}`);\nconsole.log(`Successfully reassigned names: ${result.reassignedNames}`);\nconsole.log(`Failed to reassign names: ${result.failedReassignedNames}`);",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#upgrade-(/sdks/ar-io-sdk/(ant-contracts)/upgrade)",
+  "links": []
+}

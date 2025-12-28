@@ -1,0 +1,34 @@
+{
+  "title": "AR.IO Gateway APIs (/apis/ar-io-node)",
+  "content": "import {\n  Server,\n  Network,\n  Route,\n  Database,\n  Search,\n  FileText,\n} from \"lucide-react\";\n\nThe AR.IO Gateway is the core software for the AR.IO network, serving the essential responsibility of gateways for accessing, caching, and querying data stored on Arweave. It provides a robust, decentralized infrastructure for interacting with the permanent web.\n\n## Core Responsibilities\n\nThe AR.IO Gateway handles fundamental operations for the Arweave ecosystem:\n\n- **Data Access** - Retrieve transaction data, files, and metadata from Arweave\n- **Caching** - Intelligent caching strategies for improved performance and availability\n- **Data Querying** - Powerful search and indexing capabilities for Arweave data\n- **ArNS Resolution** - Resolve human-readable names to Arweave transaction IDs\n- **Network Management** - Coordinate with other gateways in the AR.IO network\n\nBeyond basic gateway functionality, AR.IO Gateway includes sophisticated capabilities:\n\n- **Parquet Generation** - Convert Arweave data into optimized Parquet format for analytics\n- **Data Verification** - Cryptographic verification of data integrity and authenticity\n- **Index Querying** - Advanced search and filtering across Arweave datasets\n- **Farcaster Frames** - Support for Farcaster protocol integration\n- **Admin Controls** - Comprehensive gateway management and configuration\n\n}\n    title=\"Data Access\"\n    description=\"Retrieve transaction data, files, and metadata from Arweave\"\n    href=\"/apis/ar-io-node/data\"\n  />\n  }\n    title=\"ArNS Resolution\"\n    description=\"Resolve human-readable names to Arweave transaction IDs\"\n    href=\"/apis/ar-io-node/arns\"\n  />\n  }\n    title=\"Transactions & Blocks\"\n    description=\"Access transaction details, block information, and network data\"\n    href=\"/apis/ar-io-node/transactions\"\n  />\n  }\n    title=\"Index Querying\"\n    description=\"Advanced search and filtering capabilities across Arweave data\"\n    href=\"/apis/ar-io-node/index-querying\"\n  />\n  }\n    title=\"Network & Gateway\"\n    description=\"Gateway status, network information, and peer coordination\"\n    href=\"/apis/ar-io-node/network\"\n  />\n  }\n    title=\"Admin & Management\"\n    description=\"Gateway configuration, pricing, and administrative controls\"\n    href=\"/apis/ar-io-node/admin\"\n  />\n\n## Get Involved with AR.IO Gateways\n\n}\n    title=\"Run a Gateway\"\n    description=\"Join the AR.IO network by operating your own gateway and earn rewards\"\n    href=\"/build/run-a-gateway/quick-start\"\n  />\n  }\n    title=\"Leverage Gateways with Wayfinder\"\n    description=\"Use Wayfinder SDK to access data through the distributed gateway network\"\n    href=\"/sdks/wayfinder\"\n  />\n  }\n    title=\"Join the Network\"\n    description=\"Learn about the AR.IO network and how to participate in the ecosystem\"\n    href=\"https://ar.io/network\"\n  />\n\n1. **Explore the APIs endpoints** - Review the comprehensive APIs documentation\n2. **Test with sample requests** - Try out the interactive examples\n3. **Choose your integration approach** - Direct APIs calls or SDK usage\n4. **Consider running a gateway** - Contribute to the network infrastructure\n\nThe AR.IO Gateway APIs provide the foundation for building robust, decentralized applications on Arweave with reliable data access and advanced querying capabilities.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Core Responsibilities",
+      "id": "core-responsibilities"
+    },
+    {
+      "level": "h2",
+      "text": "Advanced Features",
+      "id": "advanced-features"
+    },
+    {
+      "level": "h2",
+      "text": "APIs Categories",
+      "id": "apis-categories"
+    },
+    {
+      "level": "h2",
+      "text": "Get Involved with AR.IO Gateways",
+      "id": "get-involved-with-ar.io-gateways"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Started",
+      "id": "getting-started"
+    }
+  ],
+  "url": "llms-txt#ar.io-gateway-apis-(/apis/ar-io-node)",
+  "links": []
+}

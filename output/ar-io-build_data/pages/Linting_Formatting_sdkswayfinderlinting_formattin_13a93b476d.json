@@ -1,0 +1,8 @@
+{
+  "title": "Linting & Formatting (/sdks/wayfinder/linting-formatting)",
+  "content": "- `yarn lint:check` - checks for linting errors\n- `yarn lint:fix` - fixes linting errors\n- `yarn format:check` - checks for formatting errors\n- `yarn format:fix` - fixes formatting errors",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#linting-&-formatting-(/sdks/wayfinder/linting-formatting)",
+  "links": []
+}

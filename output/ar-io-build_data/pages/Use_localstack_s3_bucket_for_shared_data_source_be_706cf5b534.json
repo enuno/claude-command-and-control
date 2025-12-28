@@ -1,0 +1,78 @@
+{
+  "title": "Use localstack s3 bucket for shared data source between AR.IO gateway and bundler",
+  "content": "AWS_S3_BUCKET=ar.io\nAWS_S3_PREFIX='data'\nAWS_ACCESS_KEY_ID='test'\nAWS_SECRET_ACCESS_KEY='test'\nAWS_REGION='us-east-1'\nAWS_ENDPOINT='http://localstack:4566'\nbash\nALLOW_LISTED_ADDRESSES=,\nbash\nANS104_INDEX_FILTER={ \"always\": true }\nANS104_UNBUNDLE_FILTER={ \"attributes\": { \"owner_address\": \"$BUNDLER_ARWEAVE_ADDRESS\" } }\nbash\nAR_IO_ADMIN_KEY=\"Admin password\"\nbash\ndocker compose --env-file ./.env.bundler --file docker-compose.bundler.yaml up -d\nbash\ndocker compose --file docker-compose.bundler.yaml down\nbash\ndocker compose --file docker-compose.bundler.yaml logs -f --tail=0\nbash",
+  "code_samples": [
+    {
+      "code": "- `BUNDLER_ARWEAVE_WALLET` must be the entire jwk of an Arweave wallet's keyfile, stringified. All uploads of bundled data items to Arweave will be signed and paid for by this wallet, so it must maintain a balance of AR tokens sufficient to handle the uploads.\n- `BUNDLER_ARWEAVE_ADDRESS` must be the [normalized public address](/glossary) for the provided Arweave wallet.\n- `APP_NAME` is a GraphQL tag that will be added to uploaded bundles.\n\nThe remaining lines in the `.env.bundler.example` file control settings that allow the bundler service to share data with the AR.IO gateway. Data sharing of contiguous data between a bundler and a gateway allows the gateway to serve optimistically cached data without waiting for it to fully settle on chain.\n\n### Configure Optimistic Indexing\n\nBy default, the bundler will only accept data items uploaded by data item signers whose [normalized wallet addresses](/glossary) are in the `ALLOW_LISTED_ADDRESSES` list. This is an additional environmental variable that can be added to your `.env.bundler` file, and must be a comma separated list of normalized public wallet addresses for wallets that should be allowed to bundle and upload data through your gateway.",
+      "language": "unknown"
+    },
+    {
+      "code": "The following permissioning configurations schemes are also possible:\n\n| Scheme                     | ALLOW_LISTED_ADDRESSES                      | SKIP_BALANCE_CHECKS | ALLOW_LISTED_SIGNATURE_TYPES | PAYMENT_SERVICE_BASE_URL |\n| -------------------------- | ------------------------------------------- | ------------------- | ---------------------------- | ------------------------ |\n| **Allow Specific Wallets** | Comma-separated normalized wallet addresses | false               | EMPTY or supplied            | EMPTY                    |\n| **Allow Specific chains**  | EMPTY or supplied                           | false               | arbundles sigtype int        | EMPTY                    |\n| **Allow All**              | n/a                                         | true                | n/a                          | n/a                      |\n| **Allow None**             | EMPTY                                       | false               | EMPTY                        | EMPTY                    |\n| **Allow Payers**           | EMPTY or supplied                           | false               | EMPTY or supplied            | Your payment service url |\n\n### Set Up Indexing\n\nBundlers submit data to the Arweave network as an [ANS-104 data item bundle](https://github.com/ArweaveTeam/arweave-standards/blob/master/ans/ANS-104.md). This means it is several transactions wrapped into one. A gateway will need to unbundle these transactions in order to index them. A gateway should include the following ANS-104 filters in order to unbundle and index transactions from a particular bundler:",
+      "language": "unknown"
+    },
+    {
+      "code": "`$BUNDLER_ARWEAVE_ADDRESS` should be replaced with the [normalized public wallet address](/glossary) associated with the bundler.\n\n**NOTE**: The above filters must be placed in the `.env` file for the core gateway service, not the bundler.\n\nGateways handle data item indexing asynchronously. This means they establish a queue of items to index, and work on processing the queue in the background while the gateway continues with its normal operations. If a gateway has broad indexing filters, there can be some latency in indexing data items from the bundler while the gateway works through its queue.\n\n### Configure Optimistic Indexing\n\nGateway operators control access to their [optimistic data item indexing](/glossary) API via an admin key that must be supplied by all bundling clients in order for their requests to be accepted. This key should be made available in the environment configuration files for BOTH the core gateway, and the bundler, and should be provided as `AR_IO_ADMIN_KEY`:",
+      "language": "unknown"
+    },
+    {
+      "code": "**NOTE**: If a gateway is started without providing the admin key, a random string will be generated to protect the gateway's admin endpoints. This can be reset by restarting the gateway with the admin key provided in the `.env` file.\n\n## Starting and Stopping the Bundler\n\n### Starting\n\nThe bundler service is designed to run in conjunction with an AR.IO gateway, and so relies on the `ar-io-network` network created in Docker when the core gateway services are spun up. It is possible to spin up the bundler while the core services are down, but the network must exist in Docker.\n\nTo start the bundler, specify the env and docker-compose files being used in a `docker compose up` command:",
+      "language": "unknown"
+    },
+    {
+      "code": "The `-d` flag runs the command in \"detached\" mode, so it will run in the background without requiring the terminal to remain active.\n\n### Stopping\n\nTo spin the bundler service down, specify the docker-compose file in a `docker compose down` command:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Logs\n\nWhile the bundler service is running in detached mode, logs can be checked by specifying the docker-compose file in a `docker compose logs` command:",
+      "language": "unknown"
+    },
+    {
+      "code": "- `-f` runs the command in \"follow\" mode, so the terminal will continue to watch and display new logs.\n- `--tail=` defines the number of logs to display that existed prior to running the command. `0` displays only new logs.\n\n## Useful Docker Commands\n\nMonitor and manage your bundler service with these commands:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Configure Optimistic Indexing",
+      "id": "configure-optimistic-indexing"
+    },
+    {
+      "level": "h3",
+      "text": "Set Up Indexing",
+      "id": "set-up-indexing"
+    },
+    {
+      "level": "h3",
+      "text": "Configure Optimistic Indexing",
+      "id": "configure-optimistic-indexing"
+    },
+    {
+      "level": "h2",
+      "text": "Starting and Stopping the Bundler",
+      "id": "starting-and-stopping-the-bundler"
+    },
+    {
+      "level": "h3",
+      "text": "Starting",
+      "id": "starting"
+    },
+    {
+      "level": "h3",
+      "text": "Stopping",
+      "id": "stopping"
+    },
+    {
+      "level": "h3",
+      "text": "Logs",
+      "id": "logs"
+    },
+    {
+      "level": "h2",
+      "text": "Useful Docker Commands",
+      "id": "useful-docker-commands"
+    }
+  ],
+  "url": "llms-txt#use-localstack-s3-bucket-for-shared-data-source-between-ar.io-gateway-and-bundler",
+  "links": []
+}

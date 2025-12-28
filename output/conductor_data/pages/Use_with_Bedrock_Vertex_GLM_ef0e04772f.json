@@ -1,0 +1,33 @@
+{
+  "title": "Use with Bedrock, Vertex, GLM",
+  "content": "Source: https://docs.conductor.build/guides/providers\n\nConnect Conductor to different model providers\n\n<img alt=\"Environment Variables\" />\n\nConductor runs using your local Claude Code login. You can check your auth status by running `claude /login` in your terminal.\n\nWe also support running Claude Code on AWS Bedrock, Google Vertex AI, or any Anthropic API compatible provider, like GLM.\n\nGo to `Settings` -> `Env` to set environment variables. Check out the [Claude Code docs](https://code.claude.com/docs/en/third-party-integrations) for a full list of environment variables.\n\nFor example, if you want to use Bedrock, you can set your env variables like this:\n\nDocs here: [https://docs.z.ai/scenario-example/develop-tools/claude](https://docs.z.ai/scenario-example/develop-tools/claude).",
+  "code_samples": [
+    {
+      "code": "## GLM Example\n\nDocs here: [https://docs.z.ai/scenario-example/develop-tools/claude](https://docs.z.ai/scenario-example/develop-tools/claude).",
+      "language": "unknown"
+    },
+    {
+      "code": "## Azure AI Example",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Bedrock Example",
+      "id": "bedrock-example"
+    },
+    {
+      "level": "h2",
+      "text": "GLM Example",
+      "id": "glm-example"
+    },
+    {
+      "level": "h2",
+      "text": "Azure AI Example",
+      "id": "azure-ai-example"
+    }
+  ],
+  "url": "llms-txt#use-with-bedrock,-vertex,-glm",
+  "links": []
+}

@@ -1,0 +1,170 @@
+{
+  "url": "https://fastapi.tiangolo.com/reference/dependencies/",
+  "title": "Dependencies - Depends() and Security()¶",
+  "content": "Dependencies are handled mainly with the special function Depends() that takes a callable.\n\nHere is the reference for it and its parameters.\n\nYou can import it directly from fastapi:\n\nDeclare a FastAPI dependency.\n\nIt takes a single \"dependable\" callable (like a function).\n\nDon't call it directly, FastAPI will call it for you.\n\nRead more about it in the FastAPI docs for Dependencies.\n\nA \"dependable\" callable (like a function).\n\nDon't call it directly, FastAPI will call it for you, just pass the object directly.\n\nTYPE: Optional[Callable[..., Any]] DEFAULT: None\n\nBy default, after a dependency is called the first time in a request, if the dependency is declared again for the rest of the request (for example if the dependency is needed by several dependencies), the value will be re-used for the rest of the request.\n\nSet use_cache to False to disable this behavior and ensure the dependency is called again (if declared more than once) in the same request.\n\nTYPE: bool DEFAULT: True\n\nMainly for dependencies with yield, define when the dependency function should start (the code before yield) and when it should end (the code after yield).\n\nTYPE: Union[Literal['function', 'request'], None] DEFAULT: None\n\nFor many scenarios, you can handle security (authorization, authentication, etc.) with dependencies, using Depends().\n\nBut when you want to also declare OAuth2 scopes, you can use Security() instead of Depends().\n\nYou can import Security() directly from fastapi:\n\nDeclare a FastAPI Security dependency.\n\nThe only difference with a regular dependency is that it can declare OAuth2 scopes that will be integrated with OpenAPI and the automatic UI docs (by default at /docs).\n\nIt takes a single \"dependable\" callable (like a function).\n\nDon't call it directly, FastAPI will call it for you.\n\nRead more about it in the FastAPI docs for Security and in the FastAPI docs for OAuth2 scopes.\n\nA \"dependable\" callable (like a function).\n\nDon't call it directly, FastAPI will call it for you, just pass the object directly.\n\nTYPE: Optional[Callable[..., Any]] DEFAULT: None\n\nOAuth2 scopes required for the path operation that uses this Security dependency.\n\nThe term \"scope\" comes from the OAuth2 specification, it seems to be intentionally vague and interpretable. It normally refers to permissions, in cases to roles.\n\nThese scopes are integrated with OpenAPI (and the API docs at /docs). So they are visible in the OpenAPI specification. )\n\nTYPE: Optional[Sequence[str]] DEFAULT: None\n\nBy default, after a dependency is called the first time in a request, if the dependency is declared again for the rest of the request (for example if the dependency is needed by several dependencies), the value will be re-used for the rest of the request.\n\nSet use_cache to False to disable this behavior and ensure the dependency is called again (if declared more than once) in the same request.\n\nTYPE: bool DEFAULT: True",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Dependencies - Depends() and Security()¶",
+      "id": "dependencies-depends-and-security"
+    },
+    {
+      "level": "h2",
+      "text": "Depends()¶",
+      "id": "depends"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.Depends ¶",
+      "id": "fastapi.Depends"
+    },
+    {
+      "level": "h2",
+      "text": "Security()¶",
+      "id": "security"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.Security ¶",
+      "id": "fastapi.Security"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from fastapi import Depends",
+      "language": "python"
+    },
+    {
+      "code": "Depends(dependency=None, *, use_cache=True, scope=None)",
+      "language": "rust"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Depends, FastAPI\n\napp = FastAPI()\n\n\nasync def common_parameters(q: str | None = None, skip: int = 0, limit: int = 100):\n    return {\"q\": q, \"skip\": skip, \"limit\": limit}\n\n\n@app.get(\"/items/\")\nasync def read_items(commons: Annotated[dict, Depends(common_parameters)]):\n    return commons",
+      "language": "python"
+    },
+    {
+      "code": "def Depends(  # noqa: N802\n    dependency: Annotated[\n        Optional[Callable[..., Any]],\n        Doc(\n            \"\"\"\n            A \"dependable\" callable (like a function).\n\n            Don't call it directly, FastAPI will call it for you, just pass the object\n            directly.\n            \"\"\"\n        ),\n    ] = None,\n    *,\n    use_cache: Annotated[\n        bool,\n        Doc(\n            \"\"\"\n            By default, after a dependency is called the first time in a request, if\n            the dependency is declared again for the rest of the request (for example\n            if the dependency is needed by several dependencies), the value will be\n            re-used for the rest of the request.\n\n            Set `use_cache` to `False` to disable this behavior and ensure the\n            dependency is called again (if declared more than once) in the same request.\n            \"\"\"\n        ),\n    ] = True,\n    scope: Annotated[\n        Union[Literal[\"function\", \"request\"], None],\n        Doc(\n            \"\"\"\n            Mainly for dependencies with `yield`, define when the dependency function\n            should start (the code before `yield`) and when it should end (the code\n            after `yield`).\n\n            * `\"function\"`: start the dependency before the *path operation function*\n                that handles the request, end the dependency after the *path operation\n                function* ends, but **before** the response is sent back to the client.\n                So, the dependency function will be executed **around** the *path operation\n                **function***.\n            * `\"request\"`: start the dependency before the *path operation function*\n                that handles the request (similar to when using `\"function\"`), but end\n                **after** the response is sent back to the client. So, the dependency\n                function will be executed **around** the **request** and response cycle.\n            \"\"\"\n        ),\n    ] = None,\n) -> Any:\n    \"\"\"\n    Declare a FastAPI dependency.\n\n    It takes a single \"dependable\" callable (like a function).\n\n    Don't call it directly, FastAPI will call it for you.\n\n    Read more about it in the\n    [FastAPI docs for Dependencies](https://fastapi.tiangolo.com/tutorial/dependencies/).\n\n    **Example**\n\n    ```python\n    from typing import Annotated\n\n    from fastapi import Depends, FastAPI\n\n    app = FastAPI()\n\n\n    async def common_parameters(q: str | None = None, skip: int = 0, limit: int = 100):\n        return {\"q\": q, \"skip\": skip, \"limit\": limit}\n\n\n    @app.get(\"/items/\")\n    async def read_items(commons: Annotated[dict, Depends(common_parameters)]):\n        return commons\n    ```\n    \"\"\"\n    return params.Depends(dependency=dependency, use_cache=use_cache, scope=scope)",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Security",
+      "language": "python"
+    },
+    {
+      "code": "Security(dependency=None, *, scopes=None, use_cache=True)",
+      "language": "rust"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Security, FastAPI\n\nfrom .db import User\nfrom .security import get_current_active_user\n\napp = FastAPI()\n\n@app.get(\"/users/me/items/\")\nasync def read_own_items(\n    current_user: Annotated[User, Security(get_current_active_user, scopes=[\"items\"])]\n):\n    return [{\"item_id\": \"Foo\", \"owner\": current_user.username}]",
+      "language": "python"
+    },
+    {
+      "code": "def Security(  # noqa: N802\n    dependency: Annotated[\n        Optional[Callable[..., Any]],\n        Doc(\n            \"\"\"\n            A \"dependable\" callable (like a function).\n\n            Don't call it directly, FastAPI will call it for you, just pass the object\n            directly.\n            \"\"\"\n        ),\n    ] = None,\n    *,\n    scopes: Annotated[\n        Optional[Sequence[str]],\n        Doc(\n            \"\"\"\n            OAuth2 scopes required for the *path operation* that uses this Security\n            dependency.\n\n            The term \"scope\" comes from the OAuth2 specification, it seems to be\n            intentionally vague and interpretable. It normally refers to permissions,\n            in cases to roles.\n\n            These scopes are integrated with OpenAPI (and the API docs at `/docs`).\n            So they are visible in the OpenAPI specification.\n            )\n            \"\"\"\n        ),\n    ] = None,\n    use_cache: Annotated[\n        bool,\n        Doc(\n            \"\"\"\n            By default, after a dependency is called the first time in a request, if\n            the dependency is declared again for the rest of the request (for example\n            if the dependency is needed by several dependencies), the value will be\n            re-used for the rest of the request.\n\n            Set `use_cache` to `False` to disable this behavior and ensure the\n            dependency is called again (if declared more than once) in the same request.\n            \"\"\"\n        ),\n    ] = True,\n) -> Any:\n    \"\"\"\n    Declare a FastAPI Security dependency.\n\n    The only difference with a regular dependency is that it can declare OAuth2\n    scopes that will be integrated with OpenAPI and the automatic UI docs (by default\n    at `/docs`).\n\n    It takes a single \"dependable\" callable (like a function).\n\n    Don't call it directly, FastAPI will call it for you.\n\n    Read more about it in the\n    [FastAPI docs for Security](https://fastapi.tiangolo.com/tutorial/security/) and\n    in the\n    [FastAPI docs for OAuth2 scopes](https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/).\n\n    **Example**\n\n    ```python\n    from typing import Annotated\n\n    from fastapi import Security, FastAPI\n\n    from .db import User\n    from .security import get_current_active_user\n\n    app = FastAPI()\n\n    @app.get(\"/users/me/items/\")\n    async def read_own_items(\n        current_user: Annotated[User, Security(get_current_active_user, scopes=[\"items\"])]\n    ):\n        return [{\"item_id\": \"Foo\", \"owner\": current_user.username}]\n    ```\n    \"\"\"\n    return params.Security(dependency=dependency, scopes=scopes, use_cache=use_cache)",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

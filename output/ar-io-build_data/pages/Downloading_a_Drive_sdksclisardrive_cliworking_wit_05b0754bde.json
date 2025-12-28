@@ -1,0 +1,13 @@
+{
+  "title": "Downloading a Drive (/sdks/(clis)/ardrive-cli/(working-with-files)/downloading-a-drive)",
+  "content": "To download the whole drive you can use the `download-drive` command.\n\nThis is equivalent to running the `download-folder` command against the root folder of the drive.",
+  "code_samples": [
+    {
+      "code": "ardrive download-drive -d \"c0c8ba1c-efc5-420d-a07c-a755dc67f6b2\"",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#downloading-a-drive-(/sdks/(clis)/ardrive-cli/(working-with-files)/downloading-a-drive)",
+  "links": []
+}

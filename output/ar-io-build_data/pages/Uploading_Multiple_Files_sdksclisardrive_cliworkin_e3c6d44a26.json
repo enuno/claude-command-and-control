@@ -1,0 +1,13 @@
+{
+  "title": "Uploading Multiple Files (/sdks/(clis)/ardrive-cli/(working-with-files)/uploading-multiple-files)",
+  "content": "To upload an arbitrary number of files or folders, pass a space-separated list of paths to `--local-paths`:",
+  "code_samples": [
+    {
+      "code": "ardrive upload-file -w wallet.json -F \"6939b9e0-cc98-42cb-bae0-5888eca78885\" --local-paths ./image.png ~/backups/ ../another_file.txt\n\nardrive upload-file -w wallet.json -F \"6939b9e0-cc98-42cb-bae0-5888eca78885\" --local-paths ./*.json",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#uploading-multiple-files-(/sdks/(clis)/ardrive-cli/(working-with-files)/uploading-multiple-files)",
+  "links": []
+}

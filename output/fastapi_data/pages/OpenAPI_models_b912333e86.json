@@ -1,0 +1,2765 @@
+{
+  "url": "https://fastapi.tiangolo.com/reference/openapi/models/",
+  "title": "OpenAPI models¶",
+  "content": "OpenAPI Pydantic models used to generate and validate the generated OpenAPI.\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig\n\nBases: BaseModelWithConfig",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "OpenAPI models¶",
+      "id": "openapi-models"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.openapi.models ¶",
+      "id": "fastapi.openapi.models"
+    },
+    {
+      "level": "h3",
+      "text": "SchemaType module-attribute ¶",
+      "id": "fastapi.openapi.models.SchemaType"
+    },
+    {
+      "level": "h3",
+      "text": "SchemaOrBool module-attribute ¶",
+      "id": "fastapi.openapi.models.SchemaOrBool"
+    },
+    {
+      "level": "h3",
+      "text": "SecurityScheme module-attribute ¶",
+      "id": "fastapi.openapi.models.SecurityScheme"
+    },
+    {
+      "level": "h3",
+      "text": "BaseModelWithConfig ¶",
+      "id": "fastapi.openapi.models.BaseModelWithConfig"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.BaseModelWithConfig.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "Contact ¶",
+      "id": "fastapi.openapi.models.Contact"
+    },
+    {
+      "level": "h4",
+      "text": "name class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Contact.name"
+    },
+    {
+      "level": "h4",
+      "text": "url class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Contact.url"
+    },
+    {
+      "level": "h4",
+      "text": "email class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Contact.email"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Contact.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "License ¶",
+      "id": "fastapi.openapi.models.License"
+    },
+    {
+      "level": "h4",
+      "text": "name instance-attribute ¶",
+      "id": "fastapi.openapi.models.License.name"
+    },
+    {
+      "level": "h4",
+      "text": "identifier class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.License.identifier"
+    },
+    {
+      "level": "h4",
+      "text": "url class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.License.url"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.License.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "Info ¶",
+      "id": "fastapi.openapi.models.Info"
+    },
+    {
+      "level": "h4",
+      "text": "title instance-attribute ¶",
+      "id": "fastapi.openapi.models.Info.title"
+    },
+    {
+      "level": "h4",
+      "text": "summary class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Info.summary"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Info.description"
+    },
+    {
+      "level": "h4",
+      "text": "termsOfService class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Info.termsOfService"
+    },
+    {
+      "level": "h4",
+      "text": "contact class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Info.contact"
+    },
+    {
+      "level": "h4",
+      "text": "license class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Info.license"
+    },
+    {
+      "level": "h4",
+      "text": "version instance-attribute ¶",
+      "id": "fastapi.openapi.models.Info.version"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Info.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "ServerVariable ¶",
+      "id": "fastapi.openapi.models.ServerVariable"
+    },
+    {
+      "level": "h4",
+      "text": "enum class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ServerVariable.enum"
+    },
+    {
+      "level": "h4",
+      "text": "default instance-attribute ¶",
+      "id": "fastapi.openapi.models.ServerVariable.default"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ServerVariable.description"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ServerVariable.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "Server ¶",
+      "id": "fastapi.openapi.models.Server"
+    },
+    {
+      "level": "h4",
+      "text": "url instance-attribute ¶",
+      "id": "fastapi.openapi.models.Server.url"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Server.description"
+    },
+    {
+      "level": "h4",
+      "text": "variables class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Server.variables"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Server.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "Reference ¶",
+      "id": "fastapi.openapi.models.Reference"
+    },
+    {
+      "level": "h4",
+      "text": "ref class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Reference.ref"
+    },
+    {
+      "level": "h3",
+      "text": "Discriminator ¶",
+      "id": "fastapi.openapi.models.Discriminator"
+    },
+    {
+      "level": "h4",
+      "text": "propertyName instance-attribute ¶",
+      "id": "fastapi.openapi.models.Discriminator.propertyName"
+    },
+    {
+      "level": "h4",
+      "text": "mapping class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Discriminator.mapping"
+    },
+    {
+      "level": "h3",
+      "text": "XML ¶",
+      "id": "fastapi.openapi.models.XML"
+    },
+    {
+      "level": "h4",
+      "text": "name class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.XML.name"
+    },
+    {
+      "level": "h4",
+      "text": "namespace class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.XML.namespace"
+    },
+    {
+      "level": "h4",
+      "text": "prefix class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.XML.prefix"
+    },
+    {
+      "level": "h4",
+      "text": "attribute class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.XML.attribute"
+    },
+    {
+      "level": "h4",
+      "text": "wrapped class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.XML.wrapped"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.XML.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "ExternalDocumentation ¶",
+      "id": "fastapi.openapi.models.ExternalDocumentation"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ExternalDocumentation.description"
+    },
+    {
+      "level": "h4",
+      "text": "url instance-attribute ¶",
+      "id": "fastapi.openapi.models.ExternalDocumentation.url"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ExternalDocumentation.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "Schema ¶",
+      "id": "fastapi.openapi.models.Schema"
+    },
+    {
+      "level": "h4",
+      "text": "schema_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.schema_"
+    },
+    {
+      "level": "h4",
+      "text": "vocabulary class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.vocabulary"
+    },
+    {
+      "level": "h4",
+      "text": "id class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.id"
+    },
+    {
+      "level": "h4",
+      "text": "anchor class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.anchor"
+    },
+    {
+      "level": "h4",
+      "text": "dynamicAnchor class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.dynamicAnchor"
+    },
+    {
+      "level": "h4",
+      "text": "ref class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.ref"
+    },
+    {
+      "level": "h4",
+      "text": "dynamicRef class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.dynamicRef"
+    },
+    {
+      "level": "h4",
+      "text": "defs class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.defs"
+    },
+    {
+      "level": "h4",
+      "text": "comment class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.comment"
+    },
+    {
+      "level": "h4",
+      "text": "allOf class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.allOf"
+    },
+    {
+      "level": "h4",
+      "text": "anyOf class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.anyOf"
+    },
+    {
+      "level": "h4",
+      "text": "oneOf class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.oneOf"
+    },
+    {
+      "level": "h4",
+      "text": "not_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.not_"
+    },
+    {
+      "level": "h4",
+      "text": "if_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.if_"
+    },
+    {
+      "level": "h4",
+      "text": "then class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.then"
+    },
+    {
+      "level": "h4",
+      "text": "else_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.else_"
+    },
+    {
+      "level": "h4",
+      "text": "dependentSchemas class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.dependentSchemas"
+    },
+    {
+      "level": "h4",
+      "text": "prefixItems class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.prefixItems"
+    },
+    {
+      "level": "h4",
+      "text": "items class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.items"
+    },
+    {
+      "level": "h4",
+      "text": "contains class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.contains"
+    },
+    {
+      "level": "h4",
+      "text": "properties class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.properties"
+    },
+    {
+      "level": "h4",
+      "text": "patternProperties class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.patternProperties"
+    },
+    {
+      "level": "h4",
+      "text": "additionalProperties class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.additionalProperties"
+    },
+    {
+      "level": "h4",
+      "text": "propertyNames class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.propertyNames"
+    },
+    {
+      "level": "h4",
+      "text": "unevaluatedItems class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.unevaluatedItems"
+    },
+    {
+      "level": "h4",
+      "text": "unevaluatedProperties class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.unevaluatedProperties"
+    },
+    {
+      "level": "h4",
+      "text": "type class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.type"
+    },
+    {
+      "level": "h4",
+      "text": "enum class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.enum"
+    },
+    {
+      "level": "h4",
+      "text": "const class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.const"
+    },
+    {
+      "level": "h4",
+      "text": "multipleOf class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.multipleOf"
+    },
+    {
+      "level": "h4",
+      "text": "maximum class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.maximum"
+    },
+    {
+      "level": "h4",
+      "text": "exclusiveMaximum class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.exclusiveMaximum"
+    },
+    {
+      "level": "h4",
+      "text": "minimum class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.minimum"
+    },
+    {
+      "level": "h4",
+      "text": "exclusiveMinimum class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.exclusiveMinimum"
+    },
+    {
+      "level": "h4",
+      "text": "maxLength class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.maxLength"
+    },
+    {
+      "level": "h4",
+      "text": "minLength class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.minLength"
+    },
+    {
+      "level": "h4",
+      "text": "pattern class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.pattern"
+    },
+    {
+      "level": "h4",
+      "text": "maxItems class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.maxItems"
+    },
+    {
+      "level": "h4",
+      "text": "minItems class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.minItems"
+    },
+    {
+      "level": "h4",
+      "text": "uniqueItems class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.uniqueItems"
+    },
+    {
+      "level": "h4",
+      "text": "maxContains class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.maxContains"
+    },
+    {
+      "level": "h4",
+      "text": "minContains class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.minContains"
+    },
+    {
+      "level": "h4",
+      "text": "maxProperties class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.maxProperties"
+    },
+    {
+      "level": "h4",
+      "text": "minProperties class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.minProperties"
+    },
+    {
+      "level": "h4",
+      "text": "required class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.required"
+    },
+    {
+      "level": "h4",
+      "text": "dependentRequired class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.dependentRequired"
+    },
+    {
+      "level": "h4",
+      "text": "format class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.format"
+    },
+    {
+      "level": "h4",
+      "text": "contentEncoding class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.contentEncoding"
+    },
+    {
+      "level": "h4",
+      "text": "contentMediaType class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.contentMediaType"
+    },
+    {
+      "level": "h4",
+      "text": "contentSchema class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.contentSchema"
+    },
+    {
+      "level": "h4",
+      "text": "title class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.title"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.description"
+    },
+    {
+      "level": "h4",
+      "text": "default class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.default"
+    },
+    {
+      "level": "h4",
+      "text": "deprecated class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.deprecated"
+    },
+    {
+      "level": "h4",
+      "text": "readOnly class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.readOnly"
+    },
+    {
+      "level": "h4",
+      "text": "writeOnly class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.writeOnly"
+    },
+    {
+      "level": "h4",
+      "text": "examples class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.examples"
+    },
+    {
+      "level": "h4",
+      "text": "discriminator class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.discriminator"
+    },
+    {
+      "level": "h4",
+      "text": "xml class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.xml"
+    },
+    {
+      "level": "h4",
+      "text": "externalDocs class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.externalDocs"
+    },
+    {
+      "level": "h4",
+      "text": "example class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.example"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Schema.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "Example ¶",
+      "id": "fastapi.openapi.models.Example"
+    },
+    {
+      "level": "h4",
+      "text": "summary instance-attribute ¶",
+      "id": "fastapi.openapi.models.Example.summary"
+    },
+    {
+      "level": "h4",
+      "text": "description instance-attribute ¶",
+      "id": "fastapi.openapi.models.Example.description"
+    },
+    {
+      "level": "h4",
+      "text": "value instance-attribute ¶",
+      "id": "fastapi.openapi.models.Example.value"
+    },
+    {
+      "level": "h4",
+      "text": "externalValue instance-attribute ¶",
+      "id": "fastapi.openapi.models.Example.externalValue"
+    },
+    {
+      "level": "h3",
+      "text": "ParameterInType ¶",
+      "id": "fastapi.openapi.models.ParameterInType"
+    },
+    {
+      "level": "h4",
+      "text": "query class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ParameterInType.query"
+    },
+    {
+      "level": "h4",
+      "text": "header class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ParameterInType.header"
+    },
+    {
+      "level": "h4",
+      "text": "path class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ParameterInType.path"
+    },
+    {
+      "level": "h4",
+      "text": "cookie class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ParameterInType.cookie"
+    },
+    {
+      "level": "h3",
+      "text": "Encoding ¶",
+      "id": "fastapi.openapi.models.Encoding"
+    },
+    {
+      "level": "h4",
+      "text": "contentType class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Encoding.contentType"
+    },
+    {
+      "level": "h4",
+      "text": "headers class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Encoding.headers"
+    },
+    {
+      "level": "h4",
+      "text": "style class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Encoding.style"
+    },
+    {
+      "level": "h4",
+      "text": "explode class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Encoding.explode"
+    },
+    {
+      "level": "h4",
+      "text": "allowReserved class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Encoding.allowReserved"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Encoding.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "MediaType ¶",
+      "id": "fastapi.openapi.models.MediaType"
+    },
+    {
+      "level": "h4",
+      "text": "schema_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.MediaType.schema_"
+    },
+    {
+      "level": "h4",
+      "text": "example class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.MediaType.example"
+    },
+    {
+      "level": "h4",
+      "text": "examples class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.MediaType.examples"
+    },
+    {
+      "level": "h4",
+      "text": "encoding class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.MediaType.encoding"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.MediaType.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "ParameterBase ¶",
+      "id": "fastapi.openapi.models.ParameterBase"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ParameterBase.description"
+    },
+    {
+      "level": "h4",
+      "text": "required class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ParameterBase.required"
+    },
+    {
+      "level": "h4",
+      "text": "deprecated class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ParameterBase.deprecated"
+    },
+    {
+      "level": "h4",
+      "text": "style class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ParameterBase.style"
+    },
+    {
+      "level": "h4",
+      "text": "explode class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ParameterBase.explode"
+    },
+    {
+      "level": "h4",
+      "text": "allowReserved class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ParameterBase.allowReserved"
+    },
+    {
+      "level": "h4",
+      "text": "schema_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ParameterBase.schema_"
+    },
+    {
+      "level": "h4",
+      "text": "example class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ParameterBase.example"
+    },
+    {
+      "level": "h4",
+      "text": "examples class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ParameterBase.examples"
+    },
+    {
+      "level": "h4",
+      "text": "content class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ParameterBase.content"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.ParameterBase.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "Parameter ¶",
+      "id": "fastapi.openapi.models.Parameter"
+    },
+    {
+      "level": "h4",
+      "text": "name instance-attribute ¶",
+      "id": "fastapi.openapi.models.Parameter.name"
+    },
+    {
+      "level": "h4",
+      "text": "in_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Parameter.in_"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Parameter.model_config"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Parameter.description"
+    },
+    {
+      "level": "h4",
+      "text": "required class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Parameter.required"
+    },
+    {
+      "level": "h4",
+      "text": "deprecated class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Parameter.deprecated"
+    },
+    {
+      "level": "h4",
+      "text": "style class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Parameter.style"
+    },
+    {
+      "level": "h4",
+      "text": "explode class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Parameter.explode"
+    },
+    {
+      "level": "h4",
+      "text": "allowReserved class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Parameter.allowReserved"
+    },
+    {
+      "level": "h4",
+      "text": "schema_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Parameter.schema_"
+    },
+    {
+      "level": "h4",
+      "text": "example class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Parameter.example"
+    },
+    {
+      "level": "h4",
+      "text": "examples class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Parameter.examples"
+    },
+    {
+      "level": "h4",
+      "text": "content class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Parameter.content"
+    },
+    {
+      "level": "h3",
+      "text": "Header ¶",
+      "id": "fastapi.openapi.models.Header"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Header.model_config"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Header.description"
+    },
+    {
+      "level": "h4",
+      "text": "required class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Header.required"
+    },
+    {
+      "level": "h4",
+      "text": "deprecated class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Header.deprecated"
+    },
+    {
+      "level": "h4",
+      "text": "style class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Header.style"
+    },
+    {
+      "level": "h4",
+      "text": "explode class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Header.explode"
+    },
+    {
+      "level": "h4",
+      "text": "allowReserved class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Header.allowReserved"
+    },
+    {
+      "level": "h4",
+      "text": "schema_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Header.schema_"
+    },
+    {
+      "level": "h4",
+      "text": "example class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Header.example"
+    },
+    {
+      "level": "h4",
+      "text": "examples class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Header.examples"
+    },
+    {
+      "level": "h4",
+      "text": "content class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Header.content"
+    },
+    {
+      "level": "h3",
+      "text": "RequestBody ¶",
+      "id": "fastapi.openapi.models.RequestBody"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.RequestBody.description"
+    },
+    {
+      "level": "h4",
+      "text": "content instance-attribute ¶",
+      "id": "fastapi.openapi.models.RequestBody.content"
+    },
+    {
+      "level": "h4",
+      "text": "required class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.RequestBody.required"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.RequestBody.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "Link ¶",
+      "id": "fastapi.openapi.models.Link"
+    },
+    {
+      "level": "h4",
+      "text": "operationRef class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Link.operationRef"
+    },
+    {
+      "level": "h4",
+      "text": "operationId class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Link.operationId"
+    },
+    {
+      "level": "h4",
+      "text": "parameters class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Link.parameters"
+    },
+    {
+      "level": "h4",
+      "text": "requestBody class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Link.requestBody"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Link.description"
+    },
+    {
+      "level": "h4",
+      "text": "server class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Link.server"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Link.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "Response ¶",
+      "id": "fastapi.openapi.models.Response"
+    },
+    {
+      "level": "h4",
+      "text": "description instance-attribute ¶",
+      "id": "fastapi.openapi.models.Response.description"
+    },
+    {
+      "level": "h4",
+      "text": "headers class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Response.headers"
+    },
+    {
+      "level": "h4",
+      "text": "content class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Response.content"
+    },
+    {
+      "level": "h4",
+      "text": "links class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Response.links"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Response.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "Operation ¶",
+      "id": "fastapi.openapi.models.Operation"
+    },
+    {
+      "level": "h4",
+      "text": "tags class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Operation.tags"
+    },
+    {
+      "level": "h4",
+      "text": "summary class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Operation.summary"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Operation.description"
+    },
+    {
+      "level": "h4",
+      "text": "externalDocs class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Operation.externalDocs"
+    },
+    {
+      "level": "h4",
+      "text": "operationId class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Operation.operationId"
+    },
+    {
+      "level": "h4",
+      "text": "parameters class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Operation.parameters"
+    },
+    {
+      "level": "h4",
+      "text": "requestBody class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Operation.requestBody"
+    },
+    {
+      "level": "h4",
+      "text": "responses class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Operation.responses"
+    },
+    {
+      "level": "h4",
+      "text": "callbacks class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Operation.callbacks"
+    },
+    {
+      "level": "h4",
+      "text": "deprecated class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Operation.deprecated"
+    },
+    {
+      "level": "h4",
+      "text": "security class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Operation.security"
+    },
+    {
+      "level": "h4",
+      "text": "servers class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Operation.servers"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Operation.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "PathItem ¶",
+      "id": "fastapi.openapi.models.PathItem"
+    },
+    {
+      "level": "h4",
+      "text": "ref class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.PathItem.ref"
+    },
+    {
+      "level": "h4",
+      "text": "summary class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.PathItem.summary"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.PathItem.description"
+    },
+    {
+      "level": "h4",
+      "text": "get class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.PathItem.get"
+    },
+    {
+      "level": "h4",
+      "text": "put class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.PathItem.put"
+    },
+    {
+      "level": "h4",
+      "text": "post class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.PathItem.post"
+    },
+    {
+      "level": "h4",
+      "text": "delete class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.PathItem.delete"
+    },
+    {
+      "level": "h4",
+      "text": "options class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.PathItem.options"
+    },
+    {
+      "level": "h4",
+      "text": "head class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.PathItem.head"
+    },
+    {
+      "level": "h4",
+      "text": "patch class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.PathItem.patch"
+    },
+    {
+      "level": "h4",
+      "text": "trace class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.PathItem.trace"
+    },
+    {
+      "level": "h4",
+      "text": "servers class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.PathItem.servers"
+    },
+    {
+      "level": "h4",
+      "text": "parameters class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.PathItem.parameters"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.PathItem.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "SecuritySchemeType ¶",
+      "id": "fastapi.openapi.models.SecuritySchemeType"
+    },
+    {
+      "level": "h4",
+      "text": "apiKey class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.SecuritySchemeType.apiKey"
+    },
+    {
+      "level": "h4",
+      "text": "http class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.SecuritySchemeType.http"
+    },
+    {
+      "level": "h4",
+      "text": "oauth2 class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.SecuritySchemeType.oauth2"
+    },
+    {
+      "level": "h4",
+      "text": "openIdConnect class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.SecuritySchemeType.openIdConnect"
+    },
+    {
+      "level": "h3",
+      "text": "SecurityBase ¶",
+      "id": "fastapi.openapi.models.SecurityBase"
+    },
+    {
+      "level": "h4",
+      "text": "type_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.SecurityBase.type_"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.SecurityBase.description"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.SecurityBase.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "APIKeyIn ¶",
+      "id": "fastapi.openapi.models.APIKeyIn"
+    },
+    {
+      "level": "h4",
+      "text": "query class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.APIKeyIn.query"
+    },
+    {
+      "level": "h4",
+      "text": "header class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.APIKeyIn.header"
+    },
+    {
+      "level": "h4",
+      "text": "cookie class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.APIKeyIn.cookie"
+    },
+    {
+      "level": "h3",
+      "text": "APIKey ¶",
+      "id": "fastapi.openapi.models.APIKey"
+    },
+    {
+      "level": "h4",
+      "text": "type_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.APIKey.type_"
+    },
+    {
+      "level": "h4",
+      "text": "in_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.APIKey.in_"
+    },
+    {
+      "level": "h4",
+      "text": "name instance-attribute ¶",
+      "id": "fastapi.openapi.models.APIKey.name"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.APIKey.model_config"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.APIKey.description"
+    },
+    {
+      "level": "h3",
+      "text": "HTTPBase ¶",
+      "id": "fastapi.openapi.models.HTTPBase"
+    },
+    {
+      "level": "h4",
+      "text": "type_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.HTTPBase.type_"
+    },
+    {
+      "level": "h4",
+      "text": "scheme instance-attribute ¶",
+      "id": "fastapi.openapi.models.HTTPBase.scheme"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.HTTPBase.model_config"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.HTTPBase.description"
+    },
+    {
+      "level": "h3",
+      "text": "HTTPBearer ¶",
+      "id": "fastapi.openapi.models.HTTPBearer"
+    },
+    {
+      "level": "h4",
+      "text": "scheme class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.HTTPBearer.scheme"
+    },
+    {
+      "level": "h4",
+      "text": "bearerFormat class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.HTTPBearer.bearerFormat"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.HTTPBearer.model_config"
+    },
+    {
+      "level": "h4",
+      "text": "type_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.HTTPBearer.type_"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.HTTPBearer.description"
+    },
+    {
+      "level": "h3",
+      "text": "OAuthFlow ¶",
+      "id": "fastapi.openapi.models.OAuthFlow"
+    },
+    {
+      "level": "h4",
+      "text": "refreshUrl class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlow.refreshUrl"
+    },
+    {
+      "level": "h4",
+      "text": "scopes class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlow.scopes"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlow.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "OAuthFlowImplicit ¶",
+      "id": "fastapi.openapi.models.OAuthFlowImplicit"
+    },
+    {
+      "level": "h4",
+      "text": "authorizationUrl instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowImplicit.authorizationUrl"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowImplicit.model_config"
+    },
+    {
+      "level": "h4",
+      "text": "refreshUrl class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowImplicit.refreshUrl"
+    },
+    {
+      "level": "h4",
+      "text": "scopes class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowImplicit.scopes"
+    },
+    {
+      "level": "h3",
+      "text": "OAuthFlowPassword ¶",
+      "id": "fastapi.openapi.models.OAuthFlowPassword"
+    },
+    {
+      "level": "h4",
+      "text": "tokenUrl instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowPassword.tokenUrl"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowPassword.model_config"
+    },
+    {
+      "level": "h4",
+      "text": "refreshUrl class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowPassword.refreshUrl"
+    },
+    {
+      "level": "h4",
+      "text": "scopes class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowPassword.scopes"
+    },
+    {
+      "level": "h3",
+      "text": "OAuthFlowClientCredentials ¶",
+      "id": "fastapi.openapi.models.OAuthFlowClientCredentials"
+    },
+    {
+      "level": "h4",
+      "text": "tokenUrl instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowClientCredentials.tokenUrl"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowClientCredentials.model_config"
+    },
+    {
+      "level": "h4",
+      "text": "refreshUrl class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowClientCredentials.refreshUrl"
+    },
+    {
+      "level": "h4",
+      "text": "scopes class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowClientCredentials.scopes"
+    },
+    {
+      "level": "h3",
+      "text": "OAuthFlowAuthorizationCode ¶",
+      "id": "fastapi.openapi.models.OAuthFlowAuthorizationCode"
+    },
+    {
+      "level": "h4",
+      "text": "authorizationUrl instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowAuthorizationCode.authorizationUrl"
+    },
+    {
+      "level": "h4",
+      "text": "tokenUrl instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowAuthorizationCode.tokenUrl"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowAuthorizationCode.model_config"
+    },
+    {
+      "level": "h4",
+      "text": "refreshUrl class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowAuthorizationCode.refreshUrl"
+    },
+    {
+      "level": "h4",
+      "text": "scopes class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlowAuthorizationCode.scopes"
+    },
+    {
+      "level": "h3",
+      "text": "OAuthFlows ¶",
+      "id": "fastapi.openapi.models.OAuthFlows"
+    },
+    {
+      "level": "h4",
+      "text": "implicit class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlows.implicit"
+    },
+    {
+      "level": "h4",
+      "text": "password class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlows.password"
+    },
+    {
+      "level": "h4",
+      "text": "clientCredentials class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlows.clientCredentials"
+    },
+    {
+      "level": "h4",
+      "text": "authorizationCode class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlows.authorizationCode"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuthFlows.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "OAuth2 ¶",
+      "id": "fastapi.openapi.models.OAuth2"
+    },
+    {
+      "level": "h4",
+      "text": "type_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuth2.type_"
+    },
+    {
+      "level": "h4",
+      "text": "flows instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuth2.flows"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuth2.model_config"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OAuth2.description"
+    },
+    {
+      "level": "h3",
+      "text": "OpenIdConnect ¶",
+      "id": "fastapi.openapi.models.OpenIdConnect"
+    },
+    {
+      "level": "h4",
+      "text": "type_ class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OpenIdConnect.type_"
+    },
+    {
+      "level": "h4",
+      "text": "openIdConnectUrl instance-attribute ¶",
+      "id": "fastapi.openapi.models.OpenIdConnect.openIdConnectUrl"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OpenIdConnect.model_config"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OpenIdConnect.description"
+    },
+    {
+      "level": "h3",
+      "text": "Components ¶",
+      "id": "fastapi.openapi.models.Components"
+    },
+    {
+      "level": "h4",
+      "text": "schemas class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Components.schemas"
+    },
+    {
+      "level": "h4",
+      "text": "responses class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Components.responses"
+    },
+    {
+      "level": "h4",
+      "text": "parameters class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Components.parameters"
+    },
+    {
+      "level": "h4",
+      "text": "examples class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Components.examples"
+    },
+    {
+      "level": "h4",
+      "text": "requestBodies class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Components.requestBodies"
+    },
+    {
+      "level": "h4",
+      "text": "headers class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Components.headers"
+    },
+    {
+      "level": "h4",
+      "text": "securitySchemes class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Components.securitySchemes"
+    },
+    {
+      "level": "h4",
+      "text": "links class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Components.links"
+    },
+    {
+      "level": "h4",
+      "text": "callbacks class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Components.callbacks"
+    },
+    {
+      "level": "h4",
+      "text": "pathItems class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Components.pathItems"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Components.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "Tag ¶",
+      "id": "fastapi.openapi.models.Tag"
+    },
+    {
+      "level": "h4",
+      "text": "name instance-attribute ¶",
+      "id": "fastapi.openapi.models.Tag.name"
+    },
+    {
+      "level": "h4",
+      "text": "description class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Tag.description"
+    },
+    {
+      "level": "h4",
+      "text": "externalDocs class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Tag.externalDocs"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.Tag.model_config"
+    },
+    {
+      "level": "h3",
+      "text": "OpenAPI ¶",
+      "id": "fastapi.openapi.models.OpenAPI"
+    },
+    {
+      "level": "h4",
+      "text": "openapi instance-attribute ¶",
+      "id": "fastapi.openapi.models.OpenAPI.openapi"
+    },
+    {
+      "level": "h4",
+      "text": "info instance-attribute ¶",
+      "id": "fastapi.openapi.models.OpenAPI.info"
+    },
+    {
+      "level": "h4",
+      "text": "jsonSchemaDialect class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OpenAPI.jsonSchemaDialect"
+    },
+    {
+      "level": "h4",
+      "text": "servers class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OpenAPI.servers"
+    },
+    {
+      "level": "h4",
+      "text": "paths class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OpenAPI.paths"
+    },
+    {
+      "level": "h4",
+      "text": "webhooks class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OpenAPI.webhooks"
+    },
+    {
+      "level": "h4",
+      "text": "components class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OpenAPI.components"
+    },
+    {
+      "level": "h4",
+      "text": "security class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OpenAPI.security"
+    },
+    {
+      "level": "h4",
+      "text": "tags class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OpenAPI.tags"
+    },
+    {
+      "level": "h4",
+      "text": "externalDocs class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OpenAPI.externalDocs"
+    },
+    {
+      "level": "h4",
+      "text": "model_config class-attribute instance-attribute ¶",
+      "id": "fastapi.openapi.models.OpenAPI.model_config"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "SchemaType = Literal[\n    \"array\",\n    \"boolean\",\n    \"integer\",\n    \"null\",\n    \"number\",\n    \"object\",\n    \"string\",\n]",
+      "language": "unknown"
+    },
+    {
+      "code": "SchemaOrBool = Union[Schema, bool]",
+      "language": "unknown"
+    },
+    {
+      "code": "SecurityScheme = Union[\n    APIKey, HTTPBase, OAuth2, OpenIdConnect, HTTPBearer\n]",
+      "language": "unknown"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "name = None",
+      "language": "rust"
+    },
+    {
+      "code": "email = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "identifier = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "summary = None",
+      "language": "rust"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "termsOfService = None",
+      "language": "rust"
+    },
+    {
+      "code": "contact = None",
+      "language": "rust"
+    },
+    {
+      "code": "license = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "enum = None",
+      "language": "rust"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "variables = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "ref = Field(alias='$ref')",
+      "language": "bash"
+    },
+    {
+      "code": "propertyName",
+      "language": "unknown"
+    },
+    {
+      "code": "mapping = None",
+      "language": "rust"
+    },
+    {
+      "code": "name = None",
+      "language": "rust"
+    },
+    {
+      "code": "namespace = None",
+      "language": "rust"
+    },
+    {
+      "code": "prefix = None",
+      "language": "rust"
+    },
+    {
+      "code": "attribute = None",
+      "language": "rust"
+    },
+    {
+      "code": "wrapped = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "schema_ = Field(default=None, alias='$schema')",
+      "language": "rust"
+    },
+    {
+      "code": "vocabulary = Field(default=None, alias='$vocabulary')",
+      "language": "rust"
+    },
+    {
+      "code": "id = Field(default=None, alias='$id')",
+      "language": "rust"
+    },
+    {
+      "code": "anchor = Field(default=None, alias='$anchor')",
+      "language": "rust"
+    },
+    {
+      "code": "dynamicAnchor = Field(default=None, alias='$dynamicAnchor')",
+      "language": "rust"
+    },
+    {
+      "code": "ref = Field(default=None, alias='$ref')",
+      "language": "rust"
+    },
+    {
+      "code": "dynamicRef = Field(default=None, alias='$dynamicRef')",
+      "language": "rust"
+    },
+    {
+      "code": "defs = Field(default=None, alias='$defs')",
+      "language": "rust"
+    },
+    {
+      "code": "comment = Field(default=None, alias='$comment')",
+      "language": "rust"
+    },
+    {
+      "code": "allOf = None",
+      "language": "rust"
+    },
+    {
+      "code": "anyOf = None",
+      "language": "rust"
+    },
+    {
+      "code": "oneOf = None",
+      "language": "rust"
+    },
+    {
+      "code": "not_ = Field(default=None, alias='not')",
+      "language": "rust"
+    },
+    {
+      "code": "if_ = Field(default=None, alias='if')",
+      "language": "rust"
+    },
+    {
+      "code": "then = None",
+      "language": "rust"
+    },
+    {
+      "code": "else_ = Field(default=None, alias='else')",
+      "language": "rust"
+    },
+    {
+      "code": "dependentSchemas = None",
+      "language": "rust"
+    },
+    {
+      "code": "prefixItems = None",
+      "language": "rust"
+    },
+    {
+      "code": "items = None",
+      "language": "rust"
+    },
+    {
+      "code": "contains = None",
+      "language": "rust"
+    },
+    {
+      "code": "properties = None",
+      "language": "rust"
+    },
+    {
+      "code": "patternProperties = None",
+      "language": "rust"
+    },
+    {
+      "code": "additionalProperties = None",
+      "language": "rust"
+    },
+    {
+      "code": "propertyNames = None",
+      "language": "rust"
+    },
+    {
+      "code": "unevaluatedItems = None",
+      "language": "rust"
+    },
+    {
+      "code": "unevaluatedProperties = None",
+      "language": "rust"
+    },
+    {
+      "code": "type = None",
+      "language": "rust"
+    },
+    {
+      "code": "enum = None",
+      "language": "rust"
+    },
+    {
+      "code": "const = None",
+      "language": "rust"
+    },
+    {
+      "code": "multipleOf = Field(default=None, gt=0)",
+      "language": "rust"
+    },
+    {
+      "code": "maximum = None",
+      "language": "rust"
+    },
+    {
+      "code": "exclusiveMaximum = None",
+      "language": "rust"
+    },
+    {
+      "code": "minimum = None",
+      "language": "rust"
+    },
+    {
+      "code": "exclusiveMinimum = None",
+      "language": "rust"
+    },
+    {
+      "code": "maxLength = Field(default=None, ge=0)",
+      "language": "rust"
+    },
+    {
+      "code": "minLength = Field(default=None, ge=0)",
+      "language": "rust"
+    },
+    {
+      "code": "pattern = None",
+      "language": "rust"
+    },
+    {
+      "code": "maxItems = Field(default=None, ge=0)",
+      "language": "rust"
+    },
+    {
+      "code": "minItems = Field(default=None, ge=0)",
+      "language": "rust"
+    },
+    {
+      "code": "uniqueItems = None",
+      "language": "rust"
+    },
+    {
+      "code": "maxContains = Field(default=None, ge=0)",
+      "language": "rust"
+    },
+    {
+      "code": "minContains = Field(default=None, ge=0)",
+      "language": "rust"
+    },
+    {
+      "code": "maxProperties = Field(default=None, ge=0)",
+      "language": "rust"
+    },
+    {
+      "code": "minProperties = Field(default=None, ge=0)",
+      "language": "rust"
+    },
+    {
+      "code": "required = None",
+      "language": "rust"
+    },
+    {
+      "code": "dependentRequired = None",
+      "language": "rust"
+    },
+    {
+      "code": "format = None",
+      "language": "rust"
+    },
+    {
+      "code": "contentEncoding = None",
+      "language": "rust"
+    },
+    {
+      "code": "contentMediaType = None",
+      "language": "rust"
+    },
+    {
+      "code": "contentSchema = None",
+      "language": "rust"
+    },
+    {
+      "code": "title = None",
+      "language": "rust"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "default = None",
+      "language": "rust"
+    },
+    {
+      "code": "deprecated = None",
+      "language": "rust"
+    },
+    {
+      "code": "readOnly = None",
+      "language": "rust"
+    },
+    {
+      "code": "writeOnly = None",
+      "language": "rust"
+    },
+    {
+      "code": "examples = None",
+      "language": "rust"
+    },
+    {
+      "code": "discriminator = None",
+      "language": "rust"
+    },
+    {
+      "code": "externalDocs = None",
+      "language": "rust"
+    },
+    {
+      "code": "example = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "description",
+      "language": "unknown"
+    },
+    {
+      "code": "externalValue",
+      "language": "unknown"
+    },
+    {
+      "code": "query = 'query'",
+      "language": "unknown"
+    },
+    {
+      "code": "header = 'header'",
+      "language": "unknown"
+    },
+    {
+      "code": "path = 'path'",
+      "language": "unknown"
+    },
+    {
+      "code": "cookie = 'cookie'",
+      "language": "unknown"
+    },
+    {
+      "code": "contentType = None",
+      "language": "rust"
+    },
+    {
+      "code": "headers = None",
+      "language": "rust"
+    },
+    {
+      "code": "style = None",
+      "language": "rust"
+    },
+    {
+      "code": "explode = None",
+      "language": "rust"
+    },
+    {
+      "code": "allowReserved = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "schema_ = Field(default=None, alias='schema')",
+      "language": "rust"
+    },
+    {
+      "code": "example = None",
+      "language": "rust"
+    },
+    {
+      "code": "examples = None",
+      "language": "rust"
+    },
+    {
+      "code": "encoding = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "required = None",
+      "language": "rust"
+    },
+    {
+      "code": "deprecated = None",
+      "language": "rust"
+    },
+    {
+      "code": "style = None",
+      "language": "rust"
+    },
+    {
+      "code": "explode = None",
+      "language": "rust"
+    },
+    {
+      "code": "allowReserved = None",
+      "language": "rust"
+    },
+    {
+      "code": "schema_ = Field(default=None, alias='schema')",
+      "language": "rust"
+    },
+    {
+      "code": "example = None",
+      "language": "rust"
+    },
+    {
+      "code": "examples = None",
+      "language": "rust"
+    },
+    {
+      "code": "content = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "in_ = Field(alias='in')",
+      "language": "unknown"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "required = None",
+      "language": "rust"
+    },
+    {
+      "code": "deprecated = None",
+      "language": "rust"
+    },
+    {
+      "code": "style = None",
+      "language": "rust"
+    },
+    {
+      "code": "explode = None",
+      "language": "rust"
+    },
+    {
+      "code": "allowReserved = None",
+      "language": "rust"
+    },
+    {
+      "code": "schema_ = Field(default=None, alias='schema')",
+      "language": "rust"
+    },
+    {
+      "code": "example = None",
+      "language": "rust"
+    },
+    {
+      "code": "examples = None",
+      "language": "rust"
+    },
+    {
+      "code": "content = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "required = None",
+      "language": "rust"
+    },
+    {
+      "code": "deprecated = None",
+      "language": "rust"
+    },
+    {
+      "code": "style = None",
+      "language": "rust"
+    },
+    {
+      "code": "explode = None",
+      "language": "rust"
+    },
+    {
+      "code": "allowReserved = None",
+      "language": "rust"
+    },
+    {
+      "code": "schema_ = Field(default=None, alias='schema')",
+      "language": "rust"
+    },
+    {
+      "code": "example = None",
+      "language": "rust"
+    },
+    {
+      "code": "examples = None",
+      "language": "rust"
+    },
+    {
+      "code": "content = None",
+      "language": "rust"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "required = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "operationRef = None",
+      "language": "rust"
+    },
+    {
+      "code": "operationId = None",
+      "language": "rust"
+    },
+    {
+      "code": "parameters = None",
+      "language": "rust"
+    },
+    {
+      "code": "requestBody = None",
+      "language": "rust"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "server = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "description",
+      "language": "unknown"
+    },
+    {
+      "code": "headers = None",
+      "language": "rust"
+    },
+    {
+      "code": "content = None",
+      "language": "rust"
+    },
+    {
+      "code": "links = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "tags = None",
+      "language": "rust"
+    },
+    {
+      "code": "summary = None",
+      "language": "rust"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "externalDocs = None",
+      "language": "rust"
+    },
+    {
+      "code": "operationId = None",
+      "language": "rust"
+    },
+    {
+      "code": "parameters = None",
+      "language": "rust"
+    },
+    {
+      "code": "requestBody = None",
+      "language": "rust"
+    },
+    {
+      "code": "responses = None",
+      "language": "rust"
+    },
+    {
+      "code": "callbacks = None",
+      "language": "rust"
+    },
+    {
+      "code": "deprecated = None",
+      "language": "rust"
+    },
+    {
+      "code": "security = None",
+      "language": "rust"
+    },
+    {
+      "code": "servers = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "ref = Field(default=None, alias='$ref')",
+      "language": "rust"
+    },
+    {
+      "code": "summary = None",
+      "language": "rust"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "post = None",
+      "language": "rust"
+    },
+    {
+      "code": "delete = None",
+      "language": "rust"
+    },
+    {
+      "code": "options = None",
+      "language": "rust"
+    },
+    {
+      "code": "head = None",
+      "language": "rust"
+    },
+    {
+      "code": "patch = None",
+      "language": "rust"
+    },
+    {
+      "code": "trace = None",
+      "language": "rust"
+    },
+    {
+      "code": "servers = None",
+      "language": "rust"
+    },
+    {
+      "code": "parameters = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "apiKey = 'apiKey'",
+      "language": "unknown"
+    },
+    {
+      "code": "http = 'http'",
+      "language": "unknown"
+    },
+    {
+      "code": "oauth2 = 'oauth2'",
+      "language": "unknown"
+    },
+    {
+      "code": "openIdConnect = 'openIdConnect'",
+      "language": "unknown"
+    },
+    {
+      "code": "type_ = Field(alias='type')",
+      "language": "unknown"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "query = 'query'",
+      "language": "unknown"
+    },
+    {
+      "code": "header = 'header'",
+      "language": "unknown"
+    },
+    {
+      "code": "cookie = 'cookie'",
+      "language": "unknown"
+    },
+    {
+      "code": "type_ = Field(default=apiKey, alias='type')",
+      "language": "unknown"
+    },
+    {
+      "code": "in_ = Field(alias='in')",
+      "language": "unknown"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "type_ = Field(default=http, alias='type')",
+      "language": "unknown"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "scheme = 'bearer'",
+      "language": "unknown"
+    },
+    {
+      "code": "bearerFormat = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "type_ = Field(default=http, alias='type')",
+      "language": "unknown"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "refreshUrl = None",
+      "language": "rust"
+    },
+    {
+      "code": "scopes = {}",
+      "language": "unknown"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "authorizationUrl",
+      "language": "unknown"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "refreshUrl = None",
+      "language": "rust"
+    },
+    {
+      "code": "scopes = {}",
+      "language": "unknown"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "refreshUrl = None",
+      "language": "rust"
+    },
+    {
+      "code": "scopes = {}",
+      "language": "unknown"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "refreshUrl = None",
+      "language": "rust"
+    },
+    {
+      "code": "scopes = {}",
+      "language": "unknown"
+    },
+    {
+      "code": "authorizationUrl",
+      "language": "unknown"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "refreshUrl = None",
+      "language": "rust"
+    },
+    {
+      "code": "scopes = {}",
+      "language": "unknown"
+    },
+    {
+      "code": "implicit = None",
+      "language": "rust"
+    },
+    {
+      "code": "password = None",
+      "language": "rust"
+    },
+    {
+      "code": "clientCredentials = None",
+      "language": "rust"
+    },
+    {
+      "code": "authorizationCode = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "type_ = Field(default=oauth2, alias='type')",
+      "language": "unknown"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "type_ = Field(default=openIdConnect, alias='type')",
+      "language": "unknown"
+    },
+    {
+      "code": "openIdConnectUrl",
+      "language": "unknown"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "schemas = None",
+      "language": "rust"
+    },
+    {
+      "code": "responses = None",
+      "language": "rust"
+    },
+    {
+      "code": "parameters = None",
+      "language": "rust"
+    },
+    {
+      "code": "examples = None",
+      "language": "rust"
+    },
+    {
+      "code": "requestBodies = None",
+      "language": "rust"
+    },
+    {
+      "code": "headers = None",
+      "language": "rust"
+    },
+    {
+      "code": "securitySchemes = None",
+      "language": "rust"
+    },
+    {
+      "code": "links = None",
+      "language": "rust"
+    },
+    {
+      "code": "callbacks = None",
+      "language": "rust"
+    },
+    {
+      "code": "pathItems = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "description = None",
+      "language": "rust"
+    },
+    {
+      "code": "externalDocs = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    },
+    {
+      "code": "jsonSchemaDialect = None",
+      "language": "rust"
+    },
+    {
+      "code": "servers = None",
+      "language": "rust"
+    },
+    {
+      "code": "paths = None",
+      "language": "rust"
+    },
+    {
+      "code": "webhooks = None",
+      "language": "rust"
+    },
+    {
+      "code": "components = None",
+      "language": "rust"
+    },
+    {
+      "code": "security = None",
+      "language": "rust"
+    },
+    {
+      "code": "tags = None",
+      "language": "rust"
+    },
+    {
+      "code": "externalDocs = None",
+      "language": "rust"
+    },
+    {
+      "code": "model_config = {'extra': 'allow'}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

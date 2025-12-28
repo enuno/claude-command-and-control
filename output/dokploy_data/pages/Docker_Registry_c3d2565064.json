@@ -1,0 +1,59 @@
+{
+  "title": "Docker Registry",
+  "content": "Dokploy provides seamless integration with Docker Registry repositories, allowing you to deploy applications directly from your container images. This feature is available for single applications and supports both public and private registries.\n\n## Configuration Overview\n\nTo connect a Docker Registry to your application:\n\n1. Navigate to your application's **General** tab\n2. Select **Docker** as the source\n3. Configure the following settings:\n\n| Setting                      | Description                                                              |\n| ---------------------------- | ------------------------------------------------------------------------ |\n| **Docker Image**             | Full name of the Docker image (e.g., `nginx:latest`, `myorg/myapp:v1.0`) |\n| **Docker Registry URL**      | Registry URL (defaults to Docker Hub if not specified)                   |\n| **Docker Registry Username** | Username for registry authentication                                     |\n| **Docker Registry Password** | Password or access token for authentication                              |\n\n<Callout type=\"info\">\n  For private registries, authentication is required. For public images, you can leave the username and password fields empty.\n</Callout>\n\n## Docker Hub Integration\n\nDocker Hub is the default registry and supports both username/password and token-based authentication.\n\n### Method 1: Username and Password\n\n1. **Username**: Enter your Docker Hub username\n2. **Password**: Enter your Docker Hub password\n\n### Method 2: Access Token (Recommended)\n\nUsing access tokens is more secure and allows fine-grained permissions:\n\n1. **Create Access Token**:\n   * Go to [Docker Hub Settings](https://hub.docker.com/settings/security) → **Personal Access Tokens**\n   * Click **Generate New Token**\n   * Set description: `Dokploy-Docker-Hub-Token`\n   * Select **Read-only** permissions\n   * Click **Generate**\n\n2. **Configure in Dokploy**:\n   * **Username**: Your Docker Hub username\n   * **Password**: Paste the generated access token\n   * **Registry URL**: Leave empty (defaults to Docker Hub)\n\n3. **Deploy**: Click **Save** and then **Deploy** from the General tab\n\n## GitHub Container Registry (GHCR)\n\nGHCR allows you to store container images alongside your GitHub repositories.\n\n* Your Docker image must already be published to GHCR\n* You need a GitHub Personal Access Token with appropriate permissions\n\n1. **Create GitHub Personal Access Token**:\n   * Go to [GitHub Settings](https://github.com/settings/tokens) → **Personal Access Tokens**\n   * Click **Generate new token (classic)**\n   * Set token name: `Dokploy-GHCR-Token`\n   * Select the following scopes:\n     * `repo` - Access to repositories\n     * `workflow` - Access to GitHub Actions\n     * `write:packages` - Upload packages\n     * `delete:packages` - Delete packages\n   * Click **Generate token**\n\n2. **Configure in Dokploy**:\n   * **Docker Image**: `ghcr.io/username/repository:tag`\n   * **Registry URL**: `ghcr.io`\n   * **Username**: Your GitHub username\n   * **Password**: Paste the generated personal access token\n\n3. **Deploy**: Click **Save** and then **Deploy** from the General tab\n\nFor public images from any registry:\n\n* **Docker Image**: Full image path (e.g., `quay.io/prometheus/prometheus:latest`)\n* **Registry URL**: Registry domain (if not Docker Hub)\n* **Username**: Leave empty\n* **Password**: Leave empty\n\n<Callout type=\"tip\">\n  **Security Recommendations:**\n\n* Use access tokens instead of passwords when possible\n  * Grant minimal required permissions to tokens\n  * Regularly rotate access tokens\n  * Use private registries for sensitive applications\n</Callout>\n\nCommon issues and solutions:\n\n* **Authentication Failed**: Verify your credentials and token permissions\n* **Image Not Found**: Check the image name and tag spelling\n* **Pull Rate Limits**: Consider using authenticated requests or private registries\n* **Registry Timeout**: Verify the registry URL is accessible from your Dokploy instance",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Configuration Overview",
+      "id": "configuration-overview"
+    },
+    {
+      "level": "h2",
+      "text": "Docker Hub Integration",
+      "id": "docker-hub-integration"
+    },
+    {
+      "level": "h3",
+      "text": "Method 1: Username and Password",
+      "id": "method-1:-username-and-password"
+    },
+    {
+      "level": "h3",
+      "text": "Method 2: Access Token (Recommended)",
+      "id": "method-2:-access-token-(recommended)"
+    },
+    {
+      "level": "h2",
+      "text": "GitHub Container Registry (GHCR)",
+      "id": "github-container-registry-(ghcr)"
+    },
+    {
+      "level": "h3",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h3",
+      "text": "Setup Process",
+      "id": "setup-process"
+    },
+    {
+      "level": "h3",
+      "text": "Public Images",
+      "id": "public-images"
+    },
+    {
+      "level": "h2",
+      "text": "Best Practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    }
+  ],
+  "url": "llms-txt#docker-registry",
+  "links": []
+}

@@ -1,0 +1,29 @@
+{
+  "title": "Get Started (/build)",
+  "content": "Welcome to AR.IO Network's developer documentation.\n\nThis section will guide you through everything you need to know for building on top of AR.IO Network from uploading and accessing your data, to operating and extending your own infrastructure to support your unique use-case.\n\nIf you're unfamiliar with Arweave's permanent storage and AR.IO Network we recommend reading this [introduction section](/learn) first.\n\n## Get Started Building with AR.IO\n\n}\n    title=\"Uploading Data\"\n    description=\"Learn how to permanently store files, websites, and application data on Arweave\"\n    href=\"/build/upload\"\n  />\n  }\n    title=\"Accessing Data\"\n    description=\"Query, retrieve, and interact with data stored on the permanent web\"\n    href=\"/build/access\"\n  />\n  }\n    title=\"Running Your Own Gateway\"\n    description=\"Deploy and operate AR.IO gateway infrastructure to support the network\"\n    href=\"/build/run-a-gateway\"\n  />\n\n## Developer Resources\n\n}\n    title=\"Turbo SDK Reference\"\n    description=\"Fast upload service SDK with payment processing and instant confirmation\"\n    href=\"/sdks/turbo-sdk/events\"\n  />\n  \n    }\n    title=\"Wayfinder SDK Reference\"\n    description=\"Decentralized data access SDK with built-in verification and routing\"\n    href=\"/sdks/wayfinder\"\n  />\n  }\n    title=\"AR.IO SDK Reference\"\n    description=\"Complete SDK documentation for interacting with AR.IO Network protocols\"\n    href=\"/sdks/ar-io-sdk\"\n  />\n  }\n    title=\"Gateway API Reference\"\n    description=\"Direct API access for custom implementations and integrations\"\n    href=\"/apis\"\n  />\n\n## Use Cases & Guides\n\n}\n    title=\"Hosting Decentralized Websites\"\n    description=\"Build and deploy censorship-resistant web applications on the permanent web\"\n    href=\"/build/guides/hosting-decentralized-websites\"\n  />\n  }\n    title=\"ArNS Primary Names\"\n    description=\"Set up primary names for user-friendly wallet addresses\"\n    href=\"/build/guides/arns-primary-names\"\n  />\n  }\n    title=\"ArNS Undernames & Versioning\"\n    description=\"Manage subdomains and versioning for your ArNS names\"\n    href=\"/build/guides/arns-undernames-versioning\"\n  />\n  }\n    title=\"ArNS Marketplace\"\n    description=\"Explore the ArNS marketplace for name trading and management\"\n    href=\"/build/guides/arns-marketplace\"\n  />\n\n}\n    title=\"Browse Examples\"\n    description=\"Explore code examples and sample applications\"\n    href=\"https://github.com/ar-io\"\n  />\n  }\n    title=\"Join the Community\"\n    description=\"Connect with other developers on Discord\"\n    href=\"https://discord.com/invite/HGG52EtTc2\"\n  />\n\nReady to build on the permanent web? Choose your path above and start creating applications that last forever.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Get Started Building with AR.IO",
+      "id": "get-started-building-with-ar.io"
+    },
+    {
+      "level": "h2",
+      "text": "Developer Resources",
+      "id": "developer-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Use Cases & Guides",
+      "id": "use-cases-&-guides"
+    },
+    {
+      "level": "h2",
+      "text": "Get Help",
+      "id": "get-help"
+    }
+  ],
+  "url": "llms-txt#get-started-(/build)",
+  "links": []
+}

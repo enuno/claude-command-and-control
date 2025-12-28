@@ -1,0 +1,29 @@
+{
+  "title": "Permissions",
+  "content": "Manage user roles and permissions within Dokploy. Dokploy handles three distinct roles with different levels of access and capabilities.\n\nDokploy supports three roles for managing user access:\n\nThe **Owner** is the creator of the organization and has the highest level of access:\n\n* Full administrative privileges\n* Can perform all actions that admins can do\n* Can delete and edit the role of admins\n* **Intransferable**: The owner role cannot be transferred to another user\n* Only one owner exists per organization\n\n**Admin** users have extensive administrative capabilities:\n\n* Can perform all actions that the owner can do\n* Full access to all features and settings\n* **Limitations**: Cannot delete or edit the role of other admins\n* **Limitations**: Cannot delete or edit the role of the owner\n\n**Members** are regular users who have access based on the permissions assigned to them. Members can be granted specific permissions to manage applications and services.\n\nThe following permissions are available for **Members** to manage your users effectively:\n\n* **Create Projects**: Allow the user to create projects.\n* **Delete Projects**: Allow the user to delete projects.\n* **Create Services**: Allow the user to create services.\n* **Delete Services**: Allow the user to delete services.\n* **Create Environments**: Allow the user to create environments.\n* **Delete Environments**: Allow the user to delete environments.\n* **Access to Traefik Files**: Allow the user to access to the Traefik Tab Files.\n* **Access to Docker**: Allow the user to access to the Docker Tab.\n* **Access to API/CLI**: Allow the user to access to the API/CLI.\n* **Access to SSH Keys**: Allow to users to access to the SSH Keys section.\n* **Access to Git Providers**: Allow to users to access to the Git Providers section.\n\nYou can also grant permissions to specific users for accessing particular projects or services.\n\n#### Project Permissions\n\nBased on your projects and services, you can assign permissions to specific users to give them access to particular projects or services. You can also select specific environments within projects, allowing you to grant granular access control at the environment level.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Roles",
+      "id": "roles"
+    },
+    {
+      "level": "h3",
+      "text": "Owner",
+      "id": "owner"
+    },
+    {
+      "level": "h3",
+      "text": "Admin",
+      "id": "admin"
+    },
+    {
+      "level": "h3",
+      "text": "Members",
+      "id": "members"
+    }
+  ],
+  "url": "llms-txt#permissions",
+  "links": []
+}

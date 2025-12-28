@@ -1,0 +1,8 @@
+{
+  "title": "Contributing (/sdks/wayfinder/contributing)",
+  "content": "1. Branch from `alpha`\n2. Create a new branch for your changes (e.g. `feat/my-feature`)\n3. Make your changes on your branch, push them to your branch\n4. As you make commits/changes or once you're ready to release, create a changeset describing your changes via `npx changeset`.\n5. Follow the prompts to select the packages that are affected by your changes.\n6. Add and commit the changeset to your branch\n7. Request review from a maintainer, and once approved, merge your changes into the `alpha` branch\n8. A release PR will be automatically created with all pending changesets to the `alpha` branch\n9. The maintainer will review the PR and merge it into `alpha`, which will trigger the automated release process using all pending changesets",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#contributing-(/sdks/wayfinder/contributing)",
+  "links": []
+}

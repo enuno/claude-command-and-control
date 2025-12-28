@@ -1,0 +1,125 @@
+{
+  "title": "Entity Types (/build/advanced/arfs/entity-types)",
+  "content": "Arweave transactions provide for a separation between data and metadata about that data via the use of headers. Key-value tags in the headers provide for expressive description about the data as well as searchability via gateway GraphQL APIs.\n\nArFS adds an additional layer of separation between data and metadata by using separate transactions for ArFS metadata and, where applicable, ArFS file data. But it also makes use of tags and data separation within an ArFS metadata transaction by including data critical to tracking drive composition in the tags space of ArFS metadata transactions and having most of the other metadata encoded as JSON in the data body of the metadata transaction. In the case of private entities, JSON data and file data payloads are always encrypted according to the protocol processes defined below.\n\n- Drive entities require a single metadata transaction, with standard Drive tags and encoded JSON with secondary metadata.\n\n- Folder entities require a single metadata transaction, with standard Folder tags and an encoded JSON with secondary metadata.\n\n- File entities require a metadata transaction, with standard File tags and an encoded Data JSON with secondary metadata relating to the file.\n\n- File entities also require a second data transaction, which includes a limited set of File tags and the actual file data itself.\n\n- Snapshot entities require a single transaction, which contains a Data JSON with all of the Drive's rolled up ArFS metadata and standard Snapshot GQL tags that identify the Snapshot.\n\nArFS v0.14 introduces the `isHidden` property. `isHidden` is a boolean (true/false) that tells clients if they should display the file or folder. Hidden files still exist and will be included in [snapshots](#snapshot), but should not be rendered by clients. If `isHidden` is not present, its value should be assumed false.\n\nArFS v0.15 introduces the `Signature-Type` metadata property on Drive entities, and a new entity type `DriveSignature`.\n\nA drive is the highest level logical grouping of folders and files. All folders and files must be part of a drive, and reference the Drive ID of that drive.\n\nWhen creating a Drive, a corresponding \"root\" folder must be created as well. This separation of drive and folder entity enables features such as folder view queries, renaming, and linking.\n\nArFS versions prior to v0.15 applied encryption to drive contents with a signing scheme that, while secure, is now deprecated in modern Arweave software wallets. ArFS v0.15 introduces an updated signing scheme compatible with these wallets and as well as \"Drive Signatures\", a new entity type to help bridge the signature derivation schemes across ArFS versions.\n\nA drive signature uses the v0.15 encryption scheme to encrypt and store the pre-v0.15 wallet signature for a private drive that is necessary for deriving the \"drive key\" for that drive. This allows for continued access of historical drive contents into the future.\n\nThe encrypted \"type 1\" signature for the drive must be provided in the `data` field of the transaction creating the drive-signature entity.\n\nA folder is a logical grouping of other folders and files. Folder entity metadata transactions without a parent folder id are considered the Drive Root Folder of their corresponding Drives. All other Folder entities must have a parent folder id. Since folders do not have underlying data, there is no Folder data transaction required.\n\nA File contains uploaded data, like a photo, document, or movie.\n\nIn the Arweave File System, a single file is broken into 2 parts - its metadata and its data.\n\nA File entity metadata transaction does not include the actual File data. Instead, the File data must be uploaded as a separate transaction, called the File Data Transaction. The File JSON metadata transaction contains a reference to the File Data Transaction ID so that it can retrieve the actual data. This separation allows for file metadata to be updated without requiring the file itself to be reuploaded. It also ensures that private files can have their JSON Metadata Transaction encrypted as well, ensuring that no one without authorization can see either the file or its metadata.\n\nSince the version v0.13, ArFS supports Pins. Pins are files whose data may be any transaction uploaded to Arweave, that may or may not be owned by the wallet that created the pin.\n\nWhen a new File Pin is created, the only created transaction is the Metadata Transaction. The `dataTxId` field will point it to any transaction in Arweave, and the optional `pinnedDataOwner` field is gonna hold the address of the wallet that owns the original copy of the data transaction.\n\n### File Data Transaction Example\n\nThe File Data Transaction contains limited information about the file, such as the information required to decrypt it, or the Content-Type (mime-type) needed to view in the browser.\n\n### File Metadata Transaction Example\n\nThe File Metadata Transaction contains the GQL Tags necessary to identify the file within a drive and folder.\n\nIts data contains the JSON metadata for the file. This includes the file name, size, last modified date, data transaction id, and data content type.\n\nArFS applications generate the latest state of a drive by querying for all ArFS transactions made relating to a user's particular `Drive-Id`. This includes both paged queries for indexed ArFS data via GQL, as well as the ArFS JSON metadata entries for each ArFS transaction.\n\nFor small drives (less than 1000 files), a few thousand requests for very small volumes of data can be achieved relatively quickly and reliably. For larger drives, however, this results in long sync times to pull every piece of ArFS metadata when the local database cache is empty. This can also potentially trigger rate-limiting related ArWeave Gateway delays.\n\nOnce a drive state has been completely, and accurately generated, in can be rolled up into a single snapshot and uploaded as an Arweave transaction. ArFS clients can use GQL to find and retrieve this snapshot in order to rapidly reconstitute the total state of the drive, or a large portion of it. They can then query individual transactions performed after the snapshot.\n\nThis optional method offers convenience and resource efficiency when building the drive state, at the cost of paying for uploading the snapshot data. Using this method means a client will only have to iterate through a few snapshots instead of every transaction performed on the drive.\n\n### Snapshot Entity Tags\n\nSnapshot entities require the following tags. These are queried by ArFS clients to find drive snapshots, organize them together with any other transactions not included within them, and build the latest state of the drive.\n\n### Snapshot Entity Data\n\nA JSON data object must also be uploaded with every ArFS Snapshot entity. This data contains all ArFS Drive, Folder, and File metadata changes within the associated drive, as well as any previous Snapshots. The Snapshot Data contains an array `txSnapshots`. Each item includes both the GQL and ArFS metadata details of each transaction made for the associated drive, within the snapshot's start and end period.\n\nA `tsSnapshot` contains a `gqlNode` object which uses the same GQL tags interface returned by the Arweave Gateway. It includes all of the important `block`, `owner`, `tags`, and `bundledIn` information needed by ArFS clients. It also contains a `dataJson` object which stores the correlated Data JSON for that ArFS entity.\n\nFor private drives, the `dataJson` object contains the JSON-string-escaped encrypted text of the associated file or folder. This encrypted text uses the file's existing `Cipher` and `Cipher-IV`. This ensures clients can decrypt this information quickly using the existing ArFS privacy protocols.\n\nThe following diagrams show complete examples of Drive, Folder, and File entity Schemas.\n\nNow that you understand the different ArFS entity types, explore how they work together:\n\n- [Data Model](/build/advanced/arfs/data-model) - Learn how entities relate to each other\n- [Privacy & Encryption](/build/advanced/arfs/privacy) - Understand how private entities work\n- [Creating Drives](/build/advanced/arfs/creating-drives) - Start building with ArFS",
+  "code_samples": [
+    {
+      "code": "ArFS: \"0.15\",\nCipher?: \"AES256-GCM\",\nCipher-IV?: \"\",\nContent-Type: \"\",\nDrive-Id: \"\",\nDrive-Privacy: \"\",\nDrive-Auth-Mode?: \"password\",\nEntity-Type: \"drive\",\nSignature-Type?: \"1\",\nUnix-Time: \"\"\n\nMetadata JSON {\n    \"name\": \"\",\n    \"rootFolderId\": \"\",\n    \"isHidden\": false\n}",
+      "language": "json"
+    },
+    {
+      "code": "ArFS: \"0.15\",\nEntity-Type: \"drive-signature\",\nSignature-Format: \"1\",\nCipher?: \"AES256-GCM\",\nCipher-IV: \"\"\n{data: }",
+      "language": "json"
+    },
+    {
+      "code": "ArFS: \"0.15\",\nCipher?: \"AES256-GCM\",\nCipher-IV?: \"\",\nContent-Type: \"\",\nDrive-Id: \"\",\nEntity-Type: \"folder\",\nFolder-Id: \"\",\nParent-Folder-Id?: \"\",\nUnix-Time: \"\"\n\nMetadata JSON {\n    \"name\": \"\",\n    \"isHidden\": false\n}",
+      "language": "json"
+    },
+    {
+      "code": "ArFS: \"0.15\",\nCipher?: \"AES256-GCM\",\nCipher-IV?: \"\",\nContent-Type: \"\",\nDrive-Id: \"\",\nEntity-Type: \"file\",\nFile-Id: \"\",\nParent-Folder-Id: \"\",\nUnix-Time: \"\"\n\nMetadata JSON {\n    \"name\": \"\",\n    \"size\": ,\n    \"lastModifiedDate\": ,\n    \"dataTxId\": \"\",\n    \"dataContentType\": \"\",\n    \"isHidden\": false,\n    \"pinnedDataOwner\": \"\", # Optional\n}",
+      "language": "json"
+    },
+    {
+      "code": "Cipher?: \"AES256-GCM\",\nCipher-IV?: \"\",\nContent-Type: \"\",\n { File Data - Encrypted if private }",
+      "language": "json"
+    },
+    {
+      "code": "ArFS: \"0.15\",\nCipher?: \"AES256-GCM\",\nCipher-IV?: \"\",\nContent-Type: \"\",\nDrive-Id: \"\",\nEntity-Type: \"file\",\nFile-Id: \"\",\nParent-Folder-Id: \"\",\nUnix-Time: \"\",\n { File JSON Metadata - Encrypted if private }",
+      "language": "json"
+    },
+    {
+      "code": "ArFS: \"0.15\",\nDrive-Id: \"\",\nEntity-Type: \"snapshot\",\nSnapshot-Id: \"\",\nContent-Type: \"\",\nBlock-Start: \"\",\nBlock-End: \"\",\nData-Start: \"\"",
+      "language": "json"
+    },
+    {
+      "code": "{\n  \"txSnapshots\": [\n    {\n      \"gqlNode\": {\n        \"id\": \"bWCvIc3cOzwVgquD349HUVsn5Dd1_GIri8Dglok41Vg\",\n        \"owner\": {\n          \"address\": \"hlWRbyJ6WUoErm3b0wqVgd1l3LTgaQeLBhB36v2HxgY\"\n        },\n        \"bundledIn\": {\n          \"id\": \"39n5evzP1Ip9MhGytuFm7F3TDaozwHuVUbS55My-MBk\"\n        },\n        \"block\": {\n          \"height\": 1062005,\n          \"timestamp\": 1669053791\n        },\n        \"tags\": [\n          {\n            \"name\": \"Content-Type\",\n            \"value\": \"application/json\"\n          },\n          {\n            \"name\": \"ArFS\",\n            \"value\": \"0.11\"\n          },\n          {\n            \"name\": \"Entity-Type\",\n            \"value\": \"drive\"\n          },\n          {\n            \"name\": \"Drive-Id\",\n            \"value\": \"f27abc4b-ed6f-4108-a9f5-e545fc4ff55b\"\n          },\n          {\n            \"name\": \"Drive-Privacy\",\n            \"value\": \"public\"\n          },\n          {\n            \"name\": \"App-Name\",\n            \"value\": \"ArDrive-App\"\n          },\n          {\n            \"name\": \"App-Platform\",\n            \"value\": \"Web\"\n          },\n          {\n            \"name\": \"App-Version\",\n            \"value\": \"1.39.0\"\n          },\n          {\n            \"name\": \"Unix-Time\",\n            \"value\": \"1669053323\"\n          }\n        ]\n      },\n      \"dataJson\": \"{\\\"name\\\":\\\"november\\\",\\\"rootFolderId\\\":\\\"71dfc1cb-5368-4323-972a-e9dd0b1c63a0\\\", \\\"isHidden\\\":false}\"\n    }\n  ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "graph TD\n    A[Drive Entity] --> B[Drive Metadata JSON]\n    A --> C[Drive Tags]\n    C --> D[ArFS: 0.15]\n    C --> E[Entity-Type: drive]\n    C --> F[Drive-Id: uuid]\n    C --> G[Drive-Privacy: public]\n    C --> H[Unix-Time: timestamp]\n    B --> I[name: string]\n    B --> J[rootFolderId: uuid]\n    B --> K[isHidden: boolean]",
+      "language": "mermaid"
+    },
+    {
+      "code": "graph TD\n    A[Drive Entity] --> B[Encrypted Drive Metadata JSON]\n    A --> C[Drive Tags]\n    C --> D[ArFS: 0.15]\n    C --> E[Entity-Type: drive]\n    C --> F[Drive-Id: uuid]\n    C --> G[Drive-Privacy: private]\n    C --> H[Drive-Auth-Mode: password]\n    C --> I[Signature-Type: 1]\n    C --> J[Cipher: AES256-GCM]\n    C --> K[Cipher-IV: base64]\n    C --> L[Content-Type: application/octet-stream]\n    C --> M[Unix-Time: timestamp]\n    B --> N[Encrypted JSON with name, rootFolderId, isHidden]",
+      "language": "mermaid"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Drive",
+      "id": "drive"
+    },
+    {
+      "level": "h2",
+      "text": "Drive-Signature",
+      "id": "drive-signature"
+    },
+    {
+      "level": "h2",
+      "text": "Folder",
+      "id": "folder"
+    },
+    {
+      "level": "h2",
+      "text": "File",
+      "id": "file"
+    },
+    {
+      "level": "h3",
+      "text": "Pinning Files",
+      "id": "pinning-files"
+    },
+    {
+      "level": "h3",
+      "text": "File Data Transaction Example",
+      "id": "file-data-transaction-example"
+    },
+    {
+      "level": "h3",
+      "text": "File Metadata Transaction Example",
+      "id": "file-metadata-transaction-example"
+    },
+    {
+      "level": "h2",
+      "text": "Snapshot",
+      "id": "snapshot"
+    },
+    {
+      "level": "h3",
+      "text": "Snapshot Entity Tags",
+      "id": "snapshot-entity-tags"
+    },
+    {
+      "level": "h3",
+      "text": "Snapshot Entity Data",
+      "id": "snapshot-entity-data"
+    },
+    {
+      "level": "h2",
+      "text": "Schema Diagrams",
+      "id": "schema-diagrams"
+    },
+    {
+      "level": "h3",
+      "text": "Public Drive",
+      "id": "public-drive"
+    },
+    {
+      "level": "h3",
+      "text": "Private Drive",
+      "id": "private-drive"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#entity-types-(/build/advanced/arfs/entity-types)",
+  "links": []
+}

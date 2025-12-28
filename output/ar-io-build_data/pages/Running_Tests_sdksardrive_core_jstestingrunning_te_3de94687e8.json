@@ -1,0 +1,13 @@
+{
+  "title": "Running Tests (/sdks/ardrive-core-js/(testing)/running-tests)",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "yarn test\n\nyarn test -g 'My specific test'\n\nyarn coverage\n\nyarn power-assert -g 'My test case'",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#running-tests-(/sdks/ardrive-core-js/(testing)/running-tests)",
+  "links": []
+}
