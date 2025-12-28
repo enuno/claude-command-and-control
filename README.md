@@ -1043,6 +1043,7 @@ version: 1.0.0
 | **[canvas-design](skills-templates/canvas-design/)** | Visual art creation using design philosophy | Creating posters, art, or static visual pieces |
 | **[changelog-generator](skills-templates/changelog-generator/)** | Git commits to user-friendly changelogs | Preparing release notes or product updates |
 | **[competitive-ads-extractor](skills-templates/competitive-ads-extractor/)** | Analyze competitors' ads from ad libraries | Understanding competitor messaging and creative approaches |
+| **[conductor](skills-templates/conductor/)** | Build and deployment orchestration | Working with conductor, implementing conductor solutions, debugging conductor code |
 | **content-research-writer** | Writing assistance with research and citations | Writing articles, documentation, blog posts |
 | **[developer-growth-analysis](skills-templates/developer-growth-analysis/)** | Coding pattern analysis from Claude Code history | Identifying development gaps and curating learning resources |
 | **[document-skills/docx](skills-templates/document-skills/docx/)** | Word document creation and editing | Working with .docx files, tracked changes, or comments |
@@ -1059,6 +1060,7 @@ version: 1.0.0
 | **[image-enhancer](skills-templates/image-enhancer/)** | Image quality improvement | Enhancing screenshots or images for presentations |
 | **[internal-comms](skills-templates/internal-comms/)** | Internal communications templates | Writing status reports, newsletters, or company updates |
 | **[invoice-organizer](skills-templates/invoice-organizer/)** | Invoice and receipt organization | Tax preparation or bookkeeping |
+| **[just](skills-templates/just/)** | Just command runner for project task automation | Creating justfile recipes, replacing Make/shell scripts, cross-platform command execution |
 | **[lead-research-assistant](skills-templates/lead-research-assistant/)** | Lead identification and qualification | Sales, business development, or marketing research |
 | **[mcp-builder](skills-templates/mcp-builder/)** | MCP server development guide | Building Model Context Protocol servers |
 | **[meeting-insights-analyzer](skills-templates/meeting-insights-analyzer/)** | Meeting transcript analysis | Improving communication or leadership skills |

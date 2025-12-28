@@ -31,12 +31,14 @@ This directory contains production-ready skill templates and examples for Claude
 | **[slack-gif-creator](slack-gif-creator/)** | Creates animated GIFs optimized for Slack with validators for size constraints |
 | **[theme-factory](theme-factory/)** | Applies professional font and color themes to artifacts (10 pre-set themes included) |
 
-### Development (6 skills)
+### Development (8 skills)
 | Skill | Description |
 |-------|-------------|
 | **[ar-io-build](ar-io-build/)** | Comprehensive AR.IO build documentation with 398 sections covering AR.IO features, APIs, and best practices |
 | **[changelog-generator](changelog-generator/)** | Automatically creates user-facing changelogs from git commits by analyzing history |
+| **[conductor](conductor/)** | Build and deployment orchestration with comprehensive Conductor documentation (40 sections, 96 KB) |
 | **[fastapi](fastapi/)** | FastAPI modern Python web framework guide with 102 pages covering APIs, async endpoints, dependency injection, and backend development |
+| **[just](just/)** | Just command runner for project task automation with 50+ built-in functions and multi-language support |
 | **[mcp-builder](mcp-builder/)** | Guide for creating high-quality MCP (Model Context Protocol) servers for external service integration |
 | **[software-architecture](software-architecture/)** | Clean Architecture and Domain Driven Design principles for quality-focused software development |
 | **[webapp-testing](webapp-testing/)** | Toolkit for testing local web applications using Playwright for verifying frontend functionality |
