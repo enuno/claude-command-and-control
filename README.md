@@ -1039,6 +1039,13 @@ version: 1.0.0
 | **[ar-io-build](skills-templates/ar-io-build/)** | Comprehensive AR.IO build documentation | Building with AR.IO, implementing AR.IO solutions, debugging AR.IO code |
 | **[arweave-ao-cookbook](skills-templates/arweave-ao-cookbook/)** | Build decentralized applications on AO | Building decentralized apps on Arweave with permanent storage |
 | **[artifacts-builder](skills-templates/artifacts-builder/)** | React/Tailwind/shadcn UI artifact builder | Complex artifacts requiring state management or shadcn/ui components |
+| **[braiins-ecosystem](skills/braiins-ecosystem/SKILL.md)** | Unified Braiins Bitcoin mining ecosystem | Complete mining stack (firmware, pool, tools, proxy, dashboard, calculator) |
+| **[braiins-insights](skills/braiins-insights/SKILL.md)** | Bitcoin mining profitability calculator | Evaluating mining profitability, ROI analysis, cash flow projections |
+| **[braiins-manager](skills/braiins-manager/SKILL.md)** | Web-based mining operations dashboard | Fleet monitoring, multi-user access, real-time metrics |
+| **[braiins-os](skills/braiins-os/SKILL.md)** | ASIC firmware with autotuning | Firmware management, API integration, OS feeds |
+| **[braiins-pool](skills/braiins-pool/SKILL.md)** | Bitcoin mining pool (FPPS, Lightning) | Mining pool setup, FPPS rewards, Lightning payouts, Stratum V2 |
+| **[braiins-proxy](skills/braiins-proxy/SKILL.md)** | Stratum V2 mining proxy | Large-scale operations, hashrate aggregation, farm proxy |
+| **[braiins-toolbox](skills/braiins-toolbox/SKILL.md)** | Batch mining operations management | Network scanning, firmware/system/miner management, performance tuning |
 | **[brand-guidelines](skills-templates/brand-guidelines/)** | Anthropic brand colors and typography | Applying brand standards to artifacts |
 | **[canvas-design](skills-templates/canvas-design/)** | Visual art creation using design philosophy | Creating posters, art, or static visual pieces |
 | **[changelog-generator](skills-templates/changelog-generator/)** | Git commits to user-friendly changelogs | Preparing release notes or product updates |
@@ -1054,6 +1061,7 @@ version: 1.0.0
 | **[document-skills/xlsx](skills-templates/document-skills/xlsx/)** | Excel spreadsheet toolkit | Working with spreadsheets, formulas, or data analysis |
 | **documentation-update** | Update repository documentation tables and indices | Adding entries to README, maintaining indices |
 | **[domain-name-brainstormer](skills-templates/domain-name-brainstormer/)** | Domain name generation and availability checking | Finding available domain names for projects |
+| **[farm-monitor](skills/farm-monitor/SKILL.md)** | Bitcoin mining fleet monitoring | Monitoring mining operations, fleet management |
 | **[fastapi](skills-templates/fastapi/)** | FastAPI modern Python web framework | Building APIs, async endpoints, dependency injection, Python backend development |
 | **file-categorization** | Categorize files as Command/Agent/Skill/Doc | Processing files in integration pipelines |
 | **[file-organizer](skills-templates/file-organizer/)** | Intelligent file organization | Organizing files, finding duplicates, or cleaning up directories |

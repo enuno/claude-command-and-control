@@ -11,7 +11,20 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 ---
 
-## Available Skills (13 Total)
+## Available Skills (21 Total)
+
+### Bitcoin Mining Skills
+
+| Skill | Description | Key Use Cases |
+|-------|-------------|---------------|
+| **[braiins-ecosystem](braiins-ecosystem/SKILL.md)** | Unified Braiins ecosystem covering firmware, pool, toolbox, manager, proxy, and insights | Complete mining stack setup, integrated workflows |
+| **[braiins-insights](braiins-insights/SKILL.md)** | Bitcoin mining profitability calculator with IRR analysis | ROI calculations, cash flow projections, break-even analysis |
+| **[braiins-manager](braiins-manager/SKILL.md)** | Web-based dashboard for mining operations monitoring | Fleet monitoring, real-time metrics, multi-user access control |
+| **[braiins-os](braiins-os/SKILL.md)** | ASIC firmware with autotuning and Stratum V2 support | Firmware management, API integration, OS feeds |
+| **[braiins-pool](braiins-pool/SKILL.md)** | Bitcoin mining pool with FPPS rewards and Lightning payouts | Pool setup, reward calculations, Lightning withdrawals, solo mining |
+| **[braiins-proxy](braiins-proxy/SKILL.md)** | High-performance Stratum V2 mining proxy | Large-scale operations, hashrate aggregation, farm proxy deployment |
+| **[braiins-toolbox](braiins-toolbox/SKILL.md)** | Batch management tool for Bitcoin mining operations | Network scanning, firmware/system/miner management, performance tuning |
+| **[farm-monitor](farm-monitor/SKILL.md)** | Bitcoin mining fleet monitoring and management | Fleet visibility, operational monitoring |
 
 ### Development Workflow Skills
 
@@ -125,6 +138,16 @@ Based on complexity:
 
 ## Skill Categories Explained
 
+### Bitcoin Mining Skills
+Skills for Bitcoin mining operations and management:
+- Mining ecosystem (braiins-ecosystem)
+- Profitability analysis (braiins-insights)
+- Fleet monitoring (braiins-manager, farm-monitor)
+- ASIC firmware (braiins-os)
+- Mining pool operations (braiins-pool)
+- Network infrastructure (braiins-proxy)
+- Batch operations (braiins-toolbox)
+
 ### Development Workflow Skills
 Skills that enhance the software development process:
 - Software architecture (software-architecture)
@@ -222,7 +245,8 @@ All skills in this repository meet these criteria:
 
 ## Statistics
 
-**Total Skills**: 13
+**Total Skills**: 21
+- Bitcoin Mining: 8
 - Development Workflow: 4
 - Design & UI/UX: 1
 - Integration & Automation: 2
@@ -240,6 +264,15 @@ All skills in this repository meet these criteria:
 ## Recent Additions
 
 **December 2025**:
+- ✨ **Braiins Bitcoin Mining Ecosystem** (2025-12-28) - 8 new skills
+  - braiins-ecosystem - Unified mining stack
+  - braiins-pool - FPPS mining pool with 12 Academy references
+  - braiins-toolbox - Batch management with 13 Academy references
+  - braiins-os - ASIC firmware with 14 API/feed references
+  - braiins-insights - Profitability calculator
+  - braiins-manager - Web dashboard
+  - braiins-proxy - Farm proxy
+  - farm-monitor - Fleet monitoring with 7 GitHub references
 - ✨ ui-ux-pro-max (2025-12-22) - UI/UX design intelligence with BM25 search
 - ✨ software-architecture (2025-12-21) - Clean Architecture & DDD guidance
 
@@ -255,6 +288,6 @@ All skills in this repository meet these criteria:
 
 ---
 
-**Last Updated**: December 22, 2025
+**Last Updated**: December 28, 2025
 **Maintained By**: Claude Command and Control Repository
-**Version**: 2.0.0
+**Version**: 2.1.0
