@@ -1,0 +1,13 @@
+{
+  "title": "Husky (Developers Only) (/sdks/(clis)/ardrive-cli/(build-and-run-from-source)/husky-developers-only)",
+  "content": "We use husky 6.x to manage the git commit hooks that help to improve the quality of our commits. Please run:\n\nto enable git hooks for your local checkout. Without doing so, you risk committing non-compliant code to the repository.",
+  "code_samples": [
+    {
+      "code": "yarn husky install",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#husky-(developers-only)-(/sdks/(clis)/ardrive-cli/(build-and-run-from-source)/husky-developers-only)",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Progress Logging of Transaction Uploads (/sdks/(clis)/ardrive-cli/(working-with-files)/progress-logging-of-transaction-uploads)",
+  "content": "Progress logging of transaction uploads to stderr can be enabled by setting the `ARDRIVE_PROGRESS_LOG` environment variable to `1`:",
+  "code_samples": [
+    {
+      "code": "Uploading file transaction 1 of total 2 transactions...\nTransaction _GKQasQX194a364Hph8Oe-oku1AdfHwxWOw9_JC1yjc Upload Progress: 0%\nTransaction _GKQasQX194a364Hph8Oe-oku1AdfHwxWOw9_JC1yjc Upload Progress: 35%\nTransaction _GKQasQX194a364Hph8Oe-oku1AdfHwxWOw9_JC1yjc Upload Progress: 66%\nTransaction _GKQasQX194a364Hph8Oe-oku1AdfHwxWOw9_JC1yjc Upload Progress: 100%\nUploading file transaction 2 of total 2 transactions...\nTransaction nA1stCdTkuf290k0qsqvmJ78isEC0bwgrAi3D8Cl1LU Upload Progress: 0%\nTransaction nA1stCdTkuf290k0qsqvmJ78isEC0bwgrAi3D8Cl1LU Upload Progress: 13%\nTransaction nA1stCdTkuf290k0qsqvmJ78isEC0bwgrAi3D8Cl1LU Upload Progress: 28%\nTransaction nA1stCdTkuf290k0qsqvmJ78isEC0bwgrAi3D8Cl1LU Upload Progress: 42%\nTransaction nA1stCdTkuf290k0qsqvmJ78isEC0bwgrAi3D8Cl1LU Upload Progress: 60%\nTransaction nA1stCdTkuf290k0qsqvmJ78isEC0bwgrAi3D8Cl1LU Upload Progress: 76%\nTransaction nA1stCdTkuf290k0qsqvmJ78isEC0bwgrAi3D8Cl1LU Upload Progress: 91%\nTransaction nA1stCdTkuf290k0qsqvmJ78isEC0bwgrAi3D8Cl1LU Upload Progress: 100%",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#progress-logging-of-transaction-uploads-(/sdks/(clis)/ardrive-cli/(working-with-files)/progress-logging-of-transaction-uploads)",
+  "links": []
+}

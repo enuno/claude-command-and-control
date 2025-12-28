@@ -1,0 +1,44 @@
+{
+  "title": "Deploy a dApp with ArDrive Web (/build/guides/deploy-dapp-with-ardrive-web)",
+  "content": "Create **permanent dApps** using the ArDrive web interface. This guide shows you how to deploy your dApp or website to the permaweb using ArDrive's user-friendly interface.\n\n- How to deploy dApps using ArDrive web\n- Creating manifests for proper file routing\n- Assigning friendly ArNS names\n- Updating your dApp with new versions\n\n**For simple apps and websites:**\n\n- Your dApp files ready for deployment\n- ArDrive account (free to create)\n\n**For advanced applications:**\n\n- dApp prepared with hash routing and relative file paths\n- Static files built (for frameworks like React)\n- Learn more about [preparing your dApp for deployment](https://docs.ardrive.io/docs/misc/deploy/)\n\n## Step-by-Step Deployment\n\nGo to the [ArDrive web app](https://app.ardrive.io/#/sign-in) and log in using your preferred method. If you don't have an account, follow the instructions to create one.\n\n### Select or Create a Drive\n\nNavigate to the drive where you want your project hosted. If you need a new drive:\n\n- Click the big red \"New\" button at the top left\n    - Create a new drive\n    - **Important:** Set the drive to **public** for others to access your dApp\n\n### Upload Your Project\n\nWith your drive selected:\n\n- Click the big red \"New\" button again\n    - Select \"Upload Folder\"\n    - Navigate to your project's root directory (or built directory if required)\n    - Select the entire directory to maintain your project's file structure\n\nReview the upload and associated cost. If everything looks correct, click \"Confirm\".\n\n**Cost Note:** Uploading to Arweave isn't free, but costs are usually quite small compared to the benefits of permanent hosting.\n\n### Create the Manifest\n\nWhile ArDrive displays files as a traditional file structure, they don't actually exist that way on Arweave. The manifest acts as a map to all your dApp files:\n\n- Navigate into your newly created folder by double-clicking it\n    - Click the big red \"New\" button again\n    - Select \"New Manifest\" in the \"Advanced\" section\n    - Name the manifest and save it inside the folder you just created\n\n### Get the Data TX ID\n\nOnce the manifest is created:\n\n- Click on it to expand its details\n    - Go to the \"Details\" tab\n    - Find the \"Data TX ID\" on the bottom right\n    - Copy this unique identifier for your dApp\n\n### View and Share Your dApp\n\nYour dApp is now live on the permaweb forever!\n\n- Append the Data TX ID to an Arweave gateway URL: `https://arweave.net/YOUR-TX-ID`\n    - It may take a few minutes for files to propagate through the network\n    - Once propagated, your dApp is accessible to anyone, anywhere, at any time\n\n### Assign a Friendly Name (Optional)\n\nMake your dApp easier to access with an ArNS name:\n\n- If you own an ArNS name, you'll be prompted during manifest creation\n    - If not, purchase one from [arns.app](https://arns.arweave.net)\n    - You can also assign an ArNS name later by clicking the three dots next to any file and selecting \"Assign ArNS name\"\n\n## Updating Your dApp\n\nFiles uploaded to Arweave are **permanent and immutable** - they cannot be changed. However, the [Arweave File System (ArFS)](/build/advanced/arfs) protocol lets you \"replace\" them with new versions while keeping old ones accessible.\n\n**To update your dApp:**\n\n1. **Make your changes** and build the static directory\n2. **Upload the entire folder again** to the same location\n3. **Follow the same steps** as the original upload\n4. **Create a new manifest** with the same name as the old one\n5. **The new manifest generates a new TX ID** for the updated dApp\n\n- The old version remains accessible to anyone with the correct TX ID\n- Old files won't display in ArDrive unless you view file history\n- Each version gets its own unique transaction ID\n\n## Benefits of ArDrive Web Deployment\n\n- **User-friendly interface** - No command line required\n- **Automatic manifest creation** - Handles file routing for you\n- **Integrated ArNS support** - Easy domain name assignment\n- **Version management** - Built-in file history and updates\n- **Cost transparency** - See upload costs before confirming\n\n}\n    arrow\n  >\n    Deploy your dApp using the ArDrive web interface\n\n}\n>\n  Learn how to create friendly domain names for your dApp\n\n}\n  >\n    Explore more advanced deployment options and tools",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "What You'll Learn",
+      "id": "what-you'll-learn"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Step-by-Step Deployment",
+      "id": "step-by-step-deployment"
+    },
+    {
+      "level": "h2",
+      "text": "Updating Your dApp",
+      "id": "updating-your-dapp"
+    },
+    {
+      "level": "h3",
+      "text": "How Updates Work",
+      "id": "how-updates-work"
+    },
+    {
+      "level": "h2",
+      "text": "Benefits of ArDrive Web Deployment",
+      "id": "benefits-of-ardrive-web-deployment"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to Deploy?",
+      "id": "ready-to-deploy?"
+    }
+  ],
+  "url": "llms-txt#deploy-a-dapp-with-ardrive-web-(/build/guides/deploy-dapp-with-ardrive-web)",
+  "links": []
+}

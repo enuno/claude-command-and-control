@@ -1,0 +1,13 @@
+{
+  "title": "Custom Metadata (/sdks/ardrive-core-js/(api-reference)/custom-metadata)",
+  "content": "Attach custom metadata to files:",
+  "code_samples": [
+    {
+      "code": "const fileWithMetadata = wrapFileOrFolder(\n  '/path/to/file.txt',\n  'text/plain',\n  {\n    metaDataJson: { \n      'Custom-Field': 'Custom Value',\n      'Version': '1.0'\n    },\n    metaDataGqlTags: {\n      'App-Name': ['MyApp'],\n      'App-Version': ['1.0.0']\n    },\n    dataGqlTags: {\n      'Content-Type': ['text/plain']\n    }\n  }\n);\n\n// Upload with custom metadata\nawait arDrive.uploadPublicFile({\n  parentFolderId,\n  wrappedFile: fileWithMetadata\n});",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#custom-metadata-(/sdks/ardrive-core-js/(api-reference)/custom-metadata)",
+  "links": []
+}

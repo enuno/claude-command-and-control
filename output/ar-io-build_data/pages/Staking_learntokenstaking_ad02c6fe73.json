@@ -1,0 +1,64 @@
+{
+  "title": "Staking (/learn/token/staking)",
+  "content": "Staking tokens within the AR.IO Network serves a dual primary purpose: it signifies a public commitment by gateway operators and qualifies them and their delegates for reward distributions.\n\nIn the AR.IO ecosystem, \"staking\" refers to the process of locking a specified amount of ARIO tokens into a protocol-controlled vault. This act signifies an opportunity cost for the staker, acting both as a motivator and a public pledge to uphold the network's collective interests. Once staked, tokens remain locked until the staker initiates an 'unstake / withdraw' action or reaches the end of the vault’s lock period.\n\nIt is important to note that the ARIO Token is non-inflationary, distinguishing the AR.IO Network's staking mechanism from yield-generation tools found in other protocols. Staking in this context is about eligibility for potential rewards rather than direct token yield. By staking tokens, gateway operators (and their delegates) demonstrate their commitment to the network, thereby gaining eligibility for protocol-driven rewards and access to the network’s shared resources.\n\nA gateway operator must stake tokens to join their gateway to the network, which not only makes them eligible for protocol rewards but also promotes network reliability. This staking requirement reassures users and developers of the gateway's commitment to the network’s objectives, and gateways that adhere to or surpass network performance standards become eligible for these rewards. Gateway operators may increase their stake above the minimum, known as excess stake. A gateway’s total stake is impacted the following epoch once excess stake is added or removed.\n\nTo promote participation from a wider audience, the network allows anyone with available ARIO tokens to partake in delegated staking. Users can choose to take part in the risk and rewards of gateway operations by staking their tokens with an active gateway (or multiple gateways) through an act known as delegating.\n\nDelegators can select which gateways to stake with in gateways.ar.io - maximize their potential rewards based on operator performance, stakes, and weights\n\n### How Delegated Staking Works\n\n**Delegated staking allows you to participate in the AR.IO Network's reward system without running your own gateway.** By staking your ARIO tokens on existing gateways, you can earn rewards while supporting network infrastructure.\n\nWhen you delegate stake to a gateway, you're essentially lending your tokens to increase that gateway's total stake. This increases the gateway's chances of being selected as an observer, which means more potential rewards for both the gateway operator and you as a delegator.\n\n- **Passive Income**: Earn rewards without running infrastructure\n- **Network Participation**: Support the AR.IO Network's growth\n- **Flexibility**: Redelegate to different gateways as conditions change\n- **Low Barrier to Entry**: No technical expertise required\n- **Transparent Rewards**: Clear visibility into reward distribution\n\nYou'll need ARIO tokens to delegate. See our comprehensive guide on [How to Get ARIO Tokens](/learn/token/get-the-token) for detailed information about acquiring tokens through exchanges, swaps, and network participation.\n\nResearch gateways on the [Gateway Portal](https://gateways.ar.io/#/staking) to find one that matches your preferences for reward sharing and performance. Look for gateways with strong uptime, competitive reward sharing percentages, and reliable operation history.\n\n**Delegate Your Stake**\n\nUse the [Gateway Portal](https://gateways.ar.io/#/staking) to delegate your tokens. The process is straightforward and your tokens remain secure throughout.\n\n**Monitor Your Rewards**\n\nTrack your delegation performance and rewards through the portal's dashboard. Receive your share of the gateway's rewards based on the percentage set by the gateway operator.\n\n### Important Considerations\n\n- **Gateway Performance**: Your rewards depend on the gateway's performance and observer selection\n- **Reward Sharing**: Gateway operators set the percentage of rewards shared with delegators\n- **Redelegation**: You can move your stake between gateways as network conditions change\n- **Withdrawal Delays**: There may be delays when withdrawing your delegated stake\n\n## Stake Redelegation\n\nThis feature enables existing stakers to reallocate their staked tokens between gateways, known as redelegation. Both delegated stakers and gateway operators with excess stake (stake above the minimum network-join requirement) can take advantage of this feature. Redelegation is intended to offer users flexibility and the ability to respond to changing network conditions.\n\n## Redeeming Delegated Stake for ArNS\n\nStaked tokens generally have restricted liquidity to maintain a healthy degree of stability in the network. However, an exception to these restrictions allows delegated stakers to use their staked tokens for specific ArNS-related services. By leveraging their staking rewards, delegates can further engage with ArNS, strengthening the name system’s utilization and impact across the network.\n\n## Expedited Withdrawal Fees\n\nGateway operators and delegated stakers can shorten the standard withdrawal delay period after initiating a withdrawal (or being placed into an automatic withdrawal by protocol mechanisms); this action is subject to a dynamic fee. At any point during the delay, users can choose to expedite access to their pending withdrawal tokens by paying a fee to the protocol balance, calculated based on how much sooner they want to receive their funds. Once triggered, the tokens are returned immediately to the user’s wallet.\n\n}\n  />\n  }\n  />\n  }\n  />\n  }\n  />",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Gateway Staking",
+      "id": "gateway-staking"
+    },
+    {
+      "level": "h2",
+      "text": "Delegated Staking",
+      "id": "delegated-staking"
+    },
+    {
+      "level": "h3",
+      "text": "How Delegated Staking Works",
+      "id": "how-delegated-staking-works"
+    },
+    {
+      "level": "h3",
+      "text": "Benefits",
+      "id": "benefits"
+    },
+    {
+      "level": "h3",
+      "text": "Getting Started",
+      "id": "getting-started"
+    },
+    {
+      "level": "h3",
+      "text": "Important Considerations",
+      "id": "important-considerations"
+    },
+    {
+      "level": "h2",
+      "text": "Stake Redelegation",
+      "id": "stake-redelegation"
+    },
+    {
+      "level": "h2",
+      "text": "Redeeming Delegated Stake for ArNS",
+      "id": "redeeming-delegated-stake-for-arns"
+    },
+    {
+      "level": "h2",
+      "text": "Expedited Withdrawal Fees",
+      "id": "expedited-withdrawal-fees"
+    },
+    {
+      "level": "h2",
+      "text": "Explore Staking",
+      "id": "explore-staking"
+    }
+  ],
+  "url": "llms-txt#staking-(/learn/token/staking)",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Django",
+  "content": "Source: https://docs.conductor.build/quickstart/django\n\nConductor works well with Django apps. Here's a basic [conductor.json](/core/conductor.json) to add to the root directory of your project.\n\nOnce added, every new workspace will automatically copy your environment variables and install dependencies.\n\nIf you use a virtual environment, you may prefer to create a fresh one per workspace:",
+  "code_samples": [
+    {
+      "code": "If you use a virtual environment, you may prefer to create a fresh one per workspace:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#django",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "RandomRoutingStrategy (/sdks/wayfinder/wayfinder-core/(routing-strategies)/randomroutingstrategy)",
+  "content": "Selects a random gateway from a list of gateways.",
+  "code_samples": [
+    {
+      "code": "// Option 1: Use with static gateways (override gatewaysProvider if provided)\nconst routingStrategy = new RandomRoutingStrategy();\nconst gateway = await routingStrategy.selectGateway({\n  gateways: [new URL('https://arweave.net'), new URL('https://permagate.io')],\n});\n\n// Option 2: Use with gatewaysProvider (fetches dynamically)\nconst routingStrategy2 = new RandomRoutingStrategy({\n  gatewaysProvider: new NetworkGatewaysProvider({\n    ario: ARIO.mainnet(),\n    sortBy: 'operatorStake',\n    limit: 10,\n  }),\n});\nconst gateway2 = await routingStrategy2.selectGateway(); // uses gatewaysProvider\n\n// Option 3: Override gatewaysProvider with static gateways\nconst gateway3 = await routingStrategy2.selectGateway({\n  gateways: [new URL('https://custom-gateway.net')], // overrides gatewaysProvider\n});",
+      "language": "javascript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#randomroutingstrategy-(/sdks/wayfinder/wayfinder-core/(routing-strategies)/randomroutingstrategy)",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Architecture (/sdks/wayfinder/architecture)",
+  "content": "- Code to interfaces.\n- Prefer type safety over runtime safety.\n- Prefer composition over inheritance.\n- Prefer integration tests over unit tests.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#architecture-(/sdks/wayfinder/architecture)",
+  "links": []
+}

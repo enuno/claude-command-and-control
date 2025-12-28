@@ -1,0 +1,8 @@
+{
+  "title": "CentOS/RHEL",
+  "content": "sudo yum install transmission-cli",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#centos/rhel",
+  "links": []
+}

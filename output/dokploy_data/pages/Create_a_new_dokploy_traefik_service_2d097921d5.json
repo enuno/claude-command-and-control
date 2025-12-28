@@ -1,0 +1,13 @@
+{
+  "title": "Create a new dokploy-traefik service",
+  "content": "docker service create \\\n  --name dokploy-traefik \\\n  --constraint 'node.role==manager' \\\n  --network dokploy-network \\\n  --mount type=bind,source=/etc/dokploy/traefik/traefik.yml,target=/etc/traefik/traefik.yml \\\n  --mount type=bind,source=/etc/dokploy/traefik/dynamic,target=/etc/dokploy/traefik/dynamic \\\n  --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \\\n  --publish mode=host,published=443,target=443 \\\n  --publish mode=host,published=80,target=80 \\\n  --publish mode=host,published=443,target=443,protocol=udp \\\n  traefik:v3.6.1\nbash\ndocker service rm dokploy",
+  "code_samples": [
+    {
+      "code": "Remove the dokploy service:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#create-a-new-dokploy-traefik-service",
+  "links": []
+}

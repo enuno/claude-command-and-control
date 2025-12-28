@@ -1,0 +1,39 @@
+{
+  "title": "Manage your Gateway (/build/run-a-gateway/manage)",
+  "content": "Master the advanced features and configurations of your AR.IO Gateway. These comprehensive guides cover everything from performance optimization to content moderation, helping you run a professional-grade gateway infrastructure.\n\n## Gateway Management\n\n}>\n  Learn how to import pre-synchronized database snapshots to quickly bootstrap your gateway and reduce initial sync time from weeks to hours.\n\n}>\n  Step-by-step guide to safely upgrade your AR.IO Gateway to the latest version without losing data or progress.\n\n## Monitoring & Analytics\n\n}\n  >\n    Deploy and configure Grafana for comprehensive gateway monitoring,\n    performance analytics, and operational insights.\n\n## Performance Optimization\n\n}>\n  Configure advanced filters to efficiently process and index only the data you need, optimizing performance and resource usage.\n\n}>\n  Customize your gateway's root domain to serve custom content, project information, or documentation instead of default network info.\n\n## Content Management\n\n}\n  >\n    Implement content moderation policies using blocklisting and filtering to\n    control what content your gateway serves.\n\n## Configuration Reference\n\n}\n  >\n    Comprehensive reference for all AR.IO Gateway environment variables\n    organized by service component.\n\n## Support & Troubleshooting\n\n}\n  >\n    Comprehensive troubleshooting guide and FAQ for common gateway issues,\n    failed epoch guidance, and frequently asked questions.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Gateway Management",
+      "id": "gateway-management"
+    },
+    {
+      "level": "h2",
+      "text": "Monitoring & Analytics",
+      "id": "monitoring-&-analytics"
+    },
+    {
+      "level": "h2",
+      "text": "Performance Optimization",
+      "id": "performance-optimization"
+    },
+    {
+      "level": "h2",
+      "text": "Content Management",
+      "id": "content-management"
+    },
+    {
+      "level": "h2",
+      "text": "Configuration Reference",
+      "id": "configuration-reference"
+    },
+    {
+      "level": "h2",
+      "text": "Support & Troubleshooting",
+      "id": "support-&-troubleshooting"
+    }
+  ],
+  "url": "llms-txt#manage-your-gateway-(/build/run-a-gateway/manage)",
+  "links": []
+}

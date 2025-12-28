@@ -1,0 +1,13 @@
+{
+  "title": "useWayfinderUrl (/sdks/wayfinder/wayfinder-react/(hooks)/usewayfinderurl)",
+  "content": "Get a dynamic URL for an existing `ar://` URL or legacy `arweave.net`/`arweave.dev` URL.",
+  "code_samples": [
+    {
+      "code": "function WayfinderImage({ txId }: { txId: string }) {\n  const { resolvedUrl, isLoading, error } = useWayfinderUrl({ txId });\n\n  if (error) {\n    return Error resolving URL: {error.message};\n  }\n\n  if (isLoading) {\n    return Resolving URL...;\n  }\n\n  return (\n    \n  );\n}",
+      "language": "tsx"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#usewayfinderurl-(/sdks/wayfinder/wayfinder-react/(hooks)/usewayfinderurl)",
+  "links": []
+}

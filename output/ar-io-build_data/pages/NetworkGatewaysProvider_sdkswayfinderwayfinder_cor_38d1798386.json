@@ -1,0 +1,13 @@
+{
+  "title": "NetworkGatewaysProvider (/sdks/wayfinder/wayfinder-core/(gateway-providers)/networkgatewaysprovider)",
+  "content": "Returns a list of gateways from the ARIO Network based on on-chain metrics. You can specify on-chain metrics for gateways to prioritize the highest quality gateways. This requires installing the `@ar.io/sdk` package and importing the `ARIO` object. *It is recommended to use this provider for most use cases to leverage the AR.IO Network.*",
+  "code_samples": [
+    {
+      "code": "// requests will be routed to one of the top 10 gateways by operator stake\nconst gatewayProvider = new NetworkGatewaysProvider({\n  ario: ARIO.mainnet(),\n  sortBy: 'operatorStake', // sort by 'operatorStake' | 'totalDelegatedStake'\n  sortOrder: 'desc', // 'asc'\n  limit: 10, // number of gateways to use\n  filter: (gateway) => {\n    // use only active gateways that did not fail in the last epoch\n    return gateway.status === 'joined' && gateway.stats.failedConsecutiveEpochs === 0;\n  },\n});",
+      "language": "javascript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#networkgatewaysprovider-(/sdks/wayfinder/wayfinder-core/(gateway-providers)/networkgatewaysprovider)",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Elixir + Phoenix",
+  "content": "Source: https://docs.conductor.build/quickstart/phoenix\n\nConductor works well with Phoenix LiveView apps. Here's a basic [conductor.json](/core/conductor.json) to add to the root directory of your project.\n\nOnce added, every new workspace will automatically copy your environment configuration and install dependencies.\n\nIf you use runtime configuration with `config/runtime.exs` and secrets, you may want to copy those too:",
+  "code_samples": [
+    {
+      "code": "If you use runtime configuration with `config/runtime.exs` and secrets, you may want to copy those too:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#elixir-+-phoenix",
+  "links": []
+}

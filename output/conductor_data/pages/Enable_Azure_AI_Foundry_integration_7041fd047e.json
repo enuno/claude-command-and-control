@@ -1,0 +1,8 @@
+{
+  "title": "Enable Azure AI Foundry integration",
+  "content": "export CLAUDE_CODE_USE_FOUNDRY=1",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#enable-azure-ai-foundry-integration",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Restart CU container",
+  "content": "docker compose -f docker-compose.ao.yaml restart",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#restart-cu-container",
+  "links": []
+}

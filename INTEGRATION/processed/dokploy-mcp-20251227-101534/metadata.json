@@ -1,0 +1,85 @@
+{
+  "name": "dokploy-mcp",
+  "version": "1.0.0",
+  "description": "AI-driven deployment management using Dokploy MCP server for projects, applications, and databases",
+  "author": "Claude Command and Control",
+  "created": "2025-12-27",
+  "last_updated": "2025-12-27",
+  "status": "active",
+  "complexity": "complex",
+  "category": "devops-automation",
+  "tags": [
+    "deployment",
+    "dokploy",
+    "mcp",
+    "docker",
+    "database",
+    "devops",
+    "automation",
+    "postgresql",
+    "git-integration",
+    "ci-cd"
+  ],
+  "token_budget": "15000",
+  "usage_frequency_target": "daily",
+  "integrations": {
+    "agents": [
+      "builder",
+      "devops",
+      "validator"
+    ],
+    "commands": [
+      "/deploy",
+      "/rollback",
+      "/check-deployment",
+      "/scale-app"
+    ],
+    "mcp_servers": [
+      "dokploy-mcp"
+    ]
+  },
+  "tools_count": 43,
+  "tool_categories": {
+    "projects": 6,
+    "applications": 24,
+    "databases": 13,
+    "domains": 8
+  },
+  "supported_platforms": {
+    "git_providers": [
+      "GitHub",
+      "GitLab",
+      "Bitbucket",
+      "Gitea",
+      "Custom Git"
+    ],
+    "build_systems": [
+      "Dockerfile",
+      "Nixpacks",
+      "Heroku Buildpacks",
+      "Paketo Buildpacks",
+      "Static Sites",
+      "Railpack"
+    ],
+    "databases": [
+      "PostgreSQL",
+      "MySQL",
+      "MariaDB",
+      "MongoDB",
+      "Redis"
+    ]
+  },
+  "requirements": {
+    "environment_variables": [
+      "DOKPLOY_URL",
+      "DOKPLOY_API_KEY"
+    ],
+    "mcp_server": "@ahdev/dokploy-mcp",
+    "minimum_node_version": "18.0.0"
+  },
+  "repository": {
+    "original": "https://github.com/andradehenrique/dokploy-mcp",
+    "official": "https://github.com/Dokploy/mcp",
+    "status": "moved_to_official"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "title": "Download Operations (/sdks/ardrive-core-js/(api-reference)/download-operations)",
+  "content": "#### Download Folders",
+  "code_samples": [
+    {
+      "code": "// Download public file\nconst publicData = await arDrive.downloadPublicFile({ \n  fileId \n});\n// publicData is a Buffer/Uint8Array\n\n// Download private file (automatically decrypted)\nconst privateData = await arDrive.downloadPrivateFile({ \n  fileId, \n  driveKey \n});",
+      "language": "typescript"
+    },
+    {
+      "code": "// Download entire folder\nconst folderData = await arDrive.downloadPublicFolder({\n  folderId,\n  destFolderPath: '/local/download/path'\n});\n\n// Download private folder\nconst privateFolderData = await arDrive.downloadPrivateFolder({\n  folderId,\n  driveKey,\n  destFolderPath: '/local/download/path'\n});",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#download-operations-(/sdks/ardrive-core-js/(api-reference)/download-operations)",
+  "links": []
+}

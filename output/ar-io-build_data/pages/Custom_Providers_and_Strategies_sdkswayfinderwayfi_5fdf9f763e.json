@@ -1,0 +1,13 @@
+{
+  "title": "Custom Providers and Strategies (/sdks/wayfinder/wayfinder-core/(advanced-usage)/custom-providers-and-strategies)",
+  "content": "For advanced use cases, you can provide custom providers and strategies to `createWayfinderClient`:",
+  "code_samples": [
+    {
+      "code": "const wayfinder = createWayfinderClient({\n  ario: ARIO.mainnet()\n  \n  // Gateway selection\n  gatewaySelection: 'top-ranked',\n  \n  // Enable caching with custom TTL\n  cache: { ttlSeconds: 3600 }, // 1 hour\n\n  // Override 'routing' with custom routing strategy\n  routingStrategy: new FastestPingRoutingStrategy({\n    timeoutMs: 1000,\n  }),\n\n  // Override 'verification' with custom verification strategy\n  verificationStrategy: new HashVerificationStrategy({\n    trustedGateways: ['https://permagate.io'],\n  }),\n});",
+      "language": "javascript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#custom-providers-and-strategies-(/sdks/wayfinder/wayfinder-core/(advanced-usage)/custom-providers-and-strategies)",
+  "links": []
+}

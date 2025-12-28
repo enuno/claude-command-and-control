@@ -1,0 +1,89 @@
+{
+  "title": "Reporting (/learn/oip/reporting)",
+  "content": "## Observer Responsibilities\n\nSelected observers have specific duties each epoch: test gateways, document results, and submit findings through two channels. Proper completion of these responsibilities determines observer rewards and future selection chances.\n\n## Dual Submission Process\n\nObservers must submit their findings through both channels to fulfill their duties:\n\n### 1. Detailed Reports to Arweave\n\n- **Format**: Comprehensive JSON reports with full evaluation data\n- **Purpose**: Permanent audit trail and transparency\n- **Content**: Complete test results, timing data, and failure details\n\n### 2. Contract Interactions to AR.IO Smart Contract\n\n- **Format**: List of failed gateways\n- **Purpose**: Efficient vote tallying for consensus\n- **Content**: Binary pass/fail determinations for each gateway tested\n\n## Observer Evaluations\n\nObservers test assigned gateways against 10 ArNS names (2 prescribed + 8 chosen) and document their findings:\n\n![Observer Report Overview showing multiple gateway evaluations](/observer-report.png)\n\n### Evaluation Results\n\nPassing Report: Gateway successfully resolves ArNS names\n      with correct status codes (200), transaction IDs, and data hashes.\n\nFailing Report: Gateway fails ArNS resolution tests due\n      to ownership issues, timeouts (5000ms), or missing content.\n\nObservers evaluate gateways based on:\n\n- **Gateway Wallet Ownership**: Verifies correct wallet address\n- **ArNS Resolution**: Tests successful name-to-transaction resolution\n- **Content Hash Verification**: Ensures data integrity\n- **Response Times**: Measures performance within limits\n- **Chunk/Offset Validation**: Cryptographic verification of data chunks (for selected gateways)\n\n## Chunk/Offset Assessment Reporting\n\nFor gateways selected for chunk/offset validation, observers perform additional testing and reporting:\n\n### Validation Process\n\n- **Offset Selection**: Random offsets within the stable weave range are chosen for testing\n- **Chunk Retrieval**: Observers request chunk data using `GET /chunk/{offset}` endpoint\n- **Merkle Proof Verification**: Cryptographic validation ensures chunk authenticity\n- **Binary Search**: Efficient transaction lookup using cached metadata for proof validation\n\n### Reporting Details\n\n- **Individual Assessments**: Each offset test is tracked with pass/fail/skipped status\n- **Enforcement Status**: Reports include whether chunk/offset failures affect gateway status\n- **Performance Metrics**: Response times and validation results are documented\n- **Early Stopping**: Tests stop immediately upon first successful validation\n\n**Initial Implementation**: During the initial rollout phase, only a very\n  small portion of gateways will be checked for chunk/offset validation, and the\n  current validation criteria are extremely lenient to ensure smooth network\n  operation.\n\n## Observer Rewards and Penalties\n\nObserver performance directly impacts rewards and future participation:\n\n### Successful Observer Performance\n\n- **Observer Reward**: Observers who submit both reports and contract interactions receive the Observer Reward\n- **Future Selection**: Successful reporting improves Observer Performance Ratio Weight (OPRW)\n- **Increased Chances**: Higher OPRW increases likelihood of future observer selection and more reward opportunities\n\n### Failed Observer Performance\n\n- **No Observer Reward**: Observers who fail to submit required reports forfeit their Observer Reward\n- **Gateway Penalty**: If the deficient observer is also a functional gateway, their gateway reward is **reduced by 25%**\n- **Reduced Selection**: Failed submissions decrease OPRW, diminishing future observer selection chances\n- **Lost Opportunities**: Lower selection probability means fewer chances to earn Observer Rewards\n\n## Observer Accountability\n\nThe system tracks observer performance to ensure network quality:\n\n- **Submission Tracking**: Both Arweave reports and contract interactions must be submitted\n- **Performance History**: Observer submission record affects future selection probability\n- **Reward Impact**: Consistent reporting builds credibility and increases earning potential\n\nReady to understand how these reports are processed? Learn about [Performance Evaluation](/learn/oip/performance-evaluation) to see how reports become votes and determine gateway rewards, or explore [Reward Distribution](/learn/oip/reward-distribution) to understand the complete incentive structure.",
+  "code_samples": [
+    {
+      "code": "{\n  \"offsetAssessments\": {\n    \"plannedOffsets\": [12345, 67890, ...],\n    \"actualAssessments\": [...],\n    \"validatedOffset\": 12345,\n    \"pass\": true,\n    \"enforcementEnabled\": true\n  }\n}",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Observer Responsibilities",
+      "id": "observer-responsibilities"
+    },
+    {
+      "level": "h2",
+      "text": "Dual Submission Process",
+      "id": "dual-submission-process"
+    },
+    {
+      "level": "h3",
+      "text": "1. Detailed Reports to Arweave",
+      "id": "1.-detailed-reports-to-arweave"
+    },
+    {
+      "level": "h3",
+      "text": "2. Contract Interactions to AR.IO Smart Contract",
+      "id": "2.-contract-interactions-to-ar.io-smart-contract"
+    },
+    {
+      "level": "h2",
+      "text": "Observer Evaluations",
+      "id": "observer-evaluations"
+    },
+    {
+      "level": "h3",
+      "text": "Evaluation Results",
+      "id": "evaluation-results"
+    },
+    {
+      "level": "h2",
+      "text": "Chunk/Offset Assessment Reporting",
+      "id": "chunk/offset-assessment-reporting"
+    },
+    {
+      "level": "h3",
+      "text": "Validation Process",
+      "id": "validation-process"
+    },
+    {
+      "level": "h3",
+      "text": "Reporting Details",
+      "id": "reporting-details"
+    },
+    {
+      "level": "h3",
+      "text": "Report Structure",
+      "id": "report-structure"
+    },
+    {
+      "level": "h2",
+      "text": "Observer Rewards and Penalties",
+      "id": "observer-rewards-and-penalties"
+    },
+    {
+      "level": "h3",
+      "text": "Successful Observer Performance",
+      "id": "successful-observer-performance"
+    },
+    {
+      "level": "h3",
+      "text": "Failed Observer Performance",
+      "id": "failed-observer-performance"
+    },
+    {
+      "level": "h2",
+      "text": "Observer Accountability",
+      "id": "observer-accountability"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#reporting-(/learn/oip/reporting)",
+  "links": []
+}

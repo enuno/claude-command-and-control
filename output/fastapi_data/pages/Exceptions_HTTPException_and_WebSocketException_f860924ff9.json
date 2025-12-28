@@ -1,0 +1,211 @@
+{
+  "url": "https://fastapi.tiangolo.com/reference/exceptions/",
+  "title": "Exceptions - HTTPException and WebSocketException¶",
+  "content": "These are the exceptions that you can raise to show errors to the client.\n\nWhen you raise an exception, as would happen with normal Python, the rest of the execution is aborted. This way you can raise these exceptions from anywhere in the code to abort a request and show the error to the client.\n\nThese exceptions can be imported directly from fastapi:\n\nAn HTTP exception you can raise in your own code to show errors to the client.\n\nThis is for client errors, invalid authentication, invalid data, etc. Not for server errors in your code.\n\nRead more about it in the FastAPI docs for Handling Errors.\n\nHTTP status code to send to the client.\n\nAny data to be sent to the client in the detail key of the JSON response.\n\nTYPE: Any DEFAULT: None\n\nAny headers to send to the client in the response.\n\nTYPE: Optional[dict[str, str]] DEFAULT: None\n\nBases: WebSocketException\n\nA WebSocket exception you can raise in your own code to show errors to the client.\n\nThis is for client errors, invalid authentication, invalid data, etc. Not for server errors in your code.\n\nRead more about it in the FastAPI docs for WebSockets.\n\nA closing code from the valid codes defined in the specification.\n\nThe reason to close the WebSocket connection.\n\nIt is UTF-8-encoded data. The interpretation of the reason is up to the application, it is not specified by the WebSocket specification.\n\nIt could contain text that could be human-readable or interpretable by the client code, etc.\n\nTYPE: Union[str, None] DEFAULT: None",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Exceptions - HTTPException and WebSocketException¶",
+      "id": "exceptions-httpexception-and-websocketexception"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.HTTPException ¶",
+      "id": "fastapi.HTTPException"
+    },
+    {
+      "level": "h4",
+      "text": "Example¶",
+      "id": "fastapi.HTTPException--example"
+    },
+    {
+      "level": "h3",
+      "text": "status_code instance-attribute ¶",
+      "id": "fastapi.HTTPException.status_code"
+    },
+    {
+      "level": "h3",
+      "text": "detail instance-attribute ¶",
+      "id": "fastapi.HTTPException.detail"
+    },
+    {
+      "level": "h3",
+      "text": "headers instance-attribute ¶",
+      "id": "fastapi.HTTPException.headers"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.WebSocketException ¶",
+      "id": "fastapi.WebSocketException"
+    },
+    {
+      "level": "h4",
+      "text": "Example¶",
+      "id": "fastapi.WebSocketException--example"
+    },
+    {
+      "level": "h3",
+      "text": "code instance-attribute ¶",
+      "id": "fastapi.WebSocketException.code"
+    },
+    {
+      "level": "h3",
+      "text": "reason instance-attribute ¶",
+      "id": "fastapi.WebSocketException.reason"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from fastapi import HTTPException, WebSocketException",
+      "language": "python"
+    },
+    {
+      "code": "HTTPException(status_code, detail=None, headers=None)",
+      "language": "rust"
+    },
+    {
+      "code": "from fastapi import FastAPI, HTTPException\n\napp = FastAPI()\n\nitems = {\"foo\": \"The Foo Wrestlers\"}\n\n\n@app.get(\"/items/{item_id}\")\nasync def read_item(item_id: str):\n    if item_id not in items:\n        raise HTTPException(status_code=404, detail=\"Item not found\")\n    return {\"item\": items[item_id]}",
+      "language": "python"
+    },
+    {
+      "code": "def __init__(\n    self,\n    status_code: Annotated[\n        int,\n        Doc(\n            \"\"\"\n            HTTP status code to send to the client.\n            \"\"\"\n        ),\n    ],\n    detail: Annotated[\n        Any,\n        Doc(\n            \"\"\"\n            Any data to be sent to the client in the `detail` key of the JSON\n            response.\n            \"\"\"\n        ),\n    ] = None,\n    headers: Annotated[\n        Optional[dict[str, str]],\n        Doc(\n            \"\"\"\n            Any headers to send to the client in the response.\n            \"\"\"\n        ),\n    ] = None,\n) -> None:\n    super().__init__(status_code=status_code, detail=detail, headers=headers)",
+      "language": "python"
+    },
+    {
+      "code": "status_code = status_code",
+      "language": "unknown"
+    },
+    {
+      "code": "detail = detail",
+      "language": "unknown"
+    },
+    {
+      "code": "headers = headers",
+      "language": "unknown"
+    },
+    {
+      "code": "WebSocketException(code, reason=None)",
+      "language": "rust"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import (\n    Cookie,\n    FastAPI,\n    WebSocket,\n    WebSocketException,\n    status,\n)\n\napp = FastAPI()\n\n@app.websocket(\"/items/{item_id}/ws\")\nasync def websocket_endpoint(\n    *,\n    websocket: WebSocket,\n    session: Annotated[str | None, Cookie()] = None,\n    item_id: str,\n):\n    if session is None:\n        raise WebSocketException(code=status.WS_1008_POLICY_VIOLATION)\n    await websocket.accept()\n    while True:\n        data = await websocket.receive_text()\n        await websocket.send_text(f\"Session cookie is: {session}\")\n        await websocket.send_text(f\"Message text was: {data}, for item ID: {item_id}\")",
+      "language": "python"
+    },
+    {
+      "code": "def __init__(\n    self,\n    code: Annotated[\n        int,\n        Doc(\n            \"\"\"\n            A closing code from the\n            [valid codes defined in the specification](https://datatracker.ietf.org/doc/html/rfc6455#section-7.4.1).\n            \"\"\"\n        ),\n    ],\n    reason: Annotated[\n        Union[str, None],\n        Doc(\n            \"\"\"\n            The reason to close the WebSocket connection.\n\n            It is UTF-8-encoded data. The interpretation of the reason is up to the\n            application, it is not specified by the WebSocket specification.\n\n            It could contain text that could be human-readable or interpretable\n            by the client code, etc.\n            \"\"\"\n        ),\n    ] = None,\n) -> None:\n    super().__init__(code=code, reason=reason)",
+      "language": "python"
+    },
+    {
+      "code": "code = code",
+      "language": "unknown"
+    },
+    {
+      "code": "reason = reason or ''",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

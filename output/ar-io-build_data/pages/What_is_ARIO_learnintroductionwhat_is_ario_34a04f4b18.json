@@ -1,0 +1,64 @@
+{
+  "title": "What is AR.IO? (/learn/(introduction)/what-is-ario)",
+  "content": "The AR.IO Network is the first permanent cloud network.\n\nA decentralized infrastructure layer built on Arweave and AO, making permanent data accessible, discoverable, and usable. Think of it as the gateway to Arweave's permaweb, turning its tamper-proof storage into a fully functional, user-friendly ecosystem for apps, websites, and data.\n\n## Features of The AR.IO Network\n\nAR.IO operates a network of [gateways](/learn/gateways) — nodes that serve as entry points to Arweave’s data. These gateways fetch and deliver data quickly, supporting everything from static files to dynamic web apps.\n\n### Arweave Name System (ArNS)\n\nThe [Arweave Name System (ArNS)](/learn/arns) is a decentralized naming system for Arweave. It allows users to register and resolve human-readable names to Arweave transaction IDs.\n\nAR.IO offers a range of tools for accessing and querying data on Arweave, including:\n\n- [HTTP Requests](/build/access/fetch-data) via gateways\n- [GraphQL Queries](/build/access/find-data) for finding data by tags and metadata\n- [ArNS](/learn/arns) for human-readable URLs\n- [Wayfinder](/learn/wayfinder) for decentralized content discovery\n\nArweave stores data forever, but accessing and organizing that data isn't always straightforward. Without efficient tools, retrieving files, serving websites, or finding specific content on Arweave's blockweave can be slow or complex, limiting its potential for developers and users.\n\nThe AR.IO Network builds on Arweave's permanent storage to create a decentralized, scalable access layer. It provides gateways, domain names, and indexing services, making it easy to interact with permaweb content as seamlessly as the traditional web.\n\n- **Decentralized Gateways**: AR.IO operates a network of gateways—nodes that serve as entry points to Arweave’s data. These gateways fetch and deliver data quickly, supporting everything from static files to dynamic web apps.\n\n- **ArNS (Arweave Name Service)**: AR.IO introduces decentralized domain names (e.g., yourname.arweave), mapping human-readable names to Arweave’s data IDs. This makes content easy to find and share, like URLs on the traditional web.\n\n- **Indexing and Querying**: AR.IO enables efficient data indexing, allowing developers to search and retrieve specific content from Arweave’s vast storage without scanning the entire blockweave.\n\n- **Routing and verification**: AR.IO 's ar://wayfinder Protocol intelligently routes requests to available gateways in the network and verifies the data's authenticity.\n\n- **Observation and incentives**: ARIO's [Observation and Incentive Protocol (OIP)](/learn/oip), ensures gateway operators are serving the right data and rewards them in the protocol native token, $ARIO, to create a secure and self-sustaining network.\n\n**In Simple Terms**: Imagine Arweave as a massive, unerasable library. The AR.IO Network is the librarian who organizes the shelves, provides a catalog, and hands you the books you need—fast.\n\n- **Accessible**: Gateways make permaweb content load as quickly as traditional websites.\n\n- **Discoverable**: ArNS provides user-friendly domain names, simplifying navigation.\n\n- **Scalable**: Supports growing permaweb usage, from small apps to global platforms.\n\n- **Decentralized**: No single entity controls access, ensuring censorship resistance.\n\n## Building on The AR.IO Network\n\nThe AR.IO Network empowers developers to create permaweb apps with tools for hosting, querying, and monetizing content, all while leveraging Arweave's permanent storage.\n\n**In Simple Terms**: Arweave locks data forever; The AR.IO Network makes it ready for the world to use.\n\n## Ready to Dive Deeper?\n\nThe AR.IO Network transforms Arweave into a vibrant permaweb ecosystem. Ready to start building? Explore our comprehensive guides and start creating on the permanent web.\n\n}\n  />\n  }\n  />\n  }\n  />\n  }\n  />",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Features of The AR.IO Network",
+      "id": "features-of-the-ar.io-network"
+    },
+    {
+      "level": "h3",
+      "text": "Gateways",
+      "id": "gateways"
+    },
+    {
+      "level": "h3",
+      "text": "Arweave Name System (ArNS)",
+      "id": "arweave-name-system-(arns)"
+    },
+    {
+      "level": "h3",
+      "text": "Data Access",
+      "id": "data-access"
+    },
+    {
+      "level": "h2",
+      "text": "The Problem",
+      "id": "the-problem"
+    },
+    {
+      "level": "h2",
+      "text": "The Solution",
+      "id": "the-solution"
+    },
+    {
+      "level": "h3",
+      "text": "How It Works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h2",
+      "text": "Why It Matters",
+      "id": "why-it-matters"
+    },
+    {
+      "level": "h2",
+      "text": "Building on The AR.IO Network",
+      "id": "building-on-the-ar.io-network"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to Dive Deeper?",
+      "id": "ready-to-dive-deeper?"
+    },
+    {
+      "level": "h2",
+      "text": "Explore AR.IO",
+      "id": "explore-ar.io"
+    }
+  ],
+  "url": "llms-txt#what-is-ar.io?-(/learn/(introduction)/what-is-ario)",
+  "links": []
+}

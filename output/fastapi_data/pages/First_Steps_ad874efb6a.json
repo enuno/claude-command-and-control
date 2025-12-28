@@ -1,0 +1,294 @@
+{
+  "url": "https://fastapi.tiangolo.com/tutorial/first-steps/",
+  "title": "First Steps¶",
+  "content": "The simplest FastAPI file could look like this:\n\nCopy that to a file main.py.\n\nIn the output, there's a line with something like:\n\nThat line shows the URL where your app is being served, in your local machine.\n\nOpen your browser at http://127.0.0.1:8000.\n\nYou will see the JSON response as:\n\nNow go to http://127.0.0.1:8000/docs.\n\nYou will see the automatic interactive API documentation (provided by Swagger UI):\n\nAnd now, go to http://127.0.0.1:8000/redoc.\n\nYou will see the alternative automatic documentation (provided by ReDoc):\n\nFastAPI generates a \"schema\" with all your API using the OpenAPI standard for defining APIs.\n\nA \"schema\" is a definition or description of something. Not the code that implements it, but just an abstract description.\n\nIn this case, OpenAPI is a specification that dictates how to define a schema of your API.\n\nThis schema definition includes your API paths, the possible parameters they take, etc.\n\nThe term \"schema\" might also refer to the shape of some data, like a JSON content.\n\nIn that case, it would mean the JSON attributes, and data types they have, etc.\n\nOpenAPI defines an API schema for your API. And that schema includes definitions (or \"schemas\") of the data sent and received by your API using JSON Schema, the standard for JSON data schemas.\n\nIf you are curious about how the raw OpenAPI schema looks like, FastAPI automatically generates a JSON (schema) with the descriptions of all your API.\n\nYou can see it directly at: http://127.0.0.1:8000/openapi.json.\n\nIt will show a JSON starting with something like:\n\nThe OpenAPI schema is what powers the two interactive documentation systems included.\n\nAnd there are dozens of alternatives, all based on OpenAPI. You could easily add any of those alternatives to your application built with FastAPI.\n\nYou could also use it to generate code automatically, for clients that communicate with your API. For example, frontend, mobile or IoT applications.\n\nYou can optionally deploy your FastAPI app to FastAPI Cloud, go and join the waiting list if you haven't. 🚀\n\nIf you already have a FastAPI Cloud account (we invited you from the waiting list 😉), you can deploy your application with one command.\n\nBefore deploying, make sure you are logged in:\n\nThen deploy your app:\n\nThat's it! Now you can access your app at that URL. ✨\n\nFastAPI is a Python class that provides all the functionality for your API.\n\nFastAPI is a class that inherits directly from Starlette.\n\nYou can use all the Starlette functionality with FastAPI too.\n\nHere the app variable will be an \"instance\" of the class FastAPI.\n\nThis will be the main point of interaction to create all your API.\n\n\"Path\" here refers to the last part of the URL starting from the first /.\n\n...the path would be:\n\nA \"path\" is also commonly called an \"endpoint\" or a \"route\".\n\nWhile building an API, the \"path\" is the main way to separate \"concerns\" and \"resources\".\n\n\"Operation\" here refers to one of the HTTP \"methods\".\n\n...and the more exotic ones:\n\nIn the HTTP protocol, you can communicate to each path using one (or more) of these \"methods\".\n\nWhen building APIs, you normally use these specific HTTP methods to perform a specific action.\n\nSo, in OpenAPI, each of the HTTP methods is called an \"operation\".\n\nWe are going to call them \"operations\" too.\n\nThe @app.get(\"/\") tells FastAPI that the function right below is in charge of handling requests that go to:\n\nThat @something syntax in Python is called a \"decorator\".\n\nYou put it on top of a function. Like a pretty decorative hat (I guess that's where the term came from).\n\nA \"decorator\" takes the function below and does something with it.\n\nIn our case, this decorator tells FastAPI that the function below corresponds to the path / with an operation get.\n\nIt is the \"path operation decorator\".\n\nYou can also use the other operations:\n\nAnd the more exotic ones:\n\nYou are free to use each operation (HTTP method) as you wish.\n\nFastAPI doesn't enforce any specific meaning.\n\nThe information here is presented as a guideline, not a requirement.\n\nFor example, when using GraphQL you normally perform all the actions using only POST operations.\n\nThis is our \"path operation function\":\n\nThis is a Python function.\n\nIt will be called by FastAPI whenever it receives a request to the URL \"/\" using a GET operation.\n\nIn this case, it is an async function.\n\nYou could also define it as a normal function instead of async def:\n\nIf you don't know the difference, check the Async: \"In a hurry?\".\n\nYou can return a dict, list, singular values as str, int, etc.\n\nYou can also return Pydantic models (you'll see more about that later).\n\nThere are many other objects and models that will be automatically converted to JSON (including ORMs, etc). Try using your favorite ones, it's highly probable that they are already supported.\n\nDeploy your app to FastAPI Cloud with one command: fastapi deploy. 🎉\n\nFastAPI Cloud is built by the same author and team behind FastAPI.\n\nIt streamlines the process of building, deploying, and accessing an API with minimal effort.\n\nIt brings the same developer experience of building apps with FastAPI to deploying them to the cloud. 🎉\n\nFastAPI Cloud is the primary sponsor and funding provider for the FastAPI and friends open source projects. ✨\n\nFastAPI is open source and based on standards. You can deploy FastAPI apps to any cloud provider you choose.\n\nFollow your cloud provider's guides to deploy FastAPI apps with them. 🤓",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "First Steps¶",
+      "id": "first-steps"
+    },
+    {
+      "level": "h3",
+      "text": "Check it¶",
+      "id": "check-it"
+    },
+    {
+      "level": "h3",
+      "text": "Interactive API docs¶",
+      "id": "interactive-api-docs"
+    },
+    {
+      "level": "h3",
+      "text": "Alternative API docs¶",
+      "id": "alternative-api-docs"
+    },
+    {
+      "level": "h3",
+      "text": "OpenAPI¶",
+      "id": "openapi"
+    },
+    {
+      "level": "h4",
+      "text": "\"Schema\"¶",
+      "id": "schema"
+    },
+    {
+      "level": "h4",
+      "text": "API \"schema\"¶",
+      "id": "api-schema"
+    },
+    {
+      "level": "h4",
+      "text": "Data \"schema\"¶",
+      "id": "data-schema"
+    },
+    {
+      "level": "h4",
+      "text": "OpenAPI and JSON Schema¶",
+      "id": "openapi-and-json-schema"
+    },
+    {
+      "level": "h4",
+      "text": "Check the openapi.json¶",
+      "id": "check-the-openapi-json"
+    },
+    {
+      "level": "h4",
+      "text": "What is OpenAPI for¶",
+      "id": "what-is-openapi-for"
+    },
+    {
+      "level": "h3",
+      "text": "Deploy your app (optional)¶",
+      "id": "deploy-your-app-optional"
+    },
+    {
+      "level": "h2",
+      "text": "Recap, step by step¶",
+      "id": "recap-step-by-step"
+    },
+    {
+      "level": "h3",
+      "text": "Step 1: import FastAPI¶",
+      "id": "step-1-import-fastapi"
+    },
+    {
+      "level": "h3",
+      "text": "Step 2: create a FastAPI \"instance\"¶",
+      "id": "step-2-create-a-fastapi-instance"
+    },
+    {
+      "level": "h3",
+      "text": "Step 3: create a path operation¶",
+      "id": "step-3-create-a-path-operation"
+    },
+    {
+      "level": "h4",
+      "text": "Path¶",
+      "id": "path"
+    },
+    {
+      "level": "h4",
+      "text": "Operation¶",
+      "id": "operation"
+    },
+    {
+      "level": "h4",
+      "text": "Define a path operation decorator¶",
+      "id": "define-a-path-operation-decorator"
+    },
+    {
+      "level": "h3",
+      "text": "Step 4: define the path operation function¶",
+      "id": "step-4-define-the-path-operation-function"
+    },
+    {
+      "level": "h3",
+      "text": "Step 5: return the content¶",
+      "id": "step-5-return-the-content"
+    },
+    {
+      "level": "h3",
+      "text": "Step 6: Deploy it¶",
+      "id": "step-6-deploy-it"
+    },
+    {
+      "level": "h4",
+      "text": "About FastAPI Cloud¶",
+      "id": "about-fastapi-cloud"
+    },
+    {
+      "level": "h4",
+      "text": "Deploy to other cloud providers¶",
+      "id": "deploy-to-other-cloud-providers"
+    },
+    {
+      "level": "h2",
+      "text": "Recap¶",
+      "id": "recap"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from fastapi import FastAPI\n\napp = FastAPI()\n\n\n@app.get(\"/\")\nasync def root():\n    return {\"message\": \"Hello World\"}",
+      "language": "python"
+    },
+    {
+      "code": "$ <font color=\"#4E9A06\">fastapi</font> dev <u style=\"text-decoration-style:solid\">main.py</u>\n\n  <span style=\"background-color:#009485\"><font color=\"#D3D7CF\"> FastAPI </font></span>  Starting development server 🚀\n\n             Searching for package file structure from directories\n             with <font color=\"#3465A4\">__init__.py</font> files\n             Importing from <font color=\"#75507B\">/home/user/code/</font><font color=\"#AD7FA8\">awesomeapp</font>\n\n   <span style=\"background-color:#007166\"><font color=\"#D3D7CF\"> module </font></span>  🐍 main.py\n\n     <span style=\"background-color:#007166\"><font color=\"#D3D7CF\"> code </font></span>  Importing the FastAPI app object from the module with\n             the following code:\n\n             <u style=\"text-decoration-style:solid\">from </u><u style=\"text-decoration-style:solid\"><b>main</b></u><u style=\"text-decoration-style:solid\"> import </u><u style=\"text-decoration-style:solid\"><b>app</b></u>\n\n      <span style=\"background-color:#007166\"><font color=\"#D3D7CF\"> app </font></span>  Using import string: <font color=\"#3465A4\">main:app</font>\n\n   <span style=\"background-color:#007166\"><font color=\"#D3D7CF\"> server </font></span>  Server started at <font color=\"#729FCF\"><u style=\"text-decoration-style:solid\">http://127.0.0.1:8000</u></font>\n   <span style=\"background-color:#007166\"><font color=\"#D3D7CF\"> server </font></span>  Documentation at <font color=\"#729FCF\"><u style=\"text-decoration-style:solid\">http://127.0.0.1:8000/docs</u></font>\n\n      <span style=\"background-color:#007166\"><font color=\"#D3D7CF\"> tip </font></span>  Running in development mode, for production use:\n             <b>fastapi run</b>\n\n             Logs:\n\n     <span style=\"background-color:#007166\"><font color=\"#D3D7CF\"> INFO </font></span>  Will watch for changes in these directories:\n             <b>[</b><font color=\"#4E9A06\">&apos;/home/user/code/awesomeapp&apos;</font><b>]</b>\n     <span style=\"background-color:#007166\"><font color=\"#D3D7CF\"> INFO </font></span>  Uvicorn running on <font color=\"#729FCF\"><u style=\"text-decoration-style:solid\">http://127.0.0.1:8000</u></font> <b>(</b>Press CTRL+C\n             to quit<b>)</b>\n     <span style=\"background-color:#007166\"><font color=\"#D3D7CF\"> INFO </font></span>  Started reloader process <b>[</b><font color=\"#34E2E2\"><b>383138</b></font><b>]</b> using WatchFiles\n     <span style=\"background-color:#007166\"><font color=\"#D3D7CF\"> INFO </font></span>  Started server process <b>[</b><font color=\"#34E2E2\"><b>383153</b></font><b>]</b>\n     <span style=\"background-color:#007166\"><font color=\"#D3D7CF\"> INFO </font></span>  Waiting for application startup.\n     <span style=\"background-color:#007166\"><font color=\"#D3D7CF\"> INFO </font></span>  Application startup complete.",
+      "language": "julia"
+    },
+    {
+      "code": "INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)",
+      "language": "yaml"
+    },
+    {
+      "code": "{\"message\": \"Hello World\"}",
+      "language": "json"
+    },
+    {
+      "code": "{\n    \"openapi\": \"3.1.0\",\n    \"info\": {\n        \"title\": \"FastAPI\",\n        \"version\": \"0.1.0\"\n    },\n    \"paths\": {\n        \"/items/\": {\n            \"get\": {\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"Successful Response\",\n                        \"content\": {\n                            \"application/json\": {\n\n\n\n...",
+      "language": "json"
+    },
+    {
+      "code": "$ fastapi login\n\nYou are logged in to FastAPI Cloud 🚀",
+      "language": "unknown"
+    },
+    {
+      "code": "$ fastapi deploy\n\nDeploying to FastAPI Cloud...\n\n✅ Deployment successful!\n\n🐔 Ready the chicken! Your app is ready at https://myapp.fastapicloud.dev",
+      "language": "unknown"
+    },
+    {
+      "code": "from fastapi import FastAPI\n\napp = FastAPI()\n\n\n@app.get(\"/\")\nasync def root():\n    return {\"message\": \"Hello World\"}",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\n\napp = FastAPI()\n\n\n@app.get(\"/\")\nasync def root():\n    return {\"message\": \"Hello World\"}",
+      "language": "python"
+    },
+    {
+      "code": "https://example.com/items/foo",
+      "language": "yaml"
+    },
+    {
+      "code": "from fastapi import FastAPI\n\napp = FastAPI()\n\n\n@app.get(\"/\")\nasync def root():\n    return {\"message\": \"Hello World\"}",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\n\napp = FastAPI()\n\n\n@app.get(\"/\")\nasync def root():\n    return {\"message\": \"Hello World\"}",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\n\napp = FastAPI()\n\n\n@app.get(\"/\")\ndef root():\n    return {\"message\": \"Hello World\"}",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\n\napp = FastAPI()\n\n\n@app.get(\"/\")\nasync def root():\n    return {\"message\": \"Hello World\"}",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

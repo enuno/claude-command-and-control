@@ -1,0 +1,69 @@
+{
+  "title": "ArFS Protocol (/build/advanced/arfs)",
+  "content": "Arweave File System, or \"ArFS\" is a data modeling, storage, and retrieval protocol designed to emulate common file system operations and to provide aspects of mutability to your data hierarchy on [Arweave](/learn/what-is-arweave)'s otherwise permanent, immutable data storage blockweave.\n\nDue to Arweave's permanent, immutable and public nature traditional file system operations such as permissions, file/folder renaming and moving, and file updates cannot be done by simply updating the on-chain data model.\n\nArFS works around this by implementing a privacy and encryption pattern and defining an append-only transaction data model using tags within [Arweave Transaction headers](https://docs.arweave.org/developers/server/http-api#transaction-format).\n\nArFS organizes files and folders using a hierarchical structure. Files are stored as individual transactions on the Arweave blockchain, while folders are metadata that reference these file transactions.\n\nEach file and folder has associated metadata, such as the name, type, size, and modification timestamp. ArFS leverages Arweave's tagging system to store this metadata in a standardized format, which allows for easy querying and organization.\n\nArFS supports public and private file permissions. Public files can be accessed by anyone on the network, while private files are encrypted using the owner's private key, ensuring only they can decrypt and access the content.\n\nArFS supports versioning of files, allowing users to store multiple versions of a file and access previous versions at any time. This is achieved by linking new file transactions to previous versions through the use of metadata tags.\n\n### Data Deduplication\n\nTo minimize storage redundancy and costs, ArFS employs data deduplication techniques. If a user tries to store a file that already exists on the network, the protocol will simply create a new reference to the existing file instead of storing a duplicate copy.\n\n### Search and Discovery\n\nArFS enables users to search and discover files based on their metadata, such as file names, types, and tags. This is made possible by indexing the metadata stored within the Arweave blockchain.\n\nArFS is designed to be interoperable with other decentralized applications and services built on the Arweave network. This allows for seamless integration and collaboration between different applications and users.\n\nTo start using ArFS, you'll need to familiarize yourself with the Arweave ecosystem, acquire AR tokens to cover storage costs, and choose a compatible client or library to interact with the ArFS protocol.\n\n## ArFS Version History\n\n| Version | Date           | Release Notes                                                                                                                                |\n| ------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |\n| 0.10    | August 2020    | The brief, beta version that was in use during initial testing of ArDrive across Web (Dart) and legacy CLI (Typescript).                     |\n| 0.11    | September 2020 | Includes all of the major functionality supporting file systems on Arweave including new drives, folders, files, renames, moves and privacy. |\n| 0.12    | December 2022  | Added Snapshot entities to support quick synchronization of drive state.                                                                     |\n| 0.13    | August 2023    | Added pins                                                                                                                                   |\n| 0.14    | January 2024   | Added `isHidden` property to file and folder metadata to enable clients to \"hide\" content from end users.                                    |\n| 0.15    | May 2025       | Added `Drive-Signature` entity type and `Signature-Type` metadata property on Drive entities.                                                |\n\nReady to dive deeper into ArFS? Here's what you should explore next:\n\n- [Entity Types](/build/advanced/arfs/entity-types) - Understand the different ArFS entities and their structure\n- [Data Model](/build/advanced/arfs/data-model) - Learn how ArFS organizes data hierarchically\n- [Privacy & Encryption](/build/advanced/arfs/privacy) - Secure your data with private drives\n- [Creating Drives](/build/advanced/arfs/creating-drives) - Get started with your first ArFS drive\n- [Reading Data](/build/advanced/arfs/reading-data) - Query and retrieve your ArFS data\n\nFor more information, documentation, and community support, refer to the following resources:\n\n- [Arweave Official Website](https://www.arweave.org/)\n- [Arweave Developer Documentation](https://docs.arweave.org/)\n- [Arweave Community Forums](https://community.arweave.org/)",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Key Features",
+      "id": "key-features"
+    },
+    {
+      "level": "h3",
+      "text": "File Structure",
+      "id": "file-structure"
+    },
+    {
+      "level": "h3",
+      "text": "Metadata",
+      "id": "metadata"
+    },
+    {
+      "level": "h3",
+      "text": "File Permissions",
+      "id": "file-permissions"
+    },
+    {
+      "level": "h3",
+      "text": "File Versioning",
+      "id": "file-versioning"
+    },
+    {
+      "level": "h3",
+      "text": "Data Deduplication",
+      "id": "data-deduplication"
+    },
+    {
+      "level": "h3",
+      "text": "Search and Discovery",
+      "id": "search-and-discovery"
+    },
+    {
+      "level": "h3",
+      "text": "Interoperability",
+      "id": "interoperability"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Started",
+      "id": "getting-started"
+    },
+    {
+      "level": "h2",
+      "text": "ArFS Version History",
+      "id": "arfs-version-history"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "Resources",
+      "id": "resources"
+    }
+  ],
+  "url": "llms-txt#arfs-protocol-(/build/advanced/arfs)",
+  "links": []
+}

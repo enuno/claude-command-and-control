@@ -1,0 +1,8 @@
+{
+  "title": "Pull latest bundler images",
+  "content": "docker compose --file docker-compose.bundler.yaml pull",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#pull-latest-bundler-images",
+  "links": []
+}

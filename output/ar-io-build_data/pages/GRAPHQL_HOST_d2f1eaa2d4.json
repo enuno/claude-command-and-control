@@ -1,0 +1,274 @@
+{
+  "title": "GRAPHQL_HOST=",
+  "content": "json {{title: \"Never Match\"}}\n{\n  \"never\": true //default behavior\n}\njson {{title: \"Always Match\"}}\n{\n  \"always\": true\n}\njson {{title: \"Exact Match\"}}\n{\n  \"tags\": [\n    {\n      \"name\": \"Content-Type\",\n      \"value\": \"image/jpeg\"\n    }\n  ]\n}\njson {{title: \"Match Tag Name Only\"}}\n{\n  \"tags\": [\n    {\n      \"name\": \"App-Name\"\n    }\n  ]\n}\njson {{title: \"Starts With Match\"}}\n{\n  \"tags\": [\n    {\n      \"name\": \"Protocol\",\n      \"valueStartsWith\": \"AO\"\n    }\n  ]\n}\njson {{title: \"Basic Attributes\"}}\n{\n  \"attributes\": {\n    \"owner_address\": \"xyz123...\",\n    \"data_size\": 1000\n  }\n}\njson {{title: \"Basic Nested Bundle\"}}\n{\n  \"isNestedBundle\": true\n}\njson {{title: \"AND Operation\"}}\n{\n  \"and\": [\n    {\n      \"tags\": [\n        {\n          \"name\": \"App-Name\",\n          \"value\": \"ArDrive-App\"\n        }\n      ]\n    },\n    {\n      \"tags\": [\n        {\n          \"name\": \"Content-Type\",\n          \"valueStartsWith\": \"image/\"\n        }\n      ]\n    }\n  ]\n}\njson {{title: \"OR Operation\"}}\n{\n  \"or\": [\n    {\n      \"tags\": [\n        {\n          \"name\": \"App-Name\",\n          \"value\": \"ArDrive-App\"\n        }\n      ]\n    },\n    {\n      \"attributes\": {\n        \"data_size\": 1000\n      }\n    }\n  ]\n}\njson {{title: \"NOT Operation\"}}\n{\n  \"not\": {\n    \"tags\": [\n      {\n        \"name\": \"Content-Type\",\n        \"value\": \"application/json\"\n      }\n    ]\n  }\n}\njson\n{\n  \"always\": true\n}\njson\n{\n  \"never\": true\n}\njson\n{\n  \"tags\": [\n    {\n      \"name\": \"App-Name\",\n      \"valueStartsWith\": \"MyApp\"\n    }\n  ]\n}\njson\n{\n  \"tags\": [\n    {\n      \"name\": \"App-Name\",\n      \"value\": \"MyApp-v1.0\"\n    }\n  ]\n}\njson\n{\n  \"or\": [\n    {\n      \"tags\": [\n        {\n          \"name\": \"App-Name\",\n          \"value\": \"MyApp-v1.0\"\n        }\n      ]\n    },\n    {\n      \"tags\": [\n        {\n          \"name\": \"App-Name\",\n          \"value\": \"AnotherApp-v2.1\"\n        }\n      ]\n    }\n  ]\n}\njson\n{\n  \"tags\": [\n    {\n      \"name\": \"App-Name\",\n      \"valueStartsWith\": \"MyApp\"\n    }\n  ]\n}\njson\n{\n  \"tags\": [\n    {\n      \"name\": \"Content-Type\",\n      \"valueStartsWith\": \"image/\"\n    }\n  ]\n}\njson\n{\n  \"or\": [\n    {\n      \"tags\": [\n        {\n          \"name\": \"Content-Type\",\n          \"value\": \"application/json\"\n        }\n      ]\n    },\n    {\n      \"tags\": [\n        {\n          \"name\": \"Content-Type\",\n          \"value\": \"text/plain\"\n        }\n      ]\n    }\n  ]\n}\njson\n{\n  \"attributes\": {\n    \"data_size\": 1000000\n  }\n}\njson\n{\n  \"attributes\": {\n    \"owner_address\": \"YOUR_WALLET_ADDRESS\"\n  }\n}\njson\n{\n  \"or\": [\n    {\n      \"attributes\": {\n        \"owner_address\": \"WALLET_ADDRESS_1\"\n      }\n    },\n    {\n      \"attributes\": {\n        \"owner_address\": \"WALLET_ADDRESS_2\"\n      }\n    }\n  ]\n}\njson\n{\n  \"not\": {\n    \"attributes\": {\n      \"owner_address\": \"UNWANTED_WALLET_ADDRESS\"\n    }\n  }\n}\njson\n{\n  \"and\": [\n    {\n      \"tags\": [\n        {\n          \"name\": \"App-Name\",\n          \"valueStartsWith\": \"MyApp\"\n        }\n      ]\n    },\n    {\n      \"attributes\": {\n        \"owner_address\": \"YOUR_WALLET_ADDRESS\"\n      }\n    },\n    {\n      \"not\": {\n        \"tags\": [\n          {\n            \"name\": \"Content-Type\",\n            \"value\": \"application/octet-stream\"\n          }\n        ]\n      }\n    }\n  ]\n}\njson\n{\n  \"and\": [\n    {\n      \"not\": {\n        \"or\": [\n          {\n            \"tags\": [\n              {\n                \"name\": \"Bundler-App-Name\",\n                \"value\": \"Warp\"\n              }\n            ]\n          },\n          {\n            \"tags\": [\n              {\n                \"name\": \"Bundler-App-Name\",\n                \"value\": \"Redstone\"\n              }\n            ]\n          },\n          {\n            \"attributes\": {\n              \"owner_address\": \"-OXcT1sVRSA5eGwt2k6Yuz8-3e3g9WJi5uSE99CWqsBs\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"tags\": [\n        {\n          \"name\": \"App-Name\",\n          \"valueStartsWith\": \"MyApp\"\n        }\n      ]\n    }\n  ]\n}\njson\n{\n  \"and\": [\n    {\n      \"not\": {\n        \"or\": [\n          {\n            \"tags\": [\n              {\n                \"name\": \"Bundler-App-Name\",\n                \"value\": \"Warp\"\n              }\n            ]\n          },\n          {\n            \"tags\": [\n              {\n                \"name\": \"Bundler-App-Name\",\n                \"value\": \"Redstone\"\n              }\n            ]\n          }\n        ]\n      }\n    },\n    {\n      \"tags\": [\n        {\n          \"name\": \"App-Name\",\n          \"valueStartsWith\": \"MyApp\"\n        }\n      ]\n    }\n  ]\n}\njson\n{\n  \"attributes\": {\n    \"owner_address\": \"YOUR_WALLET_ADDRESS\"\n  }\n}\njson\n{\n  \"tags\": [\n    {\n      \"name\": \"App-Name\",\n      \"valueStartsWith\": \"MyApp\"\n    }\n  ]\n}\njson\n{\n  \"or\": [\n    {\n      \"tags\": [\n        {\n          \"name\": \"ArFS\",\n          \"value\": \"0.10\"\n        }\n      ]\n    },\n    {\n      \"tags\": [\n        {\n          \"name\": \"ArFS\",\n          \"value\": \"0.11\"\n        }\n      ]\n    },\n    {\n      \"tags\": [\n        {\n          \"name\": \"ArFS\",\n          \"value\": \"0.12\"\n        }\n      ]\n    }\n  ]\n}\njson\n{\n  \"tags\": [\n    {\n      \"name\": \"Content-Type\",\n      \"valueStartsWith\": \"image/\"\n    }\n  ]\n}\njson\n{\n  \"and\": [\n    {\n      \"tags\": [\n        {\n          \"name\": \"Content-Type\",\n          \"valueStartsWith\": \"image/\"\n        }\n      ]\n    },\n    {\n      \"attributes\": {\n        \"data_size\": 100000\n      }\n    }\n  ]\n}\nbash",
+  "code_samples": [
+    {
+      "code": "## Filter Construction\n\n  While the filters below are displayed on multiple lines for readability, they\n  must be stored in the `.env` file as a single line for proper processing.\n\n### Basic Filters\n\nThe simplest filters you can use are `\"always\"` and `\"never\"` filters. The `\"never\"` filter is the default behavior and will match nothing, while the `\"always\"` filter matches everything.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "### Tag Filters\n\nTag filters allow you to match items based on their tags in three different ways. You can match exact tag values, check for the presence of a tag regardless of its value, or match tags whose values start with specific text. All tag values are automatically base64url-decoded before matching.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "### Attribute Filters\n\nAttribute filtering allows you to match items based on their metadata properties. The system automatically handles owner public key to address conversion, making it easy to filter by owner address. You can combine multiple attributes in a single filter:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Nested Bundle Filter\n\nThe `isNestedBundle` filter is a specialized filter that checks whether a data item is part of a nested bundle structure. It's particularly useful when you need to identify or process data items in bundles that are contained within other bundles.",
+      "language": "unknown"
+    },
+    {
+      "code": "**Note**: When processing nested bundles, be sure to include filters that match the nested bundles in both `ANS104_UNBUNDLE_FILTER` and `ANS104_INDEX_FILTER`. The bundle data items (nested bundles) need to be indexed to be matched by the unbundle filter.\n\n### Complex Filters Using Logical Operators\n\nFor more complex scenarios, the system provides logical operators (AND, OR, NOT) that can be combined to create sophisticated filtering patterns. These operators can be nested to any depth:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## Filter Configuration Strategies\n\n### Process Everything",
+      "language": "unknown"
+    },
+    {
+      "code": "### Process Nothing (Default)",
+      "language": "unknown"
+    },
+    {
+      "code": "### Process Specific App Data",
+      "language": "unknown"
+    },
+    {
+      "code": "### Single Application",
+      "language": "unknown"
+    },
+    {
+      "code": "### Multiple Applications",
+      "language": "unknown"
+    },
+    {
+      "code": "### Application with Version Range",
+      "language": "unknown"
+    },
+    {
+      "code": "### Content Type Filtering",
+      "language": "unknown"
+    },
+    {
+      "code": "### Specific File Types",
+      "language": "unknown"
+    },
+    {
+      "code": "### File Size Filtering",
+      "language": "unknown"
+    },
+    {
+      "code": "### Single Owner",
+      "language": "unknown"
+    },
+    {
+      "code": "### Multiple Owners",
+      "language": "unknown"
+    },
+    {
+      "code": "### Exclude Specific Owners",
+      "language": "unknown"
+    },
+    {
+      "code": "### Complex Multi-Condition Filter",
+      "language": "unknown"
+    },
+    {
+      "code": "### Exclude Common Bundlers",
+      "language": "unknown"
+    },
+    {
+      "code": "## Real-World Use Cases\n\n### Personal Data Gateway\n\nPerfect for individuals who want to process only their own data:\n\n**Unbundle Filter:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Index Filter:**",
+      "language": "unknown"
+    },
+    {
+      "code": "### Application-Specific Service\n\nIdeal for building services around specific applications:\n\n**Unbundle Filter:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Index Filter:**",
+      "language": "unknown"
+    },
+    {
+      "code": "### Content-Type Focused Gateway\n\nFor gateways specializing in specific content types:\n\n**Unbundle Filter:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Index Filter:**",
+      "language": "unknown"
+    },
+    {
+      "code": "## Performance Optimization\n\n### Worker Configuration\n\n### Understanding Default Worker Settings\n\nThe gateway uses sensible defaults that work well for most users:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Filter Construction",
+      "id": "filter-construction"
+    },
+    {
+      "level": "h3",
+      "text": "Basic Filters",
+      "id": "basic-filters"
+    },
+    {
+      "level": "h3",
+      "text": "Tag Filters",
+      "id": "tag-filters"
+    },
+    {
+      "level": "h3",
+      "text": "Attribute Filters",
+      "id": "attribute-filters"
+    },
+    {
+      "level": "h3",
+      "text": "Nested Bundle Filter",
+      "id": "nested-bundle-filter"
+    },
+    {
+      "level": "h3",
+      "text": "Complex Filters Using Logical Operators",
+      "id": "complex-filters-using-logical-operators"
+    },
+    {
+      "level": "h2",
+      "text": "Filter Configuration Strategies",
+      "id": "filter-configuration-strategies"
+    },
+    {
+      "level": "h3",
+      "text": "Process Everything",
+      "id": "process-everything"
+    },
+    {
+      "level": "h3",
+      "text": "Process Nothing (Default)",
+      "id": "process-nothing-(default)"
+    },
+    {
+      "level": "h3",
+      "text": "Process Specific App Data",
+      "id": "process-specific-app-data"
+    },
+    {
+      "level": "h3",
+      "text": "Single Application",
+      "id": "single-application"
+    },
+    {
+      "level": "h3",
+      "text": "Multiple Applications",
+      "id": "multiple-applications"
+    },
+    {
+      "level": "h3",
+      "text": "Application with Version Range",
+      "id": "application-with-version-range"
+    },
+    {
+      "level": "h3",
+      "text": "Content Type Filtering",
+      "id": "content-type-filtering"
+    },
+    {
+      "level": "h3",
+      "text": "Specific File Types",
+      "id": "specific-file-types"
+    },
+    {
+      "level": "h3",
+      "text": "File Size Filtering",
+      "id": "file-size-filtering"
+    },
+    {
+      "level": "h3",
+      "text": "Single Owner",
+      "id": "single-owner"
+    },
+    {
+      "level": "h3",
+      "text": "Multiple Owners",
+      "id": "multiple-owners"
+    },
+    {
+      "level": "h3",
+      "text": "Exclude Specific Owners",
+      "id": "exclude-specific-owners"
+    },
+    {
+      "level": "h3",
+      "text": "Complex Multi-Condition Filter",
+      "id": "complex-multi-condition-filter"
+    },
+    {
+      "level": "h3",
+      "text": "Exclude Common Bundlers",
+      "id": "exclude-common-bundlers"
+    },
+    {
+      "level": "h2",
+      "text": "Real-World Use Cases",
+      "id": "real-world-use-cases"
+    },
+    {
+      "level": "h3",
+      "text": "Personal Data Gateway",
+      "id": "personal-data-gateway"
+    },
+    {
+      "level": "h3",
+      "text": "Application-Specific Service",
+      "id": "application-specific-service"
+    },
+    {
+      "level": "h3",
+      "text": "Content-Type Focused Gateway",
+      "id": "content-type-focused-gateway"
+    },
+    {
+      "level": "h2",
+      "text": "Performance Optimization",
+      "id": "performance-optimization"
+    },
+    {
+      "level": "h3",
+      "text": "Worker Configuration",
+      "id": "worker-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Understanding Default Worker Settings",
+      "id": "understanding-default-worker-settings"
+    }
+  ],
+  "url": "llms-txt#graphql_host=",
+  "links": []
+}

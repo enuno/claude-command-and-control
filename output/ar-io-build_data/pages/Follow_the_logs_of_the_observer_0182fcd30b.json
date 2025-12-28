@@ -1,0 +1,14 @@
+{
+  "title": "Follow the logs of the observer",
+  "content": "docker compose logs core observer -f -n 10\n```\n\nYour gateway is running! Now you can:\n\n}\n  />\n  }\n  />\n  }\n  />\n  }\n  />\n\n**Need more context?** Learn [What is an AR.IO Gateway](/learn/gateways) to understand the full capabilities.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "What's Next?",
+      "id": "what's-next?"
+    }
+  ],
+  "url": "llms-txt#follow-the-logs-of-the-observer",
+  "links": []
+}

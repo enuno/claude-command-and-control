@@ -1,0 +1,8 @@
+{
+  "title": "NVM (Optional - Recommended) (/sdks/(clis)/ardrive-cli/(prerequisites)/nvm-optional-recommended)",
+  "content": "This project uses the Node Version Manager (NVM) and an `.nvmrc` file to lock the recommended Node version used by the latest version of `ardrive-core-js`.\n\n**Note for Windows: We recommend using WSL for setting up NVM on Windows using the [instructions described here][wsl-install]**\n\nFollow these steps to get NVM up and running on your system:\n\n1. Install NVM using [these installation instructions][nvm-install].\n2. Navigate to this project's root directory\n3. Ensure that the correct version of Node is installed by performing: `nvm install`\n4. Use the correct version of Node, by performing: `nvm use`\n\n**IT IS STRONGLY RECOMMENDED THAT YOU AVOID GENERATING WALLETS VIA SEED PHRASE WITH THE CLI USING ANY NODE VERSION OTHER THAN THE ONE SPECIFIED IN `.nvmrc`.**",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#nvm-(optional---recommended)-(/sdks/(clis)/ardrive-cli/(prerequisites)/nvm-optional-recommended)",
+  "links": []
+}

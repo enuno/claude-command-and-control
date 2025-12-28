@@ -1,0 +1,13 @@
+{
+  "title": "Uploading With a Custom Content Type (/sdks/(clis)/ardrive-cli/(working-with-files)/uploading-with-a-custom-content-type)",
+  "content": "Each file uploaded to the Arweave network receives a `\"Content-Type\"` GraphQL tag that contains the MIME type for the file. The gateway will use this content type to determine how to serve that file's data transaction at the `arweave.net/{data tx id}` endpoint.\n\nBy default, the CLI will attempt to derive this content type from the file extension of the provided file. In most cases, the content type that is derived will be correct and the gateway will properly serve the file.\n\nThe CLI also provides the option for users to upload files with a custom content type using the `--content-type` flag:\n\nIt is currently possible to set this value to any given string, but the gateway will still only serve valid content types. Check out this list of commonly used MIME types to ensure you're providing a valid content type: [Common MIME types][mozilla-mime-types].\n\nNote: In the case of multi-file uploads or recursive folder uploads, setting this `--content-type` flag will set the provided custom content type on EVERY file entity within a given upload.",
+  "code_samples": [
+    {
+      "code": "ardrive upload-file --content-type \"application/json\"  --local-path /path/to/file --parent-folder-id \"9af694f6-4cfc-4eee-88a8-1b02704760c0\" -w /path/to/wallet.json",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#uploading-with-a-custom-content-type-(/sdks/(clis)/ardrive-cli/(working-with-files)/uploading-with-a-custom-content-type)",
+  "links": []
+}

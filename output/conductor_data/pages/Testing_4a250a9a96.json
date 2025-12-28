@@ -1,0 +1,29 @@
+{
+  "title": "Testing",
+  "content": "Source: https://docs.conductor.build/core/testing\n\nAutomate testing in Conductor\n\nOnce you've made changes in a workspace, it's time to test! Conductor offers two ways to speed up the testing cycle.\n\nThe `run` script in Conductor allows you to easily launch your web server, app, or unit tests from a button in the Conductor UI.\n\n<img alt=\"Run script\" />\n\nThe script will run in your workspace directory. You can run multiple dev servers at once by reading the `$CONDUCTOR_PORT` environment variable in your script. Learn more in our [run scripts guide](/guides/how-to-run).\n\nSpotlight testing allows you to test your application by copying the changes in your workspace *back* to your repository root directory using a button in the Conductor UI.\n\n<img alt=\"Spotlight testing\" />\n\nEnabling spotlight in a workspace automatically syncs the changes in your workspace back to your repository's root directory every time a change is made.\n\nYou'll then have access to a terminal in your repository root directory in the Conductor UI. Learn more in our [spotlight testing guide](/guides/spotlight-testing).\n\n<Note>\n  Spotlight testing is in experimental mode. Enable it under `Settings` -> `Experimental`.\n\nIf you run into any issues using spotlight testing, please reach out to us at [humans@conductor.build](mailto:humans@conductor.build).\n</Note>\n\n## Choosing a testing approach\n\nThere are a few key differences to keep in mind when choosing a testing approach:\n\n* With spotlight testing, you can only test one workspace at a time.\n* Using run scripts requires your repository to be able to run from different workspace directories on your machine.\n* Consider how costly the initial build is for your repository. If it's expensive, spotlight testing can help you reuse build artifacts that already exist by running from your repository root.\n* If your application depends on a single external resource (like a database or a specific port), spotlight testing (or run scripts in nonconcurrent mode) can help prevent resource conflicts.\n\n## Running multiple services at once\n\nConductor only supports automating testing one service at a time. If your application requires multiple services to be tested at once (i.e. a backend and a frontend), check out our [using multiple repositories](/tips/using-multiple-repos) guide.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Run scripts",
+      "id": "run-scripts"
+    },
+    {
+      "level": "h2",
+      "text": "Spotlight testing",
+      "id": "spotlight-testing"
+    },
+    {
+      "level": "h2",
+      "text": "Choosing a testing approach",
+      "id": "choosing-a-testing-approach"
+    },
+    {
+      "level": "h2",
+      "text": "Running multiple services at once",
+      "id": "running-multiple-services-at-once"
+    }
+  ],
+  "url": "llms-txt#testing",
+  "links": []
+}

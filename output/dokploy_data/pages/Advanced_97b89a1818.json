@@ -1,0 +1,99 @@
+{
+  "title": "Advanced",
+  "content": "This section is designed for experienced users who need to manage complex configurations and orchestration settings in Dokploy. The **Advanced** tab is located in your **Applications** settings. Here, you can execute custom commands, manage cluster replicas, select Docker registries, and configure Docker Swarm settings.\n\n* **Purpose**: Allows users to execute custom shell commands directly within the container.\n* **Usage**: Enter the command you need to run in the provided field and click 'Save' to execute it within the container environment. This tool is particularly useful for debugging or specific administrative tasks.\n\n* **Purpose**: Manages the scaling and distribution of the application across multiple servers or nodes.\n* **Replicas**: Set the number of instances of your **application** that should be running.\n* **Registry Selection**: Choose the Docker registry from which your container images will be pulled. This is crucial for ensuring that the correct images are used during deployment.\n\nAlways click 'Redeploy' after modifying the cluster settings to apply the changes.\n\nSwarm settings allow for detailed configuration of how containers are orchestrated within the Docker Swarm.\n\n* **Purpose**: Ensures that containers are running smoothly and restarts them if they fail.\n* **Configuration**: Specify parameters like test commands, intervals, timeouts, start periods, and retries.\n\nDefines how containers should be handled if they exit or fail, the configuration is as follows:\n\n* **Condition**: Specifies under what condition a restart should occur.\n* **Delay**: Sets the time delay between restarts.\n* **Max Attempts**: Limits the number of restart attempts.\n* **Window**: Defines the time window used to evaluate the restart policy.\n\nManages the deployment and update process of services in the swarm, the configuration is as follows:\n\n* **Parallelism**: Number of containers to update simultaneously.\n* **Delay**: Time between updates.\n* **Failure Action**: Action to take if an update fails.\n* **Monitor**: Duration to monitor a container after an update.\n* **Max Failure Ratio**: The fraction of containers that are allowed to fail before the update is considered a failure.\n* **Order**: The order in which containers are stopped and started during an update.\n\nControls where containers are placed within the swarm based on specific rules and preferences, the configuration is as follows:\n\n* **Constraints**: Conditions that must be met for a container to be placed on a node.\n* **Preferences**: Preferences for placing containers across nodes to spread load evenly.\n\nManages the rollback process for services when updates fail, the configuration is as follows:\n\n* **Parallelism**: Number of containers to rollback simultaneously.\n* **Delay**: Time between rollbacks.\n* **FailureAction**: Action to take if a rollback fails.\n* **Monitor**: Duration to monitor a container after a rollback.\n* **MaxFailureRatio**: The fraction of containers that are allowed to fail before the rollback is considered a failure.\n* **Order**: The order in which containers are stopped and restarted during a rollback.\n\nDefines how services are replicated within the swarm, the configuration is as follows:\n\n* **Replicated**: Services are replicated across nodes as specified.\n* **Replicas**: Number of replicas per service.\n* **Global**: A single instance of the service runs on every node.\n* **ReplicatedJob**: Runs a job in a replicated manner.\n* **MaxConcurrent**: Maximum number of jobs running concurrently.\n* **TotalCompletions**: Total number of times the jobs need to complete.\n\nConfigures network settings for the services, the configuration is as follows:\n\n* **Target**: Specifies the network name.\n* **Aliases**: Provides aliases for the network.\n* **DriverOpts**: Network driver options like MTU size and host binding.\n\nAssigns metadata to containers to help identify and organize them, the configuration is as follows:\n\n* **Labels**: Key-value pairs assigned to the service. For example:\n\n1. `com.example.app.name`: \"my-app\"\n2. `com.example.app.version`: \"1.0.0\"\n\nModifying Swarm Settings requires careful consideration as incorrect configurations can disrupt the entire container orchestration. Always ensure you understand the implications of the changes you are making.\n\nYou can configure your application to use an external build server to compile and build your application. This feature allows you to separate the build process from your deployment servers, which is particularly useful when you want to:\n\n* Use powerful build resources without paying for expensive deployment servers\n* Keep your deployment servers lightweight\n* Build once and deploy to multiple servers\n* Isolate the build process from production environments\n\nWhen you enable a custom build server:\n\n1. **Build Phase**: Dokploy connects to your build server via SSH, clones your repository, and builds the Docker image on the build server\n2. **Push Phase**: The built image is pushed to your configured Docker registry\n3. **Deploy Phase**: Your deployment server(s) pull the image from the registry and deploy it\n\n<Callout type=\"info\">\n  **Important**: Build servers are currently **only available for Applications**. This feature is not supported for Docker Compose deployments.\n</Callout>\n\n<Callout type=\"warn\">\n  **Required Configuration**: When using a build server, you must configure a Docker registry in your Dokploy settings. The built image needs to be stored in a registry that's accessible to your deployment servers. See [Docker Registry](/docs/core/registry) for configuration details.\n</Callout>\n\n**For complete setup instructions, configuration details, and best practices, please read the comprehensive [Build Server guide](/docs/core/remote-servers/build-server).**\n\nManage the memory and CPU resources allocated to your applications or databases. These settings help control resource consumption and ensure fair distribution across your containers.\n\n<Callout type=\"info\">\n  Remember to click **Redeploy** after modifying the resources to apply the changes.\n</Callout>\n\nDocker API expects memory values in **bytes**. Dokploy provides a user-friendly interface that accepts values with units and converts them automatically.\n\nThe maximum amount of memory the container can use. If the container tries to use more memory than this limit, it will be killed by the Docker daemon.\n\n**Format**: Enter a number followed by the unit (B, KB, MB, GB)\n\n**Docker API Value**: The value is converted to bytes internally\n\n* `1073741824` bytes = 1GB\n* `268435456` bytes = 256MB\n* `536870912` bytes = 512MB\n\n* `256MB` → Limits container to 256 megabytes\n* `1GB` → Limits container to 1 gigabyte\n* `2GB` → Limits container to 2 gigabytes\n\n#### Memory Reservation\n\nThe minimum amount of memory guaranteed to the container. Docker will try to ensure this amount is always available, but the container can use more if available.\n\n**Format**: Enter a number followed by the unit (B, KB, MB, GB)\n\n**Docker API Value**: The value is converted to bytes internally\n\n* `268435456` bytes = 256MB\n* `536870912` bytes = 512MB\n\n* `128MB` → Reserves at least 128 megabytes\n* `256MB` → Reserves at least 256 megabytes\n* `512MB` → Reserves at least 512 megabytes\n\n<Callout type=\"warn\">\n  Memory Reservation should always be **less than or equal to** Memory Limit. If you set a reservation higher than the limit, Docker will use the limit value.\n</Callout>\n\nDocker API expects CPU values in **nanoseconds** (for periods) or as a decimal fraction of available CPU cores. Dokploy displays this in a user-friendly format.\n\nThe maximum number of CPU cores the container can use. This is a hard limit enforced by the Docker daemon.\n\n**Format**: Enter as a decimal number representing CPU cores\n\n* `2000000000` nanoseconds = 2 CPUs (2 full cores)\n* `1000000000` nanoseconds = 1 CPU (1 full core)\n* `500000000` nanoseconds = 0.5 CPU (half a core)\n\n**Docker API Value**: Internally represented as `NanoCPUs`\n\n* `1 CPU` → Limits to 1 full CPU core (1000000000 nanoseconds)\n* `2 CPUs` → Limits to 2 full CPU cores (2000000000 nanoseconds)\n* `0.5 CPU` → Limits to half a CPU core (500000000 nanoseconds)\n* `4 CPUs` → Limits to 4 full CPU cores (4000000000 nanoseconds)\n\nThe minimum number of CPU cores reserved for the container. Docker will try to ensure this amount is always available.\n\n**Format**: Enter as a decimal number representing CPU cores\n\n* `1000000000` nanoseconds = 1 CPU\n* `500000000` nanoseconds = 0.5 CPU\n\n**Docker API Value**: Internally represented as `NanoCPUs`\n\n* `0.5 CPU` → Reserves half a CPU core (500000000 nanoseconds)\n* `1 CPU` → Reserves 1 full CPU core (1000000000 nanoseconds)\n* `0.25 CPU` → Reserves a quarter CPU core (250000000 nanoseconds)\n\n<Callout type=\"warn\">\n  CPU Reservation should always be **less than or equal to** CPU Limit. Setting it too high may prevent the container from starting if resources aren't available.\n</Callout>\n\n#### Docker API Reference\n\nWhen Dokploy communicates with Docker API, these values are sent in the service specification:\n\nThis JSON represents:\n\n* **CPU Limit**: 2 CPUs (2000000000 nanoseconds)\n* **Memory Limit**: 1GB (1073741824 bytes)\n* **CPU Reservation**: 1 CPU (1000000000 nanoseconds)\n* **Memory Reservation**: 512MB (536870912 bytes)\n\nFor detailed information about Docker API resource specifications and service creation, refer to the official Docker Engine API documentation:\n\n[Docker Engine API - Service Create](https://docs.docker.com/reference/api/engine/version/v1.51/#tag/Service/operation/ServiceCreate)\n\nThis documentation includes:\n\n* Complete resource specification schema\n* Advanced configuration options\n* API request/response examples\n* Additional parameters and constraints\n\nConfigure persistent storage for your application to ensure data remains intact across container restarts and deployments.\n\n**Bind Mount**: Maps a host file or directory to a container file or directory. Typically used for specific configurations or databases.\n\n1. **Host Path**: Path on the host.\n2. **Mount Path**: Path in the container.\n\n**Volume Mount**: Uses Docker-managed volumes that are easier to back up and migrate than bind mounts.\n\n1. **Volume Name**: Name of the Docker-managed volume.\n2. **Mount Path**: Path in the container where the volume is mounted.\n\n**File Mount**: Specifically for single files, useful for configuration files.\n\n1. **Content**: The content to store in the file.\n2. **File Path**: The name of the file.\n3. **Mount Path**: Path in the container where the file is placed. **The path must also contain the filename.**\n\nFile mounts are a Dokploy feature. When you create a file mount, Dokploy stores the file in a folder called `files` inside your project directory. This file is created once when you set up the file mount and persists across deployments.\n\n<ImageZoom src=\"/assets/file-mount-configuration.webp\" width={800} height={630} className=\"rounded-lg\" />\n\n<ImageZoom src=\"/assets/file-mount.png\" width={800} height={630} className=\"rounded-lg\" />\n\nRedirect requests to your application to another URL based on specified rules, enhancing navigational efficiency and SEO.\n\n* **Regex**: Enter a regular expression to match the URLs that need redirecting.\n* **Replacement**: Specify the target URL where traffic should be redirected.\n* **Permanent**: Toggle this option to apply a permanent (HTTP 301) redirection, indicating to browsers and search engines that the page has moved permanently.\n\nTo redirect all traffic from \"[http://localhost](http://localhost)\" to \"[http://mydomain](http://mydomain)\", set the Regex as `http://localhost/(.*)` and the Replacement as `http://mydomain/$1`.\n\nAdd basic authentication to your application to restrict access.\n\n* **Username**: Enter a username.\n* **Password**: Enter a password.\n\nAdding basic authentication will prompt users for a username and password before allowing access to the application. Use this for environments where an additional layer of security is required.\n\nExpose your application to the internet by configuring network ports, allowing external access.\n\n* **Published Port**: The port number on the host that will route traffic to your application.\n* **Target Port**: The port number inside the container that the application uses.\n* **Protocol**: Choose between TCP and UDP based on your application's requirements.\n\nEnsure that the published port does not conflict with other services on the host to avoid port binding errors, also this port is used mostly for accesing the application from the outside, eg your-ip:port, this is not for accessing the application trought a domain.\n\nProvides a dynamic and robust method to manage HTTP traffic to your services, including load balancing and SSL termination.\n\n* **Rules**: Define complex routing, load balancing, and security configurations using Traefik's powerful rule-based configuration system.",
+  "code_samples": [
+    {
+      "code": "{\n  \"TaskTemplate\": {\n    \"Resources\": {\n      \"Limits\": {\n        \"NanoCPUs\": 2000000000,\n        \"MemoryBytes\": 1073741824\n      },\n      \"Reservations\": {\n        \"NanoCPUs\": 1000000000,\n        \"MemoryBytes\": 536870912\n      }\n    }\n  }\n}",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Run Command",
+      "id": "run-command"
+    },
+    {
+      "level": "h3",
+      "text": "Cluster Settings",
+      "id": "cluster-settings"
+    },
+    {
+      "level": "h3",
+      "text": "Swarm Settings",
+      "id": "swarm-settings"
+    },
+    {
+      "level": "h3",
+      "text": "Rollback Config",
+      "id": "rollback-config"
+    },
+    {
+      "level": "h3",
+      "text": "Mode",
+      "id": "mode"
+    },
+    {
+      "level": "h3",
+      "text": "Network",
+      "id": "network"
+    },
+    {
+      "level": "h3",
+      "text": "Labels",
+      "id": "labels"
+    },
+    {
+      "level": "h3",
+      "text": "Note",
+      "id": "note"
+    },
+    {
+      "level": "h2",
+      "text": "Build Server",
+      "id": "build-server"
+    },
+    {
+      "level": "h2",
+      "text": "Resources",
+      "id": "resources"
+    },
+    {
+      "level": "h3",
+      "text": "Memory Resources",
+      "id": "memory-resources"
+    },
+    {
+      "level": "h3",
+      "text": "CPU Resources",
+      "id": "cpu-resources"
+    },
+    {
+      "level": "h3",
+      "text": "Volumes/Mounts",
+      "id": "volumes/mounts"
+    },
+    {
+      "level": "h3",
+      "text": "Redirects",
+      "id": "redirects"
+    },
+    {
+      "level": "h3",
+      "text": "Security",
+      "id": "security"
+    },
+    {
+      "level": "h3",
+      "text": "Ports",
+      "id": "ports"
+    },
+    {
+      "level": "h3",
+      "text": "Traefik",
+      "id": "traefik"
+    }
+  ],
+  "url": "llms-txt#advanced",
+  "links": []
+}

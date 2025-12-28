@@ -1,0 +1,57 @@
+{
+  "title": "TurboFactory (/sdks/turbo-sdk/(apis)/turbofactory)",
+  "content": "#### unauthenticated()\n\nCreates an instance of a client that accesses Turbo's unauthenticated services.\n\nCreates an instance of a client that accesses Turbo's authenticated and unauthenticated services. Requires either a signer, or private key to be provided.\n\n##### ArconnectSigner\n\n##### Ethereum Private Key\n\n##### POL (MATIC) Private Key\n\n##### HexSolanaSigner\n\n##### Solana Web Wallet Adapter\n\n##### Solana Secret Key\n\n##### KYVE Private Key",
+  "code_samples": [
+    {
+      "code": "const turbo = TurboFactory.unauthenticated();",
+      "language": "typescript"
+    },
+    {
+      "code": "const jwk = await arweave.crypto.generateJWK();\nconst turbo = TurboFactory.authenticated({ privateKey: jwk });",
+      "language": "typescript"
+    },
+    {
+      "code": "const signer = new ArweaveSigner(jwk);\nconst turbo = TurboFactory.authenticated({ signer });",
+      "language": "typescript"
+    },
+    {
+      "code": "const signer = new ArconnectSigner(window.arweaveWallet);\nconst turbo = TurboFactory.authenticated({ signer });",
+      "language": "typescript"
+    },
+    {
+      "code": "const signer = new EthereumSigner(privateKey);\nconst turbo = TurboFactory.authenticated({ signer });",
+      "language": "typescript"
+    },
+    {
+      "code": "const turbo = TurboFactory.authenticated({\n  privateKey: ethHexadecimalPrivateKey,\n  token: 'ethereum',\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "const turbo = TurboFactory.authenticated({\n  privateKey: ethHexadecimalPrivateKey,\n  token: 'pol',\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "const signer = new HexSolanaSigner(bs58.encode(secretKey));\nconst turbo = TurboFactory.authenticated({ signer });",
+      "language": "typescript"
+    },
+    {
+      "code": "const turbo = TurboFactory.authenticated({\n  walletAdapter: window.solana,\n  token: 'solana',\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "const turbo = TurboFactory.authenticated({\n  privateKey: bs58.encode(secretKey),\n  token: 'solana',\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "const turbo = TurboFactory.authenticated({\n  privateKey: kyveHexadecimalPrivateKey,\n  token: 'kyve',\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "const turbo = TurboFactory.authenticated({\n  privateKey: privateKeyFromKyveMnemonic(mnemonic),\n  token: 'kyve',\n});",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#turbofactory-(/sdks/turbo-sdk/(apis)/turbofactory)",
+  "links": []
+}

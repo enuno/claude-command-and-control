@@ -1,0 +1,8 @@
+{
+  "title": "search the container name",
+  "content": "container_name=$(docker ps --filter \"name=clickhouse\" --format \"{{.Names}}\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#search-the-container-name",
+  "links": []
+}

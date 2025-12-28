@@ -1,0 +1,13 @@
+{
+  "title": "Direct Constructor Usage (/sdks/wayfinder/wayfinder-core/(advanced-usage)/direct-constructor-usage)",
+  "content": "For complete control, you can use the Wayfinder constructor directly. This is useful when you need fine-grained control over the configuration:\n\n> _Wayfinder client that caches the top 10 gateways by operator stake from the ARIO Network for 1 hour and uses the fastest pinging routing strategy to select the fastest gateway for requests._",
+  "code_samples": [
+    {
+      "code": "const wayfinder = new Wayfinder({\n  // cache the top 10 gateways by operator stake from the ARIO Network for 1 hour\n  gatewaysProvider: new SimpleCacheGatewaysProvider({\n    ttlSeconds: 60 * 60, // cache the gateways for 1 hour\n    gatewaysProvider: new NetworkGatewaysProvider({\n      ario: ARIO.mainnet(),\n      sortBy: 'operatorStake',\n      sortOrder: 'desc',\n      limit: 10,\n    }),\n  }),\n  // routing settings\n  routingSettings: {\n    // use the fastest pinging strategy to select the fastest gateway for requests\n    strategy: new FastestPingRoutingStrategy({\n      timeoutMs: 1000,\n    }),\n    // events\n    events: {\n      onRoutingStarted: (event) => {\n        console.log('Routing started!', event);\n      },\n      onRoutingSkipped: (event) => {\n        console.log('Routing skipped!', event);\n      },\n      onRoutingSucceeded: (event) => {\n        console.log('Routing succeeded!', event);\n      },\n    },\n  },\n  // verification settings\n  verificationSettings: {\n    // enable verification - if false, verification will be skipped for all requests\n    enabled: true,\n    // verify the data using the hash of the data against a list of trusted gateways\n    strategy: new HashVerificationStrategy({\n      trustedGateways: ['https://permagate.io'],\n    }),\n    // strict verification - if true, verification failures will cause requests to fail\n    strict: true,\n    // events\n    events: {\n      onVerificationProgress: (event) => {\n        console.log('Verification progress!', event);\n      },\n      onVerificationSucceeded: (event) => {\n        console.log('Verification succeeded!', event);\n      },\n      onVerificationFailed: (event) => {\n        console.log('Verification failed!', event);\n      },\n    },\n  },\n});",
+      "language": "javascript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#direct-constructor-usage-(/sdks/wayfinder/wayfinder-core/(advanced-usage)/direct-constructor-usage)",
+  "links": []
+}

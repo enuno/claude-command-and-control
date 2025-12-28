@@ -1,0 +1,59 @@
+{
+  "title": "Build Server",
+  "content": "import { Callout } from \"fumadocs-ui/components/callout\";\n\nBuild servers allow you to separate the build process from your deployment servers. This is particularly useful when you want to compile your applications on a dedicated server with more resources, or when you want to keep your deployment servers lightweight.\n\n<Callout type=\"info\">\n  Build servers are currently **only available for Applications**. This feature is not supported for Docker Compose deployments.\n</Callout>\n\nA **Build Server** is a remote server dedicated to building and compiling your applications. Instead of building your application on the deployment server, Dokploy will:\n\n1. Connect to the build server\n2. Clone your repository and build your application\n3. Create a Docker image\n4. Push the image to a registry\n5. Deploy the image to your deployment server\n\nThis approach offers several benefits:\n\n* **Resource Optimization**: Use powerful build servers without paying for expensive deployment servers\n* **Security**: Keep your source code and build process separate from production\n* **Flexibility**: Build once, deploy to multiple servers\n* **Performance**: Dedicated build resources mean faster builds\n\nBefore setting up a build server, ensure you have:\n\n1. A Dokploy instance running\n2. A remote server for builds (VPS, cloud instance, or dedicated server)\n3. SSH access to the build server\n4. Docker installed on the build server (or use Dokploy's automatic setup)\n5. A Docker registry to store your built images (Docker Hub, GitHub Container Registry, etc.)\n\n<Callout type=\"info\">\n  You can use the same SSH key you created for deploy servers, or create a dedicated one for build servers.\n</Callout>\n\n## Setting Up a Build Server\n\n### Step 1: Add a New Server\n\nNavigate to **Dashboard → Remote Servers → Add Server -> Build Type (Build Server)** in your Dokploy dashboard.\n\nFill in the server details:\n\n* **Name**: A descriptive name (e.g., \"Build Server - EU\")\n* **IP Address**: The public IP address of your build server\n* **Port**: SSH port (default is 22)\n* **Username**: SSH username (usually `root` or your custom user)\n* **SSH Key**: Select the SSH key to use for authentication\n\n### Step 2: Setup the Build Server\n\nAfter creating the server, you need to install Docker and configure it:\n\n1. Click on the server you just created\n2. Click on **Setup Server ->**\n3. Follow the setup instructions:\n   * **Automatic Setup**: Copy the command and run it on your server\n   * **Manual Setup**: Follow the step-by-step instructions if automatic setup fails\n\n<Callout type=\"warn\">\n  Make sure your build server has enough disk space for Docker images. Build processes can consume significant storage. To prevent disk space issues, you can:\n\n* Enable **Docker Cleanup** in the server settings to automatically remove unused images\n  * Create a **Scheduled Job** to periodically clean up Docker images (e.g., `docker image prune -af`)\n</Callout>\n\n### Step 3: Configure as Build Server\n\nOnce you have access to the server, you need to configure it as a build server:\n\n1. Go to the **Deployments** tab\n2. Click on the **Setup Server** button\n3. A modal will appear showing the commands being executed on the server to configure everything necessary\n4. Once the setup process finishes, navigate to the **Validate** tab\n5. Verify that all status items show as green, indicating the build server is ready\n\n<Callout type=\"info\">\n  The build server setup only installs build dependencies and tools. No Docker containers or active processes are deployed. The following tools are installed: **Nixpacks**, **Docker**, **Railpack**, and **Heroku Buildpacks**.\n</Callout>\n\n## Using a Build Server\n\n### Configure an Application to Use a Build Server\n\nWhen creating or editing an application:\n\n1. Go to the **Advanced** tab\n\n2. In the **Build Server** section:\n   * **Enable Custom Build Server**: Toggle this on\n   * **Select Build Server**: Choose your build server from the dropdown\n\n3. **Configure Registry** (required for build servers):\n   * Go to **Settings → Registries**\n   * Add a Docker registry (Docker Hub, GHCR, etc.)\n   * Configure your registry credentials\n\n4. **Select Registry in Application**:\n   * In your application's **Advanced** tab\n   * Under **Cluster Settings**\n   * Select the registry where built images will be pushed\n\n<Callout type=\"info\">\n  A registry is required when using build servers because the built image needs to be stored somewhere accessible to your deployment servers.\n</Callout>\n\n### Build Process Flow\n\nWhen you deploy an application with a custom build server:\n\n1. **Build Phase**:\n   * Dokploy connects to your build server via SSH\n   * Clones your repository on the build server\n   * Builds the Docker image on the build server\n   * Pushes the image to your configured registry\n\n2. **Deploy Phase**:\n   * Dokploy connects to your deployment server(s)\n   * Pulls the built image from the registry\n   * Deploys the container on your deployment server(s)\n\n<Callout type=\"info\">\n  After the build image is pushed to the registry, allow a few moments for your deployment server(s) to pull and cache the image before it becomes available for deployment.\n</Callout>\n\n## Docker Registry Configuration\n\nBuild servers require a Docker registry to store built images. For detailed instructions on configuring a registry, see the [Docker Registry](/docs/core/registry) guide.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Setting Up a Build Server",
+      "id": "setting-up-a-build-server"
+    },
+    {
+      "level": "h3",
+      "text": "Step 1: Add a New Server",
+      "id": "step-1:-add-a-new-server"
+    },
+    {
+      "level": "h3",
+      "text": "Step 2: Setup the Build Server",
+      "id": "step-2:-setup-the-build-server"
+    },
+    {
+      "level": "h3",
+      "text": "Step 3: Configure as Build Server",
+      "id": "step-3:-configure-as-build-server"
+    },
+    {
+      "level": "h2",
+      "text": "Using a Build Server",
+      "id": "using-a-build-server"
+    },
+    {
+      "level": "h3",
+      "text": "Configure an Application to Use a Build Server",
+      "id": "configure-an-application-to-use-a-build-server"
+    },
+    {
+      "level": "h3",
+      "text": "Build Process Flow",
+      "id": "build-process-flow"
+    },
+    {
+      "level": "h2",
+      "text": "Docker Registry Configuration",
+      "id": "docker-registry-configuration"
+    }
+  ],
+  "url": "llms-txt#build-server",
+  "links": []
+}

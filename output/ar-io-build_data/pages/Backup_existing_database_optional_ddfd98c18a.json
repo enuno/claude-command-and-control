@@ -1,0 +1,8 @@
+{
+  "title": "Backup existing database (optional)",
+  "content": "mkdir sqlite-backup\nmv data/sqlite/* sqlite-backup/",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#backup-existing-database-(optional)",
+  "links": []
+}

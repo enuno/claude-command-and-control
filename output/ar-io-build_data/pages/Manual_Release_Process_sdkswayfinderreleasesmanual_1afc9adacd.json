@@ -1,0 +1,41 @@
+{
+  "title": "Manual Release Process (/sdks/wayfinder/(releases)/manual-release-process)",
+  "content": "If you need to release manually, follow these steps:\n\nTo release a new alpha version:\n\n3. Review the version changes and changelogs\n4. Commit the changes:\n\n5. Publish the packages to npm:\n\n6. Push the changes and tags:\n\nFor prerelease versions (e.g., beta, alpha):\n\n1. Enter prerelease mode specifying the tag:\n\n2. Create changesets as normal:\n\n3. Version and publish as normal:\n\n4. Exit prerelease mode when ready for a stable release:\n\n5. Follow the normal release process for the stable version.",
+  "code_samples": [
+    {
+      "code": "npx changeset version",
+      "language": "bash"
+    },
+    {
+      "code": "git add .\ngit commit -m \"chore(release): version packages\"",
+      "language": "bash"
+    },
+    {
+      "code": "npm run build\nnpx changeset publish",
+      "language": "bash"
+    },
+    {
+      "code": "git push origin main --follow-tags",
+      "language": "bash"
+    },
+    {
+      "code": "npx changeset pre enter beta",
+      "language": "bash"
+    },
+    {
+      "code": "npx changeset",
+      "language": "bash"
+    },
+    {
+      "code": "npx changeset version\ngit add .\ngit commit -m \"chore(release): prerelease version packages\"\nnpm run build\nnpx changeset publish\ngit push origin main --follow-tags",
+      "language": "bash"
+    },
+    {
+      "code": "npx changeset pre exit",
+      "language": "bash"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#manual-release-process-(/sdks/wayfinder/(releases)/manual-release-process)",
+  "links": []
+}

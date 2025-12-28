@@ -1,0 +1,13 @@
+{
+  "title": "ArLocal Testing (/sdks/ardrive-core-js/(testing)/arlocal-testing)",
+  "content": "For integration testing with a local Arweave instance:",
+  "code_samples": [
+    {
+      "code": "yarn arlocal-docker-test",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#arlocal-testing-(/sdks/ardrive-core-js/(testing)/arlocal-testing)",
+  "links": []
+}

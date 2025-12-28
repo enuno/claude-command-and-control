@@ -1,0 +1,29 @@
+{
+  "title": "Extensions & Sidecars (/build/extensions)",
+  "content": "## What are Extensions?\n\nExtensions are additional scripts and tools you can run alongside your gateway to expand its capabilities or enhance the operator experience.\n\nThe full list of community extensions can be found at [gateways.ar.io/#/extensions](https://gateways.ar.io/#/extensions).\n\n## What are Sidecars?\n\nSidecars are dockerized services that add additional functionality, APIs, and services to AR.IO gateways. They run as separate containers alongside your gateway, providing specialized capabilities.\n\n## Getting Started with Team-Supported Sidecars\n\nThe following sidecars are developed and maintained by the AR.IO team, designed to run alongside your gateway as separate containers.\n\n}>\n    Visualize gateway metrics with comprehensive dashboards and performance monitoring.\n\n}\n>\n  Improve query performance for large datasets using columnar storage and\n  analytical optimization.\n\n}\n>\n  Accept and process ANS-104 data item uploads with multiple payment methods and\n  access control.\n\n}>\n    Execute AO processes locally with WASM module support and state management.\n\n**Ready to enhance your gateway?** Click any sidecar above to get started with detailed setup guides.\n\n}\n    title=\"Monitor your gateway with Grafana\"\n    description=\"Set up comprehensive monitoring and analytics for your gateway infrastructure\"\n    href=\"/build/extensions/grafana\"\n  />\n  }\n    title=\"Performance Optimization\"\n    description=\"Optimize your gateway for large datasets and high-performance queries\"\n    href=\"/build/run-a-gateway/manage/filters\"\n  />\n  }\n    title=\"Gateway Operations\"\n    description=\"Learn advanced gateway management, troubleshooting, and configuration\"\n    href=\"/build/run-a-gateway/manage\"\n  />\n  }\n    title=\"Developer SDKs\"\n    description=\"Integrate AR.IO services into your applications with our SDKs\"\n    href=\"/sdks\"\n  />",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "What are Extensions?",
+      "id": "what-are-extensions?"
+    },
+    {
+      "level": "h2",
+      "text": "What are Sidecars?",
+      "id": "what-are-sidecars?"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Started with Team-Supported Sidecars",
+      "id": "getting-started-with-team-supported-sidecars"
+    },
+    {
+      "level": "h2",
+      "text": "Explore More",
+      "id": "explore-more"
+    }
+  ],
+  "url": "llms-txt#extensions-&-sidecars-(/build/extensions)",
+  "links": []
+}

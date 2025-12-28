@@ -1,0 +1,25 @@
+{
+  "title": "Listing Contents of a Folder (/sdks/(clis)/ardrive-cli/(working-with-folders)/listing-contents-of-a-folder)",
+  "content": "Similar to drives, the `list-folder` command can be used to fetch the metadata of each entity within a folder. But by default, the command will fetch only the immediate children of that folder (`--max-depth 0`):\n\nTo list further than the immediate children, you can make use of the flags: `--all` and `--max-depth`.\n\nIn the case of private entitites, the `--with-keys` flag will make the command to include the keys in the output.",
+  "code_samples": [
+    {
+      "code": "ardrive list-folder --parent-folder-id \"29850ab7-56d4-4e1f-a5be-cb86d5513940\"",
+      "language": "shell"
+    },
+    {
+      "code": "[\n    {\n        \"appName\": \"ArDrive-CLI\",\n        \"appVersion\": \"2.0\",\n        \"arFS\": \"0.11\",\n        \"contentType\": \"application/json\",\n        \"driveId\": \"01ea6ba3-9e58-42e7-899d-622fd110211a\",\n        \"entityType\": \"folder\",\n        \"name\": \"mytestfolder\",\n        \"txId\": \"HYiKyfLwY7PT9NleTQoTiM_-qPVUwf4ClDhx1sjUAEU\",\n        \"unixTime\": 1635102772,\n        \"parentFolderId\": \"29850ab7-56d4-4e1f-a5be-cb86d5513940\",\n        \"entityId\": \"03df2929-1440-4ab4-bbf0-9dc776e1ed96\",\n        \"path\": \"/My Public Folder/mytestfolder\",\n        \"txIdPath\": \"/09_x0X2eZ3flXXLS72WdTDq6uaa5g2LjsT-QH1m0zhU/HYiKyfLwY7PT9NleTQoTiM_-qPVUwf4ClDhx1sjUAEU\",\n        \"entityIdPath\": \"/29850ab7-56d4-4e1f-a5be-cb86d5513940/03df2929-1440-4ab4-bbf0-9dc776e1ed96\"\n    },\n    {\n        \"appName\": \"ArDrive-CLI\",\n        \"appVersion\": \"2.0\",\n        \"arFS\": \"0.11\",\n        \"contentType\": \"application/json\",\n        \"driveId\": \"01ea6ba3-9e58-42e7-899d-622fd110211a\",\n        \"entityType\": \"folder\",\n        \"name\": \"Super sonic public folder\",\n        \"txId\": \"VUk1B_vo1va2-EHLtqjsotzy0Rdn6lU4hQo3RD2xoTI\",\n        \"unixTime\": 1631283259,\n        \"parentFolderId\": \"29850ab7-56d4-4e1f-a5be-cb86d5513940\",\n        \"entityId\": \"452c6aec-43dc-4015-9abd-20083068d432\",\n        \"path\": \"/My Public Folder/Super sonic sub folder\",\n        \"txIdPath\": \"/09_x0X2eZ3flXXLS72WdTDq6uaa5g2LjsT-QH1m0zhU/VUk1B_vo1va2-EHLtqjsotzy0Rdn6lU4hQo3RD2xoTI\",\n        \"entityIdPath\": \"/29850ab7-56d4-4e1f-a5be-cb86d5513940/452c6aec-43dc-4015-9abd-20083068d432\"\n    },\n    {\n        \"appName\": \"ArDrive-CLI\",\n        \"appVersion\": \"2.0\",\n        \"arFS\": \"0.11\",\n        \"contentType\": \"application/json\",\n        \"driveId\": \"01ea6ba3-9e58-42e7-899d-622fd110211a\",\n        \"entityType\": \"file\",\n        \"name\": \"test-number-twelve.txt\",\n        \"txId\": \"429zBqnd7ZBNzgukaix26RYz3g5SeXCCo_oIY6CPZLg\",\n        \"unixTime\": 1631722234,\n        \"size\": 47,\n        \"lastModifiedDate\": 1631722217028,\n        \"dataTxId\": \"vA-BxAS7I6n90cH4Fzsk4cWS3EOPb1KOhj8yeI88dj0\",\n        \"dataContentType\": \"text/plain\",\n        \"parentFolderId\": \"29850ab7-56d4-4e1f-a5be-cb86d5513940\",\n        \"entityId\": \"e5948327-d6de-4acf-a6fe-e091ecf78d71\",\n        \"path\": \"/My Public Folder/test-number-twelve.txt\",\n        \"txIdPath\": \"/09_x0X2eZ3flXXLS72WdTDq6uaa5g2LjsT-QH1m0zhU/429zBqnd7ZBNzgukaix26RYz3g5SeXCCo_oIY6CPZLg\",\n        \"entityIdPath\": \"/29850ab7-56d4-4e1f-a5be-cb86d5513940/e5948327-d6de-4acf-a6fe-e091ecf78d71\"\n    },\n    {\n        \"appName\": \"ArDrive-CLI\",\n        \"appVersion\": \"2.0\",\n        \"arFS\": \"0.11\",\n        \"contentType\": \"application/json\",\n        \"driveId\": \"01ea6ba3-9e58-42e7-899d-622fd110211a\",\n        \"entityType\": \"file\",\n        \"name\": \"wonderful-test-file.txt\",\n        \"txId\": \"6CokwlzB81Fx7dq-lB654VM0XQykdU6eYohDmEJ2gk4\",\n        \"unixTime\": 1631671275,\n        \"size\": 23,\n        \"lastModifiedDate\": 1631283389232,\n        \"dataTxId\": \"UP8THwA_1gvyRqNRqYmTpWvU4-UzNWBN7SiX_AIihg4\",\n        \"dataContentType\": \"text/plain\",\n        \"parentFolderId\": \"29850ab7-56d4-4e1f-a5be-cb86d5513940\",\n        \"entityId\": \"3274dae9-3487-41eb-94d5-8d5d3d8bc343\",\n        \"path\": \"/My Public Folder/wonderful-test-file.txt\",\n        \"txIdPath\": \"/09_x0X2eZ3flXXLS72WdTDq6uaa5g2LjsT-QH1m0zhU/6CokwlzB81Fx7dq-lB654VM0XQykdU6eYohDmEJ2gk4\",\n        \"entityIdPath\": \"/29850ab7-56d4-4e1f-a5be-cb86d5513940/3274dae9-3487-41eb-94d5-8d5d3d8bc343\"\n    }\n]",
+      "language": "shell"
+    },
+    {
+      "code": "ardrive list-folder --parent-folder-id \"9af694f6-4cfc-4eee-88a8-1b02704760c0\" --all\n\nardrive list-folder --parent-folder-id \"9af694f6-4cfc-4eee-88a8-1b02704760c0\" --max-depth 2",
+      "language": "shell"
+    },
+    {
+      "code": "ardrive list-folder --parent-folder-id \"1b027047-4cfc-4eee-88a8-9af694f660c0\" -w /my/wallet.json --with-keys",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#listing-contents-of-a-folder-(/sdks/(clis)/ardrive-cli/(working-with-folders)/listing-contents-of-a-folder)",
+  "links": []
+}

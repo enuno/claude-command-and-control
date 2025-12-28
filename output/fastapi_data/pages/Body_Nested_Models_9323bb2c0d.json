@@ -1,0 +1,276 @@
+{
+  "url": "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+  "title": "Body - Nested Models¶",
+  "content": "With FastAPI, you can define, validate, document, and use arbitrarily deeply nested models (thanks to Pydantic).\n\nYou can define an attribute to be a subtype. For example, a Python list:\n\nThis will make tags be a list, although it doesn't declare the type of the elements of the list.\n\nBut Python has a specific way to declare lists with internal types, or \"type parameters\":\n\nTo declare types that have type parameters (internal types), like list, dict, tuple, pass the internal type(s) as \"type parameters\" using square brackets: [ and ]\n\nThat's all standard Python syntax for type declarations.\n\nUse that same standard syntax for model attributes with internal types.\n\nSo, in our example, we can make tags be specifically a \"list of strings\":\n\nBut then we think about it, and realize that tags shouldn't repeat, they would probably be unique strings.\n\nAnd Python has a special data type for sets of unique items, the set.\n\nThen we can declare tags as a set of strings:\n\nWith this, even if you receive a request with duplicate data, it will be converted to a set of unique items.\n\nAnd whenever you output that data, even if the source had duplicates, it will be output as a set of unique items.\n\nAnd it will be annotated / documented accordingly too.\n\nEach attribute of a Pydantic model has a type.\n\nBut that type can itself be another Pydantic model.\n\nSo, you can declare deeply nested JSON \"objects\" with specific attribute names, types and validations.\n\nAll that, arbitrarily nested.\n\nFor example, we can define an Image model:\n\nAnd then we can use it as the type of an attribute:\n\nThis would mean that FastAPI would expect a body similar to:\n\nAgain, doing just that declaration, with FastAPI you get:\n\nApart from normal singular types like str, int, float, etc. you can use more complex singular types that inherit from str.\n\nTo see all the options you have, checkout Pydantic's Type Overview. You will see some examples in the next chapter.\n\nFor example, as in the Image model we have a url field, we can declare it to be an instance of Pydantic's HttpUrl instead of a str:\n\nThe string will be checked to be a valid URL, and documented in JSON Schema / OpenAPI as such.\n\nYou can also use Pydantic models as subtypes of list, set, etc.:\n\nThis will expect (convert, validate, document, etc.) a JSON body like:\n\nNotice how the images key now has a list of image objects.\n\nYou can define arbitrarily deeply nested models:\n\nNotice how Offer has a list of Items, which in turn have an optional list of Images\n\nIf the top level value of the JSON body you expect is a JSON array (a Python list), you can declare the type in the parameter of the function, the same as in Pydantic models:\n\nAnd you get editor support everywhere.\n\nEven for items inside of lists:\n\nYou couldn't get this kind of editor support if you were working directly with dict instead of Pydantic models.\n\nBut you don't have to worry about them either, incoming dicts are converted automatically and your output is converted automatically to JSON too.\n\nYou can also declare a body as a dict with keys of some type and values of some other type.\n\nThis way, you don't have to know beforehand what the valid field/attribute names are (as would be the case with Pydantic models).\n\nThis would be useful if you want to receive keys that you don't already know.\n\nAnother useful case is when you want to have keys of another type (e.g., int).\n\nThat's what we are going to see here.\n\nIn this case, you would accept any dict as long as it has int keys with float values:\n\nKeep in mind that JSON only supports str as keys.\n\nBut Pydantic has automatic data conversion.\n\nThis means that, even though your API clients can only send strings as keys, as long as those strings contain pure integers, Pydantic will convert them and validate them.\n\nAnd the dict you receive as weights will actually have int keys and float values.\n\nWith FastAPI you have the maximum flexibility provided by Pydantic models, while keeping your code simple, short and elegant.\n\nBut with all the benefits:",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Body - Nested Models¶",
+      "id": "body-nested-models"
+    },
+    {
+      "level": "h2",
+      "text": "List fields¶",
+      "id": "list-fields"
+    },
+    {
+      "level": "h2",
+      "text": "List fields with type parameter¶",
+      "id": "list-fields-with-type-parameter"
+    },
+    {
+      "level": "h3",
+      "text": "Declare a list with a type parameter¶",
+      "id": "declare-a-list-with-a-type-parameter"
+    },
+    {
+      "level": "h2",
+      "text": "Set types¶",
+      "id": "set-types"
+    },
+    {
+      "level": "h2",
+      "text": "Nested Models¶",
+      "id": "nested-models"
+    },
+    {
+      "level": "h3",
+      "text": "Define a submodel¶",
+      "id": "define-a-submodel"
+    },
+    {
+      "level": "h3",
+      "text": "Use the submodel as a type¶",
+      "id": "use-the-submodel-as-a-type"
+    },
+    {
+      "level": "h2",
+      "text": "Special types and validation¶",
+      "id": "special-types-and-validation"
+    },
+    {
+      "level": "h2",
+      "text": "Attributes with lists of submodels¶",
+      "id": "attributes-with-lists-of-submodels"
+    },
+    {
+      "level": "h2",
+      "text": "Deeply nested models¶",
+      "id": "deeply-nested-models"
+    },
+    {
+      "level": "h2",
+      "text": "Bodies of pure lists¶",
+      "id": "bodies-of-pure-lists"
+    },
+    {
+      "level": "h2",
+      "text": "Editor support everywhere¶",
+      "id": "editor-support-everywhere"
+    },
+    {
+      "level": "h2",
+      "text": "Bodies of arbitrary dicts¶",
+      "id": "bodies-of-arbitrary-dicts"
+    },
+    {
+      "level": "h2",
+      "text": "Recap¶",
+      "id": "recap"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n    tags: list = []\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    tax: Union[float, None] = None\n    tags: list = []\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "my_list: list[str]",
+      "language": "yaml"
+    },
+    {
+      "code": "from fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n    tags: list[str] = []\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    tax: Union[float, None] = None\n    tags: list[str] = []\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n    tags: set[str] = set()\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    tax: Union[float, None] = None\n    tags: set[str] = set()\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Image(BaseModel):\n    url: str\n    name: str\n\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n    tags: set[str] = set()\n    image: Image | None = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Image(BaseModel):\n    url: str\n    name: str\n\n\nclass Item(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    tax: Union[float, None] = None\n    tags: set[str] = set()\n    image: Union[Image, None] = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Image(BaseModel):\n    url: str\n    name: str\n\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n    tags: set[str] = set()\n    image: Image | None = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Image(BaseModel):\n    url: str\n    name: str\n\n\nclass Item(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    tax: Union[float, None] = None\n    tags: set[str] = set()\n    image: Union[Image, None] = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "{\n    \"name\": \"Foo\",\n    \"description\": \"The pretender\",\n    \"price\": 42.0,\n    \"tax\": 3.2,\n    \"tags\": [\"rock\", \"metal\", \"bar\"],\n    \"image\": {\n        \"url\": \"http://example.com/baz.jpg\",\n        \"name\": \"The Foo live\"\n    }\n}",
+      "language": "json"
+    },
+    {
+      "code": "from fastapi import FastAPI\nfrom pydantic import BaseModel, HttpUrl\n\napp = FastAPI()\n\n\nclass Image(BaseModel):\n    url: HttpUrl\n    name: str\n\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n    tags: set[str] = set()\n    image: Image | None = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel, HttpUrl\n\napp = FastAPI()\n\n\nclass Image(BaseModel):\n    url: HttpUrl\n    name: str\n\n\nclass Item(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    tax: Union[float, None] = None\n    tags: set[str] = set()\n    image: Union[Image, None] = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\nfrom pydantic import BaseModel, HttpUrl\n\napp = FastAPI()\n\n\nclass Image(BaseModel):\n    url: HttpUrl\n    name: str\n\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n    tags: set[str] = set()\n    images: list[Image] | None = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel, HttpUrl\n\napp = FastAPI()\n\n\nclass Image(BaseModel):\n    url: HttpUrl\n    name: str\n\n\nclass Item(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    tax: Union[float, None] = None\n    tags: set[str] = set()\n    images: Union[list[Image], None] = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "{\n    \"name\": \"Foo\",\n    \"description\": \"The pretender\",\n    \"price\": 42.0,\n    \"tax\": 3.2,\n    \"tags\": [\n        \"rock\",\n        \"metal\",\n        \"bar\"\n    ],\n    \"images\": [\n        {\n            \"url\": \"http://example.com/baz.jpg\",\n            \"name\": \"The Foo live\"\n        },\n        {\n            \"url\": \"http://example.com/dave.jpg\",\n            \"name\": \"The Baz\"\n        }\n    ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "from fastapi import FastAPI\nfrom pydantic import BaseModel, HttpUrl\n\napp = FastAPI()\n\n\nclass Image(BaseModel):\n    url: HttpUrl\n    name: str\n\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n    tags: set[str] = set()\n    images: list[Image] | None = None\n\n\nclass Offer(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    items: list[Item]\n\n\n@app.post(\"/offers/\")\nasync def create_offer(offer: Offer):\n    return offer",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel, HttpUrl\n\napp = FastAPI()\n\n\nclass Image(BaseModel):\n    url: HttpUrl\n    name: str\n\n\nclass Item(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    tax: Union[float, None] = None\n    tags: set[str] = set()\n    images: Union[list[Image], None] = None\n\n\nclass Offer(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    items: list[Item]\n\n\n@app.post(\"/offers/\")\nasync def create_offer(offer: Offer):\n    return offer",
+      "language": "python"
+    },
+    {
+      "code": "images: list[Image]",
+      "language": "yaml"
+    },
+    {
+      "code": "from fastapi import FastAPI\nfrom pydantic import BaseModel, HttpUrl\n\napp = FastAPI()\n\n\nclass Image(BaseModel):\n    url: HttpUrl\n    name: str\n\n\n@app.post(\"/images/multiple/\")\nasync def create_multiple_images(images: list[Image]):\n    return images",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\n\napp = FastAPI()\n\n\n@app.post(\"/index-weights/\")\nasync def create_index_weights(weights: dict[int, float]):\n    return weights",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

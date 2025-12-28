@@ -1,0 +1,24 @@
+{
+  "title": "Authentication",
+  "content": "The Dokploy CLI uses a token-based authentication system. To authenticate, you'll need to create an access token and store it securely.\n\n## Creating an Access Token\n\nTo create an access token, first you need to have permissions if you are admin you don't need permissions.\n\nby default access token never expires.\n\nYou can go to `dashboard/settings/profile` and click on the `Generate` button.\n\n<ImageZoom src=\"/assets/cli/token.png\" width={800} height={630} alt=\"home og image\" className=\"rounded-lg\" />\n\n## Storing the Access Token\n\nDokploy when you create an access token automatically will generate a config.json with the access token and the server url.\n\n1. `dokploy authenticate` - Authenticate with the Dokploy CLI.\n2. `dokploy verify` - Verify if the access token is valid.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Creating an Access Token",
+      "id": "creating-an-access-token"
+    },
+    {
+      "level": "h2",
+      "text": "Storing the Access Token",
+      "id": "storing-the-access-token"
+    },
+    {
+      "level": "h2",
+      "text": "Commands",
+      "id": "commands"
+    }
+  ],
+  "url": "llms-txt#authentication",
+  "links": []
+}

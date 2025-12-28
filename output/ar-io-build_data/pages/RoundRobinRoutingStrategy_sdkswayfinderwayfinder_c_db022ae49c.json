@@ -1,0 +1,13 @@
+{
+  "title": "RoundRobinRoutingStrategy (/sdks/wayfinder/wayfinder-core/(routing-strategies)/roundrobinroutingstrategy)",
+  "content": "Selects gateways in round-robin order. The gateway list is stored in memory and is not persisted across instances. You must provide either `gateways` OR `gatewaysProvider` (not both).",
+  "code_samples": [
+    {
+      "code": "// use with a static list of gateways\nconst routingStrategy = new RoundRobinRoutingStrategy({\n  gateways: [new URL('https://arweave.net'), new URL('https://permagate.io')],\n});\n\n// use with gatewaysProvider (loaded once and memoized)\nconst routingStrategy2 = new RoundRobinRoutingStrategy({\n  gatewaysProvider: new NetworkGatewaysProvider({\n    ario: ARIO.mainnet(),\n    sortBy: 'operatorStake',\n    sortOrder: 'desc',\n    limit: 10,\n  }),\n});\n\nconst gateway = await routingStrategy.selectGateway(); // returns the next gateway in round-robin order",
+      "language": "javascript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#roundrobinroutingstrategy-(/sdks/wayfinder/wayfinder-core/(routing-strategies)/roundrobinroutingstrategy)",
+  "links": []
+}

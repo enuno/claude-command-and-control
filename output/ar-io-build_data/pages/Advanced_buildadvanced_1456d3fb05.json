@@ -1,0 +1,24 @@
+{
+  "title": "Advanced (/build/advanced)",
+  "content": "Explore advanced topics and specialized guides for building on Arweave and AR.IO. These resources are designed for developers and operators who need deeper technical knowledge and advanced configuration options.\n\n**Advanced ArFS documentation** for structured data storage\n\n**Understanding wallet address normalization** across different networks\n\n**Security mechanisms** in AR.IO gateways **Key topics:** - Same-origin policy\n\n**Generate Arweave wallets** from Ethereum or Solana wallets\n\n## Ready to Go Advanced?\n\n**New to Arweave?** Start with our [Getting Started guide](/build) to understand the basics.\n\n**Building dApps?** Check out [ArFS Protocol](/build/advanced/arfs) for structured data storage solutions.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Advanced Topics",
+      "id": "advanced-topics"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to Go Advanced?",
+      "id": "ready-to-go-advanced?"
+    }
+  ],
+  "url": "llms-txt#advanced-(/build/advanced)",
+  "links": []
+}

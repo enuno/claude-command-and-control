@@ -1,0 +1,79 @@
+{
+  "title": "Check if it points to the correct transaction",
+  "content": "curl -s https://your-arns-name.arweave.net | head -10\n```\n\n### Update ArNS Record\n\nIf ArNS name points to wrong content:\n\n1. Go to [ArNS App](https://arns.app)\n2. Find your ArNS name\n3. Update the transaction ID\n4. Wait for propagation (usually immediate)\n\n### Check ArNS Status\n\nVerify ArNS name is active and not expired:\n\n1. Visit the ArNS app\n2. Check your name's status\n3. Ensure it's not expired\n4. Verify payment is up to date\n\n### Optimize for Performance\n\n- Keep file sizes reasonable\n- Use efficient HTML/CSS\n- Optimize images and assets\n- Minimize external dependencies\n\n### Ensure Accessibility\n\n- Use semantic HTML\n- Include alt text for images\n- Ensure good color contrast\n- Test with screen readers\n\n### Mobile Responsiveness\n\n- Design for mobile-first\n- Use responsive CSS\n- Test on various devices\n- Ensure touch-friendly interfaces\n\n### Content Management\n\n- Keep content in version control\n- Document changes and updates\n- Test changes before deployment\n- Maintain backup copies\n\n- Keep information current\n- Update contact details\n- Refresh project information\n- Monitor for broken links\n\n- Backup content regularly\n- Keep multiple copies\n- Document restoration procedures\n- Test backup recovery\n\n**Ready to customize your gateway?** Start with the Quick Start section above,\n  then explore the different configuration methods and use cases to find what\n  works best for your needs.\n\n### Additional Resources\n\n- **ArNS Documentation** - Learn more about ArNS names and management\n- **Content Upload Guides** - Best practices for uploading content to Arweave\n- **Gateway Configuration** - Advanced gateway configuration options\n- **Community Examples** - See how other operators use this feature\n\nIf you encounter issues:\n\n1. Check the troubleshooting section above\n2. Verify your configuration is correct\n3. Test content accessibility independently\n4. Consult the [AR.IO Discord](https://discord.com/invite/HGG52EtTc2) for community support",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Update ArNS Record",
+      "id": "update-arns-record"
+    },
+    {
+      "level": "h3",
+      "text": "Check ArNS Status",
+      "id": "check-arns-status"
+    },
+    {
+      "level": "h2",
+      "text": "Best Practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h3",
+      "text": "Content Design",
+      "id": "content-design"
+    },
+    {
+      "level": "h3",
+      "text": "Optimize for Performance",
+      "id": "optimize-for-performance"
+    },
+    {
+      "level": "h3",
+      "text": "Ensure Accessibility",
+      "id": "ensure-accessibility"
+    },
+    {
+      "level": "h3",
+      "text": "Mobile Responsiveness",
+      "id": "mobile-responsiveness"
+    },
+    {
+      "level": "h3",
+      "text": "Content Management",
+      "id": "content-management"
+    },
+    {
+      "level": "h3",
+      "text": "Version Control",
+      "id": "version-control"
+    },
+    {
+      "level": "h3",
+      "text": "Regular Updates",
+      "id": "regular-updates"
+    },
+    {
+      "level": "h3",
+      "text": "Backup Strategy",
+      "id": "backup-strategy"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h3",
+      "text": "Additional Resources",
+      "id": "additional-resources"
+    },
+    {
+      "level": "h3",
+      "text": "Getting Help",
+      "id": "getting-help"
+    }
+  ],
+  "url": "llms-txt#check-if-it-points-to-the-correct-transaction",
+  "links": []
+}

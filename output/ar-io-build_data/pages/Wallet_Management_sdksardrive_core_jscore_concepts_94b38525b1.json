@@ -1,0 +1,13 @@
+{
+  "title": "Wallet Management (/sdks/ardrive-core-js/(core-concepts)/wallet-management)",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "// Create wallet from JWK\nconst wallet = new JWKWallet(jwkKey);\n\n// Check wallet balance\nconst balance = await wallet.getBalance();",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#wallet-management-(/sdks/ardrive-core-js/(core-concepts)/wallet-management)",
+  "links": []
+}

@@ -1,0 +1,61 @@
+{
+  "title": "Uploading Manifests (/sdks/(clis)/ardrive-cli/(working-with-files)/uploading-manifests)",
+  "content": "[Arweave Path Manifests][arweave-manifests] are are special `.json` files that instruct Arweave Gateways to map file data associated with specific, unique transaction IDs to customized, hosted paths relative to that of the manifest file itself. So if, for example, your manifest file had an arweave.net URL like:\n\nThen, all the mapped transactions and paths in the manifest file would be addressable at URLs like:\n\nArDrive supports the creation of these Arweave manifests using any of your PUBLIC folders. The generated manifest paths will be links to each of the file entities within the specified folder. The manifest file entity will be created at the root of the folder.\n\nTo create a manifest of an entire public drive, specify the root folder of that drive:\n\nYou can also create a manifest of a folder's file entities at a custom depth by using the `--max-depth` option:\n\nCreating a `.json` file of your manifest links output can be accomplished here with some `jq` parsing and piping to a file:\n\nIf you'd like to preview the contents of your manifest before uploading, you can perform a dry run and do some lightweight post processing to isolate the data:\n\nThe manifest data transaction is tagged with a unique content-type, `application/x.arweave-manifest+json`, which tells the gateway to treat this file as a manifest. The manifest file itself is a `.json` file that holds the paths (the data transaction ids) to each file within the specified folder.\n\nWhen your folder is later changed by adding files or updating them with new revisions, the original manifest will NOT be updated on its own. A manifest is a permanent record of your files in their current state.\n\nHowever, creating a subsequent manifest with the same manifest name will create a new revision of that manifest in its new current state. Manifests follow the same name conflict resolution as outlined for files above (upsert by default).\n\n#### Hosting a Webpage with Manifest\n\nWhen creating a manifest, it is possible to host a webpage or web app. You can do this by creating a manifest on a folder that has an `index.html` file in its root.\n\nUsing generated build folders from popular frameworks works as well. One requirement here to note is that the `href=` paths from your generated `index.html` file must not have leading a `/`. This means that the manifest will not resolve a path of `/dist/index.js` but it will resolve `dist/index.js` or `./dist/index.js`.\n\nAs an example, here is a flow of creating a React app and hosting it with an ArDrive Manifest. First, generate a React app:\n\nNext, add this field to the generated `package.json` so that the paths will resolve correctly:\n\nThen, create an optimized production build from within the app's directory:\n\nNow, we can create and upload that produced build folder on ArDrive to any of your existing ArFS folder entities:\n\nAnd finally, create the manifest using the generated Folder ID from the build folder creation:\n\nIn the return output, the top link will be a link to the deployed web app:\n\nThis is effectively hosting a web app with ArDrive. Check out the ArDrive Price Calculator React App hosted as an [ArDrive Manifest][example-manifest-webpage].",
+  "code_samples": [
+    {
+      "code": "https://arweave.net/{manifest tx id}",
+      "language": "shell"
+    },
+    {
+      "code": "https://arweave.net/{manifest tx id}/foo.txt\nhttps://arweave.net/{manifest tx id}/bar/baz.png",
+      "language": "shell"
+    },
+    {
+      "code": "ardrive create-manifest -f \"bc9af866-6421-40f1-ac89-202bddb5c487\" -w \"/path/to/wallet\"",
+      "language": "shell"
+    },
+    {
+      "code": "ardrive create-manifest --max-depth 0  -f \"867228d8-4413-4c0e-a499-e1decbf2ea38\" -w \"/path/to/wallet\"",
+      "language": "shell"
+    },
+    {
+      "code": "ardrive create-manifest -w /path/to/wallet -f \"6c312b3e-4778-4a18-8243-f2b346f5e7cb\"  | jq '{links}' > links.json",
+      "language": "shell"
+    },
+    {
+      "code": "ardrive create-manifest -w /path/to/wallet -f \"6c312b3e-4778-4a18-8243-f2b346f5e7cb\"  --dry-run | jq '{manifest}.manifest'",
+      "language": "shell"
+    },
+    {
+      "code": "{\n    \"manifest\": \"arweave/paths\",\n    \"version\": \"0.1.0\",\n    \"index\": {\n        \"path\": \"index.html\"\n    },\n    \"paths\": {\n        \"hello_world.txt\": {\n            \"id\": \"Y7GFF8r9y0MEU_oi1aZeD87vrmai97JdRQ2L0cbGJ68\"\n        },\n        \"index.html\": {\n            \"id\": \"pELonjVebHyBsdxVymvxbGTmHD96v9PuuUXj8GUHGoY\"\n        }\n    }\n}",
+      "language": "json"
+    },
+    {
+      "code": "yarn create react-app my-app",
+      "language": "shell"
+    },
+    {
+      "code": "\"homepage\": \".\",",
+      "language": "json"
+    },
+    {
+      "code": "yarn build",
+      "language": "shell"
+    },
+    {
+      "code": "ardrive upload-file -l \"/build\" -w \"/path/to/wallet\" --parent-folder-id \"bc9af866-6421-40f1-ac89-202bddb5c487\"",
+      "language": "shell"
+    },
+    {
+      "code": "ardrive create-manifest -f \"41759f05-614d-45ad-846b-63f3767504a4\" -w \"/path/to/wallet\"",
+      "language": "shell"
+    },
+    {
+      "code": "\"links\": [\n        \"https://arweave.net/0MK68J8TqGhaaOpPe713Zn0jdpczMt2NGS2CtRYiuAg\",\n        \"https://arweave.net/0MK68J8TqGhaaOpPe713Zn0jdpczMt2NGS2CtRYiuAg/asset-manifest.json\",\n        \"https://arweave.net/0MK68J8TqGhaaOpPe713Zn0jdpczMt2NGS2CtRYiuAg/favicon.ico\",\n        \"https://arweave.net/0MK68J8TqGhaaOpPe713Zn0jdpczMt2NGS2CtRYiuAg/index.html\",\n        # ...",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#uploading-manifests-(/sdks/(clis)/ardrive-cli/(working-with-files)/uploading-manifests)",
+  "links": []
+}

@@ -1,0 +1,444 @@
+{
+  "url": "https://fastapi.tiangolo.com/reference/testclient/",
+  "title": "Test Client - TestClient¶",
+  "content": "You can use the TestClient class to test FastAPI applications without creating an actual HTTP and socket connection, just communicating directly with the FastAPI code.\n\nRead more about it in the FastAPI docs for Testing.\n\nYou can import it directly from fastapi.testclient:\n\nHTTP headers to include when sending requests.\n\nCheck if the client being closed\n\nAuthentication class used when none is passed at the request-level.\n\nSee also Authentication.\n\nBase URL to use when sending requests with relative URLs.\n\nCookie values to include when sending requests.\n\nQuery parameters to include in the URL when sending requests.\n\nBuild and return a request instance.\n\nSee also: Request instances\n\nAlternative to httpx.request() that streams the response body instead of loading it into memory at once.\n\nParameters: See httpx.request.\n\nSee also: Streaming Responses\n\nThe request is sent as-is, unmodified.\n\nTypically you'll want to build one with Client.build_request() so that any client-level configuration is merged into the request, but passing an explicit httpx.Request() is supported as well.\n\nSee also: Request instances\n\nClose transport and proxies.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Test Client - TestClient¶",
+      "id": "test-client-testclient"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.testclient.TestClient ¶",
+      "id": "fastapi.testclient.TestClient"
+    },
+    {
+      "level": "h3",
+      "text": "headers property writable ¶",
+      "id": "fastapi.testclient.TestClient.headers"
+    },
+    {
+      "level": "h3",
+      "text": "follow_redirects instance-attribute ¶",
+      "id": "fastapi.testclient.TestClient.follow_redirects"
+    },
+    {
+      "level": "h3",
+      "text": "max_redirects instance-attribute ¶",
+      "id": "fastapi.testclient.TestClient.max_redirects"
+    },
+    {
+      "level": "h3",
+      "text": "is_closed property ¶",
+      "id": "fastapi.testclient.TestClient.is_closed"
+    },
+    {
+      "level": "h3",
+      "text": "trust_env property ¶",
+      "id": "fastapi.testclient.TestClient.trust_env"
+    },
+    {
+      "level": "h3",
+      "text": "timeout property writable ¶",
+      "id": "fastapi.testclient.TestClient.timeout"
+    },
+    {
+      "level": "h3",
+      "text": "event_hooks property writable ¶",
+      "id": "fastapi.testclient.TestClient.event_hooks"
+    },
+    {
+      "level": "h3",
+      "text": "auth property writable ¶",
+      "id": "fastapi.testclient.TestClient.auth"
+    },
+    {
+      "level": "h3",
+      "text": "base_url property writable ¶",
+      "id": "fastapi.testclient.TestClient.base_url"
+    },
+    {
+      "level": "h3",
+      "text": "cookies property writable ¶",
+      "id": "fastapi.testclient.TestClient.cookies"
+    },
+    {
+      "level": "h3",
+      "text": "params property writable ¶",
+      "id": "fastapi.testclient.TestClient.params"
+    },
+    {
+      "level": "h3",
+      "text": "task instance-attribute ¶",
+      "id": "fastapi.testclient.TestClient.task"
+    },
+    {
+      "level": "h3",
+      "text": "portal class-attribute instance-attribute ¶",
+      "id": "fastapi.testclient.TestClient.portal"
+    },
+    {
+      "level": "h3",
+      "text": "async_backend instance-attribute ¶",
+      "id": "fastapi.testclient.TestClient.async_backend"
+    },
+    {
+      "level": "h3",
+      "text": "app instance-attribute ¶",
+      "id": "fastapi.testclient.TestClient.app"
+    },
+    {
+      "level": "h3",
+      "text": "app_state instance-attribute ¶",
+      "id": "fastapi.testclient.TestClient.app_state"
+    },
+    {
+      "level": "h3",
+      "text": "build_request ¶",
+      "id": "fastapi.testclient.TestClient.build_request"
+    },
+    {
+      "level": "h3",
+      "text": "stream ¶",
+      "id": "fastapi.testclient.TestClient.stream"
+    },
+    {
+      "level": "h3",
+      "text": "send ¶",
+      "id": "fastapi.testclient.TestClient.send"
+    },
+    {
+      "level": "h3",
+      "text": "close ¶",
+      "id": "fastapi.testclient.TestClient.close"
+    },
+    {
+      "level": "h3",
+      "text": "request ¶",
+      "id": "fastapi.testclient.TestClient.request"
+    },
+    {
+      "level": "h3",
+      "text": "get ¶",
+      "id": "fastapi.testclient.TestClient.get"
+    },
+    {
+      "level": "h3",
+      "text": "options ¶",
+      "id": "fastapi.testclient.TestClient.options"
+    },
+    {
+      "level": "h3",
+      "text": "head ¶",
+      "id": "fastapi.testclient.TestClient.head"
+    },
+    {
+      "level": "h3",
+      "text": "post ¶",
+      "id": "fastapi.testclient.TestClient.post"
+    },
+    {
+      "level": "h3",
+      "text": "put ¶",
+      "id": "fastapi.testclient.TestClient.put"
+    },
+    {
+      "level": "h3",
+      "text": "patch ¶",
+      "id": "fastapi.testclient.TestClient.patch"
+    },
+    {
+      "level": "h3",
+      "text": "delete ¶",
+      "id": "fastapi.testclient.TestClient.delete"
+    },
+    {
+      "level": "h3",
+      "text": "websocket_connect ¶",
+      "id": "fastapi.testclient.TestClient.websocket_connect"
+    },
+    {
+      "level": "h3",
+      "text": "lifespan async ¶",
+      "id": "fastapi.testclient.TestClient.lifespan"
+    },
+    {
+      "level": "h3",
+      "text": "wait_startup async ¶",
+      "id": "fastapi.testclient.TestClient.wait_startup"
+    },
+    {
+      "level": "h3",
+      "text": "wait_shutdown async ¶",
+      "id": "fastapi.testclient.TestClient.wait_shutdown"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from fastapi.testclient import TestClient",
+      "language": "sql"
+    },
+    {
+      "code": "TestClient(\n    app,\n    base_url=\"http://testserver\",\n    raise_server_exceptions=True,\n    root_path=\"\",\n    backend=\"asyncio\",\n    backend_options=None,\n    cookies=None,\n    headers=None,\n    follow_redirects=True,\n    client=(\"testclient\", 50000),\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(\n    self,\n    app: ASGIApp,\n    base_url: str = \"http://testserver\",\n    raise_server_exceptions: bool = True,\n    root_path: str = \"\",\n    backend: Literal[\"asyncio\", \"trio\"] = \"asyncio\",\n    backend_options: dict[str, Any] | None = None,\n    cookies: httpx._types.CookieTypes | None = None,\n    headers: dict[str, str] | None = None,\n    follow_redirects: bool = True,\n    client: tuple[str, int] = (\"testclient\", 50000),\n) -> None:\n    self.async_backend = _AsyncBackend(backend=backend, backend_options=backend_options or {})\n    if _is_asgi3(app):\n        asgi_app = app\n    else:\n        app = cast(ASGI2App, app)  # type: ignore[assignment]\n        asgi_app = _WrapASGI2(app)  # type: ignore[arg-type]\n    self.app = asgi_app\n    self.app_state: dict[str, Any] = {}\n    transport = _TestClientTransport(\n        self.app,\n        portal_factory=self._portal_factory,\n        raise_server_exceptions=raise_server_exceptions,\n        root_path=root_path,\n        app_state=self.app_state,\n        client=client,\n    )\n    if headers is None:\n        headers = {}\n    headers.setdefault(\"user-agent\", \"testclient\")\n    super().__init__(\n        base_url=base_url,\n        headers=headers,\n        transport=transport,\n        follow_redirects=follow_redirects,\n        cookies=cookies,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "follow_redirects = follow_redirects",
+      "language": "unknown"
+    },
+    {
+      "code": "max_redirects = max_redirects",
+      "language": "unknown"
+    },
+    {
+      "code": "event_hooks",
+      "language": "unknown"
+    },
+    {
+      "code": "portal = None",
+      "language": "rust"
+    },
+    {
+      "code": "async_backend = _AsyncBackend(\n    backend=backend, backend_options=backend_options or {}\n)",
+      "language": "unknown"
+    },
+    {
+      "code": "app = asgi_app",
+      "language": "unknown"
+    },
+    {
+      "code": "app_state = {}",
+      "language": "unknown"
+    },
+    {
+      "code": "build_request(\n    method,\n    url,\n    *,\n    content=None,\n    data=None,\n    files=None,\n    json=None,\n    params=None,\n    headers=None,\n    cookies=None,\n    timeout=USE_CLIENT_DEFAULT,\n    extensions=None\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def build_request(\n    self,\n    method: str,\n    url: URL | str,\n    *,\n    content: RequestContent | None = None,\n    data: RequestData | None = None,\n    files: RequestFiles | None = None,\n    json: typing.Any | None = None,\n    params: QueryParamTypes | None = None,\n    headers: HeaderTypes | None = None,\n    cookies: CookieTypes | None = None,\n    timeout: TimeoutTypes | UseClientDefault = USE_CLIENT_DEFAULT,\n    extensions: RequestExtensions | None = None,\n) -> Request:\n    \"\"\"\n    Build and return a request instance.\n\n    * The `params`, `headers` and `cookies` arguments\n    are merged with any values set on the client.\n    * The `url` argument is merged with any `base_url` set on the client.\n\n    See also: [Request instances][0]\n\n    [0]: /advanced/clients/#request-instances\n    \"\"\"\n    url = self._merge_url(url)\n    headers = self._merge_headers(headers)\n    cookies = self._merge_cookies(cookies)\n    params = self._merge_queryparams(params)\n    extensions = {} if extensions is None else extensions\n    if \"timeout\" not in extensions:\n        timeout = (\n            self.timeout\n            if isinstance(timeout, UseClientDefault)\n            else Timeout(timeout)\n        )\n        extensions = dict(**extensions, timeout=timeout.as_dict())\n    return Request(\n        method,\n        url,\n        content=content,\n        data=data,\n        files=files,\n        json=json,\n        params=params,\n        headers=headers,\n        cookies=cookies,\n        extensions=extensions,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "stream(\n    method,\n    url,\n    *,\n    content=None,\n    data=None,\n    files=None,\n    json=None,\n    params=None,\n    headers=None,\n    cookies=None,\n    auth=USE_CLIENT_DEFAULT,\n    follow_redirects=USE_CLIENT_DEFAULT,\n    timeout=USE_CLIENT_DEFAULT,\n    extensions=None\n)",
+      "language": "rust"
+    },
+    {
+      "code": "@contextmanager\ndef stream(\n    self,\n    method: str,\n    url: URL | str,\n    *,\n    content: RequestContent | None = None,\n    data: RequestData | None = None,\n    files: RequestFiles | None = None,\n    json: typing.Any | None = None,\n    params: QueryParamTypes | None = None,\n    headers: HeaderTypes | None = None,\n    cookies: CookieTypes | None = None,\n    auth: AuthTypes | UseClientDefault | None = USE_CLIENT_DEFAULT,\n    follow_redirects: bool | UseClientDefault = USE_CLIENT_DEFAULT,\n    timeout: TimeoutTypes | UseClientDefault = USE_CLIENT_DEFAULT,\n    extensions: RequestExtensions | None = None,\n) -> typing.Iterator[Response]:\n    \"\"\"\n    Alternative to `httpx.request()` that streams the response body\n    instead of loading it into memory at once.\n\n    **Parameters**: See `httpx.request`.\n\n    See also: [Streaming Responses][0]\n\n    [0]: /quickstart#streaming-responses\n    \"\"\"\n    request = self.build_request(\n        method=method,\n        url=url,\n        content=content,\n        data=data,\n        files=files,\n        json=json,\n        params=params,\n        headers=headers,\n        cookies=cookies,\n        timeout=timeout,\n        extensions=extensions,\n    )\n    response = self.send(\n        request=request,\n        auth=auth,\n        follow_redirects=follow_redirects,\n        stream=True,\n    )\n    try:\n        yield response\n    finally:\n        response.close()",
+      "language": "python"
+    },
+    {
+      "code": "send(\n    request,\n    *,\n    stream=False,\n    auth=USE_CLIENT_DEFAULT,\n    follow_redirects=USE_CLIENT_DEFAULT\n)",
+      "language": "unknown"
+    },
+    {
+      "code": "def send(\n    self,\n    request: Request,\n    *,\n    stream: bool = False,\n    auth: AuthTypes | UseClientDefault | None = USE_CLIENT_DEFAULT,\n    follow_redirects: bool | UseClientDefault = USE_CLIENT_DEFAULT,\n) -> Response:\n    \"\"\"\n    Send a request.\n\n    The request is sent as-is, unmodified.\n\n    Typically you'll want to build one with `Client.build_request()`\n    so that any client-level configuration is merged into the request,\n    but passing an explicit `httpx.Request()` is supported as well.\n\n    See also: [Request instances][0]\n\n    [0]: /advanced/clients/#request-instances\n    \"\"\"\n    if self._state == ClientState.CLOSED:\n        raise RuntimeError(\"Cannot send a request, as the client has been closed.\")\n\n    self._state = ClientState.OPENED\n    follow_redirects = (\n        self.follow_redirects\n        if isinstance(follow_redirects, UseClientDefault)\n        else follow_redirects\n    )\n\n    self._set_timeout(request)\n\n    auth = self._build_request_auth(request, auth)\n\n    response = self._send_handling_auth(\n        request,\n        auth=auth,\n        follow_redirects=follow_redirects,\n        history=[],\n    )\n    try:\n        if not stream:\n            response.read()\n\n        return response\n\n    except BaseException as exc:\n        response.close()\n        raise exc",
+      "language": "python"
+    },
+    {
+      "code": "def close(self) -> None:\n    \"\"\"\n    Close transport and proxies.\n    \"\"\"\n    if self._state != ClientState.CLOSED:\n        self._state = ClientState.CLOSED\n\n        self._transport.close()\n        for transport in self._mounts.values():\n            if transport is not None:\n                transport.close()",
+      "language": "python"
+    },
+    {
+      "code": "request(\n    method,\n    url,\n    *,\n    content=None,\n    data=None,\n    files=None,\n    json=None,\n    params=None,\n    headers=None,\n    cookies=None,\n    auth=USE_CLIENT_DEFAULT,\n    follow_redirects=USE_CLIENT_DEFAULT,\n    timeout=USE_CLIENT_DEFAULT,\n    extensions=None\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def request(  # type: ignore[override]\n    self,\n    method: str,\n    url: httpx._types.URLTypes,\n    *,\n    content: httpx._types.RequestContent | None = None,\n    data: _RequestData | None = None,\n    files: httpx._types.RequestFiles | None = None,\n    json: Any = None,\n    params: httpx._types.QueryParamTypes | None = None,\n    headers: httpx._types.HeaderTypes | None = None,\n    cookies: httpx._types.CookieTypes | None = None,\n    auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    extensions: dict[str, Any] | None = None,\n) -> httpx.Response:\n    if timeout is not httpx.USE_CLIENT_DEFAULT:\n        warnings.warn(\n            \"You should not use the 'timeout' argument with the TestClient. \"\n            \"See https://github.com/Kludex/starlette/issues/1108 for more information.\",\n            DeprecationWarning,\n        )\n    url = self._merge_url(url)\n    return super().request(\n        method,\n        url,\n        content=content,\n        data=data,\n        files=files,\n        json=json,\n        params=params,\n        headers=headers,\n        cookies=cookies,\n        auth=auth,\n        follow_redirects=follow_redirects,\n        timeout=timeout,\n        extensions=extensions,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "get(\n    url,\n    *,\n    params=None,\n    headers=None,\n    cookies=None,\n    auth=USE_CLIENT_DEFAULT,\n    follow_redirects=USE_CLIENT_DEFAULT,\n    timeout=USE_CLIENT_DEFAULT,\n    extensions=None\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def get(  # type: ignore[override]\n    self,\n    url: httpx._types.URLTypes,\n    *,\n    params: httpx._types.QueryParamTypes | None = None,\n    headers: httpx._types.HeaderTypes | None = None,\n    cookies: httpx._types.CookieTypes | None = None,\n    auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    extensions: dict[str, Any] | None = None,\n) -> httpx.Response:\n    return super().get(\n        url,\n        params=params,\n        headers=headers,\n        cookies=cookies,\n        auth=auth,\n        follow_redirects=follow_redirects,\n        timeout=timeout,\n        extensions=extensions,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "options(\n    url,\n    *,\n    params=None,\n    headers=None,\n    cookies=None,\n    auth=USE_CLIENT_DEFAULT,\n    follow_redirects=USE_CLIENT_DEFAULT,\n    timeout=USE_CLIENT_DEFAULT,\n    extensions=None\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def options(  # type: ignore[override]\n    self,\n    url: httpx._types.URLTypes,\n    *,\n    params: httpx._types.QueryParamTypes | None = None,\n    headers: httpx._types.HeaderTypes | None = None,\n    cookies: httpx._types.CookieTypes | None = None,\n    auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    extensions: dict[str, Any] | None = None,\n) -> httpx.Response:\n    return super().options(\n        url,\n        params=params,\n        headers=headers,\n        cookies=cookies,\n        auth=auth,\n        follow_redirects=follow_redirects,\n        timeout=timeout,\n        extensions=extensions,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "head(\n    url,\n    *,\n    params=None,\n    headers=None,\n    cookies=None,\n    auth=USE_CLIENT_DEFAULT,\n    follow_redirects=USE_CLIENT_DEFAULT,\n    timeout=USE_CLIENT_DEFAULT,\n    extensions=None\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def head(  # type: ignore[override]\n    self,\n    url: httpx._types.URLTypes,\n    *,\n    params: httpx._types.QueryParamTypes | None = None,\n    headers: httpx._types.HeaderTypes | None = None,\n    cookies: httpx._types.CookieTypes | None = None,\n    auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    extensions: dict[str, Any] | None = None,\n) -> httpx.Response:\n    return super().head(\n        url,\n        params=params,\n        headers=headers,\n        cookies=cookies,\n        auth=auth,\n        follow_redirects=follow_redirects,\n        timeout=timeout,\n        extensions=extensions,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "post(\n    url,\n    *,\n    content=None,\n    data=None,\n    files=None,\n    json=None,\n    params=None,\n    headers=None,\n    cookies=None,\n    auth=USE_CLIENT_DEFAULT,\n    follow_redirects=USE_CLIENT_DEFAULT,\n    timeout=USE_CLIENT_DEFAULT,\n    extensions=None\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def post(  # type: ignore[override]\n    self,\n    url: httpx._types.URLTypes,\n    *,\n    content: httpx._types.RequestContent | None = None,\n    data: _RequestData | None = None,\n    files: httpx._types.RequestFiles | None = None,\n    json: Any = None,\n    params: httpx._types.QueryParamTypes | None = None,\n    headers: httpx._types.HeaderTypes | None = None,\n    cookies: httpx._types.CookieTypes | None = None,\n    auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    extensions: dict[str, Any] | None = None,\n) -> httpx.Response:\n    return super().post(\n        url,\n        content=content,\n        data=data,\n        files=files,\n        json=json,\n        params=params,\n        headers=headers,\n        cookies=cookies,\n        auth=auth,\n        follow_redirects=follow_redirects,\n        timeout=timeout,\n        extensions=extensions,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "put(\n    url,\n    *,\n    content=None,\n    data=None,\n    files=None,\n    json=None,\n    params=None,\n    headers=None,\n    cookies=None,\n    auth=USE_CLIENT_DEFAULT,\n    follow_redirects=USE_CLIENT_DEFAULT,\n    timeout=USE_CLIENT_DEFAULT,\n    extensions=None\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def put(  # type: ignore[override]\n    self,\n    url: httpx._types.URLTypes,\n    *,\n    content: httpx._types.RequestContent | None = None,\n    data: _RequestData | None = None,\n    files: httpx._types.RequestFiles | None = None,\n    json: Any = None,\n    params: httpx._types.QueryParamTypes | None = None,\n    headers: httpx._types.HeaderTypes | None = None,\n    cookies: httpx._types.CookieTypes | None = None,\n    auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    extensions: dict[str, Any] | None = None,\n) -> httpx.Response:\n    return super().put(\n        url,\n        content=content,\n        data=data,\n        files=files,\n        json=json,\n        params=params,\n        headers=headers,\n        cookies=cookies,\n        auth=auth,\n        follow_redirects=follow_redirects,\n        timeout=timeout,\n        extensions=extensions,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "patch(\n    url,\n    *,\n    content=None,\n    data=None,\n    files=None,\n    json=None,\n    params=None,\n    headers=None,\n    cookies=None,\n    auth=USE_CLIENT_DEFAULT,\n    follow_redirects=USE_CLIENT_DEFAULT,\n    timeout=USE_CLIENT_DEFAULT,\n    extensions=None\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def patch(  # type: ignore[override]\n    self,\n    url: httpx._types.URLTypes,\n    *,\n    content: httpx._types.RequestContent | None = None,\n    data: _RequestData | None = None,\n    files: httpx._types.RequestFiles | None = None,\n    json: Any = None,\n    params: httpx._types.QueryParamTypes | None = None,\n    headers: httpx._types.HeaderTypes | None = None,\n    cookies: httpx._types.CookieTypes | None = None,\n    auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    extensions: dict[str, Any] | None = None,\n) -> httpx.Response:\n    return super().patch(\n        url,\n        content=content,\n        data=data,\n        files=files,\n        json=json,\n        params=params,\n        headers=headers,\n        cookies=cookies,\n        auth=auth,\n        follow_redirects=follow_redirects,\n        timeout=timeout,\n        extensions=extensions,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "delete(\n    url,\n    *,\n    params=None,\n    headers=None,\n    cookies=None,\n    auth=USE_CLIENT_DEFAULT,\n    follow_redirects=USE_CLIENT_DEFAULT,\n    timeout=USE_CLIENT_DEFAULT,\n    extensions=None\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def delete(  # type: ignore[override]\n    self,\n    url: httpx._types.URLTypes,\n    *,\n    params: httpx._types.QueryParamTypes | None = None,\n    headers: httpx._types.HeaderTypes | None = None,\n    cookies: httpx._types.CookieTypes | None = None,\n    auth: httpx._types.AuthTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    follow_redirects: bool | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    timeout: httpx._types.TimeoutTypes | httpx._client.UseClientDefault = httpx._client.USE_CLIENT_DEFAULT,\n    extensions: dict[str, Any] | None = None,\n) -> httpx.Response:\n    return super().delete(\n        url,\n        params=params,\n        headers=headers,\n        cookies=cookies,\n        auth=auth,\n        follow_redirects=follow_redirects,\n        timeout=timeout,\n        extensions=extensions,\n    )",
+      "language": "python"
+    },
+    {
+      "code": "websocket_connect(url, subprotocols=None, **kwargs)",
+      "language": "rust"
+    },
+    {
+      "code": "def websocket_connect(\n    self,\n    url: str,\n    subprotocols: Sequence[str] | None = None,\n    **kwargs: Any,\n) -> WebSocketTestSession:\n    url = urljoin(\"ws://testserver\", url)\n    headers = kwargs.get(\"headers\", {})\n    headers.setdefault(\"connection\", \"upgrade\")\n    headers.setdefault(\"sec-websocket-key\", \"testserver==\")\n    headers.setdefault(\"sec-websocket-version\", \"13\")\n    if subprotocols is not None:\n        headers.setdefault(\"sec-websocket-protocol\", \", \".join(subprotocols))\n    kwargs[\"headers\"] = headers\n    try:\n        super().request(\"GET\", url, **kwargs)\n    except _Upgrade as exc:\n        session = exc.session\n    else:\n        raise RuntimeError(\"Expected WebSocket upgrade\")  # pragma: no cover\n\n    return session",
+      "language": "typescript"
+    },
+    {
+      "code": "async def lifespan(self) -> None:\n    scope = {\"type\": \"lifespan\", \"state\": self.app_state}\n    try:\n        await self.app(scope, self.stream_receive.receive, self.stream_send.send)\n    finally:\n        await self.stream_send.send(None)",
+      "language": "python"
+    },
+    {
+      "code": "wait_startup()",
+      "language": "unknown"
+    },
+    {
+      "code": "async def wait_startup(self) -> None:\n    await self.stream_receive.send({\"type\": \"lifespan.startup\"})\n\n    async def receive() -> Any:\n        message = await self.stream_send.receive()\n        if message is None:\n            self.task.result()\n        return message\n\n    message = await receive()\n    assert message[\"type\"] in (\n        \"lifespan.startup.complete\",\n        \"lifespan.startup.failed\",\n    )\n    if message[\"type\"] == \"lifespan.startup.failed\":\n        await receive()",
+      "language": "python"
+    },
+    {
+      "code": "wait_shutdown()",
+      "language": "unknown"
+    },
+    {
+      "code": "async def wait_shutdown(self) -> None:\n    async def receive() -> Any:\n        message = await self.stream_send.receive()\n        if message is None:\n            self.task.result()\n        return message\n\n    await self.stream_receive.send({\"type\": \"lifespan.shutdown\"})\n    message = await receive()\n    assert message[\"type\"] in (\n        \"lifespan.shutdown.complete\",\n        \"lifespan.shutdown.failed\",\n    )\n    if message[\"type\"] == \"lifespan.shutdown.failed\":\n        await receive()",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/reference/testclient/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/advanced/clients/"
+  ]
+}

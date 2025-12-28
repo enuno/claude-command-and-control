@@ -1,0 +1,17 @@
+{
+  "title": "Caching (/sdks/ardrive-core-js/(advanced-features)/caching)",
+  "content": "ArDrive Core maintains a metadata cache for improved performance:\n\nEnable cache logging:",
+  "code_samples": [
+    {
+      "code": "Windows: /ardrive-caches/metadata\nNon-Windows: /.ardrive/caches/metadata",
+      "language": "shell"
+    },
+    {
+      "code": "",
+      "language": "bash"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#caching-(/sdks/ardrive-core-js/(advanced-features)/caching)",
+  "links": []
+}

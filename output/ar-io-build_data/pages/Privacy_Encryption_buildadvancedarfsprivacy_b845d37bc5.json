@@ -1,0 +1,97 @@
+{
+  "title": "Privacy & Encryption (/build/advanced/arfs/privacy)",
+  "content": "The Arweave blockweave is inherently public. But with apps that use ArFS, like ArDrive, your private data never leaves your computer without using military grade (and [quantum resistant](https://blog.boot.dev/cryptography/is-aes-256-quantum-resistant/#:~:text=Symmetric%20encryption%2C%20or%20more%20specifically,key%20sizes%20are%20large%20enough)) encryption. This privacy layer is applied at the Drive level, and users determine whether a Drive is public or private when they first create it. Private drives must follow the ArFS privacy model.\n\nWith ArDrive specifically, every file within a Private Drive is symmetrically encrypted using [AES-256-GCM](https://iopscience.iop.org/article/10.1088/1742-6596/1019/1/012008/pdf) (for small files and metadata transactions) or [AES-256-CTR](https://xilinx.github.io/Vitis_Libraries/security/2020.1/guide_L1/internals/ctr.html) (for large files, over 100MiB). Every Private drive has a master \"Drive Key\" which uses a combination of the user's Arweave wallet signature, a user defined drive password, and a unique drive identifier ([uuidv4](https://en.wikipedia.org/wiki/Universally_unique_identifier)). Each file has its own \"File Key\" derived from the \"Drive Key\". This allows for single files to be shared without exposing access to the other files within the Drive.\n\nOnce a file is encrypted and stored on Arweave, it is locked forever and can only be decrypted using its file key.\n\n**NOTE**: Usable encryption standards are not limited to AES-256-GCM or AES-256-CTR. Any Encryption method may be used so long as it is clearly indicated in the `cipher` tag.\n\nPrivate drives have a global drive key, `D`, and multiple file keys `F`, for encryption. This enables a drive to have as many uniquely encrypted files as needed. One key is used for all versions of a single file (since new file versions use the same File-Id)\n\n`D` is used for encrypting both Drive and Folder metadata, while `F` is used for encrypting File metadata and the actual stored data. Having these different keys, `D` and `F`, allows a user to share specific files without revealing the contents of their entire drive.\n\n`D` is derived using HKDF-SHA256 with an [unsalted]() RSA-PSS signature of the drive's id and a user provided password.\n\n`F` is also derived using HKDF-SHA256 with the drive key and the file's id.\n\nOther wallets (like [ArConnect](https://www.arconnect.io/)) integrate with this Key Derivation protocol just exposing an API to collect a signature from a given Arweave Wallet in order to get the SHA-256 signature needed for the [HKDF](https://en.wikipedia.org/wiki/HKDF) to derive the Drive Key.\n\nAn example implementation, using Dart, is available [here](https://github.com/ardriveapp/ardrive-web/blob/187b3fb30808bda452123c2b18931c898df6a3fb/docs/private_drive_kdf_reference.dart), with a Typescript implementation [here](https://github.com/ardriveapp/ardrive-core-js/blob/f19da30efd30a4370be53c9b07834eae764f8535/src/utils/crypto.ts).\n\nDrives can store either public or private data. This is indicated by the `Drive-Privacy` tag in the Drive entity metadata.\n\nIf a Drive entity is private, an additional tag `Drive-Auth-Mode` must also be used to indicate how the Drive Key is derived. ArDrive clients currently leverage a secure password along with the Arweave Wallet private key signature to derive the global Drive Key.\n\nOn every encrypted Drive Entity, a `Cipher` tag must be specified, along with the public parameters for decrypting the data. This is done by specifying the parameter with a `Cipher-*` tag. eg. `Cipher-IV`. If the parameter is byte data, it must be encoded as Base64 in the tag.\n\nArDrive clients currently leverage AES256-GCM for all symmetric encryption, which requires a Cipher Initialization Vector consisting of 12 random bytes.\n\nAdditionally, all encrypted transactions must have the `Content-Type` tag `application/octet-stream` as opposed to `application/json`\n\nPrivate Drive Entities and their corresponding Root Folder Entities will both use these keys and ciphers generated to symmetrically encrypt the JSON files that are included in the transaction. This ensures that only the Drive Owner (and whomever the keys have been shared with) can open the drive, discover the root folder, and continue to load the rest of the children in the drive.\n\nWhen a file is uploaded to a private drive, it by default also becomes private and leverages the same drive keys used for its parent drive. Each unique file in a drive will get its own set of file keys based off of that file's unique `FileId`. If a single file gets a new version, its `File-Id` will be reused, effectively leveraging the same File Key for all versions in that file's history.\n\nThese file keys can be shared by the drive's owner as needed.\n\nPrivate File entities have both its metadata and data transactions encrypted using the same File Key, ensuring all facets of the data is truly private. As such, both the file's metadata and data transactions must both have a unique `Cipher-IV` and `Cipher` tag:\n\nJust like drives, private files must have the `Content-Type` tag set as `application/octet-stream` in both its metadata and data transactions:\n\n## Encryption Process\n\nHere's how the encryption process works for private drives:\n\n## Security Best Practices\n\nWhen working with private drives, follow these security guidelines:\n\n### Password Management\n\n- Use strong, unique passwords for each drive\n- Consider using a password manager\n- Never share passwords in plain text\n\n- Never store drive keys in plain text\n- Use secure key derivation functions\n- Implement proper key rotation if needed\n\n- Share file keys only with authorized users\n- Implement proper access logging\n- Regularly audit drive access\n\n- Encrypt data before transmission\n- Use secure communication channels\n- Implement proper error handling\n\n## Drive Signature (ArFS v0.15)\n\nArFS v0.15 introduces a new `Drive-Signature` entity type to help bridge signature derivation schemes across ArFS versions. This is particularly important for maintaining access to private drives created with older wallet signing methods.\n\nThe drive signature entity stores an encrypted version of the pre-v0.15 wallet signature that's necessary for deriving the drive key. This allows continued access to historical drive contents while using modern wallet signing APIs.\n\nReady to implement privacy in your ArFS applications?\n\n- [Creating Private Drives](/build/advanced/arfs/creating-drives) - Learn how to create secure drives\n- [Upgrading Private Drives](/build/advanced/arfs/upgrading-drives) - Update legacy drives to v0.15\n- [Reading Data](/build/advanced/arfs/reading-data) - Query and decrypt your private data",
+  "code_samples": [
+    {
+      "code": "graph TD\n    A[User Password] --> B[Drive Key Derivation]\n    C[Wallet Signature] --> B\n    D[Drive ID] --> B\n    B --> E[Drive Key D]\n    E --> F[File Key Derivation]\n    G[File ID] --> F\n    F --> H[File Key F]\n\n    E --> I[Encrypt Drive Metadata]\n    E --> J[Encrypt Folder Metadata]\n    H --> K[Encrypt File Metadata]\n    H --> L[Encrypt File Data]\n\n    style A fill:#e1f5fe\n    style C fill:#e1f5fe\n    style D fill:#e1f5fe\n    style G fill:#e1f5fe\n    style E fill:#c8e6c9\n    style H fill:#c8e6c9",
+      "language": "mermaid"
+    },
+    {
+      "code": "Drive-Privacy: \"\"",
+      "language": "unknown"
+    },
+    {
+      "code": "Drive-Auth-Mode?: 'password'",
+      "language": "unknown"
+    },
+    {
+      "code": "Cipher?: \"AES256-GCM\"\nCipher-IV?: \"\"",
+      "language": "unknown"
+    },
+    {
+      "code": "Cipher?: \"AES256-GCM\"\nCipher-IV?: \"\"",
+      "language": "unknown"
+    },
+    {
+      "code": "Content-Type: \"application/octet-stream\"",
+      "language": "unknown"
+    },
+    {
+      "code": "sequenceDiagram\n    participant User\n    participant Client\n    participant Wallet\n    participant Arweave\n\n    User->>Client: Create private drive\n    Client->>Wallet: Request signature\n    Wallet->>Client: Return signature\n    Client->>Client: Derive drive key\n    Client->>Client: Encrypt drive metadata\n    Client->>Arweave: Upload encrypted drive\n\n    User->>Client: Upload file to private drive\n    Client->>Client: Derive file key\n    Client->>Client: Encrypt file metadata\n    Client->>Client: Encrypt file data\n    Client->>Arweave: Upload encrypted metadata\n    Client->>Arweave: Upload encrypted data",
+      "language": "mermaid"
+    },
+    {
+      "code": "graph TD\n    A[Legacy Wallet Signature] --> B[Encrypt with v0.15 scheme]\n    B --> C[Drive-Signature Entity]\n    C --> D[Store on Arweave]\n    D --> E[Retrieve when needed]\n    E --> F[Decrypt signature]\n    F --> G[Use for drive key derivation]\n\n    style A fill:#ffecb3\n    style C fill:#c8e6c9\n    style G fill:#e1f5fe",
+      "language": "mermaid"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Deriving Keys",
+      "id": "deriving-keys"
+    },
+    {
+      "level": "h2",
+      "text": "Private Drives",
+      "id": "private-drives"
+    },
+    {
+      "level": "h2",
+      "text": "Private Files",
+      "id": "private-files"
+    },
+    {
+      "level": "h2",
+      "text": "Encryption Process",
+      "id": "encryption-process"
+    },
+    {
+      "level": "h2",
+      "text": "Security Best Practices",
+      "id": "security-best-practices"
+    },
+    {
+      "level": "h3",
+      "text": "Password Management",
+      "id": "password-management"
+    },
+    {
+      "level": "h3",
+      "text": "Key Storage",
+      "id": "key-storage"
+    },
+    {
+      "level": "h3",
+      "text": "Access Control",
+      "id": "access-control"
+    },
+    {
+      "level": "h3",
+      "text": "Data Handling",
+      "id": "data-handling"
+    },
+    {
+      "level": "h2",
+      "text": "Drive Signature (ArFS v0.15)",
+      "id": "drive-signature-(arfs-v0.15)"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#privacy-&-encryption-(/build/advanced/arfs/privacy)",
+  "links": []
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Connection",
+  "content": "This section explains how to configure database access for applications in Dokploy, including both internal connections within your network and external connections accessible over the internet.\n\n### Internal Credentials\n\nUsed for connecting to the database from within the same network, without exposing the database to the internet.\n\n* **User**: Username for the database access.\n* **Password**: Secure password for database access.\n* **Database Name**: The name of the database to connect to.\n* **Internal Host**: The hostname or internal identifier for the database within the network.\n* **Internal Port (Container)**: The port used within the container to connect to the database.\n* **Internal Connection URL**: The full connection string used internally to connect to the database.\n\n### External Credentials\n\nEnables the database to be reachable from the internet, necessary for remote management or external applications.\n\n* **External Port (Internet)**: Assign a port that is not currently used by another service to expose the database externally.\n\n#### Steps to Configure External Access\n\n1. Ensure the external port is available and not in conflict with other services.\n2. Enter the external port you wish to use to expose your database.\n3. The system will automatically generate an external connection URL, which can be used to access the database from any database management tool over the internet, like phpMyAdmin, MySQL Workbench, PgAdmin, etc.\n\nFor security reasons, internal credentials should be used for applications running within the same network or environment to prevent unauthorized access. External credentials should only be used when necessary and with proper security measures in place, such as VPNs or IP whitelisting.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Internal Credentials",
+      "id": "internal-credentials"
+    },
+    {
+      "level": "h3",
+      "text": "External Credentials",
+      "id": "external-credentials"
+    },
+    {
+      "level": "h3",
+      "text": "Important Note",
+      "id": "important-note"
+    }
+  ],
+  "url": "llms-txt#connection",
+  "links": []
+}

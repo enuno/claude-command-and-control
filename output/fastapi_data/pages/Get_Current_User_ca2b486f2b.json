@@ -1,0 +1,241 @@
+{
+  "url": "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+  "title": "Get Current User¶",
+  "content": "In the previous chapter the security system (which is based on the dependency injection system) was giving the path operation function a token as a str:\n\nPrefer to use the Annotated version if possible.\n\nBut that is still not that useful.\n\nLet's make it give us the current user.\n\nFirst, let's create a Pydantic user model.\n\nThe same way we use Pydantic to declare bodies, we can use it anywhere else:\n\nPrefer to use the Annotated version if possible.\n\nPrefer to use the Annotated version if possible.\n\nLet's create a dependency get_current_user.\n\nRemember that dependencies can have sub-dependencies?\n\nget_current_user will have a dependency with the same oauth2_scheme we created before.\n\nThe same as we were doing before in the path operation directly, our new dependency get_current_user will receive a token as a str from the sub-dependency oauth2_scheme:\n\nPrefer to use the Annotated version if possible.\n\nPrefer to use the Annotated version if possible.\n\nget_current_user will use a (fake) utility function we created, that takes a token as a str and returns our Pydantic User model:\n\nPrefer to use the Annotated version if possible.\n\nPrefer to use the Annotated version if possible.\n\nSo now we can use the same Depends with our get_current_user in the path operation:\n\nPrefer to use the Annotated version if possible.\n\nPrefer to use the Annotated version if possible.\n\nNotice that we declare the type of current_user as the Pydantic model User.\n\nThis will help us inside of the function with all the completion and type checks.\n\nYou might remember that request bodies are also declared with Pydantic models.\n\nHere FastAPI won't get confused because you are using Depends.\n\nThe way this dependency system is designed allows us to have different dependencies (different \"dependables\") that all return a User model.\n\nWe are not restricted to having only one dependency that can return that type of data.\n\nYou can now get the current user directly in the path operation functions and deal with the security mechanisms at the Dependency Injection level, using Depends.\n\nAnd you can use any model or data for the security requirements (in this case, a Pydantic model User).\n\nBut you are not restricted to using some specific data model, class or type.\n\nDo you want to have an id and email and not have any username in your model? Sure. You can use these same tools.\n\nDo you want to just have a str? Or just a dict? Or a database class model instance directly? It all works the same way.\n\nYou actually don't have users that log in to your application but robots, bots, or other systems, that have just an access token? Again, it all works the same.\n\nJust use any kind of model, any kind of class, any kind of database that you need for your application. FastAPI has you covered with the dependency injection system.\n\nThis example might seem verbose. Keep in mind that we are mixing security, data models, utility functions and path operations in the same file.\n\nBut here's the key point.\n\nThe security and dependency injection stuff is written once.\n\nAnd you can make it as complex as you want. And still, have it written only once, in a single place. With all the flexibility.\n\nBut you can have thousands of endpoints (path operations) using the same security system.\n\nAnd all of them (or any portion of them that you want) can take advantage of re-using these dependencies or any other dependencies you create.\n\nAnd all these thousands of path operations can be as small as 3 lines:\n\nPrefer to use the Annotated version if possible.\n\nPrefer to use the Annotated version if possible.\n\nYou can now get the current user directly in your path operation function.\n\nWe are already halfway there.\n\nWe just need to add a path operation for the user/client to actually send the username and password.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Get Current User¶",
+      "id": "get-current-user"
+    },
+    {
+      "level": "h2",
+      "text": "Create a user model¶",
+      "id": "create-a-user-model"
+    },
+    {
+      "level": "h2",
+      "text": "Create a get_current_user dependency¶",
+      "id": "create-a-get-current-user-dependency"
+    },
+    {
+      "level": "h2",
+      "text": "Get the user¶",
+      "id": "get-the-user"
+    },
+    {
+      "level": "h2",
+      "text": "Inject the current user¶",
+      "id": "inject-the-current-user"
+    },
+    {
+      "level": "h2",
+      "text": "Other models¶",
+      "id": "other-models"
+    },
+    {
+      "level": "h2",
+      "text": "Code size¶",
+      "id": "code-size"
+    },
+    {
+      "level": "h2",
+      "text": "Recap¶",
+      "id": "recap"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\n@app.get(\"/items/\")\nasync def read_items(token: Annotated[str, Depends(oauth2_scheme)]):\n    return {\"token\": token}",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\n@app.get(\"/items/\")\nasync def read_items(token: str = Depends(oauth2_scheme)):\n    return {\"token\": token}",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: str | None = None\n    full_name: str | None = None\n    disabled: bool | None = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated, Union\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: Union[str, None] = None\n    full_name: Union[str, None] = None\n    disabled: Union[bool, None] = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: str | None = None\n    full_name: str | None = None\n    disabled: bool | None = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: str = Depends(oauth2_scheme)):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: User = Depends(get_current_user)):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: Union[str, None] = None\n    full_name: Union[str, None] = None\n    disabled: Union[bool, None] = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: str = Depends(oauth2_scheme)):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: User = Depends(get_current_user)):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: str | None = None\n    full_name: str | None = None\n    disabled: bool | None = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated, Union\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: Union[str, None] = None\n    full_name: Union[str, None] = None\n    disabled: Union[bool, None] = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: str | None = None\n    full_name: str | None = None\n    disabled: bool | None = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: str = Depends(oauth2_scheme)):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: User = Depends(get_current_user)):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: Union[str, None] = None\n    full_name: Union[str, None] = None\n    disabled: Union[bool, None] = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: str = Depends(oauth2_scheme)):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: User = Depends(get_current_user)):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: str | None = None\n    full_name: str | None = None\n    disabled: bool | None = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated, Union\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: Union[str, None] = None\n    full_name: Union[str, None] = None\n    disabled: Union[bool, None] = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: str | None = None\n    full_name: str | None = None\n    disabled: bool | None = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: str = Depends(oauth2_scheme)):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: User = Depends(get_current_user)):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: Union[str, None] = None\n    full_name: Union[str, None] = None\n    disabled: Union[bool, None] = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: str = Depends(oauth2_scheme)):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: User = Depends(get_current_user)):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: str | None = None\n    full_name: str | None = None\n    disabled: bool | None = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated, Union\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: Union[str, None] = None\n    full_name: Union[str, None] = None\n    disabled: Union[bool, None] = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: str | None = None\n    full_name: str | None = None\n    disabled: bool | None = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: str = Depends(oauth2_scheme)):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: User = Depends(get_current_user)):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: Union[str, None] = None\n    full_name: Union[str, None] = None\n    disabled: Union[bool, None] = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: str = Depends(oauth2_scheme)):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: User = Depends(get_current_user)):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: str | None = None\n    full_name: str | None = None\n    disabled: bool | None = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated, Union\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: Union[str, None] = None\n    full_name: Union[str, None] = None\n    disabled: Union[bool, None] = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: str | None = None\n    full_name: str | None = None\n    disabled: bool | None = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: str = Depends(oauth2_scheme)):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: User = Depends(get_current_user)):\n    return current_user",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import Depends, FastAPI\nfrom fastapi.security import OAuth2PasswordBearer\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\noauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")\n\n\nclass User(BaseModel):\n    username: str\n    email: Union[str, None] = None\n    full_name: Union[str, None] = None\n    disabled: Union[bool, None] = None\n\n\ndef fake_decode_token(token):\n    return User(\n        username=token + \"fakedecoded\", email=\"john@example.com\", full_name=\"John Doe\"\n    )\n\n\nasync def get_current_user(token: str = Depends(oauth2_scheme)):\n    user = fake_decode_token(token)\n    return user\n\n\n@app.get(\"/users/me\")\nasync def read_users_me(current_user: User = Depends(get_current_user)):\n    return current_user",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

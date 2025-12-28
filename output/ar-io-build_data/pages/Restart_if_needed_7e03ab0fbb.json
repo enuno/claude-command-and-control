@@ -1,0 +1,33 @@
+{
+  "title": "Restart if needed",
+  "content": "docker compose down\ndocker compose up -d\nbash\ndocker compose logs ar-io-core | grep -i apex\nbash",
+  "code_samples": [
+    {
+      "code": "### Check Gateway Logs\n\nReview logs for any error messages:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Resolve Content Issues\n\n### Verify Content Accessibility\n\nTest if your content is accessible:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Check Gateway Logs",
+      "id": "check-gateway-logs"
+    },
+    {
+      "level": "h3",
+      "text": "Resolve Content Issues",
+      "id": "resolve-content-issues"
+    },
+    {
+      "level": "h3",
+      "text": "Verify Content Accessibility",
+      "id": "verify-content-accessibility"
+    }
+  ],
+  "url": "llms-txt#restart-if-needed",
+  "links": []
+}
