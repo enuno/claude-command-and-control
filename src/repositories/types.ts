@@ -78,9 +78,10 @@ export const HashrateTargetSchema = z.object({
 // Type Exports from Schemas
 // ============================================================
 
-export type MinerRegistrationInput = z.infer<typeof MinerRegistrationSchema>;
-export type MinerFilter = z.infer<typeof MinerFilterSchema>;
-export type Pagination = z.infer<typeof PaginationSchema>;
+// Use z.input<> for input types to make .optional() fields truly optional (before defaults)
+export type MinerRegistrationInput = z.input<typeof MinerRegistrationSchema>;
+export type MinerFilter = z.input<typeof MinerFilterSchema>;
+export type Pagination = z.input<typeof PaginationSchema>;
 export type PowerTargetInput = z.infer<typeof PowerTargetSchema>;
 export type HashrateTargetInput = z.infer<typeof HashrateTargetSchema>;
 

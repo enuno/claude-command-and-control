@@ -14,6 +14,7 @@ import { ValidationError, MinerNotFoundError } from '../../../utils/errors';
 import {
   IMinerRepository,
   IMinerStatusRepository,
+  MinerEntity,
   MinerRegistrationSchema,
   MinerFilterSchema,
   PaginationSchema,
@@ -96,13 +97,21 @@ export function createMinerController(deps: MinerControllerDependencies): Router
       // Verify connectivity by authenticating
       await braiins.authenticate({
         host: input.host,
-        port: input.port,
-        username: input.username,
+        port: input.port ?? 80,
+        username: input.username ?? 'root',
         password: input.password,
-        useTls: input.useTls,
+        useTls: input.useTls ?? false,
       });
 
-      const miner = await minerRepo.create(input);
+      // Create miner with defaults applied
+      const minerInput = {
+        ...input,
+        port: input.port ?? 80,
+        username: input.username ?? 'root',
+        useTls: input.useTls ?? false,
+        tags: input.tags ?? [],
+      };
+      const miner = await minerRepo.create(minerInput);
 
       res.status(201).json(
         success(
@@ -130,8 +139,8 @@ export function createMinerController(deps: MinerControllerDependencies): Router
   router.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
       // Parse query parameters
-      const filter = validate(MinerFilterSchema, {
-        status: req.query.status,
+      const filterInput = validate(MinerFilterSchema, {
+        status: (req.query.status as string) ?? 'all',
         tenantId: req.query.tenantId,
         tags: req.query.tags ? (req.query.tags as string).split(',') : undefined,
         minHashrateThs: req.query.minHashrate ? Number(req.query.minHashrate) : undefined,
@@ -141,20 +150,42 @@ export function createMinerController(deps: MinerControllerDependencies): Router
         model: req.query.model,
       });
 
-      const pagination = validate(PaginationSchema, {
-        page: req.query.page ? Number(req.query.page) : undefined,
-        limit: req.query.limit ? Number(req.query.limit) : undefined,
-        sortBy: req.query.sortBy,
-        sortOrder: req.query.sortOrder,
+      const paginationInput = validate(PaginationSchema, {
+        page: req.query.page ? Number(req.query.page) : 1,
+        limit: req.query.limit ? Number(req.query.limit) : 20,
+        sortBy: (req.query.sortBy as string) ?? 'name',
+        sortOrder: (req.query.sortOrder as string) ?? 'asc',
       });
+
+      // Apply defaults to ensure required fields are present
+      const filter = {
+        ...filterInput,
+        status: filterInput.status ?? 'all',
+      } as const;
+
+      const pagination = {
+        ...paginationInput,
+        page: paginationInput.page ?? 1,
+        limit: paginationInput.limit ?? 20,
+        sortBy: paginationInput.sortBy ?? 'name',
+        sortOrder: paginationInput.sortOrder ?? 'asc',
+      } as const;
 
       controllerLogger.debug('Listing miners', { filter, pagination });
 
-      const result = await minerRepo.findAll(filter, pagination);
+      const result = await minerRepo.findAll(filter as any, pagination as any);
 
       // Optionally include status data
       const includeStatus = req.query.includeStatus === 'true';
-      let minersWithStatus = result.data;
+      type MinerWithOptionalStatus = MinerEntity & {
+        status?: {
+          online: boolean;
+          hashrateThs: number;
+          temperatureCelsius: number;
+          powerWatts: number;
+        } | null;
+      };
+      let minersWithStatus: MinerWithOptionalStatus[] = result.data;
 
       if (includeStatus && result.data.length > 0) {
         const statusMap = await statusRepo.getStatuses(result.data.map((m) => m.id));
@@ -206,6 +237,9 @@ export function createMinerController(deps: MinerControllerDependencies): Router
   router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
+      if (!id) {
+        throw new ValidationError('Miner ID is required');
+      }
 
       controllerLogger.debug('Getting miner', { id });
 
@@ -239,6 +273,9 @@ export function createMinerController(deps: MinerControllerDependencies): Router
   router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
+      if (!id) {
+        throw new ValidationError('Miner ID is required');
+      }
 
       // Partial validation - only validate fields that are provided
       const updateSchema = MinerRegistrationSchema.partial().omit({ id: true, password: true });
@@ -274,6 +311,9 @@ export function createMinerController(deps: MinerControllerDependencies): Router
   router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
+      if (!id) {
+        throw new ValidationError('Miner ID is required');
+      }
 
       controllerLogger.info('Deleting miner', { id });
 
@@ -300,6 +340,10 @@ export function createMinerController(deps: MinerControllerDependencies): Router
   router.get('/:id/status', async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
+      if (!id) {
+        throw new ValidationError('Miner ID is required');
+      }
+
       const refresh = req.query.refresh === 'true';
 
       controllerLogger.debug('Getting miner status', { id, refresh });
@@ -351,6 +395,9 @@ export function createMinerController(deps: MinerControllerDependencies): Router
   router.post('/:id/reboot', async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
+      if (!id) {
+        throw new ValidationError('Miner ID is required');
+      }
 
       controllerLogger.info('Rebooting miner', { id });
 
@@ -395,6 +442,10 @@ export function createMinerController(deps: MinerControllerDependencies): Router
   router.post('/:id/power-target', async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
+      if (!id) {
+        throw new ValidationError('Miner ID is required');
+      }
+
       const input = validate(PowerTargetSchema, req.body);
 
       controllerLogger.info('Setting power target', { id, watts: input.watts });
@@ -441,6 +492,10 @@ export function createMinerController(deps: MinerControllerDependencies): Router
   router.post('/:id/hashrate-target', async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
+      if (!id) {
+        throw new ValidationError('Miner ID is required');
+      }
+
       const input = validate(HashrateTargetSchema, req.body);
 
       controllerLogger.info('Setting hashrate target', { id, terahashPerSecond: input.terahashPerSecond });
@@ -491,7 +546,7 @@ export function createMinerController(deps: MinerControllerDependencies): Router
  */
 export function createFleetController(deps: MinerControllerDependencies): Router {
   const router = Router();
-  const { minerRepo, statusRepo } = deps;
+  const { statusRepo } = deps;
 
   /**
    * GET /fleet/status

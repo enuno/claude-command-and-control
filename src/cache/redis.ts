@@ -8,9 +8,9 @@
  */
 
 import Redis from 'ioredis';
-import { logger, createChildLogger } from '../utils/logger';
-import { RedisConnectionError } from '../utils/errors';
 import { CACHE_KEYS, CACHE_TTL } from '../config/constants';
+import { RedisConnectionError } from '../utils/errors';
+import { createChildLogger } from '../utils/logger';
 
 const redisLogger = createChildLogger({ module: 'redis' });
 

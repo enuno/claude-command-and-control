@@ -8,10 +8,9 @@
  */
 
 import * as grpc from '@grpc/grpc-js';
-import * as protoLoader from '@grpc/proto-loader';
-import { logger, createChildLogger } from '../../utils/logger';
-import { GrpcConnectionError, GrpcTimeoutError } from '../../utils/errors';
 import { GRPC_CONFIG } from '../../config/constants';
+import { GrpcConnectionError } from '../../utils/errors';
+import { createChildLogger } from '../../utils/logger';
 
 const grpcLogger = createChildLogger({ module: 'grpc' });
 
@@ -159,8 +158,6 @@ export interface UpdateProgress {
  * @returns gRPC client instance
  */
 export async function createGrpcClient(config: GrpcConfig): Promise<GrpcClient> {
-  const timeout = config.timeout ?? GRPC_CONFIG.DEFAULT_TIMEOUT_MS;
-
   // Connection pool to reuse channels
   const connections = new Map<string, grpc.Channel>();
 
@@ -192,7 +189,7 @@ export async function createGrpcClient(config: GrpcConfig): Promise<GrpcClient> 
    */
   async function withRetry<T>(operation: string, connection: MinerConnection, fn: () => Promise<T>): Promise<T> {
     let lastError: Error | null = null;
-    let backoff = GRPC_CONFIG.INITIAL_BACKOFF_MS;
+    let backoff: number = GRPC_CONFIG.INITIAL_BACKOFF_MS;
 
     for (let attempt = 1; attempt <= GRPC_CONFIG.MAX_RETRIES; attempt++) {
       try {

@@ -7,9 +7,9 @@
  * @module api/braiins/client
  */
 
-import { logger, createChildLogger } from '../../utils/logger';
-import { AppError, UnauthorizedError } from '../../utils/errors';
 import { ERROR_CODES, HTTP_STATUS } from '../../config/constants';
+import { AppError, UnauthorizedError } from '../../utils/errors';
+import { createChildLogger } from '../../utils/logger';
 import type {
   MinerConnectionConfig,
   BraiinsClientOptions,
@@ -53,7 +53,7 @@ export class BraiinsApiError extends AppError {
     message: string,
     public readonly minerHost: string,
     public readonly endpoint: string,
-    statusCode = HTTP_STATUS.BAD_GATEWAY,
+    statusCode: number = HTTP_STATUS.BAD_GATEWAY,
     retryable = false
   ) {
     super(ERROR_CODES.GRPC_CONNECTION_FAILED, message, statusCode, retryable, {

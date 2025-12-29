@@ -221,7 +221,7 @@ describe('BraiinsClient', () => {
       const result = await client.getErrors(testConfig.host);
 
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].message).toBe('Temperature warning');
+      expect(result.errors[0]!.message).toBe('Temperature warning');
     });
   });
 
@@ -260,7 +260,7 @@ describe('BraiinsClient', () => {
       const result = await client.getHashboards(testConfig.host);
 
       expect(result.hashboards).toHaveLength(1);
-      expect(result.hashboards[0].chip_type).toBe('BM1397');
+      expect(result.hashboards[0]!.chip_type).toBe('BM1397');
     });
   });
 
@@ -309,7 +309,7 @@ describe('BraiinsClient', () => {
       const result = await client.getPools(testConfig.host);
 
       expect(result).toHaveLength(1);
-      expect(result[0].pools[0].url).toBe('stratum+tcp://pool.example.com:3333');
+      expect(result[0]!.pools[0]!.url).toBe('stratum+tcp://pool.example.com:3333');
     });
   });
 

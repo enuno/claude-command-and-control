@@ -7,10 +7,10 @@
  * @module services/miner
  */
 
-import { logger, createChildLogger } from '../utils/logger';
-import { MinerNotFoundError, MinerOfflineError, ValidationError } from '../utils/errors';
-import { RedisClient, cacheKeys, cacheTTL } from '../cache/redis';
 import { BraiinsClient, MinerConnectionConfig, MinerInfo, HashboardsResponse, PoolsResponse, TunerStateResponse, ErrorsResponse, HashrateTarget, PowerTarget } from '../api/braiins';
+import { RedisClient, cacheKeys, cacheTTL } from '../cache/redis';
+import { MinerNotFoundError, ValidationError } from '../utils/errors';
+import { createChildLogger } from '../utils/logger';
 
 const serviceLogger = createChildLogger({ module: 'miner-service' });
 

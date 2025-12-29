@@ -455,8 +455,8 @@ describe('Error Scenarios Integration', () => {
       const [info, hashboards, pools] = await Promise.all([braiinsClient.getMinerInfo(testMiner.host), braiinsClient.getHashboards(testMiner.host), braiinsClient.getPools(testMiner.host)]);
 
       expect(info.uid).toBe('result-1');
-      expect(hashboards.hashboards[0].chip_type).toBe('BM1397');
-      expect(pools[0].uid).toBe('pool-1');
+      expect(hashboards.hashboards[0]!.chip_type).toBe('BM1397');
+      expect(pools[0]!.uid).toBe('pool-1');
     });
 
     it('should handle mixed success/failure in concurrent requests', async () => {

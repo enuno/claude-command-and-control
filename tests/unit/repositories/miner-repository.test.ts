@@ -2,9 +2,9 @@
  * Miner Repository Unit Tests
  */
 
+import { BraiinsClient, createBraiinsClient } from '../../../src/api/braiins/client';
 import { createMinerRepository, createMinerStatusRepository, IMinerRepository, IMinerStatusRepository, MinerRegistrationInput } from '../../../src/repositories';
 import { MinerNotFoundError, ValidationError } from '../../../src/utils/errors';
-import { BraiinsClient, createBraiinsClient } from '../../../src/api/braiins/client';
 
 // Mock fetch globally
 const mockFetch = jest.fn();
@@ -130,17 +130,17 @@ describe('MinerRepository', () => {
     it('should sort by name ascending', async () => {
       const result = await repo.findAll(undefined, { sortBy: 'name', sortOrder: 'asc' });
 
-      expect(result.data[0].name).toBe('Alpha');
-      expect(result.data[1].name).toBe('Beta');
-      expect(result.data[2].name).toBe('Gamma');
+      expect(result.data[0]!.name).toBe('Alpha');
+      expect(result.data[1]!.name).toBe('Beta');
+      expect(result.data[2]!.name).toBe('Gamma');
     });
 
     it('should sort by name descending', async () => {
       const result = await repo.findAll(undefined, { sortBy: 'name', sortOrder: 'desc' });
 
-      expect(result.data[0].name).toBe('Gamma');
-      expect(result.data[1].name).toBe('Beta');
-      expect(result.data[2].name).toBe('Alpha');
+      expect(result.data[0]!.name).toBe('Gamma');
+      expect(result.data[1]!.name).toBe('Beta');
+      expect(result.data[2]!.name).toBe('Alpha');
     });
   });
 
@@ -215,7 +215,7 @@ describe('MinerRepository', () => {
       const result = await repo.findByIds(['miner-001', 'nonexistent']);
 
       expect(result).toHaveLength(1);
-      expect(result[0].id).toBe('miner-001');
+      expect(result[0]!.id).toBe('miner-001');
     });
   });
 

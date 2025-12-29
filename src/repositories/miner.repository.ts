@@ -21,7 +21,6 @@ import type {
   PaginatedResult,
   MinerStatus,
   FleetStatus,
-  MinerRegistrationSchema,
 } from './types';
 
 const repoLogger = createChildLogger({ module: 'miner-repository' });
@@ -344,7 +343,10 @@ export function createMinerStatusRepository(
 
     async getFleetStatus(tenantId?: string): Promise<FleetStatus> {
       // Get all miners (filtered by tenant if provided)
-      const { data: miners } = await minerRepo.findAll(tenantId ? { tenantId } : undefined, { limit: 1000 });
+      const { data: miners } = await minerRepo.findAll(
+        tenantId ? { status: 'all', tenantId } : { status: 'all' },
+        { page: 1, limit: 1000, sortBy: 'name', sortOrder: 'asc' }
+      );
 
       // Fetch all statuses in parallel
       const statuses = await Promise.all(miners.map((m) => fetchStatus(m)));
