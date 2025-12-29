@@ -1,0 +1,68 @@
+{
+  "name": "bitcoin-mining",
+  "description": "Comprehensive Bitcoin mining knowledge from industry reports covering 2024 market overview, mining economics, operational handbook, and heat reuse strategies. Use when planning mining operations, analyzing profitability, optimizing energy efficiency, or exploring sustainable mining practices.",
+  "merge_mode": "rule-based",
+  "sources": [
+    {
+      "type": "pdf",
+      "path": "docs/bitcoin.mining.2024.pdf",
+      "extract_options": {
+        "chunk_size": 10,
+        "min_quality": 5.0,
+        "extract_images": true,
+        "min_image_size": 100
+      },
+      "categories": {
+        "market_overview": ["market", "2024", "year in review", "industry", "trends", "statistics"],
+        "hashrate": ["hashrate", "difficulty", "network", "mining pool"],
+        "regulatory": ["regulation", "policy", "legal", "compliance"]
+      }
+    },
+    {
+      "type": "pdf",
+      "path": "docs/bitcoin.mining.economics.pdf",
+      "extract_options": {
+        "chunk_size": 10,
+        "min_quality": 5.0,
+        "extract_images": true,
+        "min_image_size": 100
+      },
+      "categories": {
+        "economics": ["economics", "profitability", "cost", "revenue", "ROI"],
+        "energy": ["energy", "electricity", "power", "consumption"],
+        "financial": ["financial", "investment", "capital", "funding"]
+      }
+    },
+    {
+      "type": "pdf",
+      "path": "docs/bitcoin.mining.handbook.pdf",
+      "extract_options": {
+        "chunk_size": 10,
+        "min_quality": 5.0,
+        "extract_images": true,
+        "min_image_size": 100
+      },
+      "categories": {
+        "operations": ["operations", "setup", "configuration", "deployment"],
+        "hardware": ["hardware", "ASIC", "equipment", "mining rig"],
+        "maintenance": ["maintenance", "troubleshooting", "repair", "monitoring"],
+        "best_practices": ["best practices", "optimization", "performance", "efficiency"]
+      }
+    },
+    {
+      "type": "pdf",
+      "path": "docs/bitcoin.mining.heat.resue.pdf",
+      "extract_options": {
+        "chunk_size": 10,
+        "min_quality": 5.0,
+        "extract_images": true,
+        "min_image_size": 100
+      },
+      "categories": {
+        "sustainability": ["sustainability", "heat reuse", "waste heat", "green mining"],
+        "thermal": ["thermal", "cooling", "heating", "temperature"],
+        "efficiency": ["efficiency", "energy recovery", "optimization"]
+      }
+    }
+  ]
+}

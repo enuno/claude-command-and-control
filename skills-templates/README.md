@@ -31,9 +31,17 @@ This directory contains production-ready skill templates and examples for Claude
 | **[slack-gif-creator](slack-gif-creator/)** | Creates animated GIFs optimized for Slack with validators for size constraints |
 | **[theme-factory](theme-factory/)** | Applies professional font and color themes to artifacts (10 pre-set themes included) |
 
-### Development (8 skills)
+### Cryptocurrency & Payments (2 skills)
 | Skill | Description |
 |-------|-------------|
+| **[cryptocurrency/bitcoin-mining](cryptocurrency/bitcoin-mining/)** | Comprehensive Bitcoin mining knowledge from 4 industry reports covering 2024 market analysis, mining economics, operational procedures, and heat reuse strategies for sustainable mining |
+| **[cryptocurrency/btcpayserver-doc](cryptocurrency/btcpayserver-doc/)** | BTCPay Server documentation - self-hosted Bitcoin payment gateway with 767 files covering setup, integrations (WooCommerce, Shopify, etc.), Lightning Network, wallets, and deployment |
+
+### Development (10 skills)
+| Skill | Description |
+|-------|-------------|
+| **[development/ansible](development/ansible/)** | Ansible community documentation - infrastructure automation platform with 786 files covering RST documentation sources, build system (nox/Sphinx), contribution guidelines, and development workflows |
+| **[development/building-bitcoin-rust](development/building-bitcoin-rust/)** | Comprehensive 419-page technical guide to building Bitcoin protocol implementation in Rust, covering cryptographic primitives, blockchain architecture, consensus mechanisms, P2P networking, and wallet development |
 | **[ar-io-build](ar-io-build/)** | Comprehensive AR.IO build documentation with 398 sections covering AR.IO features, APIs, and best practices |
 | **[changelog-generator](changelog-generator/)** | Automatically creates user-facing changelogs from git commits by analyzing history |
 | **[conductor](conductor/)** | Build and deployment orchestration with comprehensive Conductor documentation (40 sections, 96 KB) |
@@ -191,12 +199,12 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 32
-- **Individual Skills**: 24
+- **Total Skills**: 34
+- **Individual Skills**: 26
 - **Document Processing Suite**: 4
 - **Orchestration Skills**: 4
 - **Average Quality Score**: 96.7/100 (from integration validation)
-- **Total Content**: ~284K of skill documentation
+- **Total Content**: ~336K of skill documentation
 - **Supporting Files**: 309 (scripts, themes, examples, references)
 
 ## 🔗 Resources
@@ -232,6 +240,6 @@ Individual skills may have different licenses. Check each skill's directory for 
 
 ---
 
-**Last Updated**: 2025-12-26
-**Total Skills**: 33
+**Last Updated**: 2025-12-28
+**Total Skills**: 34
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)
