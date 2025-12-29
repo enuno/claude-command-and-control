@@ -1,8 +1,8 @@
 ---
-description: "Generate Claude AI skills from documentation, GitHub repos, or PDFs using Skill Seekers"
+description: "Generate Claude AI skills from documentation, GitHub repos, or PDFs using Skill Seekers with 25+ pre-configured frameworks"
 allowed-tools: ["Bash(pip)", "Bash(skill-seekers)", "Bash(python3)", "Bash(which)", "Bash(ls)", "Bash(mkdir)", "Read"]
 author: "Claude Command and Control"
-version: "1.0"
+version: "1.1"
 ---
 
 # Create Skill
@@ -11,9 +11,10 @@ version: "1.0"
 Generate production-ready Claude AI skills from documentation websites, GitHub repositories, or PDF files using [Skill Seekers](https://github.com/yusufkaraaslan/Skill_Seekers). Automatically outputs to `/INTEGRATION/incoming` for seamless integration with the existing workflow.
 
 ## Features
-- 🌐 **Documentation Scraping** - Convert doc sites to skills (React, FastAPI, etc.)
+- 🌐 **Documentation Scraping** - Convert doc sites to skills (React, FastAPI, Just, etc.)
 - 🐙 **GitHub Integration** - Extract skills from repositories with AST parsing
 - 📄 **PDF Processing** - Transform technical PDFs into structured skills
+- ⚙️ **Config-Driven** - 25+ pre-configured frameworks in `configs/` directory
 - ✨ **AI Enhancement** - Optional AI-powered skill refinement (`--enhance`)
 - 🔄 **Auto-Integration** - Automatically runs `/integration-scan` after creation
 - 📦 **Auto-Install** - Checks for and installs `skill-seekers` if missing
@@ -38,9 +39,14 @@ Generate production-ready Claude AI skills from documentation websites, GitHub r
 /create-skill --pdf ~/Downloads/guide.pdf --name user-guide --enhance
 ```
 
-### Using Config File (Advanced)
+### Using Config File (Recommended for Best Results)
 ```bash
+# Use pre-configured framework from repository
+/create-skill --config configs/fastapi.json
 /create-skill --config configs/react.json
+/create-skill --config configs/just.json
+
+# Or use remote config URL
 /create-skill --config https://raw.githubusercontent.com/.../config.json
 ```
 
@@ -139,10 +145,21 @@ SKILL_NAME=$(python3 -c "import json; print(json.load(open('[CONFIG_PATH]'))['na
 - ✅ Rate limiting control
 - ✅ Selector customization for specific doc sites
 
-**Example config locations:**
-- User configs: `~/.skill-seekers/configs/[framework].json`
-- Project configs: `configs/[framework].json`
+**Config locations:**
+- **Local configs** (PRIMARY): `configs/[framework].json`
 - Remote configs: `https://raw.githubusercontent.com/.../config.json`
+
+**Available configs in repository:**
+- `configs/fastapi.json` - FastAPI Python web framework
+- `configs/react.json` - React JavaScript library
+- `configs/django.json` - Django Python web framework
+- `configs/braiins-pool.json` - Braiins mining pool
+- `configs/braiins-os.json` - Braiins OS firmware
+- `configs/farm-monitor.json` - Farm monitoring
+- `configs/just.json` - Just command runner (task automation)
+- `configs/kubernetes.json` - Kubernetes orchestration
+- `configs/tailwind.json` - Tailwind CSS
+- And 20+ more frameworks...
 
 Display progress:
 ```
@@ -358,8 +375,8 @@ Production-ready skill ✅
 
 ### Example 1: FastAPI Documentation (Config Approach - Recommended)
 ```bash
-# Best approach: Use pre-configured config file
-/create-skill --config ~/.skill-seekers/configs/fastapi.json
+# Best approach: Use pre-configured config file from repository
+/create-skill --config configs/fastapi.json
 ```
 
 **Result**: Comprehensive FastAPI skill with:
@@ -386,7 +403,16 @@ Config files provide 100x better content extraction!
 
 **Time**: ~12 minutes
 
-### Example 3: Custom API Manual
+### Example 3: Just Command Runner (From Repository Config)
+```bash
+/create-skill --config configs/just.json
+```
+
+**Result**: Just command runner skill with recipe syntax, examples, and task automation patterns.
+
+**Time**: ~6 minutes (smaller doc site)
+
+### Example 4: Custom API Manual
 ```bash
 /create-skill --pdf ~/Documents/api-reference-v3.pdf --name company-api --enhance
 ```
@@ -415,8 +441,8 @@ Config files provide 100x better content extraction!
 
 ### Source Selection
 - **Config files** (RECOMMENDED): Best for comprehensive extraction with 100x better results
-  - Check `~/.skill-seekers/configs/` for pre-configured popular frameworks
-  - Create custom configs for complex documentation sites
+  - Use configs from `configs/` directory (25+ pre-configured frameworks)
+  - Create new configs in `configs/` directory for reusability
   - Provides categorization, URL filtering, and rate limiting
 - **Documentation sites**: Use basic --url for simple sites or when no config exists
   - Works best for sites with llms.txt or simple HTML structure
@@ -427,11 +453,18 @@ Config files provide 100x better content extraction!
 - **PDFs**: Best for proprietary tools, legacy systems, internal documentation
 
 ### Using Config Files
+
 **When to create a custom config:**
 1. Documentation site has >50 pages
 2. Site uses JavaScript navigation (SPA)
 3. Need specific categorization (tutorials, API reference, guides)
 4. Want to exclude certain sections (external links, deployment docs)
+
+**Creating a new config:**
+1. Create file in `configs/` directory: `configs/your-framework.json`
+2. Use existing configs as templates (e.g., `configs/fastapi.json`)
+3. Test with: `/create-skill --config configs/your-framework.json`
+4. Commit to repository for reuse
 
 **Sample config structure:**
 ```json
@@ -450,6 +483,27 @@ Config files provide 100x better content extraction!
   },
   "rate_limit": 0.5,
   "max_pages": 250
+}
+```
+
+**Example: Just command runner config** (`configs/just.json`):
+```json
+{
+  "name": "just",
+  "description": "Just command runner for project task automation",
+  "base_url": "https://just.systems/",
+  "start_urls": ["https://just.systems/man/en/"],
+  "url_patterns": {
+    "include": ["/man/en/"],
+    "exclude": ["/blog/", "/changelog/"]
+  },
+  "categories": {
+    "getting_started": ["introduction", "quick-start"],
+    "recipes": ["recipes", "syntax"],
+    "features": ["features", "patterns"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 50
 }
 ```
 
@@ -513,6 +567,13 @@ export OPENAI_API_KEY="sk-..."
 
 ## Version History
 
+- **1.1** (2025-12-28): Config directory integration
+  - Use local `configs/` directory for all configurations
+  - Added 25+ pre-configured framework configs
+  - Added Just command runner example
+  - Improved config creation workflow
+  - Config file reusability across team
+
 - **1.0** (2025-12-26): Initial release
   - Documentation, GitHub, and PDF support
   - Auto-install capability
@@ -522,6 +583,7 @@ export OPENAI_API_KEY="sk-..."
 
 ---
 
-**Last Updated**: December 26, 2025
-**Dependencies**: skill-seekers package, /INTEGRATION directory structure
+**Last Updated**: December 28, 2025
+**Dependencies**: skill-seekers package, /INTEGRATION directory structure, configs/ directory
 **Integration**: Works seamlessly with integration pipeline commands
+**Available Configs**: 25+ frameworks in `configs/` directory (FastAPI, React, Django, Just, Kubernetes, Tailwind, and more)

@@ -1,0 +1,38 @@
+{
+  "name": "farm-monitor",
+  "description": "Braiins Farm Monitor - Bitcoin mining fleet monitoring and management",
+  "base_url": "https://academy.braiins.com/",
+  "start_urls": [
+    "https://academy.braiins.com/en/farm-monitor/about/",
+    "https://academy.braiins.com/en/farm-monitor/install-uninstall/",
+    "https://academy.braiins.com/en/farm-monitor/setup/",
+    "https://academy.braiins.com/en/farm-monitor/dashboards/",
+    "https://academy.braiins.com/en/farm-monitor/metrics-and-labels/",
+    "https://academy.braiins.com/en/farm-monitor/promql-examples/",
+    "https://academy.braiins.com/en/farm-monitor/structure-your-farm/",
+    "https://academy.braiins.com/en/farm-monitor/limitations/",
+    "https://academy.braiins.com/en/farm-monitor/troubleshooting/",
+    "https://academy.braiins.com/en/farm-monitor/whats-new/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/en/farm-monitor/"
+    ],
+    "exclude": [
+      "/blog/",
+      "/zh/",
+      "/es/",
+      "/ru/"
+    ]
+  },
+  "categories": {
+    "getting_started": ["about", "install-uninstall", "setup"],
+    "dashboards": ["dashboards", "metrics-and-labels"],
+    "monitoring": ["promql-examples", "structure-your-farm"],
+    "troubleshooting": ["limitations", "troubleshooting"],
+    "other": ["whats-new"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 50,
+  "follow_links": false
+}
