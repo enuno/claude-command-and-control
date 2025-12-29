@@ -3,6 +3,57 @@
 ## Purpose
 This document describes how to coordinate multiple Claude agents and commands for highly efficient, scalable, and reliable workflows. It covers orchestration architecture, communication, planning documents, and anti-patterns to avoid.
 
+## When Multi-Agent is Appropriate
+
+**Important**: Anthropic's latest research shows that for most workflows, a **single general agent with skills** is more efficient than multiple specialized agents. This guide focuses on the specific scenarios where multi-agent orchestration provides value.
+
+### Use Multi-Agent When:
+
+1. **Breadth-First Parallelization**
+   - Research across independent sources
+   - Exploring multiple solution approaches
+   - Multi-environment deployments (dev/staging/prod)
+
+2. **Scale Requires Concurrency**
+   - Large codebases needing parallel analysis
+   - High-volume data processing
+   - Time-sensitive deliverables
+
+3. **Comparison Through Diversity**
+   - Want multiple implementations to compare
+   - Leveraging stochastic variation in LLM outputs
+   - A/B testing different approaches
+
+### Don't Use Multi-Agent For:
+
+❌ **Sequential Workflows**: Use single agent + skills
+- Feature implementation (depth-first)
+- Code refactoring with context dependencies
+- Documentation generation
+- Standard testing and validation
+
+❌ **Context-Heavy Tasks**: Use single agent + progressive skill loading
+- Complex debugging requiring full codebase understanding
+- Architecture design decisions
+- API integration (sequential setup steps)
+
+### Modern Best Practice: Hybrid Approach
+
+Use orchestrator-worker pattern, but equip each worker with dynamically-loaded skills:
+
+```yaml
+orchestrator:
+  role: orchestrator-lead
+  skills: [task-decomposition, dependency-management]
+
+workers:
+  - role: general-agent
+    skills: [dynamically-loaded-per-task]
+    isolation: git-worktree
+```
+
+**See**: [Agent Skills vs. Multi-Agent Guide](../best-practices/09-Multi-Agent-Architecture-and-Skills-Integration.md) for detailed comparison and migration strategies.
+
 ## Orchestrator-Worker Architecture
 
 ### Lead Agent (Orchestrator)

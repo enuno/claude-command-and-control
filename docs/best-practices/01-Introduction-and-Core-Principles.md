@@ -75,6 +75,26 @@ Modern software development increasingly demands agent-first thinking—designin
 - Maintain detailed audit trails
 - Design fail-safe mechanisms and rollback capabilities
 
+### Core Tenet: Skills-First Agent Design
+
+**Principle**: Build general-purpose agents equipped with specialized skills rather than building separate agents for each use case.
+
+**Rationale**:
+- **Maintainability**: Update one agent instead of N specialized agents
+- **Efficiency**: 35% reduction in token usage through context reuse
+- **Composability**: Combine skills for complex workflows
+- **Portability**: Share skills across teams and projects
+- **Flexibility**: Load only relevant capabilities per task
+
+**When to Deviate**: Use multi-agent patterns when:
+1. Tasks are naturally parallelizable and independent
+2. Exploring multiple alternative approaches simultaneously
+3. Breadth-first work (research, discovery) over depth-first (implementation)
+
+**Hybrid Approach**: For complex features, use orchestrator-worker pattern where each worker is a general agent loading task-specific skills.
+
+**See Also**: [Agent Skills vs. Multi-Agent Guide](09-Multi-Agent-Architecture-and-Skills-Integration.md)
+
 ## The Claude Ecosystem Architecture
 
 ### Documentation Hierarchy

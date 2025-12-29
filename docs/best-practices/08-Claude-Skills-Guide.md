@@ -15,6 +15,57 @@ This chapter extends the Claude Command and Control framework to support **Claud
 | **Context** | Minimal | Full project | Scoped to workflow |
 | **Best For** | Repetitive actions | Complex multi-phase work | Standardized processes |
 
+## Skills vs. Agents: The Strategic Shift
+
+### The Evolution of Agent Engineering
+
+Anthropic's research demonstrates that the industry has been over-using multi-agent architectures. For most use cases, **a general agent with skills is superior** to building specialized agents.
+
+### Why Skills Win
+
+| Aspect | Multiple Agents | Single Agent + Skills |
+|--------|-----------------|---------------------|
+| Maintenance | Update N agents | Update 1 agent + M skills |
+| Token Efficiency | 15x baseline | 5-7x baseline |
+| Context Management | Distributed, duplicated | Centralized, progressive |
+| Composability | Agent coordination overhead | Native skill composition |
+| Sharing | Copy entire agent configs | Share skill packages |
+| Versioning | N agent versions | 1 agent + M skill versions |
+
+### When to Use Each
+
+**Skills (Default Choice)**:
+- Any sequential workflow
+- Standard development tasks
+- Depth-first problem solving
+- Context-heavy operations
+
+**Multi-Agent (Special Cases)**:
+- Parallel independent research
+- Exploring multiple approaches
+- Breadth-first tasks
+- Scale requiring concurrency
+
+**Hybrid (Complex Features)**:
+- Orchestrator + workers with skills
+- Best of both worlds
+- See [Multi-Agent Orchestration Guide](04-Multi-Agent-Orchestration.md)
+
+### Skills Are the New Primitive
+
+Think of skills as the fundamental building block:
+
+```
+Commands < Skills < Agents < Multi-Agent Systems
+```
+
+- **Commands**: Quick session shortcuts
+- **Skills**: Reusable workflow automation
+- **Agents**: General-purpose with skill loading
+- **Multi-Agent**: Orchestration for parallelization
+
+**Migration**: Most existing "agent templates" should be converted to skills. See [Agent Skills vs. Multi-Agent Guide](../best-practices/09-Multi-Agent-Architecture-and-Skills-Integration.md) for conversion examples.
+
 ## When to Use Skills
 
 **Create a skill when:**
