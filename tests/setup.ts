@@ -25,5 +25,7 @@ global.console = {
 // Global afterAll to ensure clean shutdown
 afterAll(async () => {
   // Allow pending operations to complete
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  await new Promise((resolve) => {
+    setTimeout(resolve, 100);
+  });
 });

@@ -7,10 +7,10 @@
  * @module utils/logger
  */
 
-import winston from 'winston';
+import { createLogger as winstonCreateLogger, format, transports, type Logger, type transport } from 'winston';
 import { LOG_CONFIG } from '../config/constants';
 
-const { combine, timestamp, printf, colorize, errors } = winston.format;
+const { combine, timestamp, printf, colorize, errors } = format;
 
 /**
  * Custom log format for structured logging
@@ -20,14 +20,16 @@ const structuredFormat = printf(({ level, message, timestamp, ...meta }) => {
   const sanitizedMeta = maskSensitiveData(meta);
 
   // Truncate very long messages
+  const messageStr = typeof message === 'string' ? message : String(message);
   const truncatedMessage =
-    typeof message === 'string' && message.length > LOG_CONFIG.MAX_MESSAGE_LENGTH
-      ? message.substring(0, LOG_CONFIG.MAX_MESSAGE_LENGTH) + '... [truncated]'
-      : message;
+    messageStr.length > LOG_CONFIG.MAX_MESSAGE_LENGTH
+      ? messageStr.substring(0, LOG_CONFIG.MAX_MESSAGE_LENGTH) + '... [truncated]'
+      : messageStr;
 
   const metaString = Object.keys(sanitizedMeta).length > 0 ? ` ${JSON.stringify(sanitizedMeta)}` : '';
 
-  return `${timestamp} [${level.toUpperCase()}] ${truncatedMessage}${metaString}`;
+  // Explicitly convert to strings to satisfy @typescript-eslint/restrict-template-expressions
+  return `${String(timestamp)} [${String(level).toUpperCase()}] ${truncatedMessage}${metaString}`;
 });
 
 /**
@@ -55,22 +57,22 @@ function maskSensitiveData(obj: Record<string, unknown>): Record<string, unknown
 function getLogLevel(): string {
   const level = process.env.LOG_LEVEL?.toLowerCase();
   const validLevels = ['error', 'warn', 'info', 'debug'];
-  return validLevels.includes(level || '') ? level! : 'info';
+  return (level !== undefined && validLevels.includes(level)) ? level : 'info';
 }
 
 /**
  * Creates the Winston logger instance
  */
-function createLogger(): winston.Logger {
+function createLogger(): Logger {
   const isProduction = process.env.NODE_ENV === 'production';
   const isTest = process.env.NODE_ENV === 'test';
 
-  const transports: winston.transport[] = [];
+  const loggerTransports: transport[] = [];
 
   // Console transport (always enabled except in test)
   if (!isTest) {
-    transports.push(
-      new winston.transports.Console({
+    loggerTransports.push(
+      new transports.Console({
         format: combine(colorize(), timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), errors({ stack: true }), structuredFormat),
       })
     );
@@ -79,26 +81,26 @@ function createLogger(): winston.Logger {
   // File transport for production
   if (isProduction) {
     // Error logs
-    transports.push(
-      new winston.transports.File({
+    loggerTransports.push(
+      new transports.File({
         filename: 'logs/error.log',
         level: 'error',
-        format: combine(timestamp(), errors({ stack: true }), winston.format.json()),
+        format: combine(timestamp(), errors({ stack: true }), format.json()),
       })
     );
 
     // Combined logs
-    transports.push(
-      new winston.transports.File({
+    loggerTransports.push(
+      new transports.File({
         filename: 'logs/combined.log',
-        format: combine(timestamp(), errors({ stack: true }), winston.format.json()),
+        format: combine(timestamp(), errors({ stack: true }), format.json()),
       })
     );
   }
 
-  return winston.createLogger({
+  return winstonCreateLogger({
     level: getLogLevel(),
-    transports,
+    transports: loggerTransports,
     // Don't exit on handled exceptions
     exitOnError: false,
   });
@@ -123,7 +125,7 @@ export const logger = createLogger();
  * const moduleLogger = createChildLogger({ module: 'grpc' });
  * moduleLogger.info('Connected to miner', { minerId: '123' });
  */
-export function createChildLogger(meta: Record<string, unknown>): winston.Logger {
+export function createChildLogger(meta: Record<string, unknown>): Logger {
   return logger.child(meta);
 }
 

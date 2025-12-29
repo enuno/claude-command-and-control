@@ -2,6 +2,8 @@
  * Miner Repository Unit Tests
  */
 
+/* eslint-disable @typescript-eslint/require-await */
+
 import { BraiinsClient, createBraiinsClient } from '../../../src/api/braiins/client';
 import { createMinerRepository, createMinerStatusRepository, IMinerRepository, IMinerStatusRepository, MinerRegistrationInput } from '../../../src/repositories';
 import { MinerNotFoundError, ValidationError } from '../../../src/utils/errors';
@@ -161,6 +163,11 @@ describe('MinerRepository', () => {
   describe('update', () => {
     it('should update miner properties', async () => {
       await repo.create(testMiner);
+
+      // Wait a bit to ensure updatedAt > createdAt (avoid flaky millisecond precision issues)
+      await new Promise((resolve) => {
+        setTimeout(resolve, 10);
+      });
 
       const updated = await repo.update(testMiner.id, {
         name: 'Updated Name',
