@@ -4,7 +4,7 @@
 # Includes all development tools, hot reload, and debugging
 # ============================================================
 
-FROM node:20-alpine
+FROM node:25-alpine
 
 # Install development tools
 RUN apk add --no-cache \
