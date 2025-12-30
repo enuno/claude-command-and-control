@@ -160,10 +160,10 @@ describe('MCP Prompts Integration Tests', () => {
       );
 
       expect(result).toHaveLength(2);
-      expect(result[0].role).toBe('user');
-      expect(result[1].role).toBe('assistant');
+      expect(result[0]?.role).toBe('user');
+      expect(result[1]?.role).toBe('assistant');
 
-      const assistantMessage = result[1].content.text ?? '';
+      const assistantMessage = result[1]?.content.text ?? '';
       expect(assistantMessage).toContain('Step 1: Check Last Known Status');
       expect(assistantMessage).toContain('✅ ONLINE');
       expect(assistantMessage).toContain('miner-1');
@@ -187,7 +187,7 @@ describe('MCP Prompts Integration Tests', () => {
       );
 
       expect(result).toHaveLength(2);
-      const assistantMessage = result[1].content.text ?? '';
+      const assistantMessage = result[1]?.content.text ?? '';
       expect(assistantMessage).toContain('❌ OFFLINE');
       expect(assistantMessage).toContain('Verify Network Connectivity');
       expect(assistantMessage).toContain('Check Physical Connections');
@@ -205,7 +205,7 @@ describe('MCP Prompts Integration Tests', () => {
       );
 
       expect(result).toHaveLength(2);
-      const assistantMessage = result[1].content.text ?? '';
+      const assistantMessage = result[1]?.content.text ?? '';
       expect(assistantMessage).toContain('Miner not found');
       expect(assistantMessage).toContain('Verify Miner Registration');
       expect(assistantMessage).toContain('get_fleet_status');
@@ -229,10 +229,10 @@ describe('MCP Prompts Integration Tests', () => {
       );
 
       expect(result).toHaveLength(2);
-      expect(result[0].role).toBe('user');
-      expect(result[1].role).toBe('assistant');
+      expect(result[0]?.role).toBe('user');
+      expect(result[1]?.role).toBe('assistant');
 
-      const assistantMessage = result[1].content.text ?? '';
+      const assistantMessage = result[1]?.content.text ?? '';
       expect(assistantMessage).toContain('Step 1: Current Performance Analysis');
       expect(assistantMessage).toContain('Current Efficiency');
       expect(assistantMessage).toContain('W/TH');
@@ -248,8 +248,8 @@ describe('MCP Prompts Integration Tests', () => {
       );
 
       expect(result).toHaveLength(2);
-      const assistantMessage = result[1].content.text ?? '';
-      expect(assistantMessage).toContain('Your Target: 30 W/TH');
+      const assistantMessage = result[1]?.content.text ?? '';
+      expect(assistantMessage).toContain('**Your Target:** 30 W/TH');
     });
 
     it('should handle miner not found error', async () => {
@@ -263,7 +263,7 @@ describe('MCP Prompts Integration Tests', () => {
       );
 
       expect(result).toHaveLength(2);
-      const assistantMessage = result[1].content.text ?? '';
+      const assistantMessage = result[1]?.content.text ?? '';
       expect(assistantMessage).toContain('Miner not reachable');
       expect(assistantMessage).toContain('Power Efficiency Best Practices');
     });
@@ -277,10 +277,10 @@ describe('MCP Prompts Integration Tests', () => {
       );
 
       expect(result).toHaveLength(2);
-      expect(result[0].role).toBe('user');
-      expect(result[1].role).toBe('assistant');
+      expect(result[0]?.role).toBe('user');
+      expect(result[1]?.role).toBe('assistant');
 
-      const assistantMessage = result[1].content.text ?? '';
+      const assistantMessage = result[1]?.content.text ?? '';
       expect(assistantMessage).toContain('Step 1: Pre-Flight Checks');
       expect(assistantMessage).toContain('Fleet Status');
       expect(assistantMessage).toContain('Total miners selected: 2');
@@ -296,11 +296,11 @@ describe('MCP Prompts Integration Tests', () => {
       );
 
       expect(result).toHaveLength(2);
-      const assistantMessage = result[1].content.text ?? '';
+      const assistantMessage = result[1]?.content.text ?? '';
       expect(assistantMessage).toContain('Total miners selected: 3');
-      // Fleet status should include all miners from the mock
-      expect(assistantMessage).toContain('Online and ready: 2');
-      expect(assistantMessage).toContain('Offline: 1');
+      // All miners in mock fleet are online (mockFleetStatus has miner-3 online too)
+      expect(assistantMessage).toContain('Online and ready: 3');
+      expect(assistantMessage).toContain('Offline: 0');
     });
 
     it('should validate firmware version format', async () => {
@@ -329,15 +329,25 @@ describe('MCP Prompts Integration Tests', () => {
     });
 
     it('should identify offline miners in pre-flight checks', async () => {
+      // Mock getMinerStatus to return offline status for miner-3
+      (mockContext.minerService.getMinerStatus as jest.Mock).mockImplementation(
+        async (minerId: string) => {
+          if (minerId === 'miner-3') {
+            return { ...mockMinerStatus, id: 'miner-3', online: false };
+          }
+          return mockMinerStatus;
+        }
+      );
+
       const result = await batchFirmwareUpdatePrompt.handler(
         { minerIds: 'miner-1,miner-2,miner-3', version: '2.0.1' },
         mockContext
       );
 
       expect(result).toHaveLength(2);
-      const assistantMessage = result[1].content.text ?? '';
+      const assistantMessage = result[1]?.content.text ?? '';
       expect(assistantMessage).toContain('Offline: 1');
-      expect(assistantMessage).toContain('Offline Miners:');
+      expect(assistantMessage).toContain('**Offline Miners:**');
     });
 
     it('should provide phased rollout recommendations for large batches', async () => {
@@ -358,7 +368,7 @@ describe('MCP Prompts Integration Tests', () => {
       );
 
       expect(result).toHaveLength(2);
-      const assistantMessage = result[1].content.text ?? '';
+      const assistantMessage = result[1]?.content.text ?? '';
       expect(assistantMessage).toContain('Phased Rollout');
       expect(assistantMessage).toContain('Test on 3-5 miners first');
     });

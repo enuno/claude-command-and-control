@@ -1,14 +1,15 @@
 ---
-description: "Initialize a new Claude coding session: capture project status, load key context, and record developer intent."
-allowed-tools: ["Read", "Search", "Bash(git:status)", "Bash(git:branch)", "Bash(git:log)", "Edit"]
-author: "Engineering Standards Committee"
+description: "Initialize Braiins OS MCP Server coding session: capture project status, load key context, and record developer intent."
+allowed-tools: ["Read", "Search", "Bash(git:status)", "Bash(git:branch)", "Bash(git:log)", "Bash(docker:ps)", "Edit"]
+author: "Ryno Crypto Mining Services"
+project: "braiins-os-mcp-server"
 version: "1.0"
 ---
 
-# Start Session
+# Start Session - Braiins OS MCP Server
 
 ## Purpose
-Initialize a productive coding session by establishing context, understanding project state, and aligning on session goals.
+Initialize a productive coding session for the Braiins OS MCP server by establishing project context, verifying infrastructure, and aligning on development goals.
 
 ## Session Initialization Steps
 
@@ -22,23 +23,34 @@ Initialize a productive coding session by establishing context, understanding pr
 
 # Show recent commits
 !git log --oneline --decorate -10
+
+# Check Redis status (required for caching)
+!docker ps --filter "name=redis" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+
+# Check if Docker Compose services are running
+!docker-compose ps
 ```
 
 ### 2. Read Key Documentation
 Read the following files in order (if they exist):
-- `@README.md` - Project overview
-- `@AGENTS.md` - Universal standards
-- `@CLAUDE.md` - Claude-specific configuration
-- `@DEVELOPMENT_PLAN.md` - Current project plan
-- `@TODO.md` - Task list and priorities
-- `@MULTI_AGENT_PLAN.md` - Multi-agent coordination (if applicable)
+- `@README.md` - Braiins OS MCP server overview
+- `@CLAUDE.md` - Project-specific MCP development instructions
+- `@DEVELOPMENT_PLAN.md` - MCP tool implementation roadmap
+- `@ARCHITECTURE.md` - System architecture (MCP, gRPC, Redis)
+- `@docs/claude/AGENT_STRATEGY_UPDATE_SUMMARY.md` - Skills-first paradigm
+- `@MULTI_AGENT_PLAN.md` - Multi-agent orchestration (if applicable)
 
 ### 3. Assess Current State
 Display to user:
+- **Project**: braiins-os-mcp-server (Braiins OS API MCP Server)
 - **Active Branch**: [current branch]
 - **Uncommitted Changes**: [count and types]
 - **Recent Work**: [last 5 commits]
+- **Infrastructure**:
+  - Redis: [running/stopped]
+  - Docker Compose: [services status]
 - **Loaded Context**: [list of files read]
+- **Existing MCP Tools**: authenticate, list_miners, get_miner_status, update_pool_config, update_firmware
 
 ### 4. Gather Session Intent
 
@@ -49,14 +61,17 @@ Session Setup Questions:
 1. What are your primary goals for this session?
    [Allow user to list 1-3 specific objectives]
 
-2. Which agent role(s) will be participating?
-   - Architect (planning)
-   - Builder (implementation)
-   - Validator (testing/review)
-   - Scribe (documentation)
-   - DevOps (infrastructure)
-   - Researcher (investigation)
-   [User selects appropriate roles]
+2. Which approach will you use?
+   - Skills-First (default): Single agent + mcp-builder skill (1-5 tools)
+   - Multi-Agent: Orchestrated parallel development (6+ tools)
+
+   If Skills-First, which workflows?
+   - MCP Tool Development (add/modify MCP tools)
+   - gRPC Client Enhancement (improve gRPC integration)
+   - Redis Caching (optimize cache patterns)
+   - Testing & Evaluation (create evaluation harness)
+   - Documentation (update API docs)
+   [User selects appropriate workflows]
 
 3. Are there any known blockers or context from previous sessions?
    [User provides relevant background]
@@ -107,22 +122,30 @@ Create or update `SESSION_LOG.md` with:
 Display a formatted summary:
 ```
 ╔════════════════════════════════════════════════════╗
-║          SESSION INITIALIZED SUCCESSFULLY          ║
+║    BRAIINS OS MCP SERVER SESSION INITIALIZED      ║
 ╚════════════════════════════════════════════════════╝
 
-PROJECT: [Project Name]
+PROJECT: braiins-os-mcp-server
+SERVICE: Braiins OS API (gRPC + REST)
 BRANCH: [active-branch]
 STATUS: Ready to work
+
+INFRASTRUCTURE:
+  ✓ Redis: [running/stopped]
+  ✓ Docker Compose: [status]
 
 GOALS:
   1. [Goal 1]
   2. [Goal 2]
   3. [Goal 3]
 
-ACTIVE ROLES:
-  • Architect
-  • Builder
-  • Validator
+APPROACH:
+  • Skills-First: mcp-builder skill loaded
+  • Workflows: [selected workflows]
+
+EXISTING MCP TOOLS:
+  • authenticate, list_miners, get_miner_status
+  • update_pool_config, update_firmware
 
 CONTEXT: Fully loaded and ready
 TIME: [Start time] → ~[Estimated end time]

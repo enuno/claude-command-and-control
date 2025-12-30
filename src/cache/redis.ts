@@ -233,6 +233,7 @@ export const cacheKeys = {
   rateLimit: (userId: string): string => `${CACHE_KEYS.RATE_LIMIT}${userId}`,
   firmware: (version: string): string => `${CACHE_KEYS.FIRMWARE}${version}`,
   task: (id: string): string => `${CACHE_KEYS.TASK}${id}`,
+  job: (id: string): string => `${CACHE_KEYS.JOB}${id}`,
 };
 
 /**

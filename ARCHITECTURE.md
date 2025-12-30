@@ -486,6 +486,46 @@ const prompts: MCPPrompt[] = [
 ];
 ```
 
+### Implemented MCP Components (December 2025)
+
+**16 MCP Tools:**
+1. `register_miner` - Register new miner with credentials
+2. `unregister_miner` - Remove miner from management
+3. `list_miners` - List all miners with filters/pagination
+4. `get_miner_status` - Get comprehensive miner status
+5. `get_miner_info` - Get miner hardware/firmware details
+6. `get_miner_logs` - Retrieve logs with level filtering
+7. `get_fleet_status` - Aggregated fleet metrics
+8. `ping_miner` - Test miner connectivity
+9. `reboot_miner` - Graceful miner reboot
+10. `set_power_target` - Configure power consumption limit
+11. `set_hashrate_target` - Configure hashrate target
+12. `update_miner_firmware` - Background firmware updates with job tracking
+13. `check_firmware_job_status` - Monitor firmware update progress
+14. `check_job_status` - Generic job status queries
+15. `update_pool_config` - Mining pool configuration
+16. `factory_reset` - Miner factory reset with confirmation
+
+**5 MCP Resources:**
+1. `braiins:///fleet/summary` - Fleet metrics (cached 30s)
+2. `braiins:///miner/{id}/status` - Real-time miner status (cached 10s)
+3. `braiins:///miner/{id}/config` - Complete configuration (cached 60s)
+4. `braiins:///miner/{id}/logs` - Recent log entries (cached 30s)
+5. `braiins:///jobs/{id}` - Background job status (real-time)
+
+**3 MCP Prompts:**
+1. `troubleshoot_miner_offline` - Step-by-step offline diagnostics
+2. `optimize_power_efficiency` - Power optimization workflow
+3. `batch_firmware_update` - Enterprise batch update with pre-flight checks
+
+**Architecture Highlights:**
+- Agent-centric design (concise responses by default, detailed on request)
+- Background job tracking for long operations (firmware updates)
+- Actionable error messages with remediation suggestions
+- Batch operation support (update multiple miners simultaneously)
+- Caching layer reduces miner load (TTL: 10-60s per resource type)
+- Comprehensive test coverage (139 tests, 13 test suites)
+
 ---
 
 ## Data Flow Architecture

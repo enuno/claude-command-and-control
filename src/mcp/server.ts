@@ -13,8 +13,11 @@ import { createBraiinsClient, BraiinsClient } from '../api/braiins';
 import { RedisClient } from '../cache/redis';
 import { SERVER_INFO, MCP_SCHEMES } from '../config/constants';
 import type { AppConfig } from '../config/env';
-import { createMinerService, MinerService, MinerRegistration } from '../services/miner.service';
+import { createMinerService, MinerService } from '../services/miner.service';
 import { createChildLogger } from '../utils/logger';
+import { ALL_RESOURCES } from './resources';
+import type { ResourceContext } from './resources/types';
+import { ALL_TOOLS, TOOL_HANDLERS, type ToolContext } from './tools';
 
 const mcpLogger = createChildLogger({ module: 'mcp' });
 
@@ -74,8 +77,16 @@ export async function createMCPServer(deps: MCPDependencies): Promise<MCPServerW
 
     const miners = await minerService.getRegisteredMiners();
 
-    // Build dynamic resource list
-    const resources = [
+    // Start with registered resource definitions
+    const resources = ALL_RESOURCES.map((resource) => ({
+      uri: resource.uriTemplate,
+      name: resource.name,
+      description: resource.description,
+      mimeType: resource.mimeType,
+    }));
+
+    // Add legacy resources for backward compatibility
+    resources.push(
       {
         uri: `${MCP_SCHEMES.MINER}list`,
         name: 'Miner List',
@@ -84,11 +95,11 @@ export async function createMCPServer(deps: MCPDependencies): Promise<MCPServerW
       },
       {
         uri: `${MCP_SCHEMES.FLEET}status`,
-        name: 'Fleet Status',
+        name: 'Fleet Status (Legacy)',
         description: 'Aggregated status of the mining fleet',
         mimeType: 'application/json',
-      },
-    ];
+      }
+    );
 
     // Add individual miner resources
     for (const miner of miners) {
@@ -107,7 +118,30 @@ export async function createMCPServer(deps: MCPDependencies): Promise<MCPServerW
     const { uri } = request.params;
     mcpLogger.debug('Reading resource', { uri });
 
-    // Parse the URI to determine resource type
+    // Create resource context
+    const resourceContext: ResourceContext = {
+      minerService,
+      braiinsClient,
+    };
+
+    // Try to match against registered resource handlers
+    for (const resource of ALL_RESOURCES) {
+      // Simple pattern matching for now (can be improved with regex)
+      const templatePrefix = resource.uriTemplate.split('{')[0];
+      if (templatePrefix && uri.startsWith(templatePrefix)) {
+        try {
+          const content = await resource.handler(uri, resourceContext);
+          return {
+            contents: [content],
+          };
+        } catch (error) {
+          mcpLogger.error('Resource handler error', { uri, error });
+          // Continue to legacy handlers if resource handler fails
+        }
+      }
+    }
+
+    // Legacy resource handlers for backward compatibility
     if (uri.startsWith(MCP_SCHEMES.MINER)) {
       const path = uri.replace(MCP_SCHEMES.MINER, '');
 
@@ -183,147 +217,7 @@ export async function createMCPServer(deps: MCPDependencies): Promise<MCPServerW
     mcpLogger.debug('Listing tools');
 
     return {
-      tools: [
-        {
-          name: 'register_miner',
-          description: 'Register a new miner with the MCP server',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              id: {
-                type: 'string',
-                description: 'Unique identifier for the miner',
-              },
-              name: {
-                type: 'string',
-                description: 'Human-readable name for the miner',
-              },
-              host: {
-                type: 'string',
-                description: 'IP address or hostname of the miner',
-              },
-              port: {
-                type: 'number',
-                description: 'HTTP port (default: 80)',
-              },
-              username: {
-                type: 'string',
-                description: 'Login username (default: root)',
-              },
-              password: {
-                type: 'string',
-                description: 'Login password',
-              },
-              useTls: {
-                type: 'boolean',
-                description: 'Use HTTPS (default: false)',
-              },
-              tags: {
-                type: 'array',
-                items: { type: 'string' },
-                description: 'Optional tags for organization',
-              },
-            },
-            required: ['id', 'name', 'host', 'password'],
-          },
-        },
-        {
-          name: 'unregister_miner',
-          description: 'Remove a miner from the MCP server',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              minerId: {
-                type: 'string',
-                description: 'The miner ID to remove',
-              },
-            },
-            required: ['minerId'],
-          },
-        },
-        {
-          name: 'get_miner_status',
-          description: 'Get the current status of a miner including hashrate, temperature, pools, and errors',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              minerId: {
-                type: 'string',
-                description: 'The unique identifier of the miner',
-              },
-              refresh: {
-                type: 'boolean',
-                description: 'Force refresh from device (bypass cache)',
-              },
-            },
-            required: ['minerId'],
-          },
-        },
-        {
-          name: 'get_fleet_status',
-          description: 'Get aggregated status for all registered miners',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              tenantId: {
-                type: 'string',
-                description: 'Optional tenant ID to filter miners',
-              },
-            },
-            required: [],
-          },
-        },
-        {
-          name: 'reboot_miner',
-          description: 'Reboot a miner',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              minerId: {
-                type: 'string',
-                description: 'The unique identifier of the miner',
-              },
-            },
-            required: ['minerId'],
-          },
-        },
-        {
-          name: 'set_power_target',
-          description: 'Set the power consumption target for a miner in watts',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              minerId: {
-                type: 'string',
-                description: 'The unique identifier of the miner',
-              },
-              watts: {
-                type: 'number',
-                description: 'Target power consumption in watts',
-              },
-            },
-            required: ['minerId', 'watts'],
-          },
-        },
-        {
-          name: 'set_hashrate_target',
-          description: 'Set the hashrate target for a miner in TH/s',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              minerId: {
-                type: 'string',
-                description: 'The unique identifier of the miner',
-              },
-              terahashPerSecond: {
-                type: 'number',
-                description: 'Target hashrate in TH/s',
-              },
-            },
-            required: ['minerId', 'terahashPerSecond'],
-          },
-        },
-      ],
+      tools: ALL_TOOLS.map((tool) => tool.schema),
     };
   });
 
@@ -332,152 +226,20 @@ export async function createMCPServer(deps: MCPDependencies): Promise<MCPServerW
     mcpLogger.info('Tool called', { name, args });
 
     try {
-      switch (name) {
-        case 'register_miner': {
-          const registration: MinerRegistration = {
-            id: args?.id as string,
-            name: args?.name as string,
-            host: args?.host as string,
-            port: args?.port as number | undefined,
-            username: (args?.username as string) ?? 'root',
-            password: args?.password as string,
-            useTls: args?.useTls as boolean | undefined,
-            tags: args?.tags as string[] | undefined,
-          };
-
-          await minerService.registerMiner(registration);
-
-          return {
-            content: [
-              {
-                type: 'text',
-                text: JSON.stringify({
-                  success: true,
-                  message: `Miner '${registration.name}' registered successfully`,
-                  minerId: registration.id,
-                  host: registration.host,
-                }),
-              },
-            ],
-          };
-        }
-
-        case 'unregister_miner': {
-          const minerId = args?.minerId as string;
-          await minerService.unregisterMiner(minerId);
-
-          return {
-            content: [
-              {
-                type: 'text',
-                text: JSON.stringify({
-                  success: true,
-                  message: `Miner '${minerId}' unregistered`,
-                }),
-              },
-            ],
-          };
-        }
-
-        case 'get_miner_status': {
-          const minerId = args?.minerId as string;
-          const refresh = args?.refresh as boolean | undefined;
-
-          const status = refresh ? await minerService.refreshMinerStatus(minerId) : await minerService.getMinerStatus(minerId);
-
-          return {
-            content: [
-              {
-                type: 'text',
-                text: JSON.stringify({
-                  success: true,
-                  ...status,
-                }),
-              },
-            ],
-          };
-        }
-
-        case 'get_fleet_status': {
-          const tenantId = args?.tenantId as string | undefined;
-          const fleetStatus = await minerService.getFleetStatus(tenantId);
-
-          return {
-            content: [
-              {
-                type: 'text',
-                text: JSON.stringify({
-                  success: true,
-                  ...fleetStatus,
-                }),
-              },
-            ],
-          };
-        }
-
-        case 'reboot_miner': {
-          const minerId = args?.minerId as string;
-          await minerService.rebootMiner(minerId);
-
-          return {
-            content: [
-              {
-                type: 'text',
-                text: JSON.stringify({
-                  success: true,
-                  message: `Reboot command sent to miner '${minerId}'`,
-                  note: 'Miner will be temporarily offline during reboot',
-                }),
-              },
-            ],
-          };
-        }
-
-        case 'set_power_target': {
-          const minerId = args?.minerId as string;
-          const watts = args?.watts as number;
-
-          await minerService.setPowerTarget(minerId, { watt: watts });
-
-          return {
-            content: [
-              {
-                type: 'text',
-                text: JSON.stringify({
-                  success: true,
-                  message: `Power target set to ${watts}W for miner '${minerId}'`,
-                  note: 'Tuner will adjust to reach target over time',
-                }),
-              },
-            ],
-          };
-        }
-
-        case 'set_hashrate_target': {
-          const minerId = args?.minerId as string;
-          const terahashPerSecond = args?.terahashPerSecond as number;
-
-          await minerService.setHashrateTarget(minerId, {
-            terahash_per_second: terahashPerSecond,
-          });
-
-          return {
-            content: [
-              {
-                type: 'text',
-                text: JSON.stringify({
-                  success: true,
-                  message: `Hashrate target set to ${terahashPerSecond} TH/s for miner '${minerId}'`,
-                  note: 'Tuner will adjust to reach target over time',
-                }),
-              },
-            ],
-          };
-        }
-
-        default:
-          throw new Error(`Unknown tool: ${name}`);
+      // Lookup tool handler from registry
+      const handler = TOOL_HANDLERS.get(name);
+      if (!handler) {
+        throw new Error(`Unknown tool: ${name}`);
       }
+
+      // Create tool context
+      const context: ToolContext = {
+        minerService,
+        braiinsClient,
+      };
+
+      // Execute tool handler
+      return await handler(args ?? {}, context);
     } catch (error) {
       mcpLogger.error('Tool execution failed', { name, error });
       return {

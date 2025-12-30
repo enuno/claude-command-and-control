@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  MCP Server Evaluation Harness
+
+  This file contains evaluation questions to test the MCP server's tools,
+  resources, and prompts. Each question tests a realistic usage scenario.
+
+  Format:
+  - <question>: The query an AI agent would ask
+  - <answer>: The expected answer or outcome
+  - <tools_used>: Comma-separated list of tools expected to be used
+  - <complexity>: simple | medium | complex
+  - <category>: monitoring | configuration | troubleshooting | batch_operations
+-->
+<evaluation>
+  <metadata>
+    <version>1.0.0</version>
+    <created>2025-12-29</created>
+    <total_questions>10</total_questions>
+    <passing_criteria>10/10 correct</passing_criteria>
+  </metadata>
+
+  <!-- Question 1: Simple Tool Invocation -->
+  <qa_pair id="1">
+    <question>What is the current status of miner-001? Include hashrate and temperature.</question>
+    <answer>
+      Status: running
+      Hashrate: 95 TH/s
+      Temperature: 65°C
+    </answer>
+    <tools_used>get_miner_status</tools_used>
+    <complexity>simple</complexity>
+    <category>monitoring</category>
+  </qa_pair>
+
+  <!-- Question 2: Resource Query -->
+  <qa_pair id="2">
+    <question>Show me the fleet summary with total hashrate and number of online miners.</question>
+    <answer>
+      Total Miners: 50
+      Online: 48
+      Offline: 2
+      Total Hashrate: 4.7 PH/s
+    </answer>
+    <tools_used>braiins:///fleet/summary (resource)</tools_used>
+    <complexity>simple</complexity>
+    <category>monitoring</category>
+  </qa_pair>
+
+  <!-- Question 3: Filtering and List Operations -->
+  <qa_pair id="3">
+    <question>List all miners with hashrate below 90 TH/s. What firmware version is most common among them?</question>
+    <answer>
+      Found 8 miners below 90 TH/s:
+      - miner-005: 85 TH/s (firmware: 2.0.1)
+      - miner-012: 88 TH/s (firmware: 2.0.1)
+      - miner-023: 82 TH/s (firmware: 2.0.0)
+      ...
+      Most common firmware: 2.0.1 (6/8 miners)
+    </answer>
+    <tools_used>list_miners, get_miner_info</tools_used>
+    <complexity>medium</complexity>
+    <category>monitoring</category>
+  </qa_pair>
+
+  <!-- Question 4: Connectivity Testing -->
+  <qa_pair id="4">
+    <question>Miner miner-015 is not responding. Test if it's reachable and suggest next steps if not.</question>
+    <answer>
+      Ping Result: Unreachable (timeout after 5s)
+
+      Suggestions:
+      1. Check if miner is powered on
+      2. Verify network connectivity with list_miners
+      3. Check miner IP address in configuration
+      4. Try rebooting miner with reboot_miner
+
+      Possible Causes:
+      - Miner offline or powered off
+      - Network firewall blocking gRPC port (50051)
+      - Incorrect IP address in database
+    </answer>
+    <tools_used>ping_miner</tools_used>
+    <complexity>medium</complexity>
+    <category>troubleshooting</category>
+  </qa_pair>
+
+  <!-- Question 5: Log Retrieval and Analysis -->
+  <qa_pair id="5">
+    <question>Get the last 20 error-level log entries from miner-007. Are there any recurring error patterns?</question>
+    <answer>
+      Retrieved 20 error logs from miner-007:
+      - 2025-12-29T10:15:32Z [ERROR] Pool connection timeout (pool-1)
+      - 2025-12-29T10:14:28Z [ERROR] Pool connection timeout (pool-1)
+      - 2025-12-29T10:13:15Z [ERROR] Pool connection timeout (pool-1)
+      ...
+
+      Recurring Pattern: Pool connection timeouts (15/20 errors)
+      Suggestion: Check pool configuration or network connectivity to pool-1
+    </answer>
+    <tools_used>get_miner_logs</tools_used>
+    <complexity>medium</complexity>
+    <category>troubleshooting</category>
+  </qa_pair>
+
+  <!-- Question 6: Batch Firmware Update -->
+  <qa_pair id="6">
+    <question>Update firmware to version 2.1.0 on all miners with tags "production" and hashrate > 95 TH/s. Track the progress.</question>
+    <answer>
+      Firmware Update Job Created:
+      - Job ID: job-abc123
+      - Status: pending
+      - Total Miners: 12
+      - Miners:
+[miner-001, miner-003, miner-008, ...]
+
+      To track progress: Use check_job_status with jobId "job-abc123"
+    </answer>
+    <tools_used>list_miners, update_miner_firmware, check_job_status</tools_used>
+    <complexity>complex</complexity>
+    <category>batch_operations</category>
+  </qa_pair>
+
+  <!-- Question 7: Pool Configuration Change -->
+  <qa_pair id="7">
+    <question>Change the mining pool for miners miner-020, miner-021, and miner-022 to stratum+tcp://newpool.com:3333 with username "worker1". Verify success.</question>
+    <answer>
+      Pool Configuration Updated:
+      - Success: 3
+      - Failed: 0
+      - Miners Updated: miner-020, miner-021, miner-022
+      - New Pool: stratum+tcp://newpool.com:3333
+      - Username: worker1
+    </answer>
+    <tools_used>update_pool_config</tools_used>
+    <complexity>medium</complexity>
+    <category>configuration</category>
+  </qa_pair>
+
+  <!-- Question 8: Job Status Monitoring -->
+  <qa_pair id="8">
+    <question>Check the status of firmware update job job-abc123. How many miners have completed? Are there any failures?</question>
+    <answer>
+      Job Status:
+      - Job ID: job-abc123
+      - Status: running
+      - Progress: 10/12 completed
+      - Successful: 9
+      - Failed: 1 (miner-008: connection timeout)
+      - In Progress: 2 (miner-011, miner-012)
+
+      Error Details:
+      - miner-008 failed with connection timeout
+      - Suggestion: Use ping_miner to test connectivity before retrying
+    </answer>
+    <tools_used>check_job_status</tools_used>
+    <complexity>simple</complexity>
+    <category>monitoring</category>
+  </qa_pair>
+
+  <!-- Question 9: Guided Troubleshooting with Prompt -->
+  <qa_pair id="9">
+    <question>Miner miner-005 is offline. Walk me through troubleshooting it step by step.</question>
+    <answer>
+      [Uses troubleshoot_miner_offline prompt]
+
+      Step 1: Checking last known status...
+      - Last seen: 2025-12-29T08:30:15Z (2 hours ago)
+      - Last status: running
+      - Last IP: 192.168.1.105
+
+      Step 2: Testing connectivity...
+      → Running: ping_miner(minerId: "miner-005")
+      Result: Unreachable
+
+      Step 3: Since ping failed, checking possible causes:
+      - Check physical power connection
+      - Verify network cable connected
+      - Check router/switch port status
+      - Verify IP address hasn't changed
+
+      Would you like me to get the miner logs to see what happened before it went offline?
+    </answer>
+    <tools_used>troubleshoot_miner_offline (prompt), ping_miner, get_miner_logs</tools_used>
+    <complexity>complex</complexity>
+    <category>troubleshooting</category>
+  </qa_pair>
+
+  <!-- Question 10: Power Efficiency Optimization -->
+  <qa_pair id="10">
+    <question>Optimize power efficiency for miner-010. Current power is 3200W with 95 TH/s. What's the optimal power target?</question>
+    <answer>
+      [Uses optimize_power_efficiency prompt]
+
+      Current Metrics:
+      - Power: 3200W
+      - Hashrate: 95 TH/s
+      - Efficiency: 33.7 W/TH
+
+      Optimal Power Target: 2900W
+      Expected Efficiency: 30.5 W/TH (10% improvement)
+      Expected Hashrate: ~95 TH/s (minimal impact)
+
+      Applying optimization...
+      → Running: set_power_target(minerId: "miner-010", powerTarget: 2900)
+
+      Result: Power target updated successfully
+      Monitor miner performance over next 10 minutes to verify hashrate stability.
+    </answer>
+    <tools_used>optimize_power_efficiency (prompt), get_miner_info, set_power_target</tools_used>
+    <complexity>complex</complexity>
+    <category>configuration</category>
+  </qa_pair>
+
+</evaluation>

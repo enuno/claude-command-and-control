@@ -26,6 +26,7 @@ export const CACHE_KEYS = {
   RATE_LIMIT: 'ratelimit:',
   FIRMWARE: 'firmware:',
   TASK: 'task:',
+  JOB: 'job:',
 } as const;
 
 /**
@@ -37,6 +38,7 @@ export const CACHE_TTL = {
   FIRMWARE_LIST: 3600, // 1 hour
   SESSION: 86400, // 24 hours
   RATE_LIMIT_WINDOW: 60, // 1 minute
+  JOB_STATUS: 3600, // 1 hour
 } as const;
 
 /**
