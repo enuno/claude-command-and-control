@@ -1,0 +1,13 @@
+{
+  "title": "Events (/sdks/turbo-sdk/events)",
+  "content": "The SDK provides events for tracking the state signing and uploading data to Turbo. You can listen to these events by providing a callback function to the `events` parameter of the `upload`, `uploadFile`, and `uploadSignedDataItem` methods.\n\n- `onProgress` - emitted when the overall progress changes (includes both upload and signing). Each event consists of the total bytes, processed bytes, and the step (upload or signing)\n- `onError` - emitted when the overall upload or signing fails (includes both upload and signing)\n- `onSuccess` - emitted when the overall upload or signing succeeds (includes both upload and signing) - this is the last event emitted for the upload or signing process\n- `onSigningProgress` - emitted when the signing progress changes.\n- `onSigningError` - emitted when the signing fails.\n- `onSigningSuccess` - emitted when the signing succeeds\n- `onUploadProgress` - emitted when the upload progress changes\n- `onUploadError` - emitted when the upload fails\n- `onUploadSuccess` - emitted when the upload succeeds",
+  "code_samples": [
+    {
+      "code": "const uploadResult = await turbo.upload({\n  data: 'The contents of my file!',\n  signal: AbortSignal.timeout(10_000), // cancel the upload after 10 seconds\n  dataItemOpts: {\n    // optional\n  },\n  events: {\n    // overall events (includes signing and upload events)\n    onProgress: ({ totalBytes, processedBytes, step }) => {\n      const percentComplete = (processedBytes / totalBytes) * 100;\n      console.log('Overall progress:', {\n        totalBytes,\n        processedBytes,\n        step,\n        percentComplete: percentComplete.toFixed(2) + '%', // eg 50.68%\n      });\n    },\n    onError: (error) => {\n      console.log('Overall error:', { error });\n    },\n    onSuccess: () => {\n      console.log('Signed and upload data item!');\n    },\n    // upload events\n    onUploadProgress: ({ totalBytes, processedBytes }) => {\n      console.log('Upload progress:', { totalBytes, processedBytes });\n    },\n    onUploadError: (error) => {\n      console.log('Upload error:', { error });\n    },\n    onUploadSuccess: () => {\n      console.log('Upload success!');\n    },\n    // signing events\n    onSigningProgress: ({ totalBytes, processedBytes }) => {\n      console.log('Signing progress:', { totalBytes, processedBytes });\n    },\n    onSigningError: (error) => {\n      console.log('Signing error:', { error });\n    },\n    onSigningSuccess: () => {\n      console.log('Signing success!');\n    },\n  },\n});",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#events-(/sdks/turbo-sdk/events)",
+  "links": []
+}

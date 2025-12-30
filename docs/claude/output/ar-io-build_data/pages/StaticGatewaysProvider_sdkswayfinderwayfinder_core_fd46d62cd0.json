@@ -1,0 +1,13 @@
+{
+  "title": "StaticGatewaysProvider (/sdks/wayfinder/wayfinder-core/(gateway-providers)/staticgatewaysprovider)",
+  "content": "The static gateway provider returns a list of gateways that you provide. This is useful for testing or for users who want to use a specific gateway for all requests.",
+  "code_samples": [
+    {
+      "code": "const gatewayProvider = new StaticGatewaysProvider({\n  gateways: ['https://arweave.net'],\n});",
+      "language": "javascript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#staticgatewaysprovider-(/sdks/wayfinder/wayfinder-core/(gateway-providers)/staticgatewaysprovider)",
+  "links": []
+}

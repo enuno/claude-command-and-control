@@ -1,0 +1,8 @@
+{
+  "title": "Azure resource name (replace {resource} with your resource name)",
+  "content": "export ANTHROPIC_FOUNDRY_RESOURCE={resource}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#azure-resource-name-(replace-{resource}-with-your-resource-name)",
+  "links": []
+}

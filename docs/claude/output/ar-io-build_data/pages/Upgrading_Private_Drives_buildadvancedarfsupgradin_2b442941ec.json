@@ -1,0 +1,170 @@
+{
+  "title": "Upgrading Private Drives (/build/advanced/arfs/upgrading-drives)",
+  "content": "Private drives rely on a combination of user-set password and a wallet signature for encryption and decryption. [Wander](https://www.wander.app/), formerly ArConnect, is a popular Arweave wallet that is deprecating its `signature()` method in favor of `signDataItem()` or `signMessage()`. In order to preserve access to private drive contents that were secured via drive keys created via 'signature()', ArFS v0.15 introduces a new drive key derivation scheme that both utilizes the modern signing APIs and bridges historical drive keys for usage with it.\n\nBecause private drive entities exist on chain and their encryption cannot be altered, an upgrade is required to allow continued access to \"V1\" private drives. This upgrade essentially takes a signature from the drive owner wallet, encrypts it using the required signature structure for V2 private drives, and places it on Arweave as a new \"Drive-Signature\" entity. This allows the signature to be fetched and decrypted using the latest methods before using it to decrypt the private drive in the V1 format.\n\nThe below instructions for upgrading a private drive will work during the deprecation period for the `signature()` method from Wanter. Once this period is over, and `signature()` loses all support, additional steps will be required to obtain the correct signature format to decrypt V1 private drives in order to upgrade them.\n\nThere is, at this time, no set date for when the deprecation period will end.\n\n## The Upgrade Process\n\nThe upgrade process involves creating a new `Drive-Signature` entity that contains an encrypted version of the legacy signature needed to decrypt the private drive.\n\n### Drive-Signature Entity\n\nThe `Drive-Signature` entity stores the encrypted legacy signature:\n\n### Updated Drive Entity\n\nThe drive entity is updated with a new `Signature-Type` tag:\n\nThe upgrade process has been made simple by using the [ArDrive app](https://app.ardrive.io/).\n\n### Step 1: Log into ArDrive\n\nIf the connected wallet has V1 private drives that need to be updated, a banner will appear at the top of the screen.\n\n![ArDrive Upgrade Banner](https://arweave.net/kJzzrYY4KIHLTC9VOECfzvVAjaO1_FOkejWgsRNbLx4)\n\n### Step 2: Click \"Update Now!\"\n\nThis will open a modal listing the drives that need to be updated, and linking to more information about the upgrade process.\n\n![ArDrive Upgrade Modal](https://arweave.net/Qa-qeKkr1flXl1-fdLapjKNmme0lKA43YQbjmMvnF-U)\n\n### Step 3: Click \"Update\"\n\nThe process of upgrading the private drives will begin, and involve signing messages depending on how many drives are being upgraded. When the process is complete, a new modal will appear listing the drives that have been successfully updated.\n\n![ArDrive Upgrade Complete](https://arweave.net/qEwT3oFZbFDpmRQpw9j1c_okN5pIkFqRuoSwBzhc3HQ)\n\n## Manual Upgrade Process\n\nIf you need to upgrade drives programmatically, here's the process:\n\n### 1. Identify V1 Drives\n\nQuery for drives that don't have the `Signature-Type` tag:\n\n### 2. Create Drive-Signature Entity\n\n### 3. Update Drive Entity\n\nAfter upgrading, verify the process was successful:\n\n### Check Drive-Signature Entity\n\n### Check Updated Drive Entity\n\n- **Signature not found** - Ensure the wallet supports the required signing methods\n- **Encryption errors** - Verify the encryption parameters are correct\n- **Upload failures** - Check network connectivity and retry\n- **Permission denied** - Ensure you own the drive being upgraded\n\n- **Backup your data** - Ensure you have access to your drive contents\n- **Test with one drive** - Start with a single drive to verify the process\n- **Check wallet compatibility** - Ensure your wallet supports required methods\n- **Verify ownership** - Confirm you own the drives being upgraded\n\n- **Monitor progress** - Keep track of upgrade status\n- **Handle errors gracefully** - Implement proper error handling\n- **Batch operations** - Upgrade multiple drives efficiently\n- **User feedback** - Provide clear status updates\n\n- **Verify functionality** - Test drive access and operations\n- **Update clients** - Ensure all clients support v0.15\n- **Monitor performance** - Check for any performance issues\n- **Document changes** - Keep track of upgraded drives\n\n## Migration Timeline\n\nAfter upgrading your drives, explore these related topics:\n\n- [Privacy & Encryption](/build/advanced/arfs/privacy) - Understand the new encryption scheme\n- [Reading Data](/build/advanced/arfs/reading-data) - Query your upgraded drives\n- [Creating Drives](/build/advanced/arfs/creating-drives) - Create new v0.15 drives",
+  "code_samples": [
+    {
+      "code": "sequenceDiagram\n    participant User\n    participant Client\n    participant Wallet\n    participant Arweave\n\n    User->>Client: Initiate drive upgrade\n    Client->>Wallet: Request legacy signature\n    Wallet->>Client: Return signature\n    Client->>Client: Encrypt signature with v0.15 scheme\n    Client->>Arweave: Upload Drive-Signature entity\n    Client->>Client: Update drive with Signature-Type tag\n    Client->>Arweave: Upload updated drive entity\n    Client->>User: Upgrade complete",
+      "language": "mermaid"
+    },
+    {
+      "code": "ArFS: \"0.15\",\nEntity-Type: \"drive-signature\",\nSignature-Format: \"1\",\nCipher?: \"AES256-GCM\",\nCipher-IV: \"\"\n{data: }",
+      "language": "json"
+    },
+    {
+      "code": "ArFS: \"0.15\",\nCipher?: \"AES256-GCM\",\nCipher-IV?: \"\",\nContent-Type: \"\",\nDrive-Id: \"\",\nDrive-Privacy: \"\",\nDrive-Auth-Mode?: \"password\",\nEntity-Type: \"drive\",\nSignature-Type?: \"1\",\nUnix-Time: \"\"\n\nMetadata JSON {\n    \"name\": \"\",\n    \"rootFolderId\": \"\",\n    \"isHidden\": false\n}",
+      "language": "json"
+    },
+    {
+      "code": "query {\n  transactions(\n    tags: [\n      { name: \"ArFS\", values: [\"0.15\"] }\n      { name: \"Entity-Type\", values: [\"drive\"] }\n      { name: \"Drive-Privacy\", values: [\"private\"] }\n    ]\n  ) {\n    edges {\n      node {\n        id\n        tags {\n          name\n          value\n        }\n      }\n    }\n  }\n}",
+      "language": "graphql"
+    },
+    {
+      "code": "async function createDriveSignature(driveId, legacySignature) {\n  // Encrypt the legacy signature\n  const encryptedSignature = await encryptSignature(legacySignature);\n\n  // Create the drive signature entity\n  const driveSignature = {\n    data: encryptedSignature,\n    tags: [\n      { name: \"ArFS\", value: \"0.15\" },\n      { name: \"Entity-Type\", value: \"drive-signature\" },\n      { name: \"Signature-Format\", value: \"1\" },\n      { name: \"Cipher\", value: \"AES256-GCM\" },\n      { name: \"Cipher-IV\", value: cipherIV },\n    ],\n  };\n\n  // Upload to Arweave\n  return await uploadTransaction(driveSignature);\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "async function updateDriveEntity(driveId) {\n  // Get existing drive entity\n  const driveEntity = await getDriveEntity(driveId);\n\n  // Add Signature-Type tag\n  const updatedTags = [\n    ...driveEntity.tags,\n    { name: \"Signature-Type\", value: \"1\" },\n  ];\n\n  // Create updated drive entity\n  const updatedDrive = {\n    data: driveEntity.data,\n    tags: updatedTags,\n  };\n\n  // Upload to Arweave\n  return await uploadTransaction(updatedDrive);\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "query ($driveId: String!) {\n  transactions(\n    tags: [\n      { name: \"ArFS\", values: [\"0.15\"] }\n      { name: \"Entity-Type\", values: [\"drive-signature\"] }\n      { name: \"Drive-Id\", values: [$driveId] }\n    ]\n  ) {\n    edges {\n      node {\n        id\n        block {\n          height\n          timestamp\n        }\n        tags {\n          name\n          value\n        }\n      }\n    }\n  }\n}",
+      "language": "graphql"
+    },
+    {
+      "code": "query ($driveId: String!) {\n  transactions(\n    tags: [\n      { name: \"ArFS\", values: [\"0.15\"] }\n      { name: \"Entity-Type\", values: [\"drive\"] }\n      { name: \"Drive-Id\", values: [$driveId] }\n      { name: \"Signature-Type\", values: [\"1\"] }\n    ]\n  ) {\n    edges {\n      node {\n        id\n        block {\n          height\n          timestamp\n        }\n        tags {\n          name\n          value\n        }\n      }\n    }\n  }\n}",
+      "language": "graphql"
+    },
+    {
+      "code": "async function upgradeDrive(driveId) {\n  try {\n    // Get legacy signature\n    const legacySignature = await getLegacySignature(driveId);\n\n    // Create drive signature entity\n    await createDriveSignature(driveId, legacySignature);\n\n    // Update drive entity\n    await updateDriveEntity(driveId);\n\n    console.log(\"Drive upgraded successfully\");\n  } catch (error) {\n    console.error(\"Upgrade failed:\", error);\n    // Handle error appropriately\n  }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "gantt\n    title ArFS v0.15 Migration Timeline\n    dateFormat  YYYY-MM-DD\n    section Phase 1\n    Legacy Support    :active, legacy, 2024-01-01, 2024-06-30\n    section Phase 2\n    Migration Period  :migration, 2024-07-01, 2024-12-31\n    section Phase 3\n    Legacy Deprecation :deprecation, 2025-01-01, 2025-06-30\n    section Phase 4\n    Full v0.15        :full, 2025-07-01, 2025-12-31",
+      "language": "mermaid"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "The Upgrade Process",
+      "id": "the-upgrade-process"
+    },
+    {
+      "level": "h3",
+      "text": "Drive-Signature Entity",
+      "id": "drive-signature-entity"
+    },
+    {
+      "level": "h3",
+      "text": "Updated Drive Entity",
+      "id": "updated-drive-entity"
+    },
+    {
+      "level": "h2",
+      "text": "Using ArDrive",
+      "id": "using-ardrive"
+    },
+    {
+      "level": "h3",
+      "text": "Step 1: Log into ArDrive",
+      "id": "step-1:-log-into-ardrive"
+    },
+    {
+      "level": "h3",
+      "text": "Step 2: Click \"Update Now!\"",
+      "id": "step-2:-click-\"update-now!\""
+    },
+    {
+      "level": "h3",
+      "text": "Step 3: Click \"Update\"",
+      "id": "step-3:-click-\"update\""
+    },
+    {
+      "level": "h2",
+      "text": "Manual Upgrade Process",
+      "id": "manual-upgrade-process"
+    },
+    {
+      "level": "h3",
+      "text": "1. Identify V1 Drives",
+      "id": "1.-identify-v1-drives"
+    },
+    {
+      "level": "h3",
+      "text": "2. Create Drive-Signature Entity",
+      "id": "2.-create-drive-signature-entity"
+    },
+    {
+      "level": "h3",
+      "text": "3. Update Drive Entity",
+      "id": "3.-update-drive-entity"
+    },
+    {
+      "level": "h2",
+      "text": "Verification",
+      "id": "verification"
+    },
+    {
+      "level": "h3",
+      "text": "Check Drive-Signature Entity",
+      "id": "check-drive-signature-entity"
+    },
+    {
+      "level": "h3",
+      "text": "Check Updated Drive Entity",
+      "id": "check-updated-drive-entity"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Common Issues",
+      "id": "common-issues"
+    },
+    {
+      "level": "h3",
+      "text": "Error Handling",
+      "id": "error-handling"
+    },
+    {
+      "level": "h2",
+      "text": "Best Practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h3",
+      "text": "Before Upgrading",
+      "id": "before-upgrading"
+    },
+    {
+      "level": "h3",
+      "text": "During Upgrading",
+      "id": "during-upgrading"
+    },
+    {
+      "level": "h3",
+      "text": "After Upgrading",
+      "id": "after-upgrading"
+    },
+    {
+      "level": "h2",
+      "text": "Migration Timeline",
+      "id": "migration-timeline"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#upgrading-private-drives-(/build/advanced/arfs/upgrading-drives)",
+  "links": []
+}

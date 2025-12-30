@@ -1,0 +1,8 @@
+{
+  "title": "Copy this value and paste in the ADVERTISE_ADDR variable:",
+  "content": "ip addr show | grep -E \"inet (192\\.168\\.|10\\.|172\\.1[6-9]\\.|172\\.2[0-9]\\.|172\\.3[0-1]\\.)\" | head -n1 | awk '{print $2}' | cut -d/ -f1",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#copy-this-value-and-paste-in-the-advertise_addr-variable:",
+  "links": []
+}

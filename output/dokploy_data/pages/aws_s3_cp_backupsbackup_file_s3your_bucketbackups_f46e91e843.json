@@ -1,0 +1,14 @@
+{
+  "title": "aws s3 cp /backups/$backup_file s3://your-bucket/backups/",
+  "content": "1. Always test your commands or scripts manually before scheduling them\n2. Use appropriate error handling in your scripts\n3. Consider the impact of scheduled jobs on system resources",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Best Practices",
+      "id": "best-practices"
+    }
+  ],
+  "url": "llms-txt#aws-s3-cp-/backups/$backup_file-s3://your-bucket/backups/",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Install Yarn 3 (/sdks/(clis)/ardrive-cli/(build-and-run-from-source)/install-yarn-3)",
+  "content": "Both the ArDrive CLI and ArDrive Core JS use Yarn 3 to manage dependencies and initiate workflows, so follow the [yarn installation instructions][yarn-install] in order to get the latest version. In most cases:",
+  "code_samples": [
+    {
+      "code": "brew install yarn\n\nnpm install -g yarn",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#install-yarn-3-(/sdks/(clis)/ardrive-cli/(build-and-run-from-source)/install-yarn-3)",
+  "links": []
+}

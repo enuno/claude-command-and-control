@@ -1,0 +1,41 @@
+{
+  "title": "Primary Names (/sdks/ar-io-sdk/(ario-contract)/primary-names)",
+  "content": "#### getPrimaryNames()\n\nRetrieves all primary names paginated and sorted by the specified criteria. The `cursor` used for pagination is the last name from the previous request.\n\n#### getPrimaryName()\n\nRetrieves the primary name for a given name or address.\n\n#### setPrimaryName()\n\nSets an ArNS name already owned by the `signer` as their primary name. Note: `signer` must be the owner of the `processId` that is assigned to the name. If not, the transaction will fail.\n\n_Note: Requires `signer` to be provided on `ARIO.init` to sign the transaction._\n\n#### requestPrimaryName()\n\nRequests a primary name for the `signer`'s address. The request must be approved by the new owner of the requested name via the `approvePrimaryNameRequest`[#approveprimarynamerequest-name-address-] API.\n\n_Note: Requires `signer` to be provided on `ARIO.init` to sign the transaction._\n\n#### getPrimaryNameRequest()\n\nRetrieves the primary name request for a a wallet address.",
+  "code_samples": [
+    {
+      "code": "const ario = ARIO.mainnet();\nconst names = await ario.getPrimaryNames({\n  cursor: 'ao', // this is the last name from the previous request\n  limit: 1,\n  sortBy: 'startTimestamp',\n  sortOrder: 'desc',\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "{\n  \"sortOrder\": \"desc\",\n  \"hasMore\": true,\n  \"totalItems\": 100,\n  \"limit\": 1,\n  \"sortBy\": \"startTimestamp\",\n  \"cursor\": \"arns\",\n  \"items\": [\n    {\n      \"owner\": \"HwFceQaMQnOBgKDpnFqCqgwKwEU5LBme1oXRuQOWSRA\",\n      \"startTimestamp\": 1719356032297,\n      \"name\": \"arns\"\n    }\n  ]\n}",
+      "language": "json"
+    },
+    {
+      "code": "const ario = ARIO.mainnet();\nconst name = await ario.getPrimaryName({\n  name: 'arns',\n});\n// or\nconst name = await ario.getPrimaryName({\n  address: 't4Xr0_J4Iurt7caNST02cMotaz2FIbWQ4Kbj616RHl3',\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "{\n  \"owner\": \"HwFceQaMQnOBgKDpnFqCqgwKwEU5LBme1oXRuQOWSRA\",\n  \"startTimestamp\": 1719356032297,\n  \"name\": \"arns\"\n}",
+      "language": "json"
+    },
+    {
+      "code": "const signer = new ArweaveSigner(jwk);\nconst ario = ARIO.mainnet({ signer });\nawait ario.setPrimaryName({ name: 'my-arns-name' }); // the caller must already have purchased the name my-arns-name and be assigned as the owner of the processId that is assigned to the name",
+      "language": "typescript"
+    },
+    {
+      "code": "const ario = ARIO.mainnet({ signer: new ArweaveSigner(jwk) });\nconst { id: txId } = await ario.requestPrimaryName({\n  name: 'arns',\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "const ario = ARIO.mainnet();\nconst request = await ario.getPrimaryNameRequest({\n  initiator: 't4Xr0_J4Iurt7caNST02cMotaz2FIbWQ4Kbj616RHl3',\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "{\n  \"initiator\": \"t4Xr0_J4Iurt7caNST02cMotaz2FIbWQ4Kbj616RHl3\",\n  \"name\": \"arns\",\n  \"startTimestamp\": 1728067635857,\n  \"endTimestamp\": 1735843635857\n}",
+      "language": "json"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#primary-names-(/sdks/ar-io-sdk/(ario-contract)/primary-names)",
+  "links": []
+}

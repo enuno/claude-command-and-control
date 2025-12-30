@@ -1,0 +1,8 @@
+{
+  "title": "Follow Grafana logs",
+  "content": "docker compose -f docker-compose.grafana.yaml logs -f --tail=25",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#follow-grafana-logs",
+  "links": []
+}

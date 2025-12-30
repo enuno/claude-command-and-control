@@ -1,0 +1,13 @@
+{
+  "title": "Bundle Support (/sdks/ardrive-core-js/(advanced-features)/bundle-support)",
+  "content": "Large uploads are automatically bundled for efficiency:",
+  "code_samples": [
+    {
+      "code": "// Bundling happens automatically for multiple files\nconst bulkResult = await arDrive.uploadAllEntities({\n  entitiesToUpload: manyFiles,\n  // Bundling is handled internally\n});",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#bundle-support-(/sdks/ardrive-core-js/(advanced-features)/bundle-support)",
+  "links": []
+}

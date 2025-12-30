@@ -1,0 +1,813 @@
+{
+  "name": "dokploy",
+  "total_pages": 201,
+  "base_url": "https://docs.dokploy.com/docs/core",
+  "llms_txt_detected": true,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "Application",
+      "url": "llms-txt#application"
+    },
+    {
+      "title": "Authentication",
+      "url": "llms-txt#authentication"
+    },
+    {
+      "title": "Databases",
+      "url": "llms-txt#databases"
+    },
+    {
+      "title": "Enviroment",
+      "url": "llms-txt#enviroment"
+    },
+    {
+      "title": "Introduction",
+      "url": "llms-txt#introduction"
+    },
+    {
+      "title": "Project",
+      "url": "llms-txt#project"
+    },
+    {
+      "title": "Admin",
+      "url": "llms-txt#admin"
+    },
+    {
+      "title": "Ai",
+      "url": "llms-txt#ai"
+    },
+    {
+      "title": "Application",
+      "url": "llms-txt#application"
+    },
+    {
+      "title": "Backup",
+      "url": "llms-txt#backup"
+    },
+    {
+      "title": "Bitbucket",
+      "url": "llms-txt#bitbucket"
+    },
+    {
+      "title": "Certificates",
+      "url": "llms-txt#certificates"
+    },
+    {
+      "title": "Cluster",
+      "url": "llms-txt#cluster"
+    },
+    {
+      "title": "Compose",
+      "url": "llms-txt#compose"
+    },
+    {
+      "title": "Deployment",
+      "url": "llms-txt#deployment"
+    },
+    {
+      "title": "Destination",
+      "url": "llms-txt#destination"
+    },
+    {
+      "title": "Docker",
+      "url": "llms-txt#docker"
+    },
+    {
+      "title": "Domain",
+      "url": "llms-txt#domain"
+    },
+    {
+      "title": "Environment",
+      "url": "llms-txt#environment"
+    },
+    {
+      "title": "Gitea",
+      "url": "llms-txt#gitea"
+    },
+    {
+      "title": "Github",
+      "url": "llms-txt#github"
+    },
+    {
+      "title": "Gitlab",
+      "url": "llms-txt#gitlab"
+    },
+    {
+      "title": "Git Provider",
+      "url": "llms-txt#git-provider"
+    },
+    {
+      "title": "Dokploy API",
+      "url": "llms-txt#dokploy-api"
+    },
+    {
+      "title": "Mariadb",
+      "url": "llms-txt#mariadb"
+    },
+    {
+      "title": "Mongo",
+      "url": "llms-txt#mongo"
+    },
+    {
+      "title": "Mounts",
+      "url": "llms-txt#mounts"
+    },
+    {
+      "title": "Mysql",
+      "url": "llms-txt#mysql"
+    },
+    {
+      "title": "Organization",
+      "url": "llms-txt#organization"
+    },
+    {
+      "title": "Port",
+      "url": "llms-txt#port"
+    },
+    {
+      "title": "Postgres",
+      "url": "llms-txt#postgres"
+    },
+    {
+      "title": "Project",
+      "url": "llms-txt#project"
+    },
+    {
+      "title": "Redirects",
+      "url": "llms-txt#redirects"
+    },
+    {
+      "title": "Redis",
+      "url": "llms-txt#redis"
+    },
+    {
+      "title": "Admin",
+      "url": "llms-txt#admin"
+    },
+    {
+      "title": "Ai",
+      "url": "llms-txt#ai"
+    },
+    {
+      "title": "Application",
+      "url": "llms-txt#application"
+    },
+    {
+      "title": "Backup",
+      "url": "llms-txt#backup"
+    },
+    {
+      "title": "Bitbucket",
+      "url": "llms-txt#bitbucket"
+    },
+    {
+      "title": "Certificates",
+      "url": "llms-txt#certificates"
+    },
+    {
+      "title": "Cluster",
+      "url": "llms-txt#cluster"
+    },
+    {
+      "title": "Compose",
+      "url": "llms-txt#compose"
+    },
+    {
+      "title": "Deployment",
+      "url": "llms-txt#deployment"
+    },
+    {
+      "title": "Destination",
+      "url": "llms-txt#destination"
+    },
+    {
+      "title": "Docker",
+      "url": "llms-txt#docker"
+    },
+    {
+      "title": "Domain",
+      "url": "llms-txt#domain"
+    },
+    {
+      "title": "Environment",
+      "url": "llms-txt#environment"
+    },
+    {
+      "title": "Git Provider",
+      "url": "llms-txt#git-provider"
+    },
+    {
+      "title": "Gitea",
+      "url": "llms-txt#gitea"
+    },
+    {
+      "title": "Github",
+      "url": "llms-txt#github"
+    },
+    {
+      "title": "Gitlab",
+      "url": "llms-txt#gitlab"
+    },
+    {
+      "title": "Mariadb",
+      "url": "llms-txt#mariadb"
+    },
+    {
+      "title": "Mongo",
+      "url": "llms-txt#mongo"
+    },
+    {
+      "title": "Mounts",
+      "url": "llms-txt#mounts"
+    },
+    {
+      "title": "Mysql",
+      "url": "llms-txt#mysql"
+    },
+    {
+      "title": "Notification",
+      "url": "llms-txt#notification"
+    },
+    {
+      "title": "Organization",
+      "url": "llms-txt#organization"
+    },
+    {
+      "title": "Port",
+      "url": "llms-txt#port"
+    },
+    {
+      "title": "Postgres",
+      "url": "llms-txt#postgres"
+    },
+    {
+      "title": "Preview Deployment",
+      "url": "llms-txt#preview-deployment"
+    },
+    {
+      "title": "Project",
+      "url": "llms-txt#project"
+    },
+    {
+      "title": "Redirects",
+      "url": "llms-txt#redirects"
+    },
+    {
+      "title": "Redis",
+      "url": "llms-txt#redis"
+    },
+    {
+      "title": "Registry",
+      "url": "llms-txt#registry"
+    },
+    {
+      "title": "Rollback",
+      "url": "llms-txt#rollback"
+    },
+    {
+      "title": "Schedule",
+      "url": "llms-txt#schedule"
+    },
+    {
+      "title": "Security",
+      "url": "llms-txt#security"
+    },
+    {
+      "title": "Server",
+      "url": "llms-txt#server"
+    },
+    {
+      "title": "Settings",
+      "url": "llms-txt#settings"
+    },
+    {
+      "title": "Ssh Key",
+      "url": "llms-txt#ssh-key"
+    },
+    {
+      "title": "Stripe",
+      "url": "llms-txt#stripe"
+    },
+    {
+      "title": "Swarm",
+      "url": "llms-txt#swarm"
+    },
+    {
+      "title": "User",
+      "url": "llms-txt#user"
+    },
+    {
+      "title": "Volume Backups",
+      "url": "llms-txt#volume-backups"
+    },
+    {
+      "title": "Registry",
+      "url": "llms-txt#registry"
+    },
+    {
+      "title": "Rollback",
+      "url": "llms-txt#rollback"
+    },
+    {
+      "title": "Schedule",
+      "url": "llms-txt#schedule"
+    },
+    {
+      "title": "Security",
+      "url": "llms-txt#security"
+    },
+    {
+      "title": "Server",
+      "url": "llms-txt#server"
+    },
+    {
+      "title": "Settings",
+      "url": "llms-txt#settings"
+    },
+    {
+      "title": "Ssh Router",
+      "url": "llms-txt#ssh-router"
+    },
+    {
+      "title": "Swarm",
+      "url": "llms-txt#swarm"
+    },
+    {
+      "title": "User",
+      "url": "llms-txt#user"
+    },
+    {
+      "title": "Volume Backups",
+      "url": "llms-txt#volume-backups"
+    },
+    {
+      "title": "Architecture of Dokploy",
+      "url": "llms-txt#architecture-of-dokploy"
+    },
+    {
+      "title": "Auto Deploy",
+      "url": "llms-txt#auto-deploy"
+    },
+    {
+      "title": "Backups",
+      "url": "llms-txt#backups"
+    },
+    {
+      "title": "Certificates",
+      "url": "llms-txt#certificates"
+    },
+    {
+      "title": "Dokploy Cloud",
+      "url": "llms-txt#dokploy-cloud"
+    },
+    {
+      "title": "Cluster",
+      "url": "llms-txt#cluster"
+    },
+    {
+      "title": "Comparison",
+      "url": "llms-txt#comparison"
+    },
+    {
+      "title": "Features",
+      "url": "llms-txt#features"
+    },
+    {
+      "title": "Goodies",
+      "url": "llms-txt#goodies"
+    },
+    {
+      "title": "Welcome to Dokploy",
+      "url": "llms-txt#welcome-to-dokploy"
+    },
+    {
+      "title": "Installation",
+      "url": "llms-txt#installation"
+    },
+    {
+      "title": "Manual Installation",
+      "url": "llms-txt#manual-installation"
+    },
+    {
+      "title": "Main script execution",
+      "url": "llms-txt#main-script-execution"
+    },
+    {
+      "title": "Installation",
+      "url": "llms-txt#installation"
+    },
+    {
+      "title": "Monitoring",
+      "url": "llms-txt#monitoring"
+    },
+    {
+      "title": "Providers",
+      "url": "llms-txt#providers"
+    },
+    {
+      "title": "Reset Password & 2FA",
+      "url": "llms-txt#reset-password-&-2fa"
+    },
+    {
+      "title": "Schedule Jobs",
+      "url": "llms-txt#schedule-jobs"
+    },
+    {
+      "title": "Backup script for custom database",
+      "url": "llms-txt#backup-script-for-custom-database"
+    },
+    {
+      "title": "search the container name",
+      "url": "llms-txt#search-the-container-name"
+    },
+    {
+      "title": "Add your backup commands here",
+      "url": "llms-txt#add-your-backup-commands-here"
+    },
+    {
+      "title": "Upload to S3 (if needed)",
+      "url": "llms-txt#upload-to-s3-(if-needed)"
+    },
+    {
+      "title": "aws s3 cp /backups/$backup_file s3://your-bucket/backups/",
+      "url": "llms-txt#aws-s3-cp-/backups/$backup_file-s3://your-bucket/backups/"
+    },
+    {
+      "title": "SSH Keys",
+      "url": "llms-txt#ssh-keys"
+    },
+    {
+      "title": "Open Source Templates",
+      "url": "llms-txt#open-source-templates"
+    },
+    {
+      "title": "Troubleshooting",
+      "url": "llms-txt#troubleshooting"
+    },
+    {
+      "title": "Then",
+      "url": "llms-txt#then"
+    },
+    {
+      "title": "Create a new dokploy-redis service",
+      "url": "llms-txt#create-a-new-dokploy-redis-service"
+    },
+    {
+      "title": "Create a new dokploy-postgres service",
+      "url": "llms-txt#create-a-new-dokploy-postgres-service"
+    },
+    {
+      "title": "If you are using docker standalone traefik",
+      "url": "llms-txt#if-you-are-using-docker-standalone-traefik"
+    },
+    {
+      "title": "If you are using docker service traefik",
+      "url": "llms-txt#if-you-are-using-docker-service-traefik"
+    },
+    {
+      "title": "Create a new dokploy-traefik service",
+      "url": "llms-txt#create-a-new-dokploy-traefik-service"
+    },
+    {
+      "title": "Create a new dokploy service",
+      "url": "llms-txt#create-a-new-dokploy-service"
+    },
+    {
+      "title": "We need the advertise address to be set which is the Private IP of your server, you can get it by running the following command:",
+      "url": "llms-txt#we-need-the-advertise-address-to-be-set-which-is-the-private-ip-of-your-server,-you-can-get-it-by-running-the-following-command:"
+    },
+    {
+      "title": "Run this command to get the private IP of your server:",
+      "url": "llms-txt#run-this-command-to-get-the-private-ip-of-your-server:"
+    },
+    {
+      "title": "Copy this value and paste in the ADVERTISE_ADDR variable:",
+      "url": "llms-txt#copy-this-value-and-paste-in-the-advertise_addr-variable:"
+    },
+    {
+      "title": "Create the dokploy service",
+      "url": "llms-txt#create-the-dokploy-service"
+    },
+    {
+      "title": "Uninstall",
+      "url": "llms-txt#uninstall"
+    },
+    {
+      "title": "Environment Variables",
+      "url": "llms-txt#environment-variables"
+    },
+    {
+      "title": "Videos",
+      "url": "llms-txt#videos"
+    },
+    {
+      "title": "Volume Backups",
+      "url": "llms-txt#volume-backups"
+    },
+    {
+      "title": "Watch Paths",
+      "url": "llms-txt#watch-paths"
+    },
+    {
+      "title": "Discord",
+      "url": "llms-txt#discord"
+    },
+    {
+      "title": "Email",
+      "url": "llms-txt#email"
+    },
+    {
+      "title": "Gotify",
+      "url": "llms-txt#gotify"
+    },
+    {
+      "title": "Lark",
+      "url": "llms-txt#lark"
+    },
+    {
+      "title": "Ntfy",
+      "url": "llms-txt#ntfy"
+    },
+    {
+      "title": "Overview",
+      "url": "llms-txt#overview"
+    },
+    {
+      "title": "Slack",
+      "url": "llms-txt#slack"
+    },
+    {
+      "title": "Telegram",
+      "url": "llms-txt#telegram"
+    },
+    {
+      "title": "Webhook",
+      "url": "llms-txt#webhook"
+    },
+    {
+      "title": "Permissions",
+      "url": "llms-txt#permissions"
+    },
+    {
+      "title": "Docker Registry",
+      "url": "llms-txt#docker-registry"
+    },
+    {
+      "title": "Bitbucket",
+      "url": "llms-txt#bitbucket"
+    },
+    {
+      "title": "Gitea",
+      "url": "llms-txt#gitea"
+    },
+    {
+      "title": "GitHub",
+      "url": "llms-txt#github"
+    },
+    {
+      "title": "Gitlab",
+      "url": "llms-txt#gitlab"
+    },
+    {
+      "title": "Actions",
+      "url": "llms-txt#actions"
+    },
+    {
+      "title": "AWS S3",
+      "url": "llms-txt#aws-s3"
+    },
+    {
+      "title": "Backblaze B2",
+      "url": "llms-txt#backblaze-b2"
+    },
+    {
+      "title": "Google Cloud Storage",
+      "url": "llms-txt#google-cloud-storage"
+    },
+    {
+      "title": "Cloudflare R2",
+      "url": "llms-txt#cloudflare-r2"
+    },
+    {
+      "title": "11ty",
+      "url": "llms-txt#11ty"
+    },
+    {
+      "title": "Astro SSR",
+      "url": "llms-txt#astro-ssr"
+    },
+    {
+      "title": "Astro",
+      "url": "llms-txt#astro"
+    },
+    {
+      "title": "Deno",
+      "url": "llms-txt#deno"
+    },
+    {
+      "title": "HTML",
+      "url": "llms-txt#html"
+    },
+    {
+      "title": "Lit",
+      "url": "llms-txt#lit"
+    },
+    {
+      "title": "Nest.js",
+      "url": "llms-txt#nest.js"
+    },
+    {
+      "title": "Next.js",
+      "url": "llms-txt#next.js"
+    },
+    {
+      "title": "Preact",
+      "url": "llms-txt#preact"
+    },
+    {
+      "title": "Qwik",
+      "url": "llms-txt#qwik"
+    },
+    {
+      "title": "Remix",
+      "url": "llms-txt#remix"
+    },
+    {
+      "title": "Solid.js",
+      "url": "llms-txt#solid.js"
+    },
+    {
+      "title": "Svelte",
+      "url": "llms-txt#svelte"
+    },
+    {
+      "title": "Tanstack",
+      "url": "llms-txt#tanstack"
+    },
+    {
+      "title": "Turborepo",
+      "url": "llms-txt#turborepo"
+    },
+    {
+      "title": "Vite React",
+      "url": "llms-txt#vite-react"
+    },
+    {
+      "title": "Vue.js",
+      "url": "llms-txt#vue.js"
+    },
+    {
+      "title": "Advanced",
+      "url": "llms-txt#advanced"
+    },
+    {
+      "title": "Build Type",
+      "url": "llms-txt#build-type"
+    },
+    {
+      "title": "Going Production",
+      "url": "llms-txt#going-production"
+    },
+    {
+      "title": "Copy only the necessary files",
+      "url": "llms-txt#copy-only-the-necessary-files"
+    },
+    {
+      "title": "Applications",
+      "url": "llms-txt#applications"
+    },
+    {
+      "title": "Preview Deployments",
+      "url": "llms-txt#preview-deployments"
+    },
+    {
+      "title": "Rollbacks",
+      "url": "llms-txt#rollbacks"
+    },
+    {
+      "title": "Zero Downtime",
+      "url": "llms-txt#zero-downtime"
+    },
+    {
+      "title": "Backups",
+      "url": "llms-txt#backups"
+    },
+    {
+      "title": "Databases",
+      "url": "llms-txt#databases"
+    },
+    {
+      "title": "Restore",
+      "url": "llms-txt#restore"
+    },
+    {
+      "title": "Domains",
+      "url": "llms-txt#domains"
+    },
+    {
+      "title": "Example",
+      "url": "llms-txt#example"
+    },
+    {
+      "title": "Docker Compose",
+      "url": "llms-txt#docker-compose"
+    },
+    {
+      "title": "Utilities",
+      "url": "llms-txt#utilities"
+    },
+    {
+      "title": "Cloudflare",
+      "url": "llms-txt#cloudflare"
+    },
+    {
+      "title": "Generated",
+      "url": "llms-txt#generated"
+    },
+    {
+      "title": "Domains",
+      "url": "llms-txt#domains"
+    },
+    {
+      "title": "Others",
+      "url": "llms-txt#others"
+    },
+    {
+      "title": "Cloudflare Tunnels",
+      "url": "llms-txt#cloudflare-tunnels"
+    },
+    {
+      "title": "EC2 Instructions",
+      "url": "llms-txt#ec2-instructions"
+    },
+    {
+      "title": "Tailscale",
+      "url": "llms-txt#tailscale"
+    },
+    {
+      "title": "Digital Ocean",
+      "url": "llms-txt#digital-ocean"
+    },
+    {
+      "title": "Docker Hub",
+      "url": "llms-txt#docker-hub"
+    },
+    {
+      "title": "GHCR",
+      "url": "llms-txt#ghcr"
+    },
+    {
+      "title": "Registry",
+      "url": "llms-txt#registry"
+    },
+    {
+      "title": "Build Server",
+      "url": "llms-txt#build-server"
+    },
+    {
+      "title": "Deployments",
+      "url": "llms-txt#deployments"
+    },
+    {
+      "title": "Introduction",
+      "url": "llms-txt#introduction"
+    },
+    {
+      "title": "Deploy Server",
+      "url": "llms-txt#deploy-server"
+    },
+    {
+      "title": "Security",
+      "url": "llms-txt#security"
+    },
+    {
+      "title": "Validate",
+      "url": "llms-txt#validate"
+    },
+    {
+      "title": "Connection",
+      "url": "llms-txt#connection"
+    },
+    {
+      "title": "MariaDB",
+      "url": "llms-txt#mariadb"
+    },
+    {
+      "title": "Mongo Compass",
+      "url": "llms-txt#mongo-compass"
+    },
+    {
+      "title": "MySQL",
+      "url": "llms-txt#mysql"
+    },
+    {
+      "title": "PG Admin",
+      "url": "llms-txt#pg-admin"
+    },
+    {
+      "title": "Redis",
+      "url": "llms-txt#redis"
+    }
+  ]
+}

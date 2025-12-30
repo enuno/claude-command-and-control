@@ -1,0 +1,26 @@
+INTEGRATION FAILURE REASON
+
+File: software-architecture/SKILL.md
+Date: 2025-12-26T08:35 UTC
+Status: DUPLICATE
+
+Issue:
+This file is a duplicate of the software-architecture skill that was already integrated
+in the previous integration session (commit b0f4be3 on 2025-12-26).
+
+Additional Issue:
+The file is in HTML format (204K HTML document) rather than markdown format.
+It appears to be a downloaded GitHub webpage instead of the actual skill file.
+
+Existing Skill Location:
+skills-templates/software-architecture/SKILL.md (already integrated and documented)
+
+Action Taken:
+Moved to INTEGRATION/failed/software-architecture-duplicate-html/
+
+Recommendation:
+No action needed - skill already exists in repository.
+If update is needed, modify the existing file directly in skills-templates/.
+
+Scan Report:
+/INTEGRATION/logs/scan-report-2025-12-26T08-30.md

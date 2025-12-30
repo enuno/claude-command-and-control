@@ -1,0 +1,19 @@
+{
+  "title": "MCP",
+  "content": "Source: https://docs.conductor.build/core/mcp\n\nConnect to external tools and data sources\n\nConductor can connect to external tools and data sources through the Model Context Protocol (MCP). MCP servers give Claude Code access to your tools, databases, and APIs.\n\nLearn more about MCP [here](https://docs.anthropic.com/en/docs/claude-code/mcp).\n\n## Adding MCP servers\n\nAdd an MCP server using the Claude Code CLI:\n\nFor example, to add Context7 (documentation search):\n\nOur favorite MCPs are Context7 (documentation search) and Linear (issue management).",
+  "code_samples": [
+    {
+      "code": "For example, to add Context7 (documentation search):",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Adding MCP servers",
+      "id": "adding-mcp-servers"
+    }
+  ],
+  "url": "llms-txt#mcp",
+  "links": []
+}

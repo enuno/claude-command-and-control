@@ -1,0 +1,88 @@
+{
+  "title": "Volume Backups",
+  "content": "Volume backups are essential when your service doesn't fit the traditional database backup solutions. This is common when your application uses SQLite databases or doesn't have a database at all, making Dokploy's dedicated database backup features (PostgreSQL, MySQL, MongoDB, etc.) unsuitable for your use case.\n\nVolume backups allow you to backup [Docker named volumes](https://docs.docker.com/engine/storage/volumes/) to S3 destinations, providing a comprehensive backup solution for any type of data stored in volumes.\n\n<Callout type=\"info\">\n  **Important:** Volume Backups only work with Docker named volumes, not with bind mounts (like the `../files` folder). If you're currently using bind mounts and need backup functionality, you'll need to migrate to named volumes. See the [Docker Compose guide](/docs/core/docker-compose#volumes) for a comparison of both methods and guidance on choosing the right approach for your needs.\n</Callout>\n\n## Supported Services\n\nVolume backups are available for:\n\n1. **Applications** - Single container applications\n2. **Docker Compose** - Multi-container applications\n\n## Setting Up Volume Mounts\n\nVolume Backups require Docker named volumes. If you're using bind mounts (like `../files`), you'll need to switch to named volumes to use this feature.\n\n1. Navigate to your application\n2. Go to **Advanced** → **Mounts**\n3. Create a new mount and select **Volume Mount** option\n\n### For Docker Compose\n\nDefine named volumes directly in your `docker-compose.yml` file. **Note:** Bind mounts (e.g., `../files/my-data:/app/data`) cannot be backed up using Volume Backups—you must use named volumes:\n\nFor more information on choosing between bind mounts and named volumes, see the [Docker Compose volumes section](/docs/core/docker-compose#volumes).\n\n## Practical Example: N8N Backup\n\nLet's walk through a common scenario using N8N, which runs on SQLite and stores data in Docker volumes.\n\n### N8N Docker Compose Configuration\n\nSince N8N uses SQLite (stored in the `n8n_data` volume), we can't use Dokploy's database backup features. Instead, we'll backup the entire volume.\n\n## Creating Volume Backups\n\n### Backup Configuration\n\n1. Deploy your N8N template\n2. Navigate to **Volume Backups** section\n3. Create a new volume backup with these settings:\n\n| Setting                | Value               | Description                                   |\n| ---------------------- | ------------------- | --------------------------------------------- |\n| **Name**               | `my-n8n-backup`     | Unique identifier for your backup             |\n| **Schedule**           | `0 0 * * *`         | Daily backup at midnight (cron format)        |\n| **Destination**        | Your S3 destination | Must be configured in your account            |\n| **Service Name**       | `n8n`               | Auto-complete will suggest available services |\n| **Volume Name**        | `n8n_data`          | Auto-filled when service is selected          |\n| **Backup Prefix**      | Optional            | Additional prefix for backup files            |\n| **Turn off Container** | Optional            | See safety considerations below               |\n| **Enabled**            | ✓                   | Enable the backup schedule                    |\n\n### Safety Considerations\n\n**Turn off Container during backup** option provides two approaches:\n\n* **Container OFF** (Recommended): Safer option that prevents data corruption during backup, this will stop the container during the backup, and then start it again after the backup is done.\n* **Container ON**: Faster but may cause inconsistencies if the service is actively writing to the volume\n\n<Callout type=\"warning\">\n  When backing up with the container running, there's a risk of data corruption if the application is actively writing to the volume during backup.\n</Callout>\n\n## Restoring Volume Backups\n\n1. Navigate to **Volume Backups** section\n2. Select **Restore Volume** option\n3. Choose your S3 destination where the backup is stored\n4. Select the specific backup you want to restore\n5. Enter the target volume name for restoration\n\n### Volume Naming for Docker Compose\n\nFor Docker Compose services, volume names follow a specific pattern:\n`{appName}_{volumeName}`\n\n**Example**: If your app name is `n8n-n8n-kqlble`, the volume name would be:\n`n8n-n8n-kqlble_n8n_data`\n\n### Important Restore Considerations\n\n<Callout type=\"warning\">\n  **Before restoring:**\n\n* Ensure the target volume doesn't already exist\n  * Stop any containers using the volume\n  * Remove the existing volume if necessary\n\nThe restore will fail if the volume is in use or already exists.\n</Callout>\n\n### Finding the Correct Volume Name\n\n1. **Check your Docker Compose file** to understand the volume structure\n2. **Verify the app name** in Dokploy (usually under the name of your service)\n3. **Use the pattern**: `{appName}_{volumeName}` for Docker Compose services\n4. **For single applications**: Volume names are typically simpler and match your mount configuration\n\nThis ensures your restored volume will be properly recognized and used by your Docker Compose services when they restart.",
+  "code_samples": [
+    {
+      "code": "services:\n  app:\n    image: dokploy/dokploy:latest\n    volumes:\n      - my-volume:/app/data\n\nvolumes:\n  my-volume:",
+      "language": "yaml"
+    },
+    {
+      "code": "version: \"3.8\"\nservices:\n  n8n:\n    image: docker.n8n.io/n8nio/n8n:1.83.2\n    restart: always\n    environment:\n      - N8N_HOST=${N8N_HOST}\n      - N8N_PORT=${N8N_PORT}\n      - N8N_PROTOCOL=http\n      - NODE_ENV=production\n      - WEBHOOK_URL=https://${N8N_HOST}/\n      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}\n      - N8N_SECURE_COOKIE=false\n    volumes:\n      - n8n_data:/home/node/.n8n\n\nvolumes:\n  n8n_data:",
+      "language": "yaml"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Supported Services",
+      "id": "supported-services"
+    },
+    {
+      "level": "h2",
+      "text": "Setting Up Volume Mounts",
+      "id": "setting-up-volume-mounts"
+    },
+    {
+      "level": "h3",
+      "text": "For Applications",
+      "id": "for-applications"
+    },
+    {
+      "level": "h3",
+      "text": "For Docker Compose",
+      "id": "for-docker-compose"
+    },
+    {
+      "level": "h2",
+      "text": "Practical Example: N8N Backup",
+      "id": "practical-example:-n8n-backup"
+    },
+    {
+      "level": "h3",
+      "text": "N8N Docker Compose Configuration",
+      "id": "n8n-docker-compose-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Creating Volume Backups",
+      "id": "creating-volume-backups"
+    },
+    {
+      "level": "h3",
+      "text": "Backup Configuration",
+      "id": "backup-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Safety Considerations",
+      "id": "safety-considerations"
+    },
+    {
+      "level": "h2",
+      "text": "Restoring Volume Backups",
+      "id": "restoring-volume-backups"
+    },
+    {
+      "level": "h3",
+      "text": "Restore Process",
+      "id": "restore-process"
+    },
+    {
+      "level": "h3",
+      "text": "Volume Naming for Docker Compose",
+      "id": "volume-naming-for-docker-compose"
+    },
+    {
+      "level": "h3",
+      "text": "Important Restore Considerations",
+      "id": "important-restore-considerations"
+    },
+    {
+      "level": "h3",
+      "text": "Finding the Correct Volume Name",
+      "id": "finding-the-correct-volume-name"
+    }
+  ],
+  "url": "llms-txt#volume-backups",
+  "links": []
+}

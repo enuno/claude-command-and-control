@@ -1,0 +1,8 @@
+{
+  "title": "Environment Setup (/sdks/ardrive-core-js/(development)/environment-setup)",
+  "content": "We use nvm and Yarn for development:\n\n1. Install nvm [using their instructions][nvm-install]\n2. Install correct Node version: `nvm install && nvm use`\n3. Install Yarn 3.x: Follow [Yarn installation][yarn-install]\n4. Enable git hooks: `yarn husky install`\n5. Install dependencies: `yarn install --check-cache`",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#environment-setup-(/sdks/ardrive-core-js/(development)/environment-setup)",
+  "links": []
+}

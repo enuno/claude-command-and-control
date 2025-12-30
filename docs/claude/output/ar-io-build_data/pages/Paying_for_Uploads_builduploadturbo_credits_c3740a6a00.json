@@ -1,0 +1,69 @@
+{
+  "title": "Paying for Uploads (/build/upload/turbo-credits)",
+  "content": "import {\n  CreditCard,\n  Upload,\n  Code,\n  FileText,\n  Tag,\n  FolderOpen,\n} from \"lucide-react\";\n\nTurbo Credits are the payment medium used by Turbo's upload service, providing a 1:1 conversion from Arweave's native AR token with additional benefits and flexible payment options.\n\n## What are Turbo Credits?\n\nTurbo Credits represent upload power on the Arweave network, divisible down to 1 trillionth of a credit (Winston Credit). Unlike traditional crypto tokens, Turbo Credits cannot be traded, transferred, or exchanged - they exist solely for uploading data to Arweave.\n\n**Important:** Turbo Credits are non-refundable and cannot be withdrawn or\n  exchanged for other cryptocurrencies.\n\n## How to Purchase Credits\n\n- **Fiat Currency**: Credit/debit cards via Stripe\n- **Crypto Tokens**: AR, ETH, SOL, MATIC, ARIO, USDC, KYVE, ETH (BASE)\n- **Multiple Wallets**: Ethereum, Solana, and Arweave wallets supported\n\n### Supported Tokens & Purchase Methods\n\n| Payment Method               | Turbo SDK | Turbo CLI | Turbo API | Top Up App | ArDrive App |\n| ---------------------------- | --------- | --------- | --------- | ---------- | ----------- |\n| **Fiat (credit/debit card)** | ✅        | ✅        | ✅        | ✅         | ✅          |\n| **AR**                       | ✅        | ✅        | ✅        | ✅         | ❌          |\n| **ETH**                      | ✅        | ✅        | ✅        | ✅         | ❌          |\n| **SOL**                      | ✅        | ✅        | ✅        | ✅         | ❌          |\n| **MATIC**                    | ✅        | ✅        | ✅        | ❌         | ❌          |\n| **KYVE**                     | ✅        | ✅        | ✅        | ❌         | ❌          |\n| **ETH (BASE)**               | ✅        | ✅        | ✅        | ❌         | ❌          |\n| **ARIO**                     | ✅        | ✅        | ✅        | ❌         | ❌          |\n| **USDC**                     | ❌        | ✅        | ✅        | ❌         | ❌          |\n\n**Wallet Compatibility:** When purchasing with cryptocurrencies, credits are\n  deposited into the corresponding wallet type. You cannot top up an ETH wallet\n  by paying with AR.\n\n**Option 1: Turbo Top Up App**\n\n- Visit [turbo-topup.com](https://turbo-topup.com)\n- Purchase with USD or AR tokens\n- Credits can be purchased into Ethereum or Solana wallets\n\n**Option 2: ArDrive App**\n\n- Use [ArDrive](https://app.ardrive.io) for simple purchases\n- Buy credits with USD directly in the app\n- Perfect for occasional users\n\n**Option 3: Turbo SDK/CLI**\n\nTurbo Credits can be shared with other users without transferring ownership, perfect for organizations and teams.\n\n### How Credit Sharing Works\n\n- **Authorize Users**: Grant specific wallets access to your credits\n- **Set Limits**: Control how much each user can spend\n- **Time Limits**: Set expiration dates for access\n- **Revoke Anytime**: Regain control of shared credits instantly\n\n- **Organizational Funds**: Central wallet shares credits with employees\n- **Onboarding**: Give new users free upload power for trials\n- **Collaboration**: Share credits with project contributors\n- **Educational Programs**: Provide students with controlled access\n\n**Perfect for:** Companies, teams, educational institutions, and any\n  organization needing controlled access to upload power.\n\n- **23.4% fee** applied to credit purchases (covers infrastructure and benefits)\n- **No additional fees** when using credits for uploads\n- **Same value per GiB** as AR regardless of price fluctuations\n- **Subsidized uploads** under 100 KiB are completely free\n\nReady to start using Turbo Credits? Choose your path:\n\n}\n    arrow\n  >\n    Buy credits instantly with credit cards or crypto\n\n}\n>\n  Learn how to upload data with your new credits\n\n}\n  >\n    Integrate credit sharing and advanced features\n\n}\n  >\n    Complete upload guide with Turbo.\n\n}>\n  Organize with metadata and tags.\n\n}\n  >\n    Create folder structures with manifests.",
+  "code_samples": [
+    {
+      "code": "// Purchase credits programmatically\nconst fundResult = await turbo.topUpWithTokens({\n  tokenAmount: TOKEN_AMOUNT,\n  tokenType: \"solana\", // or 'ethereum', 'matic', 'arweave'\n});\n\n// Check your balance\nconst balance = await turbo.getBalance();\nconsole.log(`Balance: ${balance.winc} Winston Credits`);",
+      "language": "js"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "What are Turbo Credits?",
+      "id": "what-are-turbo-credits?"
+    },
+    {
+      "level": "h2",
+      "text": "How to Purchase Credits",
+      "id": "how-to-purchase-credits"
+    },
+    {
+      "level": "h3",
+      "text": "Payment Methods",
+      "id": "payment-methods"
+    },
+    {
+      "level": "h3",
+      "text": "Supported Tokens & Purchase Methods",
+      "id": "supported-tokens-&-purchase-methods"
+    },
+    {
+      "level": "h3",
+      "text": "Purchase Options",
+      "id": "purchase-options"
+    },
+    {
+      "level": "h2",
+      "text": "Credit Sharing",
+      "id": "credit-sharing"
+    },
+    {
+      "level": "h3",
+      "text": "How Credit Sharing Works",
+      "id": "how-credit-sharing-works"
+    },
+    {
+      "level": "h3",
+      "text": "Use Cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h2",
+      "text": "Pricing & Fees",
+      "id": "pricing-&-fees"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Started",
+      "id": "getting-started"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#paying-for-uploads-(/build/upload/turbo-credits)",
+  "links": []
+}

@@ -1,0 +1,252 @@
+{
+  "url": "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+  "title": "Declare Request Example Data¶",
+  "content": "You can declare examples of the data your app can receive.\n\nHere are several ways to do it.\n\nYou can declare examples for a Pydantic model that will be added to the generated JSON Schema.\n\nThat extra info will be added as-is to the output JSON Schema for that model, and it will be used in the API docs.\n\nYou can use the attribute model_config that takes a dict as described in Pydantic's docs: Configuration.\n\nYou can set \"json_schema_extra\" with a dict containing any additional data you would like to show up in the generated JSON Schema, including examples.\n\nYou could use the same technique to extend the JSON Schema and add your own custom extra info.\n\nFor example you could use it to add metadata for a frontend user interface, etc.\n\nOpenAPI 3.1.0 (used since FastAPI 0.99.0) added support for examples, which is part of the JSON Schema standard.\n\nBefore that, it only supported the keyword example with a single example. That is still supported by OpenAPI 3.1.0, but is deprecated and is not part of the JSON Schema standard. So you are encouraged to migrate example to examples. 🤓\n\nYou can read more at the end of this page.\n\nWhen using Field() with Pydantic models, you can also declare additional examples:\n\nyou can also declare a group of examples with additional information that will be added to their JSON Schemas inside of OpenAPI.\n\nHere we pass examples containing one example of the data expected in Body():\n\nPrefer to use the Annotated version if possible.\n\nPrefer to use the Annotated version if possible.\n\nWith any of the methods above it would look like this in the /docs:\n\nYou can of course also pass multiple examples:\n\nPrefer to use the Annotated version if possible.\n\nPrefer to use the Annotated version if possible.\n\nWhen you do this, the examples will be part of the internal JSON Schema for that body data.\n\nNevertheless, at the time of writing this, Swagger UI, the tool in charge of showing the docs UI, doesn't support showing multiple examples for the data in JSON Schema. But read below for a workaround.\n\nSince before JSON Schema supported examples OpenAPI had support for a different field also called examples.\n\nThis OpenAPI-specific examples goes in another section in the OpenAPI specification. It goes in the details for each path operation, not inside each JSON Schema.\n\nAnd Swagger UI has supported this particular examples field for a while. So, you can use it to show different examples in the docs UI.\n\nThe shape of this OpenAPI-specific field examples is a dict with multiple examples (instead of a list), each with extra information that will be added to OpenAPI too.\n\nThis doesn't go inside of each JSON Schema contained in OpenAPI, this goes outside, in the path operation directly.\n\nYou can declare the OpenAPI-specific examples in FastAPI with the parameter openapi_examples for:\n\nThe keys of the dict identify each example, and each value is another dict.\n\nEach specific example dict in the examples can contain:\n\nYou can use it like this:\n\nPrefer to use the Annotated version if possible.\n\nPrefer to use the Annotated version if possible.\n\nWith openapi_examples added to Body() the /docs would look like:\n\nIf you are already using FastAPI version 0.99.0 or above, you can probably skip these details.\n\nThey are more relevant for older versions, before OpenAPI 3.1.0 was available.\n\nYou can consider this a brief OpenAPI and JSON Schema history lesson. 🤓\n\nThese are very technical details about the standards JSON Schema and OpenAPI.\n\nIf the ideas above already work for you, that might be enough, and you probably don't need these details, feel free to skip them.\n\nBefore OpenAPI 3.1.0, OpenAPI used an older and modified version of JSON Schema.\n\nJSON Schema didn't have examples, so OpenAPI added its own example field to its own modified version.\n\nOpenAPI also added example and examples fields to other parts of the specification:\n\nThis old OpenAPI-specific examples parameter is now openapi_examples since FastAPI 0.103.0.\n\nBut then JSON Schema added an examples field to a new version of the specification.\n\nAnd then the new OpenAPI 3.1.0 was based on the latest version (JSON Schema 2020-12) that included this new field examples.\n\nAnd now this new examples field takes precedence over the old single (and custom) example field, that is now deprecated.\n\nThis new examples field in JSON Schema is just a list of examples, not a dict with extra metadata as in the other places in OpenAPI (described above).\n\nEven after OpenAPI 3.1.0 was released with this new simpler integration with JSON Schema, for a while, Swagger UI, the tool that provides the automatic docs, didn't support OpenAPI 3.1.0 (it does since version 5.0.0 🎉).\n\nBecause of that, versions of FastAPI previous to 0.99.0 still used versions of OpenAPI lower than 3.1.0.\n\nWhen you add examples inside a Pydantic model, using schema_extra or Field(examples=[\"something\"]) that example is added to the JSON Schema for that Pydantic model.\n\nAnd that JSON Schema of the Pydantic model is included in the OpenAPI of your API, and then it's used in the docs UI.\n\nIn versions of FastAPI before 0.99.0 (0.99.0 and above use the newer OpenAPI 3.1.0) when you used example or examples with any of the other utilities (Query(), Body(), etc.) those examples were not added to the JSON Schema that describes that data (not even to OpenAPI's own version of JSON Schema), they were added directly to the path operation declaration in OpenAPI (outside the parts of OpenAPI that use JSON Schema).\n\nBut now that FastAPI 0.99.0 and above uses OpenAPI 3.1.0, that uses JSON Schema 2020-12, and Swagger UI 5.0.0 and above, everything is more consistent and the examples are included in JSON Schema.\n\nNow, as Swagger UI didn't support multiple JSON Schema examples (as of 2023-08-26), users didn't have a way to show multiple examples in the docs.\n\nTo solve that, FastAPI 0.103.0 added support for declaring the same old OpenAPI-specific examples field with the new parameter openapi_examples. 🤓\n\nI used to say I didn't like history that much... and look at me now giving \"tech history\" lessons. 😅\n\nIn short, upgrade to FastAPI 0.99.0 or above, and things are much simpler, consistent, and intuitive, and you don't have to know all these historic details. 😎",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Declare Request Example Data¶",
+      "id": "declare-request-example-data"
+    },
+    {
+      "level": "h2",
+      "text": "Extra JSON Schema data in Pydantic models¶",
+      "id": "extra-json-schema-data-in-pydantic-models"
+    },
+    {
+      "level": "h2",
+      "text": "Field additional arguments¶",
+      "id": "field-additional-arguments"
+    },
+    {
+      "level": "h2",
+      "text": "examples in JSON Schema - OpenAPI¶",
+      "id": "examples-in-json-schema-openapi"
+    },
+    {
+      "level": "h3",
+      "text": "Body with examples¶",
+      "id": "body-with-examples"
+    },
+    {
+      "level": "h3",
+      "text": "Example in the docs UI¶",
+      "id": "example-in-the-docs-ui"
+    },
+    {
+      "level": "h3",
+      "text": "Body with multiple examples¶",
+      "id": "body-with-multiple-examples"
+    },
+    {
+      "level": "h3",
+      "text": "OpenAPI-specific examples¶",
+      "id": "openapi-specific-examples"
+    },
+    {
+      "level": "h3",
+      "text": "Using the openapi_examples Parameter¶",
+      "id": "using-the-openapi-examples-parameter"
+    },
+    {
+      "level": "h3",
+      "text": "OpenAPI Examples in the Docs UI¶",
+      "id": "openapi-examples-in-the-docs-ui"
+    },
+    {
+      "level": "h2",
+      "text": "Technical Details¶",
+      "id": "technical-details"
+    },
+    {
+      "level": "h3",
+      "text": "JSON Schema's examples field¶",
+      "id": "json-schemas-examples-field"
+    },
+    {
+      "level": "h3",
+      "text": "Pydantic and FastAPI examples¶",
+      "id": "pydantic-and-fastapi-examples"
+    },
+    {
+      "level": "h3",
+      "text": "Swagger UI and OpenAPI-specific examples¶",
+      "id": "swagger-ui-and-openapi-specific-examples"
+    },
+    {
+      "level": "h3",
+      "text": "Summary¶",
+      "id": "summary"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n\n    model_config = {\n        \"json_schema_extra\": {\n            \"examples\": [\n                {\n                    \"name\": \"Foo\",\n                    \"description\": \"A very nice Item\",\n                    \"price\": 35.4,\n                    \"tax\": 3.2,\n                }\n            ]\n        }\n    }\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    tax: Union[float, None] = None\n\n    model_config = {\n        \"json_schema_extra\": {\n            \"examples\": [\n                {\n                    \"name\": \"Foo\",\n                    \"description\": \"A very nice Item\",\n                    \"price\": 35.4,\n                    \"tax\": 3.2,\n                }\n            ]\n        }\n    }\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\nfrom pydantic import BaseModel, Field\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str = Field(examples=[\"Foo\"])\n    description: str | None = Field(default=None, examples=[\"A very nice Item\"])\n    price: float = Field(examples=[35.4])\n    tax: float | None = Field(default=None, examples=[3.2])\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel, Field\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str = Field(examples=[\"Foo\"])\n    description: Union[str, None] = Field(default=None, examples=[\"A very nice Item\"])\n    price: float = Field(examples=[35.4])\n    tax: Union[float, None] = Field(default=None, examples=[3.2])\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(item_id: int, item: Item):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Body, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(\n    item_id: int,\n    item: Annotated[\n        Item,\n        Body(\n            examples=[\n                {\n                    \"name\": \"Foo\",\n                    \"description\": \"A very nice Item\",\n                    \"price\": 35.4,\n                    \"tax\": 3.2,\n                }\n            ],\n        ),\n    ],\n):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated, Union\n\nfrom fastapi import Body, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    tax: Union[float, None] = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(\n    item_id: int,\n    item: Annotated[\n        Item,\n        Body(\n            examples=[\n                {\n                    \"name\": \"Foo\",\n                    \"description\": \"A very nice Item\",\n                    \"price\": 35.4,\n                    \"tax\": 3.2,\n                }\n            ],\n        ),\n    ],\n):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Body, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(\n    item_id: int,\n    item: Item = Body(\n        examples=[\n            {\n                \"name\": \"Foo\",\n                \"description\": \"A very nice Item\",\n                \"price\": 35.4,\n                \"tax\": 3.2,\n            }\n        ],\n    ),\n):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import Body, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    tax: Union[float, None] = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(\n    item_id: int,\n    item: Item = Body(\n        examples=[\n            {\n                \"name\": \"Foo\",\n                \"description\": \"A very nice Item\",\n                \"price\": 35.4,\n                \"tax\": 3.2,\n            }\n        ],\n    ),\n):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Body, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(\n    *,\n    item_id: int,\n    item: Annotated[\n        Item,\n        Body(\n            examples=[\n                {\n                    \"name\": \"Foo\",\n                    \"description\": \"A very nice Item\",\n                    \"price\": 35.4,\n                    \"tax\": 3.2,\n                },\n                {\n                    \"name\": \"Bar\",\n                    \"price\": \"35.4\",\n                },\n                {\n                    \"name\": \"Baz\",\n                    \"price\": \"thirty five point four\",\n                },\n            ],\n        ),\n    ],\n):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated, Union\n\nfrom fastapi import Body, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    tax: Union[float, None] = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(\n    *,\n    item_id: int,\n    item: Annotated[\n        Item,\n        Body(\n            examples=[\n                {\n                    \"name\": \"Foo\",\n                    \"description\": \"A very nice Item\",\n                    \"price\": 35.4,\n                    \"tax\": 3.2,\n                },\n                {\n                    \"name\": \"Bar\",\n                    \"price\": \"35.4\",\n                },\n                {\n                    \"name\": \"Baz\",\n                    \"price\": \"thirty five point four\",\n                },\n            ],\n        ),\n    ],\n):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Body, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(\n    *,\n    item_id: int,\n    item: Item = Body(\n        examples=[\n            {\n                \"name\": \"Foo\",\n                \"description\": \"A very nice Item\",\n                \"price\": 35.4,\n                \"tax\": 3.2,\n            },\n            {\n                \"name\": \"Bar\",\n                \"price\": \"35.4\",\n            },\n            {\n                \"name\": \"Baz\",\n                \"price\": \"thirty five point four\",\n            },\n        ],\n    ),\n):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import Body, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    tax: Union[float, None] = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(\n    *,\n    item_id: int,\n    item: Item = Body(\n        examples=[\n            {\n                \"name\": \"Foo\",\n                \"description\": \"A very nice Item\",\n                \"price\": 35.4,\n                \"tax\": 3.2,\n            },\n            {\n                \"name\": \"Bar\",\n                \"price\": \"35.4\",\n            },\n            {\n                \"name\": \"Baz\",\n                \"price\": \"thirty five point four\",\n            },\n        ],\n    ),\n):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Body, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(\n    *,\n    item_id: int,\n    item: Annotated[\n        Item,\n        Body(\n            openapi_examples={\n                \"normal\": {\n                    \"summary\": \"A normal example\",\n                    \"description\": \"A **normal** item works correctly.\",\n                    \"value\": {\n                        \"name\": \"Foo\",\n                        \"description\": \"A very nice Item\",\n                        \"price\": 35.4,\n                        \"tax\": 3.2,\n                    },\n                },\n                \"converted\": {\n                    \"summary\": \"An example with converted data\",\n                    \"description\": \"FastAPI can convert price `strings` to actual `numbers` automatically\",\n                    \"value\": {\n                        \"name\": \"Bar\",\n                        \"price\": \"35.4\",\n                    },\n                },\n                \"invalid\": {\n                    \"summary\": \"Invalid data is rejected with an error\",\n                    \"value\": {\n                        \"name\": \"Baz\",\n                        \"price\": \"thirty five point four\",\n                    },\n                },\n            },\n        ),\n    ],\n):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated, Union\n\nfrom fastapi import Body, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    tax: Union[float, None] = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(\n    *,\n    item_id: int,\n    item: Annotated[\n        Item,\n        Body(\n            openapi_examples={\n                \"normal\": {\n                    \"summary\": \"A normal example\",\n                    \"description\": \"A **normal** item works correctly.\",\n                    \"value\": {\n                        \"name\": \"Foo\",\n                        \"description\": \"A very nice Item\",\n                        \"price\": 35.4,\n                        \"tax\": 3.2,\n                    },\n                },\n                \"converted\": {\n                    \"summary\": \"An example with converted data\",\n                    \"description\": \"FastAPI can convert price `strings` to actual `numbers` automatically\",\n                    \"value\": {\n                        \"name\": \"Bar\",\n                        \"price\": \"35.4\",\n                    },\n                },\n                \"invalid\": {\n                    \"summary\": \"Invalid data is rejected with an error\",\n                    \"value\": {\n                        \"name\": \"Baz\",\n                        \"price\": \"thirty five point four\",\n                    },\n                },\n            },\n        ),\n    ],\n):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Body, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(\n    *,\n    item_id: int,\n    item: Item = Body(\n        openapi_examples={\n            \"normal\": {\n                \"summary\": \"A normal example\",\n                \"description\": \"A **normal** item works correctly.\",\n                \"value\": {\n                    \"name\": \"Foo\",\n                    \"description\": \"A very nice Item\",\n                    \"price\": 35.4,\n                    \"tax\": 3.2,\n                },\n            },\n            \"converted\": {\n                \"summary\": \"An example with converted data\",\n                \"description\": \"FastAPI can convert price `strings` to actual `numbers` automatically\",\n                \"value\": {\n                    \"name\": \"Bar\",\n                    \"price\": \"35.4\",\n                },\n            },\n            \"invalid\": {\n                \"summary\": \"Invalid data is rejected with an error\",\n                \"value\": {\n                    \"name\": \"Baz\",\n                    \"price\": \"thirty five point four\",\n                },\n            },\n        },\n    ),\n):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import Body, FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    name: str\n    description: Union[str, None] = None\n    price: float\n    tax: Union[float, None] = None\n\n\n@app.put(\"/items/{item_id}\")\nasync def update_item(\n    *,\n    item_id: int,\n    item: Item = Body(\n        openapi_examples={\n            \"normal\": {\n                \"summary\": \"A normal example\",\n                \"description\": \"A **normal** item works correctly.\",\n                \"value\": {\n                    \"name\": \"Foo\",\n                    \"description\": \"A very nice Item\",\n                    \"price\": 35.4,\n                    \"tax\": 3.2,\n                },\n            },\n            \"converted\": {\n                \"summary\": \"An example with converted data\",\n                \"description\": \"FastAPI can convert price `strings` to actual `numbers` automatically\",\n                \"value\": {\n                    \"name\": \"Bar\",\n                    \"price\": \"35.4\",\n                },\n            },\n            \"invalid\": {\n                \"summary\": \"Invalid data is rejected with an error\",\n                \"value\": {\n                    \"name\": \"Baz\",\n                    \"price\": \"thirty five point four\",\n                },\n            },\n        },\n    ),\n):\n    results = {\"item_id\": item_id, \"item\": item}\n    return results",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

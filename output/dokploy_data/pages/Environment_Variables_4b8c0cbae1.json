@@ -1,0 +1,95 @@
+{
+  "title": "Environment Variables",
+  "content": "import { Callout } from \"fumadocs-ui/components/callout\";\n\nEnvironment variables in Dokploy allow you to:\n\n* Define configuration once and reuse it\n* Share values across multiple services\n* Reference values from within the same service\n* Centrally manage sensitive information\n\n<ImageZoom src=\"/assets/images/shared-variables.png\" width={800} height={630} alt=\"Environment variables panel\" className=\"rounded-lg\" />\n\n## Defining Variables\n\nYou can declare environment variables either:\n\n* **Project-level (shared)** — available across all services in the project\n* **Environment-level** — specific to a single environment\n* **Service-level** — specific to a single service\n\n## Project-Level Variables\n\n### Practical Example\n\nLet's consider a common scenario where you have:\n\n* A PostgreSQL database\n* Two services that need to connect to this database\n\n### 1. Define Shared Variable\n\nIn the project's shared variables section, define:\n\n### 2. Use the Variable in Services\n\nIn each service's environment variables tab, reference the shared variable:\n\n<Callout type=\"info\">\n  Dokploy will automatically replace `${{project.DATABASE_URL}}` with the value defined in the project's shared variables.\n</Callout>\n\nYou can use shared environment variables in all the services available in dokploy.\n\n## Environment-Level Variables\n\n### Practical Example\n\nLet's consider a scenario where you have:\n\n* A staging environment with different database credentials\n* Multiple services that need environment-specific configurations\n\n### 1. Define Environment Variable\n\nIn the environment's variables section, define:\n\n### 2. Use the Variable in Services\n\nIn each service's environment variables tab, reference the environment variable:\n\n<Callout type=\"info\">\n  Dokploy will automatically replace `${{environment.VARIABLE_NAME}}` with the value defined in the environment's variables.\n</Callout>\n\nYou can use environment variables in all the services available in that specific environment.\n\n## Service-Level Variables\n\nService-level variables are specific to a single service and can be used to override shared variables or define service-specific configurations.\n\n### Practical Example\n\nLet's say you have a service that requires a different database user. You can define a service-level variable:\n\n<Callout type=\"info\">\n  Preview Deployments environments also include a service-level variable called `DOKPLOY_DEPLOY_URL`, which points to the deployment URL of the service.\n  It can be used as `${{DOKPLOY_DEPLOY_URL}}` for variables like `APP_URL=https://${{DOKPLOY_DEPLOY_URL}}`.\n</Callout>\n\n* Use shared variables for credentials and configurations that repeat across services\n* Keep descriptive variable names\n* Document the purpose of each variable for easier maintenance",
+  "code_samples": [
+    {
+      "code": "DATABASE_URL=postgresql://postgres:postgres@database:5432/postgres",
+      "language": "bash"
+    },
+    {
+      "code": "DATABASE_URL=${{project.DATABASE_URL}}",
+      "language": "bash"
+    },
+    {
+      "code": "DATABASE_PASSWORD=staging_secret_password\nAPI_KEY=staging_api_key_12345",
+      "language": "bash"
+    },
+    {
+      "code": "DATABASE_URL=postgresql://postgres:${{environment.DATABASE_PASSWORD}}@staging-db:5432/postgres\nEXTERNAL_API_KEY=${{environment.API_KEY}}",
+      "language": "bash"
+    },
+    {
+      "code": "DATABASE_USER=service_user\nDATABASE_PASSWORD=service_password\nDATABASE_URL=postgresql://${{DATABASE_USER}}:${{DATABASE_PASSWORD}}@service-database:5432/postgres",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Defining Variables",
+      "id": "defining-variables"
+    },
+    {
+      "level": "h2",
+      "text": "Project-Level Variables",
+      "id": "project-level-variables"
+    },
+    {
+      "level": "h3",
+      "text": "Practical Example",
+      "id": "practical-example"
+    },
+    {
+      "level": "h3",
+      "text": "1. Define Shared Variable",
+      "id": "1.-define-shared-variable"
+    },
+    {
+      "level": "h3",
+      "text": "2. Use the Variable in Services",
+      "id": "2.-use-the-variable-in-services"
+    },
+    {
+      "level": "h2",
+      "text": "Environment-Level Variables",
+      "id": "environment-level-variables"
+    },
+    {
+      "level": "h3",
+      "text": "Practical Example",
+      "id": "practical-example"
+    },
+    {
+      "level": "h3",
+      "text": "1. Define Environment Variable",
+      "id": "1.-define-environment-variable"
+    },
+    {
+      "level": "h3",
+      "text": "2. Use the Variable in Services",
+      "id": "2.-use-the-variable-in-services"
+    },
+    {
+      "level": "h2",
+      "text": "Service-Level Variables",
+      "id": "service-level-variables"
+    },
+    {
+      "level": "h3",
+      "text": "Practical Example",
+      "id": "practical-example"
+    },
+    {
+      "level": "h3",
+      "text": "Best Practices",
+      "id": "best-practices"
+    }
+  ],
+  "url": "llms-txt#environment-variables",
+  "links": []
+}

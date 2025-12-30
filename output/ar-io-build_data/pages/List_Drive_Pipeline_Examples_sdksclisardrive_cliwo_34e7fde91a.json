@@ -1,0 +1,25 @@
+{
+  "title": "List Drive Pipeline Examples (/sdks/(clis)/ardrive-cli/(working-with-drives)/list-drive-pipeline-examples)",
+  "content": "You can utilize `jq` and the list commands to reshape the commands' output data into useful forms and stats for many use cases. Here are a few examples:",
+  "code_samples": [
+    {
+      "code": "ardrive list-drive -d a44482fd-592e-45fa-a08a-e526c31b87f1 | jq '.[] | select(.entityType == \"file\") | \"https://app.ardrive.io/#/file/\" + .entityId + \"/view\"'",
+      "language": "shell"
+    },
+    {
+      "code": "\"https://app.ardrive.io/#/file/1337babe-f000-dead-beef-ffffffffffff/view\"\n\"https://app.ardrive.io/#/file/cdbc9ddd-1cab-41d9-acbd-fd4328929de3/view\"\n\"https://app.ardrive.io/#/file/f19bc712-b57a-4e0d-8e5c-b7f1786b34a1/view\"\n\"https://app.ardrive.io/#/file/4f8e081b-42f2-442d-be41-57f6f906e1c8/view\"\n\"https://app.ardrive.io/#/file/0e02d254-c853-4ff0-9b6e-c4d23d2a95f5/view\"\n\"https://app.ardrive.io/#/file/c098b869-29d1-4a86-960f-a9e10433f0b0/view\"\n\"https://app.ardrive.io/#/file/4afc8cdf-4d27-408a-bfb9-0a2ec21eebf8/view\"\n\"https://app.ardrive.io/#/file/85fe488d-fcf7-48ca-9df8-2b39958bbf15/view\"\n...",
+      "language": "shell"
+    },
+    {
+      "code": "ardrive list-drive -d 13c3c232-6687-4d11-8ac1-35284102c7db | jq ' map(select(.entityType == \"file\") | .size) | add'",
+      "language": "shell"
+    },
+    {
+      "code": "ardrive list-drive -d 01ea6ba3-9e58-42e7-899d-622fd110211c | jq '[ .[] | select(.entityType == \"file\") ] | length'",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#list-drive-pipeline-examples-(/sdks/(clis)/ardrive-cli/(working-with-drives)/list-drive-pipeline-examples)",
+  "links": []
+}

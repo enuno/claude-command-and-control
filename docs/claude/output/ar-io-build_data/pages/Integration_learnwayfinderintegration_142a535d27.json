@@ -1,0 +1,71 @@
+{
+  "title": "Integration (/learn/wayfinder/integration)",
+  "content": "**Get the Extension**\n\nThe easiest way to use Wayfinder is the [Wayfinder Extension](https://chromewebstore.google.com/detail/ario-wayfinder/hnhmeknhajanolcoihhkkaaimapnmgil?hl=en-US), available in the Chrome Web Store.\n\n### Wayfinder Extension\n\nThe wayfinder-extension is a simple Chrome extension that supports the ar:// routing protocol and allows you to:\n\n- **Navigate ar:// URLs directly** in your browser\n- **Configure routing strategies** - Choose how requests are routed to gateways\n- **Set verification preferences** - Control content verification levels\n- **Monitor gateway performance** - See which gateways are serving your requests\n\nNo coding required - just install the extension and start browsing ar:// URLs!\n\n## Developer Integration Options\n\nFor developers who want to integrate Wayfinder into their applications:\n\nThe [wayfinder-core](/sdks/wayfinder/wayfinder-core) library is the core protocol implementation that accepts various configuration options for setting up Wayfinder. It provides:\n\n- **Gateway selection strategies** - Choose how to route requests\n- **Content verification** - Optionally verify content authenticity\n- **Telemetry collection** - Understand performance vs arweave.net\n- **Custom configurations** - Fine-tune behavior for your use case\n\nWeb developers will likely be interested in [wayfinder-react](/sdks/wayfinder/wayfinder-react), which provides:\n\n- **React Context Provider** - Easy integration with React apps\n- **Custom hooks** - Simplified data fetching and state management\n- **Component library** - Pre-built UI components for common patterns\n- **TypeScript support** - Full type safety out of the box\n\n## Common Integration Pattern: Preferred with Fallback\n\nFor most builds, teams use the \"preferred with fallback\" pattern. This routing strategy prioritizes your preferred gateway but automatically falls back to other gateways in the network if needed:\n\nThis pattern ensures:\n1. **Primary traffic** goes to your preferred gateway (one you run or are delegated to)\n2. **Automatic failover** if your gateway can't serve the data\n3. **Network resilience** by finding another gateway that can serve the content\n\nFor detailed routing strategy options, see the [routing strategies documentation](/sdks/wayfinder/wayfinder-core/preferredwithfallbackroutingstrategy).\n\n## Verification: Optional but Encouraged\n\nWhile verification is optional, it's strongly encouraged when fetching from gateways:\n\nVerification ensures you're receiving authentic content regardless of which gateway serves it.\n\n## Telemetry for Performance Insights\n\nEnable telemetry to understand how Wayfinder performs relative to arweave.net:\n\nThis helps teams make data-driven decisions about gateway selection and optimization.\n\n## React Integration Example\n\nHere's a complete example using wayfinder-react:",
+  "code_samples": [
+    {
+      "code": "const wayfinder = new createWayfinderClient({\n  ario: ARIO.mainnet(),\n  verification: 'hash',\n  routing: 'preferred',\n  preferredGateway: 'arweave.net',\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "const wayfinder = createWayfinderClient({\n  //...other settings,\n  verification: 'hash', // hash based verification\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "const wayfinder = createWayfinderClient({\n  //...other settings,\n  telemetry: {\n      enabled: true,\n      sampleRate: 0.1, // sample 10% of requests\n      apiKey: 'your-api-key', // optional\n      clientName: 'my-app',\n      clientVersion: '1.0.0'\n  }\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "import { ARIO } from '@ar.io/sdk;\n\n// Configure Wayfinder\nconst wayfinderConfig = {\n  gatewaysProvider: new NetworkGatewaysProvider({\n    ario: ARIO.mainnet(),\n  }),\n  routingSettings: {\n    // use the fastest pinging strategy to select the fastest gateway for requests\n    strategy: new FastestPingRoutingStrategy({\n      timeoutMs: 1000,\n    }),\n  }\n  verificationSettings: {\n    enabled: false\n  }\n};\n\n// Wrap your app\nfunction App() {\n  return (\n\n  );\n}\n\n// Use in components\nfunction WayfinderImage({ txId }: { txId: string }) {\n  const { resolvedUrl, isLoading, error } = useWayfinderUrl({ txId });\n\n  if (error) {\n    return Error resolving URL: {error.message};\n  }\n\n  if (isLoading) {\n    return Resolving URL...;\n  }\n\n  return (\n    \n  );\n}",
+      "language": "tsx"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Getting Started",
+      "id": "getting-started"
+    },
+    {
+      "level": "h3",
+      "text": "Wayfinder Extension",
+      "id": "wayfinder-extension"
+    },
+    {
+      "level": "h2",
+      "text": "Developer Integration Options",
+      "id": "developer-integration-options"
+    },
+    {
+      "level": "h3",
+      "text": "Wayfinder Core",
+      "id": "wayfinder-core"
+    },
+    {
+      "level": "h3",
+      "text": "Wayfinder React",
+      "id": "wayfinder-react"
+    },
+    {
+      "level": "h2",
+      "text": "Common Integration Pattern: Preferred with Fallback",
+      "id": "common-integration-pattern:-preferred-with-fallback"
+    },
+    {
+      "level": "h2",
+      "text": "Verification: Optional but Encouraged",
+      "id": "verification:-optional-but-encouraged"
+    },
+    {
+      "level": "h2",
+      "text": "Telemetry for Performance Insights",
+      "id": "telemetry-for-performance-insights"
+    },
+    {
+      "level": "h2",
+      "text": "React Integration Example",
+      "id": "react-integration-example"
+    }
+  ],
+  "url": "llms-txt#integration-(/learn/wayfinder/integration)",
+  "links": []
+}

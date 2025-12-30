@@ -1,0 +1,8 @@
+{
+  "title": "Entity Types (/sdks/ardrive-core-js/(core-concepts)/entity-types)",
+  "content": "ArDrive uses a hierarchical structure:\n- **Drives**: Top-level containers (public or private)\n- **Folders**: Organize files within drives\n- **Files**: Individual files stored on Arweave\n\nEach entity has a unique ID (`DriveID`, `FolderID`, `FileID`) and can be either public (unencrypted) or private (encrypted).",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#entity-types-(/sdks/ardrive-core-js/(core-concepts)/entity-types)",
+  "links": []
+}

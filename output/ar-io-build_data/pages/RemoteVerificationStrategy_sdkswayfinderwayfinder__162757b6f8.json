@@ -1,0 +1,13 @@
+{
+  "title": "RemoteVerificationStrategy (/sdks/wayfinder/wayfinder-core/(verification-strategies)/remoteverificationstrategy)",
+  "content": "This strategy is used to verify data by checking the `x-ar-io-verified` header from the gateway that returned the data. If the header is set to `true`, the data is considered verified and trusted.\n\nThis strategy is only recommended for users fetching data from their own gateways and want to avoid the overhead of the other verification strategies.",
+  "code_samples": [
+    {
+      "code": "const wayfinder = new Wayfinder({\n  verificationSettings: {\n    // no trusted gateways are required for this strategy\n    enabled: true,\n    strategy: new RemoteVerificationStrategy(),\n  },\n});",
+      "language": "javascript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#remoteverificationstrategy-(/sdks/wayfinder/wayfinder-core/(verification-strategies)/remoteverificationstrategy)",
+  "links": []
+}

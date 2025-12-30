@@ -1,0 +1,8 @@
+{
+  "title": "Docker Hub",
+  "content": "To configure a Docker Hub registry, you need to fill the form with the following details:\n\n1. Insert the Registry Name eg. `My Registry`.\n2. Insert the Username eg. `dockerhub_username`.\n3. Insert the Password, you can use your own dockerhub password or generate a token here `https://app.docker.com/settings/personal-access-tokens`\n4. Click on Generate Token.\n5. Insert the Token Description eg. `dockerhub_token`.\n6. In permissions make sure to select `Read` and `Write`.\n7. Click on `Create`.\n8. Copy the `access token` and paste it in Dokploy `Docker Hub` Modal section.\n9. (Optional) If you pretend to use Cluster Feature, make sure to set a `Image Prefix` and `Registry URL`.\n10. Click on `Test` to make sure everything is working.\n11. Click on `Create` to save the registry.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#docker-hub",
+  "links": []
+}

@@ -1,0 +1,39 @@
+{
+  "title": "Watch Paths",
+  "content": "Watch paths are a feature that allows you to monitor specific directories or files for changes and automatically trigger actions when modifications occur.\n\nWatch paths functionality is available for both standalone applications and Docker Compose configurations. This feature helps automate deployments based on file changes in your repository.\n\n## Supported Source Providers\n\nThe following source control providers are supported:\n\n* GitHub\n* GitLab\n* Bitbucket\n* Git (works with Bitbucket, Github, and GitLab repositories)\n\nLet's say you have a project with the following directory structure:\n\nBy default, dokploy accepts an array of paths, allowing you to monitor multiple locations. For example:\n\n* To trigger deployments when any file in the `src/` directory changes, use the pattern: `src/*`\n* To monitor a specific file, simply specify its path: `src/index.js`\n\nWatch Paths works out of the box with zero configuration when using GitHub as your provider. For other providers, you'll need to first set up auto-deploys as explained in:\n\n* [Auto Deploy](/docs/core/auto-deploy)\n* [Bitbucket Integration](/docs/core/bitbucket)\n* [GitLab Integration](/docs/core/gitlab)\n* [GitHub Integration](/docs/core/github)\n* [Gitea Integration](/docs/core/gitea)\n\nNote: When using the Git provider, the functionality will only work with GitHub, GitLab, Bitbucket, or Gitea repositories.\n\n## Pattern Matching Features\n\nWe support a wide range of pattern matching features:\n\n* Multiple glob patterns\n* Wildcards:\n  * `**` (matches any number of directories)\n  * `*.js` (matches all JavaScript files)\n* Negation patterns:\n  * `!a/*.js` (excludes JavaScript files in directory 'a')\n  * `*!(b).js` (matches all JavaScript files except those ending with 'b')\n* Extended glob patterns:\n  * `+(x|y)` (matches 'x' or 'y' one or more times)\n  * `!(a|b)` (matches anything except 'a' or 'b')\n* POSIX character classes:\n  * `[[:alpha:][:digit:]]` (matches any letter or number)\n* Brace expansion:\n  * `foo/{1..5}.md` (matches foo/1.md through foo/5.md)\n  * `bar/{a,b,c}.js` (matches bar/a.js, bar/b.js, bar/c.js)\n* Regex character classes:\n  * `foo-[1-5].js` (matches foo-1.js through foo-5.js)\n* Regex logical \"or\":\n  * `foo/(abc|xyz).js` (matches foo/abc.js or foo/xyz.js)\n\n<userStyle>\n  Normal\n</userStyle>",
+  "code_samples": [
+    {
+      "code": "my-app/\t\n├── src/\t\n│   ├── index.js\t\n├── public/",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Supported Source Providers",
+      "id": "supported-source-providers"
+    },
+    {
+      "level": "h2",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Configuration",
+      "id": "configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Pattern Matching Features",
+      "id": "pattern-matching-features"
+    }
+  ],
+  "url": "llms-txt#watch-paths",
+  "links": []
+}

@@ -1,0 +1,105 @@
+{
+  "title": "Crossmint NFT Minting App (/build/guides/crossmint-nft-minting-app)",
+  "content": "Build a **completely decentralized NFT minting app** that leverages the power of Arweave for permanent storage and Crossmint for simplified NFT creation. Learn how to store NFT content permanently, create and mint NFTs, build a frontend with authentication and payment options, and deploy your application to Arweave.\n\n- How to store NFT content permanently on Arweave\n- How to create and mint NFTs using Crossmint's API\n- How to build a frontend with authentication and payment options\n- How to deploy your application to Arweave\n- How to configure a human-readable ArNS domain\n\n- **Live Demo**: [https://crossmint_zerotoarweave.arweave.net](https://crossmint_zerotoarweave.arweave.net)\n- **GitHub Repository**: [https://github.com/ar-io/crossmint-arweave-example](https://github.com/ar-io/crossmint-arweave-example)\n\n- Node.js environment\n- Arweave wallet with AR tokens\n- Crossmint developer account\n- Basic understanding of React and JavaScript\n\nStore your NFT image permanently on Arweave using [ArDrive.io](http://ArDrive.io):\n\n#### Generate AI Image\n\n**Create an AI-generated image for your NFT:**\n\n1. Visit [ChatGPT](https://chat.openai.com/) or another AI image generation tool\n        2. Use a prompt to generate an interesting image for your NFT\n        3. Download the generated image to your local machine\n        4. Make sure to save it in a common format like PNG or JPG\n\n#### Upload to Arweave\n\n**Store the image permanently on Arweave:**\n\n1. Visit [ArDrive.io](http://ArDrive.io) and log in to your account\n        2. Fund your ArDrive wallet if needed (requires AR tokens)\n        3. Create a new folder for your NFT project\n        4. Drag and drop your AI-generated image into this folder\n        5. Wait for the upload to complete and for the transaction to be processed\n\n#### Get Transaction ID\n\n**Retrieve the Arweave Transaction ID:**\n\n1. Click on the uploaded image in your ArDrive folder\n        2. Look for the \"Transaction ID\" or \"TX ID\" in the file details\n        3. Copy this Transaction ID - it looks like `Abc123XYZ...`\n        4. Save this Transaction ID - you'll need it for creating your NFT metadata\n\n**Important:** This Transaction ID is the permanent reference to your image on the Arweave network.\n\n### Collection and Template Creation\n\nCreate an ERC-1155 collection and template using Crossmint's API:\n\n**Set up your Crossmint developer account:**\n\n1. Visit the [Crossmint Staging Console](https://staging.crossmint.com/console)\n        2. Sign in and accept the dialog to continue\n        3. Note that Crossmint provides two environments:\n           - **Staging**: For development and testing (what we'll use first)\n           - **Production**: For your final, live application\n\n**Get a server-side API key:**\n\n1. After logging in, navigate to the \"Integrate\" tab\n        2. Click on \"API Keys\" at the top of the page\n        3. In the \"Server-side keys\" section, click \"Create new key\"\n        4. Select the following scopes under \"Minting API\":\n           - `collections.create` - Required for creating a new collection\n           - `nfts.create` - Required for minting NFTs\n           - `nfts.read` - Needed to read NFT information\n        5. Create and save this API key securely\n\n#### Create Collection\n\n**Create an ERC-1155 collection:**\n\n**Create an SFT template:**\n\n### Frontend Development\n\nClone and set up the Zero-to-Arweave starter kit:\n\n#### Clone Repository\n\n**Clone the starter kit:**\n\n#### Install Dependencies\n\n**Install required packages:**\n\n#### Configure Environment\n\n**Set up your environment variables:**\n\nCreate a `.env` file in the root directory:\n\n### Authentication Integration\n\nImplement Crossmint's client-side authentication:\n\n### Payment Integration\n\nAdd Crossmint's embedded checkout for NFT purchases:\n\n### Deploy to Arweave\n\nDeploy your completed application to Arweave:\n\n#### Build Application\n\n**Build your React application:**\n\n#### Deploy with ArDrive\n\n**Deploy using ArDrive:**\n\n1. Visit [ArDrive.io](http://ArDrive.io)\n        2. Create a new folder for your application\n        3. Upload the contents of your `dist` folder\n        4. Wait for the upload to complete\n\n**Retrieve the manifest ID:**\n\n1. Click on your uploaded application folder\n        2. Look for the \"Manifest ID\" in the folder details\n        3. Copy this ID - you'll need it for domain configuration\n\n### Domain Configuration\n\nConnect your application to a human-readable domain name using ArNS:\n\n#### Purchase ARNS Name\n\n**Get an ARNS name (if needed):**\n\n1. Visit [arns.app](https://arns.app/)\n        2. Connect your Arweave wallet\n        3. Search for an available name\n        4. Purchase it with $ARIO tokens\n\n**Get your Process ID:**\n\n1. Visit [arns.app](https://arns.app/)\n        2. Connect your Arweave wallet\n        3. Click \"Manage Assets\" in the top-right\n        4. Find your ARNS name and click on the settings icon\n        5. Copy the Process ID displayed\n\n#### Update Configuration\n\n**Update the configuration:**\n\n**Set the base record:**\n\nWhen successful, you'll see:\n\n### Custom NFT Metadata\n\n### Batch Minting NFTs\n\n### Track Sales and Engagement\n\n### Comprehensive Error Handling\n\n## Benefits of This Approach\n\n- **True Permanence**: NFT images are stored permanently on Arweave\n- **Accessibility**: Credit card payments make NFTs accessible to mainstream users\n- **Complete Decentralization**: Both application and assets are stored on decentralized networks\n- **User-Friendly Experience**: Seamless experience for both creators and collectors\n- **No Server Maintenance**: No need to manage servers or renew domains\n\n}\n    arrow\n  >\n    Get started with the complete example project\n\n}\n>\n  Learn more about Crossmint's APIs and features\n\n}\n  >\n    Understand Arweave's file system for advanced storage",
+  "code_samples": [
+    {
+      "code": "const apiKey = \"YOUR_API_KEY\";\n        const env = \"staging\"; // Using staging environment for development\n        const url = `https://${env}.crossmint.com/api/2022-06-09/collections`;\n\n        const options = {\n          method: \"POST\",\n          headers: {\n            \"accept\": \"application/json\",\n            \"content-type\": \"application/json\",\n            \"x-api-key\": apiKey,\n          },\n          body: JSON.stringify({\n            chain: \"ethereum-sepolia\", // Using Ethereum testnet for development\n            fungibility: \"semi-fungible\", // For ERC-1155 tokens\n            metadata: {\n              name: \"lil dumdumz SFT Collection\",\n              imageUrl: \"https://arweave.net/YOUR_ARWEAVE_TX_ID\", // Optional collection image\n              description: \"A collection of semi-fungible tokens with images stored on Arweave\"\n            }\n          }),\n        };\n\n        fetch(url, options)\n          .then((res) => res.json())\n          .then((json) => {\n            console.log(\"Collection created! Collection ID:\", json.id);\n            console.log(\"Save this Collection ID for the next steps\");\n          })\n          .catch((err) => console.error(\"Error:\", err));",
+      "language": "javascript"
+    },
+    {
+      "code": "const apiKey = \"YOUR_API_KEY\";\n        const collectionId = \"YOUR_COLLECTION_ID\";\n        const env = \"staging\";\n        const url = `https://${env}.crossmint.com/apis/2022-06-09/collections/${collectionId}/templates`;\n\n        const options = {\n          method: \"POST\",\n          headers: {\n            \"accept\": \"application/json\",\n            \"content-type\": \"application/json\",\n            \"x-api-key\": apiKey,\n          },\n          body: JSON.stringify({\n            name: \"lil dumdumz SFT\",\n            description: \"A semi-fungible token with image stored on Arweave\",\n            imageUrl: \"https://arweave.net/YOUR_ARWEAVE_TX_ID\",\n            attributes: [\n              {\n                trait_type: \"Rarity\",\n                value: \"Common\"\n              },\n              {\n                trait_type: \"Storage\",\n                value: \"Arweave\"\n              }\n            ]\n          }),\n        };\n\n        fetch(url, options)\n          .then((res) => res.json())\n          .then((json) => {\n            console.log(\"Template created! Template ID:\", json.id);\n            console.log(\"Save this Template ID for minting NFTs\");\n          })\n          .catch((err) => console.error(\"Error:\", err));",
+      "language": "javascript"
+    },
+    {
+      "code": "git clone https://github.com/ar-io/crossmint-arweave-example.git\n        cd crossmint-arweave-example",
+      "language": "bash"
+    },
+    {
+      "code": "npm install\n        # or\n        yarn install",
+      "language": "bash"
+    },
+    {
+      "code": "VITE_CROSSMINT_API_KEY=your_api_key_here\n        VITE_CROSSMINT_ENV=staging\n        VITE_COLLECTION_ID=your_collection_id_here\n        VITE_TEMPLATE_ID=your_template_id_here",
+      "language": "unknown"
+    },
+    {
+      "code": "function App() {\n      const { user, login, logout, isLoading } = CrossmintAuth.useAuth();\n\n      return (\n        \n          {user ? (\n            \n              Welcome, {user.email}!\n              Logout\n            \n          ) : (\n            Login with Crossmint\n          )}\n        \n      );\n    }",
+      "language": "javascript"
+    },
+    {
+      "code": "function NFTMinting() {\n      const handlePaymentSuccess = (result) => {\n        console.log(\"Payment successful:\", result);\n        // Handle successful payment\n      };\n\n      return (\n        \n      );\n    }",
+      "language": "javascript"
+    },
+    {
+      "code": "npm run build\n        # or\n        yarn build",
+      "language": "bash"
+    },
+    {
+      "code": "const ant = ANT.init({\n          signer: new ArweaveSigner(jwk),\n          processId: 'YOUR_PROCESS_ID_HERE' // Replace with your Process ID\n        });\n\n        const result = await ant.setRecord({\n          name: '@',\n          ttlSeconds: 900, // 15 minutes\n          dataLink: 'YOUR_MANIFEST_ID' // Replace with the manifest ID\n        });",
+      "language": "javascript"
+    },
+    {
+      "code": "# Using pnpm\n        pnpm run set-base\n\n        # Using yarn\n        yarn set-base",
+      "language": "bash"
+    },
+    {
+      "code": "✅ Base record update successful!\n        🔗 Your application is now available at: https://YOUR-NAME.ar.io",
+      "language": "unknown"
+    },
+    {
+      "code": "const customMetadata = {\n      name: \"Custom NFT Name\",\n      description: \"A unique NFT with custom attributes\",\n      imageUrl: \"https://arweave.net/YOUR_TX_ID\",\n      attributes: [\n        {\n          trait_type: \"Rarity\",\n          value: \"Legendary\"\n        },\n        {\n          trait_type: \"Power\",\n          value: 95\n        },\n        {\n          trait_type: \"Element\",\n          value: \"Fire\"\n        }\n      ]\n    };",
+      "language": "javascript"
+    },
+    {
+      "code": "const batchMint = async (templateId, quantity) => {\n      const promises = Array(quantity).fill().map(() =>\n        mintNFT(templateId)\n      );\n\n      const results = await Promise.all(promises);\n      return results;\n    };",
+      "language": "javascript"
+    },
+    {
+      "code": "const trackMint = (nftId, userEmail) => {\n      // Send analytics data\n      analytics.track('nft_minted', {\n        nftId,\n        userEmail,\n        timestamp: Date.now()\n      });\n    };",
+      "language": "javascript"
+    },
+    {
+      "code": "const mintWithErrorHandling = async (templateId) => {\n      try {\n        const result = await mintNFT(templateId);\n        return { success: true, data: result };\n      } catch (error) {\n        console.error('Minting failed:', error);\n        return {\n          success: false,\n          error: error.message\n        };\n      }\n    };",
+      "language": "javascript"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "What You'll Learn",
+      "id": "what-you'll-learn"
+    },
+    {
+      "level": "h2",
+      "text": "Example Project",
+      "id": "example-project"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Quick Start",
+      "id": "quick-start"
+    },
+    {
+      "level": "h2",
+      "text": "Advanced Features",
+      "id": "advanced-features"
+    },
+    {
+      "level": "h2",
+      "text": "Benefits of This Approach",
+      "id": "benefits-of-this-approach"
+    },
+    {
+      "level": "h2",
+      "text": "Ready to Build?",
+      "id": "ready-to-build?"
+    }
+  ],
+  "url": "llms-txt#crossmint-nft-minting-app-(/build/guides/crossmint-nft-minting-app)",
+  "links": []
+}

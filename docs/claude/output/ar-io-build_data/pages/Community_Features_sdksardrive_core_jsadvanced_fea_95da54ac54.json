@@ -1,0 +1,13 @@
+{
+  "title": "Community Features (/sdks/ardrive-core-js/(advanced-features)/community-features)",
+  "content": "Send tips to the ArDrive community:",
+  "code_samples": [
+    {
+      "code": "// Send community tip\nawait arDrive.sendCommunityTip({\n  tokenAmount: new Winston(1000000000000), // 1 AR\n  walletAddress,\n  communityWalletAddress\n});",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#community-features-(/sdks/ardrive-core-js/(advanced-features)/community-features)",
+  "links": []
+}

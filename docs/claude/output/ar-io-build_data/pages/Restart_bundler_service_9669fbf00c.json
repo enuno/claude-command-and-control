@@ -1,0 +1,14 @@
+{
+  "title": "Restart bundler service",
+  "content": "docker compose --file docker-compose.bundler.yaml restart\n```\n\nNow that you have a bundler set up to accept data uploads, continue building your gateway infrastructure:\n\n}\n    title=\"Set Up Monitoring\"\n    description=\"Deploy Grafana to visualize your gateway's performance metrics\"\n    href=\"/build/extensions/grafana\"\n  />\n  }\n    title=\"Add ClickHouse\"\n    description=\"Improve query performance with ClickHouse and Parquet integration\"\n    href=\"/build/extensions/clickhouse\"\n  />\n  }\n    title=\"Run Compute Unit\"\n    description=\"Execute AO processes locally for maximum efficiency\"\n    href=\"/build/extensions/compute-unit\"\n  />\n  }\n    title=\"Buy an ArNS Name\"\n    description=\"Get a human-readable name for your gateway and start serving the permanent web\"\n    href=\"/learn/arns/name-registration\"\n  />",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#restart-bundler-service",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Listing Every Entity in a Drive (/sdks/(clis)/ardrive-cli/(working-with-drives)/listing-every-entity-in-a-drive)",
+  "content": "Useful notes on listing the contents of drives:\n\n- Listing a drive is effectively the same as listing its root folder.\n- You can control the tree depth of the data returned.\n- path, txPath, and entityIdPath properties on entities can provide useful handholds for other forms of data navigation",
+  "code_samples": [
+    {
+      "code": "ardrive list-drive -d \"c7f87712-b54e-4491-bc96-1c5fa7b1da50\" -w /path/to/my/wallet.json -P\n\nardrive list-drive -d \"c7f87712-b54e-4491-bc96-1c5fa7b1da50\" -w /path/to/my/wallet.json -P --with-keys\n\nardrive list-drive -d \"c7f87712-b54e-4491-bc96-1c5fa7b1da50\" --max-depth 2",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#listing-every-entity-in-a-drive-(/sdks/(clis)/ardrive-cli/(working-with-drives)/listing-every-entity-in-a-drive)",
+  "links": []
+}

@@ -1,0 +1,87 @@
+{
+  "title": "Tagging (/build/upload/tagging)",
+  "content": "Tags are key-value pairs that provide metadata about your uploaded data on Arweave. They enable discoverability, proper content serving, and integration with various protocols.\n\nEvery upload should include these tags:\n\n- **Content-Type**: Required - tells gateways how to serve your data\n- **App-Name**: Best practice - identifies your application for discoverability\n\n- `image/jpeg`, `image/png` - Images\n- `application/json` - JSON data\n- `text/html` - HTML pages\n- `video/mp4` - Videos\n- `application/pdf` - Documents\n\n### App-Specific Tags\n\n- `App-Name` - Your application identifier (e.g., \"MyApp-v1.0\", \"PhotoGallery-2024\")\n- `Title` - Human-readable title\n- `Description` - Content description\n- `Author` - Content creator\n- `Version` - Application version\n\n- `License` - Universal Data License (UDL) transaction ID\n- `License-Fee` - Fee for UDL licensing\n\n**UDL Integration:** Learn about the [Universal Data\n  License](https://mirror.xyz/0x64eA438bd2784F2C52a9095Ec0F6158f847182d9/AjNBmiD4A4Sw-ouV9YtCO6RCq0uXXcGwVJMB5cdfbhE)\n  for monetizing your data.\n\n## App-Name Best Practices\n\n### Naming Convention\n\nUse descriptive, versioned App-Name values for better organization:\n\n- **Include version**: `MyApp-v1.0`, `PhotoGallery-2024`\n- **Be specific**: `EcommerceStore-v2.1` instead of just `Store`\n- **Use consistent format**: `ProjectName-vMajor.Minor`\n- **Include year for time-based apps**: `YearlyReport-2024`\n\n- **4KB total** for bundled data items (Turbo)\n- **2KB total** for direct L1 uploads\n- **No maximum number of tags** (limited by total size)\n- Tag names are case-sensitive\n- No duplicate tag names allowed\n\n**Important:** Total tag size is limited to 4KB (bundled) or 2KB (L1). For\n  larger metadata, store it in the data payload instead.\n\n## Querying Data by Tags\n\nOnce you've tagged your data, you can use GraphQL to search and filter based on those tags. This enables powerful discovery and retrieval of your stored content.\n\n}\n  >\n    Organize files with manifests for better structure.\n\n}>\n  Secure your sensitive data with encryption.\n\n}\n  >\n    Advanced file organization with ArFS.",
+  "code_samples": [
+    {
+      "code": "const result = await turbo.upload({\n  data: fileData,\n  dataItemOpts: {\n    tags: [\n      { name: \"Content-Type\", value: \"image/jpeg\" },\n      { name: \"App-Name\", value: \"MyApp-v1.0\" },\n      { name: \"Title\", value: \"My Image\" },\n    ],\n  },\n});",
+      "language": "js"
+    },
+    {
+      "code": "const folderResult = await turbo.uploadFolder({\n  folderPath: \"./my-website\",\n  dataItemOpts: {\n    tags: [\n      { name: \"Bundle-Format\", value: \"binary\" },\n      { name: \"Bundle-Version\", value: \"2.0.0\" },\n      { name: \"App-Name\", value: \"MyWebsite-v2.1\" },\n      { name: \"Version\", value: \"2.1.0\" },\n    ],\n  },\n});",
+      "language": "js"
+    },
+    {
+      "code": "const licensedTags = [\n  { name: \"Content-Type\", value: \"image/jpeg\" },\n  { name: \"App-Name\", value: \"ArtGallery-v3.2\" },\n  { name: \"Version\", value: \"3.2.1\" },\n  { name: \"License\", value: \"udl-tx-id-here\" },\n  { name: \"License-Fee\", value: \"1000000\" }, // Fee in Winston\n];",
+      "language": "js"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Essential Tags",
+      "id": "essential-tags"
+    },
+    {
+      "level": "h2",
+      "text": "Common Tag Types",
+      "id": "common-tag-types"
+    },
+    {
+      "level": "h3",
+      "text": "Content Types",
+      "id": "content-types"
+    },
+    {
+      "level": "h3",
+      "text": "App-Specific Tags",
+      "id": "app-specific-tags"
+    },
+    {
+      "level": "h3",
+      "text": "Protocol Tags",
+      "id": "protocol-tags"
+    },
+    {
+      "level": "h2",
+      "text": "Advanced Tagging",
+      "id": "advanced-tagging"
+    },
+    {
+      "level": "h3",
+      "text": "Folder Uploads",
+      "id": "folder-uploads"
+    },
+    {
+      "level": "h3",
+      "text": "Licensed Content",
+      "id": "licensed-content"
+    },
+    {
+      "level": "h2",
+      "text": "App-Name Best Practices",
+      "id": "app-name-best-practices"
+    },
+    {
+      "level": "h3",
+      "text": "Naming Convention",
+      "id": "naming-convention"
+    },
+    {
+      "level": "h2",
+      "text": "Tag Limitations",
+      "id": "tag-limitations"
+    },
+    {
+      "level": "h2",
+      "text": "Querying Data by Tags",
+      "id": "querying-data-by-tags"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#tagging-(/build/upload/tagging)",
+  "links": []
+}

@@ -1,0 +1,39 @@
+{
+  "title": "Cloudflare",
+  "content": "import { Callout } from 'fumadocs-ui/components/callout';\n\nCloudflare has multiple SSL's Modes:\n\n1. **Strict (SSL-Only Origin Pull)**: Enforce encryption between Cloudflare and your origin. Use this mode to guarantee connections to your origin will always be encrypted, regardless of your visitor’s request.\n2. **Full (Strict)**: Enable encryption end-to-end and enforce validation on origin certificates. Use Cloudflare’s Origin CA to generate certificates for your origin.\n3. **Full**: Enable encryption end-to-end. Use this mode when your origin server supports SSL certification but does not use a valid, publicly trusted certificate.\n4. **Flexible**: Enable encryption only between your visitors and Cloudflare. This will avoid browser security warnings, but all connections between Cloudflare and your origin are made through HTTP.\n5. **Off (not secure)**: No encryption applied. Turning off SSL disables HTTPS and causes browsers to show a warning that your website is not secure.\n\nWe will cover two of SSL modes in this guide:\n\n* **Full (Strict)**\n* **Flexible**\n\nTo switch between modes, follow these steps:\n\n1. Go to cloudflare dashboard and then click on `Account Home` -> Select the Domain you want to change.\n2. On the left side, click `SSL/TLS`.\n3. Click on `Overview`.\n4. Click on Configure SSL/TLS Encryption.\n5. Select the desired mode Full (Strict) or Flexible.\n6. Click `Save`.\n\n## Assign a Domain Full (Strict)\n\n<Callout type=\"warn\">\n  Follow the steps in the same order to prevent any issues.\n</Callout>\n\nYou can create a certificate for your origin server using two methods:\n\n* Using Let's Encrypt to generate a certificate for your origin server.\n* Using Cloudflare's Origin CA to generate a certificate for your origin server.\n\nWe assume that you have enabled the `Full (Strict)` mode in the previous step, is super important to follow the steps in the same order to prevent any issues.\n\n### Using Let's Encrypt\n\n1. Go to cloudflare dashboard and then click on `Account Home` -> Select the Domain.\n2. On the left side, click `DNS`.\n3. Click on `Records`.\n4. Click on `Add Record`.\n5. Select `A` record type.\n6. Enter the `Host` name, eg. `api` so it will be `api.dokploy.com`.\n7. Enter the `IPv4 Address` from your server where the application is hosted eg. `1.2.3.4`.\n8. Click `Save`.\n9. Go to dokploy panel and now you can assign either for `Applications` or `Docker Compose`.\n10. Go to `Domains` section.\n11. Click `Create Domain`.\n12. In the `Host` field, enter the domain name eg. `api.dokploy.com`.\n13. In the `Path` field, enter the path eg. `/`.\n14. In the `Container Port` field, enter the port where your application is running eg. `3000`.\n15. In the `HTTPS` field enable `ON`.\n16. In the `Certificate` field select `Let's Encrypt`.\n17. Click `Create`.\n18. A domain will be automatically assigned to your application.\n19. Wait a few seconds and refresh the application.\n20. You should see the application running on the domain you just created.\n\n### Using Cloudflare's Origin CA\n\n1. Go to cloudflare dashboard and then click on `Account Home` -> Select the Domain.\n2. On the left side, click `SSL/TLS`.\n3. Click on `Origin Server`.\n4. Click on `Create Certificate`.\n5. Select `Generate private key and CSR with Cloudflare`.\n6. Choose the list of hostnames you want the certificate to cover eg. `api.dokploy.com`.\n7. Choose the validity period eg. `15 years`.\n8. Click `Create`.\n9. Using the PEM format, copy the `Origin Certificate` and `Private Key` in the respective fields in the dokploy new certificate panel (Certificates > Add Certificate).\n10. Go to `Domains` section in your application.\n11. Click `Create Domain`.\n12. In the `Host` field, enter the domain name eg. `api.dokploy.com`. (Make sure that the domain is already pointing to your server IP in Cloudflare DNS settings and the **hostname matches the one in the certificate**).\n13. In the `Path` field, enter the path eg. `/`.\n14. In the `Container Port` field, enter the port where your application is running eg. `3000`.\n15. In the `HTTPS` field enable `ON`.\n16. In the `Certificate` field select `None`.\n17. Click `Create`.\n\nUsing Cloudflare's Origin CA, you are sure that the certificate will be valid for the next 15 years, or the duration you selected, and you don't have to worry about failed renewals.\n\n<Callout type=\"info\">\n  You can also create a certificate for wildcards domains eg. `*.dokploy.com` and use it for multiple subdomains.\n</Callout>\n\n<Callout type=\"warn\">\n  **Important**: With a free Cloudflare account, this methods work only for the main domain and subdomains, not for sub-subdomains. Eg. `api.dokploy.com` works but `staging.api.dokploy.com` does not work.\n</Callout>\n\n## Assign a Domain Flexible\n\nWe assume that you have enabled the `Flexible` mode in the previous step, is super important to follow the steps in the same order to prevent any issues.\n\n1. Go to cloudflare dashboard and then click on `Account Home` -> Select the Domain.\n2. On the left side, click `DNS`.\n3. Click on `Records`.\n4. Click on `Add Record`.\n5. Select `A` record type.\n6. Enter the `Host` name, eg. `api` so it will be `api.dokploy.com`.\n7. Enter the `IPv4 Address` from your server where the application is hosted eg. `1.2.3.4`.\n8. Click `Save`.\n9. Go to dokploy panel and now you can assign either for `Applications` or `Docker Compose`.\n10. Go to `Domains` section.\n11. Click `Create Domain`.\n12. In the `Host` field, enter the domain name eg. `api.dokploy.com`.\n13. In the `Path` field, enter the path eg. `/`.\n14. In the `Container Port` field, enter the port where your application is running eg. `3000`.\n15. In the `HTTPS` field enable `OFF`.\n16. In the `Certificate` field select `None`.\n17. Click `Create`.\n18. A domain will be automatically assigned to your application.\n19. Wait a few seconds and refresh the application.\n20. You should see the application running on the domain you just created.\n\n### Important Clarification on Container Ports\n\nThe \"Container Port\" specified in the domain settings is exclusively for routing traffic to the correct application container through Traefik, and does not expose the port directly to the internet. This is fundamentally different from the port settings in the \"Advanced -> Ports\" section, which are used to directly expose application ports. The container port in the domain settings ensures that Traefik can internally direct traffic to the specified port within the container based on the domain configuration.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Switch Mode",
+      "id": "switch-mode"
+    },
+    {
+      "level": "h2",
+      "text": "Assign a Domain Full (Strict)",
+      "id": "assign-a-domain-full-(strict)"
+    },
+    {
+      "level": "h3",
+      "text": "Using Let's Encrypt",
+      "id": "using-let's-encrypt"
+    },
+    {
+      "level": "h3",
+      "text": "Using Cloudflare's Origin CA",
+      "id": "using-cloudflare's-origin-ca"
+    },
+    {
+      "level": "h2",
+      "text": "Assign a Domain Flexible",
+      "id": "assign-a-domain-flexible"
+    },
+    {
+      "level": "h3",
+      "text": "Important Clarification on Container Ports",
+      "id": "important-clarification-on-container-ports"
+    }
+  ],
+  "url": "llms-txt#cloudflare",
+  "links": []
+}

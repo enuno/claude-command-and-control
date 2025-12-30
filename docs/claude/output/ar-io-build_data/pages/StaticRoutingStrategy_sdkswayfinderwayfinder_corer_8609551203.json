@@ -1,0 +1,13 @@
+{
+  "title": "StaticRoutingStrategy (/sdks/wayfinder/wayfinder-core/(routing-strategies)/staticroutingstrategy)",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "const routingStrategy = new StaticRoutingStrategy({\n  gateway: 'https://arweave.net',\n});\n\nconst gateway = await routingStrategy.selectGateway(); // always returns the same gateway",
+      "language": "javascript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#staticroutingstrategy-(/sdks/wayfinder/wayfinder-core/(routing-strategies)/staticroutingstrategy)",
+  "links": []
+}

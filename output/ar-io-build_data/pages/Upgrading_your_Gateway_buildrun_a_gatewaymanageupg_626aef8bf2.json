@@ -1,0 +1,169 @@
+{
+  "title": "Upgrading your Gateway (/build/run-a-gateway/manage/upgrading-a-gateway)",
+  "content": "To ensure the optimal performance and security of your AR.IO Gateway, it's essential to regularly upgrade to the latest version. Notably, indexed data resides separate from Docker. As a result, neither upgrading the Gateway nor pruning Docker will erase your data or progress. Here's how you can perform the upgrade:\n\n- Your Gateway should have been cloned using git. If you haven't, follow the [installation instructions](/build/run-a-gateway/join-the-network).\n\n## Checking your Release Number\n\nEffective with release 3, you can view the currently implemented release on any gateway by visiting `https:///ar-io/info` in a browser. Be sure to replace `` with the domain of the gateway you are checking.\n\nIf the release number displayed includes `-pre` it means that your gateway is using the `develop` branch of the github repo for the gateway code. Follow steps in our [troubleshooting guide](/build/run-a-gateway/manage/troubleshooting) to switch over to the more stable `main` branch.\n\nAnnouncements will be made in our [discord server](https://discord.com/invite/HGG52EtTc2) showing each new release.\n\n### Pull Latest Changes\n\nNavigate to your cloned repository directory and execute:\n\nStart your gateway with the new version:\n\nEffective with Release #3, it is no longer required to include the `--build`\n  flag when starting your gateway. Docker will automatically build using the\n  image specified in the `docker-compose.yaml` file.\n\n## Detailed Upgrade Process\n\n### Full Upgrade Process\n\n### Pull Latest Changes\n\nNavigate to your cloned repository directory and execute:\n\n### Check for New Environment Variables\n\nRead the update release change logs and community announcements to see if the new version includes any new environmental variables that you should set before restarting your gateway.\n\n### Restart the Gateway\n\nStart your gateway with the new version:\n\nEffective with Release #3, it is no longer required to include the `--build`\n  flag when starting your gateway. Docker will automatically build using the\n  image specified in the `docker-compose.yaml` file.\n\n### Docker Pruning (Optional)\n\nIt's a good practice to clean up unused Docker resources after shutting down your gateway.\n\nThis will erase all inactive docker containers on your machine. If you use\n  docker for anything beyond running a gateway be extremely careful using this\n  command.\n\n### Shut Down Gateway\n\nFirst, stop your gateway:\n\n### Prune Docker System\n\nClean up unused Docker resources:\n\n### Checking for New Environment Variables\n\nNew gateway releases may introduce new environment variables that you need to configure.\n\n### Review Release Notes\n\nCheck the release notes and community announcements for any new environment variables:\n\n- Review the [GitHub releases](https://github.com/ar-io/ar-io-node/releases)\n- Check the [AR.IO Discord](https://discord.com/invite/HGG52EtTc2) for announcements\n- Look for changes in the `.env.example` file\n\n### Update Your .env File\n\nAdd any new environment variables to your `.env` file:",
+  "code_samples": [
+    {
+      "code": "git pull",
+      "language": "bash"
+    },
+    {
+      "code": "sudo docker compose down -v",
+      "language": "bash"
+    },
+    {
+      "code": "docker compose down -v",
+      "language": "bash"
+    },
+    {
+      "code": "sudo docker compose up -d",
+      "language": "bash"
+    },
+    {
+      "code": "docker compose up -d",
+      "language": "bash"
+    },
+    {
+      "code": "git pull",
+      "language": "bash"
+    },
+    {
+      "code": "sudo docker compose down -v",
+      "language": "bash"
+    },
+    {
+      "code": "docker compose down -v",
+      "language": "bash"
+    },
+    {
+      "code": "sudo docker compose up -d",
+      "language": "bash"
+    },
+    {
+      "code": "docker compose up -d",
+      "language": "bash"
+    },
+    {
+      "code": "sudo docker compose down -v",
+      "language": "bash"
+    },
+    {
+      "code": "docker compose down -v",
+      "language": "bash"
+    },
+    {
+      "code": "sudo docker system prune",
+      "language": "bash"
+    },
+    {
+      "code": "docker system prune",
+      "language": "bash"
+    },
+    {
+      "code": "sudo docker compose up -d",
+      "language": "bash"
+    },
+    {
+      "code": "docker compose up -d",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Checking your Release Number",
+      "id": "checking-your-release-number"
+    },
+    {
+      "level": "h2",
+      "text": "Quick Start",
+      "id": "quick-start"
+    },
+    {
+      "level": "h3",
+      "text": "Pull Latest Changes",
+      "id": "pull-latest-changes"
+    },
+    {
+      "level": "h3",
+      "text": "Shut Down Docker",
+      "id": "shut-down-docker"
+    },
+    {
+      "level": "h3",
+      "text": "Restart Gateway",
+      "id": "restart-gateway"
+    },
+    {
+      "level": "h2",
+      "text": "Detailed Upgrade Process",
+      "id": "detailed-upgrade-process"
+    },
+    {
+      "level": "h3",
+      "text": "Full Upgrade Process",
+      "id": "full-upgrade-process"
+    },
+    {
+      "level": "h3",
+      "text": "Pull Latest Changes",
+      "id": "pull-latest-changes"
+    },
+    {
+      "level": "h3",
+      "text": "Shut Down Docker",
+      "id": "shut-down-docker"
+    },
+    {
+      "level": "h3",
+      "text": "Check for New Environment Variables",
+      "id": "check-for-new-environment-variables"
+    },
+    {
+      "level": "h3",
+      "text": "Restart the Gateway",
+      "id": "restart-the-gateway"
+    },
+    {
+      "level": "h3",
+      "text": "Docker Pruning (Optional)",
+      "id": "docker-pruning-(optional)"
+    },
+    {
+      "level": "h3",
+      "text": "Shut Down Gateway",
+      "id": "shut-down-gateway"
+    },
+    {
+      "level": "h3",
+      "text": "Prune Docker System",
+      "id": "prune-docker-system"
+    },
+    {
+      "level": "h3",
+      "text": "Restart Gateway",
+      "id": "restart-gateway"
+    },
+    {
+      "level": "h3",
+      "text": "Checking for New Environment Variables",
+      "id": "checking-for-new-environment-variables"
+    },
+    {
+      "level": "h3",
+      "text": "Review Release Notes",
+      "id": "review-release-notes"
+    },
+    {
+      "level": "h3",
+      "text": "Update Your .env File",
+      "id": "update-your-.env-file"
+    }
+  ],
+  "url": "llms-txt#upgrading-your-gateway-(/build/run-a-gateway/manage/upgrading-a-gateway)",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "ClickHouse configuration",
+  "content": "CLICKHOUSE_URL=http://clickhouse:8123\nCLICKHOUSE_USER=default\nCLICKHOUSE_PASSWORD=your-password",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#clickhouse-configuration",
+  "links": []
+}

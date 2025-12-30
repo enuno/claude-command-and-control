@@ -1,0 +1,44 @@
+{
+  "title": "Arweave Name Tokens (ANTs) (/learn/arns/ants)",
+  "content": "To establish ownership of a record in the ArNS Registry, each record contains both a friendly name and a reference to an Arweave Name Token, ANT. Name Tokens are unique AO Computer based tokens/processes that give their owners the ability to update the Arweave Transaction IDs that their associated friendly names point to.\n\nThe ANT smart contract process is a standardized contract that implements the specific Arweave Name Process specification required by AR.IO gateways who resolve ArNS names and their Arweave Transaction IDs. It also contains other basic functionality to establish ownership and the ability to transfer ownership and update the Arweave Transaction ID.\n\nName Tokens have an owner, who can transfer the token and control its modifiable settings. These settings include modifying the address resolution time to live (ttl) for each name contained in the ANT, and other settings like the ANT Name, Ticker, and an ANT Controller.\n\n## Ownership and Control\n\nThe controller can only manage the ANT and set and update records, name, and the ticker, but cannot transfer the ANT. Note that ANTs are initially created in accordance with network standards by an end user who then has the ability to transfer its ownership or assign a controller as they see fit.\n\nOwners of names should ensure their ANT supports evolve ability if future modifications are desired. Loss of a private key for a permanently purchased name can result in the name being \"bricked\".\n\n### Under_name Ownership\n\nUndernames can have an `owner` set on them. This owner is empowered to set that undername as their primary name, can remove that undername as their primary name, and has full control over that Undername's metadata, such as:\n\n- Transaction Id - the data the record resolves to.\n- TTL Seconds - the Time To Live in seconds the data is cached for by clients.\n- Owner - the owner of the record.\n- Description - the description of the record.\n- Display Name - the display name for the owner of the record.\n- Keywords - the keywords for the record.\n- Logo - the logo of the record.\n\nThey do *NOT* have control over the `priority` of the undername, which is restricted to the ANT Controllers and Owner.\n\nThe table below indicates some of the possible interactions with the ArNS registry, corresponding ANTs, and who can perform them:\n\n| Type                                    | ANT Owner | ANT Controller | Undername Owner | Any ARIO Token Holder |\n| ----------------------------------------- | ----------- | ---------------- | ----------------- | ----------------------- |\n| Transfer ownership                      | ✔        |                |                 |                       |\n| Add / remove controllers                | ✔        |                |                 |                       |\n| Approve/Remove Primary name             | ✔        |                | ✔              |                       |\n| Reassign name to new ANT process        | ✔        |                |                 |                       |\n| Return a permanent name                 | ✔        |                |                 |                       |\n| Set records (pointers, record metadata) | ✔        | ✔             | ✔              |                       |\n| Update records, name, ticker            | ✔        | ✔             |                 |                       |\n| Update descriptions and keywords        | ✔        | ✔             |                 |                       |\n| Create and assign undernames            | ✔        | ✔             |                 |                       |\n| Extend / renew lease                    | ✔        | ✔             | ✔              | ✔                    |\n| Increase undernames                     | ✔        | ✔             | ✔              | ✔                    |\n| Convert lease to permanent              | ✔        | ✔             | ✔              | ✔                    |\n\nANT owners and controllers can configure multiple subdomains for their registered ArNS name known as \"under_names\" or more easily written \"undernames\". These undernames are assigned individually at the time of registration or can be added on to any registered name at any time.\n\nUnder*names use an underscore \"*\" in place of a more typically used dot \".\" to separate the subdomain from the main ArNS domain.\n\nSecondary markets could be created by ecosystem partners that facilitate the trading of Name Tokens. Additionally, tertiary markets could be created that support the leasing of these friendly names to other users. Such markets, if any, would be created by third parties unrelated to and outside of the scope of this paper or control of the Foundation.\n\nReady to understand how pricing works? Learn about the [Pricing Model](/learn/arns/pricing-model) to see how costs are calculated dynamically, or go back to [Name Registration](/learn/arns/name-registration) to review the registration process.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "What is an ANT?",
+      "id": "what-is-an-ant?"
+    },
+    {
+      "level": "h2",
+      "text": "Ownership and Control",
+      "id": "ownership-and-control"
+    },
+    {
+      "level": "h3",
+      "text": "Under_name Ownership",
+      "id": "under_name-ownership"
+    },
+    {
+      "level": "h2",
+      "text": "ANT Interactions",
+      "id": "ant-interactions"
+    },
+    {
+      "level": "h2",
+      "text": "Under_names",
+      "id": "under_names"
+    },
+    {
+      "level": "h2",
+      "text": "Secondary Markets",
+      "id": "secondary-markets"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#arweave-name-tokens-(ants)-(/learn/arns/ants)",
+  "links": []
+}

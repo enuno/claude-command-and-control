@@ -1,0 +1,43 @@
+{
+  "title": "Importing SQLite Database Snapshots (/build/run-a-gateway/manage/index-snapshots)",
+  "content": "One of the challenges of running an AR.IO Gateway is the initial synchronization time as your gateway builds its local index of the Arweave network. This process can take days or even weeks, depending on your hardware and the amount of data you want to index. To accelerate this process, you can import a pre-synchronized SQLite database snapshot that contains transaction and data item records already indexed.\n\nThis guide will walk you through the process of importing a database snapshot into your AR.IO Gateway.\n\nThe below instructions are designed to be used in a linux environment. Windows and MacOS users must modify the instructions to use the appropriate package manager/ command syntax for their platform.\n\nUnless otherwise specified, all commands should be run from the root directory of the gateway.\n\n### Download Database Snapshot\n\nDownload the latest database snapshot using BitTorrent:\n\nThis downloads a 42.8GB snapshot current to April 23, 2025.\n\n### Extract the Snapshot\n\nExtract the downloaded tarball:\n\nThis creates a directory with the extracted database files.\n\n### Import the Snapshot\n\nReplace your existing database with the snapshot:",
+  "code_samples": [
+    {
+      "code": "transmission-cli \"magnet:?xt=urn:btih:62ca6e05248e6df59fac9e38252e9c71951294ed&dn=2025-04-23-sqlite.tar.gz&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.bt4g.com%3A443%2Fannounce\"",
+      "language": "bash"
+    },
+    {
+      "code": "tar -xzf 2025-04-23-sqlite.tar.gz",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Quick Start",
+      "id": "quick-start"
+    },
+    {
+      "level": "h3",
+      "text": "Download Database Snapshot",
+      "id": "download-database-snapshot"
+    },
+    {
+      "level": "h3",
+      "text": "Extract the Snapshot",
+      "id": "extract-the-snapshot"
+    },
+    {
+      "level": "h3",
+      "text": "Import the Snapshot",
+      "id": "import-the-snapshot"
+    }
+  ],
+  "url": "llms-txt#importing-sqlite-database-snapshots-(/build/run-a-gateway/manage/index-snapshots)",
+  "links": []
+}

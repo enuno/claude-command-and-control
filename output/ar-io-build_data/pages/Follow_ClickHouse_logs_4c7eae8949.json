@@ -1,0 +1,8 @@
+{
+  "title": "Follow ClickHouse logs",
+  "content": "docker compose --profile clickhouse logs clickhouse -f -n 10",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#follow-clickhouse-logs",
+  "links": []
+}

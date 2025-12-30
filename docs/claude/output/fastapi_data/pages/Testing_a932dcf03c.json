@@ -1,0 +1,239 @@
+{
+  "url": "https://fastapi.tiangolo.com/tutorial/testing/",
+  "title": "Testing¶",
+  "content": "Thanks to Starlette, testing FastAPI applications is easy and enjoyable.\n\nIt is based on HTTPX, which in turn is designed based on Requests, so it's very familiar and intuitive.\n\nWith it, you can use pytest directly with FastAPI.\n\nTo use TestClient, first install httpx.\n\nMake sure you create a virtual environment, activate it, and then install it, for example:\n\nCreate a TestClient by passing your FastAPI application to it.\n\nCreate functions with a name that starts with test_ (this is standard pytest conventions).\n\nUse the TestClient object the same way as you do with httpx.\n\nWrite simple assert statements with the standard Python expressions that you need to check (again, standard pytest).\n\nNotice that the testing functions are normal def, not async def.\n\nAnd the calls to the client are also normal calls, not using await.\n\nThis allows you to use pytest directly without complications.\n\nYou could also use from starlette.testclient import TestClient.\n\nFastAPI provides the same starlette.testclient as fastapi.testclient just as a convenience for you, the developer. But it comes directly from Starlette.\n\nIf you want to call async functions in your tests apart from sending requests to your FastAPI application (e.g. asynchronous database functions), have a look at the Async Tests in the advanced tutorial.\n\nIn a real application, you probably would have your tests in a different file.\n\nAnd your FastAPI application might also be composed of several files/modules, etc.\n\nLet's say you have a file structure as described in Bigger Applications:\n\nIn the file main.py you have your FastAPI app:\n\nThen you could have a file test_main.py with your tests. It could live on the same Python package (the same directory with a __init__.py file):\n\nBecause this file is in the same package, you can use relative imports to import the object app from the main module (main.py):\n\n...and have the code for the tests just like before.\n\nNow let's extend this example and add more details to see how to test different parts.\n\nLet's continue with the same file structure as before:\n\nLet's say that now the file main.py with your FastAPI app has some other path operations.\n\nIt has a GET operation that could return an error.\n\nIt has a POST operation that could return several errors.\n\nBoth path operations require an X-Token header.\n\nPrefer to use the Annotated version if possible.\n\nPrefer to use the Annotated version if possible.\n\nYou could then update test_main.py with the extended tests:\n\nPrefer to use the Annotated version if possible.\n\nPrefer to use the Annotated version if possible.\n\nWhenever you need the client to pass information in the request and you don't know how to, you can search (Google) how to do it in httpx, or even how to do it with requests, as HTTPX's design is based on Requests' design.\n\nThen you just do the same in your tests.\n\nFor more information about how to pass data to the backend (using httpx or the TestClient) check the HTTPX documentation.\n\nNote that the TestClient receives data that can be converted to JSON, not Pydantic models.\n\nIf you have a Pydantic model in your test and you want to send its data to the application during testing, you can use the jsonable_encoder described in JSON Compatible Encoder.\n\nAfter that, you just need to install pytest.\n\nMake sure you create a virtual environment, activate it, and then install it, for example:\n\nIt will detect the files and tests automatically, execute them, and report the results back to you.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Testing¶",
+      "id": "testing"
+    },
+    {
+      "level": "h2",
+      "text": "Using TestClient¶",
+      "id": "using-testclient"
+    },
+    {
+      "level": "h2",
+      "text": "Separating tests¶",
+      "id": "separating-tests"
+    },
+    {
+      "level": "h3",
+      "text": "FastAPI app file¶",
+      "id": "fastapi-app-file"
+    },
+    {
+      "level": "h3",
+      "text": "Testing file¶",
+      "id": "testing-file"
+    },
+    {
+      "level": "h2",
+      "text": "Testing: extended example¶",
+      "id": "testing-extended-example"
+    },
+    {
+      "level": "h3",
+      "text": "Extended FastAPI app file¶",
+      "id": "extended-fastapi-app-file"
+    },
+    {
+      "level": "h3",
+      "text": "Extended testing file¶",
+      "id": "extended-testing-file"
+    },
+    {
+      "level": "h2",
+      "text": "Run it¶",
+      "id": "run-it"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ pip install httpx",
+      "language": "unknown"
+    },
+    {
+      "code": "from fastapi import FastAPI\nfrom fastapi.testclient import TestClient\n\napp = FastAPI()\n\n\n@app.get(\"/\")\nasync def read_main():\n    return {\"msg\": \"Hello World\"}\n\n\nclient = TestClient(app)\n\n\ndef test_read_main():\n    response = client.get(\"/\")\n    assert response.status_code == 200\n    assert response.json() == {\"msg\": \"Hello World\"}",
+      "language": "python"
+    },
+    {
+      "code": ".\n├── app\n│   ├── __init__.py\n│   └── main.py",
+      "language": "unknown"
+    },
+    {
+      "code": "from fastapi import FastAPI\n\napp = FastAPI()\n\n\n@app.get(\"/\")\nasync def read_main():\n    return {\"msg\": \"Hello World\"}",
+      "language": "python"
+    },
+    {
+      "code": ".\n├── app\n│   ├── __init__.py\n│   ├── main.py\n│   └── test_main.py",
+      "language": "unknown"
+    },
+    {
+      "code": "from fastapi.testclient import TestClient\n\nfrom .main import app\n\nclient = TestClient(app)\n\n\ndef test_read_main():\n    response = client.get(\"/\")\n    assert response.status_code == 200\n    assert response.json() == {\"msg\": \"Hello World\"}",
+      "language": "python"
+    },
+    {
+      "code": ".\n├── app\n│   ├── __init__.py\n│   ├── main.py\n│   └── test_main.py",
+      "language": "unknown"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import FastAPI, Header, HTTPException\nfrom pydantic import BaseModel\n\nfake_secret_token = \"coneofsilence\"\n\nfake_db = {\n    \"foo\": {\"id\": \"foo\", \"title\": \"Foo\", \"description\": \"There goes my hero\"},\n    \"bar\": {\"id\": \"bar\", \"title\": \"Bar\", \"description\": \"The bartenders\"},\n}\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    id: str\n    title: str\n    description: str | None = None\n\n\n@app.get(\"/items/{item_id}\", response_model=Item)\nasync def read_main(item_id: str, x_token: Annotated[str, Header()]):\n    if x_token != fake_secret_token:\n        raise HTTPException(status_code=400, detail=\"Invalid X-Token header\")\n    if item_id not in fake_db:\n        raise HTTPException(status_code=404, detail=\"Item not found\")\n    return fake_db[item_id]\n\n\n@app.post(\"/items/\", response_model=Item)\nasync def create_item(item: Item, x_token: Annotated[str, Header()]):\n    if x_token != fake_secret_token:\n        raise HTTPException(status_code=400, detail=\"Invalid X-Token header\")\n    if item.id in fake_db:\n        raise HTTPException(status_code=409, detail=\"Item already exists\")\n    fake_db[item.id] = item\n    return item",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated, Union\n\nfrom fastapi import FastAPI, Header, HTTPException\nfrom pydantic import BaseModel\n\nfake_secret_token = \"coneofsilence\"\n\nfake_db = {\n    \"foo\": {\"id\": \"foo\", \"title\": \"Foo\", \"description\": \"There goes my hero\"},\n    \"bar\": {\"id\": \"bar\", \"title\": \"Bar\", \"description\": \"The bartenders\"},\n}\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    id: str\n    title: str\n    description: Union[str, None] = None\n\n\n@app.get(\"/items/{item_id}\", response_model=Item)\nasync def read_main(item_id: str, x_token: Annotated[str, Header()]):\n    if x_token != fake_secret_token:\n        raise HTTPException(status_code=400, detail=\"Invalid X-Token header\")\n    if item_id not in fake_db:\n        raise HTTPException(status_code=404, detail=\"Item not found\")\n    return fake_db[item_id]\n\n\n@app.post(\"/items/\", response_model=Item)\nasync def create_item(item: Item, x_token: Annotated[str, Header()]):\n    if x_token != fake_secret_token:\n        raise HTTPException(status_code=400, detail=\"Invalid X-Token header\")\n    if item.id in fake_db:\n        raise HTTPException(status_code=409, detail=\"Item already exists\")\n    fake_db[item.id] = item\n    return item",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI, Header, HTTPException\nfrom pydantic import BaseModel\n\nfake_secret_token = \"coneofsilence\"\n\nfake_db = {\n    \"foo\": {\"id\": \"foo\", \"title\": \"Foo\", \"description\": \"There goes my hero\"},\n    \"bar\": {\"id\": \"bar\", \"title\": \"Bar\", \"description\": \"The bartenders\"},\n}\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    id: str\n    title: str\n    description: str | None = None\n\n\n@app.get(\"/items/{item_id}\", response_model=Item)\nasync def read_main(item_id: str, x_token: str = Header()):\n    if x_token != fake_secret_token:\n        raise HTTPException(status_code=400, detail=\"Invalid X-Token header\")\n    if item_id not in fake_db:\n        raise HTTPException(status_code=404, detail=\"Item not found\")\n    return fake_db[item_id]\n\n\n@app.post(\"/items/\", response_model=Item)\nasync def create_item(item: Item, x_token: str = Header()):\n    if x_token != fake_secret_token:\n        raise HTTPException(status_code=400, detail=\"Invalid X-Token header\")\n    if item.id in fake_db:\n        raise HTTPException(status_code=409, detail=\"Item already exists\")\n    fake_db[item.id] = item\n    return item",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import FastAPI, Header, HTTPException\nfrom pydantic import BaseModel\n\nfake_secret_token = \"coneofsilence\"\n\nfake_db = {\n    \"foo\": {\"id\": \"foo\", \"title\": \"Foo\", \"description\": \"There goes my hero\"},\n    \"bar\": {\"id\": \"bar\", \"title\": \"Bar\", \"description\": \"The bartenders\"},\n}\n\napp = FastAPI()\n\n\nclass Item(BaseModel):\n    id: str\n    title: str\n    description: Union[str, None] = None\n\n\n@app.get(\"/items/{item_id}\", response_model=Item)\nasync def read_main(item_id: str, x_token: str = Header()):\n    if x_token != fake_secret_token:\n        raise HTTPException(status_code=400, detail=\"Invalid X-Token header\")\n    if item_id not in fake_db:\n        raise HTTPException(status_code=404, detail=\"Item not found\")\n    return fake_db[item_id]\n\n\n@app.post(\"/items/\", response_model=Item)\nasync def create_item(item: Item, x_token: str = Header()):\n    if x_token != fake_secret_token:\n        raise HTTPException(status_code=400, detail=\"Invalid X-Token header\")\n    if item.id in fake_db:\n        raise HTTPException(status_code=409, detail=\"Item already exists\")\n    fake_db[item.id] = item\n    return item",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi.testclient import TestClient\n\nfrom .main import app\n\nclient = TestClient(app)\n\n\ndef test_read_item():\n    response = client.get(\"/items/foo\", headers={\"X-Token\": \"coneofsilence\"})\n    assert response.status_code == 200\n    assert response.json() == {\n        \"id\": \"foo\",\n        \"title\": \"Foo\",\n        \"description\": \"There goes my hero\",\n    }\n\n\ndef test_read_item_bad_token():\n    response = client.get(\"/items/foo\", headers={\"X-Token\": \"hailhydra\"})\n    assert response.status_code == 400\n    assert response.json() == {\"detail\": \"Invalid X-Token header\"}\n\n\ndef test_read_nonexistent_item():\n    response = client.get(\"/items/baz\", headers={\"X-Token\": \"coneofsilence\"})\n    assert response.status_code == 404\n    assert response.json() == {\"detail\": \"Item not found\"}\n\n\ndef test_create_item():\n    response = client.post(\n        \"/items/\",\n        headers={\"X-Token\": \"coneofsilence\"},\n        json={\"id\": \"foobar\", \"title\": \"Foo Bar\", \"description\": \"The Foo Barters\"},\n    )\n    assert response.status_code == 200\n    assert response.json() == {\n        \"id\": \"foobar\",\n        \"title\": \"Foo Bar\",\n        \"description\": \"The Foo Barters\",\n    }\n\n\ndef test_create_item_bad_token():\n    response = client.post(\n        \"/items/\",\n        headers={\"X-Token\": \"hailhydra\"},\n        json={\"id\": \"bazz\", \"title\": \"Bazz\", \"description\": \"Drop the bazz\"},\n    )\n    assert response.status_code == 400\n    assert response.json() == {\"detail\": \"Invalid X-Token header\"}\n\n\ndef test_create_existing_item():\n    response = client.post(\n        \"/items/\",\n        headers={\"X-Token\": \"coneofsilence\"},\n        json={\n            \"id\": \"foo\",\n            \"title\": \"The Foo ID Stealers\",\n            \"description\": \"There goes my stealer\",\n        },\n    )\n    assert response.status_code == 409\n    assert response.json() == {\"detail\": \"Item already exists\"}",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi.testclient import TestClient\n\nfrom .main import app\n\nclient = TestClient(app)\n\n\ndef test_read_item():\n    response = client.get(\"/items/foo\", headers={\"X-Token\": \"coneofsilence\"})\n    assert response.status_code == 200\n    assert response.json() == {\n        \"id\": \"foo\",\n        \"title\": \"Foo\",\n        \"description\": \"There goes my hero\",\n    }\n\n\ndef test_read_item_bad_token():\n    response = client.get(\"/items/foo\", headers={\"X-Token\": \"hailhydra\"})\n    assert response.status_code == 400\n    assert response.json() == {\"detail\": \"Invalid X-Token header\"}\n\n\ndef test_read_nonexistent_item():\n    response = client.get(\"/items/baz\", headers={\"X-Token\": \"coneofsilence\"})\n    assert response.status_code == 404\n    assert response.json() == {\"detail\": \"Item not found\"}\n\n\ndef test_create_item():\n    response = client.post(\n        \"/items/\",\n        headers={\"X-Token\": \"coneofsilence\"},\n        json={\"id\": \"foobar\", \"title\": \"Foo Bar\", \"description\": \"The Foo Barters\"},\n    )\n    assert response.status_code == 200\n    assert response.json() == {\n        \"id\": \"foobar\",\n        \"title\": \"Foo Bar\",\n        \"description\": \"The Foo Barters\",\n    }\n\n\ndef test_create_item_bad_token():\n    response = client.post(\n        \"/items/\",\n        headers={\"X-Token\": \"hailhydra\"},\n        json={\"id\": \"bazz\", \"title\": \"Bazz\", \"description\": \"Drop the bazz\"},\n    )\n    assert response.status_code == 400\n    assert response.json() == {\"detail\": \"Invalid X-Token header\"}\n\n\ndef test_create_existing_item():\n    response = client.post(\n        \"/items/\",\n        headers={\"X-Token\": \"coneofsilence\"},\n        json={\n            \"id\": \"foo\",\n            \"title\": \"The Foo ID Stealers\",\n            \"description\": \"There goes my stealer\",\n        },\n    )\n    assert response.status_code == 409\n    assert response.json() == {\"detail\": \"Item already exists\"}",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi.testclient import TestClient\n\nfrom .main import app\n\nclient = TestClient(app)\n\n\ndef test_read_item():\n    response = client.get(\"/items/foo\", headers={\"X-Token\": \"coneofsilence\"})\n    assert response.status_code == 200\n    assert response.json() == {\n        \"id\": \"foo\",\n        \"title\": \"Foo\",\n        \"description\": \"There goes my hero\",\n    }\n\n\ndef test_read_item_bad_token():\n    response = client.get(\"/items/foo\", headers={\"X-Token\": \"hailhydra\"})\n    assert response.status_code == 400\n    assert response.json() == {\"detail\": \"Invalid X-Token header\"}\n\n\ndef test_read_nonexistent_item():\n    response = client.get(\"/items/baz\", headers={\"X-Token\": \"coneofsilence\"})\n    assert response.status_code == 404\n    assert response.json() == {\"detail\": \"Item not found\"}\n\n\ndef test_create_item():\n    response = client.post(\n        \"/items/\",\n        headers={\"X-Token\": \"coneofsilence\"},\n        json={\"id\": \"foobar\", \"title\": \"Foo Bar\", \"description\": \"The Foo Barters\"},\n    )\n    assert response.status_code == 200\n    assert response.json() == {\n        \"id\": \"foobar\",\n        \"title\": \"Foo Bar\",\n        \"description\": \"The Foo Barters\",\n    }\n\n\ndef test_create_item_bad_token():\n    response = client.post(\n        \"/items/\",\n        headers={\"X-Token\": \"hailhydra\"},\n        json={\"id\": \"bazz\", \"title\": \"Bazz\", \"description\": \"Drop the bazz\"},\n    )\n    assert response.status_code == 400\n    assert response.json() == {\"detail\": \"Invalid X-Token header\"}\n\n\ndef test_create_existing_item():\n    response = client.post(\n        \"/items/\",\n        headers={\"X-Token\": \"coneofsilence\"},\n        json={\n            \"id\": \"foo\",\n            \"title\": \"The Foo ID Stealers\",\n            \"description\": \"There goes my stealer\",\n        },\n    )\n    assert response.status_code == 409\n    assert response.json() == {\"detail\": \"Item already exists\"}",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi.testclient import TestClient\n\nfrom .main import app\n\nclient = TestClient(app)\n\n\ndef test_read_item():\n    response = client.get(\"/items/foo\", headers={\"X-Token\": \"coneofsilence\"})\n    assert response.status_code == 200\n    assert response.json() == {\n        \"id\": \"foo\",\n        \"title\": \"Foo\",\n        \"description\": \"There goes my hero\",\n    }\n\n\ndef test_read_item_bad_token():\n    response = client.get(\"/items/foo\", headers={\"X-Token\": \"hailhydra\"})\n    assert response.status_code == 400\n    assert response.json() == {\"detail\": \"Invalid X-Token header\"}\n\n\ndef test_read_nonexistent_item():\n    response = client.get(\"/items/baz\", headers={\"X-Token\": \"coneofsilence\"})\n    assert response.status_code == 404\n    assert response.json() == {\"detail\": \"Item not found\"}\n\n\ndef test_create_item():\n    response = client.post(\n        \"/items/\",\n        headers={\"X-Token\": \"coneofsilence\"},\n        json={\"id\": \"foobar\", \"title\": \"Foo Bar\", \"description\": \"The Foo Barters\"},\n    )\n    assert response.status_code == 200\n    assert response.json() == {\n        \"id\": \"foobar\",\n        \"title\": \"Foo Bar\",\n        \"description\": \"The Foo Barters\",\n    }\n\n\ndef test_create_item_bad_token():\n    response = client.post(\n        \"/items/\",\n        headers={\"X-Token\": \"hailhydra\"},\n        json={\"id\": \"bazz\", \"title\": \"Bazz\", \"description\": \"Drop the bazz\"},\n    )\n    assert response.status_code == 400\n    assert response.json() == {\"detail\": \"Invalid X-Token header\"}\n\n\ndef test_create_existing_item():\n    response = client.post(\n        \"/items/\",\n        headers={\"X-Token\": \"coneofsilence\"},\n        json={\n            \"id\": \"foo\",\n            \"title\": \"The Foo ID Stealers\",\n            \"description\": \"There goes my stealer\",\n        },\n    )\n    assert response.status_code == 409\n    assert response.json() == {\"detail\": \"Item already exists\"}",
+      "language": "python"
+    },
+    {
+      "code": "$ pip install pytest\n\n---> 100%",
+      "language": "php"
+    },
+    {
+      "code": "$ pytest\n\n================ test session starts ================\nplatform linux -- Python 3.6.9, pytest-5.3.5, py-1.8.1, pluggy-0.13.1\nrootdir: /home/user/code/superawesome-cli/app\nplugins: forked-1.1.3, xdist-1.31.0, cov-2.8.1\ncollected 6 items\n\n---> 100%\n\ntest_main.py <span style=\"color: green; white-space: pre;\">......                            [100%]</span>\n\n<span style=\"color: green;\">================= 1 passed in 0.03s =================</span>",
+      "language": "yaml"
+    }
+  ],
+  "patterns": [
+    {
+      "description": "Info To use TestClient, first install httpx. Make sure you create a virtual environment, activate it, and then install it, for example: $ pip install httpx",
+      "code": "TestClient"
+    },
+    {
+      "description": "Make sure you create a virtual environment, activate it, and then install it, for example:",
+      "code": "$ pip install httpx"
+    },
+    {
+      "description": "Make sure you create a virtual environment, activate it, and then install it, for example:",
+      "code": "$ pip install pytest\n\n---> 100%"
+    }
+  ],
+  "links": [
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

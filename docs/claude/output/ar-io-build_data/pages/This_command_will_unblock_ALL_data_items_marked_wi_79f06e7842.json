@@ -1,0 +1,28 @@
+{
+  "title": "This command will unblock ALL data items marked with this source value",
+  "content": "bash {{ title: 'curl'}}\ncurl -X 'PUT' \\\n  'http://localhost:3000/ar-io/admin/block-name' \\\n  -H 'accept: */*' \\\n  -H 'Authorization: Bearer secret' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"i-bought-a-potato\",\n  \"notes\": \"Potatoes are offensive\",\n  \"source\": \"Public Block list\"\n}'\nbash {{title: 'curl'}}\ncurl -X 'PUT' \\\n  'http://localhost:3000/ar-io/admin/unblock-name' \\\n  -H 'accept: */*' \\\n  -H 'Authorization: Bearer secret' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"i-bought-a-potato\",\n}'\n```",
+  "code_samples": [
+    {
+      "code": "## Block ArNS Name\n\nArNS names can be blocked so that a gateway will refuse to serve their associated content even if the name holder updates the Arweave transaction Id that the name points at.\n\nThis is done via an authenticated `PUT` request to the endpoint `/ar-io/admin/block-name` containing a json object with three keys:\n\n- **name**: The ArNS name to be blocked.\n- **notes**: Any note the gateway operator wants to leave him/herself as to the reason the content is blocked.\n- **source**: A note as to where the content was identified as requiring moderation. i.e. a public block list.",
+      "language": "unknown"
+    },
+    {
+      "code": "For moderation purposes, each [undername](/learn/arns) of an ArNS name\n  is treated as a separate name and must be moderated separately.\n\n### Unblock ArNS Name\n\nGateway operators can unblock ArNS names that were previously blocked.\n\nThis is done via an authenticated `PUT` request to the endpoint `/ar-io/admin/unblock-name` containing a json object with a single key:\n\n- **name**: The ArNS name to be unblocked",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Block ArNS Name",
+      "id": "block-arns-name"
+    },
+    {
+      "level": "h3",
+      "text": "Unblock ArNS Name",
+      "id": "unblock-arns-name"
+    }
+  ],
+  "url": "llms-txt#this-command-will-unblock-all-data-items-marked-with-this-source-value",
+  "links": []
+}

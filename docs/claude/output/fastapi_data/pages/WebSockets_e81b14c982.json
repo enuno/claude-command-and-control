@@ -1,0 +1,509 @@
+{
+  "url": "https://fastapi.tiangolo.com/reference/websockets/",
+  "title": "WebSockets¶",
+  "content": "When defining WebSockets, you normally declare a parameter of type WebSocket and with it you can read data from the client and send data to it.\n\nIt is provided directly by Starlette, but you can import it from fastapi:\n\nWhen you want to define dependencies that should be compatible with both HTTP and WebSockets, you can define a parameter that takes an HTTPConnection instead of a Request or a WebSocket.\n\nBases: HTTPConnection\n\nReceive ASGI websocket messages, ensuring valid state transitions.\n\nSend ASGI websocket messages, ensuring valid state transitions.\n\nWhen a client disconnects, a WebSocketDisconnect exception is raised, you can catch it.\n\nYou can import it directly form fastapi:\n\nAdditional classes for handling WebSockets.\n\nProvided directly by Starlette, but you can import it from fastapi:",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "WebSockets¶",
+      "id": "websockets"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.WebSocket ¶",
+      "id": "fastapi.WebSocket"
+    },
+    {
+      "level": "h3",
+      "text": "scope instance-attribute ¶",
+      "id": "fastapi.WebSocket.scope"
+    },
+    {
+      "level": "h3",
+      "text": "app property ¶",
+      "id": "fastapi.WebSocket.app"
+    },
+    {
+      "level": "h3",
+      "text": "url property ¶",
+      "id": "fastapi.WebSocket.url"
+    },
+    {
+      "level": "h3",
+      "text": "base_url property ¶",
+      "id": "fastapi.WebSocket.base_url"
+    },
+    {
+      "level": "h3",
+      "text": "headers property ¶",
+      "id": "fastapi.WebSocket.headers"
+    },
+    {
+      "level": "h3",
+      "text": "query_params property ¶",
+      "id": "fastapi.WebSocket.query_params"
+    },
+    {
+      "level": "h3",
+      "text": "path_params property ¶",
+      "id": "fastapi.WebSocket.path_params"
+    },
+    {
+      "level": "h3",
+      "text": "cookies property ¶",
+      "id": "fastapi.WebSocket.cookies"
+    },
+    {
+      "level": "h3",
+      "text": "client property ¶",
+      "id": "fastapi.WebSocket.client"
+    },
+    {
+      "level": "h3",
+      "text": "state property ¶",
+      "id": "fastapi.WebSocket.state"
+    },
+    {
+      "level": "h3",
+      "text": "client_state instance-attribute ¶",
+      "id": "fastapi.WebSocket.client_state"
+    },
+    {
+      "level": "h3",
+      "text": "application_state instance-attribute ¶",
+      "id": "fastapi.WebSocket.application_state"
+    },
+    {
+      "level": "h3",
+      "text": "url_for ¶",
+      "id": "fastapi.WebSocket.url_for"
+    },
+    {
+      "level": "h3",
+      "text": "receive async ¶",
+      "id": "fastapi.WebSocket.receive"
+    },
+    {
+      "level": "h3",
+      "text": "send async ¶",
+      "id": "fastapi.WebSocket.send"
+    },
+    {
+      "level": "h3",
+      "text": "accept async ¶",
+      "id": "fastapi.WebSocket.accept"
+    },
+    {
+      "level": "h3",
+      "text": "receive_text async ¶",
+      "id": "fastapi.WebSocket.receive_text"
+    },
+    {
+      "level": "h3",
+      "text": "receive_bytes async ¶",
+      "id": "fastapi.WebSocket.receive_bytes"
+    },
+    {
+      "level": "h3",
+      "text": "receive_json async ¶",
+      "id": "fastapi.WebSocket.receive_json"
+    },
+    {
+      "level": "h3",
+      "text": "iter_text async ¶",
+      "id": "fastapi.WebSocket.iter_text"
+    },
+    {
+      "level": "h3",
+      "text": "iter_bytes async ¶",
+      "id": "fastapi.WebSocket.iter_bytes"
+    },
+    {
+      "level": "h3",
+      "text": "iter_json async ¶",
+      "id": "fastapi.WebSocket.iter_json"
+    },
+    {
+      "level": "h3",
+      "text": "send_text async ¶",
+      "id": "fastapi.WebSocket.send_text"
+    },
+    {
+      "level": "h3",
+      "text": "send_bytes async ¶",
+      "id": "fastapi.WebSocket.send_bytes"
+    },
+    {
+      "level": "h3",
+      "text": "send_json async ¶",
+      "id": "fastapi.WebSocket.send_json"
+    },
+    {
+      "level": "h3",
+      "text": "close async ¶",
+      "id": "fastapi.WebSocket.close"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.WebSocketDisconnect ¶",
+      "id": "fastapi.WebSocketDisconnect"
+    },
+    {
+      "level": "h3",
+      "text": "code instance-attribute ¶",
+      "id": "fastapi.WebSocketDisconnect.code"
+    },
+    {
+      "level": "h3",
+      "text": "reason instance-attribute ¶",
+      "id": "fastapi.WebSocketDisconnect.reason"
+    },
+    {
+      "level": "h2",
+      "text": "WebSockets - additional classes¶",
+      "id": "websockets-additional-classes"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.websockets.WebSocketDisconnect ¶",
+      "id": "fastapi.websockets.WebSocketDisconnect"
+    },
+    {
+      "level": "h3",
+      "text": "code instance-attribute ¶",
+      "id": "fastapi.websockets.WebSocketDisconnect.code"
+    },
+    {
+      "level": "h3",
+      "text": "reason instance-attribute ¶",
+      "id": "fastapi.websockets.WebSocketDisconnect.reason"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.websockets.WebSocketState ¶",
+      "id": "fastapi.websockets.WebSocketState"
+    },
+    {
+      "level": "h3",
+      "text": "CONNECTING class-attribute instance-attribute ¶",
+      "id": "fastapi.websockets.WebSocketState.CONNECTING"
+    },
+    {
+      "level": "h3",
+      "text": "CONNECTED class-attribute instance-attribute ¶",
+      "id": "fastapi.websockets.WebSocketState.CONNECTED"
+    },
+    {
+      "level": "h3",
+      "text": "DISCONNECTED class-attribute instance-attribute ¶",
+      "id": "fastapi.websockets.WebSocketState.DISCONNECTED"
+    },
+    {
+      "level": "h3",
+      "text": "RESPONSE class-attribute instance-attribute ¶",
+      "id": "fastapi.websockets.WebSocketState.RESPONSE"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from fastapi import WebSocket",
+      "language": "python"
+    },
+    {
+      "code": "WebSocket(scope, receive, send)",
+      "language": "unknown"
+    },
+    {
+      "code": "def __init__(self, scope: Scope, receive: Receive, send: Send) -> None:\n    super().__init__(scope)\n    assert scope[\"type\"] == \"websocket\"\n    self._receive = receive\n    self._send = send\n    self.client_state = WebSocketState.CONNECTING\n    self.application_state = WebSocketState.CONNECTING",
+      "language": "python"
+    },
+    {
+      "code": "scope = scope",
+      "language": "unknown"
+    },
+    {
+      "code": "query_params",
+      "language": "unknown"
+    },
+    {
+      "code": "path_params",
+      "language": "unknown"
+    },
+    {
+      "code": "client_state = CONNECTING",
+      "language": "unknown"
+    },
+    {
+      "code": "application_state = CONNECTING",
+      "language": "unknown"
+    },
+    {
+      "code": "url_for(name, /, **path_params)",
+      "language": "unknown"
+    },
+    {
+      "code": "def url_for(self, name: str, /, **path_params: Any) -> URL:\n    url_path_provider: Router | Starlette | None = self.scope.get(\"router\") or self.scope.get(\"app\")\n    if url_path_provider is None:\n        raise RuntimeError(\"The `url_for` method can only be used inside a Starlette application or with a router.\")\n    url_path = url_path_provider.url_path_for(name, **path_params)\n    return url_path.make_absolute_url(base_url=self.base_url)",
+      "language": "python"
+    },
+    {
+      "code": "async def receive(self) -> Message:\n    \"\"\"\n    Receive ASGI websocket messages, ensuring valid state transitions.\n    \"\"\"\n    if self.client_state == WebSocketState.CONNECTING:\n        message = await self._receive()\n        message_type = message[\"type\"]\n        if message_type != \"websocket.connect\":\n            raise RuntimeError(f'Expected ASGI message \"websocket.connect\", but got {message_type!r}')\n        self.client_state = WebSocketState.CONNECTED\n        return message\n    elif self.client_state == WebSocketState.CONNECTED:\n        message = await self._receive()\n        message_type = message[\"type\"]\n        if message_type not in {\"websocket.receive\", \"websocket.disconnect\"}:\n            raise RuntimeError(\n                f'Expected ASGI message \"websocket.receive\" or \"websocket.disconnect\", but got {message_type!r}'\n            )\n        if message_type == \"websocket.disconnect\":\n            self.client_state = WebSocketState.DISCONNECTED\n        return message\n    else:\n        raise RuntimeError('Cannot call \"receive\" once a disconnect message has been received.')",
+      "language": "python"
+    },
+    {
+      "code": "send(message)",
+      "language": "unknown"
+    },
+    {
+      "code": "async def send(self, message: Message) -> None:\n    \"\"\"\n    Send ASGI websocket messages, ensuring valid state transitions.\n    \"\"\"\n    if self.application_state == WebSocketState.CONNECTING:\n        message_type = message[\"type\"]\n        if message_type not in {\"websocket.accept\", \"websocket.close\", \"websocket.http.response.start\"}:\n            raise RuntimeError(\n                'Expected ASGI message \"websocket.accept\", \"websocket.close\" or \"websocket.http.response.start\", '\n                f\"but got {message_type!r}\"\n            )\n        if message_type == \"websocket.close\":\n            self.application_state = WebSocketState.DISCONNECTED\n        elif message_type == \"websocket.http.response.start\":\n            self.application_state = WebSocketState.RESPONSE\n        else:\n            self.application_state = WebSocketState.CONNECTED\n        await self._send(message)\n    elif self.application_state == WebSocketState.CONNECTED:\n        message_type = message[\"type\"]\n        if message_type not in {\"websocket.send\", \"websocket.close\"}:\n            raise RuntimeError(\n                f'Expected ASGI message \"websocket.send\" or \"websocket.close\", but got {message_type!r}'\n            )\n        if message_type == \"websocket.close\":\n            self.application_state = WebSocketState.DISCONNECTED\n        try:\n            await self._send(message)\n        except OSError:\n            self.application_state = WebSocketState.DISCONNECTED\n            raise WebSocketDisconnect(code=1006)\n    elif self.application_state == WebSocketState.RESPONSE:\n        message_type = message[\"type\"]\n        if message_type != \"websocket.http.response.body\":\n            raise RuntimeError(f'Expected ASGI message \"websocket.http.response.body\", but got {message_type!r}')\n        if not message.get(\"more_body\", False):\n            self.application_state = WebSocketState.DISCONNECTED\n        await self._send(message)\n    else:\n        raise RuntimeError('Cannot call \"send\" once a close message has been sent.')",
+      "language": "python"
+    },
+    {
+      "code": "accept(subprotocol=None, headers=None)",
+      "language": "rust"
+    },
+    {
+      "code": "async def accept(\n    self,\n    subprotocol: str | None = None,\n    headers: Iterable[tuple[bytes, bytes]] | None = None,\n) -> None:\n    headers = headers or []\n\n    if self.client_state == WebSocketState.CONNECTING:  # pragma: no branch\n        # If we haven't yet seen the 'connect' message, then wait for it first.\n        await self.receive()\n    await self.send({\"type\": \"websocket.accept\", \"subprotocol\": subprotocol, \"headers\": headers})",
+      "language": "python"
+    },
+    {
+      "code": "receive_text()",
+      "language": "unknown"
+    },
+    {
+      "code": "async def receive_text(self) -> str:\n    if self.application_state != WebSocketState.CONNECTED:\n        raise RuntimeError('WebSocket is not connected. Need to call \"accept\" first.')\n    message = await self.receive()\n    self._raise_on_disconnect(message)\n    return cast(str, message[\"text\"])",
+      "language": "python"
+    },
+    {
+      "code": "receive_bytes()",
+      "language": "unknown"
+    },
+    {
+      "code": "async def receive_bytes(self) -> bytes:\n    if self.application_state != WebSocketState.CONNECTED:\n        raise RuntimeError('WebSocket is not connected. Need to call \"accept\" first.')\n    message = await self.receive()\n    self._raise_on_disconnect(message)\n    return cast(bytes, message[\"bytes\"])",
+      "language": "python"
+    },
+    {
+      "code": "receive_json(mode='text')",
+      "language": "unknown"
+    },
+    {
+      "code": "async def receive_json(self, mode: str = \"text\") -> Any:\n    if mode not in {\"text\", \"binary\"}:\n        raise RuntimeError('The \"mode\" argument should be \"text\" or \"binary\".')\n    if self.application_state != WebSocketState.CONNECTED:\n        raise RuntimeError('WebSocket is not connected. Need to call \"accept\" first.')\n    message = await self.receive()\n    self._raise_on_disconnect(message)\n\n    if mode == \"text\":\n        text = message[\"text\"]\n    else:\n        text = message[\"bytes\"].decode(\"utf-8\")\n    return json.loads(text)",
+      "language": "python"
+    },
+    {
+      "code": "iter_text()",
+      "language": "unknown"
+    },
+    {
+      "code": "async def iter_text(self) -> AsyncIterator[str]:\n    try:\n        while True:\n            yield await self.receive_text()\n    except WebSocketDisconnect:\n        pass",
+      "language": "python"
+    },
+    {
+      "code": "iter_bytes()",
+      "language": "unknown"
+    },
+    {
+      "code": "async def iter_bytes(self) -> AsyncIterator[bytes]:\n    try:\n        while True:\n            yield await self.receive_bytes()\n    except WebSocketDisconnect:\n        pass",
+      "language": "python"
+    },
+    {
+      "code": "iter_json()",
+      "language": "unknown"
+    },
+    {
+      "code": "async def iter_json(self) -> AsyncIterator[Any]:\n    try:\n        while True:\n            yield await self.receive_json()\n    except WebSocketDisconnect:\n        pass",
+      "language": "python"
+    },
+    {
+      "code": "send_text(data)",
+      "language": "unknown"
+    },
+    {
+      "code": "async def send_text(self, data: str) -> None:\n    await self.send({\"type\": \"websocket.send\", \"text\": data})",
+      "language": "python"
+    },
+    {
+      "code": "send_bytes(data)",
+      "language": "unknown"
+    },
+    {
+      "code": "async def send_bytes(self, data: bytes) -> None:\n    await self.send({\"type\": \"websocket.send\", \"bytes\": data})",
+      "language": "python"
+    },
+    {
+      "code": "send_json(data, mode='text')",
+      "language": "unknown"
+    },
+    {
+      "code": "async def send_json(self, data: Any, mode: str = \"text\") -> None:\n    if mode not in {\"text\", \"binary\"}:\n        raise RuntimeError('The \"mode\" argument should be \"text\" or \"binary\".')\n    text = json.dumps(data, separators=(\",\", \":\"), ensure_ascii=False)\n    if mode == \"text\":\n        await self.send({\"type\": \"websocket.send\", \"text\": text})\n    else:\n        await self.send({\"type\": \"websocket.send\", \"bytes\": text.encode(\"utf-8\")})",
+      "language": "python"
+    },
+    {
+      "code": "close(code=1000, reason=None)",
+      "language": "rust"
+    },
+    {
+      "code": "async def close(self, code: int = 1000, reason: str | None = None) -> None:\n    await self.send({\"type\": \"websocket.close\", \"code\": code, \"reason\": reason or \"\"})",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import WebSocketDisconnect",
+      "language": "python"
+    },
+    {
+      "code": "WebSocketDisconnect(code=1000, reason=None)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(self, code: int = 1000, reason: str | None = None) -> None:\n    self.code = code\n    self.reason = reason or \"\"",
+      "language": "python"
+    },
+    {
+      "code": "code = code",
+      "language": "unknown"
+    },
+    {
+      "code": "reason = reason or ''",
+      "language": "unknown"
+    },
+    {
+      "code": "from fastapi.websockets import WebSocketDisconnect, WebSocketState",
+      "language": "sql"
+    },
+    {
+      "code": "WebSocketDisconnect(code=1000, reason=None)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(self, code: int = 1000, reason: str | None = None) -> None:\n    self.code = code\n    self.reason = reason or \"\"",
+      "language": "python"
+    },
+    {
+      "code": "code = code",
+      "language": "unknown"
+    },
+    {
+      "code": "reason = reason or ''",
+      "language": "unknown"
+    },
+    {
+      "code": "CONNECTING = 0",
+      "language": "unknown"
+    },
+    {
+      "code": "CONNECTED = 1",
+      "language": "unknown"
+    },
+    {
+      "code": "DISCONNECTED = 2",
+      "language": "unknown"
+    },
+    {
+      "code": "RESPONSE = 3",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

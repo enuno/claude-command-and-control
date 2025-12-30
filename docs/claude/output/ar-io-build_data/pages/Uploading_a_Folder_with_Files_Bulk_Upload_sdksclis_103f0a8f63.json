@@ -1,0 +1,13 @@
+{
+  "title": "Uploading a Folder with Files (Bulk Upload) (/sdks/(clis)/ardrive-cli/(working-with-files)/uploading-a-folder-with-files-bulk-upload)",
+  "content": "Users can perform a bulk upload by using the upload-file command on a target folder. The command will reconstruct the folder hierarchy on local disk as ArFS folders on the permaweb and upload each file into their corresponding folders:",
+  "code_samples": [
+    {
+      "code": "ardrive upload-file --local-path /path/to/folder --parent-folder-id \"9af694f6-4cfc-4eee-88a8-1b02704760c0\" -w /path/to/wallet.json",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#uploading-a-folder-with-files-(bulk-upload)-(/sdks/(clis)/ardrive-cli/(working-with-files)/uploading-a-folder-with-files-bulk-upload)",
+  "links": []
+}

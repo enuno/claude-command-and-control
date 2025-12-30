@@ -1,0 +1,64 @@
+{
+  "title": "Name Registration (/learn/arns/name-registration)",
+  "content": "There are two different types of name registrations that can be utilized based upon the needs of the user:\n\n## Registration Types\n\n### Lease Registration\n\nA name may be **leased on a yearly basis**. A leased name can have its lease extended or renewed but only up to a maximum active lease of **five (5) years** at any time.\n\n### Permanent Registration (Permabuy)\n\nA name may be **purchased for an indefinite duration** with no expiration date.\n\nRegistering a name requires spending ARIO tokens corresponding to the name's character length and purchase type.\n\nThe ArNS Registry is a list of all registered names and their associated ANT Process IDs. Key rules embedded within the smart contract include:\n\n- **Genesis Prices**: Set within the contract as starting conditions\n- **Dynamic Pricing**: Varies based on name length, purchase type (lease vs buy), lease duration, and current Demand Factor\n- **Name Records**: Include a pointer to the Arweave Name Token process identifier, lease end time (if applicable), and undername allocation\n- **Reassignment**: Name registrations can be reassigned from one ANT to another\n- **Lease Extension**: Anyone with available ARIO Tokens can extend any name's active lease\n- **Lease to Permanent Buy**: Anyone with available ARIO Tokens can convert a name's lease to a permanent buy\n- **Undername Capacity**: Additional undername capacity can be purchased for any actively registered name\n- **Name Removal**: Name records can only be removed from the registry if a lease expires, or a permanent name is returned to the protocol\n\n## Name Validation Rules\n\nAll names registered must meet the following criteria:\n\n1. **Valid characters**: Only numbers 0-9, characters a-z and dashes\n2. **Dash placement**: Dashes cannot be leading or trailing characters\n3. **Single character domains**: Dashes cannot be used in single character domains\n4. **Length limits**: 1 character minimum, 51 characters maximum\n5. **Reserved names**: Cannot be an invalid name predesignated to prevent unintentional use/abuse such as `www`\n\n### Lease Expirations\n\nWhen a lease term ends, there is a **grace period of two (2) weeks** where the lease can be renewed before it fully expires. If this grace period elapses, the name is considered expired and returns to the protocol for public registration. Once expired, a name's associated undername registrations and capacity also expire.\n\nA recently expired name's registration shall be priced subject to the \"Returned Name Premium\" mechanics.\n\n### Lease to Permabuy Conversions\n\nAn actively leased name may be converted to a permanent registration. The price for this conversion shall be treated as if it were a new permanent name purchase.\n\nThis functionality allows users to transition from leasing to permanent ownership based on changing needs and available resources. It generates additional protocol revenue through conversion fees, contributing to the ecosystem's financial health and reward system.\n\n### Permanent Name Return\n\nUsers have the option to \"return\" their permanently registered names back to the protocol. This process allows users to relinquish their ownership, returning the name to the protocol for public re-registration. Only the Owner of a name can initiate a name return.\n\nWhen a permanent name is returned, the name is subject to a \"Returned Name Premium\", similar to expired leases. A key difference is that if the name is repurchased during the premium window, the proceeds are split between the returning owner and the protocol balance.\n\nThe Arweave Name System (ArNS) supports the designation of a \"Primary Name\" for users, simplifying how Arweave addresses are displayed across applications. A Primary Name is a user-friendly alias that replaces complex wallet addresses, making interactions and profiles easier to manage and identify.\n\nUsers can set one of their owned ArNS names as their Primary Name, subject to a small fee. This allows applications to use a single, human-readable identifier for a wallet, improving user experience across the network.\n\nNow that you understand name registration, learn about [Arweave Name Tokens (ANTs)](/learn/arns/ants) to see how ownership and control work, or explore the [Pricing Model](/learn/arns/pricing-model) to understand how costs are calculated.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Registration Types",
+      "id": "registration-types"
+    },
+    {
+      "level": "h3",
+      "text": "Lease Registration",
+      "id": "lease-registration"
+    },
+    {
+      "level": "h3",
+      "text": "Permanent Registration (Permabuy)",
+      "id": "permanent-registration-(permabuy)"
+    },
+    {
+      "level": "h2",
+      "text": "Name Registry",
+      "id": "name-registry"
+    },
+    {
+      "level": "h2",
+      "text": "Name Validation Rules",
+      "id": "name-validation-rules"
+    },
+    {
+      "level": "h2",
+      "text": "Lease Management",
+      "id": "lease-management"
+    },
+    {
+      "level": "h3",
+      "text": "Lease Expirations",
+      "id": "lease-expirations"
+    },
+    {
+      "level": "h3",
+      "text": "Lease to Permabuy Conversions",
+      "id": "lease-to-permabuy-conversions"
+    },
+    {
+      "level": "h3",
+      "text": "Permanent Name Return",
+      "id": "permanent-name-return"
+    },
+    {
+      "level": "h2",
+      "text": "Primary Names",
+      "id": "primary-names"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#name-registration-(/learn/arns/name-registration)",
+  "links": []
+}

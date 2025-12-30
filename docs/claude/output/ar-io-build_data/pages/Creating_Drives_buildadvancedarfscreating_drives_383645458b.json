@@ -1,0 +1,120 @@
+{
+  "title": "Creating Drives (/build/advanced/arfs/creating-drives)",
+  "content": "To properly create a new drive, two new entities need to be created: a new Drive entity and a new Folder entity to serve as the root folder of that drive.\n\n- The user must specify a `name` of the drive which is stored within the Drive Entity's metadata JSON.\n- ArDrive generates a new unique uuidv4 for the drive entity's `Drive-Id`.\n- ArDrive also generates a new unique uuidv4 for the drive entity's `rootFolderId`, which will refer to the `Folder-Id` of the new folder entity that will be created.\n  - This `rootFolderId` is stored within the Drive Entity's metadata JSON.\n- Drive Entity Metadata transactions must have `Entity-Type: \"drive\"`.\n- ArDrive will that the current local system time as seconds since Unix epoch for the Drive Entity's `Unix-Time`.\n- The Drive Entity's `Drive-Privacy` must also be set to `public` or `private` in order for its subfolders and files to have the correct security settings.\n- If the drive is private:\n  - Its `Cipher` tag must be filled out with the correct encryption algorithm (currently `AES256-GCM`).\n  - Its `Cipher-IV` tag must be filled out with the generated Initialization Vector for the private drive.\n  - The ArFS client must derive the Drive Key and encrypt the Drive Entity's metadata JSON using the assigned `Cipher` and `Cipher-IV`.\n\n## New Root Folder Entity\n\n- The `name` of the drive and folder entities must be the same.\n  - This `name` is stored within the Folder Entity's metadata JSON.\n- The Folder Entity's `Folder-Id` must match the `rootFolderId` previously created for the Drive Entity.\n- The Folder Entity's `Drive-Id` must match the `Drive-Id` previously created for the Drive Entity.\n- The Folder Entity must not include a `Parent-Folder-Id` tag.\n  - This is how it is determined to be the root folder for a drive.\n- Folder Entity metadata transactions must have `Entity-Type: 'folder'`.\n- The client gets the user's local time for the `Unix-Time` tag, represented as seconds since Unix Epoch.\n- Public folders must have the content type `Content-Type: \"application/json\"`.\n- If the folder is private\n  - Its `Cipher` tag must be filled out with the correct encryption algorithm (currently `AES256-GCM`).\n  - Its `Cipher-IV` tag must be filled out with the generated Initialization Vector for the private folder.\n  - Its content type must be `Content-Type: \"application/octet-stream\"`.\n  - The ArFS client must encrypt the Drive Entity's metadata JSON using the assigned `Cipher` and `Cipher-IV`.\n\nFiles in ArFS require two separate transactions:\n\n1. **File Metadata Transaction** - Contains file information and references\n2. **File Data Transaction** - Contains the actual file data\n\n### File Metadata Transaction\n\n### File Data Transaction\n\nFolders are simpler than files as they only require a metadata transaction:\n\n## Creating Snapshots\n\nSnapshots provide a way to quickly synchronize drive state by rolling up all metadata into a single transaction:\n\n## Implementation Example\n\nHere's a practical example of creating a complete drive structure:\n\n### Naming Conventions\n\n- Use descriptive names for drives, folders, and files\n- Avoid special characters that might cause issues\n- Keep names under 255 characters\n- Use consistent casing\n\n- Create logical folder structures\n- Use meaningful folder names\n- Implement proper versioning\n- Document your structure\n\n- Batch operations when possible\n- Use efficient queries\n- Implement caching\n- Consider file sizes\n\n- Use strong passwords for private drives\n- Implement proper key management\n- Follow encryption best practices\n- Regular security audits\n\nWhen creating ArFS entities, handle these common scenarios:\n\n### Transaction Failures\n\n- Implement retry logic for failed uploads\n- Validate data before uploading\n- Check transaction confirmation status\n\n### Validation Errors\n\n- Verify required tags are present\n- Check data format compliance\n- Validate UUID formats\n\n- Implement timeout handling\n- Provide user feedback\n- Graceful degradation\n\nNow that you know how to create ArFS entities, learn how to work with them:\n\n- [Reading Data](/build/advanced/arfs/reading-data) - Query and retrieve your ArFS data\n- [Privacy & Encryption](/build/advanced/arfs/privacy) - Secure your data with private drives\n- [Upgrading Private Drives](/build/advanced/arfs/upgrading-drives) - Update legacy drives to v0.15",
+  "code_samples": [
+    {
+      "code": "ArFS: \"0.15\",\nCipher?: \"AES256-GCM\",\nCipher-IV?: \"\",\nContent-Type: \"\",\nDrive-Id: \"\",\nEntity-Type: \"file\",\nFile-Id: \"\",\nParent-Folder-Id: \"\",\nUnix-Time: \"\"\n\nMetadata JSON {\n    \"name\": \"\",\n    \"size\": ,\n    \"lastModifiedDate\": ,\n    \"dataTxId\": \"\",\n    \"dataContentType\": \"\",\n    \"isHidden\": false,\n    \"pinnedDataOwner\": \"\"\n}",
+      "language": "json"
+    },
+    {
+      "code": "Cipher?: \"AES256-GCM\",\nCipher-IV?: \"\",\nContent-Type: \"\",\n{ File Data - Encrypted if private }",
+      "language": "json"
+    },
+    {
+      "code": "ArFS: \"0.15\",\nCipher?: \"AES256-GCM\",\nCipher-IV?: \"\",\nContent-Type: \"\",\nDrive-Id: \"\",\nEntity-Type: \"folder\",\nFolder-Id: \"\",\nParent-Folder-Id?: \"\",\nUnix-Time: \"\"\n\nMetadata JSON {\n    \"name\": \"\",\n    \"isHidden\": false\n}",
+      "language": "json"
+    },
+    {
+      "code": "ArFS: \"0.15\",\nDrive-Id: \"\",\nEntity-Type: \"snapshot\",\nSnapshot-Id: \"\",\nContent-Type: \"\",\nBlock-Start: \"\",\nBlock-End: \"\",\nData-Start: \"\",\nData-End: \"\",\nUnix-Time: \"\"",
+      "language": "json"
+    },
+    {
+      "code": "sequenceDiagram\n    participant User\n    participant Client\n    participant Wallet\n    participant Arweave\n\n    User->>Client: Create drive \"My Project\"\n    Client->>Client: Generate drive UUID\n    Client->>Client: Generate root folder UUID\n    Client->>Wallet: Request signature (if private)\n    Wallet->>Client: Return signature\n    Client->>Client: Derive drive key (if private)\n    Client->>Client: Encrypt metadata (if private)\n    Client->>Arweave: Upload drive entity\n    Client->>Arweave: Upload root folder entity\n\n    User->>Client: Create folder \"Documents\"\n    Client->>Client: Generate folder UUID\n    Client->>Client: Encrypt folder metadata (if private)\n    Client->>Arweave: Upload folder entity\n\n    User->>Client: Upload file \"readme.txt\"\n    Client->>Client: Generate file UUID\n    Client->>Client: Encrypt file metadata (if private)\n    Client->>Client: Encrypt file data (if private)\n    Client->>Arweave: Upload file metadata\n    Client->>Arweave: Upload file data",
+      "language": "mermaid"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "New Drive Entity",
+      "id": "new-drive-entity"
+    },
+    {
+      "level": "h2",
+      "text": "New Root Folder Entity",
+      "id": "new-root-folder-entity"
+    },
+    {
+      "level": "h2",
+      "text": "Creating Files",
+      "id": "creating-files"
+    },
+    {
+      "level": "h3",
+      "text": "File Metadata Transaction",
+      "id": "file-metadata-transaction"
+    },
+    {
+      "level": "h3",
+      "text": "File Data Transaction",
+      "id": "file-data-transaction"
+    },
+    {
+      "level": "h2",
+      "text": "Creating Folders",
+      "id": "creating-folders"
+    },
+    {
+      "level": "h2",
+      "text": "Creating Snapshots",
+      "id": "creating-snapshots"
+    },
+    {
+      "level": "h2",
+      "text": "Implementation Example",
+      "id": "implementation-example"
+    },
+    {
+      "level": "h2",
+      "text": "Best Practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h3",
+      "text": "Naming Conventions",
+      "id": "naming-conventions"
+    },
+    {
+      "level": "h3",
+      "text": "Organization",
+      "id": "organization"
+    },
+    {
+      "level": "h3",
+      "text": "Performance",
+      "id": "performance"
+    },
+    {
+      "level": "h3",
+      "text": "Security",
+      "id": "security"
+    },
+    {
+      "level": "h2",
+      "text": "Error Handling",
+      "id": "error-handling"
+    },
+    {
+      "level": "h3",
+      "text": "Transaction Failures",
+      "id": "transaction-failures"
+    },
+    {
+      "level": "h3",
+      "text": "Validation Errors",
+      "id": "validation-errors"
+    },
+    {
+      "level": "h3",
+      "text": "Network Issues",
+      "id": "network-issues"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#creating-drives-(/build/advanced/arfs/creating-drives)",
+  "links": []
+}

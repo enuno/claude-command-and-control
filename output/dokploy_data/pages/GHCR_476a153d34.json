@@ -1,0 +1,8 @@
+{
+  "title": "GHCR",
+  "content": "To configure a GitHub Container Registry, you need to fill the form with the following details:\n\n1. Insert the Registry Name eg. `My Registry`.\n2. Insert the Username eg. `github_username`.\n3. Insert the Password, you can use your own github password or generate a token here `https://github.com/settings/tokens`\n4. Click on Generate Token (Classic).\n5. Insert the Note Description eg. `github_token`.\n6. In permissions make sure to select `write:packages`.\n7. Click on `Create`.\n8. Copy the `access token` and paste it in Dokploy Modal as a Password field.\n9. (Optional) If you pretend to use Cluster Feature, make sure to set a `Image Prefix`.\n10. Registry URL: set `ghcr.io`\n11. Click on `Test` to make sure everything is working.\n12. Click on `Create` to save the registry.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#ghcr",
+  "links": []
+}

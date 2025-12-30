@@ -1,0 +1,8 @@
+{
+  "title": "Testing (/sdks/wayfinder/testing)",
+  "content": "- `yarn test` - runs all tests in all packages (monorepo)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#testing-(/sdks/wayfinder/testing)",
+  "links": []
+}

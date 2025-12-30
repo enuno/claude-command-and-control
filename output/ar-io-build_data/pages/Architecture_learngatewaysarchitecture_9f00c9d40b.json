@@ -1,0 +1,89 @@
+{
+  "title": "Architecture (/learn/gateways/architecture)",
+  "content": "AR.IO gateways are sophisticated data access layers built on top of the Arweave network. They transform the raw Arweave blockchain into a performant, reliable, and developer-friendly platform for storing and retrieving data. Gateways act as bridges between applications and the permanent storage capabilities of Arweave.\n\n## Core Technology Stack\n\nAR.IO gateways are built using modern, scalable technologies designed for high-performance data operations:\n\n### Runtime and Language\n- **Node.js**: The primary runtime environment for all gateway services\n- **TypeScript**: Core services written with flexible interfaces for customization\n- **Event-driven architecture**: Enables efficient handling of concurrent operations\n\n### Data Storage\n- **SQLite**: Four specialized databases handle different aspects of gateway operations:\n  - Chain data indexing\n  - Bundle transaction processing  \n  - Data item management\n  - Configuration and metadata\n- **Redis**: High-speed caching layer for frequently accessed data\n- **File system storage**: Local caching for frequently accessed data\n\n### Processing Model\n- **Worker-based concurrency**: Specialized workers handle different background tasks\n- **Event-driven processing**: Loosely coupled components communicate via events\n- **Streaming data handling**: Minimizes memory overhead for large data operations\n\n## Key Architectural Decisions\n\nSeveral important design decisions shape how AR.IO gateways operate:\n\n### Data Retrieval Strategy\nAR.IO gateways use a sophisticated **hierarchical fallback system** for data retrieval:\n\n1. **Trusted gateways**: Prioritize data from verified, high-performance peers\n2. **AR.IO network**: Leverage the broader network of AR.IO gateways  \n3. **Chunks data items**: Reconstruct data from individual chunks when needed\n4. **Transaction data**: Fall back to raw Arweave transaction data\n\nThis approach ensures data availability while optimizing for speed and reliability.\n\n### Verification and Trust Model\n- **Multi-level cryptographic verification**: Data integrity is verified at multiple points\n- **Trust hierarchy**: Cached verified data → trusted cached data → network streams\n- **Self-healing mechanisms**: Automatic recovery and re-verification of corrupted data\n- **Verification headers**: HTTP headers indicate the verification status of returned data\n\n### Worker Specialization\nDifferent background workers handle specific responsibilities:\n\n- **Block synchronization workers**: Keep the gateway synchronized with Arweave blocks\n- **Bundle processing workers**: Handle Layer 2 bundled data items (ANS-104)\n- **Data verification workers**: Continuously verify stored data integrity\n- **Maintenance workers**: Perform cleanup and optimization tasks\n\n## Scalability and Configuration\n\nAR.IO gateways are designed to scale from small personal deployments to large enterprise installations:\n\n### Modular Architecture\nGateway services can be independently configured or disabled based on operator needs:\n- **Data serving**: Serve cached data to applications\n- **Data indexing**: Index and process new Arweave data\n- **Bundle processing**: Handle Layer 2 bundled transactions\n- **ArNS routing**: Provide Arweave Name System resolution\n\n## Core Philosophy: Builder Independence\n\nA fundamental principle of AR.IO gateway architecture is **empowering builders to do the things they care about** without relying on any centralized resource to leverage Arweave. This philosophy manifests in several key ways:\n\n### Extensibility Through Modularity\nGateways are designed as extensible platforms that operators can customize through **[Extensions](/build/extensions/)**, sidecar services, and plugin architectures for specialized functionality.\n\n### Data Sovereignty\nOperators maintain complete control through **[Data Retrieval](/learn/gateways/data-retrieval)** strategies and **[Data Verification](/learn/gateways/data-verification)** systems that ensure independence from trusted intermediaries.\n\n### Network Resilience\nThe modular design creates a resilient ecosystem where distributed infrastructure and customizable trust models prevent single points of failure.\n\nThis architecture ensures that builders can create powerful applications on Arweave while maintaining independence from any centralized infrastructure or service provider.\n\n## Explore Gateway Capabilities\n\n}\n  />\n  }\n  />\n  }\n  />\n  }\n  />",
+  "code_samples": [
+    {
+      "code": "graph TB\n    subgraph Gateway [\"AR.IO Gateway\"]\n        ENVOY[Envoy ProxyLoad Balancer & Routing]\n        \n        API[Core ServiceGateway API]\n        \n        subgraph \"Data Layer\"\n            DB1[(Chain IndexSQLite)]\n            DB2[(Bundle IndexSQLite)]\n            DB3[(Data IndexSQLite)]\n            DB4[(Config & MetadataSQLite)]\n            REDIS[(Redis CacheHigh-Speed Layer)]\n        end\n        \n        subgraph \"Storage Layer\"\n            FS[File System StorageLocal Cache]\n        end\n    end\n    \n    subgraph External [\"External Network\"]\n        MEMPOOLS[MempoolsTransaction Pool]\n        ARWEAVE[(Arweave NodesBlockchain Network)]\n        MEMPOOLS --> ARWEAVE\n    end\n\n    ENVOY --> API\n\n    API  DB1\n    API  DB2\n    API  DB3\n    API  DB4\n    API  REDIS\n    \n    API  FS\n\n    API  ARWEAVE\n    API  MEMPOOLS\n\n    classDef database fill:#3b82f6,stroke:#1d4ed8,stroke-width:2px,color:#fff\n    classDef service fill:#10b981,stroke:#059669,stroke-width:2px,color:#fff\n    classDef proxy fill:#f59e0b,stroke:#d97706,stroke-width:2px,color:#fff\n    classDef external fill:#8b5cf6,stroke:#7c3aed,stroke-width:2px,color:#fff\n    classDef storage fill:#ef4444,stroke:#dc2626,stroke-width:2px,color:#fff\n    \n    class DB1,DB2,DB3,DB4,REDIS database\n    class API service\n    class ENVOY proxy\n    class ARWEAVE,MEMPOOLS external\n    class FS storage",
+      "language": "mermaid"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Core Technology Stack",
+      "id": "core-technology-stack"
+    },
+    {
+      "level": "h3",
+      "text": "Runtime and Language",
+      "id": "runtime-and-language"
+    },
+    {
+      "level": "h3",
+      "text": "Data Storage",
+      "id": "data-storage"
+    },
+    {
+      "level": "h3",
+      "text": "Processing Model",
+      "id": "processing-model"
+    },
+    {
+      "level": "h2",
+      "text": "Key Architectural Decisions",
+      "id": "key-architectural-decisions"
+    },
+    {
+      "level": "h3",
+      "text": "Data Retrieval Strategy",
+      "id": "data-retrieval-strategy"
+    },
+    {
+      "level": "h3",
+      "text": "Verification and Trust Model",
+      "id": "verification-and-trust-model"
+    },
+    {
+      "level": "h3",
+      "text": "Worker Specialization",
+      "id": "worker-specialization"
+    },
+    {
+      "level": "h2",
+      "text": "Scalability and Configuration",
+      "id": "scalability-and-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Modular Architecture",
+      "id": "modular-architecture"
+    },
+    {
+      "level": "h2",
+      "text": "Core Philosophy: Builder Independence",
+      "id": "core-philosophy:-builder-independence"
+    },
+    {
+      "level": "h3",
+      "text": "Extensibility Through Modularity",
+      "id": "extensibility-through-modularity"
+    },
+    {
+      "level": "h3",
+      "text": "Data Sovereignty",
+      "id": "data-sovereignty"
+    },
+    {
+      "level": "h3",
+      "text": "Network Resilience",
+      "id": "network-resilience"
+    },
+    {
+      "level": "h2",
+      "text": "Explore Gateway Capabilities",
+      "id": "explore-gateway-capabilities"
+    }
+  ],
+  "url": "llms-txt#architecture-(/learn/gateways/architecture)",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Entity IDs (/sdks/ardrive-core-js/(core-concepts)/entity-ids)",
+  "content": "Use the type-safe entity ID constructors:",
+  "code_samples": [
+    {
+      "code": "// Generic entity ID\nconst entityId = EID('10108b54a-eb5e-4134-8ae2-a3946a428ec7');\n\n// Specific entity IDs\nconst driveId = new DriveID('12345674a-eb5e-4134-8ae2-a3946a428ec7');\nconst folderId = new FolderID('47162534a-eb5e-4134-8ae2-a3946a428ec7');\nconst fileId = new FileID('98765432a-eb5e-4134-8ae2-a3946a428ec7');",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#entity-ids-(/sdks/ardrive-core-js/(core-concepts)/entity-ids)",
+  "links": []
+}

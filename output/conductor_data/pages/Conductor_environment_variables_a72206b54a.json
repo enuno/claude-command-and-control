@@ -1,0 +1,8 @@
+{
+  "title": "Conductor environment variables",
+  "content": "Source: https://docs.conductor.build/tips/conductor-env\n\nConductor makes these environment variables available in your terminal and [scripts](/core/scripts):\n\n| Variable                   | Description                                            |\n| -------------------------- | ------------------------------------------------------ |\n| CONDUCTOR\\_WORKSPACE\\_NAME | Workspace name                                         |\n| CONDUCTOR\\_WORKSPACE\\_PATH | Workspace path                                         |\n| CONDUCTOR\\_ROOT\\_PATH      | Path to the repository root directory                  |\n| CONDUCTOR\\_DEFAULT\\_BRANCH | Name of the default branch (defaults to `main`)        |\n| CONDUCTOR\\_PORT            | First in a range of 10 ports assigned to the workspace |",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#conductor-environment-variables",
+  "links": []
+}

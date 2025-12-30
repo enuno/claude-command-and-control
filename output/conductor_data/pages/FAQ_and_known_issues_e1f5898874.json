@@ -1,0 +1,44 @@
+{
+  "title": "FAQ and known issues",
+  "content": "Source: https://docs.conductor.build/faq\n\nFrequently asked questions and known issues with Conductor\n\n## Which versions of Claude Code and Codex does Conductor use?\n\nConductor comes bundled with its own installation of Claude Code and Codex. You can find them at `~/Library/Application Support/com.conductor.app/bin`. Do not update or modify them, or they might be incompatible with Conductor.\n\n## How does Conductor authenticate to Claude Code and Codex?\n\nBy default, Conductor uses the auth tokens already saved on your machine. If you're logged into Claude Code with an API key, Conductor uses that; if you're logged in with Claude Pro or Max, Conductor uses that. You can also override this by setting an API key in Settings → Env.\n\n## What permissions do agents have?\n\nAgents in Conductor run with the same permissions as your user account. They can read and write files, run shell commands, and access anything you can access on your machine.\n\nAgents run directly on your system without sandboxing.\n\nMost users don't experience any problems with this. If you want to be extra safe, you can run Conductor on a separate machine or VM dedicated to development work.\n\n## Why does Conductor request access to Downloads, Reminders, etc.?\n\nWhen an agent or your shell tries to read a file in one of those macOS-protected folders, the system shows a permissions popup. Conductor itself doesn't need access—it's just passing through whatever your agent is trying to do.\n\n## How does Conductor make money?\n\nRight now we don't. We're a small team running on seed funding from a few great investors who believe in our vision. At some point we plan to charge for collaboration features that help teams make the most of AI agents, but for now we're focused on making Conductor an amazing free tool.\n\n## Why doesn't undo (cmd+z) work when I'm writing a message?\n\nThe library we use to do @-mentions breaks the undo history. Sorry! We're looking into other solutions.\n\n## Why do I see garbage when I switch between terminal windows (or see other issues with the terminal)?\n\nWe're streaming output from your shell along to the UI, and at some point along the way, the stream is probably getting corrupted. We're still working to track down this bug.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Which versions of Claude Code and Codex does Conductor use?",
+      "id": "which-versions-of-claude-code-and-codex-does-conductor-use?"
+    },
+    {
+      "level": "h2",
+      "text": "How does Conductor authenticate to Claude Code and Codex?",
+      "id": "how-does-conductor-authenticate-to-claude-code-and-codex?"
+    },
+    {
+      "level": "h2",
+      "text": "What permissions do agents have?",
+      "id": "what-permissions-do-agents-have?"
+    },
+    {
+      "level": "h2",
+      "text": "Why does Conductor request access to Downloads, Reminders, etc.?",
+      "id": "why-does-conductor-request-access-to-downloads,-reminders,-etc.?"
+    },
+    {
+      "level": "h2",
+      "text": "How does Conductor make money?",
+      "id": "how-does-conductor-make-money?"
+    },
+    {
+      "level": "h2",
+      "text": "Why doesn't undo (cmd+z) work when I'm writing a message?",
+      "id": "why-doesn't-undo-(cmd+z)-work-when-i'm-writing-a-message?"
+    },
+    {
+      "level": "h2",
+      "text": "Why do I see garbage when I switch between terminal windows (or see other issues with the terminal)?",
+      "id": "why-do-i-see-garbage-when-i-switch-between-terminal-windows-(or-see-other-issues-with-the-terminal)?"
+    }
+  ],
+  "url": "llms-txt#faq-and-known-issues",
+  "links": []
+}

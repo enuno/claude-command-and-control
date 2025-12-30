@@ -1,0 +1,62 @@
+{
+  "title": "Grafana (/build/extensions/grafana)",
+  "content": "AR.IO gateways track extensive performance and operational metrics using [Prometheus](https://prometheus.io/). A [Grafana](https://grafana.com/) sidecar can be deployed to visualize these metrics, providing an easy way to monitor gateway health and performance.\n\nThe Grafana sidecar is deployed as a separate Docker container that uses the same network as the gateway, making it simple to integrate with your existing setup.\n\n![Grafana Dashboard](/grafana.png)\n\nDeploy the Grafana sidecar using the provided Docker Compose file:\n\nThis command assumes you're running from the root directory of the gateway. If\n  running from a different directory, adjust the path to the docker-compose file\n  accordingly.\n\n### Verify Deployment\n\nCheck that Grafana is running properly:\n\nPress `Ctrl+C` to exit the logs. Look for any error messages or permission issues.\n\nNavigate to `http://localhost:1024` in your browser to access Grafana.\n\n**Default credentials:**\n\n- Username: `admin`\n- Password: `admin`\n\nUpdated credentials may be lost if the Grafana sidecar is restarted. Be sure\n  to log into Grafana immediately after every startup to ensure Grafana cannot\n  be accessed with the default credentials.\n\n## Exposing Dashboard Publicly\n\nTo expose your Grafana dashboard externally through your domain, you'll need to configure nginx as a reverse proxy. This requires DNS setup and SSL certificates as covered in the [gateway installation guide](/build/run-a-gateway/quick-start).\n\nThis setup assumes you've already configured DNS, SSL certificates, and nginx\n  as described in the [Installation & Setup\n  guide](/build/run-a-gateway/quick-start).\n\n### Deploy Grafana Sidecar\n\nFirst, ensure your Grafana container is running:\n\nVerify it's accessible locally at `http://localhost:1024`.\n\n### Update Nginx Configuration\n\nEdit your existing nginx configuration file (`/etc/nginx/sites-available/default`) to add the Grafana location block:",
+  "code_samples": [
+    {
+      "code": "docker compose -f docker-compose.grafana.yaml up -d",
+      "language": "bash"
+    },
+    {
+      "code": "docker compose -f docker-compose.grafana.yaml logs -f --tail=25",
+      "language": "bash"
+    },
+    {
+      "code": "docker compose -f docker-compose.grafana.yaml up -d",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Quick Start",
+      "id": "quick-start"
+    },
+    {
+      "level": "h3",
+      "text": "Deploy Grafana",
+      "id": "deploy-grafana"
+    },
+    {
+      "level": "h3",
+      "text": "Verify Deployment",
+      "id": "verify-deployment"
+    },
+    {
+      "level": "h3",
+      "text": "Access Grafana",
+      "id": "access-grafana"
+    },
+    {
+      "level": "h2",
+      "text": "Exposing Dashboard Publicly",
+      "id": "exposing-dashboard-publicly"
+    },
+    {
+      "level": "h3",
+      "text": "Deploy Grafana Sidecar",
+      "id": "deploy-grafana-sidecar"
+    },
+    {
+      "level": "h3",
+      "text": "Update Nginx Configuration",
+      "id": "update-nginx-configuration"
+    }
+  ],
+  "url": "llms-txt#grafana-(/build/extensions/grafana)",
+  "links": []
+}

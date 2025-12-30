@@ -1,0 +1,44 @@
+{
+  "title": "Hosting Decentralized Websites (/build/guides/hosting-decentralized-websites)",
+  "content": "Create **permanent websites** that can't be censored, taken down, or modified after deployment. Host your content on Arweave and serve it through AR.IO gateways for a truly decentralized web experience.\n\n## What Makes It Different?\n\n**Traditional websites:**\n\n- Hosted on centralized servers\n- Can be taken down or censored\n- Require ongoing hosting costs\n- Single point of failure\n\n**Decentralized websites:**\n\n- Stored permanently on Arweave\n- Censorship-resistant\n- Pay once, host forever\n- Distributed across the network\n\n### 1. Arweave Manifests\n\n[Arweave manifests](/build/upload/manifests) are JSON files that define how your website's files are organized and linked together. They enable:\n\n- **Friendly URLs** - Access files with readable paths instead of transaction IDs\n- **Relative linking** - Use `./style.css` instead of full transaction IDs\n- **Fallback pages** - Handle 404 errors gracefully\n- **File organization** - Structure your website like a traditional site\n\n**Example manifest:**\n\n### 2. Deployment Tools\n\n**Permaweb Deploy** - [CLI deployment tool](https://github.com/permaweb/permaweb-deploy) that:\n\n- Uploads your build folder to Arweave using Turbo\n- Creates a manifest automatically\n- Updates your ArNS domain\n- Integrates with GitHub Actions\n- Requires `--deploy-folder` and `--arns-name` parameters\n\n**Arlink** - [User-friendly web interface](https://arlink.ar.io/) for:\n\n- Quick website uploads through the browser\n- Manifest generation\n- ArNS integration\n\n**ArDrive Web** - [User-friendly interface](/build/guides/deploy-dapp-with-ardrive-web) for:\n\n- File management\n- Website building\n- Deployment workflows\n\n### 3. ArNS Integration\n\n**Primary Names** - [Decentralized domain names](/learn/arns) that:\n\n- Point to your website's manifest\n- Provide human-readable URLs\n- Can be updated to point to new versions\n- Are owned and controlled by you\n\n**1. Build your website** - Create a static website with HTML, CSS, and JavaScript\n\n**2. Choose a deployment tool:**",
+  "code_samples": [
+    {
+      "code": "{\n  \"manifest\": \"arweave/paths\",\n  \"version\": \"0.2.0\",\n  \"index\": {\n    \"path\": \"index.html\"\n  },\n  \"fallback\": {\n    \"id\": \"404-page-transaction-id\"\n  },\n  \"paths\": {\n    \"index.html\": {\n      \"id\": \"main-page-transaction-id\"\n    },\n    \"style.css\": {\n      \"id\": \"css-transaction-id\"\n    },\n    \"script.js\": {\n      \"id\": \"js-transaction-id\"\n    }\n  }\n}",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "What Makes It Different?",
+      "id": "what-makes-it-different?"
+    },
+    {
+      "level": "h2",
+      "text": "How It Works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h3",
+      "text": "1. Arweave Manifests",
+      "id": "1.-arweave-manifests"
+    },
+    {
+      "level": "h3",
+      "text": "2. Deployment Tools",
+      "id": "2.-deployment-tools"
+    },
+    {
+      "level": "h3",
+      "text": "3. ArNS Integration",
+      "id": "3.-arns-integration"
+    },
+    {
+      "level": "h2",
+      "text": "Quick Start",
+      "id": "quick-start"
+    }
+  ],
+  "url": "llms-txt#hosting-decentralized-websites-(/build/guides/hosting-decentralized-websites)",
+  "links": []
+}

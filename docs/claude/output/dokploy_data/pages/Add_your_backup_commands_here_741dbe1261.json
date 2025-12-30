@@ -1,0 +1,8 @@
+{
+  "title": "Add your backup commands here",
+  "content": "docker exec -it $container_name clickhouse-client --query \"BACKUP DATABASE mydb TO '/backups/$backup_file'\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#add-your-backup-commands-here",
+  "links": []
+}

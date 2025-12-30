@@ -1,0 +1,192 @@
+{
+  "url": "https://fastapi.tiangolo.com/tutorial/metadata/",
+  "title": "Metadata and Docs URLs¶",
+  "content": "You can customize several metadata configurations in your FastAPI application.\n\nYou can set the following fields that are used in the OpenAPI specification and the automatic API docs UIs:\n\nYou can set them as follows:\n\nYou can write Markdown in the description field and it will be rendered in the output.\n\nWith this configuration, the automatic API docs would look like:\n\nSince OpenAPI 3.1.0 and FastAPI 0.99.0, you can also set the license_info with an identifier instead of a url.\n\nYou can also add additional metadata for the different tags used to group your path operations with the parameter openapi_tags.\n\nIt takes a list containing one dictionary for each tag.\n\nEach dictionary can contain:\n\nLet's try that in an example with tags for users and items.\n\nCreate metadata for your tags and pass it to the openapi_tags parameter:\n\nNotice that you can use Markdown inside of the descriptions, for example \"login\" will be shown in bold (login) and \"fancy\" will be shown in italics (fancy).\n\nYou don't have to add metadata for all the tags that you use.\n\nUse the tags parameter with your path operations (and APIRouters) to assign them to different tags:\n\nRead more about tags in Path Operation Configuration.\n\nNow, if you check the docs, they will show all the additional metadata:\n\nThe order of each tag metadata dictionary also defines the order shown in the docs UI.\n\nFor example, even though users would go after items in alphabetical order, it is shown before them, because we added their metadata as the first dictionary in the list.\n\nBy default, the OpenAPI schema is served at /openapi.json.\n\nBut you can configure it with the parameter openapi_url.\n\nFor example, to set it to be served at /api/v1/openapi.json:\n\nIf you want to disable the OpenAPI schema completely you can set openapi_url=None, that will also disable the documentation user interfaces that use it.\n\nYou can configure the two documentation user interfaces included:\n\nFor example, to set Swagger UI to be served at /documentation and disable ReDoc:",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Metadata and Docs URLs¶",
+      "id": "metadata-and-docs-urls"
+    },
+    {
+      "level": "h2",
+      "text": "Metadata for API¶",
+      "id": "metadata-for-api"
+    },
+    {
+      "level": "h2",
+      "text": "License identifier¶",
+      "id": "license-identifier"
+    },
+    {
+      "level": "h2",
+      "text": "Metadata for tags¶",
+      "id": "metadata-for-tags"
+    },
+    {
+      "level": "h3",
+      "text": "Create metadata for tags¶",
+      "id": "create-metadata-for-tags"
+    },
+    {
+      "level": "h3",
+      "text": "Use your tags¶",
+      "id": "use-your-tags"
+    },
+    {
+      "level": "h3",
+      "text": "Check the docs¶",
+      "id": "check-the-docs"
+    },
+    {
+      "level": "h3",
+      "text": "Order of tags¶",
+      "id": "order-of-tags"
+    },
+    {
+      "level": "h2",
+      "text": "OpenAPI URL¶",
+      "id": "openapi-url"
+    },
+    {
+      "level": "h2",
+      "text": "Docs URLs¶",
+      "id": "docs-urls"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from fastapi import FastAPI\n\ndescription = \"\"\"\nChimichangApp API helps you do awesome stuff. 🚀\n\n## Items\n\nYou can **read items**.\n\n## Users\n\nYou will be able to:\n\n* **Create users** (_not implemented_).\n* **Read users** (_not implemented_).\n\"\"\"\n\napp = FastAPI(\n    title=\"ChimichangApp\",\n    description=description,\n    summary=\"Deadpool's favorite app. Nuff said.\",\n    version=\"0.0.1\",\n    terms_of_service=\"http://example.com/terms/\",\n    contact={\n        \"name\": \"Deadpoolio the Amazing\",\n        \"url\": \"http://x-force.example.com/contact/\",\n        \"email\": \"dp@x-force.example.com\",\n    },\n    license_info={\n        \"name\": \"Apache 2.0\",\n        \"url\": \"https://www.apache.org/licenses/LICENSE-2.0.html\",\n    },\n)\n\n\n@app.get(\"/items/\")\nasync def read_items():\n    return [{\"name\": \"Katana\"}]",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\n\ndescription = \"\"\"\nChimichangApp API helps you do awesome stuff. 🚀\n\n## Items\n\nYou can **read items**.\n\n## Users\n\nYou will be able to:\n\n* **Create users** (_not implemented_).\n* **Read users** (_not implemented_).\n\"\"\"\n\napp = FastAPI(\n    title=\"ChimichangApp\",\n    description=description,\n    summary=\"Deadpool's favorite app. Nuff said.\",\n    version=\"0.0.1\",\n    terms_of_service=\"http://example.com/terms/\",\n    contact={\n        \"name\": \"Deadpoolio the Amazing\",\n        \"url\": \"http://x-force.example.com/contact/\",\n        \"email\": \"dp@x-force.example.com\",\n    },\n    license_info={\n        \"name\": \"Apache 2.0\",\n        \"identifier\": \"MIT\",\n    },\n)\n\n\n@app.get(\"/items/\")\nasync def read_items():\n    return [{\"name\": \"Katana\"}]",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\n\ntags_metadata = [\n    {\n        \"name\": \"users\",\n        \"description\": \"Operations with users. The **login** logic is also here.\",\n    },\n    {\n        \"name\": \"items\",\n        \"description\": \"Manage items. So _fancy_ they have their own docs.\",\n        \"externalDocs\": {\n            \"description\": \"Items external docs\",\n            \"url\": \"https://fastapi.tiangolo.com/\",\n        },\n    },\n]\n\napp = FastAPI(openapi_tags=tags_metadata)\n\n\n@app.get(\"/users/\", tags=[\"users\"])\nasync def get_users():\n    return [{\"name\": \"Harry\"}, {\"name\": \"Ron\"}]\n\n\n@app.get(\"/items/\", tags=[\"items\"])\nasync def get_items():\n    return [{\"name\": \"wand\"}, {\"name\": \"flying broom\"}]",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\n\ntags_metadata = [\n    {\n        \"name\": \"users\",\n        \"description\": \"Operations with users. The **login** logic is also here.\",\n    },\n    {\n        \"name\": \"items\",\n        \"description\": \"Manage items. So _fancy_ they have their own docs.\",\n        \"externalDocs\": {\n            \"description\": \"Items external docs\",\n            \"url\": \"https://fastapi.tiangolo.com/\",\n        },\n    },\n]\n\napp = FastAPI(openapi_tags=tags_metadata)\n\n\n@app.get(\"/users/\", tags=[\"users\"])\nasync def get_users():\n    return [{\"name\": \"Harry\"}, {\"name\": \"Ron\"}]\n\n\n@app.get(\"/items/\", tags=[\"items\"])\nasync def get_items():\n    return [{\"name\": \"wand\"}, {\"name\": \"flying broom\"}]",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\n\napp = FastAPI(openapi_url=\"/api/v1/openapi.json\")\n\n\n@app.get(\"/items/\")\nasync def read_items():\n    return [{\"name\": \"Foo\"}]",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\n\napp = FastAPI(docs_url=\"/documentation\", redoc_url=None)\n\n\n@app.get(\"/items/\")\nasync def read_items():\n    return [{\"name\": \"Foo\"}]",
+      "language": "python"
+    }
+  ],
+  "patterns": [
+    {
+      "description": "For example:",
+      "code": "from fastapi import FastAPI\n\ndescription = \"\"\"\nChimichangApp API helps you do awesome stuff. 🚀\n\n## Items\n\nYou can **read items**.\n\n## Users\n\nYou will be able to:\n\n* **Create users** (_not implemented_).\n* **Read users** (_not implemented_).\n\"\"\"\n\napp = FastAPI(\n    title=\"ChimichangApp\",\n    description=description,\n    summary=\"Deadpool's favorite app. Nuff said.\",\n    version=\"0.0.1\",\n    terms_of_service=\"http://example.com/terms/\",\n    contact={\n        \"name\": \"Deadpoolio the Amazing\",\n        \"url\": \"http://x-force.example.com/contact/\",\n        \"email\": \"dp@x-force.example.com\",\n    },\n    license_info={\n        \"name\": \"Apache 2.0\",\n        \"identifier\": \"MIT\",\n    },\n)\n\n\n@app.get(\"/items/\")\nasync def read_items():\n    return [{\"name\": \"Katana\"}]"
+    }
+  ],
+  "links": [
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

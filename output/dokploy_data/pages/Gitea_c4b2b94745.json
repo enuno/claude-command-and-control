@@ -1,0 +1,19 @@
+{
+  "title": "Gitea",
+  "content": "import { Callout } from 'fumadocs-ui/components/callout';\n\nDokploy offers a way to connect your Gitea Repository to your Dokploy panel, you can use Organizations or personal accounts.\n\nGo to `Git` and select `Gitea` as the source, then you can use the following options:\n\n* **Application ID**: Select the application ID that you want to connect to Dokploy.\n* **Personal Secret**: Select the secret that you want to connect to Dokploy.\n* **Organization Name(Optional)**: Select the organization name that you want to connect to Dokploy (Ideal for Gitea Organizations).\n\nFollow the steps to connect your Gitea account to Dokploy:\n\n1. Go to your Gitea instance's settings (e.g., `https://gitea.com/user/settings/applications`) and scroll to the `Create a new OAuth2 Application`.\n2. Set Application Name: e.g., `Dokploy-Gitea-App`. Choose any name you want.\n3. Redirect URI: Copy the `Redirect URI` from Dokploy. e.g., `https://dokploy.com/api/providers/gitea/callback`.\n4. Check Confidential Client\n5. Click on `Create Application`.\n6. Copy the `Client ID` and `Client Secret` from Gitea and paste them in Dokploy's `Gitea` Modal section.\n7. Click on `Configure Gitea App`.\n8. That operation will save the Gitea Provider configuration and redirect you to Gitia to authorize Dokploy to have access.\n9. Click on `Authorize`.\n10. You will be redirected to the `Git` section of Dokploy.\n11. Now you can use the repositories from your Gitea Account in `Applications` or `Docker Compose` services.\n\n<Callout type=\"warn\">\n  Dokploy doesn't support Gitea Automatic deployments on each push you make to your repository.\n</Callout>\n\n## Setup Automatic Deployments\n\nYou can configure automatic deployments in Dokploy for the Following Services:\n\n1. **Applications**\n2. **Docker Compose**\n\nThe steps are the same for both services.\n\n1. Go to either `Applications` or `Docker Compose` and go to `Deployments` Tab.\n2. Copy the `Webhook URL`.\n3. Go to your Gitea Account and select the repository.\n4. In the left menu, select `Settings` and then `Webhooks`.\n5. Click on `Add Webhook`.\n6. Set the `URL` to the one you copied in the previous step.\n7. In the Trigger section, select `Push Events`.\n8. Click on `Add Webhook`.\n9. Click on `Save`.\n10. Now you have automatic deployments enabled for the selected repository.\n\n## Clarification on Automatic Deployments\n\nBy default, Dokploy will automatically deploy your application on the Branch you have selected.\n\ne.g., Let's suppose you have an `application` in this way:\n\nRepository: `my-app`\nBranch: `feature`\n\nIf you try to make a push on another branch e.g., `main`, Dokploy will not automatically deploy your application, because\nyour application has selected `feature` as the Branch.\n\n<Callout>\n  In the case you want to have multiple applications in the same repository, e.g., (development, staging, production), you can create 3 `Applications` in Dokploy\n  and select the branch in each of them.\n\nThis is very useful if you want to have multiple environments for the same application.\n</Callout>\n\n<userStyle>\n  Normal\n</userStyle>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Setup Automatic Deployments",
+      "id": "setup-automatic-deployments"
+    },
+    {
+      "level": "h2",
+      "text": "Clarification on Automatic Deployments",
+      "id": "clarification-on-automatic-deployments"
+    }
+  ],
+  "url": "llms-txt#gitea",
+  "links": []
+}

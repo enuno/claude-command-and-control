@@ -1,0 +1,13 @@
+{
+  "title": "Configuration (/sdks/ar-io-sdk/(ario-contract)/configuration)",
+  "content": "The ARIO client class exposes APIs relevant to the ar.io process. It can be configured to use any AO Process ID that adheres to the [ARIO Network Spec]. By default, it will use the current [ARIO Testnet Process]. Refer to [AO Connect] for more information on how to configure an ARIO process to use specific AO infrastructure.",
+  "code_samples": [
+    {
+      "code": "// provide a custom ao infrastructure and process id\nconst ario = ARIO.mainnet({\n  process: new AOProcess({\n    processId: 'ARIO_PROCESS_ID'\n    ao: connect({\n      MODE: 'legacy',\n      MU_URL: 'https://mu-testnet.xyz',\n      CU_URL: 'https://cu-testnet.xyz',\n      GRAPHQL_URL: 'https://arweave.net/graphql',\n      GATEWAY_URL: 'https://arweave.net',\n    })\n  })\n});",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#configuration-(/sdks/ar-io-sdk/(ario-contract)/configuration)",
+  "links": []
+}

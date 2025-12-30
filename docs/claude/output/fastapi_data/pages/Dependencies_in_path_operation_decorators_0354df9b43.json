@@ -1,0 +1,185 @@
+{
+  "url": "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+  "title": "Dependencies in path operation decorators¶",
+  "content": "In some cases you don't really need the return value of a dependency inside your path operation function.\n\nOr the dependency doesn't return a value.\n\nBut you still need it to be executed/solved.\n\nFor those cases, instead of declaring a path operation function parameter with Depends, you can add a list of dependencies to the path operation decorator.\n\nThe path operation decorator receives an optional argument dependencies.\n\nIt should be a list of Depends():\n\nPrefer to use the Annotated version if possible.\n\nThese dependencies will be executed/solved the same way as normal dependencies. But their value (if they return any) won't be passed to your path operation function.\n\nSome editors check for unused function parameters, and show them as errors.\n\nUsing these dependencies in the path operation decorator you can make sure they are executed while avoiding editor/tooling errors.\n\nIt might also help avoid confusion for new developers that see an unused parameter in your code and could think it's unnecessary.\n\nIn this example we use invented custom headers X-Key and X-Token.\n\nBut in real cases, when implementing security, you would get more benefits from using the integrated Security utilities (the next chapter).\n\nYou can use the same dependency functions you use normally.\n\nThey can declare request requirements (like headers) or other sub-dependencies:\n\nPrefer to use the Annotated version if possible.\n\nThese dependencies can raise exceptions, the same as normal dependencies:\n\nPrefer to use the Annotated version if possible.\n\nAnd they can return values or not, the values won't be used.\n\nSo, you can reuse a normal dependency (that returns a value) you already use somewhere else, and even though the value won't be used, the dependency will be executed:\n\nPrefer to use the Annotated version if possible.\n\nLater, when reading about how to structure bigger applications (Bigger Applications - Multiple Files), possibly with multiple files, you will learn how to declare a single dependencies parameter for a group of path operations.\n\nNext we will see how to add dependencies to the whole FastAPI application, so that they apply to each path operation.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Dependencies in path operation decorators¶",
+      "id": "dependencies-in-path-operation-decorators"
+    },
+    {
+      "level": "h2",
+      "text": "Add dependencies to the path operation decorator¶",
+      "id": "add-dependencies-to-the-path-operation-decorator"
+    },
+    {
+      "level": "h2",
+      "text": "Dependencies errors and return values¶",
+      "id": "dependencies-errors-and-return-values"
+    },
+    {
+      "level": "h3",
+      "text": "Dependency requirements¶",
+      "id": "dependency-requirements"
+    },
+    {
+      "level": "h3",
+      "text": "Raise exceptions¶",
+      "id": "raise-exceptions"
+    },
+    {
+      "level": "h3",
+      "text": "Return values¶",
+      "id": "return-values"
+    },
+    {
+      "level": "h2",
+      "text": "Dependencies for a group of path operations¶",
+      "id": "dependencies-for-a-group-of-path-operations"
+    },
+    {
+      "level": "h2",
+      "text": "Global Dependencies¶",
+      "id": "global-dependencies"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Depends, FastAPI, Header, HTTPException\n\napp = FastAPI()\n\n\nasync def verify_token(x_token: Annotated[str, Header()]):\n    if x_token != \"fake-super-secret-token\":\n        raise HTTPException(status_code=400, detail=\"X-Token header invalid\")\n\n\nasync def verify_key(x_key: Annotated[str, Header()]):\n    if x_key != \"fake-super-secret-key\":\n        raise HTTPException(status_code=400, detail=\"X-Key header invalid\")\n    return x_key\n\n\n@app.get(\"/items/\", dependencies=[Depends(verify_token), Depends(verify_key)])\nasync def read_items():\n    return [{\"item\": \"Foo\"}, {\"item\": \"Bar\"}]",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Depends, FastAPI, Header, HTTPException\n\napp = FastAPI()\n\n\nasync def verify_token(x_token: str = Header()):\n    if x_token != \"fake-super-secret-token\":\n        raise HTTPException(status_code=400, detail=\"X-Token header invalid\")\n\n\nasync def verify_key(x_key: str = Header()):\n    if x_key != \"fake-super-secret-key\":\n        raise HTTPException(status_code=400, detail=\"X-Key header invalid\")\n    return x_key\n\n\n@app.get(\"/items/\", dependencies=[Depends(verify_token), Depends(verify_key)])\nasync def read_items():\n    return [{\"item\": \"Foo\"}, {\"item\": \"Bar\"}]",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Depends, FastAPI, Header, HTTPException\n\napp = FastAPI()\n\n\nasync def verify_token(x_token: Annotated[str, Header()]):\n    if x_token != \"fake-super-secret-token\":\n        raise HTTPException(status_code=400, detail=\"X-Token header invalid\")\n\n\nasync def verify_key(x_key: Annotated[str, Header()]):\n    if x_key != \"fake-super-secret-key\":\n        raise HTTPException(status_code=400, detail=\"X-Key header invalid\")\n    return x_key\n\n\n@app.get(\"/items/\", dependencies=[Depends(verify_token), Depends(verify_key)])\nasync def read_items():\n    return [{\"item\": \"Foo\"}, {\"item\": \"Bar\"}]",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Depends, FastAPI, Header, HTTPException\n\napp = FastAPI()\n\n\nasync def verify_token(x_token: str = Header()):\n    if x_token != \"fake-super-secret-token\":\n        raise HTTPException(status_code=400, detail=\"X-Token header invalid\")\n\n\nasync def verify_key(x_key: str = Header()):\n    if x_key != \"fake-super-secret-key\":\n        raise HTTPException(status_code=400, detail=\"X-Key header invalid\")\n    return x_key\n\n\n@app.get(\"/items/\", dependencies=[Depends(verify_token), Depends(verify_key)])\nasync def read_items():\n    return [{\"item\": \"Foo\"}, {\"item\": \"Bar\"}]",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Depends, FastAPI, Header, HTTPException\n\napp = FastAPI()\n\n\nasync def verify_token(x_token: Annotated[str, Header()]):\n    if x_token != \"fake-super-secret-token\":\n        raise HTTPException(status_code=400, detail=\"X-Token header invalid\")\n\n\nasync def verify_key(x_key: Annotated[str, Header()]):\n    if x_key != \"fake-super-secret-key\":\n        raise HTTPException(status_code=400, detail=\"X-Key header invalid\")\n    return x_key\n\n\n@app.get(\"/items/\", dependencies=[Depends(verify_token), Depends(verify_key)])\nasync def read_items():\n    return [{\"item\": \"Foo\"}, {\"item\": \"Bar\"}]",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Depends, FastAPI, Header, HTTPException\n\napp = FastAPI()\n\n\nasync def verify_token(x_token: str = Header()):\n    if x_token != \"fake-super-secret-token\":\n        raise HTTPException(status_code=400, detail=\"X-Token header invalid\")\n\n\nasync def verify_key(x_key: str = Header()):\n    if x_key != \"fake-super-secret-key\":\n        raise HTTPException(status_code=400, detail=\"X-Key header invalid\")\n    return x_key\n\n\n@app.get(\"/items/\", dependencies=[Depends(verify_token), Depends(verify_key)])\nasync def read_items():\n    return [{\"item\": \"Foo\"}, {\"item\": \"Bar\"}]",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Annotated\n\nfrom fastapi import Depends, FastAPI, Header, HTTPException\n\napp = FastAPI()\n\n\nasync def verify_token(x_token: Annotated[str, Header()]):\n    if x_token != \"fake-super-secret-token\":\n        raise HTTPException(status_code=400, detail=\"X-Token header invalid\")\n\n\nasync def verify_key(x_key: Annotated[str, Header()]):\n    if x_key != \"fake-super-secret-key\":\n        raise HTTPException(status_code=400, detail=\"X-Key header invalid\")\n    return x_key\n\n\n@app.get(\"/items/\", dependencies=[Depends(verify_token), Depends(verify_key)])\nasync def read_items():\n    return [{\"item\": \"Foo\"}, {\"item\": \"Bar\"}]",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import Depends, FastAPI, Header, HTTPException\n\napp = FastAPI()\n\n\nasync def verify_token(x_token: str = Header()):\n    if x_token != \"fake-super-secret-token\":\n        raise HTTPException(status_code=400, detail=\"X-Token header invalid\")\n\n\nasync def verify_key(x_key: str = Header()):\n    if x_key != \"fake-super-secret-key\":\n        raise HTTPException(status_code=400, detail=\"X-Key header invalid\")\n    return x_key\n\n\n@app.get(\"/items/\", dependencies=[Depends(verify_token), Depends(verify_key)])\nasync def read_items():\n    return [{\"item\": \"Foo\"}, {\"item\": \"Bar\"}]",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

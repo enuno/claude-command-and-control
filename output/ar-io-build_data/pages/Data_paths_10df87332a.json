@@ -1,0 +1,19 @@
+{
+  "title": "Data paths",
+  "content": "CHUNKS_DATA_PATH=/data/chunks\nCONTIGUOUS_DATA_PATH=/data/contiguous\nSQLITE_DATA_PATH=/data/sqlite\nbash",
+  "code_samples": [
+    {
+      "code": "### Advanced Gateway with ClickHouse",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Advanced Gateway with ClickHouse",
+      "id": "advanced-gateway-with-clickhouse"
+    }
+  ],
+  "url": "llms-txt#data-paths",
+  "links": []
+}

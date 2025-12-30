@@ -1,0 +1,48 @@
+{
+  "title": "Access Data (/build/access)",
+  "content": "Once data is stored on Arweave, it's permanently available. Here's how to access it efficiently for your applications.\n\nDifferent methods serve different needs. Each provides unique capabilities for retrieving data from Arweave.\n\nSearch and discover data on Arweave\n        \n           Query by tags and metadata\n           Filter by app, owner, timestamp\n           Get transaction IDs for fetching\n\n}\n    href=\"/build/access/find-data\"\n    icon={}\n  />\n  \n        Retrieve data bytes from Arweave\n        \n           REST API endpoints\n           GET arweave.net/[txId]\n           Returns raw data/files\n\n}\n    href=\"/build/access/fetch-data\"\n    icon={}\n  />\n  \n        Assign names to data and apps\n        \n           Create names like ardrive.ar.io\n           Point to any Arweave data\n           Update targets as needed\n\n}\n    href=\"/build/access/arns\"\n    icon={}\n  />\n\n## Common Access Patterns\n\n**Finding Data**\n- Search for data by tags, owner, or timestamp\n- Discover content from specific applications\n- Get transaction IDs for data retrieval\n\n**Fetching Data**\n- Retrieve the actual files/data using transaction IDs\n- Access data via REST API: `GET arweave.net/[txId]`\n- Stream large files efficiently\n\n**Naming with ArNS**\n- Register memorable names for your apps and data\n- Create permanent links like `ardrive.ar.io`\n- Update where names point without changing the URL\n\n## Quick Example: Find and Fetch\n\n### Find Data\nUse GraphQL to search for data and get transaction IDs:\n\n### Fetch Data\nUse the transaction ID to retrieve the actual data:\n\n## Additional Access Options",
+  "code_samples": [
+    {
+      "code": "query {\n  transactions(\n    tags: [{ name: \"App-Name\", values: [\"ArDrive\"] }]\n    first: 1\n  ) {\n    edges {\n      node {\n        id\n      }\n    }\n  }\n}",
+      "language": "graphql"
+    },
+    {
+      "code": "curl https://arweave.net/[transaction-id-from-above]",
+      "language": "bash"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Access Methods",
+      "id": "access-methods"
+    },
+    {
+      "level": "h2",
+      "text": "Common Access Patterns",
+      "id": "common-access-patterns"
+    },
+    {
+      "level": "h2",
+      "text": "Quick Example: Find and Fetch",
+      "id": "quick-example:-find-and-fetch"
+    },
+    {
+      "level": "h3",
+      "text": "Find Data",
+      "id": "find-data"
+    },
+    {
+      "level": "h3",
+      "text": "Fetch Data",
+      "id": "fetch-data"
+    },
+    {
+      "level": "h2",
+      "text": "Additional Access Options",
+      "id": "additional-access-options"
+    }
+  ],
+  "url": "llms-txt#access-data-(/build/access)",
+  "links": []
+}

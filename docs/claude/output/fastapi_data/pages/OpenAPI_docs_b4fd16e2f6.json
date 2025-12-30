@@ -1,0 +1,166 @@
+{
+  "url": "https://fastapi.tiangolo.com/reference/openapi/docs/",
+  "title": "OpenAPI docs¶",
+  "content": "Utilities to handle OpenAPI automatic UI documentation, including Swagger UI (by default at /docs) and ReDoc (by default at /redoc).\n\nGenerate and return the HTML that loads Swagger UI for the interactive API docs (normally served at /docs).\n\nYou would only call this function yourself if you needed to override some parts, for example the URLs to use to load Swagger UI's JavaScript and CSS.\n\nRead more about it in the FastAPI docs for Configure Swagger UI and the FastAPI docs for Custom Docs UI Static Assets (Self-Hosting).\n\nThe OpenAPI URL that Swagger UI should load and use.\n\nThis is normally done automatically by FastAPI using the default URL /openapi.json.\n\nThe HTML <title> content, normally shown in the browser tab.\n\nThe URL to use to load the Swagger UI JavaScript.\n\nIt is normally set to a CDN URL.\n\nTYPE: str DEFAULT: 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js'\n\nThe URL to use to load the Swagger UI CSS.\n\nIt is normally set to a CDN URL.\n\nTYPE: str DEFAULT: 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css'\n\nThe URL of the favicon to use. It is normally shown in the browser tab.\n\nTYPE: str DEFAULT: 'https://fastapi.tiangolo.com/img/favicon.png'\n\nThe OAuth2 redirect URL, it is normally automatically handled by FastAPI.\n\nTYPE: Optional[str] DEFAULT: None\n\nA dictionary with Swagger UI OAuth2 initialization configurations.\n\nTYPE: Optional[dict[str, Any]] DEFAULT: None\n\nConfiguration parameters for Swagger UI.\n\nIt defaults to swagger_ui_default_parameters.\n\nTYPE: Optional[dict[str, Any]] DEFAULT: None\n\nGenerate and return the HTML response that loads ReDoc for the alternative API docs (normally served at /redoc).\n\nYou would only call this function yourself if you needed to override some parts, for example the URLs to use to load ReDoc's JavaScript and CSS.\n\nRead more about it in the FastAPI docs for Custom Docs UI Static Assets (Self-Hosting).\n\nThe OpenAPI URL that ReDoc should load and use.\n\nThis is normally done automatically by FastAPI using the default URL /openapi.json.\n\nThe HTML <title> content, normally shown in the browser tab.\n\nThe URL to use to load the ReDoc JavaScript.\n\nIt is normally set to a CDN URL.\n\nTYPE: str DEFAULT: 'https://cdn.jsdelivr.net/npm/redoc@2/bundles/redoc.standalone.js'\n\nThe URL of the favicon to use. It is normally shown in the browser tab.\n\nTYPE: str DEFAULT: 'https://fastapi.tiangolo.com/img/favicon.png'\n\nLoad and use Google Fonts.\n\nTYPE: bool DEFAULT: True\n\nGenerate the HTML response with the OAuth2 redirection for Swagger UI.\n\nYou normally don't need to use or change this.\n\nDefault configurations for Swagger UI.\n\nYou can use it as a template to add any other configurations needed.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "OpenAPI docs¶",
+      "id": "openapi-docs"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.openapi.docs.get_swagger_ui_html ¶",
+      "id": "fastapi.openapi.docs.get_swagger_ui_html"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.openapi.docs.get_redoc_html ¶",
+      "id": "fastapi.openapi.docs.get_redoc_html"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.openapi.docs.get_swagger_ui_oauth2_redirect_html ¶",
+      "id": "fastapi.openapi.docs.get_swagger_ui_oauth2_redirect_html"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.openapi.docs.swagger_ui_default_parameters module-attribute ¶",
+      "id": "fastapi.openapi.docs.swagger_ui_default_parameters"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "get_swagger_ui_html(\n    *,\n    openapi_url,\n    title,\n    swagger_js_url=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js\",\n    swagger_css_url=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css\",\n    swagger_favicon_url=\"https://fastapi.tiangolo.com/img/favicon.png\",\n    oauth2_redirect_url=None,\n    init_oauth=None,\n    swagger_ui_parameters=None\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def get_swagger_ui_html(\n    *,\n    openapi_url: Annotated[\n        str,\n        Doc(\n            \"\"\"\n            The OpenAPI URL that Swagger UI should load and use.\n\n            This is normally done automatically by FastAPI using the default URL\n            `/openapi.json`.\n            \"\"\"\n        ),\n    ],\n    title: Annotated[\n        str,\n        Doc(\n            \"\"\"\n            The HTML `<title>` content, normally shown in the browser tab.\n            \"\"\"\n        ),\n    ],\n    swagger_js_url: Annotated[\n        str,\n        Doc(\n            \"\"\"\n            The URL to use to load the Swagger UI JavaScript.\n\n            It is normally set to a CDN URL.\n            \"\"\"\n        ),\n    ] = \"https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js\",\n    swagger_css_url: Annotated[\n        str,\n        Doc(\n            \"\"\"\n            The URL to use to load the Swagger UI CSS.\n\n            It is normally set to a CDN URL.\n            \"\"\"\n        ),\n    ] = \"https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css\",\n    swagger_favicon_url: Annotated[\n        str,\n        Doc(\n            \"\"\"\n            The URL of the favicon to use. It is normally shown in the browser tab.\n            \"\"\"\n        ),\n    ] = \"https://fastapi.tiangolo.com/img/favicon.png\",\n    oauth2_redirect_url: Annotated[\n        Optional[str],\n        Doc(\n            \"\"\"\n            The OAuth2 redirect URL, it is normally automatically handled by FastAPI.\n            \"\"\"\n        ),\n    ] = None,\n    init_oauth: Annotated[\n        Optional[dict[str, Any]],\n        Doc(\n            \"\"\"\n            A dictionary with Swagger UI OAuth2 initialization configurations.\n            \"\"\"\n        ),\n    ] = None,\n    swagger_ui_parameters: Annotated[\n        Optional[dict[str, Any]],\n        Doc(\n            \"\"\"\n            Configuration parameters for Swagger UI.\n\n            It defaults to [swagger_ui_default_parameters][fastapi.openapi.docs.swagger_ui_default_parameters].\n            \"\"\"\n        ),\n    ] = None,\n) -> HTMLResponse:\n    \"\"\"\n    Generate and return the HTML  that loads Swagger UI for the interactive\n    API docs (normally served at `/docs`).\n\n    You would only call this function yourself if you needed to override some parts,\n    for example the URLs to use to load Swagger UI's JavaScript and CSS.\n\n    Read more about it in the\n    [FastAPI docs for Configure Swagger UI](https://fastapi.tiangolo.com/how-to/configure-swagger-ui/)\n    and the [FastAPI docs for Custom Docs UI Static Assets (Self-Hosting)](https://fastapi.tiangolo.com/how-to/custom-docs-ui-assets/).\n    \"\"\"\n    current_swagger_ui_parameters = swagger_ui_default_parameters.copy()\n    if swagger_ui_parameters:\n        current_swagger_ui_parameters.update(swagger_ui_parameters)\n\n    html = f\"\"\"\n    <!DOCTYPE html>\n    <html>\n    <head>\n    <link type=\"text/css\" rel=\"stylesheet\" href=\"{swagger_css_url}\">\n    <link rel=\"shortcut icon\" href=\"{swagger_favicon_url}\">\n    <title>{title}</title>\n    </head>\n    <body>\n    <div id=\"swagger-ui\">\n    </div>\n    <script src=\"{swagger_js_url}\"></script>\n    <!-- `SwaggerUIBundle` is now available on the page -->\n    <script>\n    const ui = SwaggerUIBundle({{\n        url: '{openapi_url}',\n    \"\"\"\n\n    for key, value in current_swagger_ui_parameters.items():\n        html += f\"{json.dumps(key)}: {json.dumps(jsonable_encoder(value))},\\n\"\n\n    if oauth2_redirect_url:\n        html += f\"oauth2RedirectUrl: window.location.origin + '{oauth2_redirect_url}',\"\n\n    html += \"\"\"\n    presets: [\n        SwaggerUIBundle.presets.apis,\n        SwaggerUIBundle.SwaggerUIStandalonePreset\n        ],\n    })\"\"\"\n\n    if init_oauth:\n        html += f\"\"\"\n        ui.initOAuth({json.dumps(jsonable_encoder(init_oauth))})\n        \"\"\"\n\n    html += \"\"\"\n    </script>\n    </body>\n    </html>\n    \"\"\"\n    return HTMLResponse(html)",
+      "language": "html"
+    },
+    {
+      "code": "get_redoc_html(\n    *,\n    openapi_url,\n    title,\n    redoc_js_url=\"https://cdn.jsdelivr.net/npm/redoc@2/bundles/redoc.standalone.js\",\n    redoc_favicon_url=\"https://fastapi.tiangolo.com/img/favicon.png\",\n    with_google_fonts=True\n)",
+      "language": "python"
+    },
+    {
+      "code": "def get_redoc_html(\n    *,\n    openapi_url: Annotated[\n        str,\n        Doc(\n            \"\"\"\n            The OpenAPI URL that ReDoc should load and use.\n\n            This is normally done automatically by FastAPI using the default URL\n            `/openapi.json`.\n            \"\"\"\n        ),\n    ],\n    title: Annotated[\n        str,\n        Doc(\n            \"\"\"\n            The HTML `<title>` content, normally shown in the browser tab.\n            \"\"\"\n        ),\n    ],\n    redoc_js_url: Annotated[\n        str,\n        Doc(\n            \"\"\"\n            The URL to use to load the ReDoc JavaScript.\n\n            It is normally set to a CDN URL.\n            \"\"\"\n        ),\n    ] = \"https://cdn.jsdelivr.net/npm/redoc@2/bundles/redoc.standalone.js\",\n    redoc_favicon_url: Annotated[\n        str,\n        Doc(\n            \"\"\"\n            The URL of the favicon to use. It is normally shown in the browser tab.\n            \"\"\"\n        ),\n    ] = \"https://fastapi.tiangolo.com/img/favicon.png\",\n    with_google_fonts: Annotated[\n        bool,\n        Doc(\n            \"\"\"\n            Load and use Google Fonts.\n            \"\"\"\n        ),\n    ] = True,\n) -> HTMLResponse:\n    \"\"\"\n    Generate and return the HTML response that loads ReDoc for the alternative\n    API docs (normally served at `/redoc`).\n\n    You would only call this function yourself if you needed to override some parts,\n    for example the URLs to use to load ReDoc's JavaScript and CSS.\n\n    Read more about it in the\n    [FastAPI docs for Custom Docs UI Static Assets (Self-Hosting)](https://fastapi.tiangolo.com/how-to/custom-docs-ui-assets/).\n    \"\"\"\n    html = f\"\"\"\n    <!DOCTYPE html>\n    <html>\n    <head>\n    <title>{title}</title>\n    <!-- needed for adaptive design -->\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    \"\"\"\n    if with_google_fonts:\n        html += \"\"\"\n    <link href=\"https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700\" rel=\"stylesheet\">\n    \"\"\"\n    html += f\"\"\"\n    <link rel=\"shortcut icon\" href=\"{redoc_favicon_url}\">\n    <!--\n    ReDoc doesn't change outer page styles\n    -->\n    <style>\n      body {{\n        margin: 0;\n        padding: 0;\n      }}\n    </style>\n    </head>\n    <body>\n    <noscript>\n        ReDoc requires Javascript to function. Please enable it to browse the documentation.\n    </noscript>\n    <redoc spec-url=\"{openapi_url}\"></redoc>\n    <script src=\"{redoc_js_url}\"> </script>\n    </body>\n    </html>\n    \"\"\"\n    return HTMLResponse(html)",
+      "language": "html"
+    },
+    {
+      "code": "get_swagger_ui_oauth2_redirect_html()",
+      "language": "unknown"
+    },
+    {
+      "code": "def get_swagger_ui_oauth2_redirect_html() -> HTMLResponse:\n    \"\"\"\n    Generate the HTML response with the OAuth2 redirection for Swagger UI.\n\n    You normally don't need to use or change this.\n    \"\"\"\n    # copied from https://github.com/swagger-api/swagger-ui/blob/v4.14.0/dist/oauth2-redirect.html\n    html = \"\"\"\n    <!doctype html>\n    <html lang=\"en-US\">\n    <head>\n        <title>Swagger UI: OAuth2 Redirect</title>\n    </head>\n    <body>\n    <script>\n        'use strict';\n        function run () {\n            var oauth2 = window.opener.swaggerUIRedirectOauth2;\n            var sentState = oauth2.state;\n            var redirectUrl = oauth2.redirectUrl;\n            var isValid, qp, arr;\n\n            if (/code|token|error/.test(window.location.hash)) {\n                qp = window.location.hash.substring(1).replace('?', '&');\n            } else {\n                qp = location.search.substring(1);\n            }\n\n            arr = qp.split(\"&\");\n            arr.forEach(function (v,i,_arr) { _arr[i] = '\"' + v.replace('=', '\":\"') + '\"';});\n            qp = qp ? JSON.parse('{' + arr.join() + '}',\n                    function (key, value) {\n                        return key === \"\" ? value : decodeURIComponent(value);\n                    }\n            ) : {};\n\n            isValid = qp.state === sentState;\n\n            if ((\n              oauth2.auth.schema.get(\"flow\") === \"accessCode\" ||\n              oauth2.auth.schema.get(\"flow\") === \"authorizationCode\" ||\n              oauth2.auth.schema.get(\"flow\") === \"authorization_code\"\n            ) && !oauth2.auth.code) {\n                if (!isValid) {\n                    oauth2.errCb({\n                        authId: oauth2.auth.name,\n                        source: \"auth\",\n                        level: \"warning\",\n                        message: \"Authorization may be unsafe, passed state was changed in server. The passed state wasn't returned from auth server.\"\n                    });\n                }\n\n                if (qp.code) {\n                    delete oauth2.state;\n                    oauth2.auth.code = qp.code;\n                    oauth2.callback({auth: oauth2.auth, redirectUrl: redirectUrl});\n                } else {\n                    let oauthErrorMsg;\n                    if (qp.error) {\n                        oauthErrorMsg = \"[\"+qp.error+\"]: \" +\n                            (qp.error_description ? qp.error_description+ \". \" : \"no accessCode received from the server. \") +\n                            (qp.error_uri ? \"More info: \"+qp.error_uri : \"\");\n                    }\n\n                    oauth2.errCb({\n                        authId: oauth2.auth.name,\n                        source: \"auth\",\n                        level: \"error\",\n                        message: oauthErrorMsg || \"[Authorization failed]: no accessCode received from the server.\"\n                    });\n                }\n            } else {\n                oauth2.callback({auth: oauth2.auth, token: qp, isValid: isValid, redirectUrl: redirectUrl});\n            }\n            window.close();\n        }\n\n        if (document.readyState !== 'loading') {\n            run();\n        } else {\n            document.addEventListener('DOMContentLoaded', function () {\n                run();\n            });\n        }\n    </script>\n    </body>\n    </html>\n        \"\"\"\n    return HTMLResponse(content=html)",
+      "language": "html"
+    },
+    {
+      "code": "swagger_ui_default_parameters = {\n    \"dom_id\": \"#swagger-ui\",\n    \"layout\": \"BaseLayout\",\n    \"deepLinking\": True,\n    \"showExtensions\": True,\n    \"showCommonExtensions\": True,\n}",
+      "language": "json"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

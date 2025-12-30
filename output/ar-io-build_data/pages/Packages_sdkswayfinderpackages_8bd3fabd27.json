@@ -1,0 +1,8 @@
+{
+  "title": "Packages (/sdks/wayfinder/packages)",
+  "content": "This monorepo contains the following packages:\n\n- **[@ar.io/wayfinder-core](./packages/wayfinder-core)** ![npm](https://img.shields.io/npm/v/@ar.io/wayfinder-core.svg)\n: Core JavaScript library for the Wayfinder routing and verification protocol\n- **[@ar.io/wayfinder-react](./packages/wayfinder-react)** ![npm](https://img.shields.io/npm/v/@ar.io/wayfinder-react.svg)\n: React components for Wayfinder, including Hooks and Context provider\n- **[@ar.io/wayfinder-extension](./packages/wayfinder-extension)** ![chrome](https://img.shields.io/chrome-web-store/v/hnhmeknhajanolcoihhkkaaimapnmgil?label=chrome)\n: Chrome extension for Wayfinder\n- **[@ar.io/wayfinder-cli](./packages/cli)** (coming soon)\n: CLI for interacting with Wayfinder in the terminal",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#packages-(/sdks/wayfinder/packages)",
+  "links": []
+}

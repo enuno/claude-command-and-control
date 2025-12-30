@@ -1,0 +1,13 @@
+{
+  "title": "Anonymous Operations (/sdks/ardrive-core-js/(advanced-features)/anonymous-operations)",
+  "content": "Use ArDrive without a wallet for read-only operations:",
+  "code_samples": [
+    {
+      "code": "const anonymousArDrive = arDriveAnonymousFactory({});\n\n// Read public data\nconst publicFile = await anonymousArDrive.getPublicFile({ fileId });\nconst folderContents = await anonymousArDrive.listPublicFolder({ folderId });",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#anonymous-operations-(/sdks/ardrive-core-js/(advanced-features)/anonymous-operations)",
+  "links": []
+}

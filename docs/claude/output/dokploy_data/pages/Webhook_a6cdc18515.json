@@ -1,0 +1,34 @@
+{
+  "title": "Webhook",
+  "content": "Webhook notifications are a generic way to receive notifications from Dokploy to any HTTP endpoint. You can choose to receive notifications for specific events or all events. Notifications are sent in JSON format.\n\n## Webhook Notifications\n\nTo start receiving webhook notifications, you need to fill the form with the following details:\n\n* **Name**: Enter any name you want.\n* **Webhook URL**: Enter the webhook URL where you want to receive notifications. eg. `https://your-endpoint.com/webhook`\n\n## Testing Your Webhook\n\nFor testing purposes, you can use [Webhook.site](https://webhook.site) to generate a unique URL and inspect the JSON payload that Dokploy sends:\n\n1. Go to [https://webhook.site](https://webhook.site)\n2. Copy your unique webhook URL\n3. Go to Dokploy **Notifications** and select **Webhook** as the notification provider\n4. Enter a name for your notification configuration\n5. Paste the webhook URL you copied\n6. Click on **Test** to send a test notification\n7. Check your Webhook.site page to see the JSON payload\n8. Click on **Create** to save the notification\n\nDokploy sends notifications in JSON format. The payload structure includes information about the event type, timestamp, and relevant details about the action that triggered the notification.\n\n**Example notification payload:**\n\nFor production use, ensure your webhook endpoint:\n\n* Accepts POST requests\n* Returns a 2xx HTTP status code for successful delivery\n* Handles JSON payloads\n* Is accessible from the internet (or from your Dokploy server's network)\n* Implements proper authentication if needed (consider using HTTPS with API keys in headers)",
+  "code_samples": [
+    {
+      "code": "{\n  \"title\": \"Test Notification\",\n  \"message\": \"Hi, From Dokploy 👋\",\n  \"timestamp\": \"2025-12-07T19:41:53.470Z\"\n}",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Webhook Notifications",
+      "id": "webhook-notifications"
+    },
+    {
+      "level": "h2",
+      "text": "Testing Your Webhook",
+      "id": "testing-your-webhook"
+    },
+    {
+      "level": "h2",
+      "text": "JSON Format",
+      "id": "json-format"
+    },
+    {
+      "level": "h2",
+      "text": "Production Setup",
+      "id": "production-setup"
+    }
+  ],
+  "url": "llms-txt#webhook",
+  "links": []
+}

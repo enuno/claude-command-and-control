@@ -1,0 +1,310 @@
+{
+  "url": "https://fastapi.tiangolo.com/reference/request/",
+  "title": "Request class¶",
+  "content": "You can declare a parameter in a path operation function or dependency to be of type Request and then you can access the raw request object directly, without any validation, etc.\n\nYou can import it directly from fastapi:\n\nWhen you want to define dependencies that should be compatible with both HTTP and WebSockets, you can define a parameter that takes an HTTPConnection instead of a Request or a WebSocket.\n\nBases: HTTPConnection",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Request class¶",
+      "id": "request-class"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.Request ¶",
+      "id": "fastapi.Request"
+    },
+    {
+      "level": "h3",
+      "text": "scope instance-attribute ¶",
+      "id": "fastapi.Request.scope"
+    },
+    {
+      "level": "h3",
+      "text": "app property ¶",
+      "id": "fastapi.Request.app"
+    },
+    {
+      "level": "h3",
+      "text": "url property ¶",
+      "id": "fastapi.Request.url"
+    },
+    {
+      "level": "h3",
+      "text": "base_url property ¶",
+      "id": "fastapi.Request.base_url"
+    },
+    {
+      "level": "h3",
+      "text": "headers property ¶",
+      "id": "fastapi.Request.headers"
+    },
+    {
+      "level": "h3",
+      "text": "query_params property ¶",
+      "id": "fastapi.Request.query_params"
+    },
+    {
+      "level": "h3",
+      "text": "path_params property ¶",
+      "id": "fastapi.Request.path_params"
+    },
+    {
+      "level": "h3",
+      "text": "cookies property ¶",
+      "id": "fastapi.Request.cookies"
+    },
+    {
+      "level": "h3",
+      "text": "client property ¶",
+      "id": "fastapi.Request.client"
+    },
+    {
+      "level": "h3",
+      "text": "session property ¶",
+      "id": "fastapi.Request.session"
+    },
+    {
+      "level": "h3",
+      "text": "auth property ¶",
+      "id": "fastapi.Request.auth"
+    },
+    {
+      "level": "h3",
+      "text": "user property ¶",
+      "id": "fastapi.Request.user"
+    },
+    {
+      "level": "h3",
+      "text": "state property ¶",
+      "id": "fastapi.Request.state"
+    },
+    {
+      "level": "h3",
+      "text": "method property ¶",
+      "id": "fastapi.Request.method"
+    },
+    {
+      "level": "h3",
+      "text": "receive property ¶",
+      "id": "fastapi.Request.receive"
+    },
+    {
+      "level": "h3",
+      "text": "url_for ¶",
+      "id": "fastapi.Request.url_for"
+    },
+    {
+      "level": "h3",
+      "text": "stream async ¶",
+      "id": "fastapi.Request.stream"
+    },
+    {
+      "level": "h3",
+      "text": "body async ¶",
+      "id": "fastapi.Request.body"
+    },
+    {
+      "level": "h3",
+      "text": "json async ¶",
+      "id": "fastapi.Request.json"
+    },
+    {
+      "level": "h3",
+      "text": "form ¶",
+      "id": "fastapi.Request.form"
+    },
+    {
+      "level": "h3",
+      "text": "close async ¶",
+      "id": "fastapi.Request.close"
+    },
+    {
+      "level": "h3",
+      "text": "is_disconnected async ¶",
+      "id": "fastapi.Request.is_disconnected"
+    },
+    {
+      "level": "h3",
+      "text": "send_push_promise async ¶",
+      "id": "fastapi.Request.send_push_promise"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from fastapi import Request",
+      "language": "python"
+    },
+    {
+      "code": "Request(scope, receive=empty_receive, send=empty_send)",
+      "language": "unknown"
+    },
+    {
+      "code": "def __init__(self, scope: Scope, receive: Receive = empty_receive, send: Send = empty_send):\n    super().__init__(scope)\n    assert scope[\"type\"] == \"http\"\n    self._receive = receive\n    self._send = send\n    self._stream_consumed = False\n    self._is_disconnected = False\n    self._form = None",
+      "language": "python"
+    },
+    {
+      "code": "scope = scope",
+      "language": "unknown"
+    },
+    {
+      "code": "query_params",
+      "language": "unknown"
+    },
+    {
+      "code": "path_params",
+      "language": "unknown"
+    },
+    {
+      "code": "url_for(name, /, **path_params)",
+      "language": "unknown"
+    },
+    {
+      "code": "def url_for(self, name: str, /, **path_params: Any) -> URL:\n    url_path_provider: Router | Starlette | None = self.scope.get(\"router\") or self.scope.get(\"app\")\n    if url_path_provider is None:\n        raise RuntimeError(\"The `url_for` method can only be used inside a Starlette application or with a router.\")\n    url_path = url_path_provider.url_path_for(name, **path_params)\n    return url_path.make_absolute_url(base_url=self.base_url)",
+      "language": "python"
+    },
+    {
+      "code": "async def stream(self) -> AsyncGenerator[bytes, None]:\n    if hasattr(self, \"_body\"):\n        yield self._body\n        yield b\"\"\n        return\n    if self._stream_consumed:\n        raise RuntimeError(\"Stream consumed\")\n    while not self._stream_consumed:\n        message = await self._receive()\n        if message[\"type\"] == \"http.request\":\n            body = message.get(\"body\", b\"\")\n            if not message.get(\"more_body\", False):\n                self._stream_consumed = True\n            if body:\n                yield body\n        elif message[\"type\"] == \"http.disconnect\":  # pragma: no branch\n            self._is_disconnected = True\n            raise ClientDisconnect()\n    yield b\"\"",
+      "language": "python"
+    },
+    {
+      "code": "async def body(self) -> bytes:\n    if not hasattr(self, \"_body\"):\n        chunks: list[bytes] = []\n        async for chunk in self.stream():\n            chunks.append(chunk)\n        self._body = b\"\".join(chunks)\n    return self._body",
+      "language": "python"
+    },
+    {
+      "code": "async def json(self) -> Any:\n    if not hasattr(self, \"_json\"):  # pragma: no branch\n        body = await self.body()\n        self._json = json.loads(body)\n    return self._json",
+      "language": "python"
+    },
+    {
+      "code": "form(\n    *,\n    max_files=1000,\n    max_fields=1000,\n    max_part_size=1024 * 1024\n)",
+      "language": "unknown"
+    },
+    {
+      "code": "def form(\n    self,\n    *,\n    max_files: int | float = 1000,\n    max_fields: int | float = 1000,\n    max_part_size: int = 1024 * 1024,\n) -> AwaitableOrContextManager[FormData]:\n    return AwaitableOrContextManagerWrapper(\n        self._get_form(max_files=max_files, max_fields=max_fields, max_part_size=max_part_size)\n    )",
+      "language": "python"
+    },
+    {
+      "code": "async def close(self) -> None:\n    if self._form is not None:  # pragma: no branch\n        await self._form.close()",
+      "language": "python"
+    },
+    {
+      "code": "is_disconnected()",
+      "language": "unknown"
+    },
+    {
+      "code": "async def is_disconnected(self) -> bool:\n    if not self._is_disconnected:\n        message: Message = {}\n\n        # If message isn't immediately available, move on\n        with anyio.CancelScope() as cs:\n            cs.cancel()\n            message = await self._receive()\n\n        if message.get(\"type\") == \"http.disconnect\":\n            self._is_disconnected = True\n\n    return self._is_disconnected",
+      "language": "python"
+    },
+    {
+      "code": "send_push_promise(path)",
+      "language": "unknown"
+    },
+    {
+      "code": "async def send_push_promise(self, path: str) -> None:\n    if \"http.response.push\" in self.scope.get(\"extensions\", {}):\n        raw_headers: list[tuple[bytes, bytes]] = []\n        for name in SERVER_PUSH_HEADERS_TO_COPY:\n            for value in self.headers.getlist(name):\n                raw_headers.append((name.encode(\"latin-1\"), value.encode(\"latin-1\")))\n        await self._send({\"type\": \"http.response.push\", \"path\": path, \"headers\": raw_headers})",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

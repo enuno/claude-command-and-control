@@ -1,0 +1,19 @@
+{
+  "title": "Checkpoints",
+  "content": "Source: https://docs.conductor.build/core/checkpoints\n\nView turn by turn changes in a workspace and revert to previous turns\n\n<img alt=\"checkpoint diff\" />\n\nCheckpoints are automatic snapshots of Claude's changes to your codebase. They show you what changes Claude made in its most recent turn, and let you revert to previous turns.\n\n## Restoring Checkpoints\n\nTo restore to a previous turn, click the revert icon that appears when hovering your message.\n\n<img alt=\"checkpoint revert\" />\n\nClicking the revert icon will **permanently delete** all user and AI messages from the selected turn and later. All code changes made since that user message was sent will also be reverted. Once the reversion is complete, Claude will have no knowledge of the changes or conversation you deleted.\n\n## How Checkpoints Work\n\n* Checkpoints are stored locally, separate from your working branch's Git history.\n* Before Claude responds to each user message, Conductor configures a Claude Code hook to commit the working branch state to a private Git ref\n* Each checkpoint therefore captures all AI and user code changes between when the previous and current user messages were sent.\n\n<Note>\n  Checkpoints are only supported for Claude Code.\n\nExercise caution when using checkpoints if multiple chats are running in the same workspace.\n</Note>",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Restoring Checkpoints",
+      "id": "restoring-checkpoints"
+    },
+    {
+      "level": "h2",
+      "text": "How Checkpoints Work",
+      "id": "how-checkpoints-work"
+    }
+  ],
+  "url": "llms-txt#checkpoints",
+  "links": []
+}

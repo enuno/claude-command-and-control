@@ -1,0 +1,8 @@
+{
+  "title": "Parallel agents",
+  "content": "Source: https://docs.conductor.build/core/parallel-agents\n\nRun multiple Claude Codes at once\n\nCreating parallel agents in Conductor is easy. Just press <kbd>⌘</kbd> + <kbd>N</kbd> to create a new workspace. Claude will start working in an isolated environment where it can make changes without interfering with other Claudes.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#parallel-agents",
+  "links": []
+}

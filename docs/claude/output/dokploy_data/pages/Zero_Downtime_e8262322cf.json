@@ -1,0 +1,28 @@
+{
+  "title": "Zero Downtime",
+  "content": "Dokploy allows you to configure zero downtime deployments, which means that you can deploy your application without any downtime.\n\nBy default when you create a new deployment it will stop the latest running container and start the new one. This is the default behavior of Docker Swarm and this leads to Bad Gateway since\nthe containers are initializing at the same time,\nbut Dokploy allows you to configure zero downtime deployments.\n\n## Steps to configure Zero Downtime Deployments\n\nLet's suppose we have a NodeJS application that has a health check route `/api/health` that returns a 200 status code and running in the port 3000.\n\n1. In your application is necessary to have a `Path` or `Health Route` to be able to achieve zero downtime deployments eg. in the case of a NodeJS app you can have a route `/api/health` that returns a 200 status code.\n2. Go to `Advanced` Tab and go to Cluster Settings and enter to `Swarm Settings`\n3. There are a couple options that you can use, in this case we will focus on `Health Check`.\n4. Paste this code in the health check field:\n   Make sure the API Route exists in your application\n\n1. We will use this example [Github Repo](https://github.com/Dokploy/swarm-test)\n\n2. It Have a endpoint called `health` [endpoint](https://github.com/Dokploy/swarm-test/blob/main/index.js#L20) which is the one that will tell us if our application is healthy.\n\n3. For testing purpose I've added a sleep to simulate the delay between the deployments and you can see the bad gateway error.\n\n4. **Use Git Provider in Your Application**:\n   * Repository: `https://github.com/Dokploy/swarm-test`\n   * Branch: `main`\n   * Build path: `/`\n\nIf you want to test that there is no zero downtime yet, you can simply deploy the application and then create another deployment and while doing the deployment reload the page in the path /health and you will see that a bad gateway will appear.\n\nNow go to the advanced section of our application, and go to the Swarm Settings section, we are going to modify the first section of Healtchecks.\n\nWe will use this configuration specifically, paste and save it\n\nThis configuration basically tells to Docker to do:\n\nMake a request inside the container to [http://localhost:3000/health](http://localhost:3000/health) and then we are also saying to make in interval of 30000000000 nanosec, and also makes 3 retries before switching to the new container\n\nthat would be all, Now you have Zero Downtime Deployments 🎊.",
+  "code_samples": [
+    {
+      "code": "{\n  \"Test\": [\n    \"CMD\",\n    \"curl\",\n    \"-f\",\n    \"http://localhost:3000/api/health\"\n  ],\n  \"Interval\": 30000000000,\n  \"Timeout\": 10000000000,\n  \"StartPeriod\": 30000000000,\n  \"Retries\": 3\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n  \"Test\": [\n    \"CMD\",\n    \"curl\",\n    \"-f\",\n    \"http://localhost:3000/health\"\n  ],\n  \"Interval\": 30000000000,\n  \"Timeout\": 10000000000,\n  \"StartPeriod\": 30000000000,\n  \"Retries\": 3\n}",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Steps to configure Zero Downtime Deployments",
+      "id": "steps-to-configure-zero-downtime-deployments"
+    },
+    {
+      "level": "h2",
+      "text": "Example",
+      "id": "example"
+    }
+  ],
+  "url": "llms-txt#zero-downtime",
+  "links": []
+}

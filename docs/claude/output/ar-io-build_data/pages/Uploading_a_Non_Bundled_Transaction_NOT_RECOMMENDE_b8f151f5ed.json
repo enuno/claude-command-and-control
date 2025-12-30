@@ -1,0 +1,13 @@
+{
+  "title": "Uploading a Non-Bundled Transaction (NOT RECOMMENDED) (/sdks/(clis)/ardrive-cli/(working-with-files)/uploading-a-non-bundled-transaction-not-recommended)",
+  "content": "While not recommended, the CLI does provide the option to forcibly send all transactions as standard transactions rather than attempting to bundle them together. To do this, simply add the `--no-bundle` flag to the `upload-file` or `create-drive` command:",
+  "code_samples": [
+    {
+      "code": "ardrive upload-file --no-bundle --local-path /path/to/file --parent-folder-id \"9af694f6-4cfc-4eee-88a8-1b02704760c0\" -w /path/to/wallet.json",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#uploading-a-non-bundled-transaction-(not-recommended)-(/sdks/(clis)/ardrive-cli/(working-with-files)/uploading-a-non-bundled-transaction-not-recommended)",
+  "links": []
+}

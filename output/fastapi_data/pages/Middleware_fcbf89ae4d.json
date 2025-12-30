@@ -1,0 +1,419 @@
+{
+  "url": "https://fastapi.tiangolo.com/reference/middleware/",
+  "title": "Middleware¶",
+  "content": "There are several middlewares available provided by Starlette directly.\n\nRead more about them in the FastAPI docs for Middleware.\n\nIt can be imported from fastapi:\n\nIt can be imported from fastapi:\n\nIt can be imported from fastapi:\n\nIt can be imported from fastapi:\n\nIt can be imported from fastapi:",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Middleware¶",
+      "id": "middleware"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.middleware.cors.CORSMiddleware ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware"
+    },
+    {
+      "level": "h3",
+      "text": "app instance-attribute ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware.app"
+    },
+    {
+      "level": "h3",
+      "text": "allow_origins instance-attribute ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware.allow_origins"
+    },
+    {
+      "level": "h3",
+      "text": "allow_methods instance-attribute ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware.allow_methods"
+    },
+    {
+      "level": "h3",
+      "text": "allow_headers instance-attribute ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware.allow_headers"
+    },
+    {
+      "level": "h3",
+      "text": "allow_all_origins instance-attribute ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware.allow_all_origins"
+    },
+    {
+      "level": "h3",
+      "text": "allow_all_headers instance-attribute ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware.allow_all_headers"
+    },
+    {
+      "level": "h3",
+      "text": "preflight_explicit_allow_origin instance-attribute ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware.preflight_explicit_allow_origin"
+    },
+    {
+      "level": "h3",
+      "text": "allow_origin_regex instance-attribute ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware.allow_origin_regex"
+    },
+    {
+      "level": "h3",
+      "text": "simple_headers instance-attribute ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware.simple_headers"
+    },
+    {
+      "level": "h3",
+      "text": "preflight_headers instance-attribute ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware.preflight_headers"
+    },
+    {
+      "level": "h3",
+      "text": "is_allowed_origin ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware.is_allowed_origin"
+    },
+    {
+      "level": "h3",
+      "text": "preflight_response ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware.preflight_response"
+    },
+    {
+      "level": "h3",
+      "text": "simple_response async ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware.simple_response"
+    },
+    {
+      "level": "h3",
+      "text": "send async ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware.send"
+    },
+    {
+      "level": "h3",
+      "text": "allow_explicit_origin staticmethod ¶",
+      "id": "fastapi.middleware.cors.CORSMiddleware.allow_explicit_origin"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.middleware.gzip.GZipMiddleware ¶",
+      "id": "fastapi.middleware.gzip.GZipMiddleware"
+    },
+    {
+      "level": "h3",
+      "text": "app instance-attribute ¶",
+      "id": "fastapi.middleware.gzip.GZipMiddleware.app"
+    },
+    {
+      "level": "h3",
+      "text": "minimum_size instance-attribute ¶",
+      "id": "fastapi.middleware.gzip.GZipMiddleware.minimum_size"
+    },
+    {
+      "level": "h3",
+      "text": "compresslevel instance-attribute ¶",
+      "id": "fastapi.middleware.gzip.GZipMiddleware.compresslevel"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.middleware.httpsredirect.HTTPSRedirectMiddleware ¶",
+      "id": "fastapi.middleware.httpsredirect.HTTPSRedirectMiddleware"
+    },
+    {
+      "level": "h3",
+      "text": "app instance-attribute ¶",
+      "id": "fastapi.middleware.httpsredirect.HTTPSRedirectMiddleware.app"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.middleware.trustedhost.TrustedHostMiddleware ¶",
+      "id": "fastapi.middleware.trustedhost.TrustedHostMiddleware"
+    },
+    {
+      "level": "h3",
+      "text": "app instance-attribute ¶",
+      "id": "fastapi.middleware.trustedhost.TrustedHostMiddleware.app"
+    },
+    {
+      "level": "h3",
+      "text": "allowed_hosts instance-attribute ¶",
+      "id": "fastapi.middleware.trustedhost.TrustedHostMiddleware.allowed_hosts"
+    },
+    {
+      "level": "h3",
+      "text": "allow_any instance-attribute ¶",
+      "id": "fastapi.middleware.trustedhost.TrustedHostMiddleware.allow_any"
+    },
+    {
+      "level": "h3",
+      "text": "www_redirect instance-attribute ¶",
+      "id": "fastapi.middleware.trustedhost.TrustedHostMiddleware.www_redirect"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.middleware.wsgi.WSGIMiddleware ¶",
+      "id": "fastapi.middleware.wsgi.WSGIMiddleware"
+    },
+    {
+      "level": "h3",
+      "text": "app instance-attribute ¶",
+      "id": "fastapi.middleware.wsgi.WSGIMiddleware.app"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "CORSMiddleware(\n    app,\n    allow_origins=(),\n    allow_methods=(\"GET\",),\n    allow_headers=(),\n    allow_credentials=False,\n    allow_origin_regex=None,\n    expose_headers=(),\n    max_age=600,\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(\n    self,\n    app: ASGIApp,\n    allow_origins: Sequence[str] = (),\n    allow_methods: Sequence[str] = (\"GET\",),\n    allow_headers: Sequence[str] = (),\n    allow_credentials: bool = False,\n    allow_origin_regex: str | None = None,\n    expose_headers: Sequence[str] = (),\n    max_age: int = 600,\n) -> None:\n    if \"*\" in allow_methods:\n        allow_methods = ALL_METHODS\n\n    compiled_allow_origin_regex = None\n    if allow_origin_regex is not None:\n        compiled_allow_origin_regex = re.compile(allow_origin_regex)\n\n    allow_all_origins = \"*\" in allow_origins\n    allow_all_headers = \"*\" in allow_headers\n    preflight_explicit_allow_origin = not allow_all_origins or allow_credentials\n\n    simple_headers = {}\n    if allow_all_origins:\n        simple_headers[\"Access-Control-Allow-Origin\"] = \"*\"\n    if allow_credentials:\n        simple_headers[\"Access-Control-Allow-Credentials\"] = \"true\"\n    if expose_headers:\n        simple_headers[\"Access-Control-Expose-Headers\"] = \", \".join(expose_headers)\n\n    preflight_headers = {}\n    if preflight_explicit_allow_origin:\n        # The origin value will be set in preflight_response() if it is allowed.\n        preflight_headers[\"Vary\"] = \"Origin\"\n    else:\n        preflight_headers[\"Access-Control-Allow-Origin\"] = \"*\"\n    preflight_headers.update(\n        {\n            \"Access-Control-Allow-Methods\": \", \".join(allow_methods),\n            \"Access-Control-Max-Age\": str(max_age),\n        }\n    )\n    allow_headers = sorted(SAFELISTED_HEADERS | set(allow_headers))\n    if allow_headers and not allow_all_headers:\n        preflight_headers[\"Access-Control-Allow-Headers\"] = \", \".join(allow_headers)\n    if allow_credentials:\n        preflight_headers[\"Access-Control-Allow-Credentials\"] = \"true\"\n\n    self.app = app\n    self.allow_origins = allow_origins\n    self.allow_methods = allow_methods\n    self.allow_headers = [h.lower() for h in allow_headers]\n    self.allow_all_origins = allow_all_origins\n    self.allow_all_headers = allow_all_headers\n    self.preflight_explicit_allow_origin = preflight_explicit_allow_origin\n    self.allow_origin_regex = compiled_allow_origin_regex\n    self.simple_headers = simple_headers\n    self.preflight_headers = preflight_headers",
+      "language": "python"
+    },
+    {
+      "code": "allow_origins = allow_origins",
+      "language": "unknown"
+    },
+    {
+      "code": "allow_methods = allow_methods",
+      "language": "unknown"
+    },
+    {
+      "code": "allow_headers = [(lower()) for h in allow_headers]",
+      "language": "bash"
+    },
+    {
+      "code": "allow_all_origins = allow_all_origins",
+      "language": "unknown"
+    },
+    {
+      "code": "allow_all_headers = allow_all_headers",
+      "language": "unknown"
+    },
+    {
+      "code": "preflight_explicit_allow_origin = (\n    preflight_explicit_allow_origin\n)",
+      "language": "unknown"
+    },
+    {
+      "code": "allow_origin_regex = compiled_allow_origin_regex",
+      "language": "unknown"
+    },
+    {
+      "code": "simple_headers = simple_headers",
+      "language": "unknown"
+    },
+    {
+      "code": "preflight_headers = preflight_headers",
+      "language": "unknown"
+    },
+    {
+      "code": "is_allowed_origin(origin)",
+      "language": "unknown"
+    },
+    {
+      "code": "def is_allowed_origin(self, origin: str) -> bool:\n    if self.allow_all_origins:\n        return True\n\n    if self.allow_origin_regex is not None and self.allow_origin_regex.fullmatch(origin):\n        return True\n\n    return origin in self.allow_origins",
+      "language": "python"
+    },
+    {
+      "code": "preflight_response(request_headers)",
+      "language": "unknown"
+    },
+    {
+      "code": "def preflight_response(self, request_headers: Headers) -> Response:\n    requested_origin = request_headers[\"origin\"]\n    requested_method = request_headers[\"access-control-request-method\"]\n    requested_headers = request_headers.get(\"access-control-request-headers\")\n\n    headers = dict(self.preflight_headers)\n    failures = []\n\n    if self.is_allowed_origin(origin=requested_origin):\n        if self.preflight_explicit_allow_origin:\n            # The \"else\" case is already accounted for in self.preflight_headers\n            # and the value would be \"*\".\n            headers[\"Access-Control-Allow-Origin\"] = requested_origin\n    else:\n        failures.append(\"origin\")\n\n    if requested_method not in self.allow_methods:\n        failures.append(\"method\")\n\n    # If we allow all headers, then we have to mirror back any requested\n    # headers in the response.\n    if self.allow_all_headers and requested_headers is not None:\n        headers[\"Access-Control-Allow-Headers\"] = requested_headers\n    elif requested_headers is not None:\n        for header in [h.lower() for h in requested_headers.split(\",\")]:\n            if header.strip() not in self.allow_headers:\n                failures.append(\"headers\")\n                break\n\n    # We don't strictly need to use 400 responses here, since its up to\n    # the browser to enforce the CORS policy, but its more informative\n    # if we do.\n    if failures:\n        failure_text = \"Disallowed CORS \" + \", \".join(failures)\n        return PlainTextResponse(failure_text, status_code=400, headers=headers)\n\n    return PlainTextResponse(\"OK\", status_code=200, headers=headers)",
+      "language": "python"
+    },
+    {
+      "code": "simple_response(scope, receive, send, request_headers)",
+      "language": "unknown"
+    },
+    {
+      "code": "async def simple_response(self, scope: Scope, receive: Receive, send: Send, request_headers: Headers) -> None:\n    send = functools.partial(self.send, send=send, request_headers=request_headers)\n    await self.app(scope, receive, send)",
+      "language": "python"
+    },
+    {
+      "code": "send(message, send, request_headers)",
+      "language": "unknown"
+    },
+    {
+      "code": "async def send(self, message: Message, send: Send, request_headers: Headers) -> None:\n    if message[\"type\"] != \"http.response.start\":\n        await send(message)\n        return\n\n    message.setdefault(\"headers\", [])\n    headers = MutableHeaders(scope=message)\n    headers.update(self.simple_headers)\n    origin = request_headers[\"Origin\"]\n    has_cookie = \"cookie\" in request_headers\n\n    # If request includes any cookie headers, then we must respond\n    # with the specific origin instead of '*'.\n    if self.allow_all_origins and has_cookie:\n        self.allow_explicit_origin(headers, origin)\n\n    # If we only allow specific origins, then we have to mirror back\n    # the Origin header in the response.\n    elif not self.allow_all_origins and self.is_allowed_origin(origin=origin):\n        self.allow_explicit_origin(headers, origin)\n\n    await send(message)",
+      "language": "python"
+    },
+    {
+      "code": "allow_explicit_origin(headers, origin)",
+      "language": "unknown"
+    },
+    {
+      "code": "@staticmethod\ndef allow_explicit_origin(headers: MutableHeaders, origin: str) -> None:\n    headers[\"Access-Control-Allow-Origin\"] = origin\n    headers.add_vary_header(\"Origin\")",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi.middleware.cors import CORSMiddleware",
+      "language": "sql"
+    },
+    {
+      "code": "GZipMiddleware(app, minimum_size=500, compresslevel=9)",
+      "language": "unknown"
+    },
+    {
+      "code": "def __init__(self, app: ASGIApp, minimum_size: int = 500, compresslevel: int = 9) -> None:\n    self.app = app\n    self.minimum_size = minimum_size\n    self.compresslevel = compresslevel",
+      "language": "python"
+    },
+    {
+      "code": "minimum_size = minimum_size",
+      "language": "unknown"
+    },
+    {
+      "code": "compresslevel = compresslevel",
+      "language": "unknown"
+    },
+    {
+      "code": "from fastapi.middleware.gzip import GZipMiddleware",
+      "language": "sql"
+    },
+    {
+      "code": "HTTPSRedirectMiddleware(app)",
+      "language": "unknown"
+    },
+    {
+      "code": "def __init__(self, app: ASGIApp) -> None:\n    self.app = app",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware",
+      "language": "sql"
+    },
+    {
+      "code": "TrustedHostMiddleware(\n    app, allowed_hosts=None, www_redirect=True\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(\n    self,\n    app: ASGIApp,\n    allowed_hosts: Sequence[str] | None = None,\n    www_redirect: bool = True,\n) -> None:\n    if allowed_hosts is None:\n        allowed_hosts = [\"*\"]\n\n    for pattern in allowed_hosts:\n        assert \"*\" not in pattern[1:], ENFORCE_DOMAIN_WILDCARD\n        if pattern.startswith(\"*\") and pattern != \"*\":\n            assert pattern.startswith(\"*.\"), ENFORCE_DOMAIN_WILDCARD\n    self.app = app\n    self.allowed_hosts = list(allowed_hosts)\n    self.allow_any = \"*\" in allowed_hosts\n    self.www_redirect = www_redirect",
+      "language": "python"
+    },
+    {
+      "code": "allowed_hosts = list(allowed_hosts)",
+      "language": "unknown"
+    },
+    {
+      "code": "allow_any = '*' in allowed_hosts",
+      "language": "unknown"
+    },
+    {
+      "code": "www_redirect = www_redirect",
+      "language": "unknown"
+    },
+    {
+      "code": "from fastapi.middleware.trustedhost import TrustedHostMiddleware",
+      "language": "sql"
+    },
+    {
+      "code": "WSGIMiddleware(app)",
+      "language": "unknown"
+    },
+    {
+      "code": "def __init__(self, app: Callable[..., Any]) -> None:\n    self.app = app",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi.middleware.wsgi import WSGIMiddleware",
+      "language": "sql"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

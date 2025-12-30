@@ -1,0 +1,8 @@
+{
+  "title": "Codex",
+  "content": "Source: https://docs.conductor.build/tips/codex\n\nRun OpenAI's Codex in Conductor\n\n<img alt=\"Codex selected in the model picker\" />\n\nAs of November 2025, Codex is available in Conductor!\n\nTo use the Codex Agent, select it in the model picker. Run Codex by itself or alongside Claude Code in separate tabs. We've found Codex helpful for precise, fast, and surgical edits.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#codex",
+  "links": []
+}

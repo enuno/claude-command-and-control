@@ -1,0 +1,29 @@
+{
+  "title": "Undername Ownership (/sdks/ar-io-sdk/(ant-contracts)/undername-ownership)",
+  "content": "NTs support ownership of undernames:\n\n1. **ANT Owner** - Has full control over the ANT and all records\n2. **Controllers** - Can manage records but cannot transfer ANT ownership\n3. **Record Owners** - Can only update their specific delegated records\n\nWhen a record owner updates their own record, they **MUST** include their own address in the `owner` field. If the `owner` field is omitted or set to a different address, the record ownership will be transferred or renounced.\n\n#### transferRecord()\n\nTransfers ownership of a specific record (undername) to another address. This enables delegation of control for individual records within an ANT while maintaining the ANT owner's ultimate authority. The current record owner or ANT owner/controllers can transfer ownership.\n\n_Note: Requires `signer` to be provided on `ANT.init` to sign the transaction._\n\n#### Record Owner Workflow Examples\n\n**Checking Record Ownership:**\n\n**Record Owner Updating Their Own Record:**\n\n**What Happens When Record Ownership is Renounced:**\n\nIf a record owner updates their record without including the `owner` field, the record becomes owned by the ANT owner/controllers again:",
+  "code_samples": [
+    {
+      "code": "const { id: txId } = await ant.transferRecord({\n  undername: 'alice', // the subdomain/record to transfer\n  recipient: 'new-owner-address-123...', // address of the new owner\n});\n\n// alice_ardrive.ar.io is now owned by the new owner address\n// The new owner can update the record but not other records in the ANT",
+      "language": "typescript"
+    },
+    {
+      "code": "ar.io transfer-record \\\n  --process-id \"ANT_PROCESS_ID\" \\\n  --undername \"alice\" \\\n  --recipient \"new-owner-address-123...\" \\\n  --wallet-file \"path/to/wallet.json\"",
+      "language": "bash"
+    },
+    {
+      "code": "const record = await ant.getRecord({ undername: 'alice' });\nconsole.log(`Record owner: ${record.owner}`);\nconsole.log(`Transaction ID: ${record.transactionId}`);",
+      "language": "typescript"
+    },
+    {
+      "code": "// Alice (record owner) updating her own record\nconst aliceAnt = ANT.init({\n  processId: 'ANT_PROCESS_ID',\n  signer: new ArweaveSigner(aliceJwk), // Alice's wallet\n});\n\n// ✅ CORRECT: Alice includes her own address as owner\nconst { id: txId } = await aliceAnt.setUndernameRecord({\n  undername: 'alice',\n  transactionId: 'new-content-tx-id-456...',\n  ttlSeconds: 1800,\n  owner: 'alice-wallet-address-123...', // MUST be Alice's own address\n  displayName: 'Alice Updated Portfolio',\n  description: 'Updated personal portfolio and blog',\n});\n\n// ❌ WRONG: Omitting owner field will renounce ownership\nconst badUpdate = await aliceAnt.setUndernameRecord({\n  undername: 'alice',\n  transactionId: 'new-content-tx-id-456...',\n  ttlSeconds: 1800,\n  // Missing owner field - this will renounce ownership!\n});\n\n// ❌ WRONG: Setting different owner will transfer ownership\nconst badTransfer = await aliceAnt.setUndernameRecord({\n  undername: 'alice',\n  transactionId: 'new-content-tx-id-456...',\n  ttlSeconds: 1800,\n  owner: 'someone-else-address-789...', // This transfers ownership to someone else!\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "// Before: alice record is owned by alice-wallet-address-123...\nconst recordBefore = await ant.getRecord({ undername: 'alice' });\nconsole.log(recordBefore.owner); // \"alice-wallet-address-123...\"\n\n// Alice updates without owner field\nawait aliceAnt.setUndernameRecord({\n  undername: 'alice',\n  transactionId: 'new-tx-id...',\n  ttlSeconds: 900,\n  // No owner field = renounces ownership\n});\n\n// After: record ownership reverts to ANT owner\nconst recordAfter = await ant.getRecord({ undername: 'alice' });\nconsole.log(recordAfter.owner); // undefined (controlled by ANT owner again)",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#undername-ownership-(/sdks/ar-io-sdk/(ant-contracts)/undername-ownership)",
+  "links": []
+}

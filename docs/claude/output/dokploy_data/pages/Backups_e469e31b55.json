@@ -1,0 +1,19 @@
+{
+  "title": "Backups",
+  "content": "Dokploy provides an integrated solution for backing up your databases, ensuring data safety and recovery capabilities.\n\n## Backing Up Your Database\n\nTo configure database backups, navigate to the `Backup` tab within your Dokploy dashboard. Here’s what you’ll need to set up:\n\n* **Select Destination S3 Bucket**: Specify where your backups will be stored. Buckets can be configured in the `/dashboard/settings/destinations` route.\n* **Database Name**: Enter the name of the database you want to backup.\n* **Schedule Cron**: Define the schedule for your backups using cron syntax.\n* **Prefix**: Choose a prefix under which backups will be stored in your bucket.\n* **Enabled**: Toggle whether backups are active. The default setting is enabled.\n\n### Testing Your Backup Configuration\n\nTo ensure your backup settings are correctly configured:\n\n1. Click the `Test` button.\n2. This will initiate a test backup to the S3 bucket you selected.\n3. Check the bucket to see the result of the test backup.\n\nThis feature provides peace of mind by verifying that your backup process is set up correctly before relying on it for operational backups.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Backing Up Your Database",
+      "id": "backing-up-your-database"
+    },
+    {
+      "level": "h3",
+      "text": "Testing Your Backup Configuration",
+      "id": "testing-your-backup-configuration"
+    }
+  ],
+  "url": "llms-txt#backups",
+  "links": []
+}

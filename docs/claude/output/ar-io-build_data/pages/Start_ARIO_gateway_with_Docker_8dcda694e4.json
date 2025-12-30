@@ -1,0 +1,13 @@
+{
+  "title": "Start AR.IO gateway with Docker",
+  "content": "docker run -p 4000:4000 ghcr.io/ar-io/ar-io-core:latest\nbash",
+  "code_samples": [
+    {
+      "code": "**Test it's working:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#start-ar.io-gateway-with-docker",
+  "links": []
+}

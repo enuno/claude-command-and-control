@@ -1,0 +1,8 @@
+{
+  "title": "Start bundler service in background",
+  "content": "docker compose --env-file ./.env.bundler --file docker-compose.bundler.yaml up -d",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#start-bundler-service-in-background",
+  "links": []
+}

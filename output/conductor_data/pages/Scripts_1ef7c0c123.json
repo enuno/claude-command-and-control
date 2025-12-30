@@ -1,0 +1,43 @@
+{
+  "title": "Scripts",
+  "content": "Source: https://docs.conductor.build/core/scripts\n\nAutomate repeated actions with `conductor.json`\n\nTo get the most out of Conductor, you can automate repeated actions using scripts.\nConductor lets you define three scripts:\n\n1. Setup script: runs each time you create a workspace\n2. Run script: runs when you click the \"Run\" button in the bottom-right corner of the screen\n3. Archive script: runs when you archive a workspace\n\nYour scripts are stored in a `conductor.json` file in the root of your workspace.\n\nTo configure these scripts, create a `conductor.json` file in the root of your workspace. For example:\n\nIn setup scripts, as in the terminal, you can use any of the [Conductor environment variables](/tips/conductor-env). The scripts run using zshell.\n\nScripts are the trickiest part of Conductor. If you're having trouble, reach out to us at [humans@conductor.build](mailto:humans@conductor.build).\n\nWhen Conductor creates a workspace, it copies in all your git files.\n\nUse the setup script to set up any files that aren't tracked in git: for instance, you might install dependencies or copy `.env` files.\n\nThe setup script will run inside the newly-created workspace directory.\n\nIf your app uses a `.env` file, we recommend these steps:\n\n1. Go to the repository settings page (click the repo name in the left sidebar)\n2. Choose \"Open In\" to open the repository root directory in Finder or an IDE\n3. If your `.env` file isn't already in the repository root, copy it there\n4. In your setup script, symlink .env into the workspace with `ln -s \"$CONDUCTOR_ROOT_PATH/.env\" .env`\n\nUse the run script to easily launch your web server, app, or unit tests from a button in Conductor.\n\nExample: `python3 -m http.server --port $CONDUCTOR_PORT`\n\nIf you can't run multiple dev servers at once, use `nonconcurrent` mode. In this mode, whenever you click the run button, Conductor will kill any in-progress run scripts before starting the new one.\n\nWhen you archive a workspace, Conductor deletes the workspace directory. Use the archive script to clean up any resources that live outside this directory.\n\nFor example, our archive script cleans up the Application Support directory:",
+  "code_samples": [
+    {
+      "code": "In setup scripts, as in the terminal, you can use any of the [Conductor environment variables](/tips/conductor-env). The scripts run using zshell.\n\nScripts are the trickiest part of Conductor. If you're having trouble, reach out to us at [humans@conductor.build](mailto:humans@conductor.build).\n\n## Setup script\n\nWhen Conductor creates a workspace, it copies in all your git files.\n\nUse the setup script to set up any files that aren't tracked in git: for instance, you might install dependencies or copy `.env` files.\n\nThe setup script will run inside the newly-created workspace directory.\n\nIf your app uses a `.env` file, we recommend these steps:\n\n1. Go to the repository settings page (click the repo name in the left sidebar)\n2. Choose \"Open In\" to open the repository root directory in Finder or an IDE\n3. If your `.env` file isn't already in the repository root, copy it there\n4. In your setup script, symlink .env into the workspace with `ln -s \"$CONDUCTOR_ROOT_PATH/.env\" .env`\n\n## Run script\n\nUse the run script to easily launch your web server, app, or unit tests from a button in Conductor.\n\nExample: `python3 -m http.server --port $CONDUCTOR_PORT`\n\n### Run script mode\n\nIf you can't run multiple dev servers at once, use `nonconcurrent` mode. In this mode, whenever you click the run button, Conductor will kill any in-progress run scripts before starting the new one.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Archive script\n\nWhen you archive a workspace, Conductor deletes the workspace directory. Use the archive script to clean up any resources that live outside this directory.\n\nFor example, our archive script cleans up the Application Support directory:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Getting started",
+      "id": "getting-started"
+    },
+    {
+      "level": "h2",
+      "text": "Setup script",
+      "id": "setup-script"
+    },
+    {
+      "level": "h2",
+      "text": "Run script",
+      "id": "run-script"
+    },
+    {
+      "level": "h3",
+      "text": "Run script mode",
+      "id": "run-script-mode"
+    },
+    {
+      "level": "h2",
+      "text": "Archive script",
+      "id": "archive-script"
+    }
+  ],
+  "url": "llms-txt#scripts",
+  "links": []
+}

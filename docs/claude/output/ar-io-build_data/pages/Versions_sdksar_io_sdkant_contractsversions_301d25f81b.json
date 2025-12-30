@@ -1,0 +1,49 @@
+{
+  "title": "Versions (/sdks/ar-io-sdk/(ant-contracts)/versions)",
+  "content": "Gets the module ID of the current ANT process by querying its spawn transaction tags. Results are cached after the first successful fetch.\n\nGets the version string of the current ANT by matching its module ID with versions from the ANT registry.\n\n#### isLatestVersion()\n\nChecks if the current ANT version is the latest according to the ANT registry.\n\nStatic method that returns the full array of available ANT versions and the latest version from the ANT registry.\n\n#### getLatestANTVersion()\n\nStatic method that returns the latest ANT version from the ANT registry.",
+  "code_samples": [
+    {
+      "code": "const moduleId = await ant.getModuleId();\nconsole.log(`ANT was spawned with module: ${moduleId}`);\n\n// With custom GraphQL URL and retries\nconst moduleId = await ant.getModuleId({\n  graphqlUrl: 'https://arweave.net/graphql',\n  retries: 5\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "\"FKtQtOOtlcWCW2pXrwWFiCSlnuewMZOHCzhulVkyqBE\"",
+      "language": "json"
+    },
+    {
+      "code": "const version = await ant.getVersion();\nconsole.log(`ANT is running version: ${version}`);\n\n// With custom ANT registry\nconst version = await ant.getVersion({\n  antRegistryId: 'custom-ant-registry-id'\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "\"23\"",
+      "language": "json"
+    },
+    {
+      "code": "const isLatest = await ant.isLatestVersion();\nif (!isLatest) {\n  console.log('ANT can be upgraded to the latest version');\n}",
+      "language": "typescript"
+    },
+    {
+      "code": "true",
+      "language": "json"
+    },
+    {
+      "code": "// Get all available ANT versions\nconst antVersions = ANT.versions;\nconst versions = await antVersions.getANTVersions();",
+      "language": "typescript"
+    },
+    {
+      "code": "{\n  [\n    {\n      \"moduleId\": \"FKtQtOOtlcWCW2pXrwWFiCSlnuewMZOHCzhulVkyqBE\",\n      \"version\": \"23\",\n      \"releaseNotes\": \"Initial release of the ANT module.\",\n      \"releaseDate\": 1700000000000\n    }\n    // ...other versions\n  ],\n}",
+      "language": "json"
+    },
+    {
+      "code": "// Get the latest ANT version\n\n// Get all available ANT versions\nconst antVersions = ANT.versions;\nconst versions = await antVersions.getANTVersions();\nconst latestVersion = await antVersions.getLatestANTVersion();",
+      "language": "typescript"
+    },
+    {
+      "code": "{\n  \"moduleId\": \"FKtQtOOtlcWCW2pXrwWFiCSlnuewMZOHCzhulVkyqBE\",\n  \"version\": \"23\",\n  \"releaseNotes\": \"Initial release of the ANT module.\",\n  \"releaseDate\": 1700000000000\n}",
+      "language": "json"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#versions-(/sdks/ar-io-sdk/(ant-contracts)/versions)",
+  "links": []
+}

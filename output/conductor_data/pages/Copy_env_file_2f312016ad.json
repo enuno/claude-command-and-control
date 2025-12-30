@@ -1,0 +1,8 @@
+{
+  "title": "Copy .env file",
+  "content": "cp $CONDUCTOR_ROOT_PATH/.env .env",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#copy-.env-file",
+  "links": []
+}

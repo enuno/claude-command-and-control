@@ -1,0 +1,17 @@
+{
+  "title": "Pagination (/sdks/ar-io-sdk/pagination)",
+  "content": "Certain APIs that could return a large amount of data are paginated using cursors. The SDK uses the `cursor` pattern (as opposed to pages) to better protect against changing data while paginating through a list of items. For more information on pagination strategies refer to [this article](https://www.getknit.dev/blog/api-pagination-best-practices#api-pagination-techniques-).\n\nPaginated results include the following properties:\n\n- `items`: the list of items on the current request, defaulted to 100 items.\n- `nextCursor`: the cursor to use for the next batch of items. This is `undefined` if there are no more items to fetch.\n- `hasMore`: a boolean indicating if there are more items to fetch. This is `false` if there are no more items to fetch.\n- `totalItems`: the total number of items available. This may change as new items are added to the list, only use this for informational purposes.\n- `sortBy`: the field used to sort the items, by default this is `startTimestamp`.\n- `sortOrder`: the order used to sort the items, by default this is `desc`.\n\nTo request all the items in a list, you can iterate through the list using the `nextCursor` until `hasMore` is `false`.\n\nPaginated APIs also support filtering by providing a `filters` parameter. Filters can be applied to any field in the response. When multiple keys are provided, they are treated as AND conditions (all conditions must match). When multiple values are provided for a single key (as an array), they are treated as OR conditions (any value can match).\n\nIn the example above, the query will return ArNS records where:\n\n- The type is \"lease\" AND\n- The processId is EITHER \"ZkgLfyHALs5koxzojpcsEFAKA8fbpzP7l-tbM7wmQNM\" OR \"r61rbOjyXx3u644nGl9bkwLWlWmArMEzQgxBo2R-Vu0\"",
+  "code_samples": [
+    {
+      "code": "let hasMore = true;\nlet cursor: string | undefined;\nconst gateaways = [];\nwhile (hasMore) {\n  const page = await ario.getGateways({ limit: 100, cursor });\n  gateaways.push(...items);\n  cursor = page.nextCursor;\n  hasMore = page.hasMore;\n}",
+      "language": "typescript"
+    },
+    {
+      "code": "const records = await ario.getArNSRecords({\n  filters: {\n    type: 'lease',\n    processId: [\n      'ZkgLfyHALs5koxzojpcsEFAKA8fbpzP7l-tbM7wmQNM',\n      'r61rbOjyXx3u644nGl9bkwLWlWmArMEzQgxBo2R-Vu0',\n    ],\n  },\n});",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#pagination-(/sdks/ar-io-sdk/pagination)",
+  "links": []
+}

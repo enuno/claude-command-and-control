@@ -1,0 +1,21 @@
+{
+  "title": "Folder Operations (/sdks/ardrive-core-js/(api-reference)/folder-operations)",
+  "content": "#### Creating Folders\n\n#### Listing Folder Contents\n\n#### Moving and Renaming Folders",
+  "code_samples": [
+    {
+      "code": "// Public folder\nconst publicFolder = await arDrive.createPublicFolder({\n  folderName: 'Documents',\n  driveId,\n  parentFolderId\n});\n\n// Private folder\nconst privateFolder = await arDrive.createPrivateFolder({\n  folderName: 'Secret Documents',\n  driveId,\n  driveKey,\n  parentFolderId\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "// List public folder\nconst publicContents = await arDrive.listPublicFolder({\n  folderId,\n  maxDepth: 2, // Optional: limit recursion depth\n  includeRoot: true // Optional: include root folder in results\n});\n\n// List private folder\nconst privateContents = await arDrive.listPrivateFolder({\n  folderId,\n  driveKey,\n  maxDepth: 1\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "// Move folder\nawait arDrive.movePublicFolder({\n  folderId,\n  newParentFolderId\n});\n\n// Rename folder\nawait arDrive.renamePublicFolder({\n  folderId,\n  newName: 'New Folder Name'\n});",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#folder-operations-(/sdks/ardrive-core-js/(api-reference)/folder-operations)",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Create a new dokploy-redis service",
+  "content": "docker service create \\\n  --name dokploy-redis \\\n  --constraint 'node.role==manager' \\\n  --network dokploy-network \\\n  --mount type=volume,source=dokploy-redis,target=/data \\\n  redis:7\nbash\ndocker service rm dokploy-postgres",
+  "code_samples": [
+    {
+      "code": "Remove the dokploy-postgres service:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#create-a-new-dokploy-redis-service",
+  "links": []
+}

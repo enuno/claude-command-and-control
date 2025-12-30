@@ -1,0 +1,17 @@
+{
+  "title": "Bulk Operations (/sdks/ardrive-core-js/(api-reference)/bulk-operations)",
+  "content": "#### Upload Multiple Files and Folders\n\n#### Create Folder and Upload Contents",
+  "code_samples": [
+    {
+      "code": "// Prepare entities for upload\nconst folder1 = wrapFileOrFolder('/path/to/folder1');\nconst folder2 = wrapFileOrFolder('/path/to/folder2');\nconst file1 = wrapFileOrFolder('/path/to/file1.txt');\n\n// Upload everything in one operation\nconst bulkUpload = await arDrive.uploadAllEntities({\n  entitiesToUpload: [\n    // Public folder\n    {\n      wrappedEntity: folder1,\n      destFolderId: rootFolderId\n    },\n    // Private folder\n    {\n      wrappedEntity: folder2,\n      destFolderId: rootFolderId,\n      driveKey: privateDriveKey\n    },\n    // Public file\n    {\n      wrappedEntity: file1,\n      destFolderId: someFolderId\n    }\n  ],\n  conflictResolution: 'upsert'\n});\n\n// Results include all created entities\nconsole.log('Created folders:', bulkUpload.created.length);\nconsole.log('Total cost:', bulkUpload.totalCost.toString());",
+      "language": "typescript"
+    },
+    {
+      "code": "// Create folder and upload all children\nconst folderWithContents = await arDrive.createPublicFolderAndUploadChildren({\n  parentFolderId,\n  wrappedFolder: wrapFileOrFolder('/path/to/folder'),\n  conflictResolution: 'skip'\n});",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#bulk-operations-(/sdks/ardrive-core-js/(api-reference)/bulk-operations)",
+  "links": []
+}

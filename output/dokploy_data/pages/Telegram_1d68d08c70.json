@@ -1,0 +1,14 @@
+{
+  "title": "Telegram",
+  "content": "Telegram notifications are a great way to stay up to date with important events in your Dokploy panel. You can choose to receive notifications for specific events or all events.\n\n## Telegram Notifications\n\nFor start receiving telegram notifications, you need to fill the form with the following details:\n\n* **Name**: Enter any name you want.\n* **Bot Token**: Enter the bot token. eg. `123456789:ABCdefGHIjklMNOPqrstUVWXYZ`\n* **Chat ID**: Enter the chat ID. eg. `123456789`\n\nTo Setup the telegram notifications, follow these steps:\n\n1. Go to `https://telegram.me/botfather` and click on `Start Bot`.\n2. Type `/newbot` and click on `Start`.\n3. Set a name for your bot, eg. `dokploy_bot` make sure the name ends with `_bot`.\n4. Copy the `Bot Token` and paste it in Dokploy `Telegram` Modal section.\n5. Now you need to get the Chat ID, or create a new Channel\n6. Search this bot in the search bar `@userinfobot`.\n7. Type `/start` and it will return the chat ID.\n8. Copy the `Chat ID` and paste it in Dokploy `Telegram` Modal section.\n9. Click on test to make sure everything is working.\n10. Click on `Create` to save the notification.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Telegram Notifications",
+      "id": "telegram-notifications"
+    }
+  ],
+  "url": "llms-txt#telegram",
+  "links": []
+}

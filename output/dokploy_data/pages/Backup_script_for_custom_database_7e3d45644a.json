@@ -1,0 +1,8 @@
+{
+  "title": "Backup script for custom database",
+  "content": "backup_date=$(date +%Y%m%d_%H%M%S)\nbackup_file=\"database_${backup_date}.backup\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#backup-script-for-custom-database",
+  "links": []
+}

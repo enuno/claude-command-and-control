@@ -1,0 +1,280 @@
+{
+  "url": "https://fastapi.tiangolo.com/reference/staticfiles/",
+  "title": "Static Files - StaticFiles¶",
+  "content": "You can use the StaticFiles class to serve static files, like JavaScript, CSS, images, etc.\n\nRead more about it in the FastAPI docs for Static Files.\n\nYou can import it directly from fastapi.staticfiles:\n\nGiven directory and packages arguments, return a list of all the directories that should be used for serving static files from.\n\nGiven the ASGI scope, return the path string to serve up, with OS specific path separators, and any '..', '.' components removed.\n\nReturns an HTTP response, given the incoming path, method and request headers.\n\nPerform a one-off configuration check that StaticFiles is actually pointed at a directory, so that we can raise loud errors rather than just returning 404 responses.\n\nGiven the request and response headers, return True if an HTTP \"Not Modified\" response could be returned instead.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Static Files - StaticFiles¶",
+      "id": "static-files-staticfiles"
+    },
+    {
+      "level": "h2",
+      "text": "fastapi.staticfiles.StaticFiles ¶",
+      "id": "fastapi.staticfiles.StaticFiles"
+    },
+    {
+      "level": "h3",
+      "text": "directory instance-attribute ¶",
+      "id": "fastapi.staticfiles.StaticFiles.directory"
+    },
+    {
+      "level": "h3",
+      "text": "packages instance-attribute ¶",
+      "id": "fastapi.staticfiles.StaticFiles.packages"
+    },
+    {
+      "level": "h3",
+      "text": "all_directories instance-attribute ¶",
+      "id": "fastapi.staticfiles.StaticFiles.all_directories"
+    },
+    {
+      "level": "h3",
+      "text": "html instance-attribute ¶",
+      "id": "fastapi.staticfiles.StaticFiles.html"
+    },
+    {
+      "level": "h3",
+      "text": "config_checked instance-attribute ¶",
+      "id": "fastapi.staticfiles.StaticFiles.config_checked"
+    },
+    {
+      "level": "h3",
+      "text": "follow_symlink instance-attribute ¶",
+      "id": "fastapi.staticfiles.StaticFiles.follow_symlink"
+    },
+    {
+      "level": "h3",
+      "text": "get_directories ¶",
+      "id": "fastapi.staticfiles.StaticFiles.get_directories"
+    },
+    {
+      "level": "h3",
+      "text": "get_path ¶",
+      "id": "fastapi.staticfiles.StaticFiles.get_path"
+    },
+    {
+      "level": "h3",
+      "text": "get_response async ¶",
+      "id": "fastapi.staticfiles.StaticFiles.get_response"
+    },
+    {
+      "level": "h3",
+      "text": "lookup_path ¶",
+      "id": "fastapi.staticfiles.StaticFiles.lookup_path"
+    },
+    {
+      "level": "h3",
+      "text": "file_response ¶",
+      "id": "fastapi.staticfiles.StaticFiles.file_response"
+    },
+    {
+      "level": "h3",
+      "text": "check_config async ¶",
+      "id": "fastapi.staticfiles.StaticFiles.check_config"
+    },
+    {
+      "level": "h3",
+      "text": "is_not_modified ¶",
+      "id": "fastapi.staticfiles.StaticFiles.is_not_modified"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from fastapi.staticfiles import StaticFiles",
+      "language": "sql"
+    },
+    {
+      "code": "StaticFiles(\n    *,\n    directory=None,\n    packages=None,\n    html=False,\n    check_dir=True,\n    follow_symlink=False\n)",
+      "language": "rust"
+    },
+    {
+      "code": "def __init__(\n    self,\n    *,\n    directory: PathLike | None = None,\n    packages: list[str | tuple[str, str]] | None = None,\n    html: bool = False,\n    check_dir: bool = True,\n    follow_symlink: bool = False,\n) -> None:\n    self.directory = directory\n    self.packages = packages\n    self.all_directories = self.get_directories(directory, packages)\n    self.html = html\n    self.config_checked = False\n    self.follow_symlink = follow_symlink\n    if check_dir and directory is not None and not os.path.isdir(directory):\n        raise RuntimeError(f\"Directory '{directory}' does not exist\")",
+      "language": "python"
+    },
+    {
+      "code": "directory = directory",
+      "language": "unknown"
+    },
+    {
+      "code": "packages = packages",
+      "language": "unknown"
+    },
+    {
+      "code": "all_directories = get_directories(directory, packages)",
+      "language": "unknown"
+    },
+    {
+      "code": "html = html",
+      "language": "unknown"
+    },
+    {
+      "code": "config_checked = False",
+      "language": "unknown"
+    },
+    {
+      "code": "follow_symlink = follow_symlink",
+      "language": "unknown"
+    },
+    {
+      "code": "get_directories(directory=None, packages=None)",
+      "language": "rust"
+    },
+    {
+      "code": "def get_directories(\n    self,\n    directory: PathLike | None = None,\n    packages: list[str | tuple[str, str]] | None = None,\n) -> list[PathLike]:\n    \"\"\"\n    Given `directory` and `packages` arguments, return a list of all the\n    directories that should be used for serving static files from.\n    \"\"\"\n    directories = []\n    if directory is not None:\n        directories.append(directory)\n\n    for package in packages or []:\n        if isinstance(package, tuple):\n            package, statics_dir = package\n        else:\n            statics_dir = \"statics\"\n        spec = importlib.util.find_spec(package)\n        assert spec is not None, f\"Package {package!r} could not be found.\"\n        assert spec.origin is not None, f\"Package {package!r} could not be found.\"\n        package_directory = os.path.normpath(os.path.join(spec.origin, \"..\", statics_dir))\n        assert os.path.isdir(package_directory), (\n            f\"Directory '{statics_dir!r}' in package {package!r} could not be found.\"\n        )\n        directories.append(package_directory)\n\n    return directories",
+      "language": "go"
+    },
+    {
+      "code": "get_path(scope)",
+      "language": "unknown"
+    },
+    {
+      "code": "def get_path(self, scope: Scope) -> str:\n    \"\"\"\n    Given the ASGI scope, return the `path` string to serve up,\n    with OS specific path separators, and any '..', '.' components removed.\n    \"\"\"\n    route_path = get_route_path(scope)\n    return os.path.normpath(os.path.join(*route_path.split(\"/\")))",
+      "language": "python"
+    },
+    {
+      "code": "get_response(path, scope)",
+      "language": "unknown"
+    },
+    {
+      "code": "async def get_response(self, path: str, scope: Scope) -> Response:\n    \"\"\"\n    Returns an HTTP response, given the incoming path, method and request headers.\n    \"\"\"\n    if scope[\"method\"] not in (\"GET\", \"HEAD\"):\n        raise HTTPException(status_code=405)\n\n    try:\n        full_path, stat_result = await anyio.to_thread.run_sync(self.lookup_path, path)\n    except PermissionError:\n        raise HTTPException(status_code=401)\n    except OSError as exc:\n        # Filename is too long, so it can't be a valid static file.\n        if exc.errno == errno.ENAMETOOLONG:\n            raise HTTPException(status_code=404)\n\n        raise exc\n\n    if stat_result and stat.S_ISREG(stat_result.st_mode):\n        # We have a static file to serve.\n        return self.file_response(full_path, stat_result, scope)\n\n    elif stat_result and stat.S_ISDIR(stat_result.st_mode) and self.html:\n        # We're in HTML mode, and have got a directory URL.\n        # Check if we have 'index.html' file to serve.\n        index_path = os.path.join(path, \"index.html\")\n        full_path, stat_result = await anyio.to_thread.run_sync(self.lookup_path, index_path)\n        if stat_result is not None and stat.S_ISREG(stat_result.st_mode):\n            if not scope[\"path\"].endswith(\"/\"):\n                # Directory URLs should redirect to always end in \"/\".\n                url = URL(scope=scope)\n                url = url.replace(path=url.path + \"/\")\n                return RedirectResponse(url=url)\n            return self.file_response(full_path, stat_result, scope)\n\n    if self.html:\n        # Check for '404.html' if we're in HTML mode.\n        full_path, stat_result = await anyio.to_thread.run_sync(self.lookup_path, \"404.html\")\n        if stat_result and stat.S_ISREG(stat_result.st_mode):\n            return FileResponse(full_path, stat_result=stat_result, status_code=404)\n    raise HTTPException(status_code=404)",
+      "language": "python"
+    },
+    {
+      "code": "lookup_path(path)",
+      "language": "unknown"
+    },
+    {
+      "code": "def lookup_path(self, path: str) -> tuple[str, os.stat_result | None]:\n    for directory in self.all_directories:\n        joined_path = os.path.join(directory, path)\n        if self.follow_symlink:\n            full_path = os.path.abspath(joined_path)\n            directory = os.path.abspath(directory)\n        else:\n            full_path = os.path.realpath(joined_path)\n            directory = os.path.realpath(directory)\n        if os.path.commonpath([full_path, directory]) != str(directory):\n            # Don't allow misbehaving clients to break out of the static files directory.\n            continue\n        try:\n            return full_path, os.stat(full_path)\n        except (FileNotFoundError, NotADirectoryError):\n            continue\n    return \"\", None",
+      "language": "python"
+    },
+    {
+      "code": "file_response(\n    full_path, stat_result, scope, status_code=200\n)",
+      "language": "unknown"
+    },
+    {
+      "code": "def file_response(\n    self,\n    full_path: PathLike,\n    stat_result: os.stat_result,\n    scope: Scope,\n    status_code: int = 200,\n) -> Response:\n    request_headers = Headers(scope=scope)\n\n    response = FileResponse(full_path, status_code=status_code, stat_result=stat_result)\n    if self.is_not_modified(response.headers, request_headers):\n        return NotModifiedResponse(response.headers)\n    return response",
+      "language": "python"
+    },
+    {
+      "code": "check_config()",
+      "language": "unknown"
+    },
+    {
+      "code": "async def check_config(self) -> None:\n    \"\"\"\n    Perform a one-off configuration check that StaticFiles is actually\n    pointed at a directory, so that we can raise loud errors rather than\n    just returning 404 responses.\n    \"\"\"\n    if self.directory is None:\n        return\n\n    try:\n        stat_result = await anyio.to_thread.run_sync(os.stat, self.directory)\n    except FileNotFoundError:\n        raise RuntimeError(f\"StaticFiles directory '{self.directory}' does not exist.\")\n    if not (stat.S_ISDIR(stat_result.st_mode) or stat.S_ISLNK(stat_result.st_mode)):\n        raise RuntimeError(f\"StaticFiles path '{self.directory}' is not a directory.\")",
+      "language": "python"
+    },
+    {
+      "code": "is_not_modified(response_headers, request_headers)",
+      "language": "unknown"
+    },
+    {
+      "code": "def is_not_modified(self, response_headers: Headers, request_headers: Headers) -> bool:\n    \"\"\"\n    Given the request and response headers, return `True` if an HTTP\n    \"Not Modified\" response could be returned instead.\n    \"\"\"\n    if if_none_match := request_headers.get(\"if-none-match\"):\n        # The \"etag\" header is added by FileResponse, so it's always present.\n        etag = response_headers[\"etag\"]\n        return etag in [tag.strip(\" W/\") for tag in if_none_match.split(\",\")]\n\n    try:\n        if_modified_since = parsedate(request_headers[\"if-modified-since\"])\n        last_modified = parsedate(response_headers[\"last-modified\"])\n        if if_modified_since is not None and last_modified is not None and if_modified_since >= last_modified:\n            return True\n    except KeyError:\n        pass\n\n    return False",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

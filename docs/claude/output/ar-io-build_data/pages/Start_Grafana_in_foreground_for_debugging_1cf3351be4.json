@@ -1,0 +1,8 @@
+{
+  "title": "Start Grafana in foreground (for debugging)",
+  "content": "docker compose -f docker-compose.grafana.yaml up",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#start-grafana-in-foreground-(for-debugging)",
+  "links": []
+}

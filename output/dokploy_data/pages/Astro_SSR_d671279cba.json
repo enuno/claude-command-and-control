@@ -1,0 +1,13 @@
+{
+  "title": "Astro SSR",
+  "content": "This example will deploy a simple Astro SSR application.\n\n1. **Use Git Provider in Your Application**:\n   * Repository: `https://github.com/Dokploy/examples.git`\n   * Branch: `main`\n   * Build path: `/astro-ssr`\n\n2. **Add Environment Variables**:\n\n* Navigate to the \"Environments\" tab and add the following variable:\n\n3. **Click on Deploy**:\n   * Deploy your application by clicking the deploy button.\n\n4. **Generate a Domain**:\n   * Click on generate domain button.\n   * A new domain will be generated for you.\n   * You can use this domain to access your application.\n\nIf you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).",
+  "code_samples": [
+    {
+      "code": "NIXPACKS_START_CMD=\"pnpm run preview\"",
+      "language": "cmd"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#astro-ssr",
+  "links": []
+}

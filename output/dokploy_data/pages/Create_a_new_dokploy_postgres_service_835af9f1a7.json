@@ -1,0 +1,13 @@
+{
+  "title": "Create a new dokploy-postgres service",
+  "content": "docker service create \\\n  --name dokploy-postgres \\\n  --constraint 'node.role==manager' \\\n  --network dokploy-network \\\n  --env POSTGRES_USER=dokploy \\\n  --env POSTGRES_DB=dokploy \\\n  --env POSTGRES_PASSWORD=amukds4wi9001583845717ad2 \\\n  --mount type=volume,source=dokploy-postgres,target=/var/lib/postgresql/data \\\n  postgres:16\nbash",
+  "code_samples": [
+    {
+      "code": "Remove the dokploy-traefik service:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#create-a-new-dokploy-postgres-service",
+  "links": []
+}

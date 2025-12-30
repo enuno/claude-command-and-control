@@ -1,0 +1,8 @@
+{
+  "title": "Git (/sdks/(clis)/ardrive-cli/(prerequisites)/git)",
+  "content": "Some of ArDrive's dependencies are transitively installed via Git. Install it, if necessary, and ensure that it's available within your terminal environment:\n\n[Download Git](https://git-scm.com/downloads)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#git-(/sdks/(clis)/ardrive-cli/(prerequisites)/git)",
+  "links": []
+}

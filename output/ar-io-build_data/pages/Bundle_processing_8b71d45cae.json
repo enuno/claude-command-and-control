@@ -1,0 +1,19 @@
+{
+  "title": "Bundle processing",
+  "content": "ANS104_UNBUNDLE_FILTER={\"and\": [{\"equals\": {\"App-Name\": \"MyApp-v1.0\"}}]}\nANS104_INDEX_FILTER={\"and\": [{\"equals\": {\"App-Name\": \"MyApp-v1.0\"}}]}\nANS104_UNBUNDLE_WORKERS=2\nANS104_DOWNLOAD_WORKERS=5\nbash",
+  "code_samples": [
+    {
+      "code": "### Gateway with Redis Caching",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Gateway with Redis Caching",
+      "id": "gateway-with-redis-caching"
+    }
+  ],
+  "url": "llms-txt#bundle-processing",
+  "links": []
+}

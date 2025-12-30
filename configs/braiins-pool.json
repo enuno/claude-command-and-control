@@ -1,0 +1,37 @@
+{
+  "name": "braiins-pool",
+  "description": "Braiins Pool - Bitcoin mining pool with advanced features",
+  "base_url": "https://academy.braiins.com/",
+  "start_urls": [
+    "https://academy.braiins.com/en/braiins-pool/about/",
+    "https://academy.braiins.com/en/braiins-pool/",
+    "https://academy.braiins.com/en/braiins-pool/getting-started/",
+    "https://academy.braiins.com/en/braiins-pool/features/",
+    "https://academy.braiins.com/en/braiins-pool/payout/",
+    "https://academy.braiins.com/en/braiins-pool/scoring/",
+    "https://academy.braiins.com/en/braiins-pool/api/",
+    "https://academy.braiins.com/en/braiins-pool/faq/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/en/braiins-pool/"
+    ],
+    "exclude": [
+      "/blog/",
+      "/external/",
+      "/zh/",
+      "/es/",
+      "/ru/"
+    ]
+  },
+  "categories": {
+    "getting_started": ["getting-started", "setup"],
+    "features": ["features", "scoring", "payout"],
+    "api": ["api", "integration"],
+    "faq": ["faq", "troubleshooting"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 100,
+  "follow_links": true,
+  "link_depth": 3
+}

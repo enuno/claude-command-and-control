@@ -1,0 +1,24 @@
+{
+  "title": "Using Turbo in a Browser",
+  "content": "Integrate the **Turbo SDK** directly into your web applications for fast, reliable data uploads to Arweave. Choose the approach that best fits your development workflow and framework preferences.\n\n## What You Can Build\n\n**With Turbo SDK in browsers, you can:**\n\n- **Upload files directly** from web applications to Arweave\n- **Pay with different tokens** (AR, Ethereum, and more)\n- **Integrate with popular wallets** (MetaMask, Wander, ArConnect)\n- **Build permanent web apps** that store data on Arweave\n- **Create data marketplaces** and decentralized applications\n\n**Start with the simplest approach** - no build tools required\n\n**Key topics:**\n    - CDN imports for instant setup\n    - Wallet integration examples\n    - Production deployment considerations\n    - Error handling and troubleshooting\n\n**Full-stack React applications** with server-side rendering\n\n**Key topics:**\n    - Webpack polyfill configuration\n    - Client-side component setup\n    - TypeScript integration\n    - Production optimization\n\n**Fast development** with modern build tools\n\n**Key topics:**\n    - Vite plugin configuration\n    - React and TypeScript setup\n    - Hot module replacement\n    - Bundle optimization\n\n## Why Use Turbo SDK?\n\n**Fast uploads** - Upload data to Arweave in seconds, not minutes\n\n**Multiple payment options** - Pay with AR, Ethereum, or other supported tokens\n\n**Wallet integration** - Seamlessly connect with popular browser wallets\n\n**Reliable infrastructure** - Built on Arweave's permanent storage network\n\n**Developer-friendly** - Simple APIs with comprehensive documentation",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "What You Can Build",
+      "id": "what-you-can-build"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Started",
+      "id": "getting-started"
+    },
+    {
+      "level": "h2",
+      "text": "Why Use Turbo SDK?",
+      "id": "why-use-turbo-sdk?"
+    }
+  ],
+  "url": "llms-txt#using-turbo-in-a-browser",
+  "links": []
+}

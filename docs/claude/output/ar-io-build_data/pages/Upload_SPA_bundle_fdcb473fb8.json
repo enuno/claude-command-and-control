@@ -1,0 +1,13 @@
+{
+  "title": "Upload SPA bundle",
+  "content": "APEX_ARNS_NAME=my-dapp\nbash",
+  "code_samples": [
+    {
+      "code": "**Documentation Site:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#upload-spa-bundle",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Force redirects from HTTP to HTTPS",
+  "content": "server {\n    listen 80;\n    listen [::]:80;\n    server_name .com *..com;\n\nlocation / {\n        return 301 https://$host$request_uri;\n    }\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#force-redirects-from-http-to-https",
+  "links": []
+}

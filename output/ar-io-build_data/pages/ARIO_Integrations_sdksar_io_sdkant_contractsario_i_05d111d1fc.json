@@ -1,0 +1,25 @@
+{
+  "title": "ARIO Integrations (/sdks/ar-io-sdk/(ant-contracts)/ario-integrations)",
+  "content": "Releases a name from the current owner and makes it available for purchase on the ARIO contract. The name must be permanently owned by the releasing wallet. If purchased within the recently returned name period (14 epochs), 50% of the purchase amount will be distributed to the ANT owner at the time of release. If no purchases in the recently returned name period, the name can be reregistered by anyone for the normal fee.\n\n_Note: Requires `signer` to be provided on `ANT.init` to sign the transaction._\n\nReassigns a name to a new ANT. This can only be done by the current owner of the ANT.\n\n_Note: Requires `signer` to be provided on `ANT.init` to sign the transaction._\n\n#### approvePrimaryNameRequest()\n\nApproves a primary name request for a given name or address.\n\n_Note: Requires `signer` to be provided on `ANT.init` to sign the transaction._\n\n#### removePrimaryNames()\n\nRemoves primary names from the ANT process.\n\n_Note: Requires `signer` to be provided on `ANT.init` to sign the transaction._",
+  "code_samples": [
+    {
+      "code": "const { id: txId } = await ant.releaseName({\n  name: 'permalink',\n  arioProcessId: ARIO_MAINNET_PROCESS_ID, // releases the name owned by the ANT and sends it to recently returned names on the ARIO contract\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "const { id: txId } = await ant.reassignName({\n  name: 'ardrive',\n  arioProcessId: ARIO_MAINNET_PROCESS_ID,\n  antProcessId: NEW_ANT_PROCESS_ID, // the new ANT process id that will take over ownership of the name\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "const { id: txId } = await ant.approvePrimaryNameRequest({\n  name: 'arns',\n  address: 't4Xr0_J4Iurt7caNST02cMotaz2FIbWQ4Kbj616RHl3', // must match the request initiator address\n  arioProcessId: ARIO_MAINNET_PROCESS_ID, // the ARIO process id to use for the request\n});",
+      "language": "typescript"
+    },
+    {
+      "code": "const { id: txId } = await ant.removePrimaryNames({\n  names: ['arns', 'test_arns'], // any primary names associated with a base name controlled by this ANT will be removed\n  arioProcessId: ARIO_MAINNET_PROCESS_ID,\n  notifyOwners: true, // if true, the owners of the removed names will be send AO messages to notify them of the removal\n});",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#ario-integrations-(/sdks/ar-io-sdk/(ant-contracts)/ario-integrations)",
+  "links": []
+}

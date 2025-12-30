@@ -1,0 +1,8 @@
+{
+  "title": "Project",
+  "content": "<APIPage document={\"./public/openapi.json\"} operations={[{\"method\":\"post\",\"path\":\"/project.create\"},{\"method\":\"get\",\"path\":\"/project.one\"},{\"method\":\"get\",\"path\":\"/project.all\"},{\"method\":\"post\",\"path\":\"/project.remove\"},{\"method\":\"post\",\"path\":\"/project.update\"},{\"method\":\"post\",\"path\":\"/project.duplicate\"}]} hasHead={true} />",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#project",
+  "links": []
+}

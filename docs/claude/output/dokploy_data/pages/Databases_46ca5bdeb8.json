@@ -1,0 +1,49 @@
+{
+  "title": "Databases",
+  "content": "Dokploy simplifies the process of creating and managing databases, offering robust options for both setup and backups.\n\nDokploy currently supports a range of popular database systems, ensuring compatibility and flexibility for your projects:\n\n* **Postgres**: Robust, SQL-compliant and highly reliable.\n* **MySQL**: Widely used relational database known for its performance and flexibility.\n* **MariaDB**: A fork of MySQL with additional features and improved performance.\n* **MongoDB**: A NoSQL database known for its high scalability and flexibility.\n* **Redis**: An in-memory key-value store often used as a database, cache, and message broker.\n\nWe offer multiple functionalities that you can use to manage your databases, such as:\n\nActions like deploying, updating, and deleting your database, and stopping it.\n\nIf you need to assign environment variables to your application, you can do so here.\n\nIn case you need to use a multiline variable, you can wrap it in double quotes just like this `'\"here_is_my_private_key\"'`.\n\nFour graphs will be displayed for the use of memory, CPU, disk, and network. Note that the information is only updated if you are viewing the current page, otherwise it will not be updated.\n\nWe offer automated backups for your databases, ensuring that you can recover your data quickly and easily in case of any issues, you can setup a S3 Destinations in settings to store your backups.\n\nIf you want to see any important logs from your application that is running, you can do so here and determine if your application is displaying any errors or not.\n\nThis section provides advanced configuration options for experienced users. It includes tools for custom commands within the container, managing Docker Swarm settings, and adjusting cluster settings such as replicas and registry selection. These tools are typically not required for standard application deployment and are intended for complex management and troubleshooting tasks.\n\n* **Custom Docker Image**: You can change the Docker image used to run your database.\n* **Run Command**: Execute custom commands directly in the container for advanced management or troubleshooting.\n* **Volumes**: To ensure data persistence across deployments, configure storage volumes for your application.\n* **Resources**: Adjust the CPU and memory allocation for your application.\n* **Danger Zone**: If for some reason you want to start again and delete all the data, tables, etc. you can do it here.\n\n## Keyboard Shortcuts\n\nTo help speed up navigating there are some built in keyboard shortcuts for\nnavigating tabs on database pages. Similar to GitHub these are all prefixed\nwith the `g` key so to use them press `g` and then the shortcut key.\n\n| Key | Tab         |\n| --- | ----------- |\n| `g` | General     |\n| `e` | Environment |\n| `l` | Logs        |\n| `m` | Monitoring  |\n| `b` | Backups     |\n| `a` | Advanced    |",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Database Support",
+      "id": "database-support"
+    },
+    {
+      "level": "h2",
+      "text": "General",
+      "id": "general"
+    },
+    {
+      "level": "h2",
+      "text": "Environment",
+      "id": "environment"
+    },
+    {
+      "level": "h2",
+      "text": "Monitoring",
+      "id": "monitoring"
+    },
+    {
+      "level": "h2",
+      "text": "Backups",
+      "id": "backups"
+    },
+    {
+      "level": "h2",
+      "text": "Logs",
+      "id": "logs"
+    },
+    {
+      "level": "h2",
+      "text": "Advanced",
+      "id": "advanced"
+    },
+    {
+      "level": "h2",
+      "text": "Keyboard Shortcuts",
+      "id": "keyboard-shortcuts"
+    }
+  ],
+  "url": "llms-txt#databases",
+  "links": []
+}

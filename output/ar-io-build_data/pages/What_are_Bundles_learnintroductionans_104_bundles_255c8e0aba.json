@@ -1,0 +1,44 @@
+{
+  "title": "What are Bundles? (/learn/(introduction)/ans-104-bundles)",
+  "content": "ANS-104 bundles are **data packaging standards** that efficiently bundle multiple data items and submit them to Arweave as single transactions, reducing transaction overhead and improving network efficiency.\n\n## The Problem ANS-104 Solves\n\n**Individual Arweave transactions have inherent limitations:**\n\n- **Transaction overhead** - Each transaction requires separate processing and storage\n- **Network inefficiency** - Multiple small transactions consume more network resources\n- **Indexing complexity** - Individual transactions are harder to organize and query\n- **Storage fragmentation** - Related data items are stored separately\n\n**ANS-104 provides:**\n\n- **Reduced transaction overhead** by batching multiple data items\n- **Improved network efficiency** through consolidated transactions\n- **Better indexing capabilities** with structured data item format\n- **Standardized data format** for interoperability across applications\n\n## How ANS-104 Bundling Works\n\n### The ANS-104 Standard\n\nANS-104 is the [official specification](https://github.com/ArweaveTeam/arweave-standards/blob/master/ans/ANS-104.md) for bundling data on Arweave:\n\n- **Data Items** - Individual pieces of data with standardized binary format\n- **Bundle** - Single Arweave transaction containing multiple data items\n- **Binary Serialization** - Consistent format for data item structure\n- **Standardized Format** - Ensures interoperability across applications\n\n### How ANS-104 Works\n\n1. **Data Item Creation** - Create individual data items with ANS-104 format\n2. **Bundle Assembly** - Combine multiple data items into a single bundle\n3. **Transaction Creation** - Submit bundle as one Arweave transaction\n4. **Network Processing** - Miners process the single bundle transaction\n5. **Data Retrieval** - Individual data items can be extracted and indexed\n\n## Key Benefits of ANS-104\n\n**Reduced Overhead** - Bundle multiple data items into a single transaction to reduce processing overhead\n\n**Network Efficiency** - Consolidate multiple uploads into fewer network transactions\n\n**Standardized Format** - Consistent binary serialization ensures interoperability across applications\n\n**Better Indexing** - Structured data item format enables more efficient data retrieval and querying\n\n## Why ANS-104 Matters for the Permaweb\n\nANS-104 bundles are essential for building scalable applications on the permaweb because they:\n\n- **Enable efficient data storage** by reducing transaction overhead for multiple data items\n- **Improve network performance** through consolidated transactions\n- **Support better data organization** with standardized data item formats\n- **Enable scalable applications** that need to store many related data items efficiently\n\n}\n    title=\"Upload Data\"\n    description=\"Learn how to upload data to Arweave using bundling\"\n    href=\"/build/upload\"\n  />\n  }\n    title=\"Run a Bundler\"\n    description=\"Deploy your own bundling infrastructure\"\n    href=\"/build/extensions/bundler\"\n  />\n  }\n    title=\"Gateway Extensions\"\n    description=\"Integrate bundling with your AR.IO gateway\"\n    href=\"/build/extensions\"\n  />\n  }\n    title=\"Turbo SDK\"\n    description=\"Use Turbo SDK for easy data uploads and bundling\"\n    href=\"/sdks/turbo-sdk\"\n  />",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "The Problem ANS-104 Solves",
+      "id": "the-problem-ans-104-solves"
+    },
+    {
+      "level": "h2",
+      "text": "How ANS-104 Bundling Works",
+      "id": "how-ans-104-bundling-works"
+    },
+    {
+      "level": "h3",
+      "text": "The ANS-104 Standard",
+      "id": "the-ans-104-standard"
+    },
+    {
+      "level": "h3",
+      "text": "How ANS-104 Works",
+      "id": "how-ans-104-works"
+    },
+    {
+      "level": "h2",
+      "text": "Key Benefits of ANS-104",
+      "id": "key-benefits-of-ans-104"
+    },
+    {
+      "level": "h2",
+      "text": "Why ANS-104 Matters for the Permaweb",
+      "id": "why-ans-104-matters-for-the-permaweb"
+    },
+    {
+      "level": "h2",
+      "text": "Explore Bundling",
+      "id": "explore-bundling"
+    }
+  ],
+  "url": "llms-txt#what-are-bundles?-(/learn/(introduction)/ans-104-bundles)",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Turbo Integration (/sdks/ardrive-core-js/(advanced-features)/turbo-integration)",
+  "content": "Enable Turbo for optimized uploads:",
+  "code_samples": [
+    {
+      "code": "// Enable Turbo\nconst arDriveWithTurbo = arDriveFactory({ \n  wallet: myWallet, \n  turboSettings: {} \n});\n\n// Uploads will automatically use Turbo\nconst result = await arDriveWithTurbo.uploadAllEntities({\n  entitiesToUpload: [{ wrappedEntity, destFolderId }]\n});",
+      "language": "typescript"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#turbo-integration-(/sdks/ardrive-core-js/(advanced-features)/turbo-integration)",
+  "links": []
+}

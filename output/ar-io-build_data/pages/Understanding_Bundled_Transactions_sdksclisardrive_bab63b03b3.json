@@ -1,0 +1,8 @@
+{
+  "title": "Understanding Bundled Transactions (/sdks/(clis)/ardrive-cli/(working-with-files)/understanding-bundled-transactions)",
+  "content": "The ArDrive CLI currently uses two different methods for uploading transactions to the Arweave network: standard transactions and Direct to Network (D2N) bundled transactions. By default, the CLI will send a D2N bundled transaction for any action that would result in multiple transactions. This bundling functionality is currently used on the `upload-file` and `create-drive` commands.\n\nD2N bundled transactions come with several benefits and implications:\n\n-   Bundling saves AR and enhances ArFS reliability by sending associated ArFS transactions up as one atomic bundle.\n-   Bundled transactions are treated as a single data transaction by the Arweave network, but can be presented as separate transactions by the Arweave Gateway once they have been \"unbundled\".\n-   Un-bundling can take anywhere from a few minutes up to an hour. During that time, the files in the bundle will neither appear in list- commands nor be downloadable. Similarly, they will not appear in the web app after syncs until un-bundling is complete. **This can negatively affect the accuracy of upsert operations**, so it's best to wait before retrying bulk uploads.\n-   Bundling reliability on the gateway side degrades once bundles reach either 500 data items (or ~250 files) or 500 MiB, so the CLI will create and upload multiple bundles as necessary, or will send files that are simply too large for reliable bundling as unbundled txs.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#understanding-bundled-transactions-(/sdks/(clis)/ardrive-cli/(working-with-files)/understanding-bundled-transactions)",
+  "links": []
+}

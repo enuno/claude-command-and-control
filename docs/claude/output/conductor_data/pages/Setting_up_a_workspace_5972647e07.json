@@ -1,0 +1,19 @@
+{
+  "title": "Setting up a workspace",
+  "content": "Source: https://docs.conductor.build/guides/how-to-setup\n\nWhen you create a new workspace, Conductor will copy in all your git files.\n\nTo get any other files you need—like dependencies, .env files, or build files—use a setup script.\n\n[conductor.json](/core/conductor-json):",
+  "code_samples": [
+    {
+      "code": "conductor-setup.sh:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Example",
+      "id": "example"
+    }
+  ],
+  "url": "llms-txt#setting-up-a-workspace",
+  "links": []
+}

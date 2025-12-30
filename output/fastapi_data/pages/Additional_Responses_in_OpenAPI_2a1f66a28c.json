@@ -1,0 +1,192 @@
+{
+  "url": "https://fastapi.tiangolo.com/advanced/additional-responses/",
+  "title": "Additional Responses in OpenAPI¶",
+  "content": "This is a rather advanced topic.\n\nIf you are starting with FastAPI, you might not need this.\n\nYou can declare additional responses, with additional status codes, media types, descriptions, etc.\n\nThose additional responses will be included in the OpenAPI schema, so they will also appear in the API docs.\n\nBut for those additional responses you have to make sure you return a Response like JSONResponse directly, with your status code and content.\n\nYou can pass to your path operation decorators a parameter responses.\n\nIt receives a dict: the keys are status codes for each response (like 200), and the values are other dicts with the information for each of them.\n\nEach of those response dicts can have a key model, containing a Pydantic model, just like response_model.\n\nFastAPI will take that model, generate its JSON Schema and include it in the correct place in OpenAPI.\n\nFor example, to declare another response with a status code 404 and a Pydantic model Message, you can write:\n\nKeep in mind that you have to return the JSONResponse directly.\n\nThe model key is not part of OpenAPI.\n\nFastAPI will take the Pydantic model from there, generate the JSON Schema, and put it in the correct place.\n\nThe correct place is:\n\nThe generated responses in the OpenAPI for this path operation will be:\n\nThe schemas are referenced to another place inside the OpenAPI schema:\n\nYou can use this same responses parameter to add different media types for the same main response.\n\nFor example, you can add an additional media type of image/png, declaring that your path operation can return a JSON object (with media type application/json) or a PNG image:\n\nNotice that you have to return the image using a FileResponse directly.\n\nUnless you specify a different media type explicitly in your responses parameter, FastAPI will assume the response has the same media type as the main response class (default application/json).\n\nBut if you have specified a custom response class with None as its media type, FastAPI will use application/json for any additional response that has an associated model.\n\nYou can also combine response information from multiple places, including the response_model, status_code, and responses parameters.\n\nYou can declare a response_model, using the default status code 200 (or a custom one if you need), and then declare additional information for that same response in responses, directly in the OpenAPI schema.\n\nFastAPI will keep the additional information from responses, and combine it with the JSON Schema from your model.\n\nFor example, you can declare a response with a status code 404 that uses a Pydantic model and has a custom description.\n\nAnd a response with a status code 200 that uses your response_model, but includes a custom example:\n\nIt will all be combined and included in your OpenAPI, and shown in the API docs:\n\nYou might want to have some predefined responses that apply to many path operations, but you want to combine them with custom responses needed by each path operation.\n\nFor those cases, you can use the Python technique of \"unpacking\" a dict with **dict_to_unpack:\n\nHere, new_dict will contain all the key-value pairs from old_dict plus the new key-value pair:\n\nYou can use that technique to reuse some predefined responses in your path operations and combine them with additional custom ones.\n\nTo see what exactly you can include in the responses, you can check these sections in the OpenAPI specification:",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Additional Responses in OpenAPI¶",
+      "id": "additional-responses-in-openapi"
+    },
+    {
+      "level": "h2",
+      "text": "Additional Response with model¶",
+      "id": "additional-response-with-model"
+    },
+    {
+      "level": "h2",
+      "text": "Additional media types for the main response¶",
+      "id": "additional-media-types-for-the-main-response"
+    },
+    {
+      "level": "h2",
+      "text": "Combining information¶",
+      "id": "combining-information"
+    },
+    {
+      "level": "h2",
+      "text": "Combine predefined responses and custom ones¶",
+      "id": "combine-predefined-responses-and-custom-ones"
+    },
+    {
+      "level": "h2",
+      "text": "More information about OpenAPI responses¶",
+      "id": "more-information-about-openapi-responses"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "from fastapi import FastAPI\nfrom fastapi.responses import JSONResponse\nfrom pydantic import BaseModel\n\n\nclass Item(BaseModel):\n    id: str\n    value: str\n\n\nclass Message(BaseModel):\n    message: str\n\n\napp = FastAPI()\n\n\n@app.get(\"/items/{item_id}\", response_model=Item, responses={404: {\"model\": Message}})\nasync def read_item(item_id: str):\n    if item_id == \"foo\":\n        return {\"id\": \"foo\", \"value\": \"there goes my hero\"}\n    return JSONResponse(status_code=404, content={\"message\": \"Item not found\"})",
+      "language": "python"
+    },
+    {
+      "code": "{\n    \"responses\": {\n        \"404\": {\n            \"description\": \"Additional Response\",\n            \"content\": {\n                \"application/json\": {\n                    \"schema\": {\n                        \"$ref\": \"#/components/schemas/Message\"\n                    }\n                }\n            }\n        },\n        \"200\": {\n            \"description\": \"Successful Response\",\n            \"content\": {\n                \"application/json\": {\n                    \"schema\": {\n                        \"$ref\": \"#/components/schemas/Item\"\n                    }\n                }\n            }\n        },\n        \"422\": {\n            \"description\": \"Validation Error\",\n            \"content\": {\n                \"application/json\": {\n                    \"schema\": {\n                        \"$ref\": \"#/components/schemas/HTTPValidationError\"\n                    }\n                }\n            }\n        }\n    }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n    \"components\": {\n        \"schemas\": {\n            \"Message\": {\n                \"title\": \"Message\",\n                \"required\": [\n                    \"message\"\n                ],\n                \"type\": \"object\",\n                \"properties\": {\n                    \"message\": {\n                        \"title\": \"Message\",\n                        \"type\": \"string\"\n                    }\n                }\n            },\n            \"Item\": {\n                \"title\": \"Item\",\n                \"required\": [\n                    \"id\",\n                    \"value\"\n                ],\n                \"type\": \"object\",\n                \"properties\": {\n                    \"id\": {\n                        \"title\": \"Id\",\n                        \"type\": \"string\"\n                    },\n                    \"value\": {\n                        \"title\": \"Value\",\n                        \"type\": \"string\"\n                    }\n                }\n            },\n            \"ValidationError\": {\n                \"title\": \"ValidationError\",\n                \"required\": [\n                    \"loc\",\n                    \"msg\",\n                    \"type\"\n                ],\n                \"type\": \"object\",\n                \"properties\": {\n                    \"loc\": {\n                        \"title\": \"Location\",\n                        \"type\": \"array\",\n                        \"items\": {\n                            \"type\": \"string\"\n                        }\n                    },\n                    \"msg\": {\n                        \"title\": \"Message\",\n                        \"type\": \"string\"\n                    },\n                    \"type\": {\n                        \"title\": \"Error Type\",\n                        \"type\": \"string\"\n                    }\n                }\n            },\n            \"HTTPValidationError\": {\n                \"title\": \"HTTPValidationError\",\n                \"type\": \"object\",\n                \"properties\": {\n                    \"detail\": {\n                        \"title\": \"Detail\",\n                        \"type\": \"array\",\n                        \"items\": {\n                            \"$ref\": \"#/components/schemas/ValidationError\"\n                        }\n                    }\n                }\n            }\n        }\n    }\n}",
+      "language": "json"
+    },
+    {
+      "code": "from fastapi import FastAPI\nfrom fastapi.responses import FileResponse\nfrom pydantic import BaseModel\n\n\nclass Item(BaseModel):\n    id: str\n    value: str\n\n\napp = FastAPI()\n\n\n@app.get(\n    \"/items/{item_id}\",\n    response_model=Item,\n    responses={\n        200: {\n            \"content\": {\"image/png\": {}},\n            \"description\": \"Return the JSON item or an image.\",\n        }\n    },\n)\nasync def read_item(item_id: str, img: bool | None = None):\n    if img:\n        return FileResponse(\"image.png\", media_type=\"image/png\")\n    else:\n        return {\"id\": \"foo\", \"value\": \"there goes my hero\"}",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import FastAPI\nfrom fastapi.responses import FileResponse\nfrom pydantic import BaseModel\n\n\nclass Item(BaseModel):\n    id: str\n    value: str\n\n\napp = FastAPI()\n\n\n@app.get(\n    \"/items/{item_id}\",\n    response_model=Item,\n    responses={\n        200: {\n            \"content\": {\"image/png\": {}},\n            \"description\": \"Return the JSON item or an image.\",\n        }\n    },\n)\nasync def read_item(item_id: str, img: Union[bool, None] = None):\n    if img:\n        return FileResponse(\"image.png\", media_type=\"image/png\")\n    else:\n        return {\"id\": \"foo\", \"value\": \"there goes my hero\"}",
+      "language": "python"
+    },
+    {
+      "code": "from fastapi import FastAPI\nfrom fastapi.responses import JSONResponse\nfrom pydantic import BaseModel\n\n\nclass Item(BaseModel):\n    id: str\n    value: str\n\n\nclass Message(BaseModel):\n    message: str\n\n\napp = FastAPI()\n\n\n@app.get(\n    \"/items/{item_id}\",\n    response_model=Item,\n    responses={\n        404: {\"model\": Message, \"description\": \"The item was not found\"},\n        200: {\n            \"description\": \"Item requested by ID\",\n            \"content\": {\n                \"application/json\": {\n                    \"example\": {\"id\": \"bar\", \"value\": \"The bar tenders\"}\n                }\n            },\n        },\n    },\n)\nasync def read_item(item_id: str):\n    if item_id == \"foo\":\n        return {\"id\": \"foo\", \"value\": \"there goes my hero\"}\n    else:\n        return JSONResponse(status_code=404, content={\"message\": \"Item not found\"})",
+      "language": "python"
+    },
+    {
+      "code": "old_dict = {\n    \"old key\": \"old value\",\n    \"second old key\": \"second old value\",\n}\nnew_dict = {**old_dict, \"new key\": \"new value\"}",
+      "language": "json"
+    },
+    {
+      "code": "{\n    \"old key\": \"old value\",\n    \"second old key\": \"second old value\",\n    \"new key\": \"new value\",\n}",
+      "language": "json"
+    },
+    {
+      "code": "from fastapi import FastAPI\nfrom fastapi.responses import FileResponse\nfrom pydantic import BaseModel\n\n\nclass Item(BaseModel):\n    id: str\n    value: str\n\n\nresponses = {\n    404: {\"description\": \"Item not found\"},\n    302: {\"description\": \"The item was moved\"},\n    403: {\"description\": \"Not enough privileges\"},\n}\n\n\napp = FastAPI()\n\n\n@app.get(\n    \"/items/{item_id}\",\n    response_model=Item,\n    responses={**responses, 200: {\"content\": {\"image/png\": {}}}},\n)\nasync def read_item(item_id: str, img: bool | None = None):\n    if img:\n        return FileResponse(\"image.png\", media_type=\"image/png\")\n    else:\n        return {\"id\": \"foo\", \"value\": \"there goes my hero\"}",
+      "language": "python"
+    },
+    {
+      "code": "from typing import Union\n\nfrom fastapi import FastAPI\nfrom fastapi.responses import FileResponse\nfrom pydantic import BaseModel\n\n\nclass Item(BaseModel):\n    id: str\n    value: str\n\n\nresponses = {\n    404: {\"description\": \"Item not found\"},\n    302: {\"description\": \"The item was moved\"},\n    403: {\"description\": \"Not enough privileges\"},\n}\n\n\napp = FastAPI()\n\n\n@app.get(\n    \"/items/{item_id}\",\n    response_model=Item,\n    responses={**responses, 200: {\"content\": {\"image/png\": {}}}},\n)\nasync def read_item(item_id: str, img: Union[bool, None] = None):\n    if img:\n        return FileResponse(\"image.png\", media_type=\"image/png\")\n    else:\n        return {\"id\": \"foo\", \"value\": \"there goes my hero\"}",
+      "language": "python"
+    }
+  ],
+  "patterns": [
+    {
+      "description": "And a response with a status code 200 that uses your response_model, but includes a custom example:",
+      "code": "200"
+    },
+    {
+      "description": "For example:",
+      "code": "from fastapi import FastAPI\nfrom fastapi.responses import FileResponse\nfrom pydantic import BaseModel\n\n\nclass Item(BaseModel):\n    id: str\n    value: str\n\n\nresponses = {\n    404: {\"description\": \"Item not found\"},\n    302: {\"description\": \"The item was moved\"},\n    403: {\"description\": \"Not enough privileges\"},\n}\n\n\napp = FastAPI()\n\n\n@app.get(\n    \"/items/{item_id}\",\n    response_model=Item,\n    responses={**responses, 200: {\"content\": {\"image/png\": {}}}},\n)\nasync def read_item(item_id: str, img: bool | None = None):\n    if img:\n        return FileResponse(\"image.png\", media_type=\"image/png\")\n    else:\n        return {\"id\": \"foo\", \"value\": \"there goes my hero\"}"
+    }
+  ],
+  "links": [
+    "https://fastapi.tiangolo.com/advanced/additional-responses/",
+    "https://fastapi.tiangolo.com/reference/",
+    "https://fastapi.tiangolo.com/tutorial/",
+    "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/path-params/",
+    "https://fastapi.tiangolo.com/tutorial/query-params/",
+    "https://fastapi.tiangolo.com/tutorial/body/",
+    "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/",
+    "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/",
+    "https://fastapi.tiangolo.com/tutorial/query-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/body-multiple-params/",
+    "https://fastapi.tiangolo.com/tutorial/body-fields/",
+    "https://fastapi.tiangolo.com/tutorial/body-nested-models/",
+    "https://fastapi.tiangolo.com/tutorial/schema-extra-example/",
+    "https://fastapi.tiangolo.com/tutorial/extra-data-types/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-params/",
+    "https://fastapi.tiangolo.com/tutorial/header-params/",
+    "https://fastapi.tiangolo.com/tutorial/cookie-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/header-param-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-model/",
+    "https://fastapi.tiangolo.com/tutorial/extra-models/",
+    "https://fastapi.tiangolo.com/tutorial/response-status-code/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms/",
+    "https://fastapi.tiangolo.com/tutorial/request-form-models/",
+    "https://fastapi.tiangolo.com/tutorial/request-files/",
+    "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/",
+    "https://fastapi.tiangolo.com/tutorial/handling-errors/",
+    "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/",
+    "https://fastapi.tiangolo.com/tutorial/encoder/",
+    "https://fastapi.tiangolo.com/tutorial/body-updates/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/sub-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/",
+    "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/",
+    "https://fastapi.tiangolo.com/tutorial/security/",
+    "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+    "https://fastapi.tiangolo.com/tutorial/security/get-current-user/",
+    "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/",
+    "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+    "https://fastapi.tiangolo.com/tutorial/middleware/",
+    "https://fastapi.tiangolo.com/tutorial/cors/",
+    "https://fastapi.tiangolo.com/tutorial/sql-databases/",
+    "https://fastapi.tiangolo.com/tutorial/bigger-applications/",
+    "https://fastapi.tiangolo.com/tutorial/background-tasks/",
+    "https://fastapi.tiangolo.com/tutorial/metadata/",
+    "https://fastapi.tiangolo.com/tutorial/static-files/",
+    "https://fastapi.tiangolo.com/tutorial/testing/",
+    "https://fastapi.tiangolo.com/tutorial/debugging/",
+    "https://fastapi.tiangolo.com/advanced/",
+    "https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/",
+    "https://fastapi.tiangolo.com/advanced/additional-status-codes/",
+    "https://fastapi.tiangolo.com/advanced/response-directly/",
+    "https://fastapi.tiangolo.com/advanced/custom-response/",
+    "https://fastapi.tiangolo.com/advanced/response-cookies/",
+    "https://fastapi.tiangolo.com/advanced/response-headers/",
+    "https://fastapi.tiangolo.com/advanced/response-change-status-code/",
+    "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/security/",
+    "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/",
+    "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/",
+    "https://fastapi.tiangolo.com/advanced/using-request-directly/",
+    "https://fastapi.tiangolo.com/advanced/dataclasses/",
+    "https://fastapi.tiangolo.com/advanced/middleware/",
+    "https://fastapi.tiangolo.com/advanced/sub-applications/",
+    "https://fastapi.tiangolo.com/advanced/behind-a-proxy/",
+    "https://fastapi.tiangolo.com/advanced/templates/",
+    "https://fastapi.tiangolo.com/advanced/websockets/",
+    "https://fastapi.tiangolo.com/advanced/events/",
+    "https://fastapi.tiangolo.com/advanced/testing-websockets/",
+    "https://fastapi.tiangolo.com/advanced/testing-events/",
+    "https://fastapi.tiangolo.com/advanced/testing-dependencies/",
+    "https://fastapi.tiangolo.com/advanced/async-tests/",
+    "https://fastapi.tiangolo.com/advanced/settings/",
+    "https://fastapi.tiangolo.com/advanced/openapi-callbacks/",
+    "https://fastapi.tiangolo.com/advanced/openapi-webhooks/",
+    "https://fastapi.tiangolo.com/advanced/wsgi/",
+    "https://fastapi.tiangolo.com/advanced/generate-clients/",
+    "https://fastapi.tiangolo.com/reference/fastapi/",
+    "https://fastapi.tiangolo.com/reference/parameters/",
+    "https://fastapi.tiangolo.com/reference/status/",
+    "https://fastapi.tiangolo.com/reference/uploadfile/",
+    "https://fastapi.tiangolo.com/reference/exceptions/",
+    "https://fastapi.tiangolo.com/reference/dependencies/",
+    "https://fastapi.tiangolo.com/reference/apirouter/",
+    "https://fastapi.tiangolo.com/reference/background/",
+    "https://fastapi.tiangolo.com/reference/request/",
+    "https://fastapi.tiangolo.com/reference/websockets/",
+    "https://fastapi.tiangolo.com/reference/httpconnection/",
+    "https://fastapi.tiangolo.com/reference/response/",
+    "https://fastapi.tiangolo.com/reference/responses/",
+    "https://fastapi.tiangolo.com/reference/middleware/",
+    "https://fastapi.tiangolo.com/reference/openapi/",
+    "https://fastapi.tiangolo.com/reference/openapi/docs/",
+    "https://fastapi.tiangolo.com/reference/openapi/models/",
+    "https://fastapi.tiangolo.com/reference/security/",
+    "https://fastapi.tiangolo.com/reference/encoders/",
+    "https://fastapi.tiangolo.com/reference/staticfiles/",
+    "https://fastapi.tiangolo.com/reference/templating/",
+    "https://fastapi.tiangolo.com/reference/testclient/"
+  ]
+}

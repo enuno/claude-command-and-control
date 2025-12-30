@@ -1,0 +1,8 @@
+{
+  "title": "Digital Ocean",
+  "content": "To configure a Digital Ocean Container Registry, you need to fill the form with the following details:\n\n1. Insert the Registry Name eg. `My Registry`.\n2. Go to `https://cloud.digitalocean.com/registry/new` and click on `Create a Container Registry`.\n3. Insert a lowercase name eg. `dokploy-username`.\n4. Click on `Create Registry`.\n5. Click on `Actions` and then `Download Docker Credentials`.\n6. In Permissions select `Read` and `Write`.\n7. Open the downloaded file and copy the auth value and type as `Password` in Dokploy Modal.\n8. Go to `https://cloud.digitalocean.com/account/api/tokens` and click on `Generate New Token`.\n9. In permissions select `Registry`.\n10. Click on `Create`.\n11. Copy the `access token` and paste it in Dokploy Modal as a `Username` field.\n12. (Optional) If you pretend to use Cluster Feature, make sure to set a `Image Prefix`.\n13. Registry URL: set `registry.digitalocean.com`\n14. Click on `Test` to make sure everything is working.\n15. Click on `Create` to save the registry.",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#digital-ocean",
+  "links": []
+}

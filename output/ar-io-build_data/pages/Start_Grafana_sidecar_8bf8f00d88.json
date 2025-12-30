@@ -1,0 +1,8 @@
+{
+  "title": "Start Grafana sidecar",
+  "content": "docker compose -f docker-compose.grafana.yaml up -d",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#start-grafana-sidecar",
+  "links": []
+}

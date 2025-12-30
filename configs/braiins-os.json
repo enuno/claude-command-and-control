@@ -1,0 +1,47 @@
+{
+  "name": "braiins-os",
+  "description": "Braiins OS - Bitcoin mining ASIC firmware",
+  "base_url": "https://academy.braiins.com/",
+  "start_urls": [
+    "https://academy.braiins.com/en/braiins-os/dps/",
+    "https://academy.braiins.com/en/braiins-os/autotuning/",
+    "https://academy.braiins.com/en/braiins-os/installation/install/",
+    "https://academy.braiins.com/en/braiins-os/configuration/",
+    "https://academy.braiins.com/en/braiins-os/ramping/",
+    "https://academy.braiins.com/en/braiins-os/batch-management/",
+    "https://academy.braiins.com/en/braiins-os/autoupgrade/",
+    "https://academy.braiins.com/en/braiins-os/experimental-features/",
+    "https://academy.braiins.com/en/braiins-os/technical-resources/",
+    "https://academy.braiins.com/en/braiins-os/papi-about/",
+    "https://academy.braiins.com/en/braiins-os/papi-changelog/",
+    "https://academy.braiins.com/en/braiins-os/papi-tools/",
+    "https://academy.braiins.com/en/braiins-os/papi-tool-grpcurl/overview/",
+    "https://academy.braiins.com/en/braiins-os/papi-tool-postman/overview/",
+    "https://academy.braiins.com/en/braiins-os/papi-tool-grpcui/quick-start/",
+    "https://academy.braiins.com/en/braiins-os/papi-bosminer/",
+    "https://academy.braiins.com/en/braiins-os/faqs/basics/",
+    "https://academy.braiins.com/en/braiins-os/whats-new/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/en/braiins-os/"
+    ],
+    "exclude": [
+      "/blog/",
+      "/zh/",
+      "/es/",
+      "/ru/"
+    ]
+  },
+  "categories": {
+    "getting_started": ["installation", "configuration"],
+    "features": ["dps", "autotuning", "ramping", "autoupgrade", "experimental-features"],
+    "management": ["batch-management"],
+    "api": ["papi-about", "papi-changelog", "papi-tools", "papi-tool", "papi-bosminer"],
+    "resources": ["technical-resources", "faqs"],
+    "other": ["whats-new"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 100,
+  "follow_links": false
+}

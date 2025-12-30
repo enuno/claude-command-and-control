@@ -1,0 +1,64 @@
+{
+  "title": "Get the Token (/learn/token/get-the-token)",
+  "content": "## Acquiring ARIO Tokens\n\nThere are several ways to acquire ARIO tokens, depending on your needs and preferences. Here are the primary methods available:\n\n## Exchanges and Trading Platforms\n\n### Centralized Exchanges\nARIO tokens are available on centralized exchanges:\n\n- **[Gate.io](https://gate.io)**: Trade ARIO with various cryptocurrency pairs\n- Verify exchange security and reputation before trading\n- Consider factors like trading fees, liquidity, and withdrawal limits\n\n### Decentralized Exchanges (DEXs)\nTrade ARIO on decentralized platforms within the AO ecosystem:\n\n- **[Dexi](https://dexi.ar.io)**: Native AO-based decentralized exchange\n- **[Botega](https://botega.ar.io/#/swap?from=0syT13r0s0tgPmIed95bJnuSqaD29HQNN8D3ElLSrsc&to=qNvAoz0TgcH7DMg8BCVn8jF32QH5L6T29VjHxhHqqGE)**: AO ecosystem trading platform\n- **[Vento](https://ventoswap.com/?tab=swap)**: Decentralized exchange for AO tokens\n\n### Wallet Integration\n\n- **[Wander App](https://wander.app)**: Mobile wallet with built-in ARIO exchange and swap functionality\n- **[Wander Extension](https://wander.app)**: Browser extension wallet for seamless ARIO transactions\n\n**Recommended:** We recommend using Wander for the easiest ARIO acquisition experience. Wander provides the most user-friendly way to acquire, store, and manage your ARIO tokens with integrated exchange functionality.\n\n## Network Participation\n\n### Gateway Operation\nEarn ARIO tokens by operating network infrastructure:\n\n1. **Set up a Gateway**: Deploy and maintain an AR.IO gateway\n2. **Stake Initial Tokens**: Meet minimum staking requirements\n3. **Provide Services**: Offer reliable data storage and retrieval\n4. **Earn Rewards**: Receive ARIO tokens for network participation\n\n### Token Delegation\nEarn rewards by supporting existing gateway operators:\n\n1. **Choose an Operator**: Research and select a trusted gateway\n2. **Delegate Tokens**: Stake your ARIO with the chosen operator\n3. **Earn Passively**: Receive a portion of the operator's rewards\n4. **Maintain Flexibility**: Undelegate tokens when needed\n\n## Community Programs\n\n### Grants and Bounties\nParticipate in ecosystem development programs:\n\n- **Developer Grants**: Build applications and tools for the AR.IO ecosystem\n- **Bug Bounties**: Help secure the network by finding and reporting vulnerabilities\n- **Community Initiatives**: Contribute to documentation, education, and outreach\n\n### Ecosystem Participation\nEarn tokens through various community activities:\n\n- **Governance Participation**: Engage in network decision-making processes\n- **Content Creation**: Produce educational content and tutorials\n- **Community Building**: Help grow and support the AR.IO community\n\nRemember that cryptocurrency investments carry risk, and you should only invest what you can afford to lose. Always do your own research and consider consulting with financial advisors when making investment decisions.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Acquiring ARIO Tokens",
+      "id": "acquiring-ario-tokens"
+    },
+    {
+      "level": "h2",
+      "text": "Exchanges and Trading Platforms",
+      "id": "exchanges-and-trading-platforms"
+    },
+    {
+      "level": "h3",
+      "text": "Centralized Exchanges",
+      "id": "centralized-exchanges"
+    },
+    {
+      "level": "h3",
+      "text": "Decentralized Exchanges (DEXs)",
+      "id": "decentralized-exchanges-(dexs)"
+    },
+    {
+      "level": "h3",
+      "text": "Wallet Integration",
+      "id": "wallet-integration"
+    },
+    {
+      "level": "h2",
+      "text": "Network Participation",
+      "id": "network-participation"
+    },
+    {
+      "level": "h3",
+      "text": "Gateway Operation",
+      "id": "gateway-operation"
+    },
+    {
+      "level": "h3",
+      "text": "Token Delegation",
+      "id": "token-delegation"
+    },
+    {
+      "level": "h2",
+      "text": "Community Programs",
+      "id": "community-programs"
+    },
+    {
+      "level": "h3",
+      "text": "Grants and Bounties",
+      "id": "grants-and-bounties"
+    },
+    {
+      "level": "h3",
+      "text": "Ecosystem Participation",
+      "id": "ecosystem-participation"
+    }
+  ],
+  "url": "llms-txt#get-the-token-(/learn/token/get-the-token)",
+  "links": []
+}

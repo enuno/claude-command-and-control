@@ -1,0 +1,8 @@
+{
+  "title": "Recommended Visual Studio Code extensions (Developers Only) (/sdks/(clis)/ardrive-cli/(build-and-run-from-source)/recommended-visual-studio-code-extensions-developers-only)",
+  "content": "To ensure your environment is compatible, we also recommend the following VSCode extensions:\n\n-   [ES-Lint][eslint-vscode]\n-   [Editor-Config][editor-config-vscode]\n-   [Prettier][prettier-vscode]\n-   [ZipFS][zipfs-vscode]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#recommended-visual-studio-code-extensions-(developers-only)-(/sdks/(clis)/ardrive-cli/(build-and-run-from-source)/recommended-visual-studio-code-extensions-developers-only)",
+  "links": []
+}

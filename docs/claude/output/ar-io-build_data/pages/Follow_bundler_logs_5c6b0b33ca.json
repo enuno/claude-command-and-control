@@ -1,0 +1,8 @@
+{
+  "title": "Follow bundler logs",
+  "content": "docker compose --file docker-compose.bundler.yaml logs -f --tail=10",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#follow-bundler-logs",
+  "links": []
+}

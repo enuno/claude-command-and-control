@@ -1,0 +1,14 @@
+{
+  "title": "Start CU in foreground (for debugging)",
+  "content": "docker compose --env-file .env.ao -f docker-compose.ao.yaml up\n```\n\nNow that you have a Compute Unit running alongside your gateway, continue building your infrastructure:\n\n}\n    title=\"Set Up Monitoring\"\n    description=\"Deploy Grafana to visualize your gateway's performance metrics\"\n    href=\"/build/extensions/grafana\"\n  />\n  }\n    title=\"Add ClickHouse\"\n    description=\"Improve query performance with ClickHouse and Parquet integration\"\n    href=\"/build/extensions/clickhouse\"\n  />\n  }\n    title=\"Deploy Bundler\"\n    description=\"Accept data uploads directly through your gateway\"\n    href=\"/build/extensions/bundler\"\n  />\n  }\n    title=\"Join the Network\"\n    description=\"Register your gateway and start serving the permanent web\"\n    href=\"/build/run-a-gateway/join-the-network\"\n  />",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    }
+  ],
+  "url": "llms-txt#start-cu-in-foreground-(for-debugging)",
+  "links": []
+}

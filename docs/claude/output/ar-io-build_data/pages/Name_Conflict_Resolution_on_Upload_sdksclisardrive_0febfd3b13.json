@@ -1,0 +1,21 @@
+{
+  "title": "Name Conflict Resolution on Upload (/sdks/(clis)/ardrive-cli/(working-with-files)/name-conflict-resolution-on-upload)",
+  "content": "By default, the `upload-file` command will use the upsert behavior if existing entities are encountered in the destination folder tree that would cause naming conflicts.\n\nExpect the behaviors from the following table for each of these resolution settings:\n\n| Source Type | Conflict at Dest | `skip` | `replace` | `upsert` (default) |\n| ----------- | ---------------- | ------ | --------- | ------------------ |\n| File        | None             | Insert | Insert    | Insert             |\n| File        | Matching File    | Skip   | Update    | Skip               |\n| File        | Different File   | Skip   | Update    | Update             |\n| File        | Folder           | Skip   | Fail      | Fail               |\n| Folder      | None             | Insert | Insert    | Insert             |\n| Folder      | File             | Skip   | Fail      | Fail               |\n| Folder      | Folder           | Re-use | Re-use    | Re-use             |\n\nThe default upsert behavior will check the destination folder for a file with a conflicting name. If no conflicts are found, it will insert (upload) the file.\n\nIn the case that there is a FILE to FILE name conflict found, it will only update it if necessary. To determine if an update is necessary, upsert will compare the last modified dates of conflicting file and the file being uploaded. When they are matching, the upload will be skipped. Otherwise the file will be updated as a new revision.\n\nTo override the upsert behavior, use the `--replace` option to always make new revisions of a file or the `--skip` option to always skip the upload on name conflicts:\n\nAlternatively, the upload-file commands now also supports the `--ask` conflict resolution option. This setting will always provide an interactive prompt on name conflicts that allows users to decide how to resolve each conflict found:",
+  "code_samples": [
+    {
+      "code": "ardrive upload-file --replace --local-path /path/to/file.txt  --parent-folder-id \"9af694f6-4cfc-4eee-88a8-1b02704760c0\" -w /path/to/wallet.json",
+      "language": "shell"
+    },
+    {
+      "code": "ardrive upload-file --skip --local-path /path/to/file.txt  --parent-folder-id \"9af694f6-4cfc-4eee-88a8-1b02704760c0\" -w /path/to/wallet.json",
+      "language": "shell"
+    },
+    {
+      "code": "ardrive upload-file --ask --local-file-path /path/to/file.txt  --parent-folder-id \"9af694f6-4cfc-4eee-88a8-1b02704760c0\" -w /path/to/wallet.json\n\nDestination folder has a file to file name conflict!\n\nFile name: 2.png\nFile ID: efbc0370-b69f-44d9-812c-0d272b019027\nThis file has a DIFFERENT last modified date\n\nPlease select how to proceed:\n › - Use arrow-keys. Return to submit.\n❯   Replace as new file revision\n    Upload with a different file name\n    Skip this file upload",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#name-conflict-resolution-on-upload-(/sdks/(clis)/ardrive-cli/(working-with-files)/name-conflict-resolution-on-upload)",
+  "links": []
+}

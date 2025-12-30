@@ -1,0 +1,8 @@
+{
+  "title": "Support (/sdks/ardrive-core-js/support)",
+  "content": "- [Discord Community](https://discord.com/invite/HGG52EtTc2)\n- [GitHub Issues](https://github.com/ardriveapp/ardrive-core-js/issues)\n- [ArDrive Website](https://ardrive.io)\n\n[yarn-install]: https://yarnpkg.com/getting-started/install\n[nvm-install]: https://github.com/nvm-sh/nvm#installing-and-updating\n[editor-config-vscode]: https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig\n[prettier-vscode]: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode\n[zipfs-vscode]: https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs\n[eslint-vscode]: https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint\n[mocha]: https://github.com/mochajs/mocha\n[chai]: https://github.com/chaijs/chai\n[sinon]: https://github.com/sinonjs/sinon",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#support-(/sdks/ardrive-core-js/support)",
+  "links": []
+}

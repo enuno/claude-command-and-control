@@ -1,0 +1,34 @@
+{
+  "title": "Workflow",
+  "content": "Source: https://docs.conductor.build/workflow\n\nHere are our recommendations for how to get the most out of Conductor:\n\n## Create one workspace per feature\n\nFor each feature or bugfix, create a new workspace.\n\nYou can quickly create a new workspace by using **⌘⇧N** or clicking the three dots (•••) button next to the \"New workspace\" button. This allows you to create a workspace from a pull request, branch, or Linear issue.\n\n<img alt=\"Workflow\" />\n\nUse Claude Code directly in Conductor, or open the workspace in your favorite IDE to make edits.\n\n<img alt=\"Open in IDE\" />\n\n## Review and test changes\n\nReview changes in the Diff Viewer (⌘D). Use the Terminal or Run panel to test changes.\n\nSee [this guide](/guides/how-to-run) for more on how to run your web server or app server within a workspace.\n\nCreate a PR (⌘⇧P). If any checks fail, Conductor will help you fix them.\n\nOnce everything looks good, merge!\n\n<img alt=\"Repository details\" />\n\nWhen you're done working on that feature, archive the workspace. You can always restore the workspace later — including your chat history — from the repository details page.",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Create one workspace per feature",
+      "id": "create-one-workspace-per-feature"
+    },
+    {
+      "level": "h2",
+      "text": "Develop",
+      "id": "develop"
+    },
+    {
+      "level": "h2",
+      "text": "Review and test changes",
+      "id": "review-and-test-changes"
+    },
+    {
+      "level": "h2",
+      "text": "Create PR + Merge",
+      "id": "create-pr-+-merge"
+    },
+    {
+      "level": "h2",
+      "text": "Archive",
+      "id": "archive"
+    }
+  ],
+  "url": "llms-txt#workflow",
+  "links": []
+}

@@ -1,0 +1,84 @@
+{
+  "title": "Should show SQLite database files",
+  "content": "bash\ndocker compose down\nbash\nmkdir sqlite-backup\nmv data/sqlite/* sqlite-backup/\nbash\nrm data/sqlite/*\nbash\nmv 2025-04-23-sqlite/* data/sqlite/\nbash\ndocker compose up -d\nbash\ndocker compose logs -f gateway\n```\n\nLook for messages indicating the current block being processed.\n\n### Verify Block Height\n\nThe 2025-04-23 snapshot was taken at block `1645229`, so the gateway will start importing blocks after this height if the snapshot was imported successfully.\n\nYou should see logs showing blocks being processed starting from block 1645230 or higher.\n\n### Use Grafana (Optional)\n\nYou can also use the [Grafana Extension](/build/extensions/grafana) to view the last block imported in a more human readable format.",
+  "code_samples": [
+    {
+      "code": "This will extract the file into a directory matching the filename, minus the `.tar.gz` extension.\n\n### Importing the Database Snapshot\n\nOnce you have an extracted database snapshot, you can import it into your AR.IO gateway by replacing the existing SQLite database files.\n\n  Importing a database snapshot will delete your existing database and replace\n  it with the snapshot you are importing.\n\n### Stop the Gateway\n\nStop your AR.IO gateway:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Backup Existing Database\n\n(Optional) Backup your existing SQLite database files:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Remove Old Database\n\nDelete the existing SQLite database files:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Import New Snapshot\n\nMove the snapshot files into the `data/sqlite` directory:",
+      "language": "unknown"
+    },
+    {
+      "code": "Be sure to replace `2025-04-23-sqlite` with the actual directory name of the extracted snapshot you are using.\n\n### Start the Gateway\n\nStart your AR.IO gateway:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Verifying the Import\n\nThe simplest way to verify the import is to check the gateway logs to see what block number is being imported.\n\n### Check Gateway Logs\n\nView the gateway logs to see the current block height:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Importing the Database Snapshot",
+      "id": "importing-the-database-snapshot"
+    },
+    {
+      "level": "h3",
+      "text": "Stop the Gateway",
+      "id": "stop-the-gateway"
+    },
+    {
+      "level": "h3",
+      "text": "Backup Existing Database",
+      "id": "backup-existing-database"
+    },
+    {
+      "level": "h3",
+      "text": "Remove Old Database",
+      "id": "remove-old-database"
+    },
+    {
+      "level": "h3",
+      "text": "Import New Snapshot",
+      "id": "import-new-snapshot"
+    },
+    {
+      "level": "h3",
+      "text": "Start the Gateway",
+      "id": "start-the-gateway"
+    },
+    {
+      "level": "h3",
+      "text": "Verifying the Import",
+      "id": "verifying-the-import"
+    },
+    {
+      "level": "h3",
+      "text": "Check Gateway Logs",
+      "id": "check-gateway-logs"
+    },
+    {
+      "level": "h3",
+      "text": "Verify Block Height",
+      "id": "verify-block-height"
+    },
+    {
+      "level": "h3",
+      "text": "Use Grafana (Optional)",
+      "id": "use-grafana-(optional)"
+    }
+  ],
+  "url": "llms-txt#should-show-sqlite-database-files",
+  "links": []
+}

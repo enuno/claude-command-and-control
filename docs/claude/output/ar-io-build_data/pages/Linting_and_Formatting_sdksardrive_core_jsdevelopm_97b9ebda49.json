@@ -1,0 +1,13 @@
+{
+  "title": "Linting and Formatting (/sdks/ardrive-core-js/(development)/linting-and-formatting)",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "yarn lint\n\nyarn lintfix\n\nyarn format\n\nyarn typecheck",
+      "language": "shell"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#linting-and-formatting-(/sdks/ardrive-core-js/(development)/linting-and-formatting)",
+  "links": []
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Run a Gateway (/build/run-a-gateway)",
+  "content": "Join the decentralized network that powers permanent data access. Run your own **AR.IO Gateway** to support the permaweb infrastructure and earn rewards.\n\nChoose the deployment approach that fits your needs - from local testing to production infrastructure.\n\nProduction Gateway Earn Rewards}\n    description={\n      \n        Join the AR.IO Network and earn ARIO tokens\n        \n           Earn ARIO token rewards\n           Serve Wayfinder traffic\n           Cache and serve Arweave data\n\n}\n    href=\"/build/run-a-gateway/quick-start#production-setup-with-custom-domain\"\n    icon={}\n  />\n  \n        Perfect for development and testing\n        \n           Quick Docker setup\n           Test gateway features\n           No commitment required\n\n}\n    href=\"/build/run-a-gateway/quick-start\"\n    icon={}\n  />\n  \n        Optimize for specific use cases\n        \n          • Data filtering options\n          • Performance tuning\n          • Advanced features\n\n}\n    href=\"/build/run-a-gateway/manage/filters\"\n    icon={}\n  />\n\n## Why Run a Gateway?\n\n**Economic Benefits**\n- Earn ARIO tokens through network participation\n- Set custom pricing for premium services\n- Build sustainable infrastructure business\n\n**Technical Advantages**\n- Full control over data access and caching\n- Custom configuration for your applications\n- Direct integration with your services\n\n**Network Impact**\n- Support decentralized web infrastructure\n- Increase network reliability and redundancy\n- Enable censorship-resistant data access\n\n## Quick Start in 30 Seconds\n\nGet a gateway running locally with a single command:",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Gateway Options",
+      "id": "gateway-options"
+    },
+    {
+      "level": "h2",
+      "text": "Why Run a Gateway?",
+      "id": "why-run-a-gateway?"
+    },
+    {
+      "level": "h2",
+      "text": "Quick Start in 30 Seconds",
+      "id": "quick-start-in-30-seconds"
+    }
+  ],
+  "url": "llms-txt#run-a-gateway-(/build/run-a-gateway)",
+  "links": []
+}

@@ -1,0 +1,29 @@
+{
+  "title": "Start the gateway",
+  "content": "docker compose up -d\nbash",
+  "code_samples": [
+    {
+      "code": "## Detailed Instructions\n\n### Obtaining a Database Snapshot\n\nSQLite database snapshots are very large and not easy to incrementally update. For these reasons, AR.IO is distributing them using BitTorrent.\n\n### Install Torrent Client\n\nInstall a BitTorrent client. We recommend [transmission-cli](https://github.com/transmission/transmission):",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Detailed Instructions",
+      "id": "detailed-instructions"
+    },
+    {
+      "level": "h3",
+      "text": "Obtaining a Database Snapshot",
+      "id": "obtaining-a-database-snapshot"
+    },
+    {
+      "level": "h3",
+      "text": "Install Torrent Client",
+      "id": "install-torrent-client"
+    }
+  ],
+  "url": "llms-txt#start-the-gateway",
+  "links": []
+}
