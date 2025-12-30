@@ -72,8 +72,8 @@
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1",
     "tsx": "^4.7.0",
-    "typedoc": "^0.25.4",
-    "typescript": "^5.3.3",
+    "typedoc": "^0.28.15",
+    "typescript": "^5.9.3",
     "winston": "^3.19.0"
   },
   "lint-staged": {
