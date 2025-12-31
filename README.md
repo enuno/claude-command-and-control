@@ -191,7 +191,7 @@ claude-command-and-control/
 │   ├── using-superpowers/     # Skill discovery and invocation
 │   └── validator-role-skill/  # Testing workflows
 │
-├── skills-templates/          # 29 skill templates
+├── skills-templates/          # 31 skill templates
 │   ├── orchestration/         # Multi-skill orchestration templates
 │   ├── artifacts-builder/     # Artifact generation patterns
 │   ├── brand-guidelines/      # Brand consistency workflows
@@ -253,7 +253,7 @@ claude-command-and-control/
 - **`commands-templates/`**: 21 production-tested command templates ready to copy and customize
 - **`agents-templates/`**: 10 specialized agent configurations (v2.0 with consolidated patterns)
 - **`skills/`**: 20 production-ready skills for immediate use with agents
-- **`skills-templates/`**: 29 skill templates for creating new capabilities
+- **`skills-templates/`**: 31 skill templates for creating new capabilities
 - **`templates/`**: Orchestration planning templates and skill complexity templates
 - **`INTEGRATION/`**: Automated content ingestion system with quality validation
 - **`MAINTENANCE/`**: Repository health monitoring with staleness detection
@@ -1053,6 +1053,7 @@ version: 1.0.0
 | **[conductor](skills-templates/conductor/)** | Build and deployment orchestration | Working with conductor, implementing conductor solutions, debugging conductor code |
 | **content-research-writer** | Writing assistance with research and citations | Writing articles, documentation, blog posts |
 | **[developer-growth-analysis](skills-templates/developer-growth-analysis/)** | Coding pattern analysis from Claude Code history | Identifying development gaps and curating learning resources |
+| **[docling](skills-templates/document-processing/docling/)** | IBM Research document processing library for AI | Parsing PDFs/DOCX, extracting tables/layouts, building RAG pipelines, MCP server for documents |
 | **[document-skills/docx](skills-templates/document-skills/docx/)** | Word document creation and editing | Working with .docx files, tracked changes, or comments |
 | **[dokploy](skills-templates/dokploy/)** | Comprehensive assistance with dokploy | Deploying Docker applications with Dokploy platform |
 | **[dokploy-mcp](skills-templates/dokploy-mcp/)** | AI-driven deployment management using Dokploy MCP server | Deploying apps, provisioning databases, managing Dokploy infrastructure |
@@ -1069,6 +1070,7 @@ version: 1.0.0
 | **[internal-comms](skills-templates/internal-comms/)** | Internal communications templates | Writing status reports, newsletters, or company updates |
 | **[invoice-organizer](skills-templates/invoice-organizer/)** | Invoice and receipt organization | Tax preparation or bookkeeping |
 | **[just](skills-templates/just/)** | Just command runner for project task automation | Creating justfile recipes, replacing Make/shell scripts, cross-platform command execution |
+| **[langflow](skills-templates/ai-workflow/langflow/)** | Visual AI workflow platform with MCP integration | Building AI agent workflows visually, integrating MCP servers, deploying production AI agents |
 | **[lead-research-assistant](skills-templates/lead-research-assistant/)** | Lead identification and qualification | Sales, business development, or marketing research |
 | **[mcp-builder](skills-templates/mcp-builder/)** | MCP server development guide | Building Model Context Protocol servers |
 | **[meeting-insights-analyzer](skills-templates/meeting-insights-analyzer/)** | Meeting transcript analysis | Improving communication or leadership skills |

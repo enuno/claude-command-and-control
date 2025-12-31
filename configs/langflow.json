@@ -1,0 +1,41 @@
+{
+  "name": "langflow",
+  "base_url": "https://docs.langflow.org/",
+  "start_urls": [
+    "https://docs.langflow.org/",
+    "https://docs.langflow.org/get-started-installation",
+    "https://docs.langflow.org/get-started-quickstart",
+    "https://docs.langflow.org/chat-with-rag",
+    "https://docs.langflow.org/concepts-overview",
+    "https://docs.langflow.org/agents",
+    "https://docs.langflow.org/mcp-client",
+    "https://docs.langflow.org/api-keys-and-authentication",
+    "https://docs.langflow.org/deployment-overview",
+    "https://docs.langflow.org/concepts-components",
+    "https://docs.langflow.org/api-reference-api-examples"
+  ],
+  "selectors": {
+    "content": "main, article, .content, [role='main']",
+    "title": "h1, .page-title",
+    "code": "pre, code"
+  },
+  "max_pages": 50,
+  "depth": 3,
+  "include_patterns": [
+    "*/get-started*",
+    "*/concepts*",
+    "*/mcp-*",
+    "*/agents*",
+    "*/deployment*",
+    "*/chat-*",
+    "*/api-*",
+    "*/contributing*"
+  ],
+  "exclude_patterns": [
+    "*/changelog*",
+    "*/blog*"
+  ],
+  "follow_links": true,
+  "respect_robots_txt": true,
+  "user_agent": "SkillSeekersBot/1.0"
+}

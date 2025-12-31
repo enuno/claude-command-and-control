@@ -51,9 +51,15 @@ This directory contains production-ready skill templates and examples for Claude
 | **[software-architecture](software-architecture/)** | Clean Architecture and Domain Driven Design principles for quality-focused software development |
 | **[webapp-testing](webapp-testing/)** | Toolkit for testing local web applications using Playwright for verifying frontend functionality |
 
-### Document Processing (5 skills)
+### AI Workflow Development (1 skill)
 | Skill | Description |
 |-------|-------------|
+| **[ai-workflow/langflow](ai-workflow/langflow/)** | Visual AI workflow platform with drag-and-drop interface, 200+ components, MCP client/server support, and enterprise deployment options (142k GitHub stars) |
+
+### Document Processing (6 skills)
+| Skill | Description |
+|-------|-------------|
+| **[document-processing/docling](document-processing/docling/)** | IBM Research document processing library for parsing 12+ formats (PDF, DOCX, XLSX) with advanced layout understanding, OCR, table extraction, and AI ecosystem integrations (LangChain, LlamaIndex, MCP server) - 48.4k GitHub stars |
 | **[document-skills/docx](document-skills/docx/)** | Word document creation, editing, and analysis with tracked changes and comments support |
 | **[document-skills/pdf](document-skills/pdf/)** | PDF manipulation toolkit for extracting text/tables, creating PDFs, and handling forms |
 | **[document-skills/pptx](document-skills/pptx/)** | PowerPoint presentation creation, editing, and analysis (comprehensive 25K guide) |
@@ -199,13 +205,13 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 34
-- **Individual Skills**: 26
-- **Document Processing Suite**: 4
+- **Total Skills**: 36
+- **Individual Skills**: 28
+- **Document Processing Suite**: 6
 - **Orchestration Skills**: 4
 - **Average Quality Score**: 96.7/100 (from integration validation)
-- **Total Content**: ~336K of skill documentation
-- **Supporting Files**: 309 (scripts, themes, examples, references)
+- **Total Content**: ~442K of skill documentation (including 106 KB from docling + langflow)
+- **Supporting Files**: 314 (scripts, themes, examples, references)
 
 ## 🔗 Resources
 
@@ -240,6 +246,6 @@ Individual skills may have different licenses. Check each skill's directory for 
 
 ---
 
-**Last Updated**: 2025-12-28
-**Total Skills**: 34
+**Last Updated**: 2025-12-30
+**Total Skills**: 36
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)

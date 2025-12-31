@@ -1,0 +1,49 @@
+{
+  "name": "docling",
+  "description": "Python document processing library for parsing PDFs, DOCX, and other formats with AI ecosystem integrations",
+  "base_url": "https://docling-project.github.io/docling/",
+  "start_urls": [
+    "https://docling-project.github.io/docling/",
+    "https://docling-project.github.io/docling/installation/",
+    "https://docling-project.github.io/docling/quick_start/",
+    "https://docling-project.github.io/docling/usage/advanced_options/",
+    "https://docling-project.github.io/docling/usage/supported_formats/",
+    "https://docling-project.github.io/docling/concepts/architecture/",
+    "https://docling-project.github.io/docling/examples/conversion/",
+    "https://docling-project.github.io/docling/integrations/langchain/",
+    "https://docling-project.github.io/docling/integrations/llamaindex/"
+  ],
+  "selectors": {
+    "content": "article, main, .md-content, [role='main']",
+    "title": "h1, .md-content__inner h1",
+    "code": "pre code, .highlight"
+  },
+  "max_pages": 100,
+  "depth": 3,
+  "include_patterns": [
+    "*/installation/*",
+    "*/quick_start/*",
+    "*/usage/*",
+    "*/concepts/*",
+    "*/examples/*",
+    "*/integrations/*",
+    "*/reference/*"
+  ],
+  "exclude_patterns": [
+    "*/changelog/*",
+    "*/blog/*",
+    "*/#*"
+  ],
+  "categories": {
+    "getting_started": ["installation", "quick_start", "rtx"],
+    "usage": ["advanced_options", "supported_formats", "enrichment", "vision", "gpu", "mcp", "jobkit"],
+    "concepts": ["architecture", "document", "serialization", "confidence", "chunking", "plugins"],
+    "examples": ["conversion", "serialization", "extraction", "rag", "annotation", "enrichment"],
+    "integrations": ["langchain", "llamaindex", "crew", "haystack", "agentic"],
+    "reference": ["api", "cli"]
+  },
+  "follow_links": true,
+  "respect_robots_txt": true,
+  "rate_limit": 0.5,
+  "user_agent": "SkillSeekersBot/1.0"
+}
