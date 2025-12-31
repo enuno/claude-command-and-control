@@ -16,6 +16,31 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+/**
+ * Validate required environment variables
+ */
+function validateEnvironment() {
+  const required = [
+    'TWILIO_ACCOUNT_SID',
+    'TWILIO_AUTH_TOKEN',
+    'LANGFLOW_FLOW_ID',
+    'NGROK_URL'
+  ];
+
+  const missing = required.filter(key => !process.env[key]);
+
+  if (missing.length > 0) {
+    console.error('Missing required environment variables:', missing.join(', '));
+    console.error('Please check your .env file');
+    process.exit(1);
+  }
+
+  console.log('✓ Environment variables validated');
+}
+
+// Validate environment before initializing
+validateEnvironment();
+
 // Configuration
 const config = {
   port: process.env.PORT || 3000,
@@ -28,10 +53,42 @@ const config = {
 };
 
 /**
+ * Validate Twilio request signature
+ */
+function validateTwilioRequest(req, res, next) {
+  if (process.env.VALIDATE_TWILIO_SIGNATURE === 'false') {
+    return next();
+  }
+
+  const twilioSignature = req.headers['x-twilio-signature'];
+  const url = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+
+  const isValid = twilio.validateRequest(
+    config.twilioAuthToken,
+    twilioSignature,
+    url,
+    req.body
+  );
+
+  if (!isValid) {
+    console.error('Invalid Twilio signature');
+    return res.status(403).send('Forbidden');
+  }
+
+  next();
+}
+
+/**
  * Incoming call handler - Sets up ConversationRelay
  */
-app.post('/voice', (req, res) => {
+app.post('/voice', validateTwilioRequest, (req, res) => {
   console.log('Incoming call from:', req.body.From);
+
+  // Validate required fields
+  if (!req.body.From || !req.body.To) {
+    console.error('Missing required fields in webhook');
+    return res.status(400).send('Bad Request');
+  }
 
   const twiml = new twilio.twiml.VoiceResponse();
   const connect = twiml.connect();
@@ -54,8 +111,24 @@ app.post('/voice', (req, res) => {
  */
 const wss = new WebSocket.Server({ noServer: true });
 
+// Handle WebSocket server errors
+wss.on('error', (error) => {
+  console.error('WebSocket server error:', error);
+});
+
 wss.on('connection', (ws, req) => {
   console.log('ConversationRelay WebSocket connected');
+
+  // Set connection timeout
+  const connectionTimeout = setTimeout(() => {
+    console.log('WebSocket connection timeout');
+    ws.close();
+  }, 300000); // 5 minutes
+
+  ws.on('error', (error) => {
+    console.error('WebSocket connection error:', error);
+    clearTimeout(connectionTimeout);
+  });
 
   let sessionId = null;
   let conversationHistory = [];
@@ -122,6 +195,7 @@ wss.on('connection', (ws, req) => {
 
   ws.on('close', () => {
     console.log('WebSocket closed');
+    clearTimeout(connectionTimeout);
   });
 });
 

@@ -22,6 +22,31 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
+/**
+ * Validate required environment variables
+ */
+function validateEnvironment() {
+  const required = [
+    'TWILIO_ACCOUNT_SID',
+    'TWILIO_AUTH_TOKEN',
+    'OPENAI_API_KEY',
+    'NGROK_URL'
+  ];
+
+  const missing = required.filter(key => !process.env[key]);
+
+  if (missing.length > 0) {
+    console.error('Missing required environment variables:', missing.join(', '));
+    console.error('Please check your .env file');
+    process.exit(1);
+  }
+
+  console.log('✓ Environment variables validated');
+}
+
+// Validate environment before initializing
+validateEnvironment();
+
 // Configuration
 const config = {
   port: process.env.PORT || 3000,
@@ -43,10 +68,42 @@ const SYSTEM_PROMPT = `You are a helpful voice assistant. Follow these rules:
 - Ask clarifying questions if needed`;
 
 /**
+ * Validate Twilio request signature
+ */
+function validateTwilioRequest(req, res, next) {
+  if (process.env.VALIDATE_TWILIO_SIGNATURE === 'false') {
+    return next();
+  }
+
+  const twilioSignature = req.headers['x-twilio-signature'];
+  const url = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+
+  const isValid = twilio.validateRequest(
+    config.twilioAuthToken,
+    twilioSignature,
+    url,
+    req.body
+  );
+
+  if (!isValid) {
+    console.error('Invalid Twilio signature');
+    return res.status(403).send('Forbidden');
+  }
+
+  next();
+}
+
+/**
  * Incoming call handler
  */
-app.post('/twiml', (req, res) => {
+app.post('/twiml', validateTwilioRequest, (req, res) => {
   console.log('Incoming call from:', req.body.From);
+
+  // Validate required fields
+  if (!req.body.From || !req.body.To) {
+    console.error('Missing required fields in webhook');
+    return res.status(400).send('Bad Request');
+  }
 
   const twiml = new twilio.twiml.VoiceResponse();
   const connect = twiml.connect();
@@ -67,8 +124,24 @@ app.post('/twiml', (req, res) => {
  */
 const wss = new WebSocket.Server({ noServer: true });
 
+// Handle WebSocket server errors
+wss.on('error', (error) => {
+  console.error('WebSocket server error:', error);
+});
+
 wss.on('connection', (ws, req) => {
   console.log('WebSocket connected');
+
+  // Set connection timeout
+  const connectionTimeout = setTimeout(() => {
+    console.log('WebSocket connection timeout');
+    ws.close();
+  }, 300000); // 5 minutes
+
+  ws.on('error', (error) => {
+    console.error('WebSocket connection error:', error);
+    clearTimeout(connectionTimeout);
+  });
 
   let conversationHistory = [
     { role: 'system', content: SYSTEM_PROMPT }
@@ -132,6 +205,7 @@ wss.on('connection', (ws, req) => {
 
   ws.on('close', () => {
     console.log('WebSocket closed');
+    clearTimeout(connectionTimeout);
   });
 });
 
@@ -300,9 +374,26 @@ async function getOpenAIResponseWithFunctions(ws, conversationHistory) {
 
 /**
  * Example function implementations
+ *
+ * ⚠️ WARNING: THESE ARE MOCK FUNCTIONS FOR DEMONSTRATION ONLY
+ * DO NOT DEPLOY TO PRODUCTION WITHOUT REPLACING WITH REAL IMPLEMENTATIONS
+ *
+ * These functions should:
+ * - Connect to your actual database/API
+ * - Include proper error handling
+ * - Validate input parameters
+ * - Use authentication/authorization
+ * - Log transactions for audit trails
  */
 async function checkAccountBalance(accountNumber) {
-  // Mock implementation
+  // ⚠️ MOCK IMPLEMENTATION - REPLACE IN PRODUCTION
+  console.warn('Using mock checkAccountBalance - replace with real implementation');
+
+  // TODO: Replace with real database query
+  // Example:
+  // const account = await db.accounts.findOne({ number: accountNumber });
+  // return { account_number: accountNumber, balance: account.balance, currency: 'USD' };
+
   return {
     account_number: accountNumber,
     balance: 1234.56,
@@ -311,7 +402,14 @@ async function checkAccountBalance(accountNumber) {
 }
 
 async function scheduleAppointment({ date, time, service }) {
-  // Mock implementation
+  // ⚠️ MOCK IMPLEMENTATION - REPLACE IN PRODUCTION
+  console.warn('Using mock scheduleAppointment - replace with real implementation');
+
+  // TODO: Replace with real scheduling system
+  // Example:
+  // const appointment = await schedulingService.create({ date, time, service });
+  // return { confirmed: true, appointment_id: appointment.id, date, time, service };
+
   return {
     confirmed: true,
     appointment_id: 'APT-' + Date.now(),
