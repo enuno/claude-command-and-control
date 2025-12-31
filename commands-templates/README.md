@@ -195,7 +195,7 @@ Gracefully closes sessions by:
 - Providing comprehensive closure checklist
 
 
-### 15. **create-skill.md** (NEW)
+### 15. **create-skill.md**
 
 Generates Claude AI skills from multiple sources by:
 
@@ -210,11 +210,27 @@ Generates Claude AI skills from multiple sources by:
 - Providing comprehensive error handling and recovery
 - Generating complete skill structure (SKILL.md, knowledge/, examples/, references/)
 
+### 16. **skill-enhancer/** (NEW)
+
+Enhances and upgrades existing Claude skills by:
+
+- Analyzing skill quality (description, instructions, examples, error handling)
+- Integrating new information and capabilities while preserving core functionality
+- Improving clarity, examples, and edge case documentation
+- Aligning with latest Agent Skills specifications
+- Managing semantic versioning with comprehensive changelogs
+- Creating test scenarios and validation frameworks
+- Maintaining backward compatibility or documenting migrations
+- Optimizing token usage through progressive disclosure
+- Generating enhancement reports with quality metrics
+- Supporting multiple enhancement patterns (quality, capability, performance, integration)
+- Includes `enhancement-checklist.md` for systematic quality assurance
+
 ***
 
 ## Complete Claude Commands Suite Summary
 
-You now have **17 comprehensive command templates** organized into three categories:
+You now have **18 comprehensive command templates** organized into three categories:
 
 ### **Core Workflow Commands (6)**
 
@@ -236,11 +252,12 @@ You now have **17 comprehensive command templates** organized into three categor
 13. ✅ `handoff.md` - Document for handoff
 14. ✅ `close-session.md` - Close session gracefully
 
-### **Integration & Skill Generation Commands (2)**
+### **Integration & Skill Generation Commands (3)**
 
-15. ✅ `create-skill.md` - Generate skills from docs/GitHub/PDFs (NEW)
-16. ✅ `integration-scan.md` - Scan and categorize incoming files
-17. ✅ `maintenance-scan.md` - Identify stale files
+15. ✅ `create-skill.md` - Generate skills from docs/GitHub/PDFs
+16. ✅ `skill-enhancer/` - Enhance and upgrade existing skills with new capabilities
+17. ✅ `integration-scan.md` - Scan and categorize incoming files
+18. ✅ `maintenance-scan.md` - Identify stale files
 
 Plus the **6 specialized agent templates** (architect, builder, validator, scribe, devops, researcher)
 
