@@ -22,6 +22,11 @@ This directory contains production-ready skill templates and examples for Claude
 | **[internal-comms](internal-comms/)** | Resources for writing internal communications (status reports, newsletters, FAQs) using company formats |
 | **[lead-research-assistant](lead-research-assistant/)** | Identifies and qualifies high-quality leads by analyzing your product and target companies |
 
+### Communication (1 skill)
+| Skill | Description |
+|-------|-------------|
+| **[communication/twilio-voice](communication/twilio-voice/)** | Comprehensive Twilio Voice API assistance for building voice applications, implementing calling solutions, debugging Twilio integrations, and learning best practices |
+
 ### Creative & Media (5 skills)
 | Skill | Description |
 |-------|-------------|
