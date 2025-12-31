@@ -1,0 +1,3857 @@
+{
+  "repo_info": {
+    "name": "openrag",
+    "full_name": "langflow-ai/openrag",
+    "description": "OpenRAG is a comprehensive, single package Retrieval-Augmented Generation platform built on Langflow, Docling, and Opensearch. ",
+    "url": "https://github.com/langflow-ai/openrag",
+    "homepage": "https://www.openr.ag",
+    "stars": 23,
+    "forks": 1,
+    "open_issues": 59,
+    "default_branch": "main",
+    "created_at": "2025-07-11T16:19:14+00:00",
+    "updated_at": "2025-12-29T21:42:41+00:00",
+    "language": "Python",
+    "license": "Apache License 2.0",
+    "topics": []
+  },
+  "readme": "<div align=\"center\">\n\n# OpenRAG\n\n<div align=\"center\">\n  <a href=\"https://github.com/langflow-ai/langflow\"><img src=\"https://img.shields.io/badge/Langflow-1C1C1E?style=flat&logo=langflow\" alt=\"Langflow\"></a>\n  &nbsp;&nbsp;\n  <a href=\"https://github.com/opensearch-project/OpenSearch\"><img src=\"https://img.shields.io/badge/OpenSearch-005EB8?style=flat&logo=opensearch&logoColor=white\" alt=\"OpenSearch\"></a>\n  &nbsp;&nbsp;\n  <a href=\"https://github.com/docling-project/docling\"><img src=\"https://img.shields.io/badge/Docling-000000?style=flat\" alt=\"Langflow\"></a>\n  &nbsp;&nbsp;\n</div>\n\nOpenRAG is a comprehensive Retrieval-Augmented Generation platform that enables intelligent document search and AI-powered conversations. Users can upload, process, and query documents through a chat interface backed by large language models and semantic search capabilities. The system utilizes Langflow for document ingestion, retrieval workflows, and intelligent nudges, providing a seamless RAG experience. Built with [Starlette](https://github.com/Kludex/starlette) and [Next.js](https://github.com/vercel/next.js). Powered by [OpenSearch](https://github.com/opensearch-project/OpenSearch), [Langflow](https://github.com/langflow-ai/langflow), and [Docling](https://github.com/docling-project/docling).\n\n<a href=\"https://deepwiki.com/langflow-ai/openrag\"><img src=\"https://deepwiki.com/badge.svg\" alt=\"Ask DeepWiki\"></a>\n\n</div>\n<div align=\"center\">\n  <a href=\"#quickstart\" style=\"color: #0366d6;\">Quickstart</a> &nbsp;&nbsp;|&nbsp;&nbsp;\n  <a href=\"#install-python-package\" style=\"color: #0366d6;\">Python package</a> &nbsp;&nbsp;|&nbsp;&nbsp;\n  <a href=\"#docker-or-podman-installation\" style=\"color: #0366d6;\">Docker or Podman</a> &nbsp;&nbsp;|&nbsp;&nbsp;\n  <a href=\"#development\" style=\"color: #0366d6;\">Development</a> &nbsp;&nbsp;|&nbsp;&nbsp;\n  <a href=\"#troubleshooting\" style=\"color: #0366d6;\">Troubleshooting</a>\n</div>\n\n## Quickstart\n\nTo run OpenRAG without creating or modifying any project files, use `uvx`:\n\n```bash\nuvx openrag\n```\n\nThis command runs OpenRAG without installing it to your project or globally.\n\nTo run a specific version of OpenRAG, run `uvx --from openrag==VERSION openrag`.\n\n## Install Python package\n\nTo add the OpenRAG Python package to a Python project, use `uv`:\n\n1. Create a new project with a virtual environment using `uv init`:\n\n   ```bash\n   uv init YOUR_PROJECT_NAME\n   cd YOUR_PROJECT_NAME\n   ```\n\n   The `(venv)` prompt doesn't change, but `uv` commands will automatically use the project's virtual environment.\n   For more information on virtual environments, see the [uv documentation](https://docs.astral.sh/uv/pip/environments).\n\n2. Add OpenRAG to your project:\n\n   ```bash\n   uv add openrag\n   ```\n\n   To add a specific version of OpenRAG, run `uv add openrag==VERSION`.\n\n3. Start the OpenRAG terminal user interface (TUI):\n\n   ```bash\n   uv run openrag\n   ```\n\n4. Continue with the [Quickstart](https://docs.openr.ag/quickstart).\n\nFor all installation options, see the [OpenRAG installation guide](https://docs.openr.ag/install).\n\n## Docker or Podman installation\n\nBy default, OpenRAG automatically starts the required containers and helps you manage them.\nTo install OpenRAG with self-managed containers, see the [OpenRAG installation guide](https://docs.openr.ag/docker).\n\n## Development\n\nFor developers wanting to contribute to OpenRAG or set up a development environment, see [CONTRIBUTING.md](CONTRIBUTING.md).\n\n## Troubleshooting\n\nFor common issues and fixes, see [Troubleshoot OpenRAG](https://docs.openr.ag/support/troubleshoot).",
+  "file_tree": [
+    {
+      "path": ".dockerignore",
+      "type": "file",
+      "size": 444
+    },
+    {
+      "path": ".env.example",
+      "type": "file",
+      "size": 3157
+    },
+    {
+      "path": ".github",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".gitignore",
+      "type": "file",
+      "size": 426
+    },
+    {
+      "path": ".pre-commit-config.yaml",
+      "type": "file",
+      "size": 193
+    },
+    {
+      "path": ".python-version",
+      "type": "file",
+      "size": 5
+    },
+    {
+      "path": ".secrets.baseline",
+      "type": "file",
+      "size": 3928
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "type": "file",
+      "size": 8047
+    },
+    {
+      "path": "Dockerfile",
+      "type": "file",
+      "size": 7188
+    },
+    {
+      "path": "Dockerfile.backend",
+      "type": "file",
+      "size": 1377
+    },
+    {
+      "path": "Dockerfile.frontend",
+      "type": "file",
+      "size": 300
+    },
+    {
+      "path": "Dockerfile.langflow",
+      "type": "file",
+      "size": 121
+    },
+    {
+      "path": "LICENSE",
+      "type": "file",
+      "size": 11334
+    },
+    {
+      "path": "MANIFEST.in",
+      "type": "file",
+      "size": 35
+    },
+    {
+      "path": "Makefile",
+      "type": "file",
+      "size": 18842
+    },
+    {
+      "path": "README.md",
+      "type": "file",
+      "size": 3576
+    },
+    {
+      "path": "SECURITY.md",
+      "type": "file",
+      "size": 3174
+    },
+    {
+      "path": "assets",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docker-compose.gpu.yml",
+      "type": "file",
+      "size": 147
+    },
+    {
+      "path": "docker-compose.yml",
+      "type": "file",
+      "size": 5512
+    },
+    {
+      "path": "docs",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "flows",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "keys",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "openrag-documents",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "patch-netty.sh",
+      "type": "file",
+      "size": 9799
+    },
+    {
+      "path": "pyproject.toml",
+      "type": "file",
+      "size": 1588
+    },
+    {
+      "path": "scripts",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "sdks",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "securityconfig",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "tests",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "uv.lock",
+      "type": "file",
+      "size": 487499
+    },
+    {
+      "path": "warm_up_docling.py",
+      "type": "file",
+      "size": 822
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "type": "file",
+      "size": 191
+    },
+    {
+      "path": ".github/workflows",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "assets/OpenRAG_TUI_2025-09-10T13_04_11_757637.svg",
+      "type": "file",
+      "size": 36066
+    },
+    {
+      "path": "docs/.gitignore",
+      "type": "file",
+      "size": 362
+    },
+    {
+      "path": "docs/README.md",
+      "type": "file",
+      "size": 2431
+    },
+    {
+      "path": "docs/VERSIONING_SETUP.md",
+      "type": "file",
+      "size": 2964
+    },
+    {
+      "path": "docs/docs",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docusaurus.config.js",
+      "type": "file",
+      "size": 4413
+    },
+    {
+      "path": "docs/package-lock.json",
+      "type": "file",
+      "size": 728344
+    },
+    {
+      "path": "docs/package.json",
+      "type": "file",
+      "size": 1446
+    },
+    {
+      "path": "docs/scraper.config.json",
+      "type": "file",
+      "size": 291
+    },
+    {
+      "path": "docs/sidebars.js",
+      "type": "file",
+      "size": 1989
+    },
+    {
+      "path": "docs/src",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/static",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/yarn.lock",
+      "type": "file",
+      "size": 417129
+    },
+    {
+      "path": "flows/components",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "flows/ingestion_flow.json",
+      "type": "file",
+      "size": 435220
+    },
+    {
+      "path": "flows/openrag_agent.json",
+      "type": "file",
+      "size": 399603
+    },
+    {
+      "path": "flows/openrag_nudges.json",
+      "type": "file",
+      "size": 335604
+    },
+    {
+      "path": "flows/openrag_url_mcp.json",
+      "type": "file",
+      "size": 498489
+    },
+    {
+      "path": "frontend/.gitignore",
+      "type": "file",
+      "size": 480
+    },
+    {
+      "path": "frontend/app",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/biome.json",
+      "type": "file",
+      "size": 3067
+    },
+    {
+      "path": "frontend/components.json",
+      "type": "file",
+      "size": 472
+    },
+    {
+      "path": "frontend/components",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/contexts",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/eslint.config.mjs",
+      "type": "file",
+      "size": 568
+    },
+    {
+      "path": "frontend/hooks",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/knip.config.ts",
+      "type": "file",
+      "size": 284
+    },
+    {
+      "path": "frontend/lib",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/next.config.ts",
+      "type": "file",
+      "size": 456
+    },
+    {
+      "path": "frontend/package-lock.json",
+      "type": "file",
+      "size": 278125
+    },
+    {
+      "path": "frontend/package.json",
+      "type": "file",
+      "size": 2138
+    },
+    {
+      "path": "frontend/postcss.config.mjs",
+      "type": "file",
+      "size": 105
+    },
+    {
+      "path": "frontend/public",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/stores",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/tailwind.config.ts",
+      "type": "file",
+      "size": 7614
+    },
+    {
+      "path": "frontend/tsconfig.json",
+      "type": "file",
+      "size": 598
+    },
+    {
+      "path": "keys/.gitkeep",
+      "type": "file",
+      "size": 2
+    },
+    {
+      "path": "openrag-documents/docling.pdf",
+      "type": "file",
+      "size": 5566575
+    },
+    {
+      "path": "openrag-documents/ibm_anthropic.pdf",
+      "type": "file",
+      "size": 1969939
+    },
+    {
+      "path": "openrag-documents/openrag-documentation.pdf",
+      "type": "file",
+      "size": 7914103
+    },
+    {
+      "path": "openrag-documents/warmup_ocr.pdf",
+      "type": "file",
+      "size": 9612
+    },
+    {
+      "path": "scripts/clear_opensearch_data.py",
+      "type": "file",
+      "size": 1290
+    },
+    {
+      "path": "scripts/docling_ctl.py",
+      "type": "file",
+      "size": 2830
+    },
+    {
+      "path": "scripts/extract_flow_component.py",
+      "type": "file",
+      "size": 5121
+    },
+    {
+      "path": "scripts/migrate_embedding_model_field.py",
+      "type": "file",
+      "size": 11688
+    },
+    {
+      "path": "scripts/update_flow_components.py",
+      "type": "file",
+      "size": 4648
+    },
+    {
+      "path": "sdks/python",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "sdks/typescript",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "securityconfig/action_groups.yml",
+      "type": "file",
+      "size": 107
+    },
+    {
+      "path": "securityconfig/config.yml",
+      "type": "file",
+      "size": 735
+    },
+    {
+      "path": "securityconfig/internal_users.yml",
+      "type": "file",
+      "size": 109
+    },
+    {
+      "path": "securityconfig/nodes_dn.yml",
+      "type": "file",
+      "size": 106
+    },
+    {
+      "path": "securityconfig/roles.yml",
+      "type": "file",
+      "size": 1192
+    },
+    {
+      "path": "securityconfig/roles_mapping.yml",
+      "type": "file",
+      "size": 168
+    },
+    {
+      "path": "securityconfig/tenants.yml",
+      "type": "file",
+      "size": 88
+    },
+    {
+      "path": "src/agent.py",
+      "type": "file",
+      "size": 32823
+    },
+    {
+      "path": "src/api",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/api_key_middleware.py",
+      "type": "file",
+      "size": 4121
+    },
+    {
+      "path": "src/auth_context.py",
+      "type": "file",
+      "size": 2246
+    },
+    {
+      "path": "src/auth_middleware.py",
+      "type": "file",
+      "size": 2921
+    },
+    {
+      "path": "src/config",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/connectors",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/main.py",
+      "type": "file",
+      "size": 59548
+    },
+    {
+      "path": "src/models",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/services",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/session_manager.py",
+      "type": "file",
+      "size": 8119
+    },
+    {
+      "path": "src/tui",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/utils",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "tests/__init__.py",
+      "type": "file",
+      "size": 14
+    },
+    {
+      "path": "tests/conftest.py",
+      "type": "file",
+      "size": 4953
+    },
+    {
+      "path": "tests/integration",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".github/workflows/build-multiarch.yml",
+      "type": "file",
+      "size": 8934
+    },
+    {
+      "path": ".github/workflows/codeql.yml",
+      "type": "file",
+      "size": 2650
+    },
+    {
+      "path": ".github/workflows/deploy-docs-draft.yml",
+      "type": "file",
+      "size": 11555
+    },
+    {
+      "path": ".github/workflows/deploy-gh-pages.yml",
+      "type": "file",
+      "size": 1372
+    },
+    {
+      "path": ".github/workflows/publish-sdk-python.yml",
+      "type": "file",
+      "size": 1019
+    },
+    {
+      "path": ".github/workflows/publish-sdk-typescript.yml",
+      "type": "file",
+      "size": 975
+    },
+    {
+      "path": ".github/workflows/test-integration.yml",
+      "type": "file",
+      "size": 3410
+    },
+    {
+      "path": ".github/workflows/update-uv-lock.yml",
+      "type": "file",
+      "size": 1279
+    },
+    {
+      "path": "docs/docs/_partial-docker-compose-down-and-prune.mdx",
+      "type": "file",
+      "size": 218
+    },
+    {
+      "path": "docs/docs/_partial-docker-compose-up.mdx",
+      "type": "file",
+      "size": 96
+    },
+    {
+      "path": "docs/docs/_partial-docker-remove-and-cleanup-steps.mdx",
+      "type": "file",
+      "size": 881
+    },
+    {
+      "path": "docs/docs/_partial-docker-stop-all.mdx",
+      "type": "file",
+      "size": 100
+    },
+    {
+      "path": "docs/docs/_partial-export-flows.mdx",
+      "type": "file",
+      "size": 345
+    },
+    {
+      "path": "docs/docs/_partial-factory-reset-warning.mdx",
+      "type": "file",
+      "size": 1199
+    },
+    {
+      "path": "docs/docs/_partial-ingestion-flow.mdx",
+      "type": "file",
+      "size": 2943
+    },
+    {
+      "path": "docs/docs/_partial-install-next-steps.mdx",
+      "type": "file",
+      "size": 257
+    },
+    {
+      "path": "docs/docs/_partial-integrate-chat.mdx",
+      "type": "file",
+      "size": 4716
+    },
+    {
+      "path": "docs/docs/_partial-ollama-models.mdx",
+      "type": "file",
+      "size": 1147
+    },
+    {
+      "path": "docs/docs/_partial-onboarding.mdx",
+      "type": "file",
+      "size": 8453
+    },
+    {
+      "path": "docs/docs/_partial-opensearch-auth-mode.mdx",
+      "type": "file",
+      "size": 1025
+    },
+    {
+      "path": "docs/docs/_partial-prereq-common.mdx",
+      "type": "file",
+      "size": 1301
+    },
+    {
+      "path": "docs/docs/_partial-prereq-no-script.mdx",
+      "type": "file",
+      "size": 679
+    },
+    {
+      "path": "docs/docs/_partial-prereq-python.mdx",
+      "type": "file",
+      "size": 96
+    },
+    {
+      "path": "docs/docs/_partial-prereq-windows.mdx",
+      "type": "file",
+      "size": 146
+    },
+    {
+      "path": "docs/docs/_partial-setup.mdx",
+      "type": "file",
+      "size": 8192
+    },
+    {
+      "path": "docs/docs/_partial-temp-knowledge.mdx",
+      "type": "file",
+      "size": 362
+    },
+    {
+      "path": "docs/docs/core-components",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docs/get-started",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docs/reference",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docs/support",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/src/components",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/src/css",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/static/.nojekyll",
+      "type": "file",
+      "size": 0
+    },
+    {
+      "path": "docs/static/CNAME",
+      "type": "file",
+      "size": 13
+    },
+    {
+      "path": "docs/static/files",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/static/img",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/static/robots.txt",
+      "type": "file",
+      "size": 146
+    },
+    {
+      "path": "flows/components/ollama_embedding.json",
+      "type": "file",
+      "size": 7876
+    },
+    {
+      "path": "flows/components/ollama_llm.json",
+      "type": "file",
+      "size": 33207
+    },
+    {
+      "path": "flows/components/ollama_llm_text.json",
+      "type": "file",
+      "size": 33239
+    },
+    {
+      "path": "flows/components/opensearch.py",
+      "type": "file",
+      "size": 76625
+    },
+    {
+      "path": "flows/components/opensearch_multimodel.py",
+      "type": "file",
+      "size": 77890
+    },
+    {
+      "path": "flows/components/watsonx_embedding.json",
+      "type": "file",
+      "size": 10941
+    },
+    {
+      "path": "flows/components/watsonx_llm.json",
+      "type": "file",
+      "size": 23287
+    },
+    {
+      "path": "flows/components/watsonx_llm_text.json",
+      "type": "file",
+      "size": 23280
+    },
+    {
+      "path": "frontend/app/admin",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/api",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/auth",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/chat",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/connectors",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/favicon.ico",
+      "type": "file",
+      "size": 4286
+    },
+    {
+      "path": "frontend/app/globals.css",
+      "type": "file",
+      "size": 10027
+    },
+    {
+      "path": "frontend/app/icon.png",
+      "type": "file",
+      "size": 838
+    },
+    {
+      "path": "frontend/app/knowledge",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/layout.tsx",
+      "type": "file",
+      "size": 2012
+    },
+    {
+      "path": "frontend/app/login",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/onboarding",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/page.tsx",
+      "type": "file",
+      "size": 471
+    },
+    {
+      "path": "frontend/app/providers.tsx",
+      "type": "file",
+      "size": 393
+    },
+    {
+      "path": "frontend/app/settings",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/upload",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/components/AgGrid",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/components/animated-conditional.tsx",
+      "type": "file",
+      "size": 1132
+    },
+    {
+      "path": "frontend/components/chat-renderer.tsx",
+      "type": "file",
+      "size": 12416
+    },
+    {
+      "path": "frontend/components/cloud-picker",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/components/code-component.tsx",
+      "type": "file",
+      "size": 1571
+    },
+    {
+      "path": "frontend/components/confirmation-dialog.tsx",
+      "type": "file",
+      "size": 1730
+    },
+    {
+      "path": "frontend/components/delete-confirmation-dialog.tsx",
+      "type": "file",
+      "size": 2839
+    },
+    {
+      "path": "frontend/components/delete-session-modal.tsx",
+      "type": "file",
+      "size": 1517
+    },
+    {
+      "path": "frontend/components/docling-health-banner.tsx",
+      "type": "file",
+      "size": 4398
+    },
+    {
+      "path": "frontend/components/duplicate-handling-dialog.tsx",
+      "type": "file",
+      "size": 1851
+    },
+    {
+      "path": "frontend/components/filter-icon-popover.tsx",
+      "type": "file",
+      "size": 4090
+    },
+    {
+      "path": "frontend/components/header.tsx",
+      "type": "file",
+      "size": 2024
+    },
+    {
+      "path": "frontend/components/icons",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/components/knowledge-actions-dropdown.tsx",
+      "type": "file",
+      "size": 2948
+    },
+    {
+      "path": "frontend/components/knowledge-dropdown.tsx",
+      "type": "file",
+      "size": 20403
+    },
+    {
+      "path": "frontend/components/knowledge-filter-list.tsx",
+      "type": "file",
+      "size": 4910
+    },
+    {
+      "path": "frontend/components/knowledge-filter-panel.tsx",
+      "type": "file",
+      "size": 17111
+    },
+    {
+      "path": "frontend/components/knowledge-search-input.tsx",
+      "type": "file",
+      "size": 3168
+    },
+    {
+      "path": "frontend/components/label-input.tsx",
+      "type": "file",
+      "size": 515
+    },
+    {
+      "path": "frontend/components/label-wrapper.tsx",
+      "type": "file",
+      "size": 1808
+    },
+    {
+      "path": "frontend/components/layout-wrapper.tsx",
+      "type": "file",
+      "size": 4595
+    },
+    {
+      "path": "frontend/components/markdown-renderer.tsx",
+      "type": "file",
+      "size": 5186
+    },
+    {
+      "path": "frontend/components/navigation.tsx",
+      "type": "file",
+      "size": 21200
+    },
+    {
+      "path": "frontend/components/protected-route.tsx",
+      "type": "file",
+      "size": 1626
+    },
+    {
+      "path": "frontend/components/provider-health-banner.tsx",
+      "type": "file",
+      "size": 3745
+    },
+    {
+      "path": "frontend/components/task-notification-menu.tsx",
+      "type": "file",
+      "size": 14798
+    },
+    {
+      "path": "frontend/components/theme-provider.tsx",
+      "type": "file",
+      "size": 321
+    },
+    {
+      "path": "frontend/components/theme-switcher-buttons.tsx",
+      "type": "file",
+      "size": 2211
+    },
+    {
+      "path": "frontend/components/ui",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/components/user-nav.tsx",
+      "type": "file",
+      "size": 3458
+    },
+    {
+      "path": "frontend/contexts/auth-context.tsx",
+      "type": "file",
+      "size": 4999
+    },
+    {
+      "path": "frontend/contexts/chat-context.tsx",
+      "type": "file",
+      "size": 16267
+    },
+    {
+      "path": "frontend/contexts/knowledge-filter-context.tsx",
+      "type": "file",
+      "size": 3939
+    },
+    {
+      "path": "frontend/contexts/task-context.tsx",
+      "type": "file",
+      "size": 13577
+    },
+    {
+      "path": "frontend/hooks/use-file-drag.ts",
+      "type": "file",
+      "size": 1414
+    },
+    {
+      "path": "frontend/hooks/useChatStreaming.ts",
+      "type": "file",
+      "size": 24773
+    },
+    {
+      "path": "frontend/lib/constants.ts",
+      "type": "file",
+      "size": 5056
+    },
+    {
+      "path": "frontend/lib/debounce.ts",
+      "type": "file",
+      "size": 898
+    },
+    {
+      "path": "frontend/lib/upload-utils.ts",
+      "type": "file",
+      "size": 5944
+    },
+    {
+      "path": "frontend/lib/utils.ts",
+      "type": "file",
+      "size": 169
+    },
+    {
+      "path": "frontend/public/file.svg",
+      "type": "file",
+      "size": 391
+    },
+    {
+      "path": "frontend/public/globe.svg",
+      "type": "file",
+      "size": 1035
+    },
+    {
+      "path": "frontend/public/next.svg",
+      "type": "file",
+      "size": 1375
+    },
+    {
+      "path": "frontend/public/vercel.svg",
+      "type": "file",
+      "size": 128
+    },
+    {
+      "path": "frontend/public/window.svg",
+      "type": "file",
+      "size": 385
+    },
+    {
+      "path": "frontend/stores/loadingStore.ts",
+      "type": "file",
+      "size": 257
+    },
+    {
+      "path": "sdks/python/README.md",
+      "type": "file",
+      "size": 6641
+    },
+    {
+      "path": "sdks/python/openrag_sdk",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "sdks/python/pyproject.toml",
+      "type": "file",
+      "size": 1501
+    },
+    {
+      "path": "sdks/python/tests",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "sdks/python/uv.lock",
+      "type": "file",
+      "size": 64485
+    },
+    {
+      "path": "sdks/typescript/README.md",
+      "type": "file",
+      "size": 7766
+    },
+    {
+      "path": "sdks/typescript/package-lock.json",
+      "type": "file",
+      "size": 88666
+    },
+    {
+      "path": "sdks/typescript/package.json",
+      "type": "file",
+      "size": 1215
+    },
+    {
+      "path": "sdks/typescript/src",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "sdks/typescript/tests",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "sdks/typescript/tsconfig.json",
+      "type": "file",
+      "size": 1011
+    },
+    {
+      "path": "sdks/typescript/tsup.config.ts",
+      "type": "file",
+      "size": 228
+    },
+    {
+      "path": "sdks/typescript/vitest.config.ts",
+      "type": "file",
+      "size": 224
+    },
+    {
+      "path": "src/api/__init__.py",
+      "type": "file",
+      "size": 0
+    },
+    {
+      "path": "src/api/auth.py",
+      "type": "file",
+      "size": 3245
+    },
+    {
+      "path": "src/api/chat.py",
+      "type": "file",
+      "size": 6065
+    },
+    {
+      "path": "src/api/connector_router.py",
+      "type": "file",
+      "size": 2912
+    },
+    {
+      "path": "src/api/connectors.py",
+      "type": "file",
+      "size": 18153
+    },
+    {
+      "path": "src/api/docling.py",
+      "type": "file",
+      "size": 4269
+    },
+    {
+      "path": "src/api/documents.py",
+      "type": "file",
+      "size": 3774
+    },
+    {
+      "path": "src/api/flows.py",
+      "type": "file",
+      "size": 1967
+    },
+    {
+      "path": "src/api/keys.py",
+      "type": "file",
+      "size": 4640
+    },
+    {
+      "path": "src/api/knowledge_filter.py",
+      "type": "file",
+      "size": 16720
+    },
+    {
+      "path": "src/api/langflow_files.py",
+      "type": "file",
+      "size": 11589
+    },
+    {
+      "path": "src/api/models.py",
+      "type": "file",
+      "size": 7169
+    },
+    {
+      "path": "src/api/nudges.py",
+      "type": "file",
+      "size": 2152
+    },
+    {
+      "path": "src/api/oidc.py",
+      "type": "file",
+      "size": 3625
+    },
+    {
+      "path": "src/api/provider_health.py",
+      "type": "file",
+      "size": 9838
+    },
+    {
+      "path": "src/api/provider_validation.py",
+      "type": "file",
+      "size": 31769
+    },
+    {
+      "path": "src/api/router.py",
+      "type": "file",
+      "size": 8337
+    },
+    {
+      "path": "src/api/search.py",
+      "type": "file",
+      "size": 1824
+    },
+    {
+      "path": "src/api/settings.py",
+      "type": "file",
+      "size": 70160
+    },
+    {
+      "path": "src/api/tasks.py",
+      "type": "file",
+      "size": 1471
+    },
+    {
+      "path": "src/api/upload.py",
+      "type": "file",
+      "size": 6730
+    },
+    {
+      "path": "src/api/v1",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/config/__init__.py",
+      "type": "file",
+      "size": 0
+    },
+    {
+      "path": "src/config/config_manager.py",
+      "type": "file",
+      "size": 13736
+    },
+    {
+      "path": "src/config/settings.py",
+      "type": "file",
+      "size": 33281
+    },
+    {
+      "path": "src/connectors/__init__.py",
+      "type": "file",
+      "size": 279
+    },
+    {
+      "path": "src/connectors/base.py",
+      "type": "file",
+      "size": 4720
+    },
+    {
+      "path": "src/connectors/connection_manager.py",
+      "type": "file",
+      "size": 21886
+    },
+    {
+      "path": "src/connectors/google_drive",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/connectors/langflow_connector_service.py",
+      "type": "file",
+      "size": 13056
+    },
+    {
+      "path": "src/connectors/onedrive",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/connectors/service.py",
+      "type": "file",
+      "size": 15493
+    },
+    {
+      "path": "src/connectors/sharepoint",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/models/__init__.py",
+      "type": "file",
+      "size": 0
+    },
+    {
+      "path": "src/models/processors.py",
+      "type": "file",
+      "size": 30653
+    },
+    {
+      "path": "src/models/tasks.py",
+      "type": "file",
+      "size": 1316
+    },
+    {
+      "path": "src/services/__init__.py",
+      "type": "file",
+      "size": 0
+    },
+    {
+      "path": "src/services/api_key_service.py",
+      "type": "file",
+      "size": 11541
+    },
+    {
+      "path": "src/services/auth_service.py",
+      "type": "file",
+      "size": 16728
+    },
+    {
+      "path": "src/services/chat_service.py",
+      "type": "file",
+      "size": 26490
+    },
+    {
+      "path": "src/services/conversation_persistence_service.py",
+      "type": "file",
+      "size": 6027
+    },
+    {
+      "path": "src/services/document_service.py",
+      "type": "file",
+      "size": 8248
+    },
+    {
+      "path": "src/services/flows_service.py",
+      "type": "file",
+      "size": 61345
+    },
+    {
+      "path": "src/services/knowledge_filter_service.py",
+      "type": "file",
+      "size": 12751
+    },
+    {
+      "path": "src/services/langflow_file_service.py",
+      "type": "file",
+      "size": 14885
+    },
+    {
+      "path": "src/services/langflow_history_service.py",
+      "type": "file",
+      "size": 7737
+    },
+    {
+      "path": "src/services/langflow_mcp_service.py",
+      "type": "file",
+      "size": 10403
+    },
+    {
+      "path": "src/services/models_service.py",
+      "type": "file",
+      "size": 17315
+    },
+    {
+      "path": "src/services/monitor_service.py",
+      "type": "file",
+      "size": 12493
+    },
+    {
+      "path": "src/services/search_service.py",
+      "type": "file",
+      "size": 21281
+    },
+    {
+      "path": "src/services/session_ownership_service.py",
+      "type": "file",
+      "size": 4496
+    },
+    {
+      "path": "src/services/task_service.py",
+      "type": "file",
+      "size": 20544
+    },
+    {
+      "path": "src/tui/__init__.py",
+      "type": "file",
+      "size": 138
+    },
+    {
+      "path": "src/tui/_assets",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/tui/main.py",
+      "type": "file",
+      "size": 22495
+    },
+    {
+      "path": "src/tui/managers",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/tui/screens",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/tui/utils",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/tui/widgets",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/utils/__init__.py",
+      "type": "file",
+      "size": 0
+    },
+    {
+      "path": "src/utils/container_utils.py",
+      "type": "file",
+      "size": 11622
+    },
+    {
+      "path": "src/utils/document_processing.py",
+      "type": "file",
+      "size": 14861
+    },
+    {
+      "path": "src/utils/embedding_fields.py",
+      "type": "file",
+      "size": 5809
+    },
+    {
+      "path": "src/utils/embeddings.py",
+      "type": "file",
+      "size": 7545
+    },
+    {
+      "path": "src/utils/file_utils.py",
+      "type": "file",
+      "size": 1759
+    },
+    {
+      "path": "src/utils/gpu_detection.py",
+      "type": "file",
+      "size": 1302
+    },
+    {
+      "path": "src/utils/hash_utils.py",
+      "type": "file",
+      "size": 2200
+    },
+    {
+      "path": "src/utils/langflow_headers.py",
+      "type": "file",
+      "size": 2790
+    },
+    {
+      "path": "src/utils/logging_config.py",
+      "type": "file",
+      "size": 4026
+    },
+    {
+      "path": "src/utils/opensearch_queries.py",
+      "type": "file",
+      "size": 1409
+    },
+    {
+      "path": "src/utils/paths.py",
+      "type": "file",
+      "size": 2263
+    },
+    {
+      "path": "src/utils/process_pool.py",
+      "type": "file",
+      "size": 498
+    },
+    {
+      "path": "src/utils/telemetry",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "tests/integration/__init__.py",
+      "type": "file",
+      "size": 27
+    },
+    {
+      "path": "tests/integration/test_api_endpoints.py",
+      "type": "file",
+      "size": 27629
+    },
+    {
+      "path": "tests/integration/test_startup_ingest.py",
+      "type": "file",
+      "size": 4546
+    },
+    {
+      "path": "docs/docs/core-components/agents.mdx",
+      "type": "file",
+      "size": 5207
+    },
+    {
+      "path": "docs/docs/core-components/chat.mdx",
+      "type": "file",
+      "size": 10567
+    },
+    {
+      "path": "docs/docs/core-components/ingestion.mdx",
+      "type": "file",
+      "size": 15152
+    },
+    {
+      "path": "docs/docs/core-components/knowledge-filters.mdx",
+      "type": "file",
+      "size": 3202
+    },
+    {
+      "path": "docs/docs/core-components/knowledge.mdx",
+      "type": "file",
+      "size": 11840
+    },
+    {
+      "path": "docs/docs/get-started/docker.mdx",
+      "type": "file",
+      "size": 7953
+    },
+    {
+      "path": "docs/docs/get-started/install-options.mdx",
+      "type": "file",
+      "size": 2448
+    },
+    {
+      "path": "docs/docs/get-started/install-uv.mdx",
+      "type": "file",
+      "size": 4068
+    },
+    {
+      "path": "docs/docs/get-started/install-uvx.mdx",
+      "type": "file",
+      "size": 3403
+    },
+    {
+      "path": "docs/docs/get-started/install-windows.mdx",
+      "type": "file",
+      "size": 2623
+    },
+    {
+      "path": "docs/docs/get-started/install.mdx",
+      "type": "file",
+      "size": 3528
+    },
+    {
+      "path": "docs/docs/get-started/manage-services.mdx",
+      "type": "file",
+      "size": 7007
+    },
+    {
+      "path": "docs/docs/get-started/quickstart.mdx",
+      "type": "file",
+      "size": 8454
+    },
+    {
+      "path": "docs/docs/get-started/reinstall.mdx",
+      "type": "file",
+      "size": 4299
+    },
+    {
+      "path": "docs/docs/get-started/tui.mdx",
+      "type": "file",
+      "size": 2151
+    },
+    {
+      "path": "docs/docs/get-started/uninstall.mdx",
+      "type": "file",
+      "size": 2191
+    },
+    {
+      "path": "docs/docs/get-started/upgrade.mdx",
+      "type": "file",
+      "size": 5374
+    },
+    {
+      "path": "docs/docs/get-started/what-is-openrag.mdx",
+      "type": "file",
+      "size": 3581
+    },
+    {
+      "path": "docs/docs/reference/configuration.mdx",
+      "type": "file",
+      "size": 12575
+    },
+    {
+      "path": "docs/docs/support/contribute.mdx",
+      "type": "file",
+      "size": 9720
+    },
+    {
+      "path": "docs/docs/support/troubleshoot.mdx",
+      "type": "file",
+      "size": 5892
+    },
+    {
+      "path": "docs/src/components/icon",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/src/css/custom.css",
+      "type": "file",
+      "size": 6221
+    },
+    {
+      "path": "docs/static/files/run_openrag_with_prereqs.sh",
+      "type": "file",
+      "size": 16017
+    },
+    {
+      "path": "docs/static/img/favicon.ico",
+      "type": "file",
+      "size": 4286
+    },
+    {
+      "path": "docs/static/img/logo-openrag-dark.svg",
+      "type": "file",
+      "size": 13678
+    },
+    {
+      "path": "docs/static/img/logo-openrag-light.svg",
+      "type": "file",
+      "size": 13678
+    },
+    {
+      "path": "docs/static/img/openrag_tui_dec_2025.png",
+      "type": "file",
+      "size": 21462
+    },
+    {
+      "path": "docs/static/img/opensearch-agent-flow.png",
+      "type": "file",
+      "size": 1081871
+    },
+    {
+      "path": "frontend/app/admin/page.tsx",
+      "type": "file",
+      "size": 9835
+    },
+    {
+      "path": "frontend/app/api/[...path]",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/api/get-query-client.ts",
+      "type": "file",
+      "size": 1054
+    },
+    {
+      "path": "frontend/app/api/mutations",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/api/queries",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/auth/callback",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/chat/_components",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/chat/_types",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/chat/page.tsx",
+      "type": "file",
+      "size": 38403
+    },
+    {
+      "path": "frontend/app/connectors/page.tsx",
+      "type": "file",
+      "size": 4356
+    },
+    {
+      "path": "frontend/app/knowledge/chunks",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/knowledge/page.tsx",
+      "type": "file",
+      "size": 14844
+    },
+    {
+      "path": "frontend/app/login/page.tsx",
+      "type": "file",
+      "size": 2383
+    },
+    {
+      "path": "frontend/app/onboarding/_components",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/onboarding/_hooks",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/settings/_components",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/settings/_helpers",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/app/settings/page.tsx",
+      "type": "file",
+      "size": 53631
+    },
+    {
+      "path": "frontend/app/upload/[provider]",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/components/AgGrid/agGridStyles.css",
+      "type": "file",
+      "size": 1363
+    },
+    {
+      "path": "frontend/components/AgGrid/registerAgGridModules.ts",
+      "type": "file",
+      "size": 899
+    },
+    {
+      "path": "frontend/components/cloud-picker/file-item.tsx",
+      "type": "file",
+      "size": 2857
+    },
+    {
+      "path": "frontend/components/cloud-picker/file-list.tsx",
+      "type": "file",
+      "size": 1371
+    },
+    {
+      "path": "frontend/components/cloud-picker/index.ts",
+      "type": "file",
+      "size": 303
+    },
+    {
+      "path": "frontend/components/cloud-picker/ingest-settings.tsx",
+      "type": "file",
+      "size": 8649
+    },
+    {
+      "path": "frontend/components/cloud-picker/picker-header.tsx",
+      "type": "file",
+      "size": 1703
+    },
+    {
+      "path": "frontend/components/cloud-picker/provider-handlers.ts",
+      "type": "file",
+      "size": 8855
+    },
+    {
+      "path": "frontend/components/cloud-picker/types.ts",
+      "type": "file",
+      "size": 2724
+    },
+    {
+      "path": "frontend/components/cloud-picker/unified-cloud-picker.tsx",
+      "type": "file",
+      "size": 5316
+    },
+    {
+      "path": "frontend/components/icons/animated-processing-icon.tsx",
+      "type": "file",
+      "size": 7673
+    },
+    {
+      "path": "frontend/components/icons/anthropic-logo.tsx",
+      "type": "file",
+      "size": 563
+    },
+    {
+      "path": "frontend/components/icons/aws-logo.tsx",
+      "type": "file",
+      "size": 6144
+    },
+    {
+      "path": "frontend/components/icons/dog-icon.tsx",
+      "type": "file",
+      "size": 3692
+    },
+    {
+      "path": "frontend/components/icons/google-drive-logo.tsx",
+      "type": "file",
+      "size": 1627
+    },
+    {
+      "path": "frontend/components/icons/google-logo.tsx",
+      "type": "file",
+      "size": 1433
+    },
+    {
+      "path": "frontend/components/icons/ibm-logo.tsx",
+      "type": "file",
+      "size": 1913
+    },
+    {
+      "path": "frontend/components/icons/ollama-logo.tsx",
+      "type": "file",
+      "size": 5458
+    },
+    {
+      "path": "frontend/components/icons/one-drive-logo.tsx",
+      "type": "file",
+      "size": 7423
+    },
+    {
+      "path": "frontend/components/icons/openai-logo.tsx",
+      "type": "file",
+      "size": 3098
+    },
+    {
+      "path": "frontend/components/icons/openrag-logo.tsx",
+      "type": "file",
+      "size": 6081
+    },
+    {
+      "path": "frontend/components/icons/share-point-logo.tsx",
+      "type": "file",
+      "size": 10378
+    },
+    {
+      "path": "frontend/components/ui/accordion.tsx",
+      "type": "file",
+      "size": 2030
+    },
+    {
+      "path": "frontend/components/ui/avatar.tsx",
+      "type": "file",
+      "size": 1432
+    },
+    {
+      "path": "frontend/components/ui/badge.tsx",
+      "type": "file",
+      "size": 1140
+    },
+    {
+      "path": "frontend/components/ui/banner.tsx",
+      "type": "file",
+      "size": 2896
+    },
+    {
+      "path": "frontend/components/ui/button.tsx",
+      "type": "file",
+      "size": 3670
+    },
+    {
+      "path": "frontend/components/ui/card.tsx",
+      "type": "file",
+      "size": 1937
+    },
+    {
+      "path": "frontend/components/ui/collapsible.tsx",
+      "type": "file",
+      "size": 335
+    },
+    {
+      "path": "frontend/components/ui/command.tsx",
+      "type": "file",
+      "size": 4940
+    },
+    {
+      "path": "frontend/components/ui/dialog.tsx",
+      "type": "file",
+      "size": 3876
+    },
+    {
+      "path": "frontend/components/ui/dropdown-menu.tsx",
+      "type": "file",
+      "size": 7350
+    },
+    {
+      "path": "frontend/components/ui/input.tsx",
+      "type": "file",
+      "size": 2487
+    },
+    {
+      "path": "frontend/components/ui/inputs",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "frontend/components/ui/label.tsx",
+      "type": "file",
+      "size": 618
+    },
+    {
+      "path": "frontend/components/ui/multi-select.tsx",
+      "type": "file",
+      "size": 4786
+    },
+    {
+      "path": "frontend/components/ui/popover.tsx",
+      "type": "file",
+      "size": 1317
+    },
+    {
+      "path": "frontend/components/ui/scroll-area.tsx",
+      "type": "file",
+      "size": 500
+    },
+    {
+      "path": "frontend/components/ui/select.tsx",
+      "type": "file",
+      "size": 5863
+    },
+    {
+      "path": "frontend/components/ui/slider.tsx",
+      "type": "file",
+      "size": 1108
+    },
+    {
+      "path": "frontend/components/ui/sonner.tsx",
+      "type": "file",
+      "size": 808
+    },
+    {
+      "path": "frontend/components/ui/status-badge.tsx",
+      "type": "file",
+      "size": 1203
+    },
+    {
+      "path": "frontend/components/ui/switch.tsx",
+      "type": "file",
+      "size": 1196
+    },
+    {
+      "path": "frontend/components/ui/tabs.tsx",
+      "type": "file",
+      "size": 1907
+    },
+    {
+      "path": "frontend/components/ui/textarea.tsx",
+      "type": "file",
+      "size": 376
+    },
+    {
+      "path": "frontend/components/ui/tooltip.tsx",
+      "type": "file",
+      "size": 1232
+    },
+    {
+      "path": "sdks/python/openrag_sdk/__init__.py",
+      "type": "file",
+      "size": 2774
+    },
+    {
+      "path": "sdks/python/openrag_sdk/chat.py",
+      "type": "file",
+      "size": 15365
+    },
+    {
+      "path": "sdks/python/openrag_sdk/client.py",
+      "type": "file",
+      "size": 6686
+    },
+    {
+      "path": "sdks/python/openrag_sdk/documents.py",
+      "type": "file",
+      "size": 4532
+    },
+    {
+      "path": "sdks/python/openrag_sdk/exceptions.py",
+      "type": "file",
+      "size": 763
+    },
+    {
+      "path": "sdks/python/openrag_sdk/knowledge_filters.py",
+      "type": "file",
+      "size": 7173
+    },
+    {
+      "path": "sdks/python/openrag_sdk/models.py",
+      "type": "file",
+      "size": 6250
+    },
+    {
+      "path": "sdks/python/openrag_sdk/search.py",
+      "type": "file",
+      "size": 1758
+    },
+    {
+      "path": "sdks/python/tests/__init__.py",
+      "type": "file",
+      "size": 25
+    },
+    {
+      "path": "sdks/python/tests/test_integration.py",
+      "type": "file",
+      "size": 13574
+    },
+    {
+      "path": "sdks/typescript/src/chat.ts",
+      "type": "file",
+      "size": 8271
+    },
+    {
+      "path": "sdks/typescript/src/client.ts",
+      "type": "file",
+      "size": 5947
+    },
+    {
+      "path": "sdks/typescript/src/documents.ts",
+      "type": "file",
+      "size": 4732
+    },
+    {
+      "path": "sdks/typescript/src/index.ts",
+      "type": "file",
+      "size": 2152
+    },
+    {
+      "path": "sdks/typescript/src/knowledge-filters.ts",
+      "type": "file",
+      "size": 4784
+    },
+    {
+      "path": "sdks/typescript/src/search.ts",
+      "type": "file",
+      "size": 1083
+    },
+    {
+      "path": "sdks/typescript/src/types.ts",
+      "type": "file",
+      "size": 7001
+    },
+    {
+      "path": "sdks/typescript/tests/integration.test.ts",
+      "type": "file",
+      "size": 12942
+    },
+    {
+      "path": "src/api/v1/__init__.py",
+      "type": "file",
+      "size": 190
+    },
+    {
+      "path": "src/api/v1/chat.py",
+      "type": "file",
+      "size": 9777
+    },
+    {
+      "path": "src/api/v1/documents.py",
+      "type": "file",
+      "size": 4041
+    },
+    {
+      "path": "src/api/v1/knowledge_filters.py",
+      "type": "file",
+      "size": 1709
+    },
+    {
+      "path": "src/api/v1/search.py",
+      "type": "file",
+      "size": 2950
+    },
+    {
+      "path": "src/api/v1/settings.py",
+      "type": "file",
+      "size": 2416
+    },
+    {
+      "path": "src/connectors/google_drive/__init__.py",
+      "type": "file",
+      "size": 136
+    },
+    {
+      "path": "src/connectors/google_drive/connector.py",
+      "type": "file",
+      "size": 44667
+    },
+    {
+      "path": "src/connectors/google_drive/oauth.py",
+      "type": "file",
+      "size": 6094
+    },
+    {
+      "path": "src/connectors/onedrive/__init__.py",
+      "type": "file",
+      "size": 124
+    },
+    {
+      "path": "src/connectors/onedrive/connector.py",
+      "type": "file",
+      "size": 23814
+    },
+    {
+      "path": "src/connectors/onedrive/oauth.py",
+      "type": "file",
+      "size": 14121
+    },
+    {
+      "path": "src/connectors/sharepoint/__init__.py",
+      "type": "file",
+      "size": 132
+    },
+    {
+      "path": "src/connectors/sharepoint/connector.py",
+      "type": "file",
+      "size": 28072
+    },
+    {
+      "path": "src/connectors/sharepoint/oauth.py",
+      "type": "file",
+      "size": 14545
+    },
+    {
+      "path": "src/tui/_assets/docker-compose.gpu.yml",
+      "type": "file",
+      "size": 31
+    },
+    {
+      "path": "src/tui/_assets/docker-compose.yml",
+      "type": "file",
+      "size": 27
+    },
+    {
+      "path": "src/tui/_assets/flows",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/tui/_assets/openrag-documents",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/tui/managers/__init__.py",
+      "type": "file",
+      "size": 28
+    },
+    {
+      "path": "src/tui/managers/container_manager.py",
+      "type": "file",
+      "size": 64594
+    },
+    {
+      "path": "src/tui/managers/docling_manager.py",
+      "type": "file",
+      "size": 21426
+    },
+    {
+      "path": "src/tui/managers/env_manager.py",
+      "type": "file",
+      "size": 30720
+    },
+    {
+      "path": "src/tui/screens/__init__.py",
+      "type": "file",
+      "size": 27
+    },
+    {
+      "path": "src/tui/screens/config.py",
+      "type": "file",
+      "size": 40044
+    },
+    {
+      "path": "src/tui/screens/diagnostics.py",
+      "type": "file",
+      "size": 24634
+    },
+    {
+      "path": "src/tui/screens/logs.py",
+      "type": "file",
+      "size": 12308
+    },
+    {
+      "path": "src/tui/screens/monitor.py",
+      "type": "file",
+      "size": 47271
+    },
+    {
+      "path": "src/tui/screens/welcome.py",
+      "type": "file",
+      "size": 28506
+    },
+    {
+      "path": "src/tui/utils/__init__.py",
+      "type": "file",
+      "size": 29
+    },
+    {
+      "path": "src/tui/utils/clipboard.py",
+      "type": "file",
+      "size": 1901
+    },
+    {
+      "path": "src/tui/utils/platform.py",
+      "type": "file",
+      "size": 11732
+    },
+    {
+      "path": "src/tui/utils/validation.py",
+      "type": "file",
+      "size": 3979
+    },
+    {
+      "path": "src/tui/utils/version_check.py",
+      "type": "file",
+      "size": 6386
+    },
+    {
+      "path": "src/tui/widgets/__init__.py",
+      "type": "file",
+      "size": 148
+    },
+    {
+      "path": "src/tui/widgets/command_modal.py",
+      "type": "file",
+      "size": 13679
+    },
+    {
+      "path": "src/tui/widgets/diagnostics_notification.py",
+      "type": "file",
+      "size": 1104
+    },
+    {
+      "path": "src/tui/widgets/error_notification.py",
+      "type": "file",
+      "size": 1114
+    },
+    {
+      "path": "src/tui/widgets/factory_reset_warning_modal.py",
+      "type": "file",
+      "size": 2795
+    },
+    {
+      "path": "src/tui/widgets/flow_backup_warning_modal.py",
+      "type": "file",
+      "size": 3633
+    },
+    {
+      "path": "src/tui/widgets/prune_options_modal.py",
+      "type": "file",
+      "size": 3139
+    },
+    {
+      "path": "src/tui/widgets/upgrade_instructions_modal.py",
+      "type": "file",
+      "size": 3149
+    },
+    {
+      "path": "src/tui/widgets/version_mismatch_warning_modal.py",
+      "type": "file",
+      "size": 3344
+    },
+    {
+      "path": "src/tui/widgets/waves.py",
+      "type": "file",
+      "size": 4812
+    },
+    {
+      "path": "src/utils/telemetry/__init__.py",
+      "type": "file",
+      "size": 203
+    },
+    {
+      "path": "src/utils/telemetry/category.py",
+      "type": "file",
+      "size": 1114
+    },
+    {
+      "path": "src/utils/telemetry/client.py",
+      "type": "file",
+      "size": 13680
+    },
+    {
+      "path": "src/utils/telemetry/message_id.py",
+      "type": "file",
+      "size": 8777
+    },
+    {
+      "path": "docs/src/components/icon/icon.tsx",
+      "type": "file",
+      "size": 385
+    },
+    {
+      "path": "frontend/app/api/[...path]/route.ts",
+      "type": "file",
+      "size": 4307
+    },
+    {
+      "path": "frontend/app/api/mutations/useCancelTaskMutation.ts",
+      "type": "file",
+      "size": 1056
+    },
+    {
+      "path": "frontend/app/api/mutations/useCreateApiKeyMutation.ts",
+      "type": "file",
+      "size": 1276
+    },
+    {
+      "path": "frontend/app/api/mutations/useCreateFilter.ts",
+      "type": "file",
+      "size": 1272
+    },
+    {
+      "path": "frontend/app/api/mutations/useDeleteDocument.ts",
+      "type": "file",
+      "size": 1069
+    },
+    {
+      "path": "frontend/app/api/mutations/useDeleteFilter.ts",
+      "type": "file",
+      "size": 1000
+    },
+    {
+      "path": "frontend/app/api/mutations/useOnboardingMutation.ts",
+      "type": "file",
+      "size": 1926
+    },
+    {
+      "path": "frontend/app/api/mutations/useOnboardingRollbackMutation.ts",
+      "type": "file",
+      "size": 1021
+    },
+    {
+      "path": "frontend/app/api/mutations/useRevokeApiKeyMutation.ts",
+      "type": "file",
+      "size": 1114
+    },
+    {
+      "path": "frontend/app/api/mutations/useUpdateFilter.ts",
+      "type": "file",
+      "size": 1567
+    },
+    {
+      "path": "frontend/app/api/mutations/useUpdateSettingsMutation.ts",
+      "type": "file",
+      "size": 2205
+    },
+    {
+      "path": "frontend/app/api/queries/useDeleteSessionMutation.ts",
+      "type": "file",
+      "size": 1530
+    },
+    {
+      "path": "frontend/app/api/queries/useDoclingHealthQuery.ts",
+      "type": "file",
+      "size": 2083
+    },
+    {
+      "path": "frontend/app/api/queries/useGetAllFiltersQuery.ts",
+      "type": "file",
+      "size": 983
+    },
+    {
+      "path": "frontend/app/api/queries/useGetApiKeysQuery.ts",
+      "type": "file",
+      "size": 717
+    },
+    {
+      "path": "frontend/app/api/queries/useGetConversationsQuery.ts",
+      "type": "file",
+      "size": 3804
+    },
+    {
+      "path": "frontend/app/api/queries/useGetFilterByIdQuery.ts",
+      "type": "file",
+      "size": 577
+    },
+    {
+      "path": "frontend/app/api/queries/useGetFiltersSearchQuery.ts",
+      "type": "file",
+      "size": 1155
+    },
+    {
+      "path": "frontend/app/api/queries/useGetModelsQuery.ts",
+      "type": "file",
+      "size": 6995
+    },
+    {
+      "path": "frontend/app/api/queries/useGetNudgesQuery.ts",
+      "type": "file",
+      "size": 3678
+    },
+    {
+      "path": "frontend/app/api/queries/useGetSearchAggregations.ts",
+      "type": "file",
+      "size": 1404
+    },
+    {
+      "path": "frontend/app/api/queries/useGetSearchQuery.ts",
+      "type": "file",
+      "size": 6837
+    },
+    {
+      "path": "frontend/app/api/queries/useGetSettingsQuery.ts",
+      "type": "file",
+      "size": 1896
+    },
+    {
+      "path": "frontend/app/api/queries/useGetTasksQuery.ts",
+      "type": "file",
+      "size": 2328
+    },
+    {
+      "path": "frontend/app/api/queries/useProviderHealthQuery.ts",
+      "type": "file",
+      "size": 6075
+    },
+    {
+      "path": "frontend/app/auth/callback/page.tsx",
+      "type": "file",
+      "size": 8691
+    },
+    {
+      "path": "frontend/app/chat/_components/assistant-message.tsx",
+      "type": "file",
+      "size": 4458
+    },
+    {
+      "path": "frontend/app/chat/_components/chat-input.tsx",
+      "type": "file",
+      "size": 18312
+    },
+    {
+      "path": "frontend/app/chat/_components/file-preview.tsx",
+      "type": "file",
+      "size": 2187
+    },
+    {
+      "path": "frontend/app/chat/_components/function-calls.tsx",
+      "type": "file",
+      "size": 10600
+    },
+    {
+      "path": "frontend/app/chat/_components/message.tsx",
+      "type": "file",
+      "size": 399
+    },
+    {
+      "path": "frontend/app/chat/_components/nudges.tsx",
+      "type": "file",
+      "size": 1867
+    },
+    {
+      "path": "frontend/app/chat/_components/selected-knowledge-filter.tsx",
+      "type": "file",
+      "size": 939
+    },
+    {
+      "path": "frontend/app/chat/_components/user-message.tsx",
+      "type": "file",
+      "size": 2234
+    },
+    {
+      "path": "frontend/app/chat/_types/types.ts",
+      "type": "file",
+      "size": 1126
+    },
+    {
+      "path": "frontend/app/knowledge/chunks/page.tsx",
+      "type": "file",
+      "size": 13315
+    },
+    {
+      "path": "frontend/app/onboarding/_components/advanced.tsx",
+      "type": "file",
+      "size": 2302
+    },
+    {
+      "path": "frontend/app/onboarding/_components/animated-provider-steps.tsx",
+      "type": "file",
+      "size": 8167
+    },
+    {
+      "path": "frontend/app/onboarding/_components/anthropic-onboarding.tsx",
+      "type": "file",
+      "size": 4715
+    },
+    {
+      "path": "frontend/app/onboarding/_components/ibm-onboarding.tsx",
+      "type": "file",
+      "size": 8198
+    },
+    {
+      "path": "frontend/app/onboarding/_components/model-selector.tsx",
+      "type": "file",
+      "size": 7887
+    },
+    {
+      "path": "frontend/app/onboarding/_components/ollama-onboarding.tsx",
+      "type": "file",
+      "size": 5624
+    },
+    {
+      "path": "frontend/app/onboarding/_components/onboarding-card.tsx",
+      "type": "file",
+      "size": 25283
+    },
+    {
+      "path": "frontend/app/onboarding/_components/onboarding-content.tsx",
+      "type": "file",
+      "size": 10019
+    },
+    {
+      "path": "frontend/app/onboarding/_components/onboarding-step.tsx",
+      "type": "file",
+      "size": 3660
+    },
+    {
+      "path": "frontend/app/onboarding/_components/onboarding-upload.tsx",
+      "type": "file",
+      "size": 8716
+    },
+    {
+      "path": "frontend/app/onboarding/_components/openai-onboarding.tsx",
+      "type": "file",
+      "size": 5693
+    },
+    {
+      "path": "frontend/app/onboarding/_components/progress-bar.tsx",
+      "type": "file",
+      "size": 1472
+    },
+    {
+      "path": "frontend/app/onboarding/_components/tab-trigger.tsx",
+      "type": "file",
+      "size": 951
+    },
+    {
+      "path": "frontend/app/onboarding/_hooks/useModelSelection.ts",
+      "type": "file",
+      "size": 1763
+    },
+    {
+      "path": "frontend/app/onboarding/_hooks/useUpdateSettings.ts",
+      "type": "file",
+      "size": 2058
+    },
+    {
+      "path": "frontend/app/settings/_components/anthropic-settings-dialog.tsx",
+      "type": "file",
+      "size": 5121
+    },
+    {
+      "path": "frontend/app/settings/_components/anthropic-settings-form.tsx",
+      "type": "file",
+      "size": 1616
+    },
+    {
+      "path": "frontend/app/settings/_components/model-providers.tsx",
+      "type": "file",
+      "size": 6710
+    },
+    {
+      "path": "frontend/app/settings/_components/model-selectors.tsx",
+      "type": "file",
+      "size": 4168
+    },
+    {
+      "path": "frontend/app/settings/_components/ollama-settings-dialog.tsx",
+      "type": "file",
+      "size": 5326
+    },
+    {
+      "path": "frontend/app/settings/_components/ollama-settings-form.tsx",
+      "type": "file",
+      "size": 1615
+    },
+    {
+      "path": "frontend/app/settings/_components/openai-settings-dialog.tsx",
+      "type": "file",
+      "size": 5073
+    },
+    {
+      "path": "frontend/app/settings/_components/openai-settings-form.tsx",
+      "type": "file",
+      "size": 1557
+    },
+    {
+      "path": "frontend/app/settings/_components/watsonx-settings-dialog.tsx",
+      "type": "file",
+      "size": 5427
+    },
+    {
+      "path": "frontend/app/settings/_components/watsonx-settings-form.tsx",
+      "type": "file",
+      "size": 4266
+    },
+    {
+      "path": "frontend/app/settings/_helpers/model-helpers.tsx",
+      "type": "file",
+      "size": 3730
+    },
+    {
+      "path": "frontend/app/settings/_helpers/model-select-item.tsx",
+      "type": "file",
+      "size": 966
+    },
+    {
+      "path": "frontend/app/upload/[provider]/page.tsx",
+      "type": "file",
+      "size": 12636
+    },
+    {
+      "path": "frontend/components/ui/inputs/number-input.tsx",
+      "type": "file",
+      "size": 2388
+    },
+    {
+      "path": "src/tui/_assets/flows/components",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/tui/_assets/flows/ingestion_flow.json",
+      "type": "file",
+      "size": 37
+    },
+    {
+      "path": "src/tui/_assets/flows/openrag_agent.json",
+      "type": "file",
+      "size": 36
+    },
+    {
+      "path": "src/tui/_assets/flows/openrag_nudges.json",
+      "type": "file",
+      "size": 37
+    },
+    {
+      "path": "src/tui/_assets/flows/openrag_url_mcp.json",
+      "type": "file",
+      "size": 38
+    },
+    {
+      "path": "src/tui/_assets/openrag-documents/docling.pdf",
+      "type": "file",
+      "size": 41
+    },
+    {
+      "path": "src/tui/_assets/openrag-documents/ibm_anthropic.pdf",
+      "type": "file",
+      "size": 47
+    },
+    {
+      "path": "src/tui/_assets/openrag-documents/openrag-documentation.pdf",
+      "type": "file",
+      "size": 55
+    },
+    {
+      "path": "src/tui/_assets/openrag-documents/warmup_ocr.pdf",
+      "type": "file",
+      "size": 44
+    },
+    {
+      "path": "src/tui/_assets/flows/components/ollama_embedding.json",
+      "type": "file",
+      "size": 53
+    },
+    {
+      "path": "src/tui/_assets/flows/components/ollama_llm.json",
+      "type": "file",
+      "size": 47
+    },
+    {
+      "path": "src/tui/_assets/flows/components/ollama_llm_text.json",
+      "type": "file",
+      "size": 52
+    },
+    {
+      "path": "src/tui/_assets/flows/components/watsonx_embedding.json",
+      "type": "file",
+      "size": 54
+    },
+    {
+      "path": "src/tui/_assets/flows/components/watsonx_llm.json",
+      "type": "file",
+      "size": 48
+    },
+    {
+      "path": "src/tui/_assets/flows/components/watsonx_llm_text.json",
+      "type": "file",
+      "size": 53
+    }
+  ],
+  "languages": {
+    "Python": {
+      "bytes": 1575655,
+      "percentage": 64.42
+    },
+    "TypeScript": {
+      "bytes": 822241,
+      "percentage": 33.62
+    },
+    "Makefile": {
+      "bytes": 18842,
+      "percentage": 0.77
+    },
+    "CSS": {
+      "bytes": 11390,
+      "percentage": 0.47
+    },
+    "Shell": {
+      "bytes": 9799,
+      "percentage": 0.4
+    },
+    "Dockerfile": {
+      "bytes": 7188,
+      "percentage": 0.29
+    },
+    "JavaScript": {
+      "bytes": 673,
+      "percentage": 0.03
+    }
+  },
+  "signatures": [],
+  "test_examples": [],
+  "issues": [
+    {
+      "number": 694,
+      "title": "Factory reset doesnt Delete the config files",
+      "state": "closed",
+      "labels": [
+        "bug"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-12-19T18:59:44+00:00",
+      "updated_at": "2025-12-23T19:13:49+00:00",
+      "closed_at": "2025-12-23T19:13:49+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/694",
+      "body": "Factory reset is suppose to delete the the config files also."
+    },
+    {
+      "number": 695,
+      "title": "TUI doesnt shows Lanuch OpenRAG even after services are running",
+      "state": "closed",
+      "labels": [],
+      "milestone": "GA",
+      "created_at": "2025-12-19T19:07:45+00:00",
+      "updated_at": "2025-12-23T19:13:37+00:00",
+      "closed_at": "2025-12-23T19:13:37+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/695",
+      "body": "<img width=\"838\" height=\"520\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/8db430e0-90df-4867-9a06-f5b34d3730e8\" />\n<img width=\"1728\" height=\"1086\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/aa288241-80a5-4f82-b642-f9ac7a05e95b\" />\n"
+    },
+    {
+      "number": 700,
+      "title": "Two OpenRAG Docs Filters created during onboarding",
+      "state": "open",
+      "labels": [],
+      "milestone": "GA",
+      "created_at": "2025-12-22T19:20:09+00:00",
+      "updated_at": "2025-12-22T19:20:09+00:00",
+      "closed_at": null,
+      "url": "https://github.com/langflow-ai/openrag/issues/700",
+      "body": "v0.1.55\n\nNon blocking issue\n\n- Previously had tried to upgrade from 0.1.53 to 0.1.54 but ingest never completed\n- Did a Factory reset, shut down all services \n- Created a new UV environment and installed OpenRAG 0.1.55\n- Anthropic + OpenAI onboarding successful\n- Landed on Chat was able to chat successfully\n- Clicked on knowledge to see two filters with the same name created but with different dates the last time I tried to install was 12/18 the date of the other filter. Is it possible that each"
+    },
+    {
+      "number": 685,
+      "title": "Docs: Add SECURITY.md",
+      "state": "closed",
+      "labels": [
+        "documentation"
+      ],
+      "milestone": null,
+      "created_at": "2025-12-18T23:12:52+00:00",
+      "updated_at": "2025-12-19T22:31:01+00:00",
+      "closed_at": "2025-12-19T22:31:01+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/685",
+      "body": "Create an initial SECURITY.MD"
+    },
+    {
+      "number": 504,
+      "title": "Docs: Contribution & community guides",
+      "state": "closed",
+      "labels": [
+        "documentation"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-11-25T15:36:38+00:00",
+      "updated_at": "2025-12-19T22:27:07+00:00",
+      "closed_at": "2025-12-19T22:27:06+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/504",
+      "body": "Need one or more pages about OpenRAG as an open source project:\n\n- Getting help and interacting with the community (discussions, issues, public repo, docs)\n- Contributing to the codebase: Developing against the codebase, submitting PRs (contribution guide `CONTRIBUTING.MD` should live in the repo _first_ and the docs should ref back to that for a SSOT)\n- Contributing to docs\n- Roadmap: Projects"
+    },
+    {
+      "number": 691,
+      "title": "SME review for CONTRIBUTING.md",
+      "state": "open",
+      "labels": [
+        "help wanted",
+        "basic_setup"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-12-19T16:43:33+00:00",
+      "updated_at": "2025-12-19T16:43:34+00:00",
+      "closed_at": null,
+      "url": "https://github.com/langflow-ai/openrag/issues/691",
+      "body": "Need a SME to review [CONTRIBUTING.md](https://github.com/langflow-ai/openrag/blob/main/CONTRIBUTING.md) to verify that it is still accurate for the latest version, including:\n\n* Dependencies\n* Commands\n* File paths and directory structure\n* Ports and endpoints\n* etc."
+    },
+    {
+      "number": 674,
+      "title": "Docs: New screenshots",
+      "state": "closed",
+      "labels": [
+        "documentation"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-12-16T15:25:25+00:00",
+      "updated_at": "2025-12-19T16:25:02+00:00",
+      "closed_at": "2025-12-19T16:25:02+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/674",
+      "body": "Get new screenshots right before GA"
+    },
+    {
+      "number": 509,
+      "title": "Docs: When LF 1.7 is released, update the LF component doc links in the OpenRAG docs",
+      "state": "closed",
+      "labels": [
+        "documentation"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-11-25T17:47:56+00:00",
+      "updated_at": "2025-12-19T15:41:01+00:00",
+      "closed_at": "2025-12-19T15:41:01+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/509",
+      "body": "The IA for the LF component docs is changing in LF 1.7. I need to update links to `docs.langflow.org` after the 1.7 release goes out."
+    },
+    {
+      "number": 431,
+      "title": "P0- [LF + OpenRAG Prompt] OLLAMA Llama3.1:8b With Agent,gives in JSONic output",
+      "state": "closed",
+      "labels": [
+        "documentation",
+        "Preview-sweep"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-11-19T19:56:13+00:00",
+      "updated_at": "2025-12-19T02:08:24+00:00",
+      "closed_at": "2025-12-19T02:08:24+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/431",
+      "body": "Configuring ollama and switching to llama3.1:8b returns unintelligible result to OpenRAG [ Try with a different Model] - ColeUnclear what the behavior should be, I’ll need to get ollama into a good state to see why it isn’t calling the tool simply rephrasing what it would do to call the tool. \n\nI asked Explore OpenRAG's multitenancy features\n\nAgent stops at {\"function\":\"search\", \"params\": {\"index\": \"openrag\", \"body\": {\"query\": {\"match\": {\"title\": \"multitenancy\"}}}}}\n\n[Not yet reproducted]"
+    },
+    {
+      "number": 684,
+      "title": "Docs: Remove performance test results",
+      "state": "open",
+      "labels": [
+        "documentation"
+      ],
+      "milestone": null,
+      "created_at": "2025-12-18T23:09:43+00:00",
+      "updated_at": "2025-12-18T23:09:43+00:00",
+      "closed_at": null,
+      "url": "https://github.com/langflow-ai/openrag/issues/684",
+      "body": "Remove [performance test results from the reference docs](https://docs.openr.ag/ingestion/#ingestion-performance-expectations) when benchmarking info is available on the main OpenRAG site. Replace with a link to the benchmarking page(s)."
+    },
+    {
+      "number": 673,
+      "title": "Docs: Centralized storage irrespective of install/launch directory",
+      "state": "closed",
+      "labels": [
+        "documentation"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-12-16T14:44:38+00:00",
+      "updated_at": "2025-12-18T22:57:56+00:00",
+      "closed_at": "2025-12-18T22:57:55+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/673",
+      "body": "Documentation changes related to issue #558 and PR #637 "
+    },
+    {
+      "number": 555,
+      "title": "Langflow flows lost after reset",
+      "state": "open",
+      "labels": [
+        "documentation",
+        "Preview-sweep"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-12-01T07:48:35+00:00",
+      "updated_at": "2025-12-18T16:59:07+00:00",
+      "closed_at": null,
+      "url": "https://github.com/langflow-ai/openrag/issues/555",
+      "body": "0.1.47\n\nrepro:\n\n- Get openrag up and running\n- click edit in langflow\n- go to the top level projects by clicking on Starter Project\n- Create a new project\n- Create a new Flow from templates, pick any of them\n- Create another new flow from templates, pick any of them\n- Close out langflow and go back to openrag\n- close out openrag\n- go to TUI and click reset, see warning message that tells you a backup will be created\n- agree\n- go to folder where flows should have been saved, only Ingest flow is s"
+    },
+    {
+      "number": 650,
+      "title": "Ingest from some URLs fail due to unescaped characters",
+      "state": "open",
+      "labels": [
+        "open-preview"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-12-10T03:53:54+00:00",
+      "updated_at": "2025-12-18T16:55:57+00:00",
+      "closed_at": null,
+      "url": "https://github.com/langflow-ai/openrag/issues/650",
+      "body": "Ingesting this URL fails with default ingest settings due to & in url: https://assets.warhammer-community.com/warhammer40000_core&key_corerules_eng_24.09-5xfayxjekm.pdf\n\nTwo issues:\n- Failed by saying cannot connect to chat service in UI - can we surface errors found in logs better in UI?\n\nClaude analysis: \nThe Problem\nIn the logs, you can see:\n1. User Input: ingest this website: https://assets.warhammer-community.com/warhammer40000_core&key_corerules_eng_24.09-5xfayxjekm.pdf\n2. Error Message:\nE"
+    },
+    {
+      "number": 354,
+      "title": "Conversation chat freeze during responses",
+      "state": "closed",
+      "labels": [
+        "bug",
+        "UI"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-11-04T23:20:05+00:00",
+      "updated_at": "2025-12-18T16:54:54+00:00",
+      "closed_at": "2025-12-18T16:54:54+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/354",
+      "body": "Issue reported by preview user:\nConversation chat can wait long for answers, sometimes freezing even though the backend log shows answer is generated. \n\n<img width=\"2839\" height=\"1993\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/c14c2bce-4ebc-4c18-828d-f4da0cc5d7b6\" />\n\nModel: granite-3.2-8b-instruct"
+    },
+    {
+      "number": 607,
+      "title": "Docs (future): Reference chapter(s)",
+      "state": "open",
+      "labels": [
+        "documentation"
+      ],
+      "milestone": null,
+      "created_at": "2025-12-04T18:09:10+00:00",
+      "updated_at": "2025-12-18T15:42:34+00:00",
+      "closed_at": null,
+      "url": "https://github.com/langflow-ai/openrag/issues/607",
+      "body": "Future work: Expand and add more reference topics depending on features developed, such as OpenRAG API reference (+ [SDKs](https://github.com/langflow-ai/openrag/pull/678)), component registry, flow schema, CLI tools (if any), etc."
+    },
+    {
+      "number": 529,
+      "title": "Docs: Unify the terminology used to describe OpenSearch",
+      "state": "closed",
+      "labels": [
+        "documentation"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-11-26T22:34:24+00:00",
+      "updated_at": "2025-12-17T15:48:01+00:00",
+      "closed_at": "2025-12-17T15:48:00+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/529",
+      "body": "OpenSearch is variously described as a vector database, database, knowledge base, storage, instance, and so on. \nWe should unify on the appropriate terms to use and when.\n\nThe [introduction](https://docs.openr.ag/) and all other [summaries of OpenSearch](https://docs.openr.ag/knowledge) should include all the functionality that OpenRAG uses, not just vector search."
+    },
+    {
+      "number": 568,
+      "title": "Docs: Environment variable reference seems inaccurate",
+      "state": "open",
+      "labels": [
+        "documentation",
+        "help wanted"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-12-02T14:54:31+00:00",
+      "updated_at": "2025-12-17T02:44:27+00:00",
+      "closed_at": null,
+      "url": "https://github.com/langflow-ai/openrag/issues/568",
+      "body": "I am uncertain about the accuracy of the [environment variables reference page](https://docs.openr.ag/reference/configuration).\nI will add my questions here as I think of them rather than creating an issue for each question:\n\n1. If you can (and how to) set multiple embedding models and multiple model providers in the .env.\n2. Need to know which env var are mutable (can modify with a simple stop-restart of services) vs immutable (must reset/reinstall OpenRAG). (see #528)\n   1. Which variables req"
+    },
+    {
+      "number": 558,
+      "title": "Problem: Launch OpenRAG dumps the openrag files in the folder it was launched from.",
+      "state": "closed",
+      "labels": [
+        "open-preview"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-12-01T17:43:49+00:00",
+      "updated_at": "2025-12-16T20:04:29+00:00",
+      "closed_at": "2025-12-16T20:04:28+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/558",
+      "body": "Solution - Centralize the OpenRAG files to a specific folder irrespective of where it is OpenRAG is launched from."
+    },
+    {
+      "number": 572,
+      "title": "langflow / agent flow fails with old claude models",
+      "state": "open",
+      "labels": [],
+      "milestone": "GA",
+      "created_at": "2025-12-02T17:00:04+00:00",
+      "updated_at": "2025-12-16T17:25:50+00:00",
+      "closed_at": null,
+      "url": "https://github.com/langflow-ai/openrag/issues/572",
+      "body": null
+    },
+    {
+      "number": 519,
+      "title": "Docs: Search functionality",
+      "state": "open",
+      "labels": [
+        "documentation"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-11-26T13:43:43+00:00",
+      "updated_at": "2025-12-16T15:26:48+00:00",
+      "closed_at": null,
+      "url": "https://github.com/langflow-ai/openrag/issues/519",
+      "body": "We need to figure out how to enable search for the OpenRAG docs, either by extending Algolia coverage from Langflow or creating a new Algolia plan for OpenRAG.\n\nIf it's not possible to enable search in a reasonable amount of time, the pages need to be broken down granularly (one main idea per page). Typically, we group a few related ideas on one page (ex. _Manage widgets_ would cover all CRUD operations for widgets). This only works well when search is available so users can find niche subjects "
+    },
+    {
+      "number": 454,
+      "title": "Docs: Install page complexity",
+      "state": "closed",
+      "labels": [
+        "documentation"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-11-21T15:24:19+00:00",
+      "updated_at": "2025-12-16T14:03:45+00:00",
+      "closed_at": "2025-12-16T14:03:45+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/454",
+      "body": "The Install pages are crowded, and the page titles are misleading because all options use Docker/Podman.\n\nThis content needs to be restructured to make it easier to follow and separate the nonessential information from the core install and setup.\n\n```\nInstall\n   Choose an installation method\n   Run the install script\n   Install with uv\n   Invoke with uvx\n   Install on Windows\n   Install self-managed containers\n   Upgrade\n   Reinstall\n   Uninstall\nUse the TUI\nManage containers\n```\n\nQuestions:\n\n1."
+    },
+    {
+      "number": 285,
+      "title": "tighten password complexity for opensearch",
+      "state": "closed",
+      "labels": [],
+      "milestone": "GA",
+      "created_at": "2025-10-22T18:49:18+00:00",
+      "updated_at": "2025-12-16T13:57:00+00:00",
+      "closed_at": "2025-12-16T13:57:00+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/285",
+      "body": "\nhttps://github.com/opensearch-project/security/pull/2557/files\n\n\n\nDetected OpenSearch Security Version: 3.0.0.0\nPassword P@55w0rd failed validation: \"Weak password\". Please re-try with a minimum 8 character password and must contain at least one uppercase letter, one lowercase letter, one digit, and one special character that is strong. Password strength can be tested here: https://lowe.github.io/tryzxcvbn\nWaiting for OpenSearch to start..."
+    },
+    {
+      "number": 660,
+      "title": "disambiguate key errors during onboarding",
+      "state": "closed",
+      "labels": [],
+      "milestone": "GA",
+      "created_at": "2025-12-11T20:33:03+00:00",
+      "updated_at": "2025-12-16T13:54:51+00:00",
+      "closed_at": "2025-12-16T13:54:51+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/660",
+      "body": "details here:\n\nhttps://ibm-cloud.slack.com/archives/C09FF4RJR3N/p1765485113536299?thread_ts=1765469050.050689&cid=C09FF4RJR3N"
+    },
+    {
+      "number": 614,
+      "title": "Add all model provider variables to .env.example",
+      "state": "closed",
+      "labels": [
+        "configuration"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-12-05T17:17:07+00:00",
+      "updated_at": "2025-12-16T13:53:51+00:00",
+      "closed_at": "2025-12-16T13:53:51+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/614",
+      "body": "Currently, [.env.example](https://github.com/langflow-ai/openrag/blob/main/.env.example) has only `OPENAI_API_KEY`. It would be helpful to put all possible model provider variables there, like we have done for OAuth.\n\n- `OPENAI_API_KEY`\n- `ANTHROPIC_API_KEY`\n- `OLLAMA_ENDPOINT`\n- `WATSONX_API_KEY`\n- `WATSONX_ENDPOINT`\n- `WATSONX_PROJECT_ID`"
+    },
+    {
+      "number": 533,
+      "title": "Nit: In .env.example, group OAuth variables together, and add a comment to the AWS variables",
+      "state": "closed",
+      "labels": [
+        "configuration"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-11-26T23:07:46+00:00",
+      "updated_at": "2025-12-16T13:53:51+00:00",
+      "closed_at": "2025-12-16T13:53:50+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/533",
+      "body": "In [.env.example](https://github.com/langflow-ai/openrag/blob/main/.env.example#L40), please group all OAuth variables together (currently, the AWS variables are separated from Google and Microsoft), and please add a comment for the AWS ones explaining what credentials are expected."
+    },
+    {
+      "number": 672,
+      "title": "[BUG] ValueError: Langflow returned text/html; charset=utf-8 instead of JSON.",
+      "state": "open",
+      "labels": [
+        "bug",
+        "question"
+      ],
+      "milestone": null,
+      "created_at": "2025-12-16T02:31:55+00:00",
+      "updated_at": "2025-12-16T02:37:22+00:00",
+      "closed_at": null,
+      "url": "https://github.com/langflow-ai/openrag/issues/672",
+      "body": "One example of Input file that failed below is [here](https://ibm.box.com/shared/static/acv7ryu2b1af7fa4l39wrtqwwbjqncd9.pdf)\n\nI received the below error with the latest,\n```\n% git log -n1 --oneline                                                       \nbe62f744 (HEAD -> main, tag: v0.1.53-rc3, tag: v0.1.53-rc2, tag: v0.1.53-rc1, tag: v0.1.53, origin/main, origin/HEAD) Merge pull request #669 from langflow-ai/release-chore-0.153\n```\n\nError stack from `openrag-backend`:\n\n```\n2025-12-16T02:13:55.5"
+    },
+    {
+      "number": 184,
+      "title": "[BUG] [LF] Failed to parse run response as JSON body=<!doctype html>",
+      "state": "closed",
+      "labels": [
+        "bug"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-10-03T12:12:32+00:00",
+      "updated_at": "2025-12-16T02:17:04+00:00",
+      "closed_at": "2025-12-16T02:17:03+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/184",
+      "body": "## Steps to reproduce\n\n> [!NOTE]\n> I've aliased *docker* to respective *podman* commands\n\n### Get the latest - I was at below [commit](https://github.com/langflow-ai/openrag/commit/1628f84ef5307cf5698bc3ffa29b2e58d525a74e)\n```\n(openrag-venv) openrag % date\nFri Oct  3 08:01:54 EDT 2025\n\n(openrag-venv) openrag % git log -n 1 --oneline\n1628f84 (HEAD -> main, origin/main, origin/HEAD, origin/109-design-sweep-polish-adding-from-cloud-connector-screen) Merge pull request #55 from langflow-ai/lfx-openr"
+    },
+    {
+      "number": 641,
+      "title": "Refactor code to delete unused code path - Frontend",
+      "state": "closed",
+      "labels": [],
+      "milestone": "GA",
+      "created_at": "2025-12-09T18:14:13+00:00",
+      "updated_at": "2025-12-15T20:48:46+00:00",
+      "closed_at": "2025-12-15T20:48:46+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/641",
+      "body": null
+    },
+    {
+      "number": 136,
+      "title": "[BUG] Attempted to delete non-existent file error in openrag-langflow container immediately after successful processing",
+      "state": "open",
+      "labels": [
+        "bug",
+        "question"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-09-29T17:24:37+00:00",
+      "updated_at": "2025-12-15T20:24:49+00:00",
+      "closed_at": null,
+      "url": "https://github.com/langflow-ai/openrag/issues/136",
+      "body": "when processing a set of files from local, I see this attempted to delete non-existent file warning\n\n```\n2025-09-29T17:22:45.973721Z [info     ] File 2509.12265v1.pdf saved successfully in flow a625b642-84ff-4ffe-8761-78cc4fce3a8a.\n2025-09-29 17:22:46.001 | WARNING  | langflow.services.tracing.traceloop:_validate_configuration:90 - TRACELOOP_API_KEY not set or empty.\n2025-09-29T17:22:47.645063Z [warning  ] Attempted to delete non-existent file a625b642-84ff-4ffe-8761-78cc4fce3a8a/2509.12265v1.pd"
+    },
+    {
+      "number": 257,
+      "title": "Langflow complains about non verified org for gpt 5 but only in logs",
+      "state": "open",
+      "labels": [
+        "Preview-sweep"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-10-13T14:26:46+00:00",
+      "updated_at": "2025-12-12T22:07:56+00:00",
+      "closed_at": null,
+      "url": "https://github.com/langflow-ai/openrag/issues/257",
+      "body": "Need to bubble up this error through responses api endpoint:\n\n\nos                | [2025-10-13T14:22:05,961][INFO ][o.o.m.c.MLSyncUpCron     ] [2b4466c58d9d] Skipping sync up job - ML model index not found\nlangflow          | 2025-10-13T14:22:08.351786Z [error    ] ExceptionWithMessageError: Error code: 400 - {'error': {'message': 'Your organization must be verified to stream this model. Please go to: https://platform.openai.com/settings/organization/general and click on Verify Organization. If "
+    },
+    {
+      "number": 664,
+      "title": "filter search not working on chat @",
+      "state": "closed",
+      "labels": [
+        "open-preview"
+      ],
+      "milestone": "External Open Preview",
+      "created_at": "2025-12-12T17:34:00+00:00",
+      "updated_at": "2025-12-12T22:04:22+00:00",
+      "closed_at": "2025-12-12T22:04:22+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/664",
+      "body": "Actually, yes @ does bring up filters, but when I type the filters all go away. e.g. for moby_dick filters initially show up but are gone when I type mo which is perhaps why I missed it earlier.\n\n<img width=\"383\" height=\"342\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/3bdf2f74-e725-493b-ad72-31a1e90e06aa\" />\n\n<img width=\"403\" height=\"190\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/50167d48-8fc4-4dd6-b4db-3892b6f10e80\" />"
+    },
+    {
+      "number": 649,
+      "title": "Ingest from URL names the Source as None",
+      "state": "closed",
+      "labels": [
+        "open-preview"
+      ],
+      "milestone": "External Open Preview",
+      "created_at": "2025-12-10T03:48:42+00:00",
+      "updated_at": "2025-12-12T21:20:58+00:00",
+      "closed_at": "2025-12-12T21:20:58+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/649",
+      "body": "v0.1.52\n\nIngest from URL names the Source as None, we should store something that makes sense for what the data is, either the URL itself or the name of the site the type shows text/html so that helps to know it was a website url.\n\nRepro:\n\n- In the chat say \"Ingest from docs.langflow.org\"\n- Chat successfully Ingests and knows the name of the website\n- Look at Knowledge page, source says None, user needs to click into None to see what the content is, first chunk seems to have page name in it\n\nSee"
+    },
+    {
+      "number": 651,
+      "title": "Ingest of jpg using OCR fails with an error",
+      "state": "closed",
+      "labels": [
+        "open-preview"
+      ],
+      "milestone": "External Open Preview",
+      "created_at": "2025-12-10T03:57:39+00:00",
+      "updated_at": "2025-12-12T20:17:45+00:00",
+      "closed_at": "2025-12-12T20:17:44+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/651",
+      "body": "Ingest of attached .jpg with OCR turned on fails, OpenRAG UI on Knowledge page says Ingestion failed: Expecting value: line 1 column 1 (char 0)\n\n**Claude Analysis of Logs:**\nFile: n5xibda687bb1.jpg (429KB JPEG image)\nError Location:\n```\n2025-12-07T02:42:46.959271Z /app/src/services/langflow_file_service.py:186 \n[LF] Failed to parse run response as JSON \nerror=Expecting value: line 1 column 1 (char 0)\n```\n\nThe Problem\nWhen trying to ingest the JPG file, the Langflow ingestion endpoint returned HT"
+    },
+    {
+      "number": 659,
+      "title": "TUI: Docker pulls wrong image version when starting for the first time after an update",
+      "state": "closed",
+      "labels": [
+        "open-preview"
+      ],
+      "milestone": "External Open Preview",
+      "created_at": "2025-12-11T20:17:33+00:00",
+      "updated_at": "2025-12-12T17:25:35+00:00",
+      "closed_at": "2025-12-12T17:25:34+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/659",
+      "body": "When starting the TUI for the first time, it sets OPENRAG_VERSION correctly with the TUI version, but doesn't refresh the environment, so the docker commands called still have the old version, so the old version is pulled."
+    },
+    {
+      "number": 635,
+      "title": "GA:  Chunks not shown in UI after tool call",
+      "state": "closed",
+      "labels": [
+        "GA"
+      ],
+      "milestone": "GA",
+      "created_at": "2025-12-09T16:35:47+00:00",
+      "updated_at": "2025-12-12T17:04:00+00:00",
+      "closed_at": "2025-12-12T17:04:00+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/635",
+      "body": "After Tool caling to OpenSearch Chunks that are returned are not shown in the UI or chat."
+    },
+    {
+      "number": 636,
+      "title": "GA: Granite 3.3 8b didnt show tool calling banner in result but result was surely from RAG.",
+      "state": "closed",
+      "labels": [],
+      "milestone": "External Open Preview",
+      "created_at": "2025-12-09T16:46:56+00:00",
+      "updated_at": "2025-12-12T16:22:48+00:00",
+      "closed_at": "2025-12-12T16:22:47+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/636",
+      "body": "Testing Granite Models with OpenRAG"
+    },
+    {
+      "number": 355,
+      "title": "Conversation chat throws an error when uploading a markdown (.md) file",
+      "state": "closed",
+      "labels": [
+        "bug",
+        "UI"
+      ],
+      "milestone": "External Open Preview",
+      "created_at": "2025-11-04T23:22:32+00:00",
+      "updated_at": "2025-12-12T15:55:05+00:00",
+      "closed_at": "2025-12-12T15:55:05+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/355",
+      "body": "Reported by a preview user:\nConversation chat throws an error when uploading markdown file, showing \"xxx.md is a file name, not a URL.\"\n\n<img width=\"1095\" height=\"418\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/01eca69e-9676-4892-9b57-e896607a41b1\" />\n\n"
+    },
+    {
+      "number": 532,
+      "title": "Ingest counts in tasks are confusing",
+      "state": "closed",
+      "labels": [
+        "bug",
+        "open-preview"
+      ],
+      "milestone": "External Open Preview",
+      "created_at": "2025-11-26T22:54:41+00:00",
+      "updated_at": "2025-12-12T15:53:05+00:00",
+      "closed_at": "2025-12-12T15:53:04+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/532",
+      "body": "Setup: 0.1.41, Ollama onboarding gpt-oss:20b, nomic-embed-text:latest\n\nSample data for ingest should be 3 files\nThen uploading my data results in 1 file\n\nScreenshot below shows two tasks\n- 1 succeeded, 1 failed (presumably this is my data)\n-  1 succeeded, 4 failed  (presumably this is sample data\n\n\n<img width=\"1728\" height=\"1117\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/9927e70a-f638-44e4-ada3-9f6a31c54664\" />"
+    },
+    {
+      "number": 640,
+      "title": "Unit Test Coverage (Framework)",
+      "state": "open",
+      "labels": [],
+      "milestone": "GA",
+      "created_at": "2025-12-09T18:12:16+00:00",
+      "updated_at": "2025-12-12T15:50:22+00:00",
+      "closed_at": null,
+      "url": "https://github.com/langflow-ai/openrag/issues/640",
+      "body": null
+    },
+    {
+      "number": 643,
+      "title": "E2E Tests [Smoke level]",
+      "state": "open",
+      "labels": [],
+      "milestone": "GA",
+      "created_at": "2025-12-09T18:16:13+00:00",
+      "updated_at": "2025-12-11T17:31:49+00:00",
+      "closed_at": null,
+      "url": "https://github.com/langflow-ai/openrag/issues/643",
+      "body": null
+    },
+    {
+      "number": 514,
+      "title": "Nit: Flow names are inconsistent in flow json",
+      "state": "closed",
+      "labels": [],
+      "milestone": "GA",
+      "created_at": "2025-11-25T22:14:15+00:00",
+      "updated_at": "2025-12-10T20:29:53+00:00",
+      "closed_at": "2025-12-10T20:29:52+00:00",
+      "url": "https://github.com/langflow-ai/openrag/issues/514",
+      "body": "Nitpick: The flow `name` values are inconsistent in the [flow JSON files](https://github.com/langflow-ai/openrag/blob/main/flows/ingestion_flow.json#L4288). Two have `Flow` in the `name` and two don't:\n\n- `\"name\": \"OpenRAG OpenSearch Nudges\"`\n- `\"name\": \"OpenRAG OpenSearch Agent\"`\n- `\"name\": \"OpenSearch Ingestion Flow\"`\n- `\"name\": \"OpenSearch URL Ingestion Flow\"`"
+    }
+  ],
+  "changelog": "",
+  "releases": [
+    {
+      "tag_name": "v0.2.0",
+      "name": "Release 0.2.0",
+      "body": "## What's Changed\n* Docs: Add some troubleshooting advice by @aimurphy in https://github.com/langflow-ai/openrag/pull/701\n* Uncomment PyPI publish step in workflow by @pushkala-datastax in https://github.com/langflow-ai/openrag/pull/712\n* fix: Follow redirects for OneDrive + SharePoint by @erichare in https://github.com/langflow-ai/openrag/pull/702\n* Docs: Prepare robots.txt for public site by @aimurphy in https://github.com/langflow-ai/openrag/pull/683\n* Release 0.2.0 by @phact in https://github.com/langflow-ai/openrag/pull/723\n* sdk chat endpoint fix by @phact in https://github.com/langflow-ai/openrag/pull/724\n* indentation by @phact in https://github.com/langflow-ai/openrag/pull/725\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.55...v0.2.0",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-12-23T04:21:09+00:00",
+      "published_at": "2025-12-23T04:38:05+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.2.0",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.2.0",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.2.0"
+    },
+    {
+      "tag_name": "v0.1.55",
+      "name": "Release 0.1.55",
+      "body": "## What's Changed\n* Release v0.1.54 by @erichare in https://github.com/langflow-ai/openrag/pull/681\n* langfuse by @phact in https://github.com/langflow-ai/openrag/pull/680\n* Docs: Update paths for `~/.openrag` directory and subdirectories by @aimurphy in https://github.com/langflow-ai/openrag/pull/677\n* Docs: Recommended Ollama models by @aimurphy in https://github.com/langflow-ai/openrag/pull/675\n* let the agent do full os queries by @phact in https://github.com/langflow-ai/openrag/pull/652\n* better password validator for open search by @phact in https://github.com/langflow-ai/openrag/pull/690\n* SDKs by @phact in https://github.com/langflow-ai/openrag/pull/678\n* Chore: Audit LF docs links by @aimurphy in https://github.com/langflow-ai/openrag/pull/687\n* Chore: Minor edits to install/TUI instructions while testing and replace TUI screenshot by @aimurphy in https://github.com/langflow-ai/openrag/pull/689\n* fix: Handle legacy TUI config directory cleanup in factory reset by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/697\n* fix: Add refresh action to WelcomeScreen and auto refresh by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/699\n* feat: Add image pruning options to TUI by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/633\n* Remove duplicate OPENSEARCH_PASSWORD and legacy docker-compose-cpu.yml by @Copilot in https://github.com/langflow-ai/openrag/pull/698\n* Docs: Add Contribute to OpenRAG page by @aimurphy in https://github.com/langflow-ai/openrag/pull/692\n* Docs: Create initial SECURITY.md by @aimurphy in https://github.com/langflow-ai/openrag/pull/686\n* feat: Bump version to 0.1.55  by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/696\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.54...v0.1.55",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-12-19T22:31:58+00:00",
+      "published_at": "2025-12-19T22:45:15+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.55",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.55",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.55"
+    },
+    {
+      "tag_name": "v0.1.54",
+      "name": "Release 0.1.54",
+      "body": "## What's Changed\n* fix: Add other model provider keys as examples, grouped AWS with other OAuth credentials by @erichare in https://github.com/langflow-ai/openrag/pull/670\n* fix: Disambiguate the key error messages by @erichare in https://github.com/langflow-ai/openrag/pull/671\n* Docs: Break monolithic install pages into more focused topics, use partials for some repeated content and code examples by @aimurphy in https://github.com/langflow-ai/openrag/pull/622\n* feat: Centralized storage location for OpenRAG by @erichare in https://github.com/langflow-ai/openrag/pull/637\n* Docs: Don't describe OpenSearch as only a vector db by @aimurphy in https://github.com/langflow-ai/openrag/pull/676\n* fix tui detection by @phact in https://github.com/langflow-ai/openrag/pull/679\n* Release v0.1.54 by @erichare in https://github.com/langflow-ai/openrag/pull/681\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.53...v0.1.54\n\n## What's Changed\n* fix: Add other model provider keys as examples, grouped AWS with other OAuth credentials by @erichare in https://github.com/langflow-ai/openrag/pull/670\n* fix: Disambiguate the key error messages by @erichare in https://github.com/langflow-ai/openrag/pull/671\n* Docs: Break monolithic install pages into more focused topics, use partials for some repeated content and code examples by @aimurphy in https://github.com/langflow-ai/openrag/pull/622\n* feat: Centralized storage location for OpenRAG by @erichare in https://github.com/langflow-ai/openrag/pull/637\n* Docs: Don't describe OpenSearch as only a vector db by @aimurphy in https://github.com/langflow-ai/openrag/pull/676\n* fix tui detection by @phact in https://github.com/langflow-ai/openrag/pull/679\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.53...v0.1.54",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-12-17T22:14:53+00:00",
+      "published_at": "2025-12-17T22:31:24+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.54",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.54",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.54"
+    },
+    {
+      "tag_name": "v0.1.53",
+      "name": "Release 0.1.53",
+      "body": "## What's Changed\n* feat: uv lock  auto update by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/626\n* fix: Support for txt file processing outside of Docling by @erichare in https://github.com/langflow-ai/openrag/pull/630\n* fix: Configurable ingestion timeout limits by @erichare in https://github.com/langflow-ai/openrag/pull/631\n* fix: Setup option inaccessible but available by @erichare in https://github.com/langflow-ai/openrag/pull/629\n* make flow names consistent by @mfortman11 in https://github.com/langflow-ai/openrag/pull/648\n* Add Secret detection by @mfortman11 in https://github.com/langflow-ai/openrag/pull/645\n* setup dependabot by @mfortman11 in https://github.com/langflow-ai/openrag/pull/646\n* knip cleanup for ui by @mfortman11 in https://github.com/langflow-ai/openrag/pull/653\n* fix: remove adding to failed tasks to fix failed tasks count by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/663\n* fix: Revise prompt to handle markdown uploads by @erichare in https://github.com/langflow-ai/openrag/pull/632\n* fix: Support tool calling for granite 3.3 by @erichare in https://github.com/langflow-ai/openrag/pull/638\n* fix: changed tool call signature on history to allow showing tool call content on refresh by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/661\n* fix: pass .env to commands being executed to always match new changes by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/662\n* fix: Better debugging for input type ingest failures by @erichare in https://github.com/langflow-ai/openrag/pull/666\n* fix: updated ingestion flow with updated Docling component to fix jpg error by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/667\n* feat: Update openrag_url_mcp to support file name as  url title by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/668\n* fix: make filter search be in the frontend, use fuzzy search by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/665\n* chore: release 0.1.53 by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/669\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.52...v0.1.53\n\n## What's Changed\n* feat: uv lock  auto update by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/626\n* fix: Support for txt file processing outside of Docling by @erichare in https://github.com/langflow-ai/openrag/pull/630\n* fix: Configurable ingestion timeout limits by @erichare in https://github.com/langflow-ai/openrag/pull/631\n* fix: Setup option inaccessible but available by @erichare in https://github.com/langflow-ai/openrag/pull/629\n* make flow names consistent by @mfortman11 in https://github.com/langflow-ai/openrag/pull/648\n* Add Secret detection by @mfortman11 in https://github.com/langflow-ai/openrag/pull/645\n* setup dependabot by @mfortman11 in https://github.com/langflow-ai/openrag/pull/646\n* knip cleanup for ui by @mfortman11 in https://github.com/langflow-ai/openrag/pull/653\n* fix: remove adding to failed tasks to fix failed tasks count by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/663\n* fix: Revise prompt to handle markdown uploads by @erichare in https://github.com/langflow-ai/openrag/pull/632\n* fix: Support tool calling for granite 3.3 by @erichare in https://github.com/langflow-ai/openrag/pull/638\n* fix: changed tool call signature on history to allow showing tool call content on refresh by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/661\n* fix: pass .env to commands being executed to always match new changes by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/662\n* fix: Better debugging for input type ingest failures by @erichare in https://github.com/langflow-ai/openrag/pull/666\n* fix: updated ingestion flow with updated Docling component to fix jpg error by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/667\n* feat: Update openrag_url_mcp to support file name as  url title by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/668\n* fix: make filter search be in the frontend, use fuzzy search by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/665\n* chore: release 0.1.53 by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/669\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.52...v0.1.53",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-12-13T17:10:07+00:00",
+      "published_at": "2025-12-13T17:26:04+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.53",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.53",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.53"
+    },
+    {
+      "tag_name": "v0.1.53-rc3",
+      "name": "Release 0.1.53-rc3",
+      "body": "## What's Changed\n* feat: uv lock  auto update by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/626\n* fix: Support for txt file processing outside of Docling by @erichare in https://github.com/langflow-ai/openrag/pull/630\n* fix: Configurable ingestion timeout limits by @erichare in https://github.com/langflow-ai/openrag/pull/631\n* fix: Setup option inaccessible but available by @erichare in https://github.com/langflow-ai/openrag/pull/629\n* make flow names consistent by @mfortman11 in https://github.com/langflow-ai/openrag/pull/648\n* Add Secret detection by @mfortman11 in https://github.com/langflow-ai/openrag/pull/645\n* setup dependabot by @mfortman11 in https://github.com/langflow-ai/openrag/pull/646\n* knip cleanup for ui by @mfortman11 in https://github.com/langflow-ai/openrag/pull/653\n* fix: remove adding to failed tasks to fix failed tasks count by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/663\n* fix: Revise prompt to handle markdown uploads by @erichare in https://github.com/langflow-ai/openrag/pull/632\n* fix: Support tool calling for granite 3.3 by @erichare in https://github.com/langflow-ai/openrag/pull/638\n* fix: changed tool call signature on history to allow showing tool call content on refresh by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/661\n* fix: pass .env to commands being executed to always match new changes by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/662\n* fix: Better debugging for input type ingest failures by @erichare in https://github.com/langflow-ai/openrag/pull/666\n* fix: updated ingestion flow with updated Docling component to fix jpg error by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/667\n* feat: Update openrag_url_mcp to support file name as  url title by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/668\n* fix: make filter search be in the frontend, use fuzzy search by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/665\n* chore: release 0.1.53 by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/669\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.52...v0.1.53-rc3",
+      "draft": false,
+      "prerelease": true,
+      "created_at": "2025-12-13T17:10:07+00:00",
+      "published_at": "2025-12-15T21:54:10+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.53-rc3",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.53-rc3",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.53-rc3"
+    },
+    {
+      "tag_name": "v0.1.53-rc2",
+      "name": "Release 0.1.53-rc2",
+      "body": "## What's Changed\n* feat: uv lock  auto update by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/626\n* fix: Support for txt file processing outside of Docling by @erichare in https://github.com/langflow-ai/openrag/pull/630\n* fix: Configurable ingestion timeout limits by @erichare in https://github.com/langflow-ai/openrag/pull/631\n* fix: Setup option inaccessible but available by @erichare in https://github.com/langflow-ai/openrag/pull/629\n* make flow names consistent by @mfortman11 in https://github.com/langflow-ai/openrag/pull/648\n* Add Secret detection by @mfortman11 in https://github.com/langflow-ai/openrag/pull/645\n* setup dependabot by @mfortman11 in https://github.com/langflow-ai/openrag/pull/646\n* knip cleanup for ui by @mfortman11 in https://github.com/langflow-ai/openrag/pull/653\n* fix: remove adding to failed tasks to fix failed tasks count by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/663\n* fix: Revise prompt to handle markdown uploads by @erichare in https://github.com/langflow-ai/openrag/pull/632\n* fix: Support tool calling for granite 3.3 by @erichare in https://github.com/langflow-ai/openrag/pull/638\n* fix: changed tool call signature on history to allow showing tool call content on refresh by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/661\n* fix: pass .env to commands being executed to always match new changes by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/662\n* fix: Better debugging for input type ingest failures by @erichare in https://github.com/langflow-ai/openrag/pull/666\n* fix: updated ingestion flow with updated Docling component to fix jpg error by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/667\n* feat: Update openrag_url_mcp to support file name as  url title by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/668\n* fix: make filter search be in the frontend, use fuzzy search by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/665\n* chore: release 0.1.53 by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/669\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.52...v0.1.53-rc2",
+      "draft": false,
+      "prerelease": true,
+      "created_at": "2025-12-13T17:10:07+00:00",
+      "published_at": "2025-12-15T19:57:04+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.53-rc2",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.53-rc2",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.53-rc2"
+    },
+    {
+      "tag_name": "v0.1.53-rc1",
+      "name": "Release 0.1.53-rc1",
+      "body": "## What's Changed\n* feat: uv lock  auto update by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/626\n* fix: Support for txt file processing outside of Docling by @erichare in https://github.com/langflow-ai/openrag/pull/630\n* fix: Configurable ingestion timeout limits by @erichare in https://github.com/langflow-ai/openrag/pull/631\n* fix: Setup option inaccessible but available by @erichare in https://github.com/langflow-ai/openrag/pull/629\n* make flow names consistent by @mfortman11 in https://github.com/langflow-ai/openrag/pull/648\n* Add Secret detection by @mfortman11 in https://github.com/langflow-ai/openrag/pull/645\n* setup dependabot by @mfortman11 in https://github.com/langflow-ai/openrag/pull/646\n* knip cleanup for ui by @mfortman11 in https://github.com/langflow-ai/openrag/pull/653\n* fix: remove adding to failed tasks to fix failed tasks count by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/663\n* fix: Revise prompt to handle markdown uploads by @erichare in https://github.com/langflow-ai/openrag/pull/632\n* fix: Support tool calling for granite 3.3 by @erichare in https://github.com/langflow-ai/openrag/pull/638\n* fix: changed tool call signature on history to allow showing tool call content on refresh by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/661\n* fix: pass .env to commands being executed to always match new changes by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/662\n* fix: Better debugging for input type ingest failures by @erichare in https://github.com/langflow-ai/openrag/pull/666\n* fix: updated ingestion flow with updated Docling component to fix jpg error by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/667\n* feat: Update openrag_url_mcp to support file name as  url title by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/668\n* fix: make filter search be in the frontend, use fuzzy search by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/665\n* chore: release 0.1.53 by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/669\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.52...v0.1.53-rc1",
+      "draft": false,
+      "prerelease": true,
+      "created_at": "2025-12-13T17:10:07+00:00",
+      "published_at": "2025-12-15T00:01:36+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.53-rc1",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.53-rc1",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.53-rc1"
+    },
+    {
+      "tag_name": "v0.1.52",
+      "name": "Release 0.1.52",
+      "body": "## What's Changed\n* chore: Bump version to 0.1.52 in pyproject.toml by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/625\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.51...v0.1.52",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-12-06T01:39:57+00:00",
+      "published_at": "2025-12-06T01:58:21+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.52",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.52",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.52"
+    },
+    {
+      "tag_name": "v0.1.51",
+      "name": "Release 0.1.51",
+      "body": "## What's Changed\n* crank scarf timeout by @phact in https://github.com/langflow-ai/openrag/pull/603\n* perf fix: relax blocking langflow key validation on every request by @phact in https://github.com/langflow-ai/openrag/pull/611\n* Frontend vuln nextjs by @phact in https://github.com/langflow-ai/openrag/pull/613\n* fix: chat blocking async requests by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/619\n* fix: pop up errors during onboarding, make health banner only appear after onboarding, make openAI not trigger model fetching when not selected by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/616\n* fix: chat filter being cleared by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/618\n* fix: adds onboarding rollback to allow user to edit embedding provider if ingestion fails by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/617\n* fix: Add multi-model OpenSearch  tenacity retry by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/620\n* chore: release v.0.1.51 by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/621\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.50...v0.1.51",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-12-06T00:27:30+00:00",
+      "published_at": "2025-12-06T00:49:41+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.51",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.51",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.51"
+    },
+    {
+      "tag_name": "v0.1.50",
+      "name": "Release 0.1.50",
+      "body": "## What's Changed\n* upgrade os dockerfile by @phact in https://github.com/langflow-ai/openrag/pull/593\n* fix: Add support for environment API key in onboarding by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/592\n* Factory reset fixes by @phact in https://github.com/langflow-ai/openrag/pull/594\n* unnecessary notification by @phact in https://github.com/langflow-ai/openrag/pull/595\n* Fix port check by @phact in https://github.com/langflow-ai/openrag/pull/596\n* Docs: Remove known issue when issue 552 is fixed by @aimurphy in https://github.com/langflow-ai/openrag/pull/569\n* fix: added alreadyConfigured as option to retrieve models by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/597\n* Dead code remove by @phact in https://github.com/langflow-ai/openrag/pull/601\n* feat: update ingestion flow with worker update by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/599\n* fix: make health check be lightweight on best case scenario by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/598\n* fire and foreget by @phact in https://github.com/langflow-ai/openrag/pull/602\n* chore: create release v0.1.50 by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/600\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.49...v0.1.50",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-12-04T00:52:09+00:00",
+      "published_at": "2025-12-04T01:13:59+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.50",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.50",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.50"
+    },
+    {
+      "tag_name": "v0.1.49",
+      "name": "Release 0.1.49",
+      "body": "## What's Changed\n* fix: lock ingestion flow so that backup is not generated by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/561\n* Fix security issue w/ get model calls by @mfortman11 in https://github.com/langflow-ai/openrag/pull/562\n* fix auth redirect bug for auth mode enabled by @phact in https://github.com/langflow-ai/openrag/pull/560\n* fix: change upgrade behavior, pin containers to tui version, add notice on start when containers are not latest, upgrade only when not latest by @pushkala-datastax in https://github.com/langflow-ai/openrag/pull/551\n* Docs: Reorganize core component pages by @aimurphy in https://github.com/langflow-ai/openrag/pull/538\n* Docs: Modifications to the descriptions of upgrade and reinstall behaviors by @aimurphy in https://github.com/langflow-ai/openrag/pull/565\n* fix: Handle providers in Restore Flow by @erichare in https://github.com/langflow-ai/openrag/pull/563\n* fix: Respect selected embedding model when restoring flow by @erichare in https://github.com/langflow-ai/openrag/pull/564\n* feat: add Scarf telemetry to OpenRAG by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/548\n* Docs: regenerate pdf by @aimurphy in https://github.com/langflow-ai/openrag/pull/577\n* Search fixes, Onboarding FQs, and more... by @phact in https://github.com/langflow-ai/openrag/pull/573\n* docs: update packages by @mendonk in https://github.com/langflow-ai/openrag/pull/579\n* fix: added factory reset notice and deleted mounted files by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/581\n* feat: Provide ollama health checking by @erichare in https://github.com/langflow-ai/openrag/pull/574\n* feat: bump version to 0.1.48 by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/583\n* Fix TypeScript error: Add filter_id to RequestBody interface by @Copilot in https://github.com/langflow-ai/openrag/pull/585\n* feat: bump version to 0.1.49 by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/586\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.47...v0.1.49",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-12-02T23:55:59+00:00",
+      "published_at": "2025-12-03T00:13:01+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.49",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.49",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.49"
+    },
+    {
+      "tag_name": "v0.1.47",
+      "name": "Release 0.1.47",
+      "body": "## What's Changed\n* fix: change symlinks for openrag documents by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/547\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.46...v0.1.47",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-28T17:44:25+00:00",
+      "published_at": "2025-11-28T17:59:34+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.47",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.47",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.47"
+    },
+    {
+      "tag_name": "v0.1.46",
+      "name": "Release 0.1.46",
+      "body": "## What's Changed\n* fix: openrag documents ingestion by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/545\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.45...v0.1.46\n\n## What's Changed\n* fix: openrag documents ingestion by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/545\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.45...v0.1.46",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-27T18:22:09+00:00",
+      "published_at": "2025-11-27T18:40:24+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.46",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.46",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.46"
+    },
+    {
+      "tag_name": "v0.1.45",
+      "name": "Release 0.1.45",
+      "body": "## What's Changed\n* Container and openrag-documents by @pushkala-datastax in https://github.com/langflow-ai/openrag/pull/542\n* Bump version from 0.1.44 to 0.1.45 by @pushkala-datastax in https://github.com/langflow-ai/openrag/pull/543\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.44...v0.1.45",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-27T17:40:42+00:00",
+      "published_at": "2025-11-27T18:00:46+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.45",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.45",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.45"
+    },
+    {
+      "tag_name": "v0.1.44",
+      "name": "Release 0.1.44",
+      "body": "## What's Changed\n* Update volume path for openrag-documents by @pushkala-datastax in https://github.com/langflow-ai/openrag/pull/540\n* feat: bump version to 0.1.44 by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/541\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.43...v0.1.44",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-27T16:41:18+00:00",
+      "published_at": "2025-11-27T17:03:59+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.44",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.44",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.44"
+    },
+    {
+      "tag_name": "v0.1.43",
+      "name": "Release 0.1.43",
+      "body": "## What's Changed\n* fix: make backend reset langflow flows after upgrade, backup flows every 5 mins by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/483\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.42...v0.1.43",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-27T12:13:51+00:00",
+      "published_at": "2025-11-27T12:26:09+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.43",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.43",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.43"
+    },
+    {
+      "tag_name": "v0.1.42",
+      "name": "Release 0.1.42",
+      "body": "## What's Changed\n* change documents directory to openrag-documents by @mfortman11 in https://github.com/langflow-ai/openrag/pull/521\n* Update pyproject.toml by @pushkala-datastax in https://github.com/langflow-ai/openrag/pull/534\n* Shows \"Lauch openrag\" button only after services are ready by @mfortman11 in https://github.com/langflow-ai/openrag/pull/535\n* Update path for warmup_ocr.pdf in Dockerfile by @pushkala-datastax in https://github.com/langflow-ai/openrag/pull/536\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.41...v0.1.42",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-26T23:27:50+00:00",
+      "published_at": "2025-11-26T23:39:48+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.42",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.42",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.42"
+    },
+    {
+      "tag_name": "v0.1.41",
+      "name": "Release 0.1.41",
+      "body": "## What's Changed\n* cut v0.1.40 by @phact in https://github.com/langflow-ai/openrag/pull/518\n* chore: Update base image to langflow-nightly:1.7.0.dev19 by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/489\n* fix: More graceful handling of port conflicts by @erichare in https://github.com/langflow-ai/openrag/pull/516\n* fix: change docker compose gpu to be an override by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/511\n* Adds loading state and placeholder for new conversations by @mfortman11 in https://github.com/langflow-ai/openrag/pull/520\n* feat: updates to use multi embeddings opensearch component by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/515\n* chore:Bump version to 0.1.41 in pyproject.toml by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/526\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.40...v0.1.41",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-26T21:28:00+00:00",
+      "published_at": "2025-11-26T21:41:47+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.41",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.41",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.41"
+    },
+    {
+      "tag_name": "v0.1.40",
+      "name": "Release 0.1.40",
+      "body": "## What's Changed\n* Docs: Add WSL details by @aimurphy in https://github.com/langflow-ai/openrag/pull/493\n* Docs: Add troubleshooting for Python SSL certificates on macOS by @aimurphy in https://github.com/langflow-ai/openrag/pull/494\n* Detect and default to provider with env set by @mfortman11 in https://github.com/langflow-ai/openrag/pull/496\n* Docs: Known limitation for Windows nested virtualization by @aimurphy in https://github.com/langflow-ai/openrag/pull/507\n* update limits so knowledge filters file list isn't limited to one by @mfortman11 in https://github.com/langflow-ai/openrag/pull/510\n* Docs: Fix python requirement and README anchors by @aimurphy in https://github.com/langflow-ai/openrag/pull/512\n* add tooltip to view full file names by @mfortman11 in https://github.com/langflow-ai/openrag/pull/513\n* Langflowai dockerhub by @phact in https://github.com/langflow-ai/openrag/pull/497\n* cut v0.1.40 by @phact in https://github.com/langflow-ai/openrag/pull/518\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.38...v0.1.40",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-26T08:59:45+00:00",
+      "published_at": "2025-11-26T09:11:32+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.40",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.40",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.40"
+    },
+    {
+      "tag_name": "v0.1.39-rc3",
+      "name": "Release 0.1.39-rc3",
+      "body": "## What's Changed\n* Docs: Add WSL details by @aimurphy in https://github.com/langflow-ai/openrag/pull/493\n* Docs: Add troubleshooting for Python SSL certificates on macOS by @aimurphy in https://github.com/langflow-ai/openrag/pull/494\n* Detect and default to provider with env set by @mfortman11 in https://github.com/langflow-ai/openrag/pull/496\n* Docs: Known limitation for Windows nested virtualization by @aimurphy in https://github.com/langflow-ai/openrag/pull/507\n* update limits so knowledge filters file list isn't limited to one by @mfortman11 in https://github.com/langflow-ai/openrag/pull/510\n* Docs: Fix python requirement and README anchors by @aimurphy in https://github.com/langflow-ai/openrag/pull/512\n* add tooltip to view full file names by @mfortman11 in https://github.com/langflow-ai/openrag/pull/513\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.38...v0.1.39-rc3\n\n## What's Changed\n* Docs: Add WSL details by @aimurphy in https://github.com/langflow-ai/openrag/pull/493\n* Docs: Add troubleshooting for Python SSL certificates on macOS by @aimurphy in https://github.com/langflow-ai/openrag/pull/494\n* Detect and default to provider with env set by @mfortman11 in https://github.com/langflow-ai/openrag/pull/496\n* Docs: Known limitation for Windows nested virtualization by @aimurphy in https://github.com/langflow-ai/openrag/pull/507\n* update limits so knowledge filters file list isn't limited to one by @mfortman11 in https://github.com/langflow-ai/openrag/pull/510\n* Docs: Fix python requirement and README anchors by @aimurphy in https://github.com/langflow-ai/openrag/pull/512\n* add tooltip to view full file names by @mfortman11 in https://github.com/langflow-ai/openrag/pull/513\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.38...v0.1.39-rc3",
+      "draft": false,
+      "prerelease": true,
+      "created_at": "2025-11-25T22:45:41+00:00",
+      "published_at": "2025-11-26T07:48:27+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.39-rc3",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.39-rc3",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.39-rc3"
+    },
+    {
+      "tag_name": "v0.1.39-rc2",
+      "name": "Release 0.1.39-rc2",
+      "body": "## What's Changed\n* Docs: Add WSL details by @aimurphy in https://github.com/langflow-ai/openrag/pull/493\n* Docs: Add troubleshooting for Python SSL certificates on macOS by @aimurphy in https://github.com/langflow-ai/openrag/pull/494\n* Detect and default to provider with env set by @mfortman11 in https://github.com/langflow-ai/openrag/pull/496\n* Docs: Known limitation for Windows nested virtualization by @aimurphy in https://github.com/langflow-ai/openrag/pull/507\n* update limits so knowledge filters file list isn't limited to one by @mfortman11 in https://github.com/langflow-ai/openrag/pull/510\n* Docs: Fix python requirement and README anchors by @aimurphy in https://github.com/langflow-ai/openrag/pull/512\n* add tooltip to view full file names by @mfortman11 in https://github.com/langflow-ai/openrag/pull/513\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.38...v0.1.39-rc2",
+      "draft": false,
+      "prerelease": true,
+      "created_at": "2025-11-25T22:45:41+00:00",
+      "published_at": "2025-11-26T04:41:16+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.39-rc2",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.39-rc2",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.39-rc2"
+    },
+    {
+      "tag_name": "v0.1.38",
+      "name": "Release 0.1.38",
+      "body": "## What's Changed\n* fix: Add comment marker to password requirements by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/447\n* fix: Update langflow service image in docker-compose by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/448\n* Docs: Mermaid diagram, move performance expectations to docling page by @aimurphy in https://github.com/langflow-ai/openrag/pull/455\n* feat: Add support for Anthropic, Ollama, and Watsonx config by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/477\n* Streamline tui by @phact in https://github.com/langflow-ai/openrag/pull/484\n* Fix copy for 1 vs multiple doc deletion by @mfortman11 in https://github.com/langflow-ai/openrag/pull/482\n* crank langflow client config to 20 minutes by @phact in https://github.com/langflow-ai/openrag/pull/486\n* folder upload file extensions by @phact in https://github.com/langflow-ai/openrag/pull/487\n* Update step count fixing the end of onboarding animation by @mfortman11 in https://github.com/langflow-ai/openrag/pull/485\n* validate and filter in one place + fix copy by @phact in https://github.com/langflow-ai/openrag/pull/488\n* Delete confirmation list: limit the number deleted files listed by @mfortman11 in https://github.com/langflow-ai/openrag/pull/490\n* Docs: Streamline quickstart by @aimurphy in https://github.com/langflow-ai/openrag/pull/453\n* fix: show uploading spinner on files by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/492\n* fix: show files only if chat context files exist by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/491\n* Bump version from 0.1.37 to 0.1.38 by @pushkala-datastax in https://github.com/langflow-ai/openrag/pull/495\n\n## New Contributors\n* @aimurphy made their first contribution in https://github.com/langflow-ai/openrag/pull/455\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.37...v0.1.38",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-24T22:48:39+00:00",
+      "published_at": "2025-11-24T23:05:59+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.38",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.38",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.38"
+    },
+    {
+      "tag_name": "v0.1.37",
+      "name": "Release 0.1.37",
+      "body": "## What's Changed\n* update chat page to use a different filter for every conversation by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/438\n* Persist opensearch data by @phact in https://github.com/langflow-ai/openrag/pull/442\n* feat: Add native folder picker for Add Folder by @erichare in https://github.com/langflow-ai/openrag/pull/436\n* Feat/configured providers in models by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/444\n* Bump version from 0.1.36 to 0.1.37 by @pushkala-datastax in https://github.com/langflow-ai/openrag/pull/445\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.36...v0.1.37",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-20T21:38:45+00:00",
+      "published_at": "2025-11-20T21:51:36+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.37",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.37",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.37"
+    },
+    {
+      "tag_name": "v0.1.36",
+      "name": "Release 0.1.36",
+      "body": "## What's Changed\n* feat: Add support for Anthropic, WatsonX, and Ollama APIs by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/425\n* fix: run component update after updating providers by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/423\n* Feat/provider improvements by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/422\n* fix: Error handling for chats that are slow to respond by @erichare in https://github.com/langflow-ai/openrag/pull/435\n* fix: Improve the Google Drive / Sharepoint / OneDrive connector's validation and sync by @erichare in https://github.com/langflow-ai/openrag/pull/421\n* Chat file dropzone by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/419\n* Bump version from 0.1.35 to 0.1.36 by @pushkala-datastax in https://github.com/langflow-ai/openrag/pull/437\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.35...v0.1.36",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-19T22:30:57+00:00",
+      "published_at": "2025-11-19T22:53:31+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.36",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.36",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.36"
+    },
+    {
+      "tag_name": "v0.1.35",
+      "name": "Release 0.1.35",
+      "body": "## What's Changed\n* fix: add space cleaning on gh actions by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/409\n* fix: Make sure we exclude the warmup file ingestion by @erichare in https://github.com/langflow-ai/openrag/pull/417\n* fix: make nudges and new conversations appear after onboarding, fix behavior on conversations by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/418\n* fix: add sonner styling for light mode by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/420\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.34...v0.1.35",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-19T18:51:52+00:00",
+      "published_at": "2025-11-19T19:17:54+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.35",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.35",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.35"
+    },
+    {
+      "tag_name": "v0.1.34",
+      "name": "Release 0.1.34",
+      "body": "## What's Changed\n* docs: add anthropic provider and new onboarding by @mendonk in https://github.com/langflow-ai/openrag/pull/381\n* Settings page design sweep by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/382\n* docs: use ollama with openrag by @mendonk in https://github.com/langflow-ai/openrag/pull/380\n* docs: use string shorthand for sidebar by @mendonk in https://github.com/langflow-ai/openrag/pull/392\n* fix: files table persistence by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/393\n* docs: release 0.1.33 changes by @mendonk in https://github.com/langflow-ai/openrag/pull/397\n* Design sweep - improved light mode onboarding by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/401\n* fix: make tui status check with podman, change opensearch password validation by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/394\n* Add biome to frontend and format code by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/403\n* Fix: reduce docling and provider banner refresh interval, implemented Starting on docling TUI by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/404\n* fix: add Thinking state to agent response, fix ollama and watsonx overwriting values on the onboarding by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/405\n* fix: refactor models validation to fix bugs related to ollama, watsonx and openai by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/406\n* Comment Push PyPi by @pushkala-datastax in https://github.com/langflow-ai/openrag/pull/408\n* Reorganize folders within frontend by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/407\n\n## New Contributors\n* @pushkala-datastax made their first contribution in https://github.com/langflow-ai/openrag/pull/408\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.33...v0.1.34\n\n## What's Changed\n* docs: add anthropic provider and new onboarding by @mendonk in https://github.com/langflow-ai/openrag/pull/381\n* Settings page design sweep by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/382\n* docs: use ollama with openrag by @mendonk in https://github.com/langflow-ai/openrag/pull/380\n* docs: use string shorthand for sidebar by @mendonk in https://github.com/langflow-ai/openrag/pull/392\n* fix: files table persistence by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/393\n* docs: release 0.1.33 changes by @mendonk in https://github.com/langflow-ai/openrag/pull/397\n* Design sweep - improved light mode onboarding by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/401\n* fix: make tui status check with podman, change opensearch password validation by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/394\n* Add biome to frontend and format code by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/403\n* Fix: reduce docling and provider banner refresh interval, implemented Starting on docling TUI by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/404\n* fix: add Thinking state to agent response, fix ollama and watsonx overwriting values on the onboarding by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/405\n* fix: refactor models validation to fix bugs related to ollama, watsonx and openai by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/406\n* Comment Push PyPi by @pushkala-datastax in https://github.com/langflow-ai/openrag/pull/408\n* Reorganize folders within frontend by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/407\n\n## New Contributors\n* @pushkala-datastax made their first contribution in https://github.com/langflow-ai/openrag/pull/408\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.33...v0.1.34",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-17T14:23:23+00:00",
+      "published_at": "2025-11-17T21:39:57+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.34",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.34",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.34"
+    },
+    {
+      "tag_name": "v0.1.33",
+      "name": "Release 0.1.33",
+      "body": "## What's Changed\n* v0.1.31 by @phact in https://github.com/langflow-ai/openrag/pull/367\n* fix script by @phact in https://github.com/langflow-ai/openrag/pull/368\n* docs: installation options by @mendonk in https://github.com/langflow-ai/openrag/pull/369\n* docs: updates from qa by @mendonk in https://github.com/langflow-ai/openrag/pull/360\n* Fix provider health banner showing during onboarding by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/372\n* docs: install methods anchor and cleanup by @mendonk in https://github.com/langflow-ai/openrag/pull/370\n* tui service status parse fix by @phact in https://github.com/langflow-ai/openrag/pull/375\n* handle homebrew installation by @phact in https://github.com/langflow-ai/openrag/pull/376\n* integration tests with local images checkbox by @phact in https://github.com/langflow-ai/openrag/pull/377\n* podman machine memory installer by @phact in https://github.com/langflow-ai/openrag/pull/378\n* system prompt to avoid hallucinations by @phact in https://github.com/langflow-ai/openrag/pull/379\n* docs: add script install to quickstart and update key requirements by @mendonk in https://github.com/langflow-ai/openrag/pull/374\n* fix: disable upload message when ingesting on onboarding, wait for file to be ingested, added knowledge filters on nudges by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/345\n* feat: adds anthropic provider, splits onboarding editing into two, support provider changing with generic llm and embedding components by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/373\n* better settings form validation, grouped model selection by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/383\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.31...v0.1.33",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-12T01:39:59+00:00",
+      "published_at": "2025-11-12T01:55:45+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.33",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.33",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.33"
+    },
+    {
+      "tag_name": "v0.1.31",
+      "name": "Release 0.1.31",
+      "body": "## What's Changed\n* Feat/provider validation banner by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/353\n* pin docling-core by @phact in https://github.com/langflow-ai/openrag/pull/364\n* installer script by @phact in https://github.com/langflow-ai/openrag/pull/365\n* dont show banner when down by @phact in https://github.com/langflow-ai/openrag/pull/366\n* v0.1.31 by @phact in https://github.com/langflow-ai/openrag/pull/367\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.30...v0.1.31",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-06T19:50:50+00:00",
+      "published_at": "2025-11-06T20:02:58+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.31",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.31",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.31"
+    },
+    {
+      "tag_name": "v0.1.30",
+      "name": "Release 0.1.30",
+      "body": "## What's Changed\n* disable tracing in langflow by @phact in https://github.com/langflow-ai/openrag/pull/346\n* improve docling serve banner remove false positives by @phact in https://github.com/langflow-ai/openrag/pull/347\n* fix agent instructions and up char limit by @mfortman11 in https://github.com/langflow-ai/openrag/pull/348\n* fix: changed pyproject.toml docling versions by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/350\n* version bump by @phact in https://github.com/langflow-ai/openrag/pull/351\n* better compose detection by @phact in https://github.com/langflow-ai/openrag/pull/361\n* bug: Adjust replicas to zero as we are in single server mode. Closes … by @zznate in https://github.com/langflow-ai/openrag/pull/359\n* improve gpu detection by @phact in https://github.com/langflow-ai/openrag/pull/362\n* Update version to 0.1.30 and regenerate lock file by @Copilot in https://github.com/langflow-ai/openrag/pull/363\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.29...v0.1.30",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-06T00:05:41+00:00",
+      "published_at": "2025-11-06T00:26:35+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.30",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.30",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.30"
+    },
+    {
+      "tag_name": "v0.1.29",
+      "name": "Release 0.1.29",
+      "body": "## What's Changed\n* v0.1.28 by @phact in https://github.com/langflow-ai/openrag/pull/342\n* docs: build PDF to /documents directory by @mendonk in https://github.com/langflow-ai/openrag/pull/335\n* docs: clarify provider selection in onboarding by @mendonk in https://github.com/langflow-ai/openrag/pull/336\n* Prevent flash of chat page, update loaders by @mfortman11 in https://github.com/langflow-ai/openrag/pull/343\n* docs: update PDF to include provider selection guidance by @mendonk in https://github.com/langflow-ai/openrag/pull/344\n* disable tracing in langflow by @phact in https://github.com/langflow-ai/openrag/pull/346\n* improve docling serve banner remove false positives by @phact in https://github.com/langflow-ai/openrag/pull/347\n* fix agent instructions and up char limit by @mfortman11 in https://github.com/langflow-ai/openrag/pull/348\n* fix: changed pyproject.toml docling versions by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/350\n* version bump by @phact in https://github.com/langflow-ai/openrag/pull/351\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.28...v0.1.29",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-04T20:35:21+00:00",
+      "published_at": "2025-11-04T20:48:28+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.29",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.29",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.29"
+    },
+    {
+      "tag_name": "v0.1.28",
+      "name": "Release 0.1.28",
+      "body": "## What's Changed\n* v0.1.27 by @phact in https://github.com/langflow-ai/openrag/pull/339\n* publish in ci by @phact in https://github.com/langflow-ai/openrag/pull/341\n* v0.1.28 by @phact in https://github.com/langflow-ai/openrag/pull/342\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.27...v0.1.28",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-03T05:05:56+00:00",
+      "published_at": "2025-11-03T05:20:22+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.28",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.28",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.28"
+    },
+    {
+      "tag_name": "v0.1.27",
+      "name": "Release 0.1.27",
+      "body": "## What's Changed\n* v0.1.26 by @phact in https://github.com/langflow-ai/openrag/pull/337\n* Tui optional OpenAI key by @phact in https://github.com/langflow-ai/openrag/pull/338\n* v0.1.27 by @phact in https://github.com/langflow-ai/openrag/pull/339\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.26...v0.1.27",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-10-31T19:56:37+00:00",
+      "published_at": "2025-10-31T20:16:21+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.27",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.27",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.27"
+    },
+    {
+      "tag_name": "v0.1.26",
+      "name": "Release 0.1.26",
+      "body": "## What's Changed\n* v0.1.25 by @phact in https://github.com/langflow-ai/openrag/pull/318\n* new logo round 2 by @mfortman11 in https://github.com/langflow-ai/openrag/pull/319\n* docs: performance expectations by @mendonk in https://github.com/langflow-ai/openrag/pull/320\n* docs: use uvx to install by @mendonk in https://github.com/langflow-ai/openrag/pull/321\n* Windows point to wsl by @phact in https://github.com/langflow-ai/openrag/pull/324\n* cleanup onboarding by @mfortman11 in https://github.com/langflow-ai/openrag/pull/325\n* fix: fix loading states, flickering and positioning on onboarding by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/323\n* docs: changes to onboarding by @mendonk in https://github.com/langflow-ai/openrag/pull/327\n* fix: added better onboarding error handling, added probing api keys and models by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/326\n* fix: fixed bugs on ollama integration, added ingestion on onboarding by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/330\n* chore: Update DeepWiki link in README by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/331\n* fix: check if ollama model is embedding by testing it by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/332\n* chore: delete unused models by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/333\n* docs: wsl and langflow auth clarification by @mendonk in https://github.com/langflow-ai/openrag/pull/328\n* fix: changed default llm model to be gpt 4o by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/334\n* docs: clarify installation steps by @mendonk in https://github.com/langflow-ai/openrag/pull/329\n* Feat/278 Edit current model provider settings by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/307\n* v0.1.26 by @phact in https://github.com/langflow-ai/openrag/pull/337\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.25...v0.1.26",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-10-31T18:52:48+00:00",
+      "published_at": "2025-10-31T19:09:27+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.26",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.26",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.26"
+    },
+    {
+      "tag_name": "v0.1.25",
+      "name": "Release 0.1.25",
+      "body": "## What's Changed\n* V0.1.24 by @phact in https://github.com/langflow-ai/openrag/pull/261\n* Breaks up onboarding and chat into components to support new onboarding by @mfortman11 in https://github.com/langflow-ai/openrag/pull/264\n* Create new onboarding and adds the first step by @mfortman11 in https://github.com/langflow-ai/openrag/pull/265\n* fix: Add easyocr as direct dependency to support out of the box OCR, … by @zznate in https://github.com/langflow-ai/openrag/pull/263\n* feat: add new onboarding animation, adds onboarding into layout wrapper by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/267\n* ingest should use task tracker by @phact in https://github.com/langflow-ai/openrag/pull/268\n* feat: adds provider step status, adds current step to local storage by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/269\n* feat: adds what is openrag prompt, refactors chat design, adds scroll to bottom on chat, adds streaming support by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/283\n* docs: add pdf gen by @mendonk in https://github.com/langflow-ai/openrag/pull/280\n* docs: add robots.txt and noIndex by @mendonk in https://github.com/langflow-ai/openrag/pull/284\n* Add user ingest step by @mfortman11 in https://github.com/langflow-ai/openrag/pull/287\n* docs: updates to reflect app changes by @mendonk in https://github.com/langflow-ai/openrag/pull/276\n* 279 knowledge menu improvements by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/288\n* fix: adds new provider design, fixes issues with auth mode by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/289\n* Update transition timing by @mfortman11 in https://github.com/langflow-ai/openrag/pull/291\n* Branding and styling by @mfortman11 in https://github.com/langflow-ai/openrag/pull/295\n* fix: makes chat input design, adds context files the right way by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/292\n* docs: flatten nav by @mendonk in https://github.com/langflow-ai/openrag/pull/286\n* docs: docs peer review by @mendonk in https://github.com/langflow-ai/openrag/pull/294\n* New Onboarding by @mfortman11 in https://github.com/langflow-ai/openrag/pull/296\n* docs: add docusaurus-plugin-image-zoom plugin by @mendonk in https://github.com/langflow-ai/openrag/pull/297\n* docs: add notes to starter flows by @mendonk in https://github.com/langflow-ai/openrag/pull/244\n* nuke extra flow by @phact in https://github.com/langflow-ai/openrag/pull/299\n* documents about openrag by @phact in https://github.com/langflow-ai/openrag/pull/300\n* docs: bump pdf by @mendonk in https://github.com/langflow-ai/openrag/pull/301\n* Update branding by @mfortman11 in https://github.com/langflow-ai/openrag/pull/305\n* Update chat input to support file uploads along side a message by @mfortman11 in https://github.com/langflow-ai/openrag/pull/303\n* docs: flatten tabs content in pdf by @mendonk in https://github.com/langflow-ai/openrag/pull/302\n* fix imports by @mfortman11 in https://github.com/langflow-ai/openrag/pull/309\n* docs: Improve Docusaurus and Mermaid diagrams working behavior by @msmygit in https://github.com/langflow-ai/openrag/pull/308\n* fix: make file history be the same when uploading a file and after refresh by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/310\n* fix duplciate bugs by @phact in https://github.com/langflow-ai/openrag/pull/311\n* properly show new conversations in side nav by @mfortman11 in https://github.com/langflow-ai/openrag/pull/312\n* fix: added onboarding steps accordion, changed bg color by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/313\n* update symlinks by @phact in https://github.com/langflow-ai/openrag/pull/315\n* fix: added empty message on file upload handling, fixed time calculation on onboarding by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/316\n* Allow skip onboarding by @mfortman11 in https://github.com/langflow-ai/openrag/pull/317\n* fix: remove provider loading by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/314\n* v0.1.25 by @phact in https://github.com/langflow-ai/openrag/pull/318\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.24...v0.1.25",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-10-27T21:37:22+00:00",
+      "published_at": "2025-10-27T21:54:00+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.25",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.25",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.25"
+    },
+    {
+      "tag_name": "v0.1.24",
+      "name": "Release 0.1.24",
+      "body": "## What's Changed\n* v0.1.23 by @phact in https://github.com/langflow-ai/openrag/pull/260\n* V0.1.24 by @phact in https://github.com/langflow-ai/openrag/pull/261\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.23...v0.1.24",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-10-14T16:42:15+00:00",
+      "published_at": "2025-10-14T17:01:13+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.24",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.24",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.24"
+    },
+    {
+      "tag_name": "v0.1.23",
+      "name": "Release 0.1.23",
+      "body": "## What's Changed\n* v0.1.21 by @phact in https://github.com/langflow-ai/openrag/pull/242\n* only run integration tests on PR not merge to main by @phact in https://github.com/langflow-ai/openrag/pull/243\n* Add docling banner to onboarding by @mfortman11 in https://github.com/langflow-ai/openrag/pull/246\n* Implement dynamic Ollama embedding dimension resolution with server probing by @Copilot in https://github.com/langflow-ai/openrag/pull/237\n* docs: Change README links to docs by @philnash in https://github.com/langflow-ai/openrag/pull/251\n* docs: add versions env vars by @mendonk in https://github.com/langflow-ai/openrag/pull/248\n* docs: Comment for complex password requiremens on OpenSearch by @zznate in https://github.com/langflow-ai/openrag/pull/247\n* docs: add docling serve manual start to docker page by @mendonk in https://github.com/langflow-ai/openrag/pull/249\n* Added ASFv2 license file. Closes #250 by @zznate in https://github.com/langflow-ai/openrag/pull/255\n* Multi embedding support by @phact in https://github.com/langflow-ai/openrag/pull/254\n* v0.1.22 by @phact in https://github.com/langflow-ai/openrag/pull/258\n* lint by @phact in https://github.com/langflow-ai/openrag/pull/259\n* v0.1.23 by @phact in https://github.com/langflow-ai/openrag/pull/260\n\n## New Contributors\n* @philnash made their first contribution in https://github.com/langflow-ai/openrag/pull/251\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.21...v0.1.23",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-10-14T07:09:08+00:00",
+      "published_at": "2025-10-14T07:25:03+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.23",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.23",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.23"
+    },
+    {
+      "tag_name": "v0.1.21",
+      "name": "Release 0.1.21",
+      "body": "## What's Changed\n* v0.1.20 by @phact in https://github.com/langflow-ai/openrag/pull/239\n* fix: changed ibm validation to include generating the bearer token by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/240\n* Release order by @phact in https://github.com/langflow-ai/openrag/pull/241\n* v0.1.21 by @phact in https://github.com/langflow-ai/openrag/pull/242\n* only run integration tests on PR not merge to main by @phact in https://github.com/langflow-ai/openrag/pull/243\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.20...v0.1.21",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-10-09T17:25:26+00:00",
+      "published_at": "2025-10-09T17:30:17+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.21",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.21",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.21"
+    },
+    {
+      "tag_name": "v0.1.20",
+      "name": "Release 0.1.20",
+      "body": "## What's Changed\r\n* docs: remove preview admonitions by @mendonk in https://github.com/langflow-ai/openrag/pull/215\r\n* docs: remove sync from knowledge page by @mendonk in https://github.com/langflow-ai/openrag/pull/216\r\n* docs: update readme by @mendonk in https://github.com/langflow-ai/openrag/pull/229\r\n* docs: jwt behavior in basic and advanced installations by @mendonk in https://github.com/langflow-ai/openrag/pull/223\r\n* Do not check in .DS_Store by @alexleventer in https://github.com/langflow-ai/openrag/pull/233\r\n* fix: added api key validation for IBM models by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/235\r\n* rootless podman / podman linux improvements by @phact in https://github.com/langflow-ai/openrag/pull/230\r\n* TUI improvements by @phact in https://github.com/langflow-ai/openrag/pull/234\r\n* v0.1.20 by @phact in https://github.com/langflow-ai/openrag/pull/239\r\n\r\n## New Contributors\r\n* @alexleventer made their first contribution in https://github.com/langflow-ai/openrag/pull/233\r\n\r\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.19...v0.1.20",
+      "draft": false,
+      "prerelease": true,
+      "created_at": "2025-10-09T15:51:26+00:00",
+      "published_at": "2025-10-09T15:59:55+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.20",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.20",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.20"
+    },
+    {
+      "tag_name": "v0.1.19",
+      "name": "Release 0.1.19",
+      "body": "## What's Changed\n* Integration tests by @phact in https://github.com/langflow-ai/openrag/pull/38\n* 0.1.19 by @phact in https://github.com/langflow-ai/openrag/pull/228\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.18...v0.1.19",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-10-08T15:42:12+00:00",
+      "published_at": "2025-10-08T15:42:29+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.19",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.19",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.19"
+    },
+    {
+      "tag_name": "v0.1.18",
+      "name": "Release 0.1.18",
+      "body": "## What's Changed\n* docs: ingestion update by @mendonk in https://github.com/langflow-ai/openrag/pull/224\n* tui copies flows and v0.1.17 update by @phact in https://github.com/langflow-ai/openrag/pull/226\n* 0.1.18 by @phact in https://github.com/langflow-ai/openrag/pull/227\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.17...v0.1.18",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-10-08T15:15:02+00:00",
+      "published_at": "2025-10-08T15:15:28+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.18",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.18",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.18"
+    },
+    {
+      "tag_name": "v0.1.17",
+      "name": "Release 0.1.17",
+      "body": "## What's Changed\n* ci releases by @phact in https://github.com/langflow-ai/openrag/pull/219\n* only release on tag change by @phact in https://github.com/langflow-ai/openrag/pull/220\n* docker also hinges on only new tag by @phact in https://github.com/langflow-ai/openrag/pull/221\n* v0.1.17 by @phact in https://github.com/langflow-ai/openrag/pull/222\n\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/compare/v0.1.15...v0.1.17",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-10-07T17:06:52+00:00",
+      "published_at": "2025-10-07T17:07:11+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.17",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.17",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.17"
+    },
+    {
+      "tag_name": "v0.1.16",
+      "name": "Release 0.1.16",
+      "body": "## What's Changed\n* Fix ESLint errors: remove unused variable and add missing dependencies by @Copilot in https://github.com/langflow-ai/openrag/pull/2\n* Fix TypeScript build errors in frontend navigation component by @Copilot in https://github.com/langflow-ai/openrag/pull/4\n* update favicon by @mfortman11 in https://github.com/langflow-ai/openrag/pull/12\n* Tui improvements by @phact in https://github.com/langflow-ai/openrag/pull/14\n* feat: add users classes by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/16\n* feat: add initial loading task to ingest default files from documents folder by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/7\n* feat: Enhance task management to support shared tasks  by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/18\n* feat: Google Drive File Picker and General Enhancements by @erichare in https://github.com/langflow-ai/openrag/pull/11\n* Fix: Persist Function Call Data Across Conversation Switching by @Cristhianzl in https://github.com/langflow-ai/openrag/pull/19\n* feat: add Dockerfile to build from specific langflow branch by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/20\n* fix: eslint for FE code by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/24\n* feat: add nudges generation and display by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/23\n* feat: Cleanup duplicate connections by @erichare in https://github.com/langflow-ai/openrag/pull/25\n* fix: ingestion flow by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/27\n* Add ingestion flow and ingestion integration with Langflow by @ogabrielluiz in https://github.com/langflow-ai/openrag/pull/9\n* feat: Langflow Openrag file ingestion router and langflow task service by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/22\n* task timings by @phact in https://github.com/langflow-ai/openrag/pull/30\n* Add ingest settings by @mfortman11 in https://github.com/langflow-ai/openrag/pull/26\n* refactor: Remove local metadata merging from history logic by @Cristhianzl in https://github.com/langflow-ai/openrag/pull/29\n* feat: Enhance sidebar loading states and user experience by @Cristhianzl in https://github.com/langflow-ai/openrag/pull/32\n* chore: update loggers by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/35\n* feat: adjust search behavior in Knowledge page by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/36\n* feat: Update build-multiarch to add langflow dockerfile by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/33\n* chore: revamp the readme with detailed setup +tui docs by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/34\n* feat: add Markdown support by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/37\n* tui docling serve button by @phact in https://github.com/langflow-ai/openrag/pull/39\n* Refactor Knowledge table with AgGrid by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/43\n* feat: Integrate Langflow MCP JWT header update in AuthService by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/40\n* feat: Enhance markdown rendering and dropdown consistency by @Cristhianzl in https://github.com/langflow-ai/openrag/pull/47\n* docs: Fix hyperlink in readme by @msmygit in https://github.com/langflow-ai/openrag/pull/46\n* fix: Return empty list when no auth is enabled by @erichare in https://github.com/langflow-ai/openrag/pull/48\n* Delete knowledge by @deon-sanchez in https://github.com/langflow-ai/openrag/pull/44\n* feat: Add global var headers to MCP server updates by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/51\n* Add onboarding and update settings by @mfortman11 in https://github.com/langflow-ai/openrag/pull/50\n* docs: add docusaurus scaffold and packages by @mendonk in https://github.com/langflow-ai/openrag/pull/49\n* docs: point readme links to new page locations by @mendonk in https://github.com/langflow-ai/openrag/pull/56\n* fix: make different providers have their edges connected, redirect to main page from onboarding by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/58\n* Move knowledge filters list to left nav by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/54\n* docs: add lucide react library and icon component by @mendonk in https://github.com/langflow-ai/openrag/pull/63\n* design sweep for chunks page by @boneill-ds in https://github.com/langflow-ai/openrag/pull/57\n* Add Docling ingest flow and presets controls by @mfortman11 in https://github.com/langflow-ai/openrag/pull/59\n* docs: what is openrag by @mendonk in https://github.com/langflow-ai/openrag/pull/62\n* feat: add knowledge status by @deon-sanchez in https://github.com/langflow-ai/openrag/pull/53\n* docs: quickstart by @mendonk in https://github.com/langflow-ai/openrag/pull/65\n* docs: set homepage and nav links by @mendonk in https://github.com/langflow-ai/openrag/pull/72\n* settings updates for true flow updates by @mfortman11 in https://github.com/langflow-ai/openrag/pull/71\n* Fix Agent Prompt settings and improve reset behavior by @mfortman11 in https://github.com/langflow-ai/openrag/pull/74\n* fix: adjust onboarding copies and behaviors by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/67\n* feat: add session delete functionality by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/70\n* Settings page design sweep by @boneill-ds in https://github.com/langflow-ai/openrag/pull/73\n* docs: install python wheel or docker compose by @mendonk in https://github.com/langflow-ai/openrag/pull/61\n* update ci for test releases by @phact in https://github.com/langflow-ai/openrag/pull/76\n* 0.1.14-test by @phact in https://github.com/langflow-ai/openrag/pull/77\n* Test releases by @phact in https://github.com/langflow-ai/openrag/pull/78\n* Fix frontend build by @phact in https://github.com/langflow-ai/openrag/pull/79\n* docs: core components agents by @mendonk in https://github.com/langflow-ai/openrag/pull/80\n* feat: Sharepoint and OneDrive auth support for file picker by @erichare in https://github.com/langflow-ai/openrag/pull/42\n* fix: update onboarding design, make opensearch index be initialized after onboarding, make flow reset change the models to the provider chosen by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/100\n* docs: opensearch knowledge by @mendonk in https://github.com/langflow-ai/openrag/pull/96\n* feat: Add custom headers to Langflow ingestion requests by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/93\n* docs: quickstart use langflow external api by @mendonk in https://github.com/langflow-ai/openrag/pull/131\n* Shared process document common refactor by @phact in https://github.com/langflow-ai/openrag/pull/138\n* docs: move docker deployment to its own page by @mendonk in https://github.com/langflow-ai/openrag/pull/139\n* docs: more information on TUI usage by @mendonk in https://github.com/langflow-ai/openrag/pull/142\n* langflow responses workflow by @phact in https://github.com/langflow-ai/openrag/pull/144\n* get the right branch by @phact in https://github.com/langflow-ai/openrag/pull/145\n* Langflow responses arm image by @phact in https://github.com/langflow-ai/openrag/pull/147\n* docs: troubleshooting page by @mendonk in https://github.com/langflow-ai/openrag/pull/143\n* Update docling preset options by @mfortman11 in https://github.com/langflow-ai/openrag/pull/141\n* add container utils by @mfortman11 in https://github.com/langflow-ai/openrag/pull/151\n* fix: turn button inside button into div by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/157\n* Customize color and icon for knowledge filters by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/150\n* docs: logo with dark and light mode by @mendonk in https://github.com/langflow-ai/openrag/pull/158\n* docs: core component - docling ingestion by @mendonk in https://github.com/langflow-ai/openrag/pull/154\n* docs: setup docusaurus versioning but don't enable  by @mendonk in https://github.com/langflow-ai/openrag/pull/162\n* Add empty state to knowledge table by @deon-sanchez in https://github.com/langflow-ai/openrag/pull/146\n* Remove sync from cloud connectors by @deon-sanchez in https://github.com/langflow-ai/openrag/pull/148\n* fix: truncate text on @ filter selector on chat by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/133\n* fix: remove duplicate toast and ! character by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/165\n* fix: adjust sign in page to match designs by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/164\n* fix: make onboarding match designs by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/163\n* fix: make avatar not selectable, disable file drop on chat by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/132\n* fix: set defined models for openai, make default embedding be used when disable ingest with LF feature flag is enabled by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/128\n* Fix double OAuth callback execution using sessionStorage by @mfortman11 in https://github.com/langflow-ai/openrag/pull/168\n* fix: make config be on a volume by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/170\n* docs: Allow manually deploying to GitHub pages by @mlr in https://github.com/langflow-ai/openrag/pull/172\n* docs: add custom domain and changes to the baseURL by @mendonk in https://github.com/langflow-ai/openrag/pull/169\n* docs: design feedback by @mendonk in https://github.com/langflow-ai/openrag/pull/174\n* docs: add public preview admonition  by @mendonk in https://github.com/langflow-ai/openrag/pull/173\n* 98 bug copy chunk gives a messy paste by @boneill-ds in https://github.com/langflow-ai/openrag/pull/135\n* Feat/filters sweep by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/171\n* bug: closes #159 by adding more memory to npm invocations by @zznate in https://github.com/langflow-ai/openrag/pull/160\n* docs: peer review by @mendonk in https://github.com/langflow-ai/openrag/pull/161\n* 120 + 122 design sweep polish setting screen needs to match design spec by @boneill-ds in https://github.com/langflow-ai/openrag/pull/153\n* fix: remove config from being visible by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/178\n* fix: functional changes at the filter menu by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/177\n* docs: environment variables and config.yaml by @mendonk in https://github.com/langflow-ai/openrag/pull/140\n* feat: Update to flows to support Langflow updates by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/55\n* fix: use same model selector as onboarding on settings page by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/176\n* App Shell by @deon-sanchez in https://github.com/langflow-ai/openrag/pull/156\n* chore: fix typo and clarify comments in .env.example by @dvncvn in https://github.com/langflow-ai/openrag/pull/187\n* 'Add files' button on cloud ingest temporarily changes to 'Opening picker' by @deon-sanchez in https://github.com/langflow-ai/openrag/pull/186\n* Add Langflow feature flags for default folder name and to hide getting started progress by @mfortman11 in https://github.com/langflow-ai/openrag/pull/180\n* add tooltip to embedding model by @mfortman11 in https://github.com/langflow-ai/openrag/pull/189\n* v0.1.14.dev2 by @phact in https://github.com/langflow-ai/openrag/pull/191\n* lock by @phact in https://github.com/langflow-ai/openrag/pull/192\n* Refactor:file upload task to use filename mapping by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/195\n* feat: Switch base image to langflow-nightly in Dockerfile by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/196\n* feat: Add OpenRAG Ingestion support Docling as Default  by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/185\n* v0.1.14.dev3 by @phact in https://github.com/langflow-ai/openrag/pull/198\n* Add banner if docling serve isn't running by @mfortman11 in https://github.com/langflow-ai/openrag/pull/130\n* 101 design sweep polish chunk page by @boneill-ds in https://github.com/langflow-ai/openrag/pull/182\n* fix: make tasks be displayed after failing, solve knowledge duplication issues by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/194\n* [design sweep]: update no auth cloud connector warning message by @boneill-ds in https://github.com/langflow-ai/openrag/pull/179\n* feat: Show globe icon for HTML documents in knowledge page by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/188\n* Pre release fixes by @phact in https://github.com/langflow-ai/openrag/pull/201\n* Feat/knowledge page design sweep by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/181\n* docling backend check by @phact in https://github.com/langflow-ai/openrag/pull/202\n* fix: file tuple for ingest by @phact in https://github.com/langflow-ai/openrag/pull/203\n* Page style alignment by @deon-sanchez in https://github.com/langflow-ai/openrag/pull/190\n* fixing `Connect` button on Settings page  by @boneill-ds in https://github.com/langflow-ai/openrag/pull/207\n* design sweep for ingest for connector page by @boneill-ds in https://github.com/langflow-ai/openrag/pull/197\n* fix: map the available value to the connector by @boneill-ds in https://github.com/langflow-ai/openrag/pull/208\n* Settings copy updates by @mfortman11 in https://github.com/langflow-ai/openrag/pull/205\n* backend fix by @phact in https://github.com/langflow-ai/openrag/pull/210\n* linter by @phact in https://github.com/langflow-ai/openrag/pull/211\n* feat: Add Google Drive Folder Selection by @erichare in https://github.com/langflow-ai/openrag/pull/152\n* feat: Update openrag_agent.json to add MCP support by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/200\n* 0.1.15 by @phact in https://github.com/langflow-ai/openrag/pull/212\n* lint types fix by @phact in https://github.com/langflow-ai/openrag/pull/213\n* tui ip bind check by @phact in https://github.com/langflow-ai/openrag/pull/217\n* Feat/fix chunks page by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/218\n\n## New Contributors\n* @Copilot made their first contribution in https://github.com/langflow-ai/openrag/pull/2\n* @mfortman11 made their first contribution in https://github.com/langflow-ai/openrag/pull/12\n* @phact made their first contribution in https://github.com/langflow-ai/openrag/pull/14\n* @edwinjosechittilappilly made their first contribution in https://github.com/langflow-ai/openrag/pull/16\n* @erichare made their first contribution in https://github.com/langflow-ai/openrag/pull/11\n* @Cristhianzl made their first contribution in https://github.com/langflow-ai/openrag/pull/19\n* @lucaseduoli made their first contribution in https://github.com/langflow-ai/openrag/pull/23\n* @ogabrielluiz made their first contribution in https://github.com/langflow-ai/openrag/pull/9\n* @colegoldsmith made their first contribution in https://github.com/langflow-ai/openrag/pull/43\n* @msmygit made their first contribution in https://github.com/langflow-ai/openrag/pull/46\n* @deon-sanchez made their first contribution in https://github.com/langflow-ai/openrag/pull/44\n* @mendonk made their first contribution in https://github.com/langflow-ai/openrag/pull/49\n* @boneill-ds made their first contribution in https://github.com/langflow-ai/openrag/pull/57\n* @mlr made their first contribution in https://github.com/langflow-ai/openrag/pull/172\n* @zznate made their first contribution in https://github.com/langflow-ai/openrag/pull/160\n* @dvncvn made their first contribution in https://github.com/langflow-ai/openrag/pull/187\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/commits/v0.1.16",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-10-07T16:03:16+00:00",
+      "published_at": "2025-10-07T16:31:24+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.16",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.16",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.16"
+    },
+    {
+      "tag_name": "v0.1.15",
+      "name": "Release 0.1.15",
+      "body": "## What's Changed\n* Fix ESLint errors: remove unused variable and add missing dependencies by @Copilot in https://github.com/langflow-ai/openrag/pull/2\n* Fix TypeScript build errors in frontend navigation component by @Copilot in https://github.com/langflow-ai/openrag/pull/4\n* update favicon by @mfortman11 in https://github.com/langflow-ai/openrag/pull/12\n* Tui improvements by @phact in https://github.com/langflow-ai/openrag/pull/14\n* feat: add users classes by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/16\n* feat: add initial loading task to ingest default files from documents folder by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/7\n* feat: Enhance task management to support shared tasks  by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/18\n* feat: Google Drive File Picker and General Enhancements by @erichare in https://github.com/langflow-ai/openrag/pull/11\n* Fix: Persist Function Call Data Across Conversation Switching by @Cristhianzl in https://github.com/langflow-ai/openrag/pull/19\n* feat: add Dockerfile to build from specific langflow branch by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/20\n* fix: eslint for FE code by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/24\n* feat: add nudges generation and display by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/23\n* feat: Cleanup duplicate connections by @erichare in https://github.com/langflow-ai/openrag/pull/25\n* fix: ingestion flow by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/27\n* Add ingestion flow and ingestion integration with Langflow by @ogabrielluiz in https://github.com/langflow-ai/openrag/pull/9\n* feat: Langflow Openrag file ingestion router and langflow task service by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/22\n* task timings by @phact in https://github.com/langflow-ai/openrag/pull/30\n* Add ingest settings by @mfortman11 in https://github.com/langflow-ai/openrag/pull/26\n* refactor: Remove local metadata merging from history logic by @Cristhianzl in https://github.com/langflow-ai/openrag/pull/29\n* feat: Enhance sidebar loading states and user experience by @Cristhianzl in https://github.com/langflow-ai/openrag/pull/32\n* chore: update loggers by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/35\n* feat: adjust search behavior in Knowledge page by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/36\n* feat: Update build-multiarch to add langflow dockerfile by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/33\n* chore: revamp the readme with detailed setup +tui docs by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/34\n* feat: add Markdown support by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/37\n* tui docling serve button by @phact in https://github.com/langflow-ai/openrag/pull/39\n* Refactor Knowledge table with AgGrid by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/43\n* feat: Integrate Langflow MCP JWT header update in AuthService by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/40\n* feat: Enhance markdown rendering and dropdown consistency by @Cristhianzl in https://github.com/langflow-ai/openrag/pull/47\n* docs: Fix hyperlink in readme by @msmygit in https://github.com/langflow-ai/openrag/pull/46\n* fix: Return empty list when no auth is enabled by @erichare in https://github.com/langflow-ai/openrag/pull/48\n* Delete knowledge by @deon-sanchez in https://github.com/langflow-ai/openrag/pull/44\n* feat: Add global var headers to MCP server updates by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/51\n* Add onboarding and update settings by @mfortman11 in https://github.com/langflow-ai/openrag/pull/50\n* docs: add docusaurus scaffold and packages by @mendonk in https://github.com/langflow-ai/openrag/pull/49\n* docs: point readme links to new page locations by @mendonk in https://github.com/langflow-ai/openrag/pull/56\n* fix: make different providers have their edges connected, redirect to main page from onboarding by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/58\n* Move knowledge filters list to left nav by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/54\n* docs: add lucide react library and icon component by @mendonk in https://github.com/langflow-ai/openrag/pull/63\n* design sweep for chunks page by @boneill-ds in https://github.com/langflow-ai/openrag/pull/57\n* Add Docling ingest flow and presets controls by @mfortman11 in https://github.com/langflow-ai/openrag/pull/59\n* docs: what is openrag by @mendonk in https://github.com/langflow-ai/openrag/pull/62\n* feat: add knowledge status by @deon-sanchez in https://github.com/langflow-ai/openrag/pull/53\n* docs: quickstart by @mendonk in https://github.com/langflow-ai/openrag/pull/65\n* docs: set homepage and nav links by @mendonk in https://github.com/langflow-ai/openrag/pull/72\n* settings updates for true flow updates by @mfortman11 in https://github.com/langflow-ai/openrag/pull/71\n* Fix Agent Prompt settings and improve reset behavior by @mfortman11 in https://github.com/langflow-ai/openrag/pull/74\n* fix: adjust onboarding copies and behaviors by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/67\n* feat: add session delete functionality by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/70\n* Settings page design sweep by @boneill-ds in https://github.com/langflow-ai/openrag/pull/73\n* docs: install python wheel or docker compose by @mendonk in https://github.com/langflow-ai/openrag/pull/61\n* update ci for test releases by @phact in https://github.com/langflow-ai/openrag/pull/76\n* 0.1.14-test by @phact in https://github.com/langflow-ai/openrag/pull/77\n* Test releases by @phact in https://github.com/langflow-ai/openrag/pull/78\n* Fix frontend build by @phact in https://github.com/langflow-ai/openrag/pull/79\n* docs: core components agents by @mendonk in https://github.com/langflow-ai/openrag/pull/80\n* feat: Sharepoint and OneDrive auth support for file picker by @erichare in https://github.com/langflow-ai/openrag/pull/42\n* fix: update onboarding design, make opensearch index be initialized after onboarding, make flow reset change the models to the provider chosen by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/100\n* docs: opensearch knowledge by @mendonk in https://github.com/langflow-ai/openrag/pull/96\n* feat: Add custom headers to Langflow ingestion requests by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/93\n* docs: quickstart use langflow external api by @mendonk in https://github.com/langflow-ai/openrag/pull/131\n* Shared process document common refactor by @phact in https://github.com/langflow-ai/openrag/pull/138\n* docs: move docker deployment to its own page by @mendonk in https://github.com/langflow-ai/openrag/pull/139\n* docs: more information on TUI usage by @mendonk in https://github.com/langflow-ai/openrag/pull/142\n* langflow responses workflow by @phact in https://github.com/langflow-ai/openrag/pull/144\n* get the right branch by @phact in https://github.com/langflow-ai/openrag/pull/145\n* Langflow responses arm image by @phact in https://github.com/langflow-ai/openrag/pull/147\n* docs: troubleshooting page by @mendonk in https://github.com/langflow-ai/openrag/pull/143\n* Update docling preset options by @mfortman11 in https://github.com/langflow-ai/openrag/pull/141\n* add container utils by @mfortman11 in https://github.com/langflow-ai/openrag/pull/151\n* fix: turn button inside button into div by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/157\n* Customize color and icon for knowledge filters by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/150\n* docs: logo with dark and light mode by @mendonk in https://github.com/langflow-ai/openrag/pull/158\n* docs: core component - docling ingestion by @mendonk in https://github.com/langflow-ai/openrag/pull/154\n* docs: setup docusaurus versioning but don't enable  by @mendonk in https://github.com/langflow-ai/openrag/pull/162\n* Add empty state to knowledge table by @deon-sanchez in https://github.com/langflow-ai/openrag/pull/146\n* Remove sync from cloud connectors by @deon-sanchez in https://github.com/langflow-ai/openrag/pull/148\n* fix: truncate text on @ filter selector on chat by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/133\n* fix: remove duplicate toast and ! character by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/165\n* fix: adjust sign in page to match designs by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/164\n* fix: make onboarding match designs by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/163\n* fix: make avatar not selectable, disable file drop on chat by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/132\n* fix: set defined models for openai, make default embedding be used when disable ingest with LF feature flag is enabled by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/128\n* Fix double OAuth callback execution using sessionStorage by @mfortman11 in https://github.com/langflow-ai/openrag/pull/168\n* fix: make config be on a volume by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/170\n* docs: Allow manually deploying to GitHub pages by @mlr in https://github.com/langflow-ai/openrag/pull/172\n* docs: add custom domain and changes to the baseURL by @mendonk in https://github.com/langflow-ai/openrag/pull/169\n* docs: design feedback by @mendonk in https://github.com/langflow-ai/openrag/pull/174\n* docs: add public preview admonition  by @mendonk in https://github.com/langflow-ai/openrag/pull/173\n* 98 bug copy chunk gives a messy paste by @boneill-ds in https://github.com/langflow-ai/openrag/pull/135\n* Feat/filters sweep by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/171\n* bug: closes #159 by adding more memory to npm invocations by @zznate in https://github.com/langflow-ai/openrag/pull/160\n* docs: peer review by @mendonk in https://github.com/langflow-ai/openrag/pull/161\n* 120 + 122 design sweep polish setting screen needs to match design spec by @boneill-ds in https://github.com/langflow-ai/openrag/pull/153\n* fix: remove config from being visible by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/178\n* fix: functional changes at the filter menu by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/177\n* docs: environment variables and config.yaml by @mendonk in https://github.com/langflow-ai/openrag/pull/140\n* feat: Update to flows to support Langflow updates by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/55\n* fix: use same model selector as onboarding on settings page by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/176\n* App Shell by @deon-sanchez in https://github.com/langflow-ai/openrag/pull/156\n* chore: fix typo and clarify comments in .env.example by @dvncvn in https://github.com/langflow-ai/openrag/pull/187\n* 'Add files' button on cloud ingest temporarily changes to 'Opening picker' by @deon-sanchez in https://github.com/langflow-ai/openrag/pull/186\n* Add Langflow feature flags for default folder name and to hide getting started progress by @mfortman11 in https://github.com/langflow-ai/openrag/pull/180\n* add tooltip to embedding model by @mfortman11 in https://github.com/langflow-ai/openrag/pull/189\n* v0.1.14.dev2 by @phact in https://github.com/langflow-ai/openrag/pull/191\n* lock by @phact in https://github.com/langflow-ai/openrag/pull/192\n* Refactor:file upload task to use filename mapping by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/195\n* feat: Switch base image to langflow-nightly in Dockerfile by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/196\n* feat: Add OpenRAG Ingestion support Docling as Default  by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/185\n* v0.1.14.dev3 by @phact in https://github.com/langflow-ai/openrag/pull/198\n* Add banner if docling serve isn't running by @mfortman11 in https://github.com/langflow-ai/openrag/pull/130\n* 101 design sweep polish chunk page by @boneill-ds in https://github.com/langflow-ai/openrag/pull/182\n* fix: make tasks be displayed after failing, solve knowledge duplication issues by @lucaseduoli in https://github.com/langflow-ai/openrag/pull/194\n* [design sweep]: update no auth cloud connector warning message by @boneill-ds in https://github.com/langflow-ai/openrag/pull/179\n* feat: Show globe icon for HTML documents in knowledge page by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/188\n* Pre release fixes by @phact in https://github.com/langflow-ai/openrag/pull/201\n* Feat/knowledge page design sweep by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/181\n* docling backend check by @phact in https://github.com/langflow-ai/openrag/pull/202\n* fix: file tuple for ingest by @phact in https://github.com/langflow-ai/openrag/pull/203\n* Page style alignment by @deon-sanchez in https://github.com/langflow-ai/openrag/pull/190\n* fixing `Connect` button on Settings page  by @boneill-ds in https://github.com/langflow-ai/openrag/pull/207\n* design sweep for ingest for connector page by @boneill-ds in https://github.com/langflow-ai/openrag/pull/197\n* fix: map the available value to the connector by @boneill-ds in https://github.com/langflow-ai/openrag/pull/208\n* Settings copy updates by @mfortman11 in https://github.com/langflow-ai/openrag/pull/205\n* backend fix by @phact in https://github.com/langflow-ai/openrag/pull/210\n* linter by @phact in https://github.com/langflow-ai/openrag/pull/211\n* feat: Add Google Drive Folder Selection by @erichare in https://github.com/langflow-ai/openrag/pull/152\n* feat: Update openrag_agent.json to add MCP support by @edwinjosechittilappilly in https://github.com/langflow-ai/openrag/pull/200\n* 0.1.15 by @phact in https://github.com/langflow-ai/openrag/pull/212\n* lint types fix by @phact in https://github.com/langflow-ai/openrag/pull/213\n* tui ip bind check by @phact in https://github.com/langflow-ai/openrag/pull/217\n* Feat/fix chunks page by @colegoldsmith in https://github.com/langflow-ai/openrag/pull/218\n\n## New Contributors\n* @Copilot made their first contribution in https://github.com/langflow-ai/openrag/pull/2\n* @mfortman11 made their first contribution in https://github.com/langflow-ai/openrag/pull/12\n* @phact made their first contribution in https://github.com/langflow-ai/openrag/pull/14\n* @edwinjosechittilappilly made their first contribution in https://github.com/langflow-ai/openrag/pull/16\n* @erichare made their first contribution in https://github.com/langflow-ai/openrag/pull/11\n* @Cristhianzl made their first contribution in https://github.com/langflow-ai/openrag/pull/19\n* @lucaseduoli made their first contribution in https://github.com/langflow-ai/openrag/pull/23\n* @ogabrielluiz made their first contribution in https://github.com/langflow-ai/openrag/pull/9\n* @colegoldsmith made their first contribution in https://github.com/langflow-ai/openrag/pull/43\n* @msmygit made their first contribution in https://github.com/langflow-ai/openrag/pull/46\n* @deon-sanchez made their first contribution in https://github.com/langflow-ai/openrag/pull/44\n* @mendonk made their first contribution in https://github.com/langflow-ai/openrag/pull/49\n* @boneill-ds made their first contribution in https://github.com/langflow-ai/openrag/pull/57\n* @mlr made their first contribution in https://github.com/langflow-ai/openrag/pull/172\n* @zznate made their first contribution in https://github.com/langflow-ai/openrag/pull/160\n* @dvncvn made their first contribution in https://github.com/langflow-ai/openrag/pull/187\n\n**Full Changelog**: https://github.com/langflow-ai/openrag/commits/v0.1.15",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-10-07T16:03:16+00:00",
+      "published_at": "2025-10-07T16:10:24+00:00",
+      "url": "https://github.com/langflow-ai/openrag/releases/tag/v0.1.15",
+      "tarball_url": "https://api.github.com/repos/langflow-ai/openrag/tarball/v0.1.15",
+      "zipball_url": "https://api.github.com/repos/langflow-ai/openrag/zipball/v0.1.15"
+    }
+  ]
+}

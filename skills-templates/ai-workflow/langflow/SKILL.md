@@ -301,6 +301,232 @@ Chat Input → Agent (with Chat Memory) → Tools → LLM → Chat Output
 Input → Component A → Parse → Component B → Format → Output
 ```
 
+## OpenRAG - Production RAG Platform
+
+**OpenRAG** is a comprehensive, production-ready Retrieval-Augmented Generation platform built on top of Langflow, providing a complete RAG solution with document processing, semantic search, and conversational AI capabilities.
+
+### What is OpenRAG?
+
+OpenRAG combines three powerful technologies into a single, cohesive platform:
+- **Langflow**: Workflow orchestration and agent coordination
+- **Docling**: Advanced document processing and extraction
+- **OpenSearch**: Semantic search and vector database
+
+**Repository**: https://github.com/langflow-ai/openrag (23 stars)
+**Documentation**: https://docs.openr.ag/
+**Homepage**: https://www.openr.ag
+**Latest Version**: v0.2.0 (December 2025)
+**License**: Apache License 2.0
+
+### Architecture Stack
+
+```
+Frontend (Next.js + TypeScript)
+         ↓
+Backend (Starlette + Python)
+         ↓
+┌─────────────────────────────────┐
+│  Langflow (Workflow Engine)     │
+│  Docling (Document Processing)  │
+│  OpenSearch (Vector Search)     │
+└─────────────────────────────────┘
+```
+
+**Language Distribution**:
+- Python: 64.4% (backend, workflows)
+- TypeScript: 33.6% (frontend)
+- Other: 1.0% (Makefile, CSS, Shell, Dockerfile)
+
+### Key Features
+
+**Document Management**:
+- Upload and process multiple document formats (PDF, TXT, DOCX, Markdown)
+- Docling-powered extraction for complex layouts and tables
+- OneDrive and SharePoint integration (v0.2.0+)
+- Configurable ingestion timeout limits
+
+**Intelligent Search**:
+- Semantic search with OpenSearch vector database
+- Context-aware document retrieval
+- Full-text search combined with vector similarity
+
+**Conversational AI**:
+- Chat interface with document-grounded responses
+- LLM integration (OpenAI, Anthropic, Ollama, IBM Granite, etc.)
+- Tool calling support for agent workflows
+- Session history and context management
+
+**Enterprise Features**:
+- Langfuse integration for observability and monitoring
+- Configurable authentication and security
+- API and SDK access for programmatic integration
+- Terminal User Interface (TUI) for management
+
+### Installation Options
+
+**Quick Start (No Installation)**:
+```bash
+# Run directly with uvx (no local installation)
+uvx openrag
+
+# Run specific version
+uvx --from openrag==0.2.0 openrag
+```
+
+**Python Package Installation**:
+```bash
+# Create project with uv
+uv init my-rag-app
+cd my-rag-app
+
+# Add OpenRAG
+uv add openrag
+
+# Launch TUI
+uv run openrag
+```
+
+**Docker/Podman Deployment**:
+```bash
+# OpenRAG automatically manages containers
+# See: https://docs.openr.ag/docker
+```
+
+### Production Deployment
+
+**Managed Containers** (Recommended):
+- OpenRAG automatically starts and manages required containers
+- Built-in health checks and service discovery
+- Simplified configuration through TUI
+
+**Self-Managed Containers**:
+- Full control over container orchestration
+- Custom Docker Compose configurations
+- Kubernetes deployment options
+- See: https://docs.openr.ag/docker
+
+### Use Cases
+
+**1. Enterprise Document Q&A**
+- Upload company documents, policies, and knowledge bases
+- Enable employees to query documents conversationally
+- Maintain document versioning and access control
+
+**2. Research Assistant**
+- Process academic papers and research documents
+- Extract insights and answer research questions
+- Track sources and citations automatically
+
+**3. Customer Support Knowledge Base**
+- Ingest support documentation and FAQs
+- Provide AI-powered answers to customer queries
+- Reduce support ticket volume with self-service
+
+**4. Legal Document Analysis**
+- Process contracts, agreements, and legal documents
+- Extract key clauses and obligations
+- Answer questions about document content
+
+### OpenRAG vs Direct Langflow
+
+| Feature | Langflow | OpenRAG |
+|---------|----------|---------|
+| **Purpose** | Workflow builder | Complete RAG platform |
+| **Setup Complexity** | Manual workflow creation | Pre-configured RAG stack |
+| **Document Processing** | Manual component setup | Built-in Docling integration |
+| **Vector Storage** | Requires separate setup | Integrated OpenSearch |
+| **Frontend UI** | Build your own | Production Next.js app |
+| **Use Case** | Custom AI workflows | Document Q&A systems |
+| **Best For** | Flexible AI development | Production RAG deployments |
+
+**When to Use OpenRAG**:
+- ✅ Need complete RAG system out-of-the-box
+- ✅ Focus on document Q&A use cases
+- ✅ Want integrated frontend + backend
+- ✅ Require enterprise features (Langfuse, OneDrive)
+- ✅ Prefer managed infrastructure
+
+**When to Use Langflow Directly**:
+- ✅ Building custom AI workflows beyond RAG
+- ✅ Need maximum flexibility in component choice
+- ✅ Integrating with existing systems
+- ✅ Prototyping new AI application patterns
+- ✅ Custom UI requirements
+
+### Recent Updates (v0.2.0)
+
+**December 2025 Release**:
+- OneDrive and SharePoint integration with redirect handling
+- SDK improvements for chat endpoints
+- Enhanced troubleshooting documentation
+- Langfuse observability integration
+- Image pruning options in TUI
+- Better password validation for OpenSearch
+- Centralized storage location (`~/.openrag`)
+
+### Getting Started with OpenRAG
+
+```bash
+# 1. Quick start (runs in TUI)
+uvx openrag
+
+# 2. Follow TUI prompts to:
+#    - Configure OpenSearch
+#    - Set up LLM provider (OpenAI, Anthropic, etc.)
+#    - Start services
+
+# 3. Access web interface
+# Default: http://localhost:3000
+
+# 4. Upload documents and start chatting
+```
+
+### OpenRAG Configuration
+
+**Storage Location**: `~/.openrag/`
+- Configuration files
+- Document uploads
+- Vector indexes
+- Session data
+
+**Environment Variables**:
+```bash
+# LLM Provider
+OPENAI_API_KEY=your_key
+ANTHROPIC_API_KEY=your_key
+
+# OpenSearch
+OPENSEARCH_PASSWORD=secure_password
+
+# Langfuse (Optional)
+LANGFUSE_PUBLIC_KEY=your_key
+LANGFUSE_SECRET_KEY=your_key
+```
+
+### Troubleshooting OpenRAG
+
+**Common Issues**:
+
+1. **Container Startup Failures**
+   - Check Docker/Podman is running
+   - Verify port availability (9200, 3000, 7860)
+   - Review logs: `openrag logs`
+
+2. **Document Ingestion Errors**
+   - Check file format support
+   - Verify Docling service is running
+   - Increase ingestion timeout if needed
+
+3. **Search Not Working**
+   - Verify OpenSearch is healthy
+   - Check vector embeddings are generated
+   - Review OpenSearch password configuration
+
+**Get Help**:
+- Troubleshooting Guide: https://docs.openr.ag/support/troubleshoot
+- GitHub Issues: https://github.com/langflow-ai/openrag/issues
+- Documentation: https://docs.openr.ag/
+
 ## Troubleshooting
 
 ### Port Already in Use
@@ -339,17 +565,30 @@ docker run -p 7860:7860 -v langflow-data:/app/data langflowai/langflow:latest
 - **Discord**: https://discord.gg/EqksyE2EX9
 - **Twitter**: https://twitter.com/langflow_ai
 
+### OpenRAG Resources
+- **Homepage**: https://www.openr.ag
+- **Documentation**: https://docs.openr.ag/
+- **GitHub**: https://github.com/langflow-ai/openrag (23 stars)
+- **Quickstart**: https://docs.openr.ag/quickstart
+- **Troubleshooting**: https://docs.openr.ag/support/troubleshoot
+
 ### Key Statistics
-- **Contributors**: 331 developers
-- **Used by**: 1,500+ projects
-- **Latest Release**: v1.7.1 (December 2025)
-- **License**: MIT
+- **Contributors**: 331 developers (Langflow)
+- **Used by**: 1,500+ projects (Langflow)
+- **Latest Release**:
+  - Langflow v1.7.1 (December 2025)
+  - OpenRAG v0.2.0 (December 2025)
+- **License**:
+  - Langflow: MIT
+  - OpenRAG: Apache License 2.0
 
 ### Learning Resources
 - Quickstart Tutorial: https://docs.langflow.org/get-started-quickstart
 - Component Reference: https://docs.langflow.org/concepts-components
 - Deployment Guides: https://docs.langflow.org/deployment-overview
 - API Documentation: https://docs.langflow.org/api-reference-api-examples
+- RAG with Langflow: https://docs.langflow.org/chat-with-rag
+- OpenRAG Installation: https://docs.openr.ag/install
 
 ## When to Use This Skill
 
@@ -361,6 +600,9 @@ Use the Langflow skill when:
 - ✅ Creating multi-agent coordination systems
 - ✅ Developing RAG (Retrieval-Augmented Generation) applications
 - ✅ Exposing AI workflows as API endpoints
+- ✅ Deploying production-ready RAG platforms with OpenRAG
+- ✅ Building document Q&A systems with integrated search and chat
+- ✅ Processing documents with Docling and OpenSearch integration
 - ✅ Building custom components for specialized AI tasks
 - ✅ Setting up local or cloud-based AI development environments
 - ✅ Testing and debugging complex LLM workflows interactively
@@ -368,11 +610,14 @@ Use the Langflow skill when:
 ## Related Technologies
 
 - **LangChain**: Python framework for LLM applications (Langflow is built on LangChain)
+- **OpenRAG**: Production RAG platform built on Langflow (https://github.com/langflow-ai/openrag)
+- **Docling**: Document processing and extraction (integrated in OpenRAG)
+- **OpenSearch**: Vector database and semantic search (integrated in OpenRAG)
 - **Model Context Protocol (MCP)**: Tool integration standard (native support)
 - **OpenAI API**: LLM provider (integrated)
 - **Anthropic Claude**: LLM provider (integrated)
 - **LangSmith**: Observability platform (integrated)
-- **LangFuse**: Open-source observability (integrated)
+- **LangFuse**: Open-source observability (integrated in OpenRAG)
 - **Docker**: Containerization (deployment option)
 - **Kubernetes**: Orchestration (production deployment)
 
