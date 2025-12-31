@@ -1,0 +1,296 @@
+{
+  "repo_info": {
+    "name": "cc-mcp-executor-skill",
+    "full_name": "mcfearsome/cc-mcp-executor-skill",
+    "description": "Claude Code skill for executing MCP tool calls as code",
+    "url": "https://github.com/mcfearsome/cc-mcp-executor-skill",
+    "homepage": null,
+    "stars": 1,
+    "forks": 0,
+    "open_issues": 2,
+    "default_branch": "main",
+    "created_at": "2025-11-11T17:26:59+00:00",
+    "updated_at": "2025-12-20T22:22:26+00:00",
+    "language": "Python",
+    "license": null,
+    "topics": []
+  },
+  "readme": "# Code Executor Skill for Claude Code\n\nA comprehensive Claude Code skill that enables efficient multi-tool MCP workflows by launching subagents that write and execute code, reducing token overhead by up to 98%.\n\n## Overview\n\nThis skill teaches Claude Code how to handle complex MCP workflows efficiently using a **subagent architecture**. Instead of loading all MCP tool schemas into the main context (causing token bloat), Claude Code launches a subagent that writes TypeScript or Python code to compose multiple MCP tool calls.\n\n### Key Benefits\n\n- **98% Token Reduction**: Main context has NO MCP servers → no token bloat (1.6k vs 141k tokens)\n- **Multi-Tool Composition**: Combine multiple MCP operations in single code execution\n- **Complex Logic**: Loops, conditionals, data transformations, retry logic\n- **Parallel Execution**: Fetch from multiple sources simultaneously\n- **Cached Patterns**: 12 proven script examples (6 TypeScript + 6 Python)\n- **Progressive Disclosure**: Load MCP tools only in subagent context\n\n## Architecture\n\n```\nMain Claude Code (NO MCP servers configured)\n    ↓\n    Recognizes multi-tool MCP workflow\n    ↓\n    Launches subagent via Task tool\n    ↓\nSubagent (HAS MCP servers configured)\n    ↓\n    Writes TypeScript/Python code\n    ↓\n    Executes via Bash (deno run / python)\n    ↓\n    Code imports local MCP client library\n    ↓\n    MCP client calls tools via MCP protocol\n    ↓\n    Returns results to main context\n```\n\n**Why this works:**\n- Main context stays clean (no MCP schemas loaded)\n- Subagent context is isolated and disposable\n- Code execution allows complex multi-tool composition\n- Results summarized and returned to main\n\n## Prerequisites\n\n### Required\n\n1. **Claude Code** (terminal or web version)\n   - Get it: https://docs.claude.com/en/docs/claude-code\n\n2. **Deno** (for TypeScript execution)\n   ```bash\n   curl -fsSL https://deno.land/install.sh | sh\n   ```\n\n3. **Python 3.8+** (for Python execution)\n   ```bash\n   python3 --version  # Should be 3.8 or higher\n   ```\n\n4. **MCP Servers** you want to use\n   - Filesystem: `@modelcontextprotocol/server-filesystem`\n   - PostgreSQL: `mcp-server-postgres`\n   - SQLite: `mcp-server-sqlite`\n   - GitHub: `mcp-server-github`\n   - Or your custom MCP servers\n\n### NOT Required\n\n- ❌ code-executor-MCP server (we implement MCP client locally)\n- ❌ MCP servers in main Claude Code configuration (keeps context clean)\n\n## Installation\n\n### Step 1: Install the Skill\n\n```bash\n# Clone this repository\ngit clone https://github.com/mcfearsome/cc-mcp-executor-skill.git\n\n# Install for main Claude Code instance (global)\ncp -r cc-mcp-executor-skill/code-executor ~/.claude/skills/\n\n# OR install for specific project (local)\nmkdir -p .claude/skills\ncp -r cc-mcp-executor-skill/code-executor .claude/skills/\n```\n\n### Step 2: Configure Subagent MCP Servers\n\nCreate `~/.claude/subagent-mcp.json` (or project-specific `.claude/subagent-mcp.json`):\n\n```json\n{\n  \"mcpServers\": {\n    \"filesystem\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-filesystem\", \"/tmp\", \"/home/user/projects\"]\n    },\n    \"postgres\": {\n      \"command\": \"mcp-server-postgres\",\n      \"args\": [\"--connection\", \"postgresql://localhost/mydb\"]\n    },\n    \"github\": {\n      \"command\": \"mcp-server-github\",\n      \"args\": [\"--token-file\", \"/home/user/.github-token\"]\n    }\n  }\n}\n```\n\n### Step 3: Understand MCP Client Configuration\n\nThe MCP client library reads configuration from `~/.mcp.json` or `MCP_CONFIG_PATH` env var.\n\n**CRITICAL: Do NOT symlink or globally export MCP_CONFIG_PATH**\n\nWhy? If you symlink `~/.claude/subagent-mcp.json` to `~/.mcp.json`, or globally export `MCP_CONFIG_PATH`, then **main Claude Code will load all MCP servers**, defeating the entire purpose (98% token reduction).\n\n**Correct approach:**\n\nThe subagent sets `MCP_CONFIG_PATH` temporarily in the Bash execution command:\n\n```bash\nMCP_CONFIG_PATH=~/.claude/subagent-mcp.json deno run --allow-read --allow-run --allow-env script.ts\n```\n\nThis way:\n- ✅ Main Claude Code has NO MCP servers loaded (keeps context clean)\n- ✅ Subagent execution sets `MCP_CONFIG_PATH` temporarily\n- ✅ MCP client reads from subagent config only during code execution\n- ✅ Token overhead isolated to subagent context\n\n**No action needed in this step** - the subagent handles setting `MCP_CONFIG_PATH` automatically when executing code.\n\n### Step 4: Verify Installation\n\n```bash\n# Check skill is installed\nls -la ~/.claude/skills/code-executor/\n\n# You should see:\n# - SKILL.md (main skill file)\n# - SUBAGENT_SETUP.md (configuration guide)\n# - lib/ (MCP client libraries)\n# - scripts/ (cached patterns)\n# - templates/ (starting points)\n```\n\n## Quick Start\n\n### Example 1: Simple File Processing\n\n**User Request:**\n```\n\"Read all JSON files in /tmp/data and count total records\"\n```\n\n**Claude Code (main):**\nRecognizes multi-tool workflow → launches subagent\n\n**Subagent:**\n- Writes code using `scripts/typescript/file-processing.ts` pattern\n- Lists files via `mcp__filesystem__listDirectory`\n- Reads each JSON file via `mcp__filesystem__readFile`\n- Counts records\n- Returns: \"Processed 15 files, 1,247 total records\"\n\n### Example 2: Multi-Source Data Aggregation\n\n**User Request:**\n```\n\"Fetch users from database, enrich with GitHub profile data, store results\"\n```\n\n**Claude Code (main):**\nRecognizes multi-tool workflow → launches subagent\n\n**Subagent:**\n- Uses `scripts/typescript/data-aggregation.ts` pattern\n- Fetches users via `mcp__database__query`\n- Enriches in parallel via `mcp__github__getUser`\n- Stores via `mcp__database__insert`\n- Returns: \"Enriched 234 users, stored successfully\"\n\n### Example 3: Error Recovery\n\n**User Request:**\n```\n\"Fetch data from primary API, fallback to secondary if it fails\"\n```\n\n**Claude Code (main):**\nRecognizes error recovery pattern → launches subagent\n\n**Subagent:**\n- Uses `scripts/typescript/error-recovery.ts` pattern\n- Tries primary API with retries\n- Falls back to secondary on failure\n- Returns: \"Retrieved from secondary API after primary timeout\"\n\n## Skill Structure\n\n```\ncode-executor/\n├── SKILL.md                    # Main skill file (Claude Code reads this)\n├── SUBAGENT_SETUP.md           # Configuration guide\n├── TYPESCRIPT_GUIDE.md         # TypeScript patterns reference\n├── PYTHON_GUIDE.md             # Python patterns reference\n├── EXAMPLES.md                 # Complete real-world examples\n├── REFERENCE.md                # MCP client API reference\n├── lib/                        # MCP client libraries\n│   ├── mcp-client.ts           # TypeScript/Deno MCP client\n│   └── mcp_client.py           # Python MCP client\n├── scripts/                    # Cached executable patterns\n│   ├── typescript/\n│   │   ├── multi-tool-workflow.ts      # Sequential pipeline\n│   │   ├── parallel-execution.ts       # Concurrent operations\n│   │   ├── error-recovery.ts           # Retry logic\n│   │   ├── file-processing.ts          # Batch file ops\n│   │   ├── conditional-logic.ts        # Dynamic tool selection\n│   │   └── data-aggregation.ts         # Multi-source merging\n│   └── python/\n│       ├── multi_tool_workflow.py\n│       ├── parallel_execution.py\n│       ├── error_recovery.py\n│       ├── file_processing.py\n│       ├── conditional_logic.py\n│       └── data_aggregation.py\n└── templates/                  # Minimal starting points\n    ├── basic-typescript.template.ts\n    ├── basic-python.template.py\n    ├── multi-tool.template.ts\n    └── multi-tool.template.py\n```\n\n## How It Works\n\n### 1. Main Claude Code (YOU)\n\nWhen you encounter a multi-tool MCP workflow:\n\n1. ✅ Recognize pattern (3+ MCP tools, complex logic, etc.)\n2. ✅ Launch subagent via Task tool\n3. ✅ Provide clear instructions referencing cached scripts\n4. ✅ Specify which MCP tools are available\n5. ✅ Define expected output\n6. ✅ Receive and report results\n\n**You DON'T:**\n- ❌ Have MCP servers configured (keeps context clean)\n- ❌ Load MCP tool schemas (no token bloat)\n- ❌ Write the code yourself (subagent does it)\n\n### 2. Subagent Execution\n\nThe subagent:\n\n1. Reads referenced cached script pattern\n2. Writes adapted TypeScript/Python code\n3. Imports MCP client library\n4. Executes code via Bash\n5. Code calls multiple MCP tools as needed\n6. Returns summary to main context\n\n### 3. MCP Client Library\n\nLocal implementation of MCP protocol client:\n\n**TypeScript (`lib/mcp-client.ts`)**:\n```typescript\nimport { callMCPTool } from '../../lib/mcp-client.ts';\n\nconst result = await callMCPTool('mcp__filesystem__readFile', {\n  path: '/data/file.json'\n});\n```\n\n**Python (`lib/mcp_client.py`)**:\n```python\nfrom lib.mcp_client import call_mcp_tool\n\nresult = await call_mcp_tool('mcp__filesystem__readFile', {\n    'path': '/data/file.json'\n})\n```\n\n## When to Use This Skill\n\n### ✅ Use When:\n\n1. **Multi-tool MCP workflows** (3+ tool calls needed)\n   - \"List files, read each, aggregate data, store in database\"\n\n2. **Complex data processing**\n   - \"Fetch from DB, enrich with API, filter, deduplicate, store\"\n\n3. **Conditional tool selection**\n   - \"Try primary API, fallback to secondary, then cache\"\n\n4. **Parallel operations**\n   - \"Fetch from 5 different APIs simultaneously\"\n\n5. **Retry logic and error recovery**\n   - \"Retry with exponential backoff until success\"\n\n### ❌ Don't Use When:\n\n1. **Single simple tool call** - Just call it directly\n2. **No MCP tools needed** - Regular task planning\n3. **UI/user interaction** - Use slash commands\n4. **Simple sequential ops** - Direct calls clearer\n\n## Cached Script Patterns\n\n### TypeScript\n\n1. **multi-tool-workflow.ts** - Sequential pipeline (Fetch → Transform → Validate → Store → Report)\n2. **parallel-execution.ts** - Concurrent operations with Promise.all\n3. **error-recovery.ts** - Retry logic with exponential backoff\n4. **file-processing.ts** - Batch file operations with filtering\n5. **conditional-logic.ts** - Dynamic tool selection based on data\n6. **data-aggregation.ts** - Multi-source data merging\n\n### Python\n\nSame patterns in Python:\n- multi_tool_workflow.py\n- parallel_execution.py\n- error_recovery.py\n- file_processing.py\n- conditional_logic.py\n- data_aggregation.py\n\n## MCP Tool Naming\n\n**Format**: `mcp__<server>__<tool>`\n\n**Examples**:\n- `mcp__filesystem__readFile`\n- `mcp__database__query`\n- `mcp__github__createPullRequest`\n\nThe `<server>` name comes from your subagent MCP configuration.\n\n## Troubleshooting\n\n### Skill Not Activating\n\n**Problem**: Claude Code doesn't use the skill\n\n**Solutions**:\n1. Check installation: `ls ~/.claude/skills/code-executor/SKILL.md`\n2. Verify YAML frontmatter in SKILL.md\n3. Try explicit language: \"Use the code-executor skill to handle this multi-tool workflow\"\n\n### Tool Not Found\n\n**Problem**: `Error: MCP tool 'mcp__server__tool' not found`\n\n**Solutions**:\n1. Check tool name format: `mcp__<server>__<tool>`\n2. Verify server in subagent config: `cat ~/.mcp.json`\n3. Ensure server is running (test manually)\n\n### MCP Config Not Found\n\n**Problem**: \"MCP config file not found: ~/.mcp.json\"\n\n**Cause**: Subagent execution command didn't set `MCP_CONFIG_PATH`\n\n**Solutions**:\n1. Verify subagent Bash command includes: `MCP_CONFIG_PATH=~/.claude/subagent-mcp.json`\n2. Check config file exists: `ls -la ~/.claude/subagent-mcp.json`\n3. Review SKILL.md to ensure execution examples include MCP_CONFIG_PATH\n\n**DO NOT**: Symlink or globally export MCP_CONFIG_PATH (this defeats the architecture)\n\n### Permission Denied\n\n**Problem**: Cannot read/write files or access network\n\n**Solutions**:\n1. Check Deno permissions: Include `--allow-read --allow-run --allow-env`\n2. Verify file paths are in allowed directories (MCP server config)\n3. Check MCP server has necessary permissions\n\n### Code Execution Fails\n\n**Problem**: Subagent's code doesn't run\n\n**Solutions**:\n1. Check Deno installed: `deno --version`\n2. Check Python installed: `python3 --version`\n3. Review generated code for syntax errors\n4. Check MCP client import paths are correct\n\n## Configuration\n\n### Main Claude Code\n\n**NO MCP servers** in `.mcp.json`:\n\n```json\n{\n  \"mcpServers\": {\n    // Keep this empty or don't create the file\n  }\n}\n```\n\n### Subagent MCP Servers\n\nCreate `~/.claude/subagent-mcp.json`:\n\n```json\n{\n  \"mcpServers\": {\n    \"filesystem\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-filesystem\", \"/allowed/paths\"]\n    },\n    \"database\": {\n      \"command\": \"mcp-server-postgres\",\n      \"args\": [\"--connection\", \"postgresql://...\"]\n    }\n  }\n}\n```\n\nSee [SUBAGENT_SETUP.md](./code-executor/SUBAGENT_SETUP.md) for complete configuration guide.\n\n## Security Considerations\n\n1. **Sandboxed Execution**\n   - TypeScript: Deno runtime with explicit permissions\n   - Python: subprocess with restricted access\n\n2. **MCP Server Security**\n   - Filesystem: Limited to allowed paths\n   - Database: Use read-only connections where possible\n   - Network: Servers can make network requests\n\n3. **Best Practices**\n   - Review generated code in sensitive contexts\n   - Configure MCP servers with least privilege\n   - Use allowlists to restrict tool access\n   - Avoid sensitive data in logs\n\n4. **Code Execution Risk**\n   - Subagent writes and executes code\n   - Audit generated scripts before execution in production\n   - Consider running in isolated environments\n\n## Documentation\n\n- **[SKILL.md](./code-executor/SKILL.md)** - Main skill instructions (what Claude Code reads)\n- **[SUBAGENT_SETUP.md](./code-executor/SUBAGENT_SETUP.md)** - Complete configuration guide\n- **[TYPESCRIPT_GUIDE.md](./code-executor/TYPESCRIPT_GUIDE.md)** - TypeScript patterns and Deno\n- **[PYTHON_GUIDE.md](./code-executor/PYTHON_GUIDE.md)** - Python patterns and asyncio\n- **[EXAMPLES.md](./code-executor/EXAMPLES.md)** - 6 complete real-world examples\n- **[REFERENCE.md](./code-executor/REFERENCE.md)** - MCP client API reference\n\n## Contributing\n\nContributions welcome! To add new cached scripts or improve documentation:\n\n1. Fork the repository\n2. Create a feature branch\n3. Add your script to `scripts/typescript/` or `scripts/python/`\n4. Include comprehensive header with:\n   - Purpose and use case\n   - Adaptation instructions\n   - Example usage\n5. Test the script with actual MCP tools\n6. Submit a pull request\n\n## Development\n\n### Adding New Scripts\n\n1. Create script file in appropriate directory\n2. Include header documentation\n3. Import MCP client library\n4. Test with real MCP tools\n5. Update README if adding new categories\n\n### Testing Scripts\n\n```bash\n# Test TypeScript script\nMCP_CONFIG_PATH=~/.claude/subagent-mcp.json \\\n  deno run --allow-read --allow-run --allow-env scripts/typescript/your-script.ts\n\n# Test Python script\nMCP_CONFIG_PATH=~/.claude/subagent-mcp.json \\\n  python scripts/python/your_script.py\n```\n\n## License\n\nMIT License - See LICENSE file for details\n\n## Related Projects\n\n- [Claude Code](https://docs.claude.com/en/docs/claude-code) - AI coding assistant\n- [MCP Protocol](https://modelcontextprotocol.io) - Model Context Protocol specification\n- [Deno](https://deno.land) - Secure TypeScript runtime\n\n## Support\n\nFor issues related to:\n- **This skill**: Open an issue in this repository\n- **Claude Code**: See https://docs.claude.com/en/docs/claude-code\n- **MCP Protocol**: See https://modelcontextprotocol.io\n- **Deno**: See https://deno.land\n- **Specific MCP servers**: Check their respective repositories\n\n## Changelog\n\n### v2.0.0 (2025-11-11) - Subagent Architecture\n\n**BREAKING CHANGES:**\n- Complete redesign from code-executor-MCP dependency to subagent architecture\n- Main Claude Code no longer needs MCP servers configured\n- Subagents handle code execution with local MCP client\n\n**New:**\n- Local MCP client libraries (TypeScript + Python)\n- Subagent configuration guide\n- Completely rewritten SKILL.md for subagent pattern\n- Updated all scripts and templates for new architecture\n\n**Benefits:**\n- 98% token reduction in main context\n- No external dependencies (besides Deno/Python)\n- More flexible and efficient execution\n\n### v1.0.0 (2025-11-11) - Initial Release\n\n- 12 cached scripts (6 TypeScript + 6 Python)\n- 4 template files\n- Comprehensive documentation (5 guide files)\n- Support for both TypeScript (Deno) and Python execution\n\n## Acknowledgments\n\n- Inspired by [code-executor-MCP](https://github.com/aberemia24/code-executor-MCP) by aberemia24\n- Built for the Claude Code ecosystem by Anthropic\n- Thanks to the MCP community for the protocol specification\n\n---\n\n**Ready to get started?** See [SUBAGENT_SETUP.md](./code-executor/SUBAGENT_SETUP.md) for step-by-step setup instructions.\n",
+  "file_tree": [
+    {
+      "path": ".claude-plugin",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".github",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".markdownlint.json",
+      "type": "file",
+      "size": 200
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "type": "file",
+      "size": 5225
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "type": "file",
+      "size": 10015
+    },
+    {
+      "path": "PLAN.md",
+      "type": "file",
+      "size": 28572
+    },
+    {
+      "path": "README.md",
+      "type": "file",
+      "size": 16748
+    },
+    {
+      "path": "TESTING.md",
+      "type": "file",
+      "size": 15784
+    },
+    {
+      "path": "code-executor",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".claude-plugin/plugin.json",
+      "type": "file",
+      "size": 620
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "type": "file",
+      "size": 546
+    },
+    {
+      "path": ".github/labeler.yml",
+      "type": "file",
+      "size": 449
+    },
+    {
+      "path": ".github/markdown-link-check-config.json",
+      "type": "file",
+      "size": 340
+    },
+    {
+      "path": ".github/pull_request_template.md",
+      "type": "file",
+      "size": 1956
+    },
+    {
+      "path": ".github/workflows",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "code-executor/EXAMPLES.md",
+      "type": "file",
+      "size": 22433
+    },
+    {
+      "path": "code-executor/PYTHON_GUIDE.md",
+      "type": "file",
+      "size": 16519
+    },
+    {
+      "path": "code-executor/REFERENCE.md",
+      "type": "file",
+      "size": 13060
+    },
+    {
+      "path": "code-executor/SKILL.md",
+      "type": "file",
+      "size": 16966
+    },
+    {
+      "path": "code-executor/SUBAGENT_SETUP.md",
+      "type": "file",
+      "size": 11556
+    },
+    {
+      "path": "code-executor/TYPESCRIPT_GUIDE.md",
+      "type": "file",
+      "size": 13934
+    },
+    {
+      "path": "code-executor/lib",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "code-executor/scripts",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "code-executor/templates",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.yml",
+      "type": "file",
+      "size": 2664
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.yml",
+      "type": "file",
+      "size": 1937
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "type": "file",
+      "size": 6386
+    },
+    {
+      "path": ".github/workflows/docs.yml",
+      "type": "file",
+      "size": 1792
+    },
+    {
+      "path": ".github/workflows/labeler.yml",
+      "type": "file",
+      "size": 344
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "type": "file",
+      "size": 1949
+    },
+    {
+      "path": ".github/workflows/security.yml",
+      "type": "file",
+      "size": 885
+    },
+    {
+      "path": "code-executor/lib/mcp-client.ts",
+      "type": "file",
+      "size": 5825
+    },
+    {
+      "path": "code-executor/lib/mcp_client.py",
+      "type": "file",
+      "size": 7175
+    },
+    {
+      "path": "code-executor/scripts/python",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "code-executor/scripts/typescript",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "code-executor/templates/basic-python.template.py",
+      "type": "file",
+      "size": 1597
+    },
+    {
+      "path": "code-executor/templates/basic-typescript.template.ts",
+      "type": "file",
+      "size": 1611
+    },
+    {
+      "path": "code-executor/templates/multi-tool.template.py",
+      "type": "file",
+      "size": 3174
+    },
+    {
+      "path": "code-executor/templates/multi-tool.template.ts",
+      "type": "file",
+      "size": 3059
+    },
+    {
+      "path": "code-executor/scripts/python/conditional_logic.py",
+      "type": "file",
+      "size": 11233
+    },
+    {
+      "path": "code-executor/scripts/python/data_aggregation.py",
+      "type": "file",
+      "size": 12248
+    },
+    {
+      "path": "code-executor/scripts/python/error_recovery.py",
+      "type": "file",
+      "size": 7190
+    },
+    {
+      "path": "code-executor/scripts/python/file_processing.py",
+      "type": "file",
+      "size": 8283
+    },
+    {
+      "path": "code-executor/scripts/python/multi_tool_workflow.py",
+      "type": "file",
+      "size": 4539
+    },
+    {
+      "path": "code-executor/scripts/python/parallel_execution.py",
+      "type": "file",
+      "size": 6218
+    },
+    {
+      "path": "code-executor/scripts/typescript/conditional-logic.ts",
+      "type": "file",
+      "size": 10595
+    },
+    {
+      "path": "code-executor/scripts/typescript/data-aggregation.ts",
+      "type": "file",
+      "size": 12135
+    },
+    {
+      "path": "code-executor/scripts/typescript/error-recovery.ts",
+      "type": "file",
+      "size": 6869
+    },
+    {
+      "path": "code-executor/scripts/typescript/file-processing.ts",
+      "type": "file",
+      "size": 8206
+    },
+    {
+      "path": "code-executor/scripts/typescript/multi-tool-workflow.ts",
+      "type": "file",
+      "size": 4257
+    },
+    {
+      "path": "code-executor/scripts/typescript/parallel-execution.ts",
+      "type": "file",
+      "size": 6153
+    }
+  ],
+  "languages": {
+    "Python": {
+      "bytes": 61657,
+      "percentage": 51.22
+    },
+    "TypeScript": {
+      "bytes": 58710,
+      "percentage": 48.78
+    }
+  },
+  "signatures": [],
+  "test_examples": [],
+  "issues": [],
+  "changelog": "",
+  "releases": []
+}

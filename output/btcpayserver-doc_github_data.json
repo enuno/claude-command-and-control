@@ -1,0 +1,4247 @@
+{
+  "repo_info": {
+    "name": "btcpayserver-doc",
+    "full_name": "btcpayserver/btcpayserver-doc",
+    "description": "BTCPay Server Official Documentation",
+    "url": "https://github.com/btcpayserver/btcpayserver-doc",
+    "homepage": "https://docs.btcpayserver.org",
+    "stars": 407,
+    "forks": 286,
+    "open_issues": 21,
+    "default_branch": "master",
+    "created_at": "2017-08-28T15:28:45+00:00",
+    "updated_at": "2025-12-22T21:33:14+00:00",
+    "language": "Shell",
+    "license": null,
+    "topics": [
+      "btcpayserver",
+      "documentation"
+    ]
+  },
+  "readme": "# BTCPay Server Documentation\n\n[![Build Status](https://github.com/btcpayserver/btcpayserver-doc/workflows/Build/badge.svg)](https://github.com/btcpayserver/btcpayserver-doc/actions/workflows/build.yml)\n\n## Introduction\n\nBTCPay Server is an open-source, self-hosted payment processor for Bitcoin and other cryptocurrencies.\n\nIf you have trouble using BTCPay Server, consider joining the [communities listed on the official website](https://btcpayserver.org/#communityCTA) to get help from community members.\n\nOnly file a [Github issue](https://github.com/btcpayserver/btcpayserver/issues) for technical issues you can't resolve through other channels or feature requests you've validated with other members of community.\n\nPlease check out our [official website](https://btcpayserver.org/), [complete documentation](https://docs.btcpayserver.org/) and [FAQ](https://docs.btcpayserver.org/FAQ/) for more details.\n\n## Contributing\n\nPull requests are welcome and appreciated. To contribute to BTCPay Server, first check the [contributing guidelines](docs/Contribute/README.md).\n\nIf you're a beginner, take a look at the step by step guide on how to contribute to BTCPay Server documentation below.\n\n[![Contributing to Documentation](https://img.youtube.com/vi/bSDROcdSSWw/mqdefault.jpg)](https://www.youtube.com/watch?v=bSDROcdSSWw)\n\n### Build the Documentation Locally\n\nIn order to build the website locally, you'll need [Node.js](https://nodejs.org/) >= 12.16 (or basically the latest LTS version).\nA prerequisite for the `setup-deps.sh` script is [jq](https://stedolan.github.io/jq/).\n\nThe setup is straight forward:\n\n```bash\n# Install dependencies\nnpm install\n\n# Link external doc repos\n./setup-deps.sh\n\n# Serve locally (by default on port 8080)\nnpm start\n```\n\n### Text Highlights\n\nThere are [three types of text highlights](https://vuepress.vuejs.org/guide/markdown.html#custom-containers) that can be used to display different colored boxes.\n\nA green box displaying a friendly tip:\n\n```md\n:::tip\nfoo\n:::\n```\n\nA yellow box with a cautious warning:\n\n```md\n:::warning\nfoo\n:::\n```\n\nA red box with a clear danger, you can also add a title `foo` to any container:\n\n```md\n:::danger foo\nbar\n:::\n```\n\n### SEO improvements\n\nWe are using the [Vuepress SEO plugin](https://www.npmjs.com/package/vuepress-plugin-seo) to add relevant meta tags to the site and individual pages.\n\nTo improve the meta attributes of a specific page, you can add them as YAML frontmatter like this: (see the WooCommerce page for an example)\n\n```text\n---\ndescription: How to integrate BTCPay Server into your WooCommerce store.\ntags:\n- WooCommerce\n- WordPress\n- Plugin\n- eCommerce\n---\n# WooCommerce integration\n\nThis document explains how to **integrate BTCPay Server into your WooCommerce store**.\n```\n\n### Embedding YouTube videos\n\nTo add a YouTube video with a preview, you can do so by linking to it like this:\n\n```md\n[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/mqdefault.jpg)](https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)\n```\n\nNote that the link item need to be a preview image (either from YouTube or a custom one) to result in an embedded video.\n\n### External documentation repos\n\nThe build documentation site combines a bunch of docs living in different repositories.\n\nBefore the build we check out the other repositories, copy their docs into the right places and link them just as the docs in this repo.\n\nThe process for that is defined in the [setup-deps.sh](./setup-deps.sh) script.\n\nExternal repos can trigger the docs build whenever they change.\nYou can use GitHub's [repository_dispatch](https://help.github.com/en/actions/reference/events-that-trigger-workflows#external-events-repository_dispatch) feature for this, which is exposed via the API:\n\n```sh\ncurl -X POST https://api.github.com/repos/btcpayserver/btcpayserver-doc/dispatches \\\n  -u \"${{ secrets.GH_PAT }}\" \\\n  -H \"Accept: application/vnd.github.everest-preview+json\" \\\n  -H \"Content-Type: application/json\" \\\n  --data '{\"event_type\": \"build_docs\"}'\n```\n\nThe `GH_PAT` needs to be a [personal access token](https://help.github.com/en/actions/reference/events-that-trigger-workflows#triggering-new-workflows-using-a-personal-access-token).\n\n## Supporters\n\nThe BTCPay Server Project is proudly supported by these entities through the [BTCPay Server Foundation](https://foundation.btcpayserver.org/).\n\n[![Spiral](https://raw.githubusercontent.com/btcpayserver/btcpayserver/master/BTCPayServer/wwwroot/img/readme/supporter_spiral.svg)](https://spiral.xyz)\n[![OpenSats](https://raw.githubusercontent.com/btcpayserver/btcpayserver/master/BTCPayServer/wwwroot/img/readme/supporter_opensats.svg)](https://opensats.org)\n[![Tether](https://raw.githubusercontent.com/btcpayserver/btcpayserver/master/BTCPayServer/wwwroot/img/readme/supporter_tether.svg)](https://tether.to)\n[![Human Rights Foundation](https://raw.githubusercontent.com/btcpayserver/btcpayserver/master/BTCPayServer/wwwroot/img/readme/supporter_hrf.svg)](https://hrf.org)\n[![LunaNode](https://raw.githubusercontent.com/btcpayserver/btcpayserver/master/BTCPayServer/wwwroot/img/readme/supporter_lunanode.svg)](https://lunanode.com)\n[![Wallet of Satoshi](https://raw.githubusercontent.com/btcpayserver/btcpayserver/master/BTCPayServer/wwwroot/img/readme/supporter_walletofsatoshi.svg)](https://walletofsatoshi.com/)\n[![Coincards](https://raw.githubusercontent.com/btcpayserver/btcpayserver/master/BTCPayServer/wwwroot/img/readme/supporter_coincards.svg)](https://coincards.com/)\n[![IVPN](https://raw.githubusercontent.com/btcpayserver/btcpayserver/master/BTCPayServer/wwwroot/img/readme/supporter_ivpn.svg)](https://ivpn.net/)\n[![Unbank](https://raw.githubusercontent.com/btcpayserver/btcpayserver/master/BTCPayServer/wwwroot/img/readme/supporter_unbank.svg)](https://unbank.com/)\n\nIf you'd like to support the project, please visit the [donation page](https://btcpayserver.org/donate/).\n",
+  "file_tree": [
+    {
+      "path": ".editorconfig",
+      "type": "file",
+      "size": 280
+    },
+    {
+      "path": ".github",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".gitignore",
+      "type": "file",
+      "size": 761
+    },
+    {
+      "path": "LICENSE",
+      "type": "file",
+      "size": 1074
+    },
+    {
+      "path": "README.md",
+      "type": "file",
+      "size": 5922
+    },
+    {
+      "path": "create-redirects.js",
+      "type": "file",
+      "size": 888
+    },
+    {
+      "path": "docs",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "jest.config.js",
+      "type": "file",
+      "size": 283
+    },
+    {
+      "path": "package-lock.json",
+      "type": "file",
+      "size": 892854
+    },
+    {
+      "path": "package.json",
+      "type": "file",
+      "size": 1556
+    },
+    {
+      "path": "scripts",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "setup-deps.sh",
+      "type": "file",
+      "size": 19826
+    },
+    {
+      "path": "swagger",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".github/FUNDING.yml",
+      "type": "file",
+      "size": 85
+    },
+    {
+      "path": ".github/workflows",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/.vuepress",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/AdvancedForms.md",
+      "type": "file",
+      "size": 12113
+    },
+    {
+      "path": "docs/Apps.md",
+      "type": "file",
+      "size": 4132
+    },
+    {
+      "path": "docs/BTCPayVsOthers.md",
+      "type": "file",
+      "size": 8681
+    },
+    {
+      "path": "docs/Calcom.md",
+      "type": "file",
+      "size": 4173
+    },
+    {
+      "path": "docs/ColdCardWallet.md",
+      "type": "file",
+      "size": 2423
+    },
+    {
+      "path": "docs/Community.md",
+      "type": "file",
+      "size": 344
+    },
+    {
+      "path": "docs/Conference-PoS-guide.md",
+      "type": "file",
+      "size": 11610
+    },
+    {
+      "path": "docs/ConnectWallet.md",
+      "type": "file",
+      "size": 3922
+    },
+    {
+      "path": "docs/Contribute",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/CreateStore.md",
+      "type": "file",
+      "size": 1183
+    },
+    {
+      "path": "docs/CreateWallet.md",
+      "type": "file",
+      "size": 6708
+    },
+    {
+      "path": "docs/CustomIntegration.md",
+      "type": "file",
+      "size": 4462
+    },
+    {
+      "path": "docs/Dashboard.md",
+      "type": "file",
+      "size": 2513
+    },
+    {
+      "path": "docs/Deployment",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/Development",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/EasyDigitalDownloads.md",
+      "type": "file",
+      "size": 5939
+    },
+    {
+      "path": "docs/EasyWebshop.md",
+      "type": "file",
+      "size": 505
+    },
+    {
+      "path": "docs/ElectrumPersonalServer.md",
+      "type": "file",
+      "size": 8239
+    },
+    {
+      "path": "docs/ElectrumWallet.md",
+      "type": "file",
+      "size": 6266
+    },
+    {
+      "path": "docs/ElectrumX.md",
+      "type": "file",
+      "size": 13070
+    },
+    {
+      "path": "docs/FAQ",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/Forms.md",
+      "type": "file",
+      "size": 7336
+    },
+    {
+      "path": "docs/GiveWP.md",
+      "type": "file",
+      "size": 5443
+    },
+    {
+      "path": "docs/Guide.md",
+      "type": "file",
+      "size": 3578
+    },
+    {
+      "path": "docs/HardwareWalletIntegration.md",
+      "type": "file",
+      "size": 3800
+    },
+    {
+      "path": "docs/InvoiceNinja.md",
+      "type": "file",
+      "size": 4735
+    },
+    {
+      "path": "docs/Invoices.md",
+      "type": "file",
+      "size": 8172
+    },
+    {
+      "path": "docs/LedgerWallet.md",
+      "type": "file",
+      "size": 3659
+    },
+    {
+      "path": "docs/LightningNetwork.md",
+      "type": "file",
+      "size": 10101
+    },
+    {
+      "path": "docs/LightningNetwork_PaymentChannels.md",
+      "type": "file",
+      "size": 2411
+    },
+    {
+      "path": "docs/Magento.md",
+      "type": "file",
+      "size": 769
+    },
+    {
+      "path": "docs/Monetization.md",
+      "type": "file",
+      "size": 3319
+    },
+    {
+      "path": "docs/Multisig.md",
+      "type": "file",
+      "size": 7381
+    },
+    {
+      "path": "docs/Notifications.md",
+      "type": "file",
+      "size": 4293
+    },
+    {
+      "path": "docs/OpenCart.md",
+      "type": "file",
+      "size": 13032
+    },
+    {
+      "path": "docs/Payjoin.md",
+      "type": "file",
+      "size": 3404
+    },
+    {
+      "path": "docs/PaymentRequests.md",
+      "type": "file",
+      "size": 2998
+    },
+    {
+      "path": "docs/Payouts.md",
+      "type": "file",
+      "size": 3113
+    },
+    {
+      "path": "docs/PhocaCart.md",
+      "type": "file",
+      "size": 672
+    },
+    {
+      "path": "docs/PrestaShop.md",
+      "type": "file",
+      "size": 5003
+    },
+    {
+      "path": "docs/Pretix.md",
+      "type": "file",
+      "size": 3105
+    },
+    {
+      "path": "docs/PullPayments.md",
+      "type": "file",
+      "size": 6388
+    },
+    {
+      "path": "docs/README.md",
+      "type": "file",
+      "size": 1207
+    },
+    {
+      "path": "docs/Refund.md",
+      "type": "file",
+      "size": 2174
+    },
+    {
+      "path": "docs/RegisterAccount.md",
+      "type": "file",
+      "size": 2359
+    },
+    {
+      "path": "docs/Reporting.md",
+      "type": "file",
+      "size": 579
+    },
+    {
+      "path": "docs/Shopify.md",
+      "type": "file",
+      "size": 5955
+    },
+    {
+      "path": "docs/ShopifyV2.md",
+      "type": "file",
+      "size": 21072
+    },
+    {
+      "path": "docs/Shopware.md",
+      "type": "file",
+      "size": 431
+    },
+    {
+      "path": "docs/Sign-PSBT-with-sparrow-wallet.md",
+      "type": "file",
+      "size": 4360
+    },
+    {
+      "path": "docs/Subscriptions.md",
+      "type": "file",
+      "size": 10740
+    },
+    {
+      "path": "docs/Support.md",
+      "type": "file",
+      "size": 1237
+    },
+    {
+      "path": "docs/Translations.md",
+      "type": "file",
+      "size": 4643
+    },
+    {
+      "path": "docs/Troubleshooting.md",
+      "type": "file",
+      "size": 9154
+    },
+    {
+      "path": "docs/TryItOut.md",
+      "type": "file",
+      "size": 2336
+    },
+    {
+      "path": "docs/UseCase.md",
+      "type": "file",
+      "size": 7824
+    },
+    {
+      "path": "docs/VirtueMart.md",
+      "type": "file",
+      "size": 12948
+    },
+    {
+      "path": "docs/Walkthrough.md",
+      "type": "file",
+      "size": 9512
+    },
+    {
+      "path": "docs/Wallet.md",
+      "type": "file",
+      "size": 9839
+    },
+    {
+      "path": "docs/WalletSetup.md",
+      "type": "file",
+      "size": 680
+    },
+    {
+      "path": "docs/WasabiWallet.md",
+      "type": "file",
+      "size": 6187
+    },
+    {
+      "path": "docs/WhatsNext.md",
+      "type": "file",
+      "size": 3243
+    },
+    {
+      "path": "docs/WooCommerce.md",
+      "type": "file",
+      "size": 19356
+    },
+    {
+      "path": "docs/img",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "scripts/btcpayserver-rpi4-install.sh",
+      "type": "file",
+      "size": 4176
+    },
+    {
+      "path": "swagger/btcpay.json",
+      "type": "file",
+      "size": 147
+    },
+    {
+      "path": "swagger/plugins.json",
+      "type": "file",
+      "size": 416
+    },
+    {
+      "path": "swagger/plugins",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".github/workflows/build.yml",
+      "type": "file",
+      "size": 1608
+    },
+    {
+      "path": "docs/.vuepress/__snapshots__",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/.vuepress/config.js",
+      "type": "file",
+      "size": 13757
+    },
+    {
+      "path": "docs/.vuepress/enhanceApp.js",
+      "type": "file",
+      "size": 2072
+    },
+    {
+      "path": "docs/.vuepress/imageAltToTitlePlugin.js",
+      "type": "file",
+      "size": 609
+    },
+    {
+      "path": "docs/.vuepress/includes",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/.vuepress/preprocessMarkdown.js",
+      "type": "file",
+      "size": 5270
+    },
+    {
+      "path": "docs/.vuepress/preprocessMarkdown.spec.js",
+      "type": "file",
+      "size": 2846
+    },
+    {
+      "path": "docs/.vuepress/public",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/.vuepress/redirects.js",
+      "type": "file",
+      "size": 9628
+    },
+    {
+      "path": "docs/.vuepress/slugify.js",
+      "type": "file",
+      "size": 744
+    },
+    {
+      "path": "docs/.vuepress/slugify.spec.js",
+      "type": "file",
+      "size": 2045
+    },
+    {
+      "path": "docs/.vuepress/styles",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/.vuepress/theme",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/.vuepress/themeSwitch.js",
+      "type": "file",
+      "size": 634
+    },
+    {
+      "path": "docs/Contribute/Design.md",
+      "type": "file",
+      "size": 844
+    },
+    {
+      "path": "docs/Contribute/Dev.md",
+      "type": "file",
+      "size": 2565
+    },
+    {
+      "path": "docs/Contribute/DevCode.md",
+      "type": "file",
+      "size": 14885
+    },
+    {
+      "path": "docs/Contribute/DevTest.md",
+      "type": "file",
+      "size": 8851
+    },
+    {
+      "path": "docs/Contribute/Misc.md",
+      "type": "file",
+      "size": 2351
+    },
+    {
+      "path": "docs/Contribute/README.md",
+      "type": "file",
+      "size": 682
+    },
+    {
+      "path": "docs/Contribute/Translate.md",
+      "type": "file",
+      "size": 2856
+    },
+    {
+      "path": "docs/Contribute/Write.md",
+      "type": "file",
+      "size": 3150
+    },
+    {
+      "path": "docs/Contribute/WriteBlog.md",
+      "type": "file",
+      "size": 526
+    },
+    {
+      "path": "docs/Contribute/WriteDocs.md",
+      "type": "file",
+      "size": 1469
+    },
+    {
+      "path": "docs/Contribute/WriteSoftware.md",
+      "type": "file",
+      "size": 1911
+    },
+    {
+      "path": "docs/Deployment/Azure.md",
+      "type": "file",
+      "size": 2273
+    },
+    {
+      "path": "docs/Deployment/AzurePennyPinching.md",
+      "type": "file",
+      "size": 5334
+    },
+    {
+      "path": "docs/Deployment/Clovyr.md",
+      "type": "file",
+      "size": 2104
+    },
+    {
+      "path": "docs/Deployment/DynamicDNS.md",
+      "type": "file",
+      "size": 2509
+    },
+    {
+      "path": "docs/Deployment/GoogleCloud.md",
+      "type": "file",
+      "size": 1921
+    },
+    {
+      "path": "docs/Deployment/Hack0.md",
+      "type": "file",
+      "size": 4230
+    },
+    {
+      "path": "docs/Deployment/Hardware.md",
+      "type": "file",
+      "size": 1122
+    },
+    {
+      "path": "docs/Deployment/HardwareAsAService.md",
+      "type": "file",
+      "size": 1520
+    },
+    {
+      "path": "docs/Deployment/LightningInABox.md",
+      "type": "file",
+      "size": 9224
+    },
+    {
+      "path": "docs/Deployment/LunaNode.md",
+      "type": "file",
+      "size": 3382
+    },
+    {
+      "path": "docs/Deployment/ManualDeployment.md",
+      "type": "file",
+      "size": 4547
+    },
+    {
+      "path": "docs/Deployment/ManualDeploymentExtended.md",
+      "type": "file",
+      "size": 43691
+    },
+    {
+      "path": "docs/Deployment/README.md",
+      "type": "file",
+      "size": 8807
+    },
+    {
+      "path": "docs/Deployment/RaspberryPi4.md",
+      "type": "file",
+      "size": 11128
+    },
+    {
+      "path": "docs/Deployment/ReverseProxyToTor.md",
+      "type": "file",
+      "size": 10956
+    },
+    {
+      "path": "docs/Deployment/ReverseSSHtunnel.md",
+      "type": "file",
+      "size": 3430
+    },
+    {
+      "path": "docs/Deployment/ThirdPartyHosting.md",
+      "type": "file",
+      "size": 10772
+    },
+    {
+      "path": "docs/Deployment/voltagecloud.md",
+      "type": "file",
+      "size": 4628
+    },
+    {
+      "path": "docs/Deployment/webdeployment.md",
+      "type": "file",
+      "size": 2959
+    },
+    {
+      "path": "docs/Development/Altcoins.md",
+      "type": "file",
+      "size": 1875
+    },
+    {
+      "path": "docs/Development/GreenFieldExample-NodeJS.md",
+      "type": "file",
+      "size": 11576
+    },
+    {
+      "path": "docs/Development/GreenFieldExample.md",
+      "type": "file",
+      "size": 7390
+    },
+    {
+      "path": "docs/Development/GreenfieldExample-PHP.md",
+      "type": "file",
+      "size": 9691
+    },
+    {
+      "path": "docs/Development/InvoiceMetadata.md",
+      "type": "file",
+      "size": 7924
+    },
+    {
+      "path": "docs/Development/LocalDev.md",
+      "type": "file",
+      "size": 5764
+    },
+    {
+      "path": "docs/Development/Plugins.md",
+      "type": "file",
+      "size": 15163
+    },
+    {
+      "path": "docs/Development/README.md",
+      "type": "file",
+      "size": 1821
+    },
+    {
+      "path": "docs/Development/TestnetDemo.md",
+      "type": "file",
+      "size": 1939
+    },
+    {
+      "path": "docs/Development/Theme.md",
+      "type": "file",
+      "size": 3800
+    },
+    {
+      "path": "docs/Development/ecommerce-integration-guide.md",
+      "type": "file",
+      "size": 16847
+    },
+    {
+      "path": "docs/FAQ/Altcoin.md",
+      "type": "file",
+      "size": 3692
+    },
+    {
+      "path": "docs/FAQ/Apps.md",
+      "type": "file",
+      "size": 13059
+    },
+    {
+      "path": "docs/FAQ/Deployment.md",
+      "type": "file",
+      "size": 24305
+    },
+    {
+      "path": "docs/FAQ/General.md",
+      "type": "file",
+      "size": 17434
+    },
+    {
+      "path": "docs/FAQ/Integrations.md",
+      "type": "file",
+      "size": 15167
+    },
+    {
+      "path": "docs/FAQ/LightningNetwork.md",
+      "type": "file",
+      "size": 19975
+    },
+    {
+      "path": "docs/FAQ/README.md",
+      "type": "file",
+      "size": 19632
+    },
+    {
+      "path": "docs/FAQ/ServerSettings.md",
+      "type": "file",
+      "size": 13101
+    },
+    {
+      "path": "docs/FAQ/Stores.md",
+      "type": "file",
+      "size": 11131
+    },
+    {
+      "path": "docs/FAQ/Synchronization.md",
+      "type": "file",
+      "size": 12921
+    },
+    {
+      "path": "docs/FAQ/Wallet.md",
+      "type": "file",
+      "size": 11234
+    },
+    {
+      "path": "docs/img/AddCustomPhp.gif",
+      "type": "file",
+      "size": 770974
+    },
+    {
+      "path": "docs/img/Architecture.png",
+      "type": "file",
+      "size": 15575
+    },
+    {
+      "path": "docs/img/AzureBTCPayServerPublicIP.png",
+      "type": "file",
+      "size": 21193
+    },
+    {
+      "path": "docs/img/AzureResourceConfig.png",
+      "type": "file",
+      "size": 28967
+    },
+    {
+      "path": "docs/img/BTC-P2P.png",
+      "type": "file",
+      "size": 76779
+    },
+    {
+      "path": "docs/img/BTCPay-Navigation.jpg",
+      "type": "file",
+      "size": 74014
+    },
+    {
+      "path": "docs/img/BTCPayGettingStartedStoreRegistration1.png",
+      "type": "file",
+      "size": 30394
+    },
+    {
+      "path": "docs/img/BTCPayGettingStartedStoreRegistration2.jpg",
+      "type": "file",
+      "size": 31970
+    },
+    {
+      "path": "docs/img/BTCPayInvoiceExport.png",
+      "type": "file",
+      "size": 95254
+    },
+    {
+      "path": "docs/img/BTCPayPayButtonDynamic.png",
+      "type": "file",
+      "size": 33751
+    },
+    {
+      "path": "docs/img/BTCPayPayButtonDynamic2.png",
+      "type": "file",
+      "size": 45508
+    },
+    {
+      "path": "docs/img/BTCPayPointOfSale1.jpg",
+      "type": "file",
+      "size": 75850
+    },
+    {
+      "path": "docs/img/BTCPayServerScreenshot.png",
+      "type": "file",
+      "size": 1780938
+    },
+    {
+      "path": "docs/img/BTCPayServerScreenshotH.png",
+      "type": "file",
+      "size": 397784
+    },
+    {
+      "path": "docs/img/BTCPayVaultStoreSetup1.png",
+      "type": "file",
+      "size": 80563
+    },
+    {
+      "path": "docs/img/BTCPayVaultStoreSetup2.png",
+      "type": "file",
+      "size": 34606
+    },
+    {
+      "path": "docs/img/BTCPayVaultStoreSetup3.png",
+      "type": "file",
+      "size": 55469
+    },
+    {
+      "path": "docs/img/BTCPayVaultStoreSetup4.png",
+      "type": "file",
+      "size": 43883
+    },
+    {
+      "path": "docs/img/BTCPayVaultStoreSetup5.png",
+      "type": "file",
+      "size": 59010
+    },
+    {
+      "path": "docs/img/BTCPayVaultStoreSetup6.png",
+      "type": "file",
+      "size": 37850
+    },
+    {
+      "path": "docs/img/BTCPayVaultStoreSetup7.png",
+      "type": "file",
+      "size": 78555
+    },
+    {
+      "path": "docs/img/BTCPayVaultWalletSend1.png",
+      "type": "file",
+      "size": 30180
+    },
+    {
+      "path": "docs/img/BTCPayVaultWalletSend2.png",
+      "type": "file",
+      "size": 27520
+    },
+    {
+      "path": "docs/img/BTCPayWallets1.png",
+      "type": "file",
+      "size": 35826
+    },
+    {
+      "path": "docs/img/BTCPayWallets2.png",
+      "type": "file",
+      "size": 52649
+    },
+    {
+      "path": "docs/img/BTCPayWallets3.png",
+      "type": "file",
+      "size": 21485
+    },
+    {
+      "path": "docs/img/BTCPayWallets4.png",
+      "type": "file",
+      "size": 48968
+    },
+    {
+      "path": "docs/img/BTCPayWallets5.png",
+      "type": "file",
+      "size": 22623
+    },
+    {
+      "path": "docs/img/BrandingTheme.png",
+      "type": "file",
+      "size": 35902
+    },
+    {
+      "path": "docs/img/Clovyr",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/Contribute",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/CrowdfundCodeEmbed.png",
+      "type": "file",
+      "size": 20576
+    },
+    {
+      "path": "docs/img/CrowdfundingWoo.gif",
+      "type": "file",
+      "size": 4875903
+    },
+    {
+      "path": "docs/img/CustomTheme.png",
+      "type": "file",
+      "size": 37327
+    },
+    {
+      "path": "docs/img/Dont-muck-markup.png",
+      "type": "file",
+      "size": 2982
+    },
+    {
+      "path": "docs/img/ElectrumWallet1.png",
+      "type": "file",
+      "size": 15072
+    },
+    {
+      "path": "docs/img/ElectrumWallet10.png",
+      "type": "file",
+      "size": 28522
+    },
+    {
+      "path": "docs/img/ElectrumWallet11.png",
+      "type": "file",
+      "size": 311246
+    },
+    {
+      "path": "docs/img/ElectrumWallet11a.png",
+      "type": "file",
+      "size": 15524
+    },
+    {
+      "path": "docs/img/ElectrumWallet12.png",
+      "type": "file",
+      "size": 17608
+    },
+    {
+      "path": "docs/img/ElectrumWallet2.png",
+      "type": "file",
+      "size": 12332
+    },
+    {
+      "path": "docs/img/ElectrumWallet3.png",
+      "type": "file",
+      "size": 11964
+    },
+    {
+      "path": "docs/img/ElectrumWallet4.png",
+      "type": "file",
+      "size": 12441
+    },
+    {
+      "path": "docs/img/ElectrumWallet6.png",
+      "type": "file",
+      "size": 21280
+    },
+    {
+      "path": "docs/img/ElectrumWallet7.png",
+      "type": "file",
+      "size": 17103
+    },
+    {
+      "path": "docs/img/ElectrumWallet9.png",
+      "type": "file",
+      "size": 13125
+    },
+    {
+      "path": "docs/img/FAQ",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/FirstStoreCreation.png",
+      "type": "file",
+      "size": 69620
+    },
+    {
+      "path": "docs/img/Forms-1.png",
+      "type": "file",
+      "size": 8665
+    },
+    {
+      "path": "docs/img/FullyNoded.png",
+      "type": "file",
+      "size": 75030
+    },
+    {
+      "path": "docs/img/Gandi1.png",
+      "type": "file",
+      "size": 58076
+    },
+    {
+      "path": "docs/img/Gandi2.png",
+      "type": "file",
+      "size": 68004
+    },
+    {
+      "path": "docs/img/Gandi3.png",
+      "type": "file",
+      "size": 53185
+    },
+    {
+      "path": "docs/img/HappyAzure.png",
+      "type": "file",
+      "size": 8682
+    },
+    {
+      "path": "docs/img/HowToRestartBTCPayServer.png",
+      "type": "file",
+      "size": 50435
+    },
+    {
+      "path": "docs/img/HowToUpdateBTCPayServer.png",
+      "type": "file",
+      "size": 50334
+    },
+    {
+      "path": "docs/img/InvalidCertificate.png",
+      "type": "file",
+      "size": 153369
+    },
+    {
+      "path": "docs/img/InviteUser.png",
+      "type": "file",
+      "size": 13896
+    },
+    {
+      "path": "docs/img/InvoiceNinja",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/LND-Service-Seed-Backup.jpg",
+      "type": "file",
+      "size": 65843
+    },
+    {
+      "path": "docs/img/LND-With-Seed-Example.jpg",
+      "type": "file",
+      "size": 32074
+    },
+    {
+      "path": "docs/img/LedgerHelpXpub.png",
+      "type": "file",
+      "size": 18740
+    },
+    {
+      "path": "docs/img/LightningNodepPageInfo.png",
+      "type": "file",
+      "size": 17644
+    },
+    {
+      "path": "docs/img/Maintenance.png",
+      "type": "file",
+      "size": 45457
+    },
+    {
+      "path": "docs/img/Maintenance2.png",
+      "type": "file",
+      "size": 151430
+    },
+    {
+      "path": "docs/img/NBXplorer-stuck.png",
+      "type": "file",
+      "size": 63306
+    },
+    {
+      "path": "docs/img/RideTheLightning.png",
+      "type": "file",
+      "size": 245159
+    },
+    {
+      "path": "docs/img/SSH-Authorized-Keys.png",
+      "type": "file",
+      "size": 59497
+    },
+    {
+      "path": "docs/img/ShowB1.png",
+      "type": "file",
+      "size": 35572
+    },
+    {
+      "path": "docs/img/ShowCost.png",
+      "type": "file",
+      "size": 71378
+    },
+    {
+      "path": "docs/img/ShowPrice.png",
+      "type": "file",
+      "size": 47800
+    },
+    {
+      "path": "docs/img/ShowResources.png",
+      "type": "file",
+      "size": 7241
+    },
+    {
+      "path": "docs/img/ShowSize.png",
+      "type": "file",
+      "size": 69815
+    },
+    {
+      "path": "docs/img/ShowVM.png",
+      "type": "file",
+      "size": 81866
+    },
+    {
+      "path": "docs/img/StopVM.png",
+      "type": "file",
+      "size": 13469
+    },
+    {
+      "path": "docs/img/Subscriptions",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/SupportersReadme.PNG",
+      "type": "file",
+      "size": 22614
+    },
+    {
+      "path": "docs/img/Theme-AantonopShop.png",
+      "type": "file",
+      "size": 127153
+    },
+    {
+      "path": "docs/img/Theme-BitcoinFortuneCookie.png",
+      "type": "file",
+      "size": 38512
+    },
+    {
+      "path": "docs/img/Theme-BitcoinPeople.png",
+      "type": "file",
+      "size": 98203
+    },
+    {
+      "path": "docs/img/Theme-Bitmatk.png",
+      "type": "file",
+      "size": 65041
+    },
+    {
+      "path": "docs/img/Theme-Blockstream.png",
+      "type": "file",
+      "size": 26168
+    },
+    {
+      "path": "docs/img/Theme-Coincards.png",
+      "type": "file",
+      "size": 25059
+    },
+    {
+      "path": "docs/img/Theme-CryptoCloaks.png",
+      "type": "file",
+      "size": 152801
+    },
+    {
+      "path": "docs/img/Theme-HumanRightsFoundation.png",
+      "type": "file",
+      "size": 117754
+    },
+    {
+      "path": "docs/img/Theme-WearMyLiberty.png",
+      "type": "file",
+      "size": 21041
+    },
+    {
+      "path": "docs/img/Theme-cryptosecurity.png",
+      "type": "file",
+      "size": 29187
+    },
+    {
+      "path": "docs/img/ThirdPartyEnableLNOthers.png",
+      "type": "file",
+      "size": 32401
+    },
+    {
+      "path": "docs/img/Translations",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/Wasabi",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/azuresecurityrule.png",
+      "type": "file",
+      "size": 12741
+    },
+    {
+      "path": "docs/img/btcpay-architecture-advancing-bitcoin.png",
+      "type": "file",
+      "size": 587761
+    },
+    {
+      "path": "docs/img/btcpay-invoice.jpg",
+      "type": "file",
+      "size": 59449
+    },
+    {
+      "path": "docs/img/btcpay-node-info.jpg",
+      "type": "file",
+      "size": 110885
+    },
+    {
+      "path": "docs/img/btcpay-registration-page.png",
+      "type": "file",
+      "size": 39903
+    },
+    {
+      "path": "docs/img/btcpay-registration-store-creation.png",
+      "type": "file",
+      "size": 34430
+    },
+    {
+      "path": "docs/img/calcom",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/changedomain.png",
+      "type": "file",
+      "size": 870641
+    },
+    {
+      "path": "docs/img/conference-pos-guide",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/createwallet",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/dashboard",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/deploy-to-azure.svg",
+      "type": "file",
+      "size": 3666
+    },
+    {
+      "path": "docs/img/domainmapping1.png",
+      "type": "file",
+      "size": 35323
+    },
+    {
+      "path": "docs/img/domainmapping2.png",
+      "type": "file",
+      "size": 44286
+    },
+    {
+      "path": "docs/img/ecommerce-integration-guide",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/edd",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/electrum",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/formbuilder",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/gcloud-yaml.png",
+      "type": "file",
+      "size": 80757
+    },
+    {
+      "path": "docs/img/github.png",
+      "type": "file",
+      "size": 1787
+    },
+    {
+      "path": "docs/img/givewp",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/hotwallet",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/hww-setup",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/infographics",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/invoice",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/kraken-logo-stacked-purple-RGB-2019.svg",
+      "type": "file",
+      "size": 2914
+    },
+    {
+      "path": "docs/img/lightning-node-setup",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/ltc-lightningnetwork.png",
+      "type": "file",
+      "size": 49913
+    },
+    {
+      "path": "docs/img/mattermost.png",
+      "type": "file",
+      "size": 1816
+    },
+    {
+      "path": "docs/img/monetization",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/multisig",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/notifications",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/opencart",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/payjoin",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/payment-requests",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/plugins",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/point-of-sale",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/prestashop",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/pretix",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/psbt-send-sparrow",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/pull-payments",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/raspberry-pi",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/refunds",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/server-settings",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/setuplightningnode.png",
+      "type": "file",
+      "size": 6144
+    },
+    {
+      "path": "docs/img/shopify",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/shopifyv2",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/smtp",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/telegram.png",
+      "type": "file",
+      "size": 4105
+    },
+    {
+      "path": "docs/img/transifex-alert.png",
+      "type": "file",
+      "size": 55695
+    },
+    {
+      "path": "docs/img/twitter.png",
+      "type": "file",
+      "size": 2293
+    },
+    {
+      "path": "docs/img/virtuemart",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/voltage",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/walktrough",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/wallet",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/woocommerce",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/zapier",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "swagger/plugins/.gitkeep",
+      "type": "file",
+      "size": 0
+    },
+    {
+      "path": "swagger/plugins/shim",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/.vuepress/__snapshots__/preprocessMarkdown.spec.js.snap",
+      "type": "file",
+      "size": 3785
+    },
+    {
+      "path": "docs/.vuepress/includes/supporters.html",
+      "type": "file",
+      "size": 33200
+    },
+    {
+      "path": "docs/.vuepress/public/API",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/.vuepress/public/android-chrome-192x192.png",
+      "type": "file",
+      "size": 11092
+    },
+    {
+      "path": "docs/.vuepress/public/android-chrome-512x512.png",
+      "type": "file",
+      "size": 30189
+    },
+    {
+      "path": "docs/.vuepress/public/apple-touch-icon.png",
+      "type": "file",
+      "size": 5354
+    },
+    {
+      "path": "docs/.vuepress/public/browserconfig.xml",
+      "type": "file",
+      "size": 222
+    },
+    {
+      "path": "docs/.vuepress/public/card.png",
+      "type": "file",
+      "size": 21038
+    },
+    {
+      "path": "docs/.vuepress/public/favicon-16x16.png",
+      "type": "file",
+      "size": 1007
+    },
+    {
+      "path": "docs/.vuepress/public/favicon-32x32.png",
+      "type": "file",
+      "size": 1678
+    },
+    {
+      "path": "docs/.vuepress/public/favicon.ico",
+      "type": "file",
+      "size": 2090
+    },
+    {
+      "path": "docs/.vuepress/public/img",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/.vuepress/public/mstile-150x150.png",
+      "type": "file",
+      "size": 4862
+    },
+    {
+      "path": "docs/.vuepress/public/styles",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/.vuepress/styles/btcpayserver-main.styl",
+      "type": "file",
+      "size": 28662
+    },
+    {
+      "path": "docs/.vuepress/styles/index.styl",
+      "type": "file",
+      "size": 26348
+    },
+    {
+      "path": "docs/.vuepress/styles/palette.styl",
+      "type": "file",
+      "size": 353
+    },
+    {
+      "path": "docs/.vuepress/theme/components",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/.vuepress/theme/index.js",
+      "type": "file",
+      "size": 57
+    },
+    {
+      "path": "docs/.vuepress/theme/layouts",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/Clovyr/1.png",
+      "type": "file",
+      "size": 223545
+    },
+    {
+      "path": "docs/img/Clovyr/2.png",
+      "type": "file",
+      "size": 840643
+    },
+    {
+      "path": "docs/img/Clovyr/3.png",
+      "type": "file",
+      "size": 464618
+    },
+    {
+      "path": "docs/img/Clovyr/4.png",
+      "type": "file",
+      "size": 120627
+    },
+    {
+      "path": "docs/img/Contribute/ContributeCloneRepo.jpg",
+      "type": "file",
+      "size": 62157
+    },
+    {
+      "path": "docs/img/Contribute/ContributeCloneRepo2.jpg",
+      "type": "file",
+      "size": 67590
+    },
+    {
+      "path": "docs/img/Contribute/ContributeCommit.jpg",
+      "type": "file",
+      "size": 67200
+    },
+    {
+      "path": "docs/img/Contribute/ContributeCommit2.jpg",
+      "type": "file",
+      "size": 93259
+    },
+    {
+      "path": "docs/img/Contribute/ContributeCreateBranch.jpg",
+      "type": "file",
+      "size": 70940
+    },
+    {
+      "path": "docs/img/Contribute/ContributeCreateBranch2.jpg",
+      "type": "file",
+      "size": 63653
+    },
+    {
+      "path": "docs/img/Contribute/ContributeCreatePR.jpg",
+      "type": "file",
+      "size": 88902
+    },
+    {
+      "path": "docs/img/Contribute/ContributeFindFile.jpg",
+      "type": "file",
+      "size": 87177
+    },
+    {
+      "path": "docs/img/Contribute/ContributeOpenPR.jpg",
+      "type": "file",
+      "size": 81487
+    },
+    {
+      "path": "docs/img/Contribute/DB-Config.png",
+      "type": "file",
+      "size": 7552
+    },
+    {
+      "path": "docs/img/Contribute/DB-Connect.png",
+      "type": "file",
+      "size": 25004
+    },
+    {
+      "path": "docs/img/Contribute/DB-Edit.png",
+      "type": "file",
+      "size": 30758
+    },
+    {
+      "path": "docs/img/Contribute/Netlify_preview.png",
+      "type": "file",
+      "size": 46098
+    },
+    {
+      "path": "docs/img/Contribute/agendaios.gif",
+      "type": "file",
+      "size": 2002309
+    },
+    {
+      "path": "docs/img/Contribute/dashboard-change.jpg",
+      "type": "file",
+      "size": 75564
+    },
+    {
+      "path": "docs/img/Contribute/docker-compose-up-dev.png",
+      "type": "file",
+      "size": 61163
+    },
+    {
+      "path": "docs/img/Contribute/lunanode-fork.png",
+      "type": "file",
+      "size": 17492
+    },
+    {
+      "path": "docs/img/Contribute/regtest-btcpay.png",
+      "type": "file",
+      "size": 301800
+    },
+    {
+      "path": "docs/img/Contribute/regtest-paid-invoice.png",
+      "type": "file",
+      "size": 19528
+    },
+    {
+      "path": "docs/img/Contribute/vs-debug-console.png",
+      "type": "file",
+      "size": 53947
+    },
+    {
+      "path": "docs/img/Contribute/vs-solution-explorer.png",
+      "type": "file",
+      "size": 10149
+    },
+    {
+      "path": "docs/img/FAQ/btcpayWebhookFAQ1.jpg",
+      "type": "file",
+      "size": 43560
+    },
+    {
+      "path": "docs/img/FAQ/btcpayWebhookFAQ2.jpg",
+      "type": "file",
+      "size": 190253
+    },
+    {
+      "path": "docs/img/FAQ/btcpayemailrule1.jpg",
+      "type": "file",
+      "size": 108849
+    },
+    {
+      "path": "docs/img/FAQ/btcpaylightningfaq1.jpg",
+      "type": "file",
+      "size": 109715
+    },
+    {
+      "path": "docs/img/InvoiceNinja/BTCPayInvoiceNinja.png",
+      "type": "file",
+      "size": 702412
+    },
+    {
+      "path": "docs/img/InvoiceNinja/InvoiceNinja1.png",
+      "type": "file",
+      "size": 343438
+    },
+    {
+      "path": "docs/img/InvoiceNinja/InvoiceNinja2.png",
+      "type": "file",
+      "size": 186095
+    },
+    {
+      "path": "docs/img/InvoiceNinja/InvoiceNinja3.png",
+      "type": "file",
+      "size": 181748
+    },
+    {
+      "path": "docs/img/InvoiceNinja/InvoiceNinja4.png",
+      "type": "file",
+      "size": 118399
+    },
+    {
+      "path": "docs/img/InvoiceNinja/InvoiceNinja5.png",
+      "type": "file",
+      "size": 242530
+    },
+    {
+      "path": "docs/img/InvoiceNinja/InvoiceNinja6.png",
+      "type": "file",
+      "size": 119014
+    },
+    {
+      "path": "docs/img/InvoiceNinja/InvoiceNinja7.png",
+      "type": "file",
+      "size": 171272
+    },
+    {
+      "path": "docs/img/InvoiceNinja/InvoiceNinja8.png",
+      "type": "file",
+      "size": 209896
+    },
+    {
+      "path": "docs/img/InvoiceNinja/InvoiceNinja9.png",
+      "type": "file",
+      "size": 146949
+    },
+    {
+      "path": "docs/img/Subscriptions/Sub-Edit-Plan.png",
+      "type": "file",
+      "size": 715422
+    },
+    {
+      "path": "docs/img/Subscriptions/Sub-Management.png",
+      "type": "file",
+      "size": 676698
+    },
+    {
+      "path": "docs/img/Subscriptions/Sub-Plans.png",
+      "type": "file",
+      "size": 1002731
+    },
+    {
+      "path": "docs/img/Subscriptions/Sub-configure-offering.png",
+      "type": "file",
+      "size": 792889
+    },
+    {
+      "path": "docs/img/Subscriptions/Sub-create-offering.png",
+      "type": "file",
+      "size": 468429
+    },
+    {
+      "path": "docs/img/Subscriptions/Sub-create-subscriber.png",
+      "type": "file",
+      "size": 656397
+    },
+    {
+      "path": "docs/img/Subscriptions/Sub-plan-checkout.png",
+      "type": "file",
+      "size": 635691
+    },
+    {
+      "path": "docs/img/Translations/01_Translation.png",
+      "type": "file",
+      "size": 18659
+    },
+    {
+      "path": "docs/img/Translations/02_Translation.png",
+      "type": "file",
+      "size": 20128
+    },
+    {
+      "path": "docs/img/Translations/03_Translation_creation.png",
+      "type": "file",
+      "size": 97246
+    },
+    {
+      "path": "docs/img/Translations/04_Translation_dictionary.png",
+      "type": "file",
+      "size": 107987
+    },
+    {
+      "path": "docs/img/Translations/05_Translation_Add_Role_To_Yoruba.png",
+      "type": "file",
+      "size": 31916
+    },
+    {
+      "path": "docs/img/Translations/06_Translation_Saved_Dictionary.png",
+      "type": "file",
+      "size": 20307
+    },
+    {
+      "path": "docs/img/Translations/07_Translation_Validation.png",
+      "type": "file",
+      "size": 41313
+    },
+    {
+      "path": "docs/img/Wasabi/WasabiAddWallet.png",
+      "type": "file",
+      "size": 18608
+    },
+    {
+      "path": "docs/img/Wasabi/WasabiAddWalletAddPassword.png",
+      "type": "file",
+      "size": 44684
+    },
+    {
+      "path": "docs/img/Wasabi/WasabiAddWalletConfirmRecoveryWords.png",
+      "type": "file",
+      "size": 28923
+    },
+    {
+      "path": "docs/img/Wasabi/WasabiAddWalletRecoveryWords.png",
+      "type": "file",
+      "size": 29391
+    },
+    {
+      "path": "docs/img/Wasabi/WasabiAddWalletSuccess.png",
+      "type": "file",
+      "size": 34054
+    },
+    {
+      "path": "docs/img/Wasabi/WasabiAddWalletWalletName.png",
+      "type": "file",
+      "size": 10055
+    },
+    {
+      "path": "docs/img/Wasabi/WasabiCoinjoinStrategy.png",
+      "type": "file",
+      "size": 45819
+    },
+    {
+      "path": "docs/img/Wasabi/WasabiExtendedAccountPublicKey.png",
+      "type": "file",
+      "size": 164372
+    },
+    {
+      "path": "docs/img/Wasabi/WasabiFindWalletInfo.png",
+      "type": "file",
+      "size": 61669
+    },
+    {
+      "path": "docs/img/Wasabi/WasabiOpenWallet.png",
+      "type": "file",
+      "size": 82286
+    },
+    {
+      "path": "docs/img/Wasabi/WasabiReceive.png",
+      "type": "file",
+      "size": 26358
+    },
+    {
+      "path": "docs/img/calcom/10_booking_flow_3.png",
+      "type": "file",
+      "size": 126662
+    },
+    {
+      "path": "docs/img/calcom/11_booking_flow_4.png",
+      "type": "file",
+      "size": 138463
+    },
+    {
+      "path": "docs/img/calcom/12_booking_flow_5.png",
+      "type": "file",
+      "size": 112176
+    },
+    {
+      "path": "docs/img/calcom/13_booking_flow_6.png",
+      "type": "file",
+      "size": 186335
+    },
+    {
+      "path": "docs/img/calcom/14_booking_flow_7.png",
+      "type": "file",
+      "size": 127807
+    },
+    {
+      "path": "docs/img/calcom/15_invoice_details.png",
+      "type": "file",
+      "size": 169579
+    },
+    {
+      "path": "docs/img/calcom/1_app_install_details.png",
+      "type": "file",
+      "size": 655514
+    },
+    {
+      "path": "docs/img/calcom/2_installation_step_one.png",
+      "type": "file",
+      "size": 60675
+    },
+    {
+      "path": "docs/img/calcom/3_installation_step_two.png",
+      "type": "file",
+      "size": 57078
+    },
+    {
+      "path": "docs/img/calcom/4_btcpay_apikey.png",
+      "type": "file",
+      "size": 233699
+    },
+    {
+      "path": "docs/img/calcom/5_btcpay_credentials.png",
+      "type": "file",
+      "size": 197234
+    },
+    {
+      "path": "docs/img/calcom/6_event_types_booking.png",
+      "type": "file",
+      "size": 121823
+    },
+    {
+      "path": "docs/img/calcom/7_event_payment_booking_setup.png",
+      "type": "file",
+      "size": 182965
+    },
+    {
+      "path": "docs/img/calcom/8_booking_flow_1.png",
+      "type": "file",
+      "size": 134240
+    },
+    {
+      "path": "docs/img/calcom/9_booking_flow_2.png",
+      "type": "file",
+      "size": 112486
+    },
+    {
+      "path": "docs/img/calcom/Invoice_payment.png",
+      "type": "file",
+      "size": 157258
+    },
+    {
+      "path": "docs/img/conference-pos-guide/rate-limiting.png",
+      "type": "file",
+      "size": 15660
+    },
+    {
+      "path": "docs/img/createwallet/ImportWallet.png",
+      "type": "file",
+      "size": 86668
+    },
+    {
+      "path": "docs/img/createwallet/Setup.png",
+      "type": "file",
+      "size": 36074
+    },
+    {
+      "path": "docs/img/createwallet/SetupWallet.png",
+      "type": "file",
+      "size": 79681
+    },
+    {
+      "path": "docs/img/createwallet/SetupWalletXpub.png",
+      "type": "file",
+      "size": 123484
+    },
+    {
+      "path": "docs/img/createwallet/compare-address.jpg",
+      "type": "file",
+      "size": 123212
+    },
+    {
+      "path": "docs/img/createwallet/recoveryseedbackup.jpg",
+      "type": "file",
+      "size": 58094
+    },
+    {
+      "path": "docs/img/createwallet/select-xpub.jpg",
+      "type": "file",
+      "size": 165256
+    },
+    {
+      "path": "docs/img/createwallet/storedashboard-connect.jpg",
+      "type": "file",
+      "size": 81598
+    },
+    {
+      "path": "docs/img/createwallet/storedashboard-create.jpg",
+      "type": "file",
+      "size": 83469
+    },
+    {
+      "path": "docs/img/createwallet/wallet-connected.jpg",
+      "type": "file",
+      "size": 161407
+    },
+    {
+      "path": "docs/img/createwallet/xpub-form.jpg",
+      "type": "file",
+      "size": 121273
+    },
+    {
+      "path": "docs/img/dashboard/btcpayLNDashboard2.jpg",
+      "type": "file",
+      "size": 47063
+    },
+    {
+      "path": "docs/img/dashboard/btcpayLNDashboard3.jpg",
+      "type": "file",
+      "size": 24722
+    },
+    {
+      "path": "docs/img/dashboard/btcpayLNDashboard4.jpg",
+      "type": "file",
+      "size": 20465
+    },
+    {
+      "path": "docs/img/dashboard/dashboardgif.gif",
+      "type": "file",
+      "size": 2215581
+    },
+    {
+      "path": "docs/img/dashboard/dashboardgifH.gif",
+      "type": "file",
+      "size": 585088
+    },
+    {
+      "path": "docs/img/dashboard/fund-full-view.jpg",
+      "type": "file",
+      "size": 97053
+    },
+    {
+      "path": "docs/img/dashboard/fund-perk-view.jpg",
+      "type": "file",
+      "size": 29948
+    },
+    {
+      "path": "docs/img/dashboard/fundperf-view.jpg",
+      "type": "file",
+      "size": 34072
+    },
+    {
+      "path": "docs/img/dashboard/recent-invoice-view.jpg",
+      "type": "file",
+      "size": 113142
+    },
+    {
+      "path": "docs/img/dashboard/recent-tx-view.jpg",
+      "type": "file",
+      "size": 138211
+    },
+    {
+      "path": "docs/img/dashboard/tx-activity-view.jpg",
+      "type": "file",
+      "size": 21310
+    },
+    {
+      "path": "docs/img/dashboard/wallet-view.jpg",
+      "type": "file",
+      "size": 62458
+    },
+    {
+      "path": "docs/img/ecommerce-integration-guide/btcpay-authorize-app-api-key.png",
+      "type": "file",
+      "size": 142279
+    },
+    {
+      "path": "docs/img/ecommerce-integration-guide/btcpay-checkout-flow-chart.png",
+      "type": "file",
+      "size": 160622
+    },
+    {
+      "path": "docs/img/edd/edd-admin-order-completed.png",
+      "type": "file",
+      "size": 102452
+    },
+    {
+      "path": "docs/img/edd/edd-checkout-invoice-paid.png",
+      "type": "file",
+      "size": 69153
+    },
+    {
+      "path": "docs/img/edd/edd-checkout-invoice.png",
+      "type": "file",
+      "size": 51493
+    },
+    {
+      "path": "docs/img/edd/edd-checkout.png",
+      "type": "file",
+      "size": 53026
+    },
+    {
+      "path": "docs/img/edd/edd-order-confirmation.png",
+      "type": "file",
+      "size": 77896
+    },
+    {
+      "path": "docs/img/edd/edd-search-and-install-plugin.png",
+      "type": "file",
+      "size": 218744
+    },
+    {
+      "path": "docs/img/edd/edd-setup-authorize-permissions.png",
+      "type": "file",
+      "size": 148393
+    },
+    {
+      "path": "docs/img/edd/edd-setup-authorize-select-store.png",
+      "type": "file",
+      "size": 45322
+    },
+    {
+      "path": "docs/img/edd/edd-setup-completed.png",
+      "type": "file",
+      "size": 259801
+    },
+    {
+      "path": "docs/img/edd/edd-setup-configure.png",
+      "type": "file",
+      "size": 289253
+    },
+    {
+      "path": "docs/img/edd/edd-setup-enable-gateway.png",
+      "type": "file",
+      "size": 211667
+    },
+    {
+      "path": "docs/img/electrum/btcpayWalletImport1.jpg",
+      "type": "file",
+      "size": 42831
+    },
+    {
+      "path": "docs/img/electrum/btcpayWalletImport2.jpg",
+      "type": "file",
+      "size": 80790
+    },
+    {
+      "path": "docs/img/electrum/btcpayWalletImport3.jpg",
+      "type": "file",
+      "size": 122493
+    },
+    {
+      "path": "docs/img/electrum/btcpayWalletImport4.jpg",
+      "type": "file",
+      "size": 123181
+    },
+    {
+      "path": "docs/img/electrum/electrum-create-1.gif",
+      "type": "file",
+      "size": 71139
+    },
+    {
+      "path": "docs/img/electrum/electrum-create-2-export.gif",
+      "type": "file",
+      "size": 149706
+    },
+    {
+      "path": "docs/img/electrum/electrum-create-3-import.gif",
+      "type": "file",
+      "size": 557717
+    },
+    {
+      "path": "docs/img/electrum/electrum-create-4-compare-addresses.gif",
+      "type": "file",
+      "size": 315604
+    },
+    {
+      "path": "docs/img/formbuilder/btcpayformbuilder1.png",
+      "type": "file",
+      "size": 13318
+    },
+    {
+      "path": "docs/img/formbuilder/btcpayformbuilder2-1.png",
+      "type": "file",
+      "size": 53685
+    },
+    {
+      "path": "docs/img/formbuilder/btcpayformbuilder2-2.png",
+      "type": "file",
+      "size": 28328
+    },
+    {
+      "path": "docs/img/formbuilder/btcpayformbuilder2-3.png",
+      "type": "file",
+      "size": 37556
+    },
+    {
+      "path": "docs/img/formbuilder/btcpayformbuilder2-4.png",
+      "type": "file",
+      "size": 57283
+    },
+    {
+      "path": "docs/img/formbuilder/btcpayformbuilder2.png",
+      "type": "file",
+      "size": 40114
+    },
+    {
+      "path": "docs/img/formbuilder/btcpayformbuilder3.png",
+      "type": "file",
+      "size": 94707
+    },
+    {
+      "path": "docs/img/givewp/btcpay-api-key-1of2.png",
+      "type": "file",
+      "size": 288357
+    },
+    {
+      "path": "docs/img/givewp/btcpay-api-key-2of2.png",
+      "type": "file",
+      "size": 349253
+    },
+    {
+      "path": "docs/img/givewp/btcpay-api-key-success.png",
+      "type": "file",
+      "size": 252444
+    },
+    {
+      "path": "docs/img/givewp/btcpay-store-id.png",
+      "type": "file",
+      "size": 146949
+    },
+    {
+      "path": "docs/img/givewp/givewp-bitcoin-payment-option.png",
+      "type": "file",
+      "size": 151833
+    },
+    {
+      "path": "docs/img/givewp/givewp-donation-paid.png",
+      "type": "file",
+      "size": 91526
+    },
+    {
+      "path": "docs/img/givewp/givewp-install.png",
+      "type": "file",
+      "size": 177535
+    },
+    {
+      "path": "docs/img/givewp/givewp-payment-page.png",
+      "type": "file",
+      "size": 86171
+    },
+    {
+      "path": "docs/img/givewp/givewp-settings-gateway-default.png",
+      "type": "file",
+      "size": 195754
+    },
+    {
+      "path": "docs/img/givewp/givewp-settings-success.png",
+      "type": "file",
+      "size": 177156
+    },
+    {
+      "path": "docs/img/givewp/givewp-settings.png",
+      "type": "file",
+      "size": 99748
+    },
+    {
+      "path": "docs/img/hotwallet/AdvancedSettings.png",
+      "type": "file",
+      "size": 28342
+    },
+    {
+      "path": "docs/img/hotwallet/BroadcastConfirm.png",
+      "type": "file",
+      "size": 224419
+    },
+    {
+      "path": "docs/img/hotwallet/CreateNewWallet.png",
+      "type": "file",
+      "size": 48930
+    },
+    {
+      "path": "docs/img/hotwallet/HotWallet.png",
+      "type": "file",
+      "size": 102607
+    },
+    {
+      "path": "docs/img/hotwallet/MainMenu.png",
+      "type": "file",
+      "size": 41686
+    },
+    {
+      "path": "docs/img/hotwallet/ServerSettings.png",
+      "type": "file",
+      "size": 82549
+    },
+    {
+      "path": "docs/img/hotwallet/SignTransaction.png",
+      "type": "file",
+      "size": 172056
+    },
+    {
+      "path": "docs/img/hotwallet/WalletSend.png",
+      "type": "file",
+      "size": 210870
+    },
+    {
+      "path": "docs/img/hotwallet/WalletSettings.png",
+      "type": "file",
+      "size": 31161
+    },
+    {
+      "path": "docs/img/hww-setup/1-store-created.png",
+      "type": "file",
+      "size": 89428
+    },
+    {
+      "path": "docs/img/hww-setup/10-choose-signing-method.png",
+      "type": "file",
+      "size": 88463
+    },
+    {
+      "path": "docs/img/hww-setup/11-sign-transaction.png",
+      "type": "file",
+      "size": 37512
+    },
+    {
+      "path": "docs/img/hww-setup/2-connect-wallet.png",
+      "type": "file",
+      "size": 62576
+    },
+    {
+      "path": "docs/img/hww-setup/3-choose-import-method.png",
+      "type": "file",
+      "size": 123079
+    },
+    {
+      "path": "docs/img/hww-setup/4-vault-notif.png",
+      "type": "file",
+      "size": 123393
+    },
+    {
+      "path": "docs/img/hww-setup/5-address-type.png",
+      "type": "file",
+      "size": 76877
+    },
+    {
+      "path": "docs/img/hww-setup/6-pubkey-hww.png",
+      "type": "file",
+      "size": 105707
+    },
+    {
+      "path": "docs/img/hww-setup/7-confirm-addresses.png",
+      "type": "file",
+      "size": 134630
+    },
+    {
+      "path": "docs/img/hww-setup/8-wallet-setup-complete.png",
+      "type": "file",
+      "size": 156200
+    },
+    {
+      "path": "docs/img/hww-setup/9-send-btc.png",
+      "type": "file",
+      "size": 73892
+    },
+    {
+      "path": "docs/img/infographics/BTCPay-How-Is-It-Different-history.png",
+      "type": "file",
+      "size": 484051
+    },
+    {
+      "path": "docs/img/infographics/BTCPay-How-Is-It-Different.png",
+      "type": "file",
+      "size": 665925
+    },
+    {
+      "path": "docs/img/infographics/BTCPayInfographic.png",
+      "type": "file",
+      "size": 444855
+    },
+    {
+      "path": "docs/img/infographics/BTCPayUseCaseInfographic.png",
+      "type": "file",
+      "size": 570276
+    },
+    {
+      "path": "docs/img/infographics/BTCPayUseCasev2-1.png",
+      "type": "file",
+      "size": 1767685
+    },
+    {
+      "path": "docs/img/infographics/DecisionDiagInstallBTCPayServer.png",
+      "type": "file",
+      "size": 127065
+    },
+    {
+      "path": "docs/img/infographics/DecisionDiagInstallBTCPayServer.vsdx",
+      "type": "file",
+      "size": 48966
+    },
+    {
+      "path": "docs/img/invoice/InvoiceFiltering.gif",
+      "type": "file",
+      "size": 648767
+    },
+    {
+      "path": "docs/img/invoice/Invoices.png",
+      "type": "file",
+      "size": 344013
+    },
+    {
+      "path": "docs/img/invoice/PaidInvoice.png",
+      "type": "file",
+      "size": 29218
+    },
+    {
+      "path": "docs/img/lightning-node-setup/LightningNetworkNodeSetupOverview.jpg",
+      "type": "file",
+      "size": 91772
+    },
+    {
+      "path": "docs/img/monetization/monetization-1.png",
+      "type": "file",
+      "size": 764779
+    },
+    {
+      "path": "docs/img/monetization/monetization-10.png",
+      "type": "file",
+      "size": 1638781
+    },
+    {
+      "path": "docs/img/monetization/monetization-2.png",
+      "type": "file",
+      "size": 910019
+    },
+    {
+      "path": "docs/img/monetization/monetization-3.png",
+      "type": "file",
+      "size": 695663
+    },
+    {
+      "path": "docs/img/monetization/monetization-4.png",
+      "type": "file",
+      "size": 1057979
+    },
+    {
+      "path": "docs/img/monetization/monetization-5.png",
+      "type": "file",
+      "size": 666465
+    },
+    {
+      "path": "docs/img/monetization/monetization-6.png",
+      "type": "file",
+      "size": 678433
+    },
+    {
+      "path": "docs/img/monetization/monetization-7.png",
+      "type": "file",
+      "size": 1294444
+    },
+    {
+      "path": "docs/img/monetization/monetization-8.png",
+      "type": "file",
+      "size": 1589641
+    },
+    {
+      "path": "docs/img/monetization/monetization-9.png",
+      "type": "file",
+      "size": 1459097
+    },
+    {
+      "path": "docs/img/multisig/multisig-broadcast-2.png",
+      "type": "file",
+      "size": 140262
+    },
+    {
+      "path": "docs/img/multisig/multisig-broadcast.png",
+      "type": "file",
+      "size": 234973
+    },
+    {
+      "path": "docs/img/multisig/multisig-choose-method.png",
+      "type": "file",
+      "size": 185535
+    },
+    {
+      "path": "docs/img/multisig/multisig-configuration.png",
+      "type": "file",
+      "size": 350974
+    },
+    {
+      "path": "docs/img/multisig/multisig-create-pending.png",
+      "type": "file",
+      "size": 180373
+    },
+    {
+      "path": "docs/img/multisig/multisig-email-rule-configure.png",
+      "type": "file",
+      "size": 264147
+    },
+    {
+      "path": "docs/img/multisig/multisig-email-rule-create.png",
+      "type": "file",
+      "size": 223717
+    },
+    {
+      "path": "docs/img/multisig/multisig-signed-1.png",
+      "type": "file",
+      "size": 304031
+    },
+    {
+      "path": "docs/img/multisig/multisig-view.png",
+      "type": "file",
+      "size": 272640
+    },
+    {
+      "path": "docs/img/notifications/notification-manage.png",
+      "type": "file",
+      "size": 110666
+    },
+    {
+      "path": "docs/img/notifications/notification-page.png",
+      "type": "file",
+      "size": 130753
+    },
+    {
+      "path": "docs/img/notifications/notification-version.png",
+      "type": "file",
+      "size": 57739
+    },
+    {
+      "path": "docs/img/opencart/oc3--01--upload-zip.png",
+      "type": "file",
+      "size": 59652
+    },
+    {
+      "path": "docs/img/opencart/oc3--02--install-btcpay.png",
+      "type": "file",
+      "size": 439521
+    },
+    {
+      "path": "docs/img/opencart/oc3--03--configure-btcpay.png",
+      "type": "file",
+      "size": 63842
+    },
+    {
+      "path": "docs/img/opencart/oc3--04--configure-btcpay-page.png",
+      "type": "file",
+      "size": 277061
+    },
+    {
+      "path": "docs/img/opencart/oc3--05--btcps-account-manage-add.png",
+      "type": "file",
+      "size": 62363
+    },
+    {
+      "path": "docs/img/opencart/oc3--05--btcps-account-manage.png",
+      "type": "file",
+      "size": 15778
+    },
+    {
+      "path": "docs/img/opencart/oc3--06--btcps-generate-api-key-permissions.png",
+      "type": "file",
+      "size": 249916
+    },
+    {
+      "path": "docs/img/opencart/oc3--07--btcps-generate-api-key-permissions-store.png",
+      "type": "file",
+      "size": 213841
+    },
+    {
+      "path": "docs/img/opencart/oc3--08--btcps-generate-api-key-result.png",
+      "type": "file",
+      "size": 130444
+    },
+    {
+      "path": "docs/img/opencart/oc3--09--btcps-store-id.png",
+      "type": "file",
+      "size": 74907
+    },
+    {
+      "path": "docs/img/opencart/oc3--10--save-settings.png",
+      "type": "file",
+      "size": 143304
+    },
+    {
+      "path": "docs/img/opencart/oc3--11--save-settings-success.png",
+      "type": "file",
+      "size": 15358
+    },
+    {
+      "path": "docs/img/opencart/oc3--12--webhook-success.png",
+      "type": "file",
+      "size": 96556
+    },
+    {
+      "path": "docs/img/opencart/oc3--20--debug-mode-enable.png",
+      "type": "file",
+      "size": 53469
+    },
+    {
+      "path": "docs/img/opencart/oc3--21--error-logs.png",
+      "type": "file",
+      "size": 72152
+    },
+    {
+      "path": "docs/img/payjoin/Payjoin_Guide_Pay_1.png",
+      "type": "file",
+      "size": 39219
+    },
+    {
+      "path": "docs/img/payjoin/Payjoin_Guide_Pay_2.png",
+      "type": "file",
+      "size": 39698
+    },
+    {
+      "path": "docs/img/payjoin/Payjoin_Guide_Pay_3.png",
+      "type": "file",
+      "size": 44797
+    },
+    {
+      "path": "docs/img/payjoin/Payjoin_Guide_Pay_4.png",
+      "type": "file",
+      "size": 40326
+    },
+    {
+      "path": "docs/img/payjoin/Payjoin_Guide_Receive_1.png",
+      "type": "file",
+      "size": 58007
+    },
+    {
+      "path": "docs/img/payjoin/Payjoin_Guide_Receive_2.png",
+      "type": "file",
+      "size": 56299
+    },
+    {
+      "path": "docs/img/payjoin/Payjoin_Guide_Receive_3.png",
+      "type": "file",
+      "size": 49586
+    },
+    {
+      "path": "docs/img/payment-requests/CreatePaymentRequest.png",
+      "type": "file",
+      "size": 72260
+    },
+    {
+      "path": "docs/img/payment-requests/NewPaymentRequest.png",
+      "type": "file",
+      "size": 43500
+    },
+    {
+      "path": "docs/img/payment-requests/PaidPaymentRequest.png",
+      "type": "file",
+      "size": 38500
+    },
+    {
+      "path": "docs/img/payment-requests/PaymentRequestList.png",
+      "type": "file",
+      "size": 41043
+    },
+    {
+      "path": "docs/img/payment-requests/PaymentRequestListOptions.png",
+      "type": "file",
+      "size": 42040
+    },
+    {
+      "path": "docs/img/payment-requests/PaymentRequests.png",
+      "type": "file",
+      "size": 135676
+    },
+    {
+      "path": "docs/img/plugins/plugin-builder-create-build.png",
+      "type": "file",
+      "size": 36542
+    },
+    {
+      "path": "docs/img/plugins/plugin-builder-create-plugin.png",
+      "type": "file",
+      "size": 22462
+    },
+    {
+      "path": "docs/img/point-of-sale/AppRedirect.png",
+      "type": "file",
+      "size": 14194
+    },
+    {
+      "path": "docs/img/prestashop/api-key-setup.jpg",
+      "type": "file",
+      "size": 219152
+    },
+    {
+      "path": "docs/img/prestashop/invalid-token-popup.jpg",
+      "type": "file",
+      "size": 20959
+    },
+    {
+      "path": "docs/img/prestashop/module-install.jpg",
+      "type": "file",
+      "size": 492255
+    },
+    {
+      "path": "docs/img/prestashop/success.jpg",
+      "type": "file",
+      "size": 187916
+    },
+    {
+      "path": "docs/img/pretix/pretix-step-1-4.png",
+      "type": "file",
+      "size": 312318
+    },
+    {
+      "path": "docs/img/pretix/pretix-step-11.png",
+      "type": "file",
+      "size": 85900
+    },
+    {
+      "path": "docs/img/pretix/pretix-step-12.png",
+      "type": "file",
+      "size": 209976
+    },
+    {
+      "path": "docs/img/pretix/pretix-step-13-15.png",
+      "type": "file",
+      "size": 430208
+    },
+    {
+      "path": "docs/img/pretix/pretix-step-16.png",
+      "type": "file",
+      "size": 53391
+    },
+    {
+      "path": "docs/img/pretix/pretix-step-5.png",
+      "type": "file",
+      "size": 144046
+    },
+    {
+      "path": "docs/img/pretix/pretix-step-6.png",
+      "type": "file",
+      "size": 93345
+    },
+    {
+      "path": "docs/img/pretix/pretix-step-7-8.png",
+      "type": "file",
+      "size": 202957
+    },
+    {
+      "path": "docs/img/pretix/pretix-step-9-10.png",
+      "type": "file",
+      "size": 53999
+    },
+    {
+      "path": "docs/img/psbt-send-sparrow/btcpay-1-send.png",
+      "type": "file",
+      "size": 156675
+    },
+    {
+      "path": "docs/img/psbt-send-sparrow/btcpay-2-choose-signing-method.png",
+      "type": "file",
+      "size": 134724
+    },
+    {
+      "path": "docs/img/psbt-send-sparrow/btcpay-3-download-psbt.png",
+      "type": "file",
+      "size": 150165
+    },
+    {
+      "path": "docs/img/psbt-send-sparrow/sparrow-1-loaded-psbt-for-signing.png",
+      "type": "file",
+      "size": 92277
+    },
+    {
+      "path": "docs/img/psbt-send-sparrow/sparrow-2-loaded-psbt-sign.png",
+      "type": "file",
+      "size": 97533
+    },
+    {
+      "path": "docs/img/psbt-send-sparrow/sparrow-3-scan-for-hww.png",
+      "type": "file",
+      "size": 106665
+    },
+    {
+      "path": "docs/img/psbt-send-sparrow/sparrow-4-unlocked-hww.png",
+      "type": "file",
+      "size": 109279
+    },
+    {
+      "path": "docs/img/psbt-send-sparrow/sparrow-5-broadcast-transaction.png",
+      "type": "file",
+      "size": 94081
+    },
+    {
+      "path": "docs/img/pull-payments/1.jpg",
+      "type": "file",
+      "size": 183541
+    },
+    {
+      "path": "docs/img/pull-payments/10.png",
+      "type": "file",
+      "size": 32257
+    },
+    {
+      "path": "docs/img/pull-payments/11.png",
+      "type": "file",
+      "size": 9113
+    },
+    {
+      "path": "docs/img/pull-payments/12.png",
+      "type": "file",
+      "size": 57852
+    },
+    {
+      "path": "docs/img/pull-payments/13.png",
+      "type": "file",
+      "size": 62081
+    },
+    {
+      "path": "docs/img/pull-payments/1H.png",
+      "type": "file",
+      "size": 33791
+    },
+    {
+      "path": "docs/img/pull-payments/2.jpg",
+      "type": "file",
+      "size": 133884
+    },
+    {
+      "path": "docs/img/pull-payments/2H.png",
+      "type": "file",
+      "size": 15114
+    },
+    {
+      "path": "docs/img/pull-payments/3.jpg",
+      "type": "file",
+      "size": 98912
+    },
+    {
+      "path": "docs/img/pull-payments/3H.png",
+      "type": "file",
+      "size": 38326
+    },
+    {
+      "path": "docs/img/pull-payments/4.png",
+      "type": "file",
+      "size": 41842
+    },
+    {
+      "path": "docs/img/pull-payments/5.png",
+      "type": "file",
+      "size": 67559
+    },
+    {
+      "path": "docs/img/pull-payments/6.jpg",
+      "type": "file",
+      "size": 104794
+    },
+    {
+      "path": "docs/img/pull-payments/6H.png",
+      "type": "file",
+      "size": 48761
+    },
+    {
+      "path": "docs/img/pull-payments/7.jpg",
+      "type": "file",
+      "size": 175231
+    },
+    {
+      "path": "docs/img/pull-payments/7H.png",
+      "type": "file",
+      "size": 38756
+    },
+    {
+      "path": "docs/img/pull-payments/8.jpg",
+      "type": "file",
+      "size": 202681
+    },
+    {
+      "path": "docs/img/pull-payments/8H.png",
+      "type": "file",
+      "size": 28692
+    },
+    {
+      "path": "docs/img/pull-payments/9.png",
+      "type": "file",
+      "size": 16942
+    },
+    {
+      "path": "docs/img/raspberry-pi/rpi-imager-advanced-settings.png",
+      "type": "file",
+      "size": 119064
+    },
+    {
+      "path": "docs/img/raspberry-pi/rpi-imager.png",
+      "type": "file",
+      "size": 38223
+    },
+    {
+      "path": "docs/img/refunds/batch-payouts.jpg",
+      "type": "file",
+      "size": 140615
+    },
+    {
+      "path": "docs/img/refunds/claiment-completed1.jpg",
+      "type": "file",
+      "size": 53310
+    },
+    {
+      "path": "docs/img/refunds/claiming-waiting-apprv.jpg",
+      "type": "file",
+      "size": 64729
+    },
+    {
+      "path": "docs/img/refunds/claimingside.jpg",
+      "type": "file",
+      "size": 47285
+    },
+    {
+      "path": "docs/img/refunds/invoices-details.jpg",
+      "type": "file",
+      "size": 52447
+    },
+    {
+      "path": "docs/img/refunds/issue-refund-amount.jpg",
+      "type": "file",
+      "size": 69833
+    },
+    {
+      "path": "docs/img/refunds/issue-refund-payment-option.jpg",
+      "type": "file",
+      "size": 33299
+    },
+    {
+      "path": "docs/img/refunds/issue-refund.jpg",
+      "type": "file",
+      "size": 71542
+    },
+    {
+      "path": "docs/img/refunds/issue-refundH.jpg",
+      "type": "file",
+      "size": 64786
+    },
+    {
+      "path": "docs/img/refunds/payout-status-succesfull.jpg",
+      "type": "file",
+      "size": 363237
+    },
+    {
+      "path": "docs/img/refunds/payouts-status3-options-appr.jpg",
+      "type": "file",
+      "size": 106102
+    },
+    {
+      "path": "docs/img/refunds/payouts-status4-options-sign2.jpg",
+      "type": "file",
+      "size": 123122
+    },
+    {
+      "path": "docs/img/refunds/payouts-status4-options-sign3-adv.jpg",
+      "type": "file",
+      "size": 215425
+    },
+    {
+      "path": "docs/img/refunds/payouts-status5-completed1.jpg",
+      "type": "file",
+      "size": 81129
+    },
+    {
+      "path": "docs/img/server-settings/services",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify1.png",
+      "type": "file",
+      "size": 70757
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify10.png",
+      "type": "file",
+      "size": 100821
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify11.png",
+      "type": "file",
+      "size": 40538
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify12.png",
+      "type": "file",
+      "size": 110549
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify13.png",
+      "type": "file",
+      "size": 73430
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify14-2.png",
+      "type": "file",
+      "size": 51821
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify14.png",
+      "type": "file",
+      "size": 120258
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify15.png",
+      "type": "file",
+      "size": 252592
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify16.png",
+      "type": "file",
+      "size": 45957
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify17.png",
+      "type": "file",
+      "size": 47354
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify18.png",
+      "type": "file",
+      "size": 125581
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify2.png",
+      "type": "file",
+      "size": 56788
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify3.png",
+      "type": "file",
+      "size": 75705
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify4.png",
+      "type": "file",
+      "size": 69408
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify5.png",
+      "type": "file",
+      "size": 103587
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify6.png",
+      "type": "file",
+      "size": 93509
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify7.png",
+      "type": "file",
+      "size": 130603
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify8.png",
+      "type": "file",
+      "size": 129152
+    },
+    {
+      "path": "docs/img/shopify/btcpayshopify9.png",
+      "type": "file",
+      "size": 146601
+    },
+    {
+      "path": "docs/img/shopifyv2/app-deploy_custom-distribution-1.png",
+      "type": "file",
+      "size": 91202
+    },
+    {
+      "path": "docs/img/shopifyv2/app-deploy_custom-distribution-2.png",
+      "type": "file",
+      "size": 73502
+    },
+    {
+      "path": "docs/img/shopifyv2/app-deploy_distribution-confirm.png",
+      "type": "file",
+      "size": 174509
+    },
+    {
+      "path": "docs/img/shopifyv2/app-deploy_distribution-copy-store-url.png",
+      "type": "file",
+      "size": 92194
+    },
+    {
+      "path": "docs/img/shopifyv2/app-deploy_distribution-generate-link-confirm.png",
+      "type": "file",
+      "size": 168935
+    },
+    {
+      "path": "docs/img/shopifyv2/app-deploy_distribution-generate-link.png",
+      "type": "file",
+      "size": 87459
+    },
+    {
+      "path": "docs/img/shopifyv2/app-deploy_distribution-generated-link-copy.png",
+      "type": "file",
+      "size": 95307
+    },
+    {
+      "path": "docs/img/shopifyv2/app-deploy_distribution-install-to-store-confirm.png",
+      "type": "file",
+      "size": 73290
+    },
+    {
+      "path": "docs/img/shopifyv2/app-deploy_install-succesful.png",
+      "type": "file",
+      "size": 63934
+    },
+    {
+      "path": "docs/img/shopifyv2/app-deploy_install-successful.png",
+      "type": "file",
+      "size": 62612
+    },
+    {
+      "path": "docs/img/shopifyv2/app-deploy_plugin-all-green.png",
+      "type": "file",
+      "size": 34604
+    },
+    {
+      "path": "docs/img/shopifyv2/app-setup_step-1.png",
+      "type": "file",
+      "size": 52665
+    },
+    {
+      "path": "docs/img/shopifyv2/app-setup_step-4-1.png",
+      "type": "file",
+      "size": 24222
+    },
+    {
+      "path": "docs/img/shopifyv2/app-setup_step-4-2.png",
+      "type": "file",
+      "size": 83586
+    },
+    {
+      "path": "docs/img/shopifyv2/app-setup_step-5-1.png",
+      "type": "file",
+      "size": 26843
+    },
+    {
+      "path": "docs/img/shopifyv2/app-setup_step-5-2.png",
+      "type": "file",
+      "size": 110537
+    },
+    {
+      "path": "docs/img/shopifyv2/app-setup_step-6.png",
+      "type": "file",
+      "size": 226386
+    },
+    {
+      "path": "docs/img/shopifyv2/app-setup_step-7.png",
+      "type": "file",
+      "size": 176664
+    },
+    {
+      "path": "docs/img/shopifyv2/app-setup_step-8.png",
+      "type": "file",
+      "size": 118914
+    },
+    {
+      "path": "docs/img/shopifyv2/app-setup_step-9-1.png",
+      "type": "file",
+      "size": 51228
+    },
+    {
+      "path": "docs/img/shopifyv2/app-setup_step-9-2.png",
+      "type": "file",
+      "size": 117023
+    },
+    {
+      "path": "docs/img/shopifyv2/btcpay_checkout.png",
+      "type": "file",
+      "size": 52645
+    },
+    {
+      "path": "docs/img/shopifyv2/complete_payment.png",
+      "type": "file",
+      "size": 104504
+    },
+    {
+      "path": "docs/img/shopifyv2/create_app_manually.png",
+      "type": "file",
+      "size": 34269
+    },
+    {
+      "path": "docs/img/shopifyv2/invoice_paid.png",
+      "type": "file",
+      "size": 59650
+    },
+    {
+      "path": "docs/img/shopifyv2/invoice_payment_details.png",
+      "type": "file",
+      "size": 68412
+    },
+    {
+      "path": "docs/img/shopifyv2/order_status_page_after_payment.png",
+      "type": "file",
+      "size": 86211
+    },
+    {
+      "path": "docs/img/shopifyv2/paid_invoice_btcpay.png",
+      "type": "file",
+      "size": 30236
+    },
+    {
+      "path": "docs/img/shopifyv2/partner-app_client-id-secret.png",
+      "type": "file",
+      "size": 67138
+    },
+    {
+      "path": "docs/img/shopifyv2/partner_app_network_access.png",
+      "type": "file",
+      "size": 81591
+    },
+    {
+      "path": "docs/img/shopifyv2/partners_cli-token-created.png",
+      "type": "file",
+      "size": 41857
+    },
+    {
+      "path": "docs/img/shopifyv2/partners_create-cli-token-duration.png",
+      "type": "file",
+      "size": 27232
+    },
+    {
+      "path": "docs/img/shopifyv2/partners_create-cli-token.png",
+      "type": "file",
+      "size": 37272
+    },
+    {
+      "path": "docs/img/shopifyv2/partners_settings-cli-token.png",
+      "type": "file",
+      "size": 36701
+    },
+    {
+      "path": "docs/img/shopifyv2/partners_settings.png",
+      "type": "file",
+      "size": 26592
+    },
+    {
+      "path": "docs/img/shopifyv2/payment_option.png",
+      "type": "file",
+      "size": 30880
+    },
+    {
+      "path": "docs/img/shopifyv2/plugin_install-restart.png",
+      "type": "file",
+      "size": 51778
+    },
+    {
+      "path": "docs/img/shopifyv2/plugin_install.png",
+      "type": "file",
+      "size": 74221
+    },
+    {
+      "path": "docs/img/shopifyv2/plugin_install_fails.png",
+      "type": "file",
+      "size": 206072
+    },
+    {
+      "path": "docs/img/shopifyv2/plugin_section-1.png",
+      "type": "file",
+      "size": 65916
+    },
+    {
+      "path": "docs/img/shopifyv2/plugin_section-2--console-output.png",
+      "type": "file",
+      "size": 68894
+    },
+    {
+      "path": "docs/img/shopifyv2/plugin_section-2.png",
+      "type": "file",
+      "size": 65717
+    },
+    {
+      "path": "docs/img/shopifyv2/plugin_section-3.png",
+      "type": "file",
+      "size": 45965
+    },
+    {
+      "path": "docs/img/shopifyv2/plugin_update-app--console.png",
+      "type": "file",
+      "size": 66903
+    },
+    {
+      "path": "docs/img/shopifyv2/plugin_update-app--deploy.png",
+      "type": "file",
+      "size": 67936
+    },
+    {
+      "path": "docs/img/shopifyv2/plugin_update-app--finished.png",
+      "type": "file",
+      "size": 36645
+    },
+    {
+      "path": "docs/img/shopifyv2/pm_step_1.png",
+      "type": "file",
+      "size": 63936
+    },
+    {
+      "path": "docs/img/shopifyv2/pm_step_2_and_3.png",
+      "type": "file",
+      "size": 127102
+    },
+    {
+      "path": "docs/img/shopifyv2/shopify_migration_old_user_error.png",
+      "type": "file",
+      "size": 198110
+    },
+    {
+      "path": "docs/img/smtp/smtp-setup.png",
+      "type": "file",
+      "size": 44477
+    },
+    {
+      "path": "docs/img/smtp/validate-smtp-setup.png",
+      "type": "file",
+      "size": 22343
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--01-install-web.png",
+      "type": "file",
+      "size": 152051
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--02-install-upload.png",
+      "type": "file",
+      "size": 76445
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--03-enable-plugin.png",
+      "type": "file",
+      "size": 32958
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--04-add-new-payment-method.png",
+      "type": "file",
+      "size": 37020
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--05-payment-method-details.png",
+      "type": "file",
+      "size": 97096
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--06-payment-method-configuration-tab.png",
+      "type": "file",
+      "size": 132212
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--07-account-manage.png",
+      "type": "file",
+      "size": 24341
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--08-add-api-key.png",
+      "type": "file",
+      "size": 79429
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--09-permissions-and-select-store.png",
+      "type": "file",
+      "size": 298045
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--10-permissions-set.png",
+      "type": "file",
+      "size": 578319
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--11-copy-api-key.png",
+      "type": "file",
+      "size": 203925
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--12-copy-store-id.png",
+      "type": "file",
+      "size": 71857
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--13-save-vm-payment-method-form.png",
+      "type": "file",
+      "size": 134153
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--14-create-webhook.png",
+      "type": "file",
+      "size": 55520
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--14-vm-form-webhook-url.png",
+      "type": "file",
+      "size": 132052
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--15-webhook-payload-url.png",
+      "type": "file",
+      "size": 259629
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--16-virtuemart-configuration-save.png",
+      "type": "file",
+      "size": 110669
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--16-webhook-copy-secret.png",
+      "type": "file",
+      "size": 59146
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--17-webhook-save.png",
+      "type": "file",
+      "size": 90393
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--18-troubleshoot-copy-callback-url.png",
+      "type": "file",
+      "size": 103177
+    },
+    {
+      "path": "docs/img/virtuemart/btcpay-vm--19-troubleshoot-403-callback.png",
+      "type": "file",
+      "size": 129225
+    },
+    {
+      "path": "docs/img/voltage/deploybtcpay.jpg",
+      "type": "file",
+      "size": 33877
+    },
+    {
+      "path": "docs/img/voltage/deployln.jpg",
+      "type": "file",
+      "size": 64697
+    },
+    {
+      "path": "docs/img/voltage/voltagelnname.jpg",
+      "type": "file",
+      "size": 60906
+    },
+    {
+      "path": "docs/img/voltage/voltagereg.jpg",
+      "type": "file",
+      "size": 59619
+    },
+    {
+      "path": "docs/img/voltage/whatnode.jpg",
+      "type": "file",
+      "size": 32039
+    },
+    {
+      "path": "docs/img/walktrough/preview-paybutton.jpg",
+      "type": "file",
+      "size": 11895
+    },
+    {
+      "path": "docs/img/walktrough/selected-store.jpg",
+      "type": "file",
+      "size": 13497
+    },
+    {
+      "path": "docs/img/walktrough/store-settingsH.jpg",
+      "type": "file",
+      "size": 205562
+    },
+    {
+      "path": "docs/img/walktrough/walktrough-payouts1.jpg",
+      "type": "file",
+      "size": 99448
+    },
+    {
+      "path": "docs/img/walktrough/welcome-store.jpg",
+      "type": "file",
+      "size": 257259
+    },
+    {
+      "path": "docs/img/wallet/CoinSelection.jpg",
+      "type": "file",
+      "size": 288130
+    },
+    {
+      "path": "docs/img/wallet/ManageLabel.png",
+      "type": "file",
+      "size": 25071
+    },
+    {
+      "path": "docs/img/wallet/ScanWallet.PNG",
+      "type": "file",
+      "size": 13458
+    },
+    {
+      "path": "docs/img/wallet/WalletRBF.jpg",
+      "type": "file",
+      "size": 186696
+    },
+    {
+      "path": "docs/img/wallet/WalletReceive.png",
+      "type": "file",
+      "size": 33787
+    },
+    {
+      "path": "docs/img/wallet/WalletReceiveTwo.png",
+      "type": "file",
+      "size": 34072
+    },
+    {
+      "path": "docs/img/wallet/WalletRescan.png",
+      "type": "file",
+      "size": 51341
+    },
+    {
+      "path": "docs/img/wallet/WalletRescanProgress.png",
+      "type": "file",
+      "size": 20433
+    },
+    {
+      "path": "docs/img/wallet/WalletSend.png",
+      "type": "file",
+      "size": 58648
+    },
+    {
+      "path": "docs/img/wallet/WalletSetting.png",
+      "type": "file",
+      "size": 130842
+    },
+    {
+      "path": "docs/img/wallet/WalletSettingTwo.png",
+      "type": "file",
+      "size": 91108
+    },
+    {
+      "path": "docs/img/wallet/WalletTransactions.png",
+      "type": "file",
+      "size": 83367
+    },
+    {
+      "path": "docs/img/wallet/WalletTxComment.png",
+      "type": "file",
+      "size": 54670
+    },
+    {
+      "path": "docs/img/wallet/Wallets.png",
+      "type": "file",
+      "size": 19961
+    },
+    {
+      "path": "docs/img/wallet/btcpayserverwalletsettings1.jpg",
+      "type": "file",
+      "size": 85236
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--01-plugin-search.png",
+      "type": "file",
+      "size": 125517
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--02-activated-configure.png",
+      "type": "file",
+      "size": 108469
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--03-settings--api-key-redirect.png",
+      "type": "file",
+      "size": 158294
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--04-api-auth-login.png",
+      "type": "file",
+      "size": 62148
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--05-api-auth-select-store.png",
+      "type": "file",
+      "size": 48762
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--06-api-auth-authorize-button.png",
+      "type": "file",
+      "size": 147523
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--07-api-auth-after-redirect-prefilled.png",
+      "type": "file",
+      "size": 294138
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--08-api-auth-save-webhook-created.png",
+      "type": "file",
+      "size": 129083
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--09-man-api--manage-account.png",
+      "type": "file",
+      "size": 108680
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--10-man-api--keys-overview.png",
+      "type": "file",
+      "size": 84990
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--11-man-api--permissions.png",
+      "type": "file",
+      "size": 205286
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--12-man-api--permissions-save.png",
+      "type": "file",
+      "size": 493957
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--13-man-api--copy-key.png",
+      "type": "file",
+      "size": 175574
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--14-man-api--copy-store-id.png",
+      "type": "file",
+      "size": 72283
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--15-man-api--btcpay-settings-fill.png",
+      "type": "file",
+      "size": 260633
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--15-man-api--btcpay-settings-save.png",
+      "type": "file",
+      "size": 289824
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--7-man-api--copy-store-id.png",
+      "type": "file",
+      "size": 67843
+    },
+    {
+      "path": "docs/img/woocommerce/btcpay-wc-2--reqbin-403-test.png",
+      "type": "file",
+      "size": 154629
+    },
+    {
+      "path": "docs/img/woocommerce/btcpayWooLmode1.jpg",
+      "type": "file",
+      "size": 87226
+    },
+    {
+      "path": "docs/img/woocommerce/btcpayWooLmode2.jpg",
+      "type": "file",
+      "size": 133926
+    },
+    {
+      "path": "docs/img/woocommerce/btcpayWooLmode3.jpg",
+      "type": "file",
+      "size": 59784
+    },
+    {
+      "path": "docs/img/woocommerce/btcpayWooLmode4.jpg",
+      "type": "file",
+      "size": 171855
+    },
+    {
+      "path": "docs/img/woocommerce/btcpayWooLmode5.jpg",
+      "type": "file",
+      "size": 127135
+    },
+    {
+      "path": "docs/img/woocommerce/btcpayWooLmode6.jpg",
+      "type": "file",
+      "size": 115342
+    },
+    {
+      "path": "docs/img/woocommerce/woocommerce_at_free-shipping-flat-rate-config.png",
+      "type": "file",
+      "size": 94341
+    },
+    {
+      "path": "docs/img/woocommerce/woocommerce_at_free-shipping-product-setting.png",
+      "type": "file",
+      "size": 51654
+    },
+    {
+      "path": "docs/img/woocommerce/woocommerce_at_limit-payment-methods-rules.png",
+      "type": "file",
+      "size": 158151
+    },
+    {
+      "path": "docs/img/woocommerce/woocommerce_at_payment-method-discount.png",
+      "type": "file",
+      "size": 84676
+    },
+    {
+      "path": "docs/img/woocommerce/woocommerce_at_payment-methods.png",
+      "type": "file",
+      "size": 85470
+    },
+    {
+      "path": "docs/img/woocommerce/woocommerce_at_product-country-restriction.png",
+      "type": "file",
+      "size": 83935
+    },
+    {
+      "path": "docs/img/woocommerce/woocommerce_at_product_promotion_tag.png",
+      "type": "file",
+      "size": 21013
+    },
+    {
+      "path": "docs/img/zapier/ExampleApiPermissions.jpg",
+      "type": "file",
+      "size": 238079
+    },
+    {
+      "path": "swagger/plugins/shim/shim.json",
+      "type": "file",
+      "size": 18
+    },
+    {
+      "path": "docs/.vuepress/public/API/Greenfield",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/.vuepress/public/img/btcpay-logo.svg",
+      "type": "file",
+      "size": 885
+    },
+    {
+      "path": "docs/.vuepress/public/styles/btcpayserver-variables.css",
+      "type": "file",
+      "size": 25657
+    },
+    {
+      "path": "docs/.vuepress/theme/components/NavLinks.vue",
+      "type": "file",
+      "size": 3854
+    },
+    {
+      "path": "docs/.vuepress/theme/components/Navbar.vue",
+      "type": "file",
+      "size": 4558
+    },
+    {
+      "path": "docs/.vuepress/theme/components/PageEdit.vue",
+      "type": "file",
+      "size": 4619
+    },
+    {
+      "path": "docs/.vuepress/theme/components/Sidebar.vue",
+      "type": "file",
+      "size": 1402
+    },
+    {
+      "path": "docs/.vuepress/theme/layouts/Homepage.vue",
+      "type": "file",
+      "size": 7158
+    },
+    {
+      "path": "docs/img/server-settings/services/RideTheLightningServices.jpg",
+      "type": "file",
+      "size": 36375
+    },
+    {
+      "path": "docs/img/server-settings/services/RideTheLightningServicesH.png",
+      "type": "file",
+      "size": 51960
+    },
+    {
+      "path": "docs/.vuepress/public/API/Greenfield/Plugins",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/.vuepress/public/API/Greenfield/v1",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/.vuepress/public/API/Greenfield/Plugins/index.html",
+      "type": "file",
+      "size": 785
+    },
+    {
+      "path": "docs/.vuepress/public/API/Greenfield/v1/index.html",
+      "type": "file",
+      "size": 780
+    }
+  ],
+  "languages": {
+    "Shell": {
+      "bytes": 24002,
+      "percentage": 95.35
+    },
+    "JavaScript": {
+      "bytes": 1171,
+      "percentage": 4.65
+    }
+  },
+  "signatures": [],
+  "test_examples": [],
+  "issues": [
+    {
+      "number": 1540,
+      "title": "Improve How to contribute to BTCPay Server?",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-12-11T18:39:07+00:00",
+      "updated_at": "2025-12-12T04:58:21+00:00",
+      "closed_at": "2025-12-12T04:58:21+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1540",
+      "body": "I could not find the information I was looking for on the \"How to contribute to BTCPay Server?\" page (`/Contribute/`).\n\n[PLEASE DESCRIBE HOW THE PAGE CAN BE IMPROVED]"
+    },
+    {
+      "number": 1539,
+      "title": "Improve Payroll Plugin for BTCPay Server",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-12-09T01:22:16+00:00",
+      "updated_at": "2025-12-09T14:54:22+00:00",
+      "closed_at": "2025-12-09T13:12:37+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1539",
+      "body": "I could not find the information I was looking for on the \"Payroll Plugin for BTCPay Server\" page (`/VendorPay/`).\n\n[PLEASE DESCRIBE HOW THE PAGE CAN BE IMPROVED]"
+    },
+    {
+      "number": 1538,
+      "title": "Improve Wallet FAQ / Gap limit problem",
+      "state": "open",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-12-06T15:12:29+00:00",
+      "updated_at": "2025-12-06T15:12:29+00:00",
+      "closed_at": null,
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1538",
+      "body": "Hi, I found another way to solve Gap limit problem. Currently there are only two solutions, not suitable for all.\n\nProposed change [in the Wallet FAQ](https://docs.btcpayserver.org/FAQ/Wallet/#the-gap-limit-solution):\n\n> ## The gap limit solution\n> It's not easy to solve the gap limit problem. You have two options:\n> \n> 1. Increase the gap limit in your existing (external) wallet\n> 2. Use internal BTCPay Server wallet\n> 3. Send sats to some unused addresses\n> \n> ### Send sats to some unused addr"
+    },
+    {
+      "number": 1537,
+      "title": "4",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-12-02T02:39:58+00:00",
+      "updated_at": "2025-12-02T02:41:13+00:00",
+      "closed_at": "2025-12-02T02:40:44+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1537",
+      "body": null
+    },
+    {
+      "number": 1421,
+      "title": "Improve Wallet FAQ",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2024-08-18T20:35:05+00:00",
+      "updated_at": "2025-11-10T18:01:38+00:00",
+      "closed_at": "2025-11-10T18:01:38+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1421",
+      "body": "I could not find the information I was looking for on the \"Wallet FAQ\" page (`/FAQ/Wallet/`).\r\n\r\n[PLEASE DESCRIBE HOW THE PAGE CAN BE IMPROVED]\r\n\r\nThis might be a basic question, but when creating a wallet on your node, will you receive the seed phrase for that wallet? This way, if your node goes down, you can still access it. Also, if that happens, do you need to use a BTCPayServer instance to access the wallet, or can you use any other wallet? If you do use a different wallet, will the gap lim"
+    },
+    {
+      "number": 997,
+      "title": "Revise the `BTCPay Server vs. Others` page",
+      "state": "closed",
+      "labels": [
+        "Introduction",
+        "User-Doc"
+      ],
+      "milestone": null,
+      "created_at": "2021-12-22T10:24:51+00:00",
+      "updated_at": "2025-11-10T17:58:46+00:00",
+      "closed_at": "2025-11-10T17:58:46+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/997",
+      "body": "BTCPay is a good page which should give a bullish case for BTCPay and also explain how it's different. \r\n\r\n- [ ] Revise content for validity and if there are some things we'd like to add\r\n- [ ] Merge in \"How it's different section\" from the `Introduction` page.\r\n- [ ] Design a better infographic based on our branding guidelines and improved content (consider a video as well)"
+    },
+    {
+      "number": 1042,
+      "title": "Create new Bitcoin Point of sale video",
+      "state": "closed",
+      "labels": [
+        "Video",
+        "User-Doc"
+      ],
+      "milestone": null,
+      "created_at": "2022-03-23T09:34:47+00:00",
+      "updated_at": "2025-11-10T17:58:34+00:00",
+      "closed_at": "2025-11-10T17:58:34+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1042",
+      "body": "@Webworthy and I discussed that we probably should create a new \"how to create a bitcoin point of sale video\" that would feature our new UI. Webworthy mentioned he'd like to record a local merchant setting it all up. An example [here](https://youtu.be/tpqQRJoJgzU?t=834)."
+    },
+    {
+      "number": 1532,
+      "title": "Improve Payment Requests",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-11-09T18:06:27+00:00",
+      "updated_at": "2025-11-09T21:30:24+00:00",
+      "closed_at": "2025-11-09T21:30:24+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1532",
+      "body": "I could not find the information I was looking for on the \"Payment Requests\" page (`/PaymentRequests/`).\n\n[PLEASE DESCRIBE HOW THE PAGE CAN BE IMPROVED]"
+    },
+    {
+      "number": 1533,
+      "title": "My card",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-11-09T18:06:43+00:00",
+      "updated_at": "2025-11-09T21:30:09+00:00",
+      "closed_at": "2025-11-09T21:30:09+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1533",
+      "body": null
+    },
+    {
+      "number": 1531,
+      "title": "Remove Wabisabi Plugin documentation",
+      "state": "open",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-11-02T07:59:22+00:00",
+      "updated_at": "2025-11-02T07:59:22+00:00",
+      "closed_at": null,
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1531",
+      "body": "This page refers to a plugin not available anymore: https://docs.btcpayserver.org/Wabisabi\n\nAre there any plans to bring the plugin back or should this page better be removed?"
+    },
+    {
+      "number": 1530,
+      "title": "Improve Lightning Network (LN) and BTCPay Server",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-10-21T23:21:13+00:00",
+      "updated_at": "2025-10-30T10:03:21+00:00",
+      "closed_at": "2025-10-30T10:03:20+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1530",
+      "body": "I could not find the information I was looking for on the \"Lightning Network (LN) and BTCPay Server\" page (`/LightningNetwork/`).\n\nIs it possible for users to _stream sats_ to a merchant for a service for as long as they are using the service?"
+    },
+    {
+      "number": 1526,
+      "title": "remove transmuter",
+      "state": "closed",
+      "labels": [
+        "good first issue"
+      ],
+      "milestone": null,
+      "created_at": "2025-09-10T09:35:24+00:00",
+      "updated_at": "2025-10-30T10:01:49+00:00",
+      "closed_at": "2025-10-30T10:01:49+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1526",
+      "body": "while reading [BTCPay Server vs. Others](https://docs.btcpayserver.org/BTCPayVsOthers/) the [Transmuter](https://github.com/btcpayserver/btcTransmuter) was mentioned. the repository is archived and it says:\n\n> Avoid using it, if you can.\n\nthe transmuter should be removed from the documentation\n\ncan create a pull request with the necessary changes — let me know"
+    },
+    {
+      "number": 1437,
+      "title": "Improve (3) Wallet Setup",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2024-10-23T18:51:26+00:00",
+      "updated_at": "2025-10-20T09:13:49+00:00",
+      "closed_at": "2025-10-20T09:13:49+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1437",
+      "body": "Request for \"Wallet Creation\" API Endpoint and Permission Support in BTC Pay Server\r\n\r\nI am currently integrating BTC Pay Server with a Python Flask application and have encountered the need to programmatically create wallets through the API. While the API offers comprehensive support for store management, there is no direct API endpoint available to automate the wallet creation process for newly registered stores, particularly for hot wallets (e.g., Segwit wallets).\r\n\r\nIntegration Use Case:\r\nAs"
+    },
+    {
+      "number": 1440,
+      "title": "Improve Azure Deployment",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2024-10-31T10:19:12+00:00",
+      "updated_at": "2025-10-20T09:13:24+00:00",
+      "closed_at": "2025-10-20T09:13:24+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1440",
+      "body": "After deploying on Azure and opening site the first time to register, you're greeted with a ERR_CONNECTION_REFUSED error..."
+    },
+    {
+      "number": 1521,
+      "title": "Improve Customizing themes",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-08-20T20:21:15+00:00",
+      "updated_at": "2025-10-20T09:13:12+00:00",
+      "closed_at": "2025-10-20T09:13:12+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1521",
+      "body": "I could not find the information I was looking for on the \"Customizing themes\" page (`/Development/Theme/`).\n\n[PLEASE DESCRIBE HOW THE PAGE CAN BE IMPROVED] This is nonprofitaassosiation Oiva Hoiva ry homesit3...\n\nOiva Hoiva ry \n\nTells those site what kind of work they do and what kind of people\n\nAlso what kind of future  they make and how mutch they hope to geta donations in USA\n\nAnd  also where ex̌atly th r y try to catch that.... Direct httpss://  address!!!!!????"
+    },
+    {
+      "number": 1522,
+      "title": "Improve Plugins",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-08-23T07:04:26+00:00",
+      "updated_at": "2025-10-20T09:12:55+00:00",
+      "closed_at": "2025-10-20T09:12:55+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1522",
+      "body": "I could not find the information I was looking for on the \"Plugins\" page (`/Development/Plugins/`).\n\n[PLEASE DESCRIBE HOW THE PAGE CAN BE IMPROVED]\nHonestly I don't know how to work this system I know I've made a payment to this page for a withdrawal fee of a btc payment and never received the pay out I'm not sure wat I'm supposed to do beyond this point but if someone can get in contact with me @shegottitt21@gmail.com that would be amazing thanks"
+    },
+    {
+      "number": 1523,
+      "title": "Improve Frequently Asked Questions and Common Issues — Recurring payments support for WooCommerce?",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-09-03T00:05:09+00:00",
+      "updated_at": "2025-10-20T09:12:13+00:00",
+      "closed_at": "2025-10-20T09:12:13+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1523",
+      "body": "I could not find the information I was looking for on the \"Frequently Asked Questions and Common Issues\" page (`/FAQ/`).\n\nThe article linked below says that your woocommerce plugin can work with the Woocommerce Subscriptions Plugin to provide recurring cryptocurrency payments. But I can't find anything about that on your website. Does this actually work as the article below claims?\n\nhttps://merchantconnect.uk/how-to-set-up-crypto-subscriptions-in-woocommerce/"
+    },
+    {
+      "number": 1518,
+      "title": "Improve Try out BTCPay server",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-08-09T14:29:08+00:00",
+      "updated_at": "2025-08-09T19:26:40+00:00",
+      "closed_at": "2025-08-09T19:26:40+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1518",
+      "body": "I could not find the information I was looking for on the \"Try out BTCPay server\" page (`/TryItOut/`).\n\n[PLEASE DESCRIBE HOW THE PAGE CAN BE IMPROVED]"
+    },
+    {
+      "number": 1517,
+      "title": "Improve Using BTCPay Translation Feature to Localize Your BTCPay Server instance",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-08-02T07:49:09+00:00",
+      "updated_at": "2025-08-02T07:53:37+00:00",
+      "closed_at": "2025-08-02T07:52:59+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1517",
+      "body": "I could not find the information I was looking for on the \"Using BTCPay Translation Feature to Localize Your BTCPay Server instance\" page (`/Translations/`).\n\n[PLEASE DESCRIBE HOW THE PAGE CAN BE IMPROVED] funds. I just payed the 35 dollar fee saying .000003 is still owed is that a 1 cent can some one get back to me with my funds thanks"
+    },
+    {
+      "number": 1516,
+      "title": "Add guide on how to deploy on machine with already running bitcoind and synced blockchain",
+      "state": "open",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-07-31T21:28:21+00:00",
+      "updated_at": "2025-07-31T21:28:21+00:00",
+      "closed_at": null,
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1516",
+      "body": null
+    },
+    {
+      "number": 1511,
+      "title": "Change paid support link from archived #freelance to #dev",
+      "state": "closed",
+      "labels": [
+        "good first issue"
+      ],
+      "milestone": null,
+      "created_at": "2025-07-21T05:42:08+00:00",
+      "updated_at": "2025-07-21T08:16:05+00:00",
+      "closed_at": "2025-07-21T08:16:05+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1511",
+      "body": "On [here](https://docs.btcpayserver.org/Support/#paid-support) there is still a link to the Mattermost freelance channel which doesn't exist anymore.\n\nNot sure there is an option for finding trustworthy third party support options. Perhaps the section should be removed altogether?"
+    },
+    {
+      "number": 1510,
+      "title": "Improve Connect an existing wallet",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-07-13T18:32:46+00:00",
+      "updated_at": "2025-07-14T03:43:24+00:00",
+      "closed_at": "2025-07-14T03:43:24+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1510",
+      "body": "I could not find the information I was looking for on the \"Connect an existing wallet\" page (`/ConnectWallet/`).\n\n[PLEASE DESCRIBE HOW THE PAGE CAN BE IMPROVED]"
+    },
+    {
+      "number": 1505,
+      "title": "Improve Reporting in BTCPay - Modify Export Fields",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-05-15T14:52:23+00:00",
+      "updated_at": "2025-05-16T13:49:30+00:00",
+      "closed_at": "2025-05-16T13:49:28+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1505",
+      "body": "I could not find the information I was looking for on the \"Reporting in BTCPay\" page (`/Reporting/`).\n\n[PLEASE DESCRIBE HOW THE PAGE CAN BE IMPROVED]\n\nHi, \n\nIt would be great if it was possible to adjust the export fields to include information such as user data collected during the process.\n\nThis makes it easier to print a list of users for example, with ticket sales, and quickly see their email address.\n\nCurrently, we have to export a list of sales and then manually check each one to copy past"
+    },
+    {
+      "number": 1490,
+      "title": "Ran the upgrade script for the first time and now getting 502 Bad Gateway",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-03-10T22:47:47+00:00",
+      "updated_at": "2025-04-02T12:48:10+00:00",
+      "closed_at": "2025-04-02T12:48:10+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1490",
+      "body": "I installed BTCPay on my VPS. Everything worked great. I had not started using it but noticed an update over the weekend. I figured it would be good to update it to get used to it for the future. I ran the sh script. It ran fine, restarted, but then got the 502, rebooted, still getting the 502. What should I do now to get back to a working setup?"
+    },
+    {
+      "number": 1480,
+      "title": "Add Pretix integration to docs",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-01-14T10:17:59+00:00",
+      "updated_at": "2025-03-25T10:19:06+00:00",
+      "closed_at": "2025-03-25T10:19:06+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1480",
+      "body": "- [x] Test it @ndeet \n- [x] Add to docs @ndeet \n- [x] Add to website @TChukwuleta "
+    },
+    {
+      "number": 1496,
+      "title": "bitcoin.conf.txt",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-03-24T21:40:28+00:00",
+      "updated_at": "2025-03-25T04:39:54+00:00",
+      "closed_at": "2025-03-25T04:39:54+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1496",
+      "body": "![bitcoin.conf.txt](https://github.com/user-attachments/files/19438496/bitcoin.conf.txt)\n\n"
+    },
+    {
+      "number": 1495,
+      "title": "Improve (3) Wallet Setup",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-03-24T12:37:52+00:00",
+      "updated_at": "2025-03-24T12:40:39+00:00",
+      "closed_at": "2025-03-24T12:40:39+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1495",
+      "body": "I could not find the information I was looking for on the \"(3) Wallet Setup\" page (`/WalletSetup/`).\n\n[PLEASE DESCRIBE HOW THE PAGE CAN BE IMPROVED]"
+    },
+    {
+      "number": 1492,
+      "title": "Remove LightningInABox",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-03-14T23:08:08+00:00",
+      "updated_at": "2025-03-17T11:13:11+00:00",
+      "closed_at": "2025-03-17T11:13:11+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1492",
+      "body": "the page links now to a scam / casino thingy, seems was sold, not sure if we should just remove the link or the whole page; the instructions would still work for most hardware \n\nhttps://docs.btcpayserver.org/Deployment/LightningInABox/\n"
+    },
+    {
+      "number": 1454,
+      "title": "Improve Lightning Network setup docs",
+      "state": "open",
+      "labels": [
+        "Lightning"
+      ],
+      "milestone": null,
+      "created_at": "2024-11-18T12:11:48+00:00",
+      "updated_at": "2025-01-29T10:48:01+00:00",
+      "closed_at": null,
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1454",
+      "body": "@ndeet is taking a lead here.  https://docs.btcpayserver.org/LightningNetwork/"
+    },
+    {
+      "number": 1481,
+      "title": "Improve The BTCPay Server Coinjoin plugin",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-01-24T04:44:44+00:00",
+      "updated_at": "2025-01-24T04:44:59+00:00",
+      "closed_at": "2025-01-24T04:44:59+00:00",
+      "url": "https://github.com/btcpayserver/btcpayserver-doc/issues/1481",
+      "body": "I could not find the information I was looking for on the \"The BTCPay Server Coinjoin plugin\" page (`/Wabisabi/`).\n\n[PLEASE DESCRIBE HOW THE PAGE CAN BE IMPROVED]"
+    }
+  ],
+  "changelog": "",
+  "releases": []
+}

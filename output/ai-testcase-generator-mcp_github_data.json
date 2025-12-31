@@ -1,0 +1,231 @@
+{
+  "repo_info": {
+    "name": "ai-testcase-generator-mcp",
+    "full_name": "Mallikarjun-Roddannavar/ai-testcase-generator-mcp",
+    "description": "An Model Context Protocol(MCP) server that generates comprehensive API test cases (positive, negative, edge cases) from endpoint metadata, powered by AI/LLMs",
+    "url": "https://github.com/Mallikarjun-Roddannavar/ai-testcase-generator-mcp",
+    "homepage": "",
+    "stars": 9,
+    "forks": 3,
+    "open_issues": 0,
+    "default_branch": "main",
+    "created_at": "2025-09-10T13:35:11+00:00",
+    "updated_at": "2025-12-16T09:36:00+00:00",
+    "language": "TypeScript",
+    "license": "MIT License",
+    "topics": [
+      "ai",
+      "api-testing",
+      "llm",
+      "mcp",
+      "mcp-server",
+      "nodejs",
+      "swagger",
+      "test-automation",
+      "test-case-generation",
+      "test-case-generator",
+      "testing",
+      "testplan",
+      "tests",
+      "typescript"
+    ]
+  },
+  "readme": "# 🤖 AI Testcase Generator MCP\n\nAn **Model Context Protocol(MCP) server** that generates comprehensive **API test plans** (positive, negative, and boundary/edge cases) directly from endpoint metadata—powered by **LLMs**.\n\nThis is a TypeScript-based Model Context Protocol(MCP) server for QA engineers. It demonstrates core Model Context Protocol concepts by providing:\n\n- AI-powered tool for generating exhaustive test case plans from API endpoints and payloads\n- Prompt-driven LLM integration for quality and coverage\n- Extensible structure for future automation tooling\n\n## ✨ Features\n\n- 🔌 **MCP-compliant server** (`stdio` transport).  \n- 📝 Tool: `generate_tests_excel`  \n  - Input: endpoint, HTTP method, payload, extra context. \n  - **Input options**:\n    - **Direct endpoint details**: endpoint, HTTP method, payload\n    - Use extraContext to provide any additional testing notes or constraints\n  - **OutputPut**: 📊 **Excel test plan** with columns: *Sl no, Test Name, Pre-Condition, Steps, Expected Result*.  \n- 🧠 **Prompt-driven test generation** with configurable LLM (Groq, OpenAI, Anthropic).  \n- 📜 Detailed logging with **Winston**. \n\n## 🏗️ Architecture\n\n```mermaid\nflowchart TD\n    A[Claude / MCP Client] -->|Run Tool| B[MCP Server]\n    B -->|Prompt| C[LLM API]\n    C -->|Test Cases JSON| B\n    B -->|Excel Export| D[(Test Plan .xlsx)]\n    B -->|Logs| E[Server Log File]\n```\n## 📂 Project Structure\n<details>\n\n```plaintext\nai-testcase-designer-mcp/\n├── build/                         # Compiled JavaScript output\n├── assets/                        # Demo gifs, images, and sample files\n│    ├── demo.gif\n│    ├── excel_preview.png\n│    └── sample_chat_message.txt\n├── configs/\n│    └── config.json               # Server/tool config\n├── src/\n│    ├── index.ts                  # Main server entry point (MCP interface & routing)\n│    ├── excel.ts                  # Excel file creation & writing logic (modular)\n│    ├── logger.ts                 # Winston logger configuration & log writing (modular)\n│    └── prompts/\n│         └── testcase_prompt.txt  # Prompt template for LLM-based test generation\n├── package.json\n├── tsconfig.json\n├── README.md\n└── .gitignore\n```\n\n- **src/excel.ts**: Handles all Excel (.xlsx) file creation and test plan export (modularized).\n- **src/logger.ts**: Provides modular logging functionality across the MCP server using Winston.\n- **src/prompts/**: Contains prompt templates for LLM-driven test generation.\n- **assets/**: Demo GIFs, Excel sample preview, and chat prompt examples.\n---\n</details>\n\n## 🎥 Demo\n\nHere’s the MCP generating test cases and exporting to Excel:\n\n![AI Testcase Designer Demo](./assets/demo.gif)\n\n### 🔍 Excel Preview\nBelow is a quick preview of the generated test cases:\n\n![Excel Preview](./assets/excel_preview.png)\n\n## Development\n\nInstall dependencies:\n```bash\nnpm install\n```\n\nBuild the server:\n```bash\nnpm run build\n```\n\nFor development with auto-rebuild:\n```bash\nnpm run watch\n```\n\n## ⚙️ Installation\n\nFollow these steps to set up the AI Testcase Designer MCP server locally:\n\n1. **Clone the repository**\n    ```bash\n    git clone https://github.com/yourusername/ai-testcase-designer-mcp.git\n    cd ai-testcase-designer-mcp\n    ```\n\n2. **Install dependencies**\n    ```bash\n    npm install\n    ```\n\n3. **Build the server**\n    ```bash\n    npm run build\n    ```\n\n4. **Configure the server in your MCP client**\n    #### a. Claude Desktop or any MCP-compatible client\n    <details>\n\n    - Add the following server configuration:\n\n      - **On MacOS:**  \n        `~/Library/Application Support/Claude/claude_desktop_config.json`\n\n      - **On Windows:**  \n        `%APPDATA%/Claude/claude_desktop_config.json`\n\n    ```json\n    {\n      \"mcpServers\": {\n        \"ai-testcase-designer-mcp\": {\n          \"disabled\": false,\n          \"timeout\": 60,\n          \"command\": \"node\",\n          \"args\": [\n            \"c:/Auto_WS/ai-testcase-designer-mcp/build/index.js\"\n          ],\n          \"transportType\": \"stdio\"\n        }\n      }\n    }\n    ```\n    </details>\n\n    #### b. Cline (VS Code Extension)\n    <details>\n    You can also use the AI Testcase Designer MCP server with [Cline](https://cline.bot), the Model Context Protocol VS Code extension.\n\n    **Quick Start:**  \n    1. **Install [Cline from the VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev).**  \n    2. **Open the Cline sidebar** (from the VS Code activity bar).  \n    3. **Go to the \"MCP Servers\" section and click \"Add New MCP Server\".**  \n    4. **Fill in the server details:**  \n        ```json\n        {\n          \"mcpServers\": {\n            \"ai-testcase-designer-mcp\": {\n              \"disabled\": false,\n              \"timeout\": 60,\n              \"command\": \"node\",\n              \"args\": [\n                \"c:/Auto_WS/ai-testcase-designer-mcp/build/index.js\"\n              ],\n              \"transportType\": \"stdio\"\n            }\n          }\n        }\n        ```\n    5. **Test the connection and save.**\n\n    For a visual step-by-step guide, see below:\n\n    ![Cline MCP Server Add Steps](./assets/ClineSetUp_Steps.png)\n\n    ![Cline MCP Server Connection Success](./assets/ClineSetUp_MCP_Servers.png)\n\n    For detailed Cline guidance, see the official docs:  \n    [cline.bot/getting-started/installing-cline#vs-code-marketplace%3A-step-by-step-setup](https://docs.cline.bot/getting-started/installing-cline#vs-code-marketplace%3A-step-by-step-setup)\n\n</details>\n\n## 🔑 API Key & Work Directory Setup\n\nTo use the AI Testcase Designer MCP.\n\n1. Get your Groq API key from here for free: [https://console.groq.com/keys](https://console.groq.com/keys)\n2. A working directory (WORK_DIR) where generated Excel test plans and server logs will be saved.\n\nUpdate your `config.json` file like this:\n\n```json\n{\n  \"MODEL_API_KEY\": \"gsk_7Ma3Fabcd <your-api-key-here>\",\n  \"WORK_DIR\": \"C:/Auto_WS/ai-testcase-designer-mcp\"\n}\n```\n### How to Use\n\n1. 🖥️ Open Claude Desktop (or any MCP-compatible client).  \n2. 📂 **Download Sample Chat Message**: [sample_chat_message.txt](./assets/sample_chat_message.txt) and copy its content.  \n3. ✉️ Paste the content into the chat and send the message: the AI will generate detailed test cases in Excel format.  \n4. 💾 Generated Excel files and server logs are saved in your `WORK_DIR` folder.  \n\n\n## ▶️ Example Request\n\n```json\n{\n  \"name\": \"generate_tests_excel\",\n  \"arguments\": {\n    \"endpoint\": \"https://api.example.com/v1/users\",\n    \"method\": \"POST\",\n    \"payload\": {\n      \"name\": \"John Doe\",\n      \"email\": \"john@example.com\"\n    },\n    \"extraContext\": \"Focus on invalid email and empty payload scenarios.\"\n  }\n}\n```\n\n## 📊 Example Excel Output\n\n<details>\n\n| Sl no | Test Name         | Pre-Condition | Steps                               | Expected Result           |\n|-------|-------------------|---------------|-------------------------------------|---------------------------|\n| 1     | Valid User Create | DB is empty   | Send POST with valid payload        | User created successfully |\n| 2     | Missing Email     | DB is empty   | Send POST with name only            | 400 validation error      |\n| 3     | Invalid Email     | DB is empty   | Send POST with invalid email format | 422 error message         |\n\n</details>\n\n## 📂 Files Output\n\nFiles are written to: ./workdir/generated/\n\n---\n\n### Sample Log Output\n\n<details>\n\n```log\n2025-09-13T10:22:11 [info]: [Step1] Incoming request: endpoint=/v1/users, method=POST\n2025-09-13T10:22:11 [info]: [Step2] Building LLM prompt...\n2025-09-13T10:22:13 [info]: [Step5] Converting LLM JSON to Excel rows (15 test cases)\n```\n</details>\n\n### Debugging\n\n<details>\nSince MCP servers communicate over stdio, debugging can be challenging. We recommend using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector), which is available as a package script:\n\n```bash\nnpm run inspector\n```\n\nThe Inspector will provide a URL to access debugging tools in your browser.\n\n</details>\n\n## License\n\nThis project is licensed under the MIT License.  \nSee the [LICENSE](LICENSE) file for details.\n",
+  "file_tree": [
+    {
+      "path": ".github",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".gitignore",
+      "type": "file",
+      "size": 52
+    },
+    {
+      "path": "LICENSE",
+      "type": "file",
+      "size": 1080
+    },
+    {
+      "path": "README.md",
+      "type": "file",
+      "size": 8234
+    },
+    {
+      "path": "assets",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "configs",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "generated",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "jest.config.cjs",
+      "type": "file",
+      "size": 210
+    },
+    {
+      "path": "package-lock.json",
+      "type": "file",
+      "size": 207163
+    },
+    {
+      "path": "package.json",
+      "type": "file",
+      "size": 1366
+    },
+    {
+      "path": "src",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "tests",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "tsconfig.json",
+      "type": "file",
+      "size": 415
+    },
+    {
+      "path": ".github/copilot-instructions.md",
+      "type": "file",
+      "size": 2564
+    },
+    {
+      "path": "assets/ClineSetUp_MCP_Servers.png",
+      "type": "file",
+      "size": 33155
+    },
+    {
+      "path": "assets/ClineSetUp_Steps.png",
+      "type": "file",
+      "size": 64664
+    },
+    {
+      "path": "assets/demo.gif",
+      "type": "file",
+      "size": 10256509
+    },
+    {
+      "path": "assets/excel_preview.png",
+      "type": "file",
+      "size": 87258
+    },
+    {
+      "path": "assets/generated_tests_get_https___api_example_com_v1_users__userId__1757765178012.xlsx",
+      "type": "file",
+      "size": 10413
+    },
+    {
+      "path": "assets/sample_chat_message.txt",
+      "type": "file",
+      "size": 8213
+    },
+    {
+      "path": "configs/config.json",
+      "type": "file",
+      "size": 84
+    },
+    {
+      "path": "generated/server.log",
+      "type": "file",
+      "size": 3
+    },
+    {
+      "path": "src/index.ts",
+      "type": "file",
+      "size": 6763
+    },
+    {
+      "path": "src/logger.ts",
+      "type": "file",
+      "size": 817
+    },
+    {
+      "path": "src/prompts",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/services",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "tests/unit",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "src/prompts/testcase_prompt.txt",
+      "type": "file",
+      "size": 3024
+    },
+    {
+      "path": "src/services/excelService.ts",
+      "type": "file",
+      "size": 2169
+    },
+    {
+      "path": "src/services/llmService.ts",
+      "type": "file",
+      "size": 2770
+    },
+    {
+      "path": "tests/unit/llmService.test.ts",
+      "type": "file",
+      "size": 3851
+    }
+  ],
+  "languages": {
+    "TypeScript": {
+      "bytes": 9607,
+      "percentage": 57.94
+    },
+    "JavaScript": {
+      "bytes": 6973,
+      "percentage": 42.06
+    }
+  },
+  "signatures": [],
+  "test_examples": [],
+  "issues": [
+    {
+      "number": 4,
+      "title": "Configure Jest and Add Sample Unit Test Scaffolding",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-09-22T16:51:17+00:00",
+      "updated_at": "2025-09-22T16:52:33+00:00",
+      "closed_at": "2025-09-22T16:52:33+00:00",
+      "url": "https://github.com/Mallikarjun-Roddannavar/ai-testcase-generator-mcp/issues/4",
+      "body": "Set up Jest with TypeScript support using ts-jest, and scaffold initial unit test files for core modules.\n\n- [x] Install jest, ts-jest, and @types/jest\n- [x] Initialize jest.config.js with TypeScript support\n- [x] Create tests/unit folder with:\n       llmService.test.ts"
+    },
+    {
+      "number": 3,
+      "title": "Add Core Service Modules for MCP Workflow",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-09-22T16:47:06+00:00",
+      "updated_at": "2025-09-22T16:48:51+00:00",
+      "closed_at": "2025-09-22T16:48:50+00:00",
+      "url": "https://github.com/Mallikarjun-Roddannavar/ai-testcase-generator-mcp/issues/3",
+      "body": "Implement foundational service modules to support MCP server functionality.\n\nTasks:\n\n- [ ] 1. Add llmService.ts for LLM orchestration and prompt handling\n- [ ] 2. Add excelService.ts for exporting generated test cases to Excel"
+    }
+  ],
+  "changelog": "",
+  "releases": []
+}

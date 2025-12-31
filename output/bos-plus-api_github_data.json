@@ -1,0 +1,494 @@
+{
+  "repo_info": {
+    "name": "bos-plus-api",
+    "full_name": "braiins/bos-plus-api",
+    "description": "BOS API",
+    "url": "https://github.com/braiins/bos-plus-api",
+    "homepage": "",
+    "stars": 35,
+    "forks": 13,
+    "open_issues": 9,
+    "default_branch": "main",
+    "created_at": "2023-05-02T06:46:02+00:00",
+    "updated_at": "2025-12-02T18:15:54+00:00",
+    "language": null,
+    "license": null,
+    "topics": []
+  },
+  "readme": "# Braiins OS Public API\n\nThis repository contains protocol buffers for the new Braiins OS Public API, which is based on gRPC API technology.\n\n\n### Versions\n\n| Public API Version | Braiins OS version |\n|--------------------|--------------------|\n| 1.8.0              | 25.11              |\n| 1.7.0              | 25.07              |\n| 1.6.0              | 25.05              |\n| 1.5.0              | 25.03              |\n| 1.4.0              | 25.01              |\n| 1.3.0              | 24.09              |\n| 1.2.0              | 24.06              |\n| 1.1.0              | 24.04              |\n| 1.0.0              | 24.03              |\n| 1.0.0-beta.6       | 24.02              |\n| 1.0.0-beta.5       | 23.12              |\n| 1.0.0-beta.4       | 23.10.1            |\n| 1.0.0-beta.3       | 23.10              |\n| 1.0.0-beta.2       | 23.08              |\n| 1.0.0-beta.1       | 23.05              |\n| 1.0.0-beta         | 23.04              |\n| 1.0.0-alpha.1      | 23.03.3            |\n| 1.0.0-alpha        | 23.03              |\n\n### Overview\n\nThe Braiins OS Public API, introduced in version 23.03, represents a significant milestone in our platform's evolution. This API sets a standard for all present and forthcoming hardware variants, irrespective of their manufacturer. It provides a unified interface for interacting with mining hardware, enabling seamless integration with third-party applications and services. The API is designed to be intuitive, efficient, and versatile, offering a wide range of functionalities to meet diverse requirements.\n\n### Examples\n\nWe've curated a collection of examples demonstrating the utilization of our Public API, conveniently hosted on our GitHub repository: https://github.com/braiins/bos-plus-api-demos. These examples serve as practical guides for integrating our API into your projects, showcasing its versatility and ease of use. Explore the repository to discover hands-on demonstrations tailored to various use cases.\n\n## Getting Started\n\ngRPC is a high-performance remote procedure call (RPC) framework developed by Google. It allows developers to create efficient and reliable communications between client and server applications running on different platforms and written in different programming languages. Read more about gRPC at **[grpc.io](https://grpc.io)**\n\n### Prerequisites\n* Miner must have port 50051 enabled. As of Braiins OS version 23.03.1, it should be enabled by default.\n\nThere is no specific prerequisite for using Braiins OS Public API. It is possible to directly access it using standard GUI tools like **[Postman](https://www.postman.com)**, **[Kreya](https://kreya.app)** or CLI tool like **[grpcurl](https://github.com/fullstorydev/grpcurl)**. Please find an example how to access gRPC api using **grpcurl** below.\n\n#### Installation\nRead **https://github.com/fullstorydev/grpcurl**\n\n## Usage\nBest way to start using our public API is to list available services and describe them. This can be done 2 ways:\n* using prepared proto files,\n* using reflection.\n### Proto files\nExample of how to list available services in proto file and how to describe service.\n```shell\n$ grpcurl -import-path ./proto -proto bos/v1/actions.proto list\nbraiins.bos.v1.ActionsService\n\n$ grpcurl -import-path ./proto -proto bos/v1/actions.proto describe\nbraiins.bos.v1.ActionsService is a service:\nservice ActionsService {\n  // Method to pause mining\n  rpc PauseMining ( .braiins.bos.v1.PauseMiningRequest ) returns ( .braiins.bos.v1.PauseMiningResponse );\n  // Method to reboot whole miner\n  rpc Reboot ( .braiins.bos.v1.RebootRequest ) returns ( .braiins.bos.v1.RebootResponse );\n  // Method to restart bosminer\n  rpc Restart ( .braiins.bos.v1.RestartRequest ) returns ( .braiins.bos.v1.RestartResponse );\n  // Method to resume mining\n  rpc ResumeMining ( .braiins.bos.v1.ResumeMiningRequest ) returns ( .braiins.bos.v1.ResumeMiningResponse );\n  // Method to start bosminer\n  rpc Start ( .braiins.bos.v1.StartRequest ) returns ( .braiins.bos.v1.StartResponse );\n  // Method to stop bosminer\n  rpc Stop ( .braiins.bos.v1.StopRequest ) returns ( .braiins.bos.v1.StopResponse );\n}\n\n```\n\n### Reflection\nBraiins OS Public API has gRPC Server Reflection enabled. gRPC Server Reflection provides information about publicly-accessible gRPC services on a server, and assists clients at runtime to construct RPC requests and responses without precompiled service information. It is used by gRPC CLI, which can be used to introspect server protos.\n\nReadme more at **[gRPC Server Reflection Tutorial](https://grpc.github.io/grpc/core/md_doc_server_reflection_tutorial.html)**.\n\n#### Examples\nList available services\n```shell\n$ grpcurl -plaintext miner:50051 list\nbraiins.bos.ApiVersionService\nbraiins.bos.v1.ActionsService\nbraiins.bos.v1.AuthenticationService\nbraiins.bos.v1.ConfigurationService\nbraiins.bos.v1.CoolingService\nbraiins.bos.v1.MinerService\nbraiins.bos.v1.PoolService\nbraiins.bos.v1.TunerService\nbraiins.bos.v1.UpgradeService\ngrpc.reflection.v1alpha.ServerReflection\n```\n\nDescribe available service\n```shell\n$ grpcurl -plaintext miner:50051 describe\nbraiins.bos.ApiVersionService is a service:\nservice ApiVersionService {\n  rpc GetApiVersion ( .braiins.bos.ApiVersionRequest ) returns ( .braiins.bos.ApiVersion );\n}\nbraiins.bos.v1.ActionsService is a service:\nservice ActionsService {\n  // Method to pause mining\n  rpc PauseMining ( .braiins.bos.v1.PauseMiningRequest ) returns ( .braiins.bos.v1.PauseMiningResponse );\n  // Method to reboot whole miner\n  rpc Reboot ( .braiins.bos.v1.RebootRequest ) returns ( .braiins.bos.v1.RebootResponse );\n  // Method to restart bosminer\n  rpc Restart ( .braiins.bos.v1.RestartRequest ) returns ( .braiins.bos.v1.RestartResponse );\n  // Method to resume mining\n  rpc ResumeMining ( .braiins.bos.v1.ResumeMiningRequest ) returns ( .braiins.bos.v1.ResumeMiningResponse );\n  // Method to start bosminer\n  rpc Start ( .braiins.bos.v1.StartRequest ) returns ( .braiins.bos.v1.StartResponse );\n  // Method to stop bosminer\n  rpc Stop ( .braiins.bos.v1.StopRequest ) returns ( .braiins.bos.v1.StopResponse );\n}\nbraiins.bos.v1.AuthenticationService is a service:\nservice AuthenticationService {\n  rpc Login ( .braiins.bos.v1.LoginRequest ) returns ( .braiins.bos.v1.LoginResponse );\n}\n...\n```\n\n### Authentication\nThe vast majority of requests necessitate authentication, achieved by presenting a token in the Authorization header. This token primarily functions as a session token rather than an authentication token, mirroring the approach in the Braiins OS GUI. Sessions are time-limited, with tokens expiring after 3600 seconds of inactivity. Renewed activity prolongs the session, effectively extending its expiration. Consequently, a session remains active if requests are consistently made within short intervals.\n\n#### How to get auth token\nSend a request with username and password to **Login** method in **AuthenticationService**. The token is present in the response body in `token` field.\n\n```shell\n$ grpcurl -plaintext -d '{\"username\": \"xxxx\", \"password\": \"yyyy\"}' miner:50051 braiins.bos.v1.AuthenticationService/Login\n{\n  \"token\": \"eUInGZBQ4yGyKiDe\",\n  \"timeoutS\": 3600\n}\n```\n**Note:** Legacy way that token is present in the response header `authorization` still works.\n\n#### How to use auth token\nTo authenticate requests with a token just add `authorization` header with token using `-H` flag.\n\n```shell\n$ grpcurl -plaintext -H 'authorization:FvZarvVQLCtzNaM6' miner:50051 braiins.bos.v1.MinerService/GetMinerDetails\n{\n  \"uid\": \"lAOJ0RbI6axyOyGf\",\n  \"minerIdentity\": {\n    \"brand\": \"MINER_BRAND_ANTMINER\",\n    \"model\": \"MINER_MODEL_ANTMINER_S19J_PRO\", // Deprecated, use miner_model\n    \"name\": \"Antminer S19J Pro\"\n    \"miner_model\": \"Antminer S19J Pro\",\n  },\n  \"platform\": \"PLATFORM_AM3_BBB\",\n  \"bosMode\": \"BOS_MODE_NAND\",\n  \"bosVersion\": {\n    \"current\": \"2023-04-20-0-0ce150e9-23.03-plus\",\n    \"major\": \"2022-09-13-0-11012d53-22.08-plus\",\n    \"bosPlus\": true\n  },\n  \"hostname\": \"localhost\",\n  \"macAddress\": \"94:e3:6d:fb:89:ad\",\n  \"systemUptime\": \"90919\",  // Deprecated, use system_uptime_s\n  \"bosminer_uptime_s\": \"5050\",\n  \"system_uptime_s\": \"90919\",\n  \"status\": \"MINER_STATUS_NORMAL\",\n  \"kernel_version\": \"3.8.13+\"\n}\n\n```\n\n### Version\nIt is important to note what version of Public API must be used for communication with the miner. Current API version on the miner is available via `GetApiVersion` method in `braiins.bos.ApiVersionService`. This service does not require authentication.\n```shell\n$ grpcurl -plaintext miner:50051 braiins.bos.ApiVersionService/GetApiVersion\n{\n    \"major\": \"1\",\n    \"minor\": \"3\",\n    \"patch\": \"0\",\n    \"pre\": \"\",\n    \"build\": \"\"\n}\n```\n**Note**: Version `1.0.0-<ver>` is actually `1.0.0-<ver>.0`. `0` as default value was dropped during serialization.\n\n\n### Proto files\n#### 1. proto/bos/v1/actions.proto\nContains miner actions related protobuf messages and **ActionsService** with various method to control miner:\n* **Start** - method to start mining,\n* **Stop** - method to stop mining,\n* **PauseMining** - method to pause mining,\n* **ResumeMining** - method to resume mining,\n* **Restart** - method to restart mining,\n* **Reboot** - method to reboot whole miner,\n* **SetLocateDeviceStatus** - method to enable/disable locate device mode,\n* **GetLocateDeviceStatus** - method to retrieve the locate device mode status.\n\n#### 2. proto/bos/v1/authentication.proto\nContains authentication related messages and **AuthenticationService** with various methods:\n* **Login** - method to log in and get auth. token,\n* **SetPassword** - method to set new password.\n\n#### 3. proto/bos/v1/common.proto\nContains **SaveAction** enumeration used for setting configuration. Options:\n* `SAVE_ACTION_SAVE` - only save new configuration\n* `SAVE_ACTION_SAVE_AND_APPLY` - save and apply new configuration\n* `SAVE_ACTION_SAVE_AND_FORCE_APPLY` - save and force apply new configuration\n\n#### 4. proto/bos/v1/configuration.proto\nContains configuration related messages and **ConfigurationService** with various methods to read or modify miner settings:\n* **GetMinerConfiguration** - method to read current miner configuration,\n* **GetConstraints** - method to read current configuration constraints(min, max, default).\n\n#### 5. proto/bos/v1/constraints.proto\nContains protobuf messages used for constraints.\n\n#### 6. proto/bos/v1/cooling.proto\nContains cooling related messages and **CoolingService** with various methods to read cooling info and modify cooling settings:\n* **GetCoolingState** - method to read current temperature measurements and fans states,\n* **SetImmersionMode** - method to set/toggle immersion mode.\n\n#### 7. proto/bos/v1/license.proto\nContains license related messages and **LicenseService** with method to read license state:\n* **GetLicenseState** - method to read current license state.\n\n#### 8. proto/bos/v1/miner.proto\nContains miner related messages and **MinerService** with various methods to read info about miner:\n* **GetMinerStatus** - method to fetch miner status,\n* **GetMinerDetails** - method to read miner details info like model, IP, uptime, etc.,\n* **GetMinerStats** - method to read aggregated miner stats,\n* **GetErrors** - method to get all miner errors,\n* **GetHashboards** - method to read miner hashboards state and statistics,\n* **GetSupportArchive** - method to download Braiins OS support archive,\n* **EnableHashboards** - method to enable hashboards,\n* **DisableHashboards** - method to disable hashboards.\n\n#### 9. proto/bos/v1/network.proto\nContains network related messages and **NetworkService** with various methods to read and modify network settings:\n* **GetNetworkConfiguration** - method to read network configuration,\n* **SetNetworkConfiguration** - method to modify network configuration,\n* **GetNetworkInfo** - method to get current network configuration for the default network interface.\n\n#### 10. proto/bos/v1/performance.proto\nContains tuner related messages and **PerformanceService** with various methods to read or modify tuner:\n* **GetTunerState** - method to read current tuner state and available tuner profiles,\n* **ListTargetProfiles** - method to set default power target,\n* **SetDefaultPowerTarget** - method to set default power target,\n* **SetPowerTarget** - method to set specific power target,\n* **IncrementPowerTarget** - method to increment currently configured power target by a specific value,\n* **DecrementPowerTarget** - method to decrement current configured power target by a specific value,\n* **SetDefaultHashrateTarget** - method to set default hashrate target,\n* **SetHashrateTarget** - method to set specific hashrate target,\n* **IncrementHashrateTarget** - method to increment currently configured hashrate target by a specific value,\n* **DecrementHashrateTarget** - method to decrement current configured hashrate target by a specific value,\n* **SetDPS** - method to set Dynamic Performance Scaling,\n* **SetPerformanceMode** - method to set performance mode,\n* **GetActivePerformanceMode** - method to read active(runtime) performance mode.\n\n#### 11. proto/bos/v1/pool.proto\nContains pools related messages and **PoolService** with various methods to read or modify pool settings:\n* **GetPoolGroups** - method to read current pools state and statistics,\n* **CreatePoolGroup** - method to create pool group\n* **UpdatePoolGroup** - method to update default pool group,\n* **RemovePoolGroup** - method to remove pool group.\n* **SetPoolGroups** - method to set all pool groups at once.\n\n#### 12. proto/bos/v1/units.proto\nContains protobuf messages representing various units like Voltage, Frequency, etc.\n\n#### 13. proto/bos/v1/upgrade.proto\nContains upgrade related messages and **UpgradeService** with methods to configure and monitor automatic firmware upgrades:\n* **UpdateAutoUpgradeConfig** - method to enable/disable AutoUpgrade feature and configure upgrade schedule,\n* **GetAutoUpgradeStatus** - method to retrieve current AutoUpgrade configuration and execution status.\n\nThe AutoUpgrade feature allows the miner to automatically upgrade its firmware according to a configured schedule. You can schedule upgrades to run:\n* **Daily** - at a specific time each day\n* **Weekly** - on a specific day of the week at a specific time\n* **Monthly** - on a specific day of the month (1-28) at a specific time\n\n**Notes:**\n* The `dayOfWeek` field uses the `units.DayOfWeek` enum with value for each day in a week.\n* The `time` field uses the `UpgradeTime` message with fields:\n  * `hours` - hour of day in 24-hour format (0-23)\n  * `minutes` - minutes of hour (0-59)\n  * `seconds` - seconds of minute (0-59, optional, defaults to 0)\n* For monthly schedules, `dayOfMonth` is limited to values 1-28 to ensure compatibility across all months\n* When updating the configuration, both `enabled` and `schedule` fields are optional - you can update just one or both\n* The `lastExecution` timestamp indicates when the last automatic upgrade was performed (if any)\n* The `nextExecution` timestamp indicates when the next automatic upgrade will occur\n* **Important**: When schedule attributes are not supplied, they will be randomized:\n  * For `DailySchedule`: if `time` (hours/minutes) is not set, a random time of day will be generated\n  * For `WeeklySchedule`: if `dayOfWeek` is not set, a random day of the week will be generated; if `time` is not set, a random time of day will be generated\n  * For `MonthlySchedule`: if `dayOfMonth` is not set, a random day (1-28) will be generated; if `time` is not set, a random time of day will be generated\n\n#### 14. proto/bos/v1/work.proto\nContains mining work related protobuf messages.\n\n#### 15. proto/bos/version.proto\nContains **ApiVersionService** service with **GetApiVersion** to be able to read current Public API version available for communication with miner\n\n\n\n\n### Contact\nDo you have questions or specific needs from the API? Our dev and support teams are always available to help. You can send a request to our support team or open a GitHub issue.\n\nYou can also join our Telegram group at https://t.me/BraiinsOS point and customize it to fit your project's specific needs.\n",
+  "file_tree": [
+    {
+      "path": ".gitignore",
+      "type": "file",
+      "size": 353
+    },
+    {
+      "path": "CHANGELOG.md",
+      "type": "file",
+      "size": 21869
+    },
+    {
+      "path": "README.md",
+      "type": "file",
+      "size": 16131
+    },
+    {
+      "path": "proto",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "proto/bos",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "proto/bos/v1",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "proto/bos/version.proto",
+      "type": "file",
+      "size": 1777
+    },
+    {
+      "path": "proto/bos/v1/actions.proto",
+      "type": "file",
+      "size": 3473
+    },
+    {
+      "path": "proto/bos/v1/authentication.proto",
+      "type": "file",
+      "size": 1924
+    },
+    {
+      "path": "proto/bos/v1/common.proto",
+      "type": "file",
+      "size": 1346
+    },
+    {
+      "path": "proto/bos/v1/configuration.proto",
+      "type": "file",
+      "size": 2554
+    },
+    {
+      "path": "proto/bos/v1/constraints.proto",
+      "type": "file",
+      "size": 2270
+    },
+    {
+      "path": "proto/bos/v1/cooling.proto",
+      "type": "file",
+      "size": 8777
+    },
+    {
+      "path": "proto/bos/v1/license.proto",
+      "type": "file",
+      "size": 2891
+    },
+    {
+      "path": "proto/bos/v1/miner.proto",
+      "type": "file",
+      "size": 9686
+    },
+    {
+      "path": "proto/bos/v1/network.proto",
+      "type": "file",
+      "size": 3437
+    },
+    {
+      "path": "proto/bos/v1/performance.proto",
+      "type": "file",
+      "size": 16517
+    },
+    {
+      "path": "proto/bos/v1/pool.proto",
+      "type": "file",
+      "size": 6994
+    },
+    {
+      "path": "proto/bos/v1/units.proto",
+      "type": "file",
+      "size": 2200
+    },
+    {
+      "path": "proto/bos/v1/upgrade.proto",
+      "type": "file",
+      "size": 2790
+    },
+    {
+      "path": "proto/bos/v1/work.proto",
+      "type": "file",
+      "size": 2050
+    }
+  ],
+  "languages": {},
+  "signatures": [],
+  "test_examples": [],
+  "issues": [
+    {
+      "number": 35,
+      "title": "No hashboard model in zynq firmware",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-09-25T07:55:37+00:00",
+      "updated_at": "2025-10-29T09:19:59+00:00",
+      "closed_at": "2025-10-29T09:19:59+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/issues/35",
+      "body": "No hashboard model returns from firmware for zynq control board. Firmware version is 2025-06-03-0-d04a0611-25.05-plus. For aml, bb it works."
+    },
+    {
+      "number": 14,
+      "title": "[Feature] Allow setting fan configuration",
+      "state": "open",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2024-01-12T20:58:38+00:00",
+      "updated_at": "2025-10-10T23:03:31+00:00",
+      "closed_at": null,
+      "url": "https://github.com/braiins/bos-plus-api/issues/14",
+      "body": "Right now, in [cooling.proto](https://github.com/braiins/bos-plus-api/blob/main/proto/bos/v1/cooling.proto) there is no way to set the fan control mode.  There should be an endpoint that takes a `CoolingConfiguration` so that this configuration can be set."
+    },
+    {
+      "number": 33,
+      "title": "API Integration authentication issue",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2025-07-16T08:36:22+00:00",
+      "updated_at": "2025-07-16T14:55:24+00:00",
+      "closed_at": "2025-07-16T14:55:24+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/issues/33",
+      "body": "**Proto files version** 1.6.0\n**Braiins Firmware** 25.05\n**Error**:\n<_InactiveRpcError of RPC that terminated with:\n    status = StatusCode.UNAUTHENTICATED\n    details = \"Bad credentials\"\n    debug_error_string = \"UNKNOWN:Error received from peer  {created_time:\"2025-07-14T22:14:48.80719643+02:00\", grpc_status:16, grpc_message:\"Bad credentials\"}\"\n**Miner**: S19k Pro\n\nCreated the .py files, implemented the Authentication and raises the exception above\nMy code is very alike this one: https://paste"
+    },
+    {
+      "number": 28,
+      "title": "Add serial number to `Hashboard`",
+      "state": "open",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2024-10-29T17:42:18+00:00",
+      "updated_at": "2024-10-29T17:42:25+00:00",
+      "closed_at": null,
+      "url": "https://github.com/braiins/bos-plus-api/issues/28",
+      "body": "Would be helpful to have the serial number included in the hashboard struct.\r\n\r\nRight now it is really only feasible to get this via ssh, running the `bosminer model -d` command."
+    },
+    {
+      "number": 16,
+      "title": "[Feature] Add `SetPoolConfiguration`",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2024-01-12T21:30:19+00:00",
+      "updated_at": "2024-07-17T16:45:05+00:00",
+      "closed_at": "2024-07-17T16:45:05+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/issues/16",
+      "body": "Right now to update pool information, you have to handle each group and or pool individually.  It would be nice to be able to set the pool configuration as a whole, by passing a list of `PoolGroupConfiguration`s."
+    },
+    {
+      "number": 23,
+      "title": "License Hash Burn Rate Clarification",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2024-04-22T15:11:28+00:00",
+      "updated_at": "2024-05-06T03:55:19+00:00",
+      "closed_at": "2024-05-06T03:55:19+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/issues/23",
+      "body": "Section 3.10 of https://braiins.com/os/plus/license\r\n>    3.10. If the Software loses its connection to the License Server and Braiins was therefore not able to conduct the verification procedure under the Section 3.9. hereof the cryptocurrency mining device will only use 95 % of its processing power (so called hash rate) until the next verification procedure is successfully conducted. You acknowledge that this is not an error, misfunction, or penalty, but rather an intended function of the Soft"
+    },
+    {
+      "number": 21,
+      "title": "uint32 Quota vs double FixedShareRatio",
+      "state": "open",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2024-04-18T15:56:28+00:00",
+      "updated_at": "2024-04-18T15:56:28+00:00",
+      "closed_at": null,
+      "url": "https://github.com/braiins/bos-plus-api/issues/21",
+      "body": "Using Rust and using `tonic::include_proto!(\"braiins.bos.v1\");`\r\n\r\nTrying to generalize some ASIC configuration and go from `FixedShareRatio` into a general `Quota` by multiplying by 100 and such. Find [this](https://users.rust-lang.org/t/convert-f64-to-u64/93658) for f64 to u64 but `Quota` is `u32`, however other 64bit types are defined elsewhere, so I assume 64bit unsigned integers would be allowable.\r\n\r\nNot really sure if this is an issue or not but seems like a general inconsistency.\r\n\r\nprot"
+    },
+    {
+      "number": 18,
+      "title": "Trouble with authentication token in smarthome",
+      "state": "open",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2024-03-08T21:04:51+00:00",
+      "updated_at": "2024-03-25T15:21:20+00:00",
+      "closed_at": null,
+      "url": "https://github.com/braiins/bos-plus-api/issues/18",
+      "body": "Hi, \r\ni tried to integrate some miners into my smarthome to make use of excess energy from PV.\r\nSince all my other stuff gets handled on a raspberryPi with Node-Red, i tried integrating the BOS+API there.\r\nThere seems to be only one repository that can handle gRPC on node-red: https://github.com/julien-pal/node-red-contrib-grpc\r\nI got it to work, since i can read out the GetApiVersion, but that's where the problem starts.\r\n\r\nFor every other command, you also need so send the authentication token"
+    },
+    {
+      "number": 20,
+      "title": "Increase/DecreasePowerTarget ",
+      "state": "open",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2024-03-25T15:18:42+00:00",
+      "updated_at": "2024-03-25T15:18:42+00:00",
+      "closed_at": null,
+      "url": "https://github.com/braiins/bos-plus-api/issues/20",
+      "body": "Hi, something seems to be broken since the latest update.\r\nThe Increase/DecreasePowerTarget doesn't work no more, not through api commands, nore with the toolbox.\r\nThe miner reports the newly set PowerTarget but doesn't ramp up or down.\r\n\r\nSetting The PowerTarget to a fixed value through SetPowerTarget seems to work just fine."
+    },
+    {
+      "number": 13,
+      "title": "API documentation needs examples.  ",
+      "state": "open",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2024-01-01T18:26:41+00:00",
+      "updated_at": "2024-02-19T19:21:19+00:00",
+      "closed_at": null,
+      "url": "https://github.com/braiins/bos-plus-api/issues/13",
+      "body": "[Updated] I was looking for an example grpcurl script that has full parameters required to change the power target on a miner.  My use case is to run miner at the lowest power possible during evening, and max/full power during the day when my solar panels are active.  I've put this into cron job on a nearby linux machine.  \r\n\r\nI reviewed the authenticate script and proto files and figured out that the message parameters are positional along with the names of the variables.  Some variables are ex"
+    },
+    {
+      "number": 15,
+      "title": "[Feature] Add `SetMinerConfiguration` endpoint",
+      "state": "open",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2024-01-12T21:28:17+00:00",
+      "updated_at": "2024-01-12T22:06:20+00:00",
+      "closed_at": null,
+      "url": "https://github.com/braiins/bos-plus-api/issues/15",
+      "body": "It would be nice to have an endpoint that would take a combination of all the configs expected by boser (`CoolingConfiguration`, `TunerConfiguration`, etc) that would allow a developer to handle all the configuration in one place."
+    },
+    {
+      "number": 4,
+      "title": "Confused about the security model?",
+      "state": "closed",
+      "labels": [],
+      "milestone": null,
+      "created_at": "2023-06-30T18:30:39+00:00",
+      "updated_at": "2023-08-08T07:48:02+00:00",
+      "closed_at": "2023-08-08T07:48:02+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/issues/4",
+      "body": "Hello there,\r\nCan you explain the need for authentication if the protocol sends credentials over plaintext? I'm a little confused on this point. Doesn't sending the password over plaintext make authentication redundant? My only guess is that it's only meant for secure networks but doesn't that make authentication unnecessary?"
+    }
+  ],
+  "changelog": "# Changelog\n\n## [1.8.0] - 2025-11-25\nVersion **1.8.0** introduces new Upgrade service `braiins.bos.v1.UpgradeService` and relative power/hashrate target configuration.\n\n### Added\n* Introduced new field `uid` in the `braiins.bos.v1.PoolGroup` message to get group uid.\n* Introduced new service `braiins.bos.v1.UpgradeService` with methods:\n  * `UpdateAutoUpgradeConfig` - enables/disables AutoUpgrade feature and configures upgrade schedule\n  * `GetAutoUpgradeStatus` - retrieves current AutoUpgrade configuration and execution status\n* Introduced new messages for AutoUpgrade scheduling:\n  * `units.DayOfWeek` enum and custom `upgrade.UpgradeTime` message for schedule configuration\n  * `DailySchedule` - schedule upgrades to run daily at a specific time\n  * `WeeklySchedule` - schedule upgrades to run weekly on a specific day of the week at a specific time\n  * `MonthlySchedule` - schedule upgrades to run monthly on a specific day of the month (1-28) at a specific time\n  * `AutoUpgradeSchedule` - oneof message that can contain any of the schedule types\n  * `UpdateAutoUpgradeConfigRequest` - request message to update AutoUpgrade configuration\n  * `UpdateAutoUpgradeConfigResponse` - response message containing enabled status and next execution timestamp\n  * `GetAutoUpgradeStatusRequest` - request message to get AutoUpgrade status\n  * `GetAutoUpgradeStatusResponse` - response message containing enabled status, schedule, next execution, and last execution timestamps\n* Introduced new enumeration `RelativeTargetReference` with `NOMINAL`, `MIN`, `MAX` and `CURRENT` variants.\n* Introduced new message `SetRelativeTargetRequest` with `save_action`, `percentage` and `reference` fields.\n* Introduced new methods `SetRelativePowerTarget` and `SetRelativeHashrateTarget`. User can now set power and hashrate targets relative to a reference value\n\n## [1.7.0] - 2025-08-10\nVersion **1.7.0** introduces changes to `braiins.bos.v1.PoolGroupConfiguration` and `braiins.bos.v1.PoolConfiguration`.\n\n### Added\n* Introduced new enumeration `braiins.bos.v1.FanPauseMode` with `FAN_PAUSE_MODE_AUTO` and `FAN_PAUSE_MODE_MANUAL` variants.\n* Introduced new field `default_fan_pause_mode` in the `braiins.bos.v1.CoolingConstraints` message to get default fan pause mode.\n* Introduced new messages `braiins.bos.v1.SetQuickRampingRequest`, `braiins.bos.v1.QuickRampingResponse` and `braiins.bos.v1.SetDefaultQuickRampingRequest`.\n* Introduced new method `SetQuickRamping` in the `braiins.bos.v1.PerformanceService`. User can now set quick ramping time up and down values.\n* Introduced new method `SetDefaultQuickRamping` in the `braiins.bos.v1.PerformanceService`. User can now set quick ramping time up and down to default.\n* Introduced new fields `quick_ramping_time_up_s` and `quick_ramping_time_down_s` in the `braiins.bos.v1.HashboardPerformanceConfiguration` message to get quick ramping time up and down values.\n* Introduced new field `quick_ramping_time_s` in the `braiins.bos.v1.HashboardConstraints` message to get quick ramping time constraints.\n\n### Changed\n* Mark `uid` for `braiins.bos.v1.PoolGroupConfiguration` and `braiins.bos.v1.PoolConfiguration` as optional. This change allows to create new pool group or pool without providing empty `uid` value. When new entity is created `uid` is generated automatically. When updating existing Pool Group with `UpdatePoolGroup` method, `uid` is required, otherwise error is returned back to the user.\n\n## [1.6.0] - 2025-06-10\nVersion **1.6.0** introduces enhanced control of fan behavior during cooling mode curtailment and adds ability to apply Custom Contracts.\n\n### Added\n* Introduced new messages `PauseMode`, `AutoPauseMode` and `ManualPauseMode`.\n* Introduced new field `pause_mode` in the `braiins.bos.v1.CoolingAutoMode` message to set and get pause cooldown fan speed for automatic cooling mode.\n* Introduced new field `pause_mode` in the `braiins.bos.v1.CoolingManualMode` message to set and get pause cooldown fan speed for manual cooling mode.\n* Introduced new field `pause_cooldown_fan_speed_ratio` in the `braiins.bos.v1.CoolingConstraints` message to get pause cooldown fan speed constraints.\n* Introduced new method `ApplyContractKey` in the `braiins.bos.v1.LicenseService`. User can now apply contract key to miner and get licence.\n\n## [1.5.0] - 2025-04-09\nVersion **1.5.0** extends Hashboard message to provide lowest inlet and highest outlet temperatures. And HW info including miner serial number from stock FW.\n\n### Added\n* Introduced new fields `lowest_inlet_temp`, `highest_outlet_temp` in the `braiins.bos.v1.Hashboard` message to get the lowest inlet and highest outlet temperature for a specific hashboard.\n* Introduced new fields `serial_number`, `board_name` and `chip_type` in the `braiins.bos.v1.Hashboard` message.\n* Introduced new `PsuInfo` message and added it to the `braiins.bos.v1.GetMinerDetailsResponse` message.\n* Introduced new `ControlBoardSocFamily` enumeration and added it to the `braiins.bos.v1.GetMinerDetailsResponse` message.\n* Introduced new field `serial_number` in the `braiins.bos.v1.GetMinerDetailsResponse` message.\n\n## [1.4.0] - 2025-02-26\nVersion **1.4.0** introduces possibility to set DPS mode to `normal` or `boost`. It also extends cooling configuration with new values `immersion` and `hydro`.\n\n### Added\n* Introduced new enumeration `braiins.bos.v1.DPSMode` with `DPS_MODE_NORMAL` and `DPS_MODE_BOOST` variants.\n* Introduced new field `mode` in the `braiins.bos.v1.DPSConfiguration`, `braiins.bos.v1.SetDPSRequest`, `braiins.bos.v1.SetDPSResponse` message to get or set DPS mode.\n* Introduced new field `mode` in the `braiins.bos.v1.DPSConstraints` message to get the default value for DPS mode.\n* Introduced new method `SetCoolingMode` in the `braiins.bos.v1.CoolingService`. User can now set cooling mode to `automatic`, `manual`, `hydro` or `immersion`. It gives user possibility to set specific temperature and fan settings for each mode.\n* Introduced new field `min_fan_speed` in the `braiins.bos.v1.CoolingAutoMode` to set minimum fan speed for automatic cooling mode.\n* Introduced new field `max_fan_speed` in the `braiins.bos.v1.CoolingAutoMode` to set maximum fan speed for automatic cooling mode.\n* Introduced new field `min_fan_speed` in the `braiins.bos.v1.CoolingConstraints` to get default value for minimum fan speed for automatic cooling mode.\n* Introduced new field `max_fan_speed` in the `braiins.bos.v1.CoolingConstraints` to get default value for maximum fan speed for automatic cooling mode.\n* Introduced new field `target_temperature` in the `braiins.bos.v1.CoolingManualMode` to set target temperature for manual cooling mode.\n\n### Changed\n* Mark `SetImmersionMode` method as deprecated in `CoolingService`. Instead of this method, user should use `SetCoolingMode` with `immersion` mode.\n* Extend `CoolingConfiguration` mode with new value `immersion` that represents immersion cooling mode.\n* Extend `CoolingConfiguration` mode with new value `hydro` that represents hydro cooling mode.\n* Mark `disabled` cooling mode as deprecated in `CoolingConfiguration` mode.\n* Mark `minimum_required_fans` field as deprecated in `CoolingConfiguration`. Instead user should use `minimum_required_fans` field in `CoolingAutoMode` or `CoolingManualMode`.\n* Extend `CoolingAutoMode` with new field `minimum_required_fans`.\n* Extend `CoolingManualMode` with new field `minimum_required_fans`.\n\n## [1.3.0] - 2024-10-22\nVersion **1.3.0** introduces few small improvements.\n\n### Changed\n* Extended `braiins.bos.v1.Platform` enumeration with `PLATFORM_STM32MP157C_II2_BMM1` variant,\n* Extended `braiins.bos.v1.SupportArchiveFormat` enumeration with `SUPPORT_ARCHIVE_FORMAT_ZIP_ENCRYPTED` variant.\n\n## [1.2.0] - 2024-07-17\nVersion **1.2.0** introduces the possibility to configure all pool groups at once and read Braiins OS errors.\n\n### Added\n* Introduced new field `model` in the `braiins.bos.v1.Hashboard` message that contains hashboard name,\n* Introduced new method `GetErrors` in the `braiins.bos.v1.MinerService` to get all miner errors,\n* Introduced new method `SetPoolGroups` in the `braiins.bos.v1.PoolService` to set all Pool groups at once.\n\n## [1.1.0] - 2024-05-09\nVersion **1.1.0** introduce possibility to read network configuration, changes in authentication and few more changes. \n\n### Added\n* Introduced new field `last_share_time` in the `braiins.bos.v1.PoolStats` that provides info about last share time,\n* Introduced new field `token` in the `braiins.bos.v1.LoginResponse` that provides info created authentication token that was till now available only in response header,\n* Introduced new field `timeout_s` in the `braiins.bos.v1.LoginResponse` that provides info about authentication token expiration time,\n* Introduced new method `GetNetworkInfo` in the `braiins.bos.v1.NetworkService` to get current network configuration for the default network interface,\n* Introduced new field `kernel_version` in the `braiins.bos.v1.GetMinerDetailsResponse` that provides info about Kernel version.\n\n## [1.0.0] - 2024-03-26\nThe first stable release of the Public API incorporates minor enhancements.\n\n### Added\n* Introduced new field `enabled` in the `braiins.bos.v1.DPSConfiguration` that provides info, if DPS is enabled by default or not.\n* Introduced new field `enabled` in the `braiins.bos.v1.TunerConstraints` that provides info, if DPS is enabled by default or not.\n* Introduced new field `default_mode` in the `braiins.bos.v1.TunerConstraints` that provides info about the default tuner mode.\n* Introduced new field `status` in the `braiins.bos.v1.GetMinerDetailsResponse` that provides info about the current miner status.\n\n## [1.0.0-beta.6] - 2024-03-05\nVersion **1.0.0-beta.6** contains one new feature Network configuration.\n\n### Added\n* New `braiins.bos.v1.NetworkService` with `GetNetworkConfiguration` and `SetNetworkConfiguration` methods\n\n## [1.0.0-beta.5] - 2023-12-14\nVersion **1.0.0-beta.5** contains one small extension.\n\n### Added\n* Extension of the `braiins.bos.v1.Platform` enumeration with new value for Zynq.\n\n## [1.0.0-beta.4] - 2023-11-23\nVersion **1.0.0-beta.4** contains one new feature and one breaking change.\n\n### Added\n* We added option to clean tuner profiles by adding `braiins.bos.v1.PerformanceService::RemoveTunedProfiles`\n* Introduced a new field `system_uptime_s` in the `braiins.bos.v1.GetMinerDetailsResponse` that replaces `system_uptime`(marked as deprecated) to keep the best practice that a field name should also describe the unit (when applicable).\n\n### Breaking Changes:\n* We reverted removing `braiins.bos.v1.MinerModel` enumeration from the previous release because this change was causing troubles to our users.\n  Instead of dropping enumeration, we decided to mark it as deprecated and introduce new field `miner_model` for string representation.\n\n## [1.0.0-beta.3] - 2023-11-02\nVersion **1.0.0-beta.3** contains a few minor improvements.\n\n### Added\n* Extension of the `braiins.bos.v1.GetMinerDetailsResponse` message with `bosminer_uptime_s` field that contains bosminer uptime.\n\n### Breaking Changes:\n* We removed `braiins.bos.v1.MinerModel` enumeration and changed type of `model` field in `braiins.bos.v1.MinerIdentity` to `string`. Replacing model enumeration with string eliminates the need to release a new version every time we add support for new model,\n\n## [1.0.0-beta.2] - 2023-08-10\nVersion **1.0.0-beta.2** extends performance management and Pool Group management possibilities. It also introduces an API to get Mining Status.\n\n#### Enhanced Performance Options\nWe have extended the alternatives for performance tuning in this release.\n\n##### Hashrate Target Introduction\nFormerly, users could only configure power target values. Now, we made it possible to define hashrate targets as well.\n\n##### Dynamic Performance Scaling\nThis release adds the possibility to configure Dynamic Performance Scaling parameters. Users now can fully optimize their operations to their unique requirements using Public API.\n\n##### Augmented Hashboard Administration\nWe have extended the hashboards management. Public API now lets users activate or deactivate individual hashboards.\n\n#### Evolved Pool Group Management\nPreviously only single pool group modifications were possible. We have reworked the Public API to allow addition of new pool groups and removal of existing ones.\n\n#### Introduction of Mining Status\nAn entirely new API makes its debut, providing concise insights into the mining status of individual devices. The mining status allows users to readily differentiate between paused operations and miners requiring attention or possible repair.\n\n### Added\n* Introduction of a new `braiins.bos.v1.PerformanceService::SetDefaultHashrateTarget()` method that allows the user to set the currently configured hashrate target value to default one,\n* Introduction of a new `braiins.bos.v1.PerformanceService::SetHashrateTarget()` method that allows the user to set the currently configured hashrate target value to a specific one,\n* Introduction of a new `braiins.bos.v1.PerformanceService::IncrementHashrateTarget()` method that allows the user to increment the currently configured hashrate target value,\n* Introduction of a new `braiins.bos.v1.PerformanceService::DecrementHashrateTarget()` method that allows the user to decrement currently configured hashrate target value,\n* Introduction of a new `braiins.bos.v1.MinerService::EnableHashboards()` method that allows user to enable hashboards,\n* Introduction of a new `braiins.bos.v1.MinerService::DisableHashboards()` method that allows user to enable hashboards,\n* Introduction of a new `braiins.bos.v1.PerformanceService::SetDPS()` method that allows user to configure dynamic performance scaling,\n* Introduction of a new `braiins.bos.v1.PerformanceService::SetPerformanceMode()` method that allows the user to set performance mode to one of the modes: manual or tuner,\n* Introduction of a new `braiins.bos.v1.PerformanceService::GetActivePerformanceMode()` method that allows the user to read the current performance mode,\n* Introduction of a new `braiins.bos.v1.PerformanceService::ListTargetProfiles()` method that allows the user to read the currently used tuner profile,\n* Introduction of a new `braiins.bos.v1.MinerService::GetMinerStatus()` method streaming actual miner status.\n* Introduction of a new `braiins.bos.v1.PoolService::RemovePoolGroup()` method that allows to remove pools group,\n* Introduction of a new `braiins.bos.v1.PoolService::CreatePoolGroup()`,\n* Extension of the `braiins.bos.v1.UpdatePoolGroupResponse` message with `group` field that contains updated pool group configuration,\n* Extension of the `braiins.bos.v1.TunerConstraints` message with new field `hashrate_target` that contains constraints for hashrate target value,\n* Extension of the `braiins.bos.v1.GetMinerStatsResponse` message with new field `power_stats` that contains miner power stats like consumption or efficiency,\n* Extension of the `braiins.bos.v1.GetTunerStateResponse` message with new fields:\n  * `current_power_target` that contains the current power target,\n  * `current_hashrate_target` that contains the current hashrate target,\n  * `current_profile` that contains info about the currently used tuner profile,\n* Extension of the `braiins.bos.v1.Hashboard` with the new field `enabled` that represents a flag if HB is enabled\n* Extension of the `braiins.bos.v1.GetMinerConfigurationResponse` with new fields:\n  * `dps` that contain Dynamic Performance Scaling configuration,\n  * `hashboard_config` holds information regarding the presently configured hashboard frequency, voltage settings, or the enabled/disabled status of HB,\n* Extension of the `braiins.bos.v1.GetConstraintsResponse` message with new fields:\n  * `dps_constraints` that contains constraints for Dynamic Performance Scaling configuration,\n  * `hashboards_constraints` that contains constraints for hashboards config,\n* Extension of the `braiins.bos.v1.Platform` enumeration with new values for CVITEK and Braiins control boards.\n\n### Breaking Changes:\n* The service `braiins.v1.bos.TunerService` has been updated to `braiins.v1.bos.PerformanceService` to encompass methods relevant to this service.\n* Furthermore, the method `braiins.v1.bos.PerformanceService::SetAbsolutePowerTarget()` has been modified to `braiins.v1.bos.PerformanceService::SetPowerTarget()`, removing the potentially confusing term \"Absolute\".\n* In alignment with the adjusted method name, the request message previously labeled as `braiins.bos.v1.SetAbsolutePowerTargetRequest` has been changed to `braiins.bos.v1.SetPowerTargetRequest`.\n* Standardization of modification requests has been enacted, with each request containing a designated `save_action` field located at index 1.\n* In anticipation of potential hashboard identifiers incorporating non-numeric characters in the future, adjustments have been made to the hashboards identifier fields, shifting from `uint32` to `string` type.\n\n### Migration Guide:\nIn order to transition to version **1.0.0-beta.2**, the integration requires implementation of the subsequent adjustments:\n* Ensure incorporation of the updated moniker `PerformanceService`. The same applies to usage of the `SetAbsolutePowerTarget` method.\n* Verify the seamless functionality of your modification request with the modified index placements within the `save_action` fields.\n* Guarantee accurate parsing of the novel string-based hashboard identifiers.\n\n---\n\n## [1.0.0-beta.1] - 2023-06-29\nThe latest release, version **1.0.0-beta.1**, enhances the authentication functionalities while also introducing two new features: Device Location and Support Archive.\n\n#### Enhanced Authentication\nA novel method is unveiled within this iteration, affording users the ability to institute a new password for their miners.\n\n#### Device Location Functionality\nThe Locate Device feature debuts, offering users the capability to activate or deactivate LEDs on the device. This serves as a visual aid, allowing the client to precisely identify the targeted device.\n\n#### Introduction of Support Archive\nA new API has emerged, facilitating streamlined access to a comprehensive support archive. This archive acts as a valuable repository, housing crucial information for troubleshooting and problem resolution.\n\n### Added\n* Introduction of a new `braiins.bos.v1.AuthenticationService::SetPassword()` method that allows the user to set a new password on the miner,\n* Introduction of a new `braiins.bos.v1.ActionsService::SetLocateDeviceStatus()` and `braiins.bos.v1.ActionsService::GetLocateDeviceStatus()` methods to turn on/off device location function,\n* Introduction of a new `braiins.bos.v1.MinerService::GetSupportArchive()` streaming method that allows to download BOS support archive.\n* Extension of the `braiins.bos.v1.GetMinerDetailsResponse` message with `sticker_hashrate` field that contains HR declared by miner vendor,\n\n**Important:** This iteration bears resemblance to **1.0.0-alpha.1**, yet it is grounded in a licenses-integrated branch and encompasses a broader array of features.\n\n---\n\n## [1.0.0-beta] - 2023-05-11\nThe latest release, version 1.0.0-beta, introduces a significant addition: the all-new Braiins OS License feature.\n\n### Added\n* Introduction of a new `braiins.bos.v1.LicenseService::GetLicenseState()` streaming method to fetch BOS Licence state.\n\n**Important:** This version remained in a private state for a duration, attributed to the testing phase of the novel licenses approach.\n\n---\n\n## [1.0.0-alpha.1] - 2023-06-26\nNew version 1.0.0-alpha.1 extends authentication options and introduces new features, **Locate Device** and **Support Archive**.\n\n##### Authentication options\nWe introduce a new method that allows user to set new password on miner.\n\n##### Locate Device\nLocate device is a feature where user can turn on/off a LED on the device and client is able to visually detect, which one is it.\n\n##### Support Archive\nWe introduce a new API that provides simple way how to download a support archive that contains useful information for problem investigation.\n\n### Added\n* Introduction of a new `braiins.bos.v1.AuthenticationService::SetPassword()` method that allows user to set a new password on the miner,\n* Introduction of new `braiins.bos.v1.ActionsService::SetLocateDeviceStatus()` and `braiins.bos.v1.ActionsService::GetLocateDeviceStatus()` methods to turn on/off device location function,\n* Introduction of a new `braiins.bos.v1.MinerService::GetSupportArchive()` streaming method that allows to download BOS support archive.\n* Extension of the `braiins.bos.v1.GetMinerDetailsResponse` message with a `sticker_hashrate` field that contains HR declared by miner vendor.\n\n---\n\n## [1.0.0-alpha] - 2023-05-25\nThe first release for the new Braiins OS Public API, which introduces the first batch of features.\n\n##### Actions\nWith actions from `ActionService`, user can start/stop/restart/pause/resume mining. Reboot of the whole miner is supported as well.\n\n##### Configuration\nWith `ConfigurationService` methods, user can read current miner configuration and configuration constraints.\n\n##### Cooling\nWith `CoolingService`methods, user can read current state of fans or current temperatures, or configure immersion mode.\n\n##### Miner\nWith `MinerService` methods, user can read miner HW details, overall miner or hashboards statistics.\n\n##### Pools\nWith `PoolService` methods, user can read all currently used pool groups, as well as update a specific pool group.\n\n##### Tuner\nWith `TunerService` methods, user can read current tuner state and configure tuner power target.\n\n##### Other\nOverall to use gRPC API, user must be authenticated. For this purpose, `AuthenticationService` with `Login` method is present.\n\nThe method in `VersionService` provides information about a particular version of the public Braiins OS API.\n",
+  "releases": [
+    {
+      "tag_name": "1.8.0",
+      "name": "1.8.0",
+      "body": "## [1.8.0] - 2025-11-25\r\nVersion **1.8.0** introduces new Upgrade service `braiins.bos.v1.UpgradeService` and relative power/hashrate target configuration.\r\n\r\n### Added\r\n* Introduced new field `uid` in the `braiins.bos.v1.PoolGroup` message to get group uid.\r\n* Introduced new service `braiins.bos.v1.UpgradeService` with methods:\r\n  * `UpdateAutoUpgradeConfig` - enables/disables AutoUpgrade feature and configures upgrade schedule\r\n  * `GetAutoUpgradeStatus` - retrieves current AutoUpgrade configuration and execution status\r\n* Introduced new messages for AutoUpgrade scheduling:\r\n  * `units.DayOfWeek` enum and custom `upgrade.UpgradeTime` message for schedule configuration\r\n  * `DailySchedule` - schedule upgrades to run daily at a specific time\r\n  * `WeeklySchedule` - schedule upgrades to run weekly on a specific day of the week at a specific time\r\n  * `MonthlySchedule` - schedule upgrades to run monthly on a specific day of the month (1-28) at a specific time\r\n  * `AutoUpgradeSchedule` - oneof message that can contain any of the schedule types\r\n  * `UpdateAutoUpgradeConfigRequest` - request message to update AutoUpgrade configuration\r\n  * `UpdateAutoUpgradeConfigResponse` - response message containing enabled status and next execution timestamp\r\n  * `GetAutoUpgradeStatusRequest` - request message to get AutoUpgrade status\r\n  * `GetAutoUpgradeStatusResponse` - response message containing enabled status, schedule, next execution, and last execution timestamps\r\n* Introduced new enumeration `RelativeTargetReference` with `NOMINAL`, `MIN`, `MAX` and `CURRENT` variants.\r\n* Introduced new message `SetRelativeTargetRequest` with `save_action`, `percentage` and `reference` fields.\r\n* Introduced new methods `SetRelativePowerTarget` and `SetRelativeHashrateTarget`. User can now set power and hashrate targets relative to a reference value",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-11-25T16:27:45+00:00",
+      "published_at": "2025-11-25T16:28:56+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.8.0",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.8.0",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.8.0"
+    },
+    {
+      "tag_name": "1.7.0",
+      "name": "1.7.0",
+      "body": "## [1.7.0] - 2025-08-10\r\nVersion **1.7.0** introduces changes to `braiins.bos.v1.PoolGroupConfiguration` and `braiins.bos.v1.PoolConfiguration`.\r\n\r\n### Added\r\n* Introduced new enumeration `braiins.bos.v1.FanPauseMode` with `FAN_PAUSE_MODE_AUTO` and `FAN_PAUSE_MODE_MANUAL` variants.\r\n* Introduced new field `default_fan_pause_mode` in the `braiins.bos.v1.CoolingConstraints` message to get default fan pause mode.\r\n* Introduced new messages `braiins.bos.v1.SetQuickRampingRequest`, `braiins.bos.v1.QuickRampingResponse` and `braiins.bos.v1.SetDefaultQuickRampingRequest`.\r\n* Introduced new method `SetQuickRamping` in the `braiins.bos.v1.PerformanceService`. User can now set quick ramping time up and down values.\r\n* Introduced new method `SetDefaultQuickRamping` in the `braiins.bos.v1.PerformanceService`. User can now set quick ramping time up and down to default.\r\n* Introduced new fields `quick_ramping_time_up_s` and `quick_ramping_time_down_s` in the `braiins.bos.v1.HashboardPerformanceConfiguration` message to get quick ramping time up and down values.\r\n* Introduced new field `quick_ramping_time_s` in the `braiins.bos.v1.HashboardConstraints` message to get quick ramping time constraints.\r\n\r\n### Changed\r\n* Mark `uid` for `braiins.bos.v1.PoolGroupConfiguration` and `braiins.bos.v1.PoolConfiguration` as optional. This change allows to create new pool group or pool without providing empty `uid` value. When new entity is created `uid` is generated automatically. When updating existing Pool Group with `UpdatePoolGroup` method, `uid` is required, otherwise error is returned back to the user.\r\n",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-08-10T16:09:01+00:00",
+      "published_at": "2025-08-10T16:10:51+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.7.0",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.7.0",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.7.0"
+    },
+    {
+      "tag_name": "1.6.0",
+      "name": "1.6.0",
+      "body": "## [1.6.0] - 2025-06-10\r\nVersion **1.6.0** introduces enhanced control of fan behavior during cooling mode curtailment and adds ability to apply Custom Contracts.\r\n\r\n### Added\r\n* Introduced new messages `PauseMode`, `AutoPauseMode` and `ManualPauseMode`.\r\n* Introduced new field `pause_mode` in the `braiins.bos.v1.CoolingAutoMode` message to set and get pause cooldown fan speed for automatic cooling mode.\r\n* Introduced new field `pause_mode` in the `braiins.bos.v1.CoolingManualMode` message to set and get pause cooldown fan speed for manual cooling mode.\r\n* Introduced new field `pause_cooldown_fan_speed_ratio` in the `braiins.bos.v1.CoolingConstraints` message to get pause cooldown fan speed constraints.\r\n* Introduced new method `ApplyContractKey` in the `braiins.bos.v1.LicenseService`. User can now apply contract key to miner and get licence.",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-06-10T16:13:36+00:00",
+      "published_at": "2025-06-10T16:16:15+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.6.0",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.6.0",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.6.0"
+    },
+    {
+      "tag_name": "1.5.0",
+      "name": "1.5.0",
+      "body": "## [1.5.0] - 2025-04-09\r\nVersion **1.5.0** extends Hashboard message to provide lowest inlet and highest outlet temperatures. And HW info including miner serial number from stock FW.\r\n\r\n### Added\r\n* Introduced new fields `lowest_inlet_temp`, `highest_outlet_temp` in the `braiins.bos.v1.Hashboard` message to get the lowest inlet and highest outlet temperature for a specific hashboard.\r\n* Introduced new fields `serial_number`, `board_name` and `chip_type` in the `braiins.bos.v1.Hashboard` message.\r\n* Introduced new `PsuInfo` message and added it to the `braiins.bos.v1.GetMinerDetailsResponse` message.\r\n* Introduced new `ControlBoardSocFamily` enumeration and added it to the `braiins.bos.v1.GetMinerDetailsResponse` message.\r\n* Introduced new field `serial_number` in the `braiins.bos.v1.GetMinerDetailsResponse` message.",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-04-09T12:24:44+00:00",
+      "published_at": "2025-04-09T12:34:37+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.5.0",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.5.0",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.5.0"
+    },
+    {
+      "tag_name": "1.4.0",
+      "name": "1.4.0",
+      "body": "## [1.4.0] - 2025-02-26\r\nVersion **1.4.0** introduces possibility to set DPS mode to `normal` or `boost`. It also extends cooling configuration with new values `immersion` and `hydro`.\r\n\r\n### Added\r\n* Introduced new enumeration `braiins.bos.v1.DPSMode` with `DPS_MODE_NORMAL` and `DPS_MODE_BOOST` variants.\r\n* Introduced new field `mode` in the `braiins.bos.v1.DPSConfiguration`, `braiins.bos.v1.SetDPSRequest`, `braiins.bos.v1.SetDPSResponse` message to get or set DPS mode.\r\n* Introduced new field `mode` in the `braiins.bos.v1.DPSConstraints` message to get the default value for DPS mode.\r\n* Introduced new method `SetCoolingMode` in the `braiins.bos.v1.CoolingService`. User can now set cooling mode to `automatic`, `manual`, `hydro` or `immersion`. It gives user possibility to set specific temperature and fan settings for each mode.\r\n* Introduced new field `min_fan_speed` in the `braiins.bos.v1.CoolingAutoMode` to set minimum fan speed for automatic cooling mode.\r\n* Introduced new field `max_fan_speed` in the `braiins.bos.v1.CoolingAutoMode` to set maximum fan speed for automatic cooling mode.\r\n* Introduced new field `min_fan_speed` in the `braiins.bos.v1.CoolingConstraints` to get default value for minimum fan speed for automatic cooling mode.\r\n* Introduced new field `max_fan_speed` in the `braiins.bos.v1.CoolingConstraints` to get default value for maximum fan speed for automatic cooling mode.\r\n* Introduced new field `target_temperature` in the `braiins.bos.v1.CoolingManualMode` to set target temperature for manual cooling mode.\r\n\r\n### Changed\r\n* Mark `SetImmersionMode` method as deprecated in `CoolingService`. Instead of this method, user should use `SetCoolingMode` with `immersion` mode.\r\n* Extend `CoolingConfiguration` mode with new value `immersion` that represents immersion cooling mode.\r\n* Extend `CoolingConfiguration` mode with new value `hydro` that represents hydro cooling mode.\r\n* Mark `disabled` cooling mode as deprecated in `CoolingConfiguration` mode.\r\n* Mark `minimum_required_fans` field as deprecated in `CoolingConfiguration`. Instead user should use `minimum_required_fans` field in `CoolingAutoMode` or `CoolingManualMode`.\r\n* Extend `CoolingAutoMode` with new field `minimum_required_fans`.\r\n* Extend `CoolingManualMode` with new field `minimum_required_fans`.",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2025-02-27T09:19:03+00:00",
+      "published_at": "2025-02-27T09:23:59+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.4.0",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.4.0",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.4.0"
+    },
+    {
+      "tag_name": "1.3.0",
+      "name": "1.3.0",
+      "body": "# [1.3.0] - 2024-10-22\r\nVersion **1.3.0** introduces few small improvements.\r\n\r\n### Changed\r\n* Extended `braiins.bos.v1.Platform` enumeration with `PLATFORM_STM32MP157C_II2_BMM1` variant,\r\n* Extended `braiins.bos.v1.SupportArchiveFormat` enumeration with `SUPPORT_ARCHIVE_FORMAT_ZIP_ENCRYPTED` variant.",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2024-10-22T10:24:33+00:00",
+      "published_at": "2024-10-22T10:26:31+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.3.0",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.3.0",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.3.0"
+    },
+    {
+      "tag_name": "1.2.0",
+      "name": "1.2.0",
+      "body": "# [1.2.0] - 2024-07-17\r\nVersion **1.2.0** introduces the possibility to configure all pool groups at once and read Braiins OS errors.\r\n\r\n### Added\r\n* Introduced new field `model` in the `braiins.bos.v1.Hashboard` message that contains hashboard name,\r\n* Introduced new method `GetErrors` in the `braiins.bos.v1.MinerService` to get all miner errors,\r\n* Introduced new method `SetPoolGroups` in the `braiins.bos.v1.PoolService` to set all Pool groups at once.",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2024-07-17T09:58:34+00:00",
+      "published_at": "2024-07-17T09:59:31+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.2.0",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.2.0",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.2.0"
+    },
+    {
+      "tag_name": "1.1.0",
+      "name": "1.1.0",
+      "body": "# [1.1.0] - 2024-05-09\r\nVersion **1.1.0** introduce possibility to read network configuration, changes in authentication and few more changes. \r\n\r\n### Added\r\n* Introduced new field `last_share_time` in the `braiins.bos.v1.PoolStats` that provides info about last share time,\r\n* Introduced new field `token` in the `braiins.bos.v1.LoginResponse` that provides info created authentication token that was till now available only in response header,\r\n* Introduced new field `timeout_s` in the `braiins.bos.v1.LoginResponse` that provides info about authentication token expiration time,\r\n* Introduced new method `GetNetworkInfo` in the `braiins.bos.v1.NetworkService` to get current network configuration for the default network interface,\r\n* Introduced new field `kernel_version` in the `braiins.bos.v1.GetMinerDetailsResponse` that provides info about Kernel version.",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2024-05-09T10:47:49+00:00",
+      "published_at": "2024-05-09T10:54:36+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.1.0",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.1.0",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.1.0"
+    },
+    {
+      "tag_name": "1.0.0",
+      "name": "1.0.0",
+      "body": "## [1.0.0] - 2024-03-27\r\nThe first stable release of the Public API incorporates minor enhancements.\r\n\r\n### Added\r\n* Introduced new field `enabled` in the `braiins.bos.v1.DPSConfiguration` that provides info, if DPS is enabled by default or not.\r\n* Introduced new field `enabled` in the `braiins.bos.v1.TunerConstraints` that provides info, if DPS is enabled by default or not.\r\n* Introduced new field `default_mode` in the `braiins.bos.v1.TunerConstraints` that provides info about the default tuner mode.\r\n* Introduced new field `status` in the `braiins.bos.v1.GetMinerDetailsResponse` that provides info about the current miner status.",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2024-03-27T12:19:48+00:00",
+      "published_at": "2024-03-27T12:20:57+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.0.0",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.0.0",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.0.0"
+    },
+    {
+      "tag_name": "1.0.0-beta.6",
+      "name": "1.0.0-beta.6",
+      "body": "## [1.0.0-beta.6] - 2024-03-05\r\nVersion **1.0.0-beta.6** contains one new feature Network configuration.\r\n\r\n### Added\r\nNew `braiins.bos.v1.NetworkService` with `GetNetworkConfiguration` and `SetNetworkConfiguration` methods\r\n",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2024-03-05T06:09:43+00:00",
+      "published_at": "2024-03-05T06:12:49+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.0.0-beta.6",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.0.0-beta.6",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.0.0-beta.6"
+    },
+    {
+      "tag_name": "1.0.0-beta.5",
+      "name": "1.0.0-beta.5",
+      "body": "# [1.0.0-beta.5] - 2023-12-19\r\nVersion **1.0.0-beta.5** contains one small extension.\r\n\r\n### Added\r\nExtension of the `braiins.bos.v1.Platform` enumeration with new value for Zynq.",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2023-12-18T14:10:16+00:00",
+      "published_at": "2023-12-18T14:12:34+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.0.0-beta.5",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.0.0-beta.5",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.0.0-beta.5"
+    },
+    {
+      "tag_name": "1.0.0-beta.4",
+      "name": "1.0.0-beta.4",
+      "body": "## [1.0.0-beta.4] - 2023-11-23\r\nVersion **1.0.0-beta.4** contains one new feature and one breaking change.\r\n\r\n### Added\r\n* We added option to clean tuner profiles by adding `braiins.bos.v1.PerformanceService::RemoveTunedProfiles`\r\n* Introduced a new field `system_uptime_s` in the `braiins.bos.v1.GetMinerDetailsResponse` that replaces `system_uptime`(marked as deprecated) to keep the best practice that a field name should also describe the unit (when applicable).\r\n\r\n### Breaking Changes:\r\n* We reverted removing `braiins.bos.v1.MinerModel` enumeration from the previous release because this change was causing troubles to our users.\r\n  Instead of dropping enumeration, we decided to mark it as deprecated and introduce new field `miner_model` for string representation.\r\n",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2023-11-23T14:26:24+00:00",
+      "published_at": "2023-11-23T14:28:08+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.0.0-beta.4",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.0.0-beta.4",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.0.0-beta.4"
+    },
+    {
+      "tag_name": "1.0.0-beta.3",
+      "name": "1.0.0-beta.3",
+      "body": "Version **1.0.0-beta.3** contains a few minor improvements.\r\n\r\n### Added\r\n* Extension of the `braiins.bos.v1.GetMinerDetailsResponse` message with `bosminer_uptime_s` field that contains bosminer uptime.\r\n\r\n### Breaking Changes:\r\n* We removed `braiins.bos.v1.MinerModel` enumeration and changed type of `model` field in `braiins.bos.v1.MinerIdentity` to `string`. Replacing model enumeration with string eliminates the need to release a new version every time we add support for new model,",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2023-11-02T08:53:42+00:00",
+      "published_at": "2023-11-02T08:56:07+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.0.0-beta.3",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.0.0-beta.3",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.0.0-beta.3"
+    },
+    {
+      "tag_name": "1.0.0-beta.2",
+      "name": "1.0.0-beta.2",
+      "body": "New version 1.0.0-beta.2 extends performance management and Pool Group management possibilities. It also introduces an API to get Mining Status.",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2023-08-11T13:19:42+00:00",
+      "published_at": "2023-08-11T13:21:31+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.0.0-beta.2",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.0.0-beta.2",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.0.0-beta.2"
+    },
+    {
+      "tag_name": "1.0.0-beta.1",
+      "name": "1.0.0-beta.1",
+      "body": "New version **1.0.0-beta.1**, enhances the authentication functionalities while also introducing two new features: Device Location and Support Archive.",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2023-08-10T12:15:46+00:00",
+      "published_at": "2023-08-11T12:30:53+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.0.0-beta.1",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.0.0-beta.1",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.0.0-beta.1"
+    },
+    {
+      "tag_name": "1.0.0-beta",
+      "name": "1.0.0-beta",
+      "body": "New version 1.0.0-beta, introduces a significant addition: the all-new BOS+ License feature.",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2023-08-10T06:48:06+00:00",
+      "published_at": "2023-08-11T12:27:46+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.0.0-beta",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.0.0-beta",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.0.0-beta"
+    },
+    {
+      "tag_name": "1.0.0-alpha.1",
+      "name": "1.0.0-alpha.1",
+      "body": "New version 1.0.0-alpha.1 extends authentication options and introduces new features, **Locate Device** and **Support Archive**.\r\n",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2023-08-07T06:27:46+00:00",
+      "published_at": "2023-08-07T06:30:19+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.0.0-alpha.1",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.0.0-alpha.1",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.0.0-alpha.1"
+    },
+    {
+      "tag_name": "1.0.0-alpha",
+      "name": "1.0.0-alpha",
+      "body": "First release for new Braiins OS+ Public API.",
+      "draft": false,
+      "prerelease": false,
+      "created_at": "2023-05-05T14:19:30+00:00",
+      "published_at": "2023-05-05T14:31:43+00:00",
+      "url": "https://github.com/braiins/bos-plus-api/releases/tag/1.0.0-alpha",
+      "tarball_url": "https://api.github.com/repos/braiins/bos-plus-api/tarball/1.0.0-alpha",
+      "zipball_url": "https://api.github.com/repos/braiins/bos-plus-api/zipball/1.0.0-alpha"
+    }
+  ]
+}

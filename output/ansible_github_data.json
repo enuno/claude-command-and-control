@@ -1,0 +1,4106 @@
+{
+  "repo_info": {
+    "name": "ansible-documentation",
+    "full_name": "ansible/ansible-documentation",
+    "description": "Ansible community documentation",
+    "url": "https://github.com/ansible/ansible-documentation",
+    "homepage": "https://docs.ansible.com/",
+    "stars": 143,
+    "forks": 764,
+    "open_issues": 118,
+    "default_branch": "devel",
+    "created_at": "2023-06-08T23:05:38+00:00",
+    "updated_at": "2025-12-28T17:52:39+00:00",
+    "language": "Python",
+    "license": "GNU General Public License v3.0",
+    "topics": [
+      "ansible",
+      "documentation",
+      "hacktoberfest"
+    ]
+  },
+  "readme": "# ansible-documentation\n\nThis repository holds the ReStructuredText (RST) source, and other files, for user documentation related to the Ansible package and Ansible Core.\n\n> Documentation for modules and plugins that are officially supported by the Ansible Core engineering team is available in the [`ansible/ansible`](https://github.com/ansible/ansible) repository.\n\n## Verifying your pull request\n\nWe welcome all contributions to Ansible community documentation.\nIf you plan to submit a pull request with changes, you should [verify your PR](https://docs.ansible.com/ansible/latest/community/documentation_contributions.html#verifying-your-documentation-pr) to ensure it conforms with style guidelines and can build successfully.\n\n### Setting up nox\n\nThis project includes a `nox` configuration to automate tests, checks, and other functions.\nYou can use these automated tests to help you verify changes before you submit a PR.\nYou can manually\n[set up your environment](https://docs.ansible.com/ansible/latest/community/documentation_contributions.html#setting-up-your-environment-to-build-documentation-locally)\nif you prefer, but `nox` is more straightforward and create an isolated environment for you.\n\n* Install `nox` using `python3 -m pip install nox` or your distribution's package manager.\n\n* Execute `nox` from the repository root with no arguments to run\n  all docs checkers, Python code checkers, and a minimal HTML docs build.\n\n* Alternatively, you can run only certain tasks as outlined in the following sections.\n  Run `nox --list` to view available sessions.\n\n### Building docs\n\nThe different Makefile targets used to build the documentation are outlined in\n[Building the documentation locally](https://docs.ansible.com/ansible/latest/community/documentation_contributions.html#building-the-documentation-locally).\nThe `nox` configuration has a `make` session that creates a build environment and uses the Makefile to generate HTML.\n\n* Clone required parts of the `ansible/ansible` repository.\n\n  ``` bash\n  nox -s clone-core\n  ```\n\n  See [Periodically cloning Ansible core](https://docs.ansible.com/ansible/latest/community/documentation_contributions.html#periodically-cloning-ansible-core) for more information.\n\n* Build minimal Ansible Core docs.\n\n  ``` bash\n  nox -s make\n  ```\n\n* Run a specific Makefile target:\n\n  ``` bash\n  nox -s make -- clean htmlsingle rst=community/documentation_contributions.rst\n  ```\n\n### Running automated tests\n\nThe `nox` configuration also contains session to run automated docs checkers.\n\n* Ensure there are no syntax errors in the reStructuredText source files.\n\n  ``` bash\n  nox -s \"checkers(rstcheck)\"\n  ```\n\n  See [Running the final tests](https://docs.ansible.com/ansible/latest/community/documentation_contributions.html#running-the-final-tests) for more information.\n\n* Verify the docs build.\n\n  ``` bash\n  nox -s \"checkers(docs-build)\"\n  ```\n\n  This session cleans the generated docs after it runs.\n  If you want to view the generated HTML in your browser, you should build the documentation locally.\n  See [Building the documentation locally](https://docs.ansible.com/ansible/latest/community/documentation_contributions.html#building-the-documentation-locally) for more information.\n\n* Lint, type check, and format Python scripts in this repository and lint the Github Actions workflows for syntax and security issues:\n\n  ``` bash\n  nox -s lint\n  ```\n\n  The `actionlint` linter that is run as part of the `lint` session requires\n  `podman` or `docker` to be installed.\n  If both container engines are installed, `podman` is preferred.\n  Set `CONTAINER_ENGINE=docker` to change this behavior.\n\n### Checking spelling\n\nUse [`codespell`](https://github.com/codespell-project/codespell) to check for common spelling mistakes in the documentation source.\n\n* Check spelling.\n\n  ``` bash\n  nox -s spelling\n  ```\n\n* Correct any detected spelling errors.\n\n  ``` bash\n  nox -s spelling -- -w\n  ```\n\n* Select an option when `codespell` suggests more than one word as a correction.\n\n  ``` bash\n  nox -s spelling -- -w -i 3\n  ```\n\n## Dependency files\n\n`nox` sessions use dependencies from requirements files in the `tests/` directory.\nEach session has a `tests/{name}.in` file with direct dependencies and a lock file in `tests/{name}.txt` that pins *exact versions* for both direct and transitive dependencies.\nThe lock files contain tested dependencies that are automatically updated on a weekly basis.\n\nIf you'd like to use untested dependencies, set `PINNED=false` as in the following example:\n\n```bash\nPINNED=false nox -s \"checkers(docs-build)\"\n```\n\nFor more details about using unpinned and tested dependencies for doc builds, see [Setting up your environment to build documentation locally](https://docs.ansible.com/ansible/latest/community/documentation_contributions.html#setting-up-your-environment-to-build-documentation-locally).\n\n## Updating dependencies\n\nUse the following `nox` session to update the dependency lock files in `tests/`.\n\n  ``` bash\n  nox -s pip-compile\n  ```\n\nTo synchronize dependency lock files with base requirements files without changing transitive dependencies, use the `--no-upgrade` flag:\n\n  ``` bash\n  nox -s pip-compile -- --no-upgrade\n  ```\n\nTo upgrade a single dependency, for instance when adjusting constraints on a package, use the `--upgrade-package` flag followed by the package name:\n\n  ``` bash\n  nox -s pip-compile -- --upgrade-package <package_name>\n  ```\n\n## Creating release tags\n\nWhen a tag is created in the [`ansible/ansible`](https://github.com/ansible/ansible) repository for a release or release candidate, a corresponding tag should be created in this `ansible-documentation` repository.\n\nFirst, ensure that you have the [`ansible/ansible`](https://github.com/ansible/ansible) and [`ansible/ansible-documentation`](https://github.com/ansible/ansible-documentation) repositories checked out.\nThe tool assumes that both checkouts have the same parent directory. You can set different paths to your checkouts with the `--docs` and `--core` options if you have them set up another way.\n\nNext, run the `tag` `nox` session.\n\nThis will determine any missing `ansible-core` tags and create them in `ansible-documentation` if needed, exiting normally otherwise:\n\n``` bash\n# The tagger scripts assumes \"origin\" as the upstream remote.\nnox -s tag\n\n# If you use a different upstream remote, specify the name.\nnox -s tag -- --remote <name> tag\n\n# If your core repo is not in the same filesystem location, specify the path.\nnox -s tag -- --core <path> tag\n```\n\nSee `nox -s tag -- --help` for extended options.\n",
+  "file_tree": [
+    {
+      "path": ".codespellignorelines",
+      "type": "file",
+      "size": 1703
+    },
+    {
+      "path": ".codespellignorewords",
+      "type": "file",
+      "size": 85
+    },
+    {
+      "path": ".codespellrc",
+      "type": "file",
+      "size": 261
+    },
+    {
+      "path": ".github",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".gitignore",
+      "type": "file",
+      "size": 2974
+    },
+    {
+      "path": ".isort.cfg",
+      "type": "file",
+      "size": 24
+    },
+    {
+      "path": ".mailmap",
+      "type": "file",
+      "size": 2200
+    },
+    {
+      "path": ".mypy.ini",
+      "type": "file",
+      "size": 130
+    },
+    {
+      "path": ".readthedocs.yaml",
+      "type": "file",
+      "size": 670
+    },
+    {
+      "path": ".yamllint",
+      "type": "file",
+      "size": 1343
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "type": "file",
+      "size": 2359
+    },
+    {
+      "path": "COPYING",
+      "type": "file",
+      "size": 35149
+    },
+    {
+      "path": "DCO",
+      "type": "file",
+      "size": 1421
+    },
+    {
+      "path": "MAINTAINERS.md",
+      "type": "file",
+      "size": 16848
+    },
+    {
+      "path": "README.md",
+      "type": "file",
+      "size": 6606
+    },
+    {
+      "path": "docs",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "examples",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hacking",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "licenses",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "noxfile.py",
+      "type": "file",
+      "size": 8481
+    },
+    {
+      "path": "tests",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".github/CODEOWNERS",
+      "type": "file",
+      "size": 582
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "type": "file",
+      "size": 350
+    },
+    {
+      "path": ".github/patchback.yml",
+      "type": "file",
+      "size": 286
+    },
+    {
+      "path": ".github/workflows",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": ".github/zizmor.yml",
+      "type": "file",
+      "size": 152
+    },
+    {
+      "path": "docs/ansible-core-branch.txt",
+      "type": "file",
+      "size": 6
+    },
+    {
+      "path": "docs/bin",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/man",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/templates",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "examples/DOCUMENTATION.yml",
+      "type": "file",
+      "size": 1161
+    },
+    {
+      "path": "examples/README.md",
+      "type": "file",
+      "size": 918
+    },
+    {
+      "path": "examples/ansible.cfg",
+      "type": "file",
+      "size": 614
+    },
+    {
+      "path": "examples/hosts",
+      "type": "file",
+      "size": 1175
+    },
+    {
+      "path": "examples/hosts.yaml",
+      "type": "file",
+      "size": 2700
+    },
+    {
+      "path": "examples/hosts.yml",
+      "type": "file",
+      "size": 10
+    },
+    {
+      "path": "examples/inventory_script_schema.json",
+      "type": "file",
+      "size": 1489
+    },
+    {
+      "path": "examples/play.yml",
+      "type": "file",
+      "size": 19547
+    },
+    {
+      "path": "examples/plugin_filters.yml",
+      "type": "file",
+      "size": 107
+    },
+    {
+      "path": "examples/scripts",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hacking/README.md",
+      "type": "file",
+      "size": 1948
+    },
+    {
+      "path": "hacking/ansible-profile",
+      "type": "file",
+      "size": 1025
+    },
+    {
+      "path": "hacking/azp",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hacking/backport",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hacking/build-ansible.py",
+      "type": "file",
+      "size": 3738
+    },
+    {
+      "path": "hacking/build_library",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hacking/create-bulk-issues.py",
+      "type": "file",
+      "size": 10646
+    },
+    {
+      "path": "hacking/deprecated_issue_template.md",
+      "type": "file",
+      "size": 389
+    },
+    {
+      "path": "hacking/env-setup",
+      "type": "file",
+      "size": 3180
+    },
+    {
+      "path": "hacking/env-setup.fish",
+      "type": "file",
+      "size": 2717
+    },
+    {
+      "path": "hacking/fix_test_syntax.py",
+      "type": "file",
+      "size": 3652
+    },
+    {
+      "path": "hacking/get_bot_user.sh",
+      "type": "file",
+      "size": 329
+    },
+    {
+      "path": "hacking/get_library.py",
+      "type": "file",
+      "size": 964
+    },
+    {
+      "path": "hacking/pr_labeler",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hacking/report.py",
+      "type": "file",
+      "size": 6099
+    },
+    {
+      "path": "hacking/return_skeleton_generator.py",
+      "type": "file",
+      "size": 3329
+    },
+    {
+      "path": "hacking/tagger",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hacking/templates",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hacking/test-module",
+      "type": "file",
+      "size": 14
+    },
+    {
+      "path": "hacking/test-module.py",
+      "type": "file",
+      "size": 10900
+    },
+    {
+      "path": "hacking/tests",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hacking/ticket_stubs",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hacking/update-sanity-requirements.py",
+      "type": "file",
+      "size": 3668
+    },
+    {
+      "path": "licenses/Apache-License.txt",
+      "type": "file",
+      "size": 11325
+    },
+    {
+      "path": "licenses/MIT-license.txt",
+      "type": "file",
+      "size": 1023
+    },
+    {
+      "path": "licenses/PSF-license.txt",
+      "type": "file",
+      "size": 2484
+    },
+    {
+      "path": "licenses/simplified_bsd.txt",
+      "type": "file",
+      "size": 1237
+    },
+    {
+      "path": "tests/README.md",
+      "type": "file",
+      "size": 1575
+    },
+    {
+      "path": "tests/checkers.py",
+      "type": "file",
+      "size": 1901
+    },
+    {
+      "path": "tests/checkers",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "tests/constraints.in",
+      "type": "file",
+      "size": 833
+    },
+    {
+      "path": "tests/formatters.in",
+      "type": "file",
+      "size": 12
+    },
+    {
+      "path": "tests/formatters.txt",
+      "type": "file",
+      "size": 503
+    },
+    {
+      "path": "tests/pip-compile.in",
+      "type": "file",
+      "size": 64
+    },
+    {
+      "path": "tests/pip-compile.txt",
+      "type": "file",
+      "size": 197
+    },
+    {
+      "path": "tests/pr_labeler.in",
+      "type": "file",
+      "size": 38
+    },
+    {
+      "path": "tests/pr_labeler.txt",
+      "type": "file",
+      "size": 1041
+    },
+    {
+      "path": "tests/requirements.in",
+      "type": "file",
+      "size": 784
+    },
+    {
+      "path": "tests/requirements.txt",
+      "type": "file",
+      "size": 4826
+    },
+    {
+      "path": "tests/spelling.in",
+      "type": "file",
+      "size": 10
+    },
+    {
+      "path": "tests/spelling.txt",
+      "type": "file",
+      "size": 194
+    },
+    {
+      "path": "tests/static.in",
+      "type": "file",
+      "size": 5
+    },
+    {
+      "path": "tests/static.txt",
+      "type": "file",
+      "size": 184
+    },
+    {
+      "path": "tests/tag.in",
+      "type": "file",
+      "size": 31
+    },
+    {
+      "path": "tests/tag.txt",
+      "type": "file",
+      "size": 469
+    },
+    {
+      "path": "tests/typing.in",
+      "type": "file",
+      "size": 104
+    },
+    {
+      "path": "tests/typing.txt",
+      "type": "file",
+      "size": 2103
+    },
+    {
+      "path": "tests/zizmor.in",
+      "type": "file",
+      "size": 7
+    },
+    {
+      "path": "tests/zizmor.txt",
+      "type": "file",
+      "size": 186
+    },
+    {
+      "path": ".github/workflows/build-devel-docs.yaml",
+      "type": "file",
+      "size": 564
+    },
+    {
+      "path": ".github/workflows/build-latest-docs.yaml",
+      "type": "file",
+      "size": 729
+    },
+    {
+      "path": ".github/workflows/build-package-docs.yaml",
+      "type": "file",
+      "size": 2605
+    },
+    {
+      "path": ".github/workflows/ci.yaml",
+      "type": "file",
+      "size": 698
+    },
+    {
+      "path": ".github/workflows/labeler.yml",
+      "type": "file",
+      "size": 2473
+    },
+    {
+      "path": ".github/workflows/pip-compile-dev.yml",
+      "type": "file",
+      "size": 2406
+    },
+    {
+      "path": ".github/workflows/pip-compile-docs.yml",
+      "type": "file",
+      "size": 1493
+    },
+    {
+      "path": ".github/workflows/release-porting-guide.yml",
+      "type": "file",
+      "size": 3298
+    },
+    {
+      "path": ".github/workflows/reusable-build-docs.yaml",
+      "type": "file",
+      "size": 3724
+    },
+    {
+      "path": ".github/workflows/reusable-deploy-docs.yaml",
+      "type": "file",
+      "size": 4101
+    },
+    {
+      "path": ".github/workflows/reusable-nox.yml",
+      "type": "file",
+      "size": 1776
+    },
+    {
+      "path": ".github/workflows/reusable-pip-compile.yml",
+      "type": "file",
+      "size": 4809
+    },
+    {
+      "path": ".github/workflows/tag.yml",
+      "type": "file",
+      "size": 1568
+    },
+    {
+      "path": "docs/bin/clone-core.py",
+      "type": "file",
+      "size": 4272
+    },
+    {
+      "path": "docs/bin/find-plugin-refs.py",
+      "type": "file",
+      "size": 3665
+    },
+    {
+      "path": "docs/docsite/.gitignore",
+      "type": "file",
+      "size": 252
+    },
+    {
+      "path": "docs/docsite/.nojekyll",
+      "type": "file",
+      "size": 0
+    },
+    {
+      "path": "docs/docsite/.templates",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/Makefile",
+      "type": "file",
+      "size": 7164
+    },
+    {
+      "path": "docs/docsite/Makefile.sphinx",
+      "type": "file",
+      "size": 887
+    },
+    {
+      "path": "docs/docsite/README.md",
+      "type": "file",
+      "size": 2287
+    },
+    {
+      "path": "docs/docsite/_static",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/collection-plugins.yml",
+      "type": "file",
+      "size": 608
+    },
+    {
+      "path": "docs/docsite/declarative-configs",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/modules.js",
+      "type": "file",
+      "size": 90
+    },
+    {
+      "path": "docs/docsite/rst",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/variables.dot",
+      "type": "file",
+      "size": 1266
+    },
+    {
+      "path": "docs/docsite/version_helper.py",
+      "type": "file",
+      "size": 788
+    },
+    {
+      "path": "docs/man/.gitignore",
+      "type": "file",
+      "size": 17
+    },
+    {
+      "path": "docs/man/man3",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/templates/collections_galaxy_meta.rst.j2",
+      "type": "file",
+      "size": 2264
+    },
+    {
+      "path": "docs/templates/config.rst.j2",
+      "type": "file",
+      "size": 10927
+    },
+    {
+      "path": "docs/templates/playbooks_keywords.rst.j2",
+      "type": "file",
+      "size": 949
+    },
+    {
+      "path": "examples/scripts/ConfigureRemotingForAnsible.ps1",
+      "type": "file",
+      "size": 16683
+    },
+    {
+      "path": "examples/scripts/New-AnsiblePowerShellSignature.ps1",
+      "type": "file",
+      "size": 17095
+    },
+    {
+      "path": "examples/scripts/README.md",
+      "type": "file",
+      "size": 2874
+    },
+    {
+      "path": "examples/scripts/my_test.py",
+      "type": "file",
+      "size": 4172
+    },
+    {
+      "path": "examples/scripts/my_test_facts.py",
+      "type": "file",
+      "size": 2785
+    },
+    {
+      "path": "examples/scripts/my_test_info.py",
+      "type": "file",
+      "size": 3120
+    },
+    {
+      "path": "examples/scripts/upgrade_to_ps3.ps1",
+      "type": "file",
+      "size": 2461
+    },
+    {
+      "path": "hacking/azp/README.md",
+      "type": "file",
+      "size": 5998
+    },
+    {
+      "path": "hacking/azp/download.py",
+      "type": "file",
+      "size": 7353
+    },
+    {
+      "path": "hacking/azp/get_recent_coverage_runs.py",
+      "type": "file",
+      "size": 4136
+    },
+    {
+      "path": "hacking/azp/incidental.py",
+      "type": "file",
+      "size": 16914
+    },
+    {
+      "path": "hacking/azp/run.py",
+      "type": "file",
+      "size": 2595
+    },
+    {
+      "path": "hacking/backport/README.md",
+      "type": "file",
+      "size": 1040
+    },
+    {
+      "path": "hacking/backport/__init__.py",
+      "type": "file",
+      "size": 0
+    },
+    {
+      "path": "hacking/backport/backport_of_line_adder.py",
+      "type": "file",
+      "size": 9977
+    },
+    {
+      "path": "hacking/build_library/__init__.py",
+      "type": "file",
+      "size": 0
+    },
+    {
+      "path": "hacking/build_library/build_ansible",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hacking/pr_labeler/.gitignore",
+      "type": "file",
+      "size": 12
+    },
+    {
+      "path": "hacking/pr_labeler/pr_labeler",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hacking/pr_labeler/pyproject.toml",
+      "type": "file",
+      "size": 595
+    },
+    {
+      "path": "hacking/pr_labeler/requirements.txt",
+      "type": "file",
+      "size": 38
+    },
+    {
+      "path": "hacking/tagger/tag.py",
+      "type": "file",
+      "size": 11262
+    },
+    {
+      "path": "hacking/templates/man.j2",
+      "type": "file",
+      "size": 3195
+    },
+    {
+      "path": "hacking/tests/gen_distribution_version_testcase.py",
+      "type": "file",
+      "size": 2710
+    },
+    {
+      "path": "hacking/tests/selinux",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hacking/ticket_stubs/README.md",
+      "type": "file",
+      "size": 326
+    },
+    {
+      "path": "hacking/ticket_stubs/bug_internal_api.md",
+      "type": "file",
+      "size": 1095
+    },
+    {
+      "path": "hacking/ticket_stubs/bug_wrong_repo.md",
+      "type": "file",
+      "size": 1472
+    },
+    {
+      "path": "hacking/ticket_stubs/collections.md",
+      "type": "file",
+      "size": 897
+    },
+    {
+      "path": "hacking/ticket_stubs/guide_newbie_about_gh_and_contributing_to_ansible.md",
+      "type": "file",
+      "size": 863
+    },
+    {
+      "path": "hacking/ticket_stubs/no_thanks.md",
+      "type": "file",
+      "size": 904
+    },
+    {
+      "path": "hacking/ticket_stubs/pr_duplicate.md",
+      "type": "file",
+      "size": 967
+    },
+    {
+      "path": "hacking/ticket_stubs/pr_merged.md",
+      "type": "file",
+      "size": 767
+    },
+    {
+      "path": "hacking/ticket_stubs/proposal.md",
+      "type": "file",
+      "size": 767
+    },
+    {
+      "path": "hacking/ticket_stubs/question_not_bug.md",
+      "type": "file",
+      "size": 796
+    },
+    {
+      "path": "hacking/ticket_stubs/resolved.md",
+      "type": "file",
+      "size": 609
+    },
+    {
+      "path": "hacking/ticket_stubs/wider_discussion.md",
+      "type": "file",
+      "size": 763
+    },
+    {
+      "path": "tests/checkers/docs-build.py",
+      "type": "file",
+      "size": 5645
+    },
+    {
+      "path": "tests/checkers/rst-yamllint.json",
+      "type": "file",
+      "size": 162
+    },
+    {
+      "path": "tests/checkers/rst-yamllint.py",
+      "type": "file",
+      "size": 7214
+    },
+    {
+      "path": "tests/checkers/rstcheck.json",
+      "type": "file",
+      "size": 232
+    },
+    {
+      "path": "tests/checkers/rstcheck.py",
+      "type": "file",
+      "size": 1696
+    },
+    {
+      "path": "docs/docsite/.templates/banner.html",
+      "type": "file",
+      "size": 6746
+    },
+    {
+      "path": "docs/docsite/.templates/breadcrumbs.html",
+      "type": "file",
+      "size": 4884
+    },
+    {
+      "path": "docs/docsite/.templates/redirect_template.html",
+      "type": "file",
+      "size": 307
+    },
+    {
+      "path": "docs/docsite/.templates/version_chooser.html",
+      "type": "file",
+      "size": 156
+    },
+    {
+      "path": "docs/docsite/_static/.keep",
+      "type": "file",
+      "size": 0
+    },
+    {
+      "path": "docs/docsite/declarative-configs/ansible_redirects.toml",
+      "type": "file",
+      "size": 25947
+    },
+    {
+      "path": "docs/docsite/rst/404.rst",
+      "type": "file",
+      "size": 374
+    },
+    {
+      "path": "docs/docsite/rst/ansible_index.rst",
+      "type": "file",
+      "size": 2906
+    },
+    {
+      "path": "docs/docsite/rst/api",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/collections",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/collections_guide",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/command_guide",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/community",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/conf.py",
+      "type": "file",
+      "size": 14541
+    },
+    {
+      "path": "docs/docsite/rst/core_index.rst",
+      "type": "file",
+      "size": 3072
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/galaxy",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/getting_started",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/getting_started_ee",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/images",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/installation_guide",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/inventory",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/inventory_guide",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/locales",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/module_plugin_guide",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/network",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/os_guide",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/plugins",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/roadmap",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/scenario_guides",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/shared_snippets",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/tips_tricks",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/user_guide",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/vault_guide",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/man/man3/.gitdir",
+      "type": "file",
+      "size": 0
+    },
+    {
+      "path": "hacking/build_library/build_ansible/__init__.py",
+      "type": "file",
+      "size": 0
+    },
+    {
+      "path": "hacking/build_library/build_ansible/change_detection.py",
+      "type": "file",
+      "size": 1078
+    },
+    {
+      "path": "hacking/build_library/build_ansible/command_plugins",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hacking/build_library/build_ansible/commands.py",
+      "type": "file",
+      "size": 1578
+    },
+    {
+      "path": "hacking/build_library/build_ansible/errors.py",
+      "type": "file",
+      "size": 526
+    },
+    {
+      "path": "hacking/pr_labeler/pr_labeler/__init__.py",
+      "type": "file",
+      "size": 0
+    },
+    {
+      "path": "hacking/pr_labeler/pr_labeler/__main__.py",
+      "type": "file",
+      "size": 216
+    },
+    {
+      "path": "hacking/pr_labeler/pr_labeler/actions.py",
+      "type": "file",
+      "size": 4255
+    },
+    {
+      "path": "hacking/pr_labeler/pr_labeler/cli.py",
+      "type": "file",
+      "size": 2648
+    },
+    {
+      "path": "hacking/pr_labeler/pr_labeler/cli_context.py",
+      "type": "file",
+      "size": 2221
+    },
+    {
+      "path": "hacking/pr_labeler/pr_labeler/constants.py",
+      "type": "file",
+      "size": 575
+    },
+    {
+      "path": "hacking/pr_labeler/pr_labeler/data",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "hacking/pr_labeler/pr_labeler/github_utils.py",
+      "type": "file",
+      "size": 3165
+    },
+    {
+      "path": "hacking/pr_labeler/pr_labeler/jinja.py",
+      "type": "file",
+      "size": 625
+    },
+    {
+      "path": "hacking/pr_labeler/pr_labeler/py.typed",
+      "type": "file",
+      "size": 0
+    },
+    {
+      "path": "hacking/pr_labeler/pr_labeler/utils.py",
+      "type": "file",
+      "size": 454
+    },
+    {
+      "path": "hacking/tests/selinux/README.md",
+      "type": "file",
+      "size": 471
+    },
+    {
+      "path": "hacking/tests/selinux/ansible-podman.te",
+      "type": "file",
+      "size": 463
+    },
+    {
+      "path": "hacking/tests/selinux/build.sh",
+      "type": "file",
+      "size": 243
+    },
+    {
+      "path": "docs/docsite/rst/api/index.rst",
+      "type": "file",
+      "size": 2039
+    },
+    {
+      "path": "docs/docsite/rst/collections/all_plugins.rst",
+      "type": "file",
+      "size": 196
+    },
+    {
+      "path": "docs/docsite/rst/collections_guide/collections_downloading.rst",
+      "type": "file",
+      "size": 2971
+    },
+    {
+      "path": "docs/docsite/rst/collections_guide/collections_index.rst",
+      "type": "file",
+      "size": 128
+    },
+    {
+      "path": "docs/docsite/rst/collections_guide/collections_installing.rst",
+      "type": "file",
+      "size": 9981
+    },
+    {
+      "path": "docs/docsite/rst/collections_guide/collections_listing.rst",
+      "type": "file",
+      "size": 3053
+    },
+    {
+      "path": "docs/docsite/rst/collections_guide/collections_using_playbooks.rst",
+      "type": "file",
+      "size": 5899
+    },
+    {
+      "path": "docs/docsite/rst/collections_guide/collections_verifying.rst",
+      "type": "file",
+      "size": 4467
+    },
+    {
+      "path": "docs/docsite/rst/collections_guide/index.rst",
+      "type": "file",
+      "size": 1087
+    },
+    {
+      "path": "docs/docsite/rst/command_guide/cheatsheet.rst",
+      "type": "file",
+      "size": 3321
+    },
+    {
+      "path": "docs/docsite/rst/command_guide/command_line_tools.rst",
+      "type": "file",
+      "size": 726
+    },
+    {
+      "path": "docs/docsite/rst/command_guide/index.rst",
+      "type": "file",
+      "size": 1230
+    },
+    {
+      "path": "docs/docsite/rst/command_guide/intro_adhoc.rst",
+      "type": "file",
+      "size": 9376
+    },
+    {
+      "path": "docs/docsite/rst/community/advanced_index.rst",
+      "type": "file",
+      "size": 405
+    },
+    {
+      "path": "docs/docsite/rst/community/code_of_conduct.rst",
+      "type": "file",
+      "size": 7702
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_contributors",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_development_process.rst",
+      "type": "file",
+      "size": 15553
+    },
+    {
+      "path": "docs/docsite/rst/community/committer_guidelines.rst",
+      "type": "file",
+      "size": 6845
+    },
+    {
+      "path": "docs/docsite/rst/community/communication.rst",
+      "type": "file",
+      "size": 7466
+    },
+    {
+      "path": "docs/docsite/rst/community/contributing_maintained_collections.rst",
+      "type": "file",
+      "size": 14859
+    },
+    {
+      "path": "docs/docsite/rst/community/contributions.rst",
+      "type": "file",
+      "size": 1723
+    },
+    {
+      "path": "docs/docsite/rst/community/contributions_collections.rst",
+      "type": "file",
+      "size": 1455
+    },
+    {
+      "path": "docs/docsite/rst/community/contributor_path.rst",
+      "type": "file",
+      "size": 7507
+    },
+    {
+      "path": "docs/docsite/rst/community/create_pr_quick_start.rst",
+      "type": "file",
+      "size": 10022
+    },
+    {
+      "path": "docs/docsite/rst/community/developer_certificate_of_origin.rst",
+      "type": "file",
+      "size": 484
+    },
+    {
+      "path": "docs/docsite/rst/community/development_process.rst",
+      "type": "file",
+      "size": 17685
+    },
+    {
+      "path": "docs/docsite/rst/community/documentation_contributions.rst",
+      "type": "file",
+      "size": 12281
+    },
+    {
+      "path": "docs/docsite/rst/community/ecosystem_project_resources.rst",
+      "type": "file",
+      "size": 2574
+    },
+    {
+      "path": "docs/docsite/rst/community/getting_started.rst",
+      "type": "file",
+      "size": 1033
+    },
+    {
+      "path": "docs/docsite/rst/community/github_admins.rst",
+      "type": "file",
+      "size": 1257
+    },
+    {
+      "path": "docs/docsite/rst/community/how_can_I_help.rst",
+      "type": "file",
+      "size": 5681
+    },
+    {
+      "path": "docs/docsite/rst/community/index.rst",
+      "type": "file",
+      "size": 1578
+    },
+    {
+      "path": "docs/docsite/rst/community/maintainers.rst",
+      "type": "file",
+      "size": 835
+    },
+    {
+      "path": "docs/docsite/rst/community/maintainers_guidelines.rst",
+      "type": "file",
+      "size": 5706
+    },
+    {
+      "path": "docs/docsite/rst/community/maintainers_workflow.rst",
+      "type": "file",
+      "size": 3896
+    },
+    {
+      "path": "docs/docsite/rst/community/other_tools_and_programs.rst",
+      "type": "file",
+      "size": 2591
+    },
+    {
+      "path": "docs/docsite/rst/community/release_managers.rst",
+      "type": "file",
+      "size": 3990
+    },
+    {
+      "path": "docs/docsite/rst/community/reporting_bugs_and_features.rst",
+      "type": "file",
+      "size": 3098
+    },
+    {
+      "path": "docs/docsite/rst/community/reporting_collections.rst",
+      "type": "file",
+      "size": 1519
+    },
+    {
+      "path": "docs/docsite/rst/community/steering",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/ansible_index.rst",
+      "type": "file",
+      "size": 4887
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/ansible_markup.rst",
+      "type": "file",
+      "size": 7917
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/core_branches_and_tags.rst",
+      "type": "file",
+      "size": 3985
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/core_index.rst",
+      "type": "file",
+      "size": 4582
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/debugging.rst",
+      "type": "file",
+      "size": 6916
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_api.rst",
+      "type": "file",
+      "size": 1081
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_collections.rst",
+      "type": "file",
+      "size": 1801
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_collections_changelogs.rst",
+      "type": "file",
+      "size": 4482
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_collections_contributing.rst",
+      "type": "file",
+      "size": 3261
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_collections_creating.rst",
+      "type": "file",
+      "size": 8297
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_collections_distributing.rst",
+      "type": "file",
+      "size": 20224
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_collections_documenting.rst",
+      "type": "file",
+      "size": 2241
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_collections_migrating.rst",
+      "type": "file",
+      "size": 7785
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_collections_path.rst",
+      "type": "file",
+      "size": 8101
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_collections_shared.rst",
+      "type": "file",
+      "size": 5046
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_collections_structure.rst",
+      "type": "file",
+      "size": 15304
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_collections_testing.rst",
+      "type": "file",
+      "size": 6765
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_core.rst",
+      "type": "file",
+      "size": 819
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_inventory.rst",
+      "type": "file",
+      "size": 25305
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_locally.rst",
+      "type": "file",
+      "size": 11105
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_module_utilities.rst",
+      "type": "file",
+      "size": 5009
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_modules.rst",
+      "type": "file",
+      "size": 3451
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_modules_best_practices.rst",
+      "type": "file",
+      "size": 13622
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_modules_checklist.rst",
+      "type": "file",
+      "size": 3980
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_modules_documenting.rst",
+      "type": "file",
+      "size": 24075
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_modules_general.rst",
+      "type": "file",
+      "size": 10896
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_modules_general_windows.rst",
+      "type": "file",
+      "size": 37871
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_modules_in_groups.rst",
+      "type": "file",
+      "size": 4840
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_plugins.rst",
+      "type": "file",
+      "size": 31615
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_program_flow_modules.rst",
+      "type": "file",
+      "size": 42967
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_python_3.rst",
+      "type": "file",
+      "size": 17098
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/developing_rebasing.rst",
+      "type": "file",
+      "size": 3828
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/migrating_roles.rst",
+      "type": "file",
+      "size": 17646
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/module_lifecycle.rst",
+      "type": "file",
+      "size": 7908
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/overview_architecture.rst",
+      "type": "file",
+      "size": 7584
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/shared_snippets",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/sidecar.rst",
+      "type": "file",
+      "size": 3575
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing.rst",
+      "type": "file",
+      "size": 10470
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing_compile.rst",
+      "type": "file",
+      "size": 101
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing_documentation.rst",
+      "type": "file",
+      "size": 1504
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing_httptester.rst",
+      "type": "file",
+      "size": 781
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing_integration.rst",
+      "type": "file",
+      "size": 8783
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing_pep8.rst",
+      "type": "file",
+      "size": 73
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing_running_locally.rst",
+      "type": "file",
+      "size": 13100
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing_sanity.rst",
+      "type": "file",
+      "size": 2347
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing_units.rst",
+      "type": "file",
+      "size": 7359
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing_units_modules.rst",
+      "type": "file",
+      "size": 25550
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing_validate-modules.rst",
+      "type": "file",
+      "size": 118
+    },
+    {
+      "path": "docs/docsite/rst/galaxy/dev_guide.rst",
+      "type": "file",
+      "size": 7843
+    },
+    {
+      "path": "docs/docsite/rst/galaxy/user_guide.rst",
+      "type": "file",
+      "size": 15426
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/ansible_output",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/basic_concepts.rst",
+      "type": "file",
+      "size": 277
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/get_started_ansible.rst",
+      "type": "file",
+      "size": 1156
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/get_started_inventory.rst",
+      "type": "file",
+      "size": 4226
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/get_started_playbook.rst",
+      "type": "file",
+      "size": 2243
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/index.rst",
+      "type": "file",
+      "size": 1026
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/introduction.rst",
+      "type": "file",
+      "size": 1555
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/yaml",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/getting_started_ee/build_execution_environment.rst",
+      "type": "file",
+      "size": 2296
+    },
+    {
+      "path": "docs/docsite/rst/getting_started_ee/index.rst",
+      "type": "file",
+      "size": 1203
+    },
+    {
+      "path": "docs/docsite/rst/getting_started_ee/introduction.rst",
+      "type": "file",
+      "size": 2875
+    },
+    {
+      "path": "docs/docsite/rst/getting_started_ee/run_community_ee_image.rst",
+      "type": "file",
+      "size": 1442
+    },
+    {
+      "path": "docs/docsite/rst/getting_started_ee/run_execution_environment.rst",
+      "type": "file",
+      "size": 2765
+    },
+    {
+      "path": "docs/docsite/rst/getting_started_ee/setup_environment.rst",
+      "type": "file",
+      "size": 1246
+    },
+    {
+      "path": "docs/docsite/rst/getting_started_ee/yaml",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/images/ansible_inv_start.svg",
+      "type": "file",
+      "size": 63716
+    },
+    {
+      "path": "docs/docsite/rst/images/cow.png",
+      "type": "file",
+      "size": 5777
+    },
+    {
+      "path": "docs/docsite/rst/installation_guide/index.rst",
+      "type": "file",
+      "size": 203
+    },
+    {
+      "path": "docs/docsite/rst/installation_guide/installation_distros.rst",
+      "type": "file",
+      "size": 7532
+    },
+    {
+      "path": "docs/docsite/rst/installation_guide/intro_configuration.rst",
+      "type": "file",
+      "size": 2585
+    },
+    {
+      "path": "docs/docsite/rst/installation_guide/intro_installation.rst",
+      "type": "file",
+      "size": 13283
+    },
+    {
+      "path": "docs/docsite/rst/inventory/implicit_localhost.rst",
+      "type": "file",
+      "size": 2229
+    },
+    {
+      "path": "docs/docsite/rst/inventory_guide/connection_details.rst",
+      "type": "file",
+      "size": 4719
+    },
+    {
+      "path": "docs/docsite/rst/inventory_guide/index.rst",
+      "type": "file",
+      "size": 1294
+    },
+    {
+      "path": "docs/docsite/rst/inventory_guide/intro_dynamic_inventory.rst",
+      "type": "file",
+      "size": 8065
+    },
+    {
+      "path": "docs/docsite/rst/inventory_guide/intro_inventory.rst",
+      "type": "file",
+      "size": 35527
+    },
+    {
+      "path": "docs/docsite/rst/inventory_guide/intro_patterns.rst",
+      "type": "file",
+      "size": 9675
+    },
+    {
+      "path": "docs/docsite/rst/inventory_guide/shared_snippets",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/module_plugin_guide/index.rst",
+      "type": "file",
+      "size": 1343
+    },
+    {
+      "path": "docs/docsite/rst/module_plugin_guide/modules_intro.rst",
+      "type": "file",
+      "size": 3817
+    },
+    {
+      "path": "docs/docsite/rst/module_plugin_guide/modules_plugins_index.rst",
+      "type": "file",
+      "size": 160
+    },
+    {
+      "path": "docs/docsite/rst/module_plugin_guide/modules_support.rst",
+      "type": "file",
+      "size": 3749
+    },
+    {
+      "path": "docs/docsite/rst/module_plugin_guide/plugin_filtering_config.rst",
+      "type": "file",
+      "size": 1108
+    },
+    {
+      "path": "docs/docsite/rst/network/dev_guide",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/network/getting_started",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/network/index.rst",
+      "type": "file",
+      "size": 1013
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/index.rst",
+      "type": "file",
+      "size": 1106
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/intro_bsd.rst",
+      "type": "file",
+      "size": 11284
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/intro_windows.rst",
+      "type": "file",
+      "size": 8061
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/intro_zos.rst",
+      "type": "file",
+      "size": 13158
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/windows_app_control.rst",
+      "type": "file",
+      "size": 11378
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/windows_dsc.rst",
+      "type": "file",
+      "size": 19755
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/windows_faq.rst",
+      "type": "file",
+      "size": 132
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/windows_performance.rst",
+      "type": "file",
+      "size": 3833
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/windows_setup.rst",
+      "type": "file",
+      "size": 107
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/windows_ssh.rst",
+      "type": "file",
+      "size": 10172
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/windows_usage.rst",
+      "type": "file",
+      "size": 18157
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/windows_winrm.rst",
+      "type": "file",
+      "size": 25115
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/windows_winrm_certificate.rst",
+      "type": "file",
+      "size": 9098
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/windows_winrm_kerberos.rst",
+      "type": "file",
+      "size": 15592
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/yaml",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/complex_data_manipulation.rst",
+      "type": "file",
+      "size": 10476
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/guide_rolling_upgrade.rst",
+      "type": "file",
+      "size": 15924
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/index.rst",
+      "type": "file",
+      "size": 1508
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbook_pathing.rst",
+      "type": "file",
+      "size": 3818
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks.rst",
+      "type": "file",
+      "size": 1540
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_advanced_syntax.rst",
+      "type": "file",
+      "size": 4411
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_async.rst",
+      "type": "file",
+      "size": 7841
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_blocks.rst",
+      "type": "file",
+      "size": 8169
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_checkmode.rst",
+      "type": "file",
+      "size": 4792
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_conditionals.rst",
+      "type": "file",
+      "size": 25017
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_debugger.rst",
+      "type": "file",
+      "size": 13522
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_delegation.rst",
+      "type": "file",
+      "size": 8603
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_environment.rst",
+      "type": "file",
+      "size": 5471
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_error_handling.rst",
+      "type": "file",
+      "size": 12780
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_execution.rst",
+      "type": "file",
+      "size": 780
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_filters.rst",
+      "type": "file",
+      "size": 70272
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_handlers.rst",
+      "type": "file",
+      "size": 10967
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_intro.rst",
+      "type": "file",
+      "size": 8883
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_lookups.rst",
+      "type": "file",
+      "size": 2573
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_loops.rst",
+      "type": "file",
+      "size": 21695
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_module_defaults.rst",
+      "type": "file",
+      "size": 7505
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_privilege_escalation.rst",
+      "type": "file",
+      "size": 34786
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_prompts.rst",
+      "type": "file",
+      "size": 4007
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_python_version.rst",
+      "type": "file",
+      "size": 2485
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_reuse.rst",
+      "type": "file",
+      "size": 11503
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_reuse_roles.rst",
+      "type": "file",
+      "size": 30810
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_roles.rst",
+      "type": "file",
+      "size": 540
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_special_topics.rst",
+      "type": "file",
+      "size": 294
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_startnstep.rst",
+      "type": "file",
+      "size": 1554
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_strategies.rst",
+      "type": "file",
+      "size": 10808
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_tags.rst",
+      "type": "file",
+      "size": 19522
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_templating.rst",
+      "type": "file",
+      "size": 2573
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_templating_now.rst",
+      "type": "file",
+      "size": 609
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_templating_undef.rst",
+      "type": "file",
+      "size": 1012
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_tests.rst",
+      "type": "file",
+      "size": 17206
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_variables.rst",
+      "type": "file",
+      "size": 27983
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_variables_validation.rst",
+      "type": "file",
+      "size": 3811
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_vars_facts.rst",
+      "type": "file",
+      "size": 28528
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/playbooks_vault.rst",
+      "type": "file",
+      "size": 219
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/shared_snippets",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/plugins/action.rst",
+      "type": "file",
+      "size": 1804
+    },
+    {
+      "path": "docs/docsite/rst/plugins/become.rst",
+      "type": "file",
+      "size": 2068
+    },
+    {
+      "path": "docs/docsite/rst/plugins/cache.rst",
+      "type": "file",
+      "size": 4639
+    },
+    {
+      "path": "docs/docsite/rst/plugins/callback.rst",
+      "type": "file",
+      "size": 4297
+    },
+    {
+      "path": "docs/docsite/rst/plugins/cliconf.rst",
+      "type": "file",
+      "size": 1832
+    },
+    {
+      "path": "docs/docsite/rst/plugins/connection.rst",
+      "type": "file",
+      "size": 3411
+    },
+    {
+      "path": "docs/docsite/rst/plugins/docs_fragment.rst",
+      "type": "file",
+      "size": 1002
+    },
+    {
+      "path": "docs/docsite/rst/plugins/filter.rst",
+      "type": "file",
+      "size": 3021
+    },
+    {
+      "path": "docs/docsite/rst/plugins/httpapi.rst",
+      "type": "file",
+      "size": 2574
+    },
+    {
+      "path": "docs/docsite/rst/plugins/index.html",
+      "type": "file",
+      "size": 217
+    },
+    {
+      "path": "docs/docsite/rst/plugins/inventory.rst",
+      "type": "file",
+      "size": 8917
+    },
+    {
+      "path": "docs/docsite/rst/plugins/lookup.rst",
+      "type": "file",
+      "size": 6733
+    },
+    {
+      "path": "docs/docsite/rst/plugins/module.rst",
+      "type": "file",
+      "size": 1351
+    },
+    {
+      "path": "docs/docsite/rst/plugins/module_util.rst",
+      "type": "file",
+      "size": 946
+    },
+    {
+      "path": "docs/docsite/rst/plugins/netconf.rst",
+      "type": "file",
+      "size": 2235
+    },
+    {
+      "path": "docs/docsite/rst/plugins/plugins.rst",
+      "type": "file",
+      "size": 1072
+    },
+    {
+      "path": "docs/docsite/rst/plugins/shell.rst",
+      "type": "file",
+      "size": 1953
+    },
+    {
+      "path": "docs/docsite/rst/plugins/strategy.rst",
+      "type": "file",
+      "size": 2290
+    },
+    {
+      "path": "docs/docsite/rst/plugins/terminal.rst",
+      "type": "file",
+      "size": 1556
+    },
+    {
+      "path": "docs/docsite/rst/plugins/test.rst",
+      "type": "file",
+      "size": 3805
+    },
+    {
+      "path": "docs/docsite/rst/plugins/vars.rst",
+      "type": "file",
+      "size": 3533
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/core_porting_guides.rst",
+      "type": "file",
+      "size": 853
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_10.rst",
+      "type": "file",
+      "size": 69949
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_11.rst",
+      "type": "file",
+      "size": 90252
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_12.rst",
+      "type": "file",
+      "size": 135801
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_13.rst",
+      "type": "file",
+      "size": 37306
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_2.0.rst",
+      "type": "file",
+      "size": 16613
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_2.10.rst",
+      "type": "file",
+      "size": 69061
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_2.3.rst",
+      "type": "file",
+      "size": 6551
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_2.4.rst",
+      "type": "file",
+      "size": 11974
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_2.5.rst",
+      "type": "file",
+      "size": 19162
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_2.6.rst",
+      "type": "file",
+      "size": 6320
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_2.7.rst",
+      "type": "file",
+      "size": 14501
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_2.8.rst",
+      "type": "file",
+      "size": 32713
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_2.9.rst",
+      "type": "file",
+      "size": 56974
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_3.rst",
+      "type": "file",
+      "size": 64939
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_4.rst",
+      "type": "file",
+      "size": 61944
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_5.rst",
+      "type": "file",
+      "size": 75487
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_6.rst",
+      "type": "file",
+      "size": 70755
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_7.rst",
+      "type": "file",
+      "size": 140730
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_8.rst",
+      "type": "file",
+      "size": 75193
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_9.rst",
+      "type": "file",
+      "size": 80199
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_base_2.10.rst",
+      "type": "file",
+      "size": 6471
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_core_2.11.rst",
+      "type": "file",
+      "size": 9155
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_core_2.12.rst",
+      "type": "file",
+      "size": 5335
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_core_2.13.rst",
+      "type": "file",
+      "size": 2788
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_core_2.14.rst",
+      "type": "file",
+      "size": 4274
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_core_2.15.rst",
+      "type": "file",
+      "size": 5361
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_core_2.16.rst",
+      "type": "file",
+      "size": 2379
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_core_2.17.rst",
+      "type": "file",
+      "size": 2912
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_core_2.18.rst",
+      "type": "file",
+      "size": 2743
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_core_2.19.rst",
+      "type": "file",
+      "size": 34131
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_core_2.20.rst",
+      "type": "file",
+      "size": 6788
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guide_core_2.21.rst",
+      "type": "file",
+      "size": 1562
+    },
+    {
+      "path": "docs/docsite/rst/porting_guides/porting_guides.rst",
+      "type": "file",
+      "size": 706
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices/.rstcheck.cfg",
+      "type": "file",
+      "size": 50
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices/YAMLSyntax.rst",
+      "type": "file",
+      "size": 7981
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices/automationhub.rst",
+      "type": "file",
+      "size": 1026
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices/common_return_values.rst",
+      "type": "file",
+      "size": 7844
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices/faq.rst",
+      "type": "file",
+      "size": 41530
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices/general_precedence.rst",
+      "type": "file",
+      "size": 10006
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices/glossary.rst",
+      "type": "file",
+      "size": 31925
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices/interpreter_discovery.rst",
+      "type": "file",
+      "size": 1072
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices/logging.rst",
+      "type": "file",
+      "size": 1482
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices/module_utils.rst",
+      "type": "file",
+      "size": 1771
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices/python_3_support.rst",
+      "type": "file",
+      "size": 4101
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices/release_and_maintenance.rst",
+      "type": "file",
+      "size": 26984
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices/special_variables.rst",
+      "type": "file",
+      "size": 8518
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices/test_strategies.rst",
+      "type": "file",
+      "size": 12487
+    },
+    {
+      "path": "docs/docsite/rst/reference_appendices/tower.rst",
+      "type": "file",
+      "size": 1532
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/COLLECTIONS_10.rst",
+      "type": "file",
+      "size": 6949
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/COLLECTIONS_11.rst",
+      "type": "file",
+      "size": 6748
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/COLLECTIONS_12.rst",
+      "type": "file",
+      "size": 6648
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/COLLECTIONS_13.rst",
+      "type": "file",
+      "size": 5796
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/COLLECTIONS_14.rst",
+      "type": "file",
+      "size": 5796
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/COLLECTIONS_2_10.rst",
+      "type": "file",
+      "size": 3438
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/COLLECTIONS_3_0.rst",
+      "type": "file",
+      "size": 3870
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/COLLECTIONS_4.rst",
+      "type": "file",
+      "size": 4749
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/COLLECTIONS_5.rst",
+      "type": "file",
+      "size": 5074
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/COLLECTIONS_6.rst",
+      "type": "file",
+      "size": 4947
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/COLLECTIONS_7.rst",
+      "type": "file",
+      "size": 4625
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/COLLECTIONS_8.rst",
+      "type": "file",
+      "size": 4993
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/COLLECTIONS_9.rst",
+      "type": "file",
+      "size": 6109
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_10.rst",
+      "type": "file",
+      "size": 1539
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_11.rst",
+      "type": "file",
+      "size": 1447
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_12.rst",
+      "type": "file",
+      "size": 1464
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_13.rst",
+      "type": "file",
+      "size": 1584
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_14.rst",
+      "type": "file",
+      "size": 1564
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_15.rst",
+      "type": "file",
+      "size": 1172
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_16.rst",
+      "type": "file",
+      "size": 1719
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_17.rst",
+      "type": "file",
+      "size": 1438
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_18.rst",
+      "type": "file",
+      "size": 1888
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_19.rst",
+      "type": "file",
+      "size": 2305
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_20.rst",
+      "type": "file",
+      "size": 1432
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_21.rst",
+      "type": "file",
+      "size": 1151
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_5.rst",
+      "type": "file",
+      "size": 5232
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_6.rst",
+      "type": "file",
+      "size": 1937
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_7.rst",
+      "type": "file",
+      "size": 4626
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_8.rst",
+      "type": "file",
+      "size": 791
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ROADMAP_2_9.rst",
+      "type": "file",
+      "size": 823
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ansible_core_roadmap_index.rst",
+      "type": "file",
+      "size": 1371
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/ansible_roadmap_index.rst",
+      "type": "file",
+      "size": 1484
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/index.rst",
+      "type": "file",
+      "size": 157
+    },
+    {
+      "path": "docs/docsite/rst/roadmap/old_roadmap_index.rst",
+      "type": "file",
+      "size": 271
+    },
+    {
+      "path": "docs/docsite/rst/scenario_guides/cloud_guides.rst",
+      "type": "file",
+      "size": 559
+    },
+    {
+      "path": "docs/docsite/rst/scenario_guides/guide_alicloud.rst",
+      "type": "file",
+      "size": 203
+    },
+    {
+      "path": "docs/docsite/rst/scenario_guides/guide_aws.rst",
+      "type": "file",
+      "size": 201
+    },
+    {
+      "path": "docs/docsite/rst/scenario_guides/guide_docker.rst",
+      "type": "file",
+      "size": 248
+    },
+    {
+      "path": "docs/docsite/rst/scenario_guides/guide_online.rst",
+      "type": "file",
+      "size": 157
+    },
+    {
+      "path": "docs/docsite/rst/scenario_guides/guide_packet.rst",
+      "type": "file",
+      "size": 193
+    },
+    {
+      "path": "docs/docsite/rst/scenario_guides/guide_scaleway.rst",
+      "type": "file",
+      "size": 174
+    },
+    {
+      "path": "docs/docsite/rst/scenario_guides/guides.rst",
+      "type": "file",
+      "size": 593
+    },
+    {
+      "path": "docs/docsite/rst/shared_snippets/basic_concepts.txt",
+      "type": "file",
+      "size": 3696
+    },
+    {
+      "path": "docs/docsite/rst/shared_snippets/download_tarball_collections.txt",
+      "type": "file",
+      "size": 212
+    },
+    {
+      "path": "docs/docsite/rst/shared_snippets/galaxy_server_list.txt",
+      "type": "file",
+      "size": 4939
+    },
+    {
+      "path": "docs/docsite/rst/shared_snippets/installing_collections_file.rst",
+      "type": "file",
+      "size": 836
+    },
+    {
+      "path": "docs/docsite/rst/shared_snippets/installing_collections_git_repo.txt",
+      "type": "file",
+      "size": 5732
+    },
+    {
+      "path": "docs/docsite/rst/shared_snippets/installing_multiple_collections.txt",
+      "type": "file",
+      "size": 3239
+    },
+    {
+      "path": "docs/docsite/rst/shared_snippets/installing_older_collection.txt",
+      "type": "file",
+      "size": 1441
+    },
+    {
+      "path": "docs/docsite/rst/tips_tricks/ansible_tips_tricks.rst",
+      "type": "file",
+      "size": 9650
+    },
+    {
+      "path": "docs/docsite/rst/tips_tricks/index.rst",
+      "type": "file",
+      "size": 1060
+    },
+    {
+      "path": "docs/docsite/rst/tips_tricks/sample_setup.rst",
+      "type": "file",
+      "size": 10970
+    },
+    {
+      "path": "docs/docsite/rst/tips_tricks/shared_snippets",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/tips_tricks/yaml",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/basic_concepts.rst",
+      "type": "file",
+      "size": 138
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/become.rst",
+      "type": "file",
+      "size": 201
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/cheatsheet.rst",
+      "type": "file",
+      "size": 121
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/collections_using.rst",
+      "type": "file",
+      "size": 114
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/command_line_tools.rst",
+      "type": "file",
+      "size": 125
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/complex_data_manipulation.rst",
+      "type": "file",
+      "size": 103
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/connection_details.rst",
+      "type": "file",
+      "size": 146
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/index.rst",
+      "type": "file",
+      "size": 956
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/intro.rst",
+      "type": "file",
+      "size": 627
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/intro_adhoc.rst",
+      "type": "file",
+      "size": 149
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/intro_bsd.rst",
+      "type": "file",
+      "size": 90
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/intro_dynamic_inventory.rst",
+      "type": "file",
+      "size": 158
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/intro_inventory.rst",
+      "type": "file",
+      "size": 141
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/intro_patterns.rst",
+      "type": "file",
+      "size": 130
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/intro_windows.rst",
+      "type": "file",
+      "size": 115
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/modules.rst",
+      "type": "file",
+      "size": 105
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/modules_intro.rst",
+      "type": "file",
+      "size": 111
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/modules_support.rst",
+      "type": "file",
+      "size": 150
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks.rst",
+      "type": "file",
+      "size": 110
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_advanced_syntax.rst",
+      "type": "file",
+      "size": 115
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_async.rst",
+      "type": "file",
+      "size": 123
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_best_practices.rst",
+      "type": "file",
+      "size": 105
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_blocks.rst",
+      "type": "file",
+      "size": 79
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_checkmode.rst",
+      "type": "file",
+      "size": 185
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_conditionals.rst",
+      "type": "file",
+      "size": 103
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_debugger.rst",
+      "type": "file",
+      "size": 107
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_delegation.rst",
+      "type": "file",
+      "size": 178
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_environment.rst",
+      "type": "file",
+      "size": 125
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_error_handling.rst",
+      "type": "file",
+      "size": 150
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_filters.rst",
+      "type": "file",
+      "size": 158
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_filters_ipaddr.rst",
+      "type": "file",
+      "size": 130
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_handlers.rst",
+      "type": "file",
+      "size": 128
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_intro.rst",
+      "type": "file",
+      "size": 114
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_lookups.rst",
+      "type": "file",
+      "size": 83
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_loops.rst",
+      "type": "file",
+      "size": 75
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_module_defaults.rst",
+      "type": "file",
+      "size": 89
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_prompts.rst",
+      "type": "file",
+      "size": 140
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_reuse.rst",
+      "type": "file",
+      "size": 137
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_reuse_includes.rst",
+      "type": "file",
+      "size": 126
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_reuse_roles.rst",
+      "type": "file",
+      "size": 82
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_startnstep.rst",
+      "type": "file",
+      "size": 186
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_strategies.rst",
+      "type": "file",
+      "size": 166
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_tags.rst",
+      "type": "file",
+      "size": 61
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_tests.rst",
+      "type": "file",
+      "size": 75
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_variables.rst",
+      "type": "file",
+      "size": 109
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/playbooks_vars_facts.rst",
+      "type": "file",
+      "size": 203
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/plugin_filtering_config.rst",
+      "type": "file",
+      "size": 100
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/sample_setup.rst",
+      "type": "file",
+      "size": 117
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/vault.rst",
+      "type": "file",
+      "size": 173
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/windows.rst",
+      "type": "file",
+      "size": 123
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/windows_dsc.rst",
+      "type": "file",
+      "size": 109
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/windows_faq.rst",
+      "type": "file",
+      "size": 132
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/windows_performance.rst",
+      "type": "file",
+      "size": 101
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/windows_setup.rst",
+      "type": "file",
+      "size": 114
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/windows_usage.rst",
+      "type": "file",
+      "size": 107
+    },
+    {
+      "path": "docs/docsite/rst/user_guide/windows_winrm.rst",
+      "type": "file",
+      "size": 107
+    },
+    {
+      "path": "docs/docsite/rst/vault_guide/index.rst",
+      "type": "file",
+      "size": 1103
+    },
+    {
+      "path": "docs/docsite/rst/vault_guide/vault.rst",
+      "type": "file",
+      "size": 1326
+    },
+    {
+      "path": "docs/docsite/rst/vault_guide/vault_encrypting_content.rst",
+      "type": "file",
+      "size": 16051
+    },
+    {
+      "path": "docs/docsite/rst/vault_guide/vault_managing_passwords.rst",
+      "type": "file",
+      "size": 9145
+    },
+    {
+      "path": "docs/docsite/rst/vault_guide/vault_using_encrypted_content.rst",
+      "type": "file",
+      "size": 9467
+    },
+    {
+      "path": "hacking/build_library/build_ansible/command_plugins/collection_meta.py",
+      "type": "file",
+      "size": 2932
+    },
+    {
+      "path": "hacking/build_library/build_ansible/command_plugins/docs_build.py",
+      "type": "file",
+      "size": 10905
+    },
+    {
+      "path": "hacking/build_library/build_ansible/command_plugins/dump_config.py",
+      "type": "file",
+      "size": 3242
+    },
+    {
+      "path": "hacking/build_library/build_ansible/command_plugins/dump_keywords.py",
+      "type": "file",
+      "size": 5097
+    },
+    {
+      "path": "hacking/build_library/build_ansible/command_plugins/file_deprecated_issues.py",
+      "type": "file",
+      "size": 5460
+    },
+    {
+      "path": "hacking/build_library/build_ansible/command_plugins/porting_guide.py",
+      "type": "file",
+      "size": 3304
+    },
+    {
+      "path": "hacking/build_library/build_ansible/command_plugins/update_intersphinx.py",
+      "type": "file",
+      "size": 4179
+    },
+    {
+      "path": "hacking/pr_labeler/pr_labeler/data/docs_team_info.md",
+      "type": "file",
+      "size": 579
+    },
+    {
+      "path": "hacking/pr_labeler/pr_labeler/data/no_body_nag.md",
+      "type": "file",
+      "size": 519
+    },
+    {
+      "path": "hacking/pr_labeler/pr_labeler/data/porting_guide_changes.md",
+      "type": "file",
+      "size": 255
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_contributors/collection_integration_about.rst",
+      "type": "file",
+      "size": 7629
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_contributors/collection_integration_add.rst",
+      "type": "file",
+      "size": 9517
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_contributors/collection_integration_running.rst",
+      "type": "file",
+      "size": 1558
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_contributors/collection_integration_tests.rst",
+      "type": "file",
+      "size": 1001
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_contributors/collection_integration_updating.rst",
+      "type": "file",
+      "size": 7803
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_contributors/collection_package_removal.rst",
+      "type": "file",
+      "size": 13187
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_contributors/collection_release_with_branches.rst",
+      "type": "file",
+      "size": 15387
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_contributors/collection_release_without_branches.rst",
+      "type": "file",
+      "size": 4631
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_contributors/collection_releasing.rst",
+      "type": "file",
+      "size": 6008
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_contributors/collection_requirements.rst",
+      "type": "file",
+      "size": 38481
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_contributors/collection_reviewing.rst",
+      "type": "file",
+      "size": 5019
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_contributors/collection_test_pr_locally.rst",
+      "type": "file",
+      "size": 1606
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_contributors/collection_unit_tests.rst",
+      "type": "file",
+      "size": 6039
+    },
+    {
+      "path": "docs/docsite/rst/community/collection_contributors/test_index.rst",
+      "type": "file",
+      "size": 371
+    },
+    {
+      "path": "docs/docsite/rst/community/steering/community_steering_committee.rst",
+      "type": "file",
+      "size": 13371
+    },
+    {
+      "path": "docs/docsite/rst/community/steering/community_topics_workflow.rst",
+      "type": "file",
+      "size": 5372
+    },
+    {
+      "path": "docs/docsite/rst/community/steering/steering_committee_membership.rst",
+      "type": "file",
+      "size": 9406
+    },
+    {
+      "path": "docs/docsite/rst/community/steering/steering_committee_past_members.rst",
+      "type": "file",
+      "size": 1842
+    },
+    {
+      "path": "docs/docsite/rst/community/steering/steering_index.rst",
+      "type": "file",
+      "size": 842
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/shared_snippets/licensing.txt",
+      "type": "file",
+      "size": 1162
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide/basic_rules.rst",
+      "type": "file",
+      "size": 3809
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide/grammar_punctuation.rst",
+      "type": "file",
+      "size": 8086
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide/images",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide/index.rst",
+      "type": "file",
+      "size": 16899
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide/preferred_terms.rst",
+      "type": "file",
+      "size": 2592
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide/resources.rst",
+      "type": "file",
+      "size": 560
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide/search_hints.rst",
+      "type": "file",
+      "size": 4130
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide/spelling_word_choice.rst",
+      "type": "file",
+      "size": 11759
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide/trademarks.rst",
+      "type": "file",
+      "size": 5636
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide/voice_style.rst",
+      "type": "file",
+      "size": 1643
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide/why_use.rst",
+      "type": "file",
+      "size": 1011
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/ansible_output/first_playbook_output.txt",
+      "type": "file",
+      "size": 1037
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/ansible_output/ping_inventory_output.txt",
+      "type": "file",
+      "size": 476
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/ansible_output/ping_output.txt",
+      "type": "file",
+      "size": 470
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/yaml/first_playbook.yaml",
+      "type": "file",
+      "size": 178
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/yaml/inventory_example_vms.yaml",
+      "type": "file",
+      "size": 159
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/yaml/inventory_group_structure.yaml",
+      "type": "file",
+      "size": 431
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/yaml/inventory_variables_group.yaml",
+      "type": "file",
+      "size": 201
+    },
+    {
+      "path": "docs/docsite/rst/getting_started/yaml/inventory_variables_host.yaml",
+      "type": "file",
+      "size": 160
+    },
+    {
+      "path": "docs/docsite/rst/getting_started_ee/yaml/execution-environment.yml",
+      "type": "file",
+      "size": 344
+    },
+    {
+      "path": "docs/docsite/rst/getting_started_ee/yaml/hosts.yml",
+      "type": "file",
+      "size": 73
+    },
+    {
+      "path": "docs/docsite/rst/getting_started_ee/yaml/test_localhost.yml",
+      "type": "file",
+      "size": 178
+    },
+    {
+      "path": "docs/docsite/rst/getting_started_ee/yaml/test_remote.yml",
+      "type": "file",
+      "size": 166
+    },
+    {
+      "path": "docs/docsite/rst/inventory_guide/shared_snippets/SSH_password_prompt.txt",
+      "type": "file",
+      "size": 268
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/network/dev_guide/developing_plugins_network.rst",
+      "type": "file",
+      "size": 12559
+    },
+    {
+      "path": "docs/docsite/rst/network/dev_guide/developing_resource_modules_network.rst",
+      "type": "file",
+      "size": 32435
+    },
+    {
+      "path": "docs/docsite/rst/network/dev_guide/documenting_modules_network.rst",
+      "type": "file",
+      "size": 2792
+    },
+    {
+      "path": "docs/docsite/rst/network/dev_guide/index.rst",
+      "type": "file",
+      "size": 1546
+    },
+    {
+      "path": "docs/docsite/rst/network/getting_started/basic_concepts.rst",
+      "type": "file",
+      "size": 369
+    },
+    {
+      "path": "docs/docsite/rst/network/getting_started/first_inventory.rst",
+      "type": "file",
+      "size": 14696
+    },
+    {
+      "path": "docs/docsite/rst/network/getting_started/first_playbook.rst",
+      "type": "file",
+      "size": 9484
+    },
+    {
+      "path": "docs/docsite/rst/network/getting_started/index.rst",
+      "type": "file",
+      "size": 1895
+    },
+    {
+      "path": "docs/docsite/rst/network/getting_started/intermediate_concepts.rst",
+      "type": "file",
+      "size": 1732
+    },
+    {
+      "path": "docs/docsite/rst/network/getting_started/network_connection_options.rst",
+      "type": "file",
+      "size": 1975
+    },
+    {
+      "path": "docs/docsite/rst/network/getting_started/network_differences.rst",
+      "type": "file",
+      "size": 5725
+    },
+    {
+      "path": "docs/docsite/rst/network/getting_started/network_resources.rst",
+      "type": "file",
+      "size": 1874
+    },
+    {
+      "path": "docs/docsite/rst/network/getting_started/network_roles.rst",
+      "type": "file",
+      "size": 11594
+    },
+    {
+      "path": "docs/docsite/rst/network/getting_started/sample_files",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/cli_parsing.rst",
+      "type": "file",
+      "size": 27710
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/faq.rst",
+      "type": "file",
+      "size": 5547
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/index.rst",
+      "type": "file",
+      "size": 1045
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/network_best_practices_2.5.rst",
+      "type": "file",
+      "size": 19242
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/network_debug_troubleshooting.rst",
+      "type": "file",
+      "size": 29604
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/network_resource_modules.rst",
+      "type": "file",
+      "size": 10315
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/network_working_with_command_output.rst",
+      "type": "file",
+      "size": 5082
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_ce.rst",
+      "type": "file",
+      "size": 7363
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_cnos.rst",
+      "type": "file",
+      "size": 2920
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_dellos10.rst",
+      "type": "file",
+      "size": 2907
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_dellos6.rst",
+      "type": "file",
+      "size": 2874
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_dellos9.rst",
+      "type": "file",
+      "size": 2875
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_enos.rst",
+      "type": "file",
+      "size": 2999
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_eos.rst",
+      "type": "file",
+      "size": 5350
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_eric_eccli.rst",
+      "type": "file",
+      "size": 2681
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_exos.rst",
+      "type": "file",
+      "size": 4081
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_frr.rst",
+      "type": "file",
+      "size": 2485
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_icx.rst",
+      "type": "file",
+      "size": 2680
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_index.rst",
+      "type": "file",
+      "size": 7141
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_ios.rst",
+      "type": "file",
+      "size": 2755
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_iosxr.rst",
+      "type": "file",
+      "size": 4882
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_ironware.rst",
+      "type": "file",
+      "size": 2885
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_junos.rst",
+      "type": "file",
+      "size": 5199
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_meraki.rst",
+      "type": "file",
+      "size": 1129
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_netconf_enabled.rst",
+      "type": "file",
+      "size": 4321
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_netvisor.rst",
+      "type": "file",
+      "size": 2757
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_nos.rst",
+      "type": "file",
+      "size": 2659
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_nxos.rst",
+      "type": "file",
+      "size": 6493
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_routeros.rst",
+      "type": "file",
+      "size": 3866
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_slxos.rst",
+      "type": "file",
+      "size": 2691
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_voss.rst",
+      "type": "file",
+      "size": 2728
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_vyos.rst",
+      "type": "file",
+      "size": 2559
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/platform_weos4.rst",
+      "type": "file",
+      "size": 3007
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/shared_snippets",
+      "type": "dir",
+      "size": null
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/validate.rst",
+      "type": "file",
+      "size": 7332
+    },
+    {
+      "path": "docs/docsite/rst/os_guide/yaml/winrm_cert_auth_setup.yaml",
+      "type": "file",
+      "size": 3578
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/shared_snippets/role_directory.txt",
+      "type": "file",
+      "size": 1298
+    },
+    {
+      "path": "docs/docsite/rst/playbook_guide/shared_snippets/with2loop.txt",
+      "type": "file",
+      "size": 5254
+    },
+    {
+      "path": "docs/docsite/rst/tips_tricks/shared_snippets/role_directory.txt",
+      "type": "file",
+      "size": 1323
+    },
+    {
+      "path": "docs/docsite/rst/tips_tricks/yaml/tip_group_by.yaml",
+      "type": "file",
+      "size": 227
+    },
+    {
+      "path": "docs/docsite/rst/tips_tricks/yaml/tip_group_hosts.yaml",
+      "type": "file",
+      "size": 163
+    },
+    {
+      "path": "docs/docsite/rst/tips_tricks/yaml/tip_include_vars.yaml",
+      "type": "file",
+      "size": 308
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide/images/commas-matter-2.jpg",
+      "type": "file",
+      "size": 53403
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide/images/commas-matter.jpg",
+      "type": "file",
+      "size": 85373
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide/images/hyphen-funny.jpg",
+      "type": "file",
+      "size": 49628
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/style_guide/images/thenvsthan.jpg",
+      "type": "file",
+      "size": 36500
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/action-plugin-docs.rst",
+      "type": "file",
+      "size": 131
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/ansible-doc.rst",
+      "type": "file",
+      "size": 120
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/ansible-requirements.rst",
+      "type": "file",
+      "size": 193
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/ansible-test-future-boilerplate.rst",
+      "type": "file",
+      "size": 229
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/ansible-var-precedence-check.rst",
+      "type": "file",
+      "size": 165
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/azure-requirements.rst",
+      "type": "file",
+      "size": 310
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/bin-symlinks.rst",
+      "type": "file",
+      "size": 625
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/boilerplate.rst",
+      "type": "file",
+      "size": 144
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/botmeta.rst",
+      "type": "file",
+      "size": 76
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/changelog.rst",
+      "type": "file",
+      "size": 446
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/compile.rst",
+      "type": "file",
+      "size": 1013
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/configure-remoting-ps1.rst",
+      "type": "file",
+      "size": 265
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/deprecated-config.rst",
+      "type": "file",
+      "size": 97
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/docs-build.rst",
+      "type": "file",
+      "size": 118
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/empty-init.rst",
+      "type": "file",
+      "size": 387
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/future-import-boilerplate.rst",
+      "type": "file",
+      "size": 2129
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/ignores.rst",
+      "type": "file",
+      "size": 4915
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/import.rst",
+      "type": "file",
+      "size": 7306
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/index.rst",
+      "type": "file",
+      "size": 1195
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/integration-aliases.rst",
+      "type": "file",
+      "size": 6750
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/line-endings.rst",
+      "type": "file",
+      "size": 91
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/metaclass-boilerplate.rst",
+      "type": "file",
+      "size": 704
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/mypy.rst",
+      "type": "file",
+      "size": 437
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/no-assert.rst",
+      "type": "file",
+      "size": 735
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/no-basestring.rst",
+      "type": "file",
+      "size": 538
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/no-dict-iteritems.rst",
+      "type": "file",
+      "size": 339
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/no-dict-iterkeys.rst",
+      "type": "file",
+      "size": 180
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/no-dict-itervalues.rst",
+      "type": "file",
+      "size": 335
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/no-get-exception.rst",
+      "type": "file",
+      "size": 742
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/no-illegal-filenames.rst",
+      "type": "file",
+      "size": 1136
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/no-main-display.rst",
+      "type": "file",
+      "size": 382
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/no-smart-quotes.rst",
+      "type": "file",
+      "size": 127
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/no-tests-as-filters.rst",
+      "type": "file",
+      "size": 747
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/no-underscore-variable.rst",
+      "type": "file",
+      "size": 802
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/no-unicode-literals.rst",
+      "type": "file",
+      "size": 870
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/no-unwanted-files.rst",
+      "type": "file",
+      "size": 347
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/no-wildcard-import.rst",
+      "type": "file",
+      "size": 840
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/obsolete-files.rst",
+      "type": "file",
+      "size": 799
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/package-data.rst",
+      "type": "file",
+      "size": 96
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/pep8.rst",
+      "type": "file",
+      "size": 496
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/pslint.rst",
+      "type": "file",
+      "size": 149
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/pylint-ansible-test.rst",
+      "type": "file",
+      "size": 162
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/pylint.rst",
+      "type": "file",
+      "size": 69
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/pymarkdown.rst",
+      "type": "file",
+      "size": 78
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/release-names.rst",
+      "type": "file",
+      "size": 121
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/replace-urlopen.rst",
+      "type": "file",
+      "size": 96
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/required-and-default-attributes.rst",
+      "type": "file",
+      "size": 135
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/rstcheck.rst",
+      "type": "file",
+      "size": 92
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/runtime-metadata.rst",
+      "type": "file",
+      "size": 166
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/sanity-docs.rst",
+      "type": "file",
+      "size": 100
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/shebang.rst",
+      "type": "file",
+      "size": 398
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/shellcheck.rst",
+      "type": "file",
+      "size": 132
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/symlinks.rst",
+      "type": "file",
+      "size": 219
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/test-constraints.rst",
+      "type": "file",
+      "size": 144
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/update-bundled.rst",
+      "type": "file",
+      "size": 1367
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/use-argspec-type-path.rst",
+      "type": "file",
+      "size": 513
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/use-compat-six.rst",
+      "type": "file",
+      "size": 85
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/validate-modules.rst",
+      "type": "file",
+      "size": 20216
+    },
+    {
+      "path": "docs/docsite/rst/dev_guide/testing/sanity/yamllint.rst",
+      "type": "file",
+      "size": 70
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/404.po",
+      "type": "file",
+      "size": 1415
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/api.po",
+      "type": "file",
+      "size": 3400
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/cli.po",
+      "type": "file",
+      "size": 63336
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/collections.po",
+      "type": "file",
+      "size": 847
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/community.po",
+      "type": "file",
+      "size": 232115
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/dev_guide.po",
+      "type": "file",
+      "size": 1239468
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/galaxy.po",
+      "type": "file",
+      "size": 83185
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/index.po",
+      "type": "file",
+      "size": 9550
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/installation_guide.po",
+      "type": "file",
+      "size": 56431
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/inventory.po",
+      "type": "file",
+      "size": 5416
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/network.po",
+      "type": "file",
+      "size": 438669
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/plugins.po",
+      "type": "file",
+      "size": 86296
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/porting_guides.po",
+      "type": "file",
+      "size": 698766
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/reference_appendices.po",
+      "type": "file",
+      "size": 657563
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/roadmap.po",
+      "type": "file",
+      "size": 82992
+    },
+    {
+      "path": "docs/docsite/rst/locales/ja/LC_MESSAGES/scenario_guides.po",
+      "type": "file",
+      "size": 646269
+    },
+    {
+      "path": "docs/docsite/rst/network/getting_started/sample_files/first_playbook.yml",
+      "type": "file",
+      "size": 379
+    },
+    {
+      "path": "docs/docsite/rst/network/getting_started/sample_files/first_playbook_ext.yml",
+      "type": "file",
+      "size": 790
+    },
+    {
+      "path": "docs/docsite/rst/network/user_guide/shared_snippets/SSH_warning.txt",
+      "type": "file",
+      "size": 300
+    }
+  ],
+  "languages": {
+    "Python": {
+      "bytes": 176365,
+      "percentage": 94.81
+    },
+    "Shell": {
+      "bytes": 6469,
+      "percentage": 3.48
+    },
+    "Jinja": {
+      "bytes": 3195,
+      "percentage": 1.72
+    }
+  },
+  "signatures": [],
+  "test_examples": [],
+  "issues": [
+    {
+      "number": 3379,
+      "title": "become sudo no longer working with cached credentials for localhost in 2.19.0 — please document this in the porting guide",
+      "state": "open",
+      "labels": [
+        "bug",
+        "needs_triage"
+      ],
+      "milestone": null,
+      "created_at": "2025-12-05T01:03:07+00:00",
+      "updated_at": "2025-12-18T06:25:52+00:00",
+      "closed_at": null,
+      "url": "https://github.com/ansible/ansible-documentation/issues/3379",
+      "body": "### Summary\n\nSee https://github.com/ansible/ansible/issues/85536. Since this was an intentional change that is breaking users, it should be listed in the changelog/porting guide.\n\n```\ndocs/docsite/rst/porting_guides/porting_guide_12.rst:- Task Execution / Forks - Forks no longer inherit stdio from the parent ``ansible-playbook`` process. ``stdout``, ``stderr``, and ``stdin`` within a worker are detached from the terminal, and non-functional. All needs to access stdio from a fork for controller s"
+    },
+    {
+      "number": 3228,
+      "title": "Prune stub files in docs/docsite",
+      "state": "open",
+      "labels": [
+        "good first issue",
+        "needs_triage",
+        "easy fix"
+      ],
+      "milestone": null,
+      "created_at": "2025-11-07T11:49:12+00:00",
+      "updated_at": "2025-12-12T19:45:23+00:00",
+      "closed_at": null,
+      "url": "https://github.com/ansible/ansible-documentation/issues/3228",
+      "body": "A few years ago @samccann and I restructured the monolithic \"User Guide\" into more logically organized sections like the playbook guide. Rather than deleting RST files from the User Guide, we created stub files using the `:orphan:` tag. This allowed us to avoid adding to the httpd redirects configuration.\n\nThese stub files still exist but are no longer needed. In fact the need for most stub pages has been completely replaced by [ansible_redirects.toml](https://github.com/ansible/ansible-document"
+    },
+    {
+      "number": 3261,
+      "title": "Remove the locales folder",
+      "state": "open",
+      "labels": [
+        "needs_triage"
+      ],
+      "milestone": null,
+      "created_at": "2025-11-17T18:02:08+00:00",
+      "updated_at": "2025-12-12T18:56:41+00:00",
+      "closed_at": null,
+      "url": "https://github.com/ansible/ansible-documentation/issues/3261",
+      "body": "I believe https://github.com/ansible/ansible-documentation/tree/devel/docs/docsite/rst/locales/ is no longer in use."
+    },
+    {
+      "number": 3371,
+      "title": "ansible-galaxy: travis integrations section under dev_guide is outdated",
+      "state": "open",
+      "labels": [
+        "needs_triage"
+      ],
+      "milestone": null,
+      "created_at": "2025-12-11T18:30:25+00:00",
+      "updated_at": "2025-12-11T18:30:41+00:00",
+      "closed_at": null,
+      "url": "https://github.com/ansible/ansible-documentation/issues/3371",
+      "body": "The section https://docs.ansible.com/projects/ansible/latest/galaxy/dev_guide.html#travis-integrations in ansible-galaxy dev guide mentions about `[v1](https://galaxy.ansible.com/api/v1/notifications/)` API of galaxy. This is API is deprecated.\n\nWe need to go through the section and check if it is updated. "
+    },
+    {
+      "number": 3341,
+      "title": "Complete zizmor backports",
+      "state": "open",
+      "labels": [
+        "needs_triage"
+      ],
+      "milestone": null,
+      "created_at": "2025-12-05T02:53:16+00:00",
+      "updated_at": "2025-12-05T02:53:35+00:00",
+      "closed_at": null,
+      "url": "https://github.com/ansible/ansible-documentation/issues/3341",
+      "body": ">  I don't think we need to integrate the zizmor session into the noxfile or add any of the comments related to zizmor. Totally open to suggestions there.\r\n\r\nI would definitely integrate zizmor across branches. I see no downside to enabling it (other than initial setup work) and only upsides. The workflows have the potential to diverge so we should make sure they all pass the linter on each branch.\r\n\r\n_Originally posted by @gotmax23 in https://github.com/ansible/ansible-documentation/issues/3331"
+    },
+    {
+      "number": 2681,
+      "title": "Harden GHA with Zizmor",
+      "state": "closed",
+      "labels": [
+        "tooling",
+        "github_actions"
+      ],
+      "milestone": null,
+      "created_at": "2025-06-03T19:32:55+00:00",
+      "updated_at": "2025-12-03T17:02:44+00:00",
+      "closed_at": "2025-12-03T17:02:44+00:00",
+      "url": "https://github.com/ansible/ansible-documentation/issues/2681",
+      "body": "Hey @oraNod, here's an integration you can add through GHA itself:\n\n```yaml\n---\n\nname: GitHub Actions Security Analysis with zizmor 🌈\n\non:  # yamllint disable-line rule:truthy\n  push:\n  pull_request:\n\njobs:\n  zizmor:\n    name: 🌈 zizmor\n\n    permissions:\n      security-events: write\n\n    # yamllint disable-line rule:line-length\n    uses: zizmorcore/workflow/.github/workflows/reusable-zizmor.yml@3bb5e95068d0f44b6d2f3f7e91379bed1d2f96a8\n\n...\n```\n\nOptionally, it could also be added to pre-commit on "
+    },
+    {
+      "number": 3330,
+      "title": "Explicitly declaring secrets in workflows",
+      "state": "open",
+      "labels": [
+        "needs_triage",
+        "tooling"
+      ],
+      "milestone": null,
+      "created_at": "2025-12-01T10:28:49+00:00",
+      "updated_at": "2025-12-01T10:29:05+00:00",
+      "closed_at": null,
+      "url": "https://github.com/ansible/ansible-documentation/issues/3330",
+      "body": "Follow on to https://github.com/ansible/ansible-documentation/pull/3188/files#r2501372682 and https://github.com/ansible/ansible-documentation/pull/3188/files#r2501378393\n\n`secrets: inherit  # zizmor: ignore[secrets-inherit]` is used because secrets are part of the `github-bot` environment and the environment cannot be set in the calling workflow."
+    },
+    {
+      "number": 3329,
+      "title": "Complementary workflow to integrate Zizmor with GH code scanning",
+      "state": "open",
+      "labels": [
+        "needs_triage"
+      ],
+      "milestone": null,
+      "created_at": "2025-12-01T10:06:06+00:00",
+      "updated_at": "2025-12-01T10:06:23+00:00",
+      "closed_at": null,
+      "url": "https://github.com/ansible/ansible-documentation/issues/3329",
+      "body": "Follows on from discussion in https://github.com/ansible/ansible-documentation/pull/3141 and https://github.com/ansible/ansible-documentation/pull/3188/files#r2467351161\n\nAdd a new reusable workflow for GH Code Scanning integration.\n"
+    },
+    {
+      "number": 3310,
+      "title": "Fix searchbox for package docs",
+      "state": "open",
+      "labels": [
+        "needs_triage"
+      ],
+      "milestone": null,
+      "created_at": "2025-11-24T21:59:51+00:00",
+      "updated_at": "2025-11-28T10:29:28+00:00",
+      "closed_at": null,
+      "url": "https://github.com/ansible/ansible-documentation/issues/3310",
+      "body": "Follows up on https://github.com/ansible/ansible-documentation/pull/3309\n\n@felixfontein mentioned that the searchbox from the package docs does not behave the same way as core docs: https://github.com/ansible/ansible-documentation/pull/3309#issuecomment-3572610673\n\nLooking at Receptor and ansible-core docs on RTD:\n\n- https://docs.ansible.com/projects/receptor/en/latest/\n- https://docs.ansible.com/projects/ansible-core/devel/\n\nBoth of these projects use the sphinx-ansible-theme as the package doc"
+    }
+  ],
+  "changelog": "",
+  "releases": []
+}

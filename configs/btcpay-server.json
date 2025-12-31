@@ -1,0 +1,135 @@
+{
+  "name": "btcpay-server",
+  "description": "BTCPay Server - Self-hosted Bitcoin payment gateway documentation",
+  "base_url": "https://docs.btcpayserver.org/",
+  "start_urls": [
+    "https://docs.btcpayserver.org/Guide/",
+    "https://docs.btcpayserver.org/Deployment/",
+    "https://docs.btcpayserver.org/Development/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/Guide/",
+      "/TryItOut/",
+      "/Walkthrough/",
+      "/UseCase/",
+      "/BTCPayVsOthers/",
+      "/RegisterAccount/",
+      "/CreateStore/",
+      "/WalletSetup",
+      "/ConnectWallet/",
+      "/CreateWallet/",
+      "/LightningNetwork/",
+      "/WhatsNext/",
+      "/Dashboard/",
+      "/Wallet",
+      "/Invoices/",
+      "/Subscriptions",
+      "/PaymentRequests/",
+      "/PullPayments",
+      "/Payouts/",
+      "/Forms",
+      "/Apps",
+      "/Reporting/",
+      "/Payjoin",
+      "/Deployment/",
+      "/Docker/",
+      "/ThirdPartyHosting/",
+      "/Development/",
+      "/GreenFieldExample/",
+      "/FAQ/",
+      "/Troubleshooting/",
+      "/Support/",
+      "/Community/",
+      "/Contribute/",
+      "/BigCommerce/",
+      "/Calcom/",
+      "/Drupal/",
+      "/EasyDigitalDownloads/",
+      "/WooCommerce/",
+      "/Shopify/",
+      "/PrestaShop/",
+      "/Magento/",
+      "/CustomIntegration/",
+      "/Breez/",
+      "/Nostr/",
+      "/Wabisabi/",
+      "/HardwareWalletIntegration/"
+    ],
+    "exclude": [
+      "/blog/",
+      "/changelog/",
+      "github.com",
+      "twitter.com",
+      "youtube.com",
+      "btcpayserver.org"
+    ]
+  },
+  "categories": {
+    "getting_started": [
+      "Guide",
+      "TryItOut",
+      "Walkthrough",
+      "RegisterAccount",
+      "CreateStore",
+      "WalletSetup",
+      "WhatsNext"
+    ],
+    "wallet": [
+      "ConnectWallet",
+      "CreateWallet",
+      "Wallet",
+      "HardwareWalletIntegration"
+    ],
+    "lightning": [
+      "LightningNetwork",
+      "Breez"
+    ],
+    "features": [
+      "Dashboard",
+      "Invoices",
+      "Subscriptions",
+      "PaymentRequests",
+      "PullPayments",
+      "Payouts",
+      "Forms",
+      "Apps",
+      "Reporting",
+      "Payjoin"
+    ],
+    "deployment": [
+      "Deployment",
+      "Docker",
+      "ThirdPartyHosting"
+    ],
+    "integrations": [
+      "BigCommerce",
+      "Calcom",
+      "Drupal",
+      "EasyDigitalDownloads",
+      "WooCommerce",
+      "Shopify",
+      "PrestaShop",
+      "Magento",
+      "CustomIntegration"
+    ],
+    "plugins": [
+      "Breez",
+      "Nostr",
+      "Wabisabi"
+    ],
+    "development": [
+      "Development",
+      "GreenFieldExample"
+    ],
+    "support": [
+      "FAQ",
+      "Troubleshooting",
+      "Support",
+      "Community",
+      "Contribute"
+    ]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 150
+}

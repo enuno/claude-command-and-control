@@ -1,0 +1,13 @@
+{
+  "name": "ansible",
+  "total_pages": 1,
+  "base_url": "https://docs.ansible.com/projects/ansible/latest/index.html",
+  "llms_txt_detected": false,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "Ansible Documentation — Ansible Community Documentation",
+      "url": "https://docs.ansible.com/projects/ansible/latest/index.html"
+    }
+  ]
+}

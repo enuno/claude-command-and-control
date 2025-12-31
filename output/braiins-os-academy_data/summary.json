@@ -1,0 +1,13 @@
+{
+  "name": "braiins-os-academy",
+  "total_pages": 1,
+  "base_url": "https://academy.braiins.com/en/braiins-os/about/",
+  "llms_txt_detected": false,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "Braiins OS – Braiins Academy",
+      "url": "https://academy.braiins.com/en/braiins-os/about/"
+    }
+  ]
+}
