@@ -1071,6 +1071,7 @@ version: 1.0.0
 | **[invoice-organizer](skills-templates/invoice-organizer/)** | Invoice and receipt organization | Tax preparation or bookkeeping |
 | **[just](skills-templates/just/)** | Just command runner for project task automation | Creating justfile recipes, replacing Make/shell scripts, cross-platform command execution |
 | **[langflow](skills-templates/ai-workflow/langflow/)** | Visual AI workflow platform with MCP integration | Building AI agent workflows visually, integrating MCP servers, deploying production AI agents |
+| **[latex-manual](skills-templates/documentation/latex-manual/)** | Comprehensive LaTeX reference with templates and troubleshooting | Writing LaTeX documents, creating equations, formatting papers, making presentations, debugging compilation |
 | **[lead-research-assistant](skills-templates/lead-research-assistant/)** | Lead identification and qualification | Sales, business development, or marketing research |
 | **[mcp-builder](skills-templates/mcp-builder/)** | MCP server development guide | Building Model Context Protocol servers |
 | **[meeting-insights-analyzer](skills-templates/meeting-insights-analyzer/)** | Meeting transcript analysis | Improving communication or leadership skills |
