@@ -1086,6 +1086,7 @@ version: 1.0.0
 | **[software-architecture](skills/software-architecture/SKILL.md)** | Clean Architecture & DDD guidance | Software design, code quality, anti-patterns |
 | **subagent-driven-development** | Execute plans with fresh subagents per task | Plan execution with quality gates |
 | **[theme-factory](skills-templates/theme-factory/)** | 10 pre-set themes for artifact styling | Applying professional themes to slides, docs, or HTML |
+| **[terraform](skills-templates/infrastructure/terraform/)** | HashiCorp Terraform Infrastructure as Code (IaC) | Managing cloud infrastructure, writing .tf files, state management, multi-cloud provisioning |
 | **[twilio-voice](skills-templates/communication/twilio-voice/)** | Comprehensive Twilio Voice API assistance with AI integration patterns | Voice assistants, OpenAI Realtime API, function-calling agents, Conversational Intelligence |
 | **[ui-ux-pro-max](skills/ui-ux-pro-max/SKILL.md)** | UI/UX design intelligence with 50+ styles, color palettes, font pairings, and 8 framework stacks | Frontend design, component styling, accessibility |
 | **using-git-worktrees** | Isolated workspace management | Feature work needing isolation |

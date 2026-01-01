@@ -1,0 +1,79 @@
+{
+  "name": "terraform",
+  "description": "HashiCorp Terraform Infrastructure as Code (IaC) tool for building, changing, and versioning infrastructure",
+  "base_url": "https://developer.hashicorp.com/terraform/",
+  "start_urls": [
+    "https://developer.hashicorp.com/terraform/docs",
+    "https://developer.hashicorp.com/terraform/language",
+    "https://developer.hashicorp.com/terraform/cli"
+  ],
+  "url_patterns": {
+    "include": [
+      "/terraform/docs",
+      "/terraform/language",
+      "/terraform/cli",
+      "/terraform/intro"
+    ],
+    "exclude": [
+      "/terraform/plugin",
+      "/terraform/internals",
+      "/terraform/enterprise",
+      "/terraform/cloud-docs",
+      "/well-architected-framework",
+      "/terraform/tutorials",
+      "/changelog"
+    ]
+  },
+  "categories": {
+    "getting_started": [
+      "intro",
+      "install",
+      "getting-started",
+      "cli/init",
+      "cli/plan",
+      "cli/apply"
+    ],
+    "configuration": [
+      "language/syntax",
+      "language/resources",
+      "language/data-sources",
+      "language/providers",
+      "language/variables",
+      "language/outputs"
+    ],
+    "state_management": [
+      "language/state",
+      "cli/state",
+      "language/settings/backends"
+    ],
+    "modules": [
+      "language/modules",
+      "language/meta-arguments/count",
+      "language/meta-arguments/for_each",
+      "language/meta-arguments/depends_on"
+    ],
+    "functions": [
+      "language/functions"
+    ],
+    "cli_commands": [
+      "cli/commands"
+    ],
+    "provisioners": [
+      "language/resources/provisioners"
+    ],
+    "import": [
+      "cli/import",
+      "language/import"
+    ],
+    "best_practices": [
+      "language/style",
+      "language/settings"
+    ]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 300,
+  "selectors": {
+    "content": "article, .content, main",
+    "code": "pre code, .highlight"
+  }
+}

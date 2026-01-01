@@ -71,6 +71,11 @@ This directory contains production-ready skill templates and examples for Claude
 | **[document-skills/xlsx](document-skills/xlsx/)** | Excel spreadsheet toolkit with formulas, formatting, data analysis, and visualization |
 | **[video-downloader](video-downloader/)** | Downloads videos from YouTube and other platforms for offline viewing or archival |
 
+### Infrastructure (1 skill)
+| Skill | Description |
+|-------|-------------|
+| **[infrastructure/terraform](infrastructure/terraform/)** | HashiCorp Terraform Infrastructure as Code (IaC) tool for provisioning, managing, and versioning cloud infrastructure across AWS, Azure, GCP, and other providers - comprehensive 33KB guide with state management, modules, and production examples |
+
 ### Productivity & Organization (6 skills)
 | Skill | Description |
 |-------|-------------|
