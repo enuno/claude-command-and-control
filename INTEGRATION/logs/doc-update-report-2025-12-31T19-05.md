@@ -66,7 +66,7 @@ Verified all links are valid:
 **Link Validation**:
 - Main README.md → skills-templates/infrastructure/terraform/ ✅
 - skills-templates/README.md → infrastructure/terraform/ ✅
-- Both resolve to same location: `/Users/elvis/Documents/Git/HomeLab-Tools/claude-command-and-control/skills-templates/infrastructure/terraform/`
+- Both resolve to same location: `./skills-templates/infrastructure/terraform/`
 
 ---
 

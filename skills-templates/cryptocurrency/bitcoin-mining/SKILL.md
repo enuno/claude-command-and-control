@@ -1,20 +1,23 @@
 ---
 name: bitcoin-mining
-description: Comprehensive Bitcoin mining knowledge from industry reports covering 2024 market overview, mining economics, operational handbook, and heat reuse strategies. Use when planning mining operations, analyzing profitability, optimizing energy efficiency, or exploring sustainable mining practices.
+description: Comprehensive Bitcoin mining knowledge from 7 industry reports covering 2024 market overview, mining economics, operational handbooks, heat reuse strategies, mining glossary, Stratum V2 protocol specifications, and ultimate mining handbook. Use when planning mining operations, analyzing profitability, optimizing energy efficiency, understanding mining terminology, or exploring sustainable mining practices.
 ---
 
 # Bitcoin Mining
 
-Comprehensive Bitcoin mining documentation skill based on industry reports and technical handbooks covering market analysis, economics, operations, and sustainability.
+Comprehensive Bitcoin mining documentation skill based on industry reports and technical handbooks covering market analysis, economics, operations, sustainability, terminology, and advanced protocols.
 
 ## 📚 Source Materials
 
-This skill is built from four authoritative PDF documents:
+This skill is built from seven authoritative PDF documents:
 
 1. **Bitcoin Mining 2024 Year in Review** - Industry trends, market analysis, and regulatory updates
 2. **Bitcoin Mining Economics** - Profitability analysis, cost structures, and financial modeling
 3. **Bitcoin Mining Handbook** - Operational procedures, hardware setup, and best practices
 4. **Bitcoin Mining Heat Reuse** - Sustainable mining through waste heat recovery and thermal optimization
+5. **Bitcoin Mining Glossary** - Comprehensive terminology definitions and technical jargon explanations
+6. **Stratum V2 Master Thesis** - Advanced mining pool protocol specifications and security improvements
+7. **Ultimate Bitcoin Mining Handbook** - Comprehensive end-to-end guide with best practices and pro tips
 
 ## 📖 Reference Documentation
 
@@ -52,6 +55,18 @@ Use this skill when you need to:
 - Optimize energy consumption and efficiency
 - Explore green mining practices and renewable energy integration
 
+### Terminology & Definitions
+- Look up Bitcoin mining technical terms and jargon
+- Understand industry-specific acronyms and abbreviations
+- Learn standard nomenclature for mining concepts
+- Quick reference for unfamiliar terminology
+
+### Protocol & Infrastructure
+- Understand Stratum V2 mining pool protocol
+- Implement secure pool communication standards
+- Analyze protocol improvements and security enhancements
+- Design advanced mining infrastructure architecture
+
 ## 🔧 Key Topics Covered
 
 **Market & Industry**
@@ -77,6 +92,18 @@ Use this skill when you need to:
 - Thermal system design
 - Energy efficiency optimization
 - Renewable energy integration
+
+**Terminology & Standards**
+- Mining-specific vocabulary and definitions
+- Technical acronyms and abbreviations
+- Industry-standard nomenclature
+- Protocol terminology reference
+
+**Advanced Protocols**
+- Stratum V2 protocol specifications
+- Mining pool communication security
+- Protocol upgrade paths and implementations
+- Infrastructure architecture patterns
 
 ## 📝 Usage Notes
 

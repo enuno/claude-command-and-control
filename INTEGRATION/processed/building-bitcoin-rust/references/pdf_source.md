@@ -6,7 +6,7 @@ The complete "Building Bitcoin in Rust" technical guide is available as a PDF fi
 
 ## Document Details
 
-**File Path**: `/Users/elvis/Documents/Git/HomeLab-Tools/claude-command-and-control/docs/building.bitcoin.in.rust.pdf`
+**File Path**: `./docs/building.bitcoin.in.rust.pdf`
 
 **Specifications**:
 - **Format**: PDF 1.7

@@ -43,6 +43,36 @@ All Bitcoin mining documentation is available as PDF files in the repository. Cl
 - Sustainability practices
 - Energy efficiency optimization
 
+### 5. Bitcoin Mining Glossary
+**Path**: `./docs/references/technical-documents/bitcoin.mining/bitcoin.mining.glossery.pdf`
+
+**When to Reference**:
+- Bitcoin mining terminology definitions
+- Technical jargon explanations
+- Industry-standard nomenclature
+- Acronym and abbreviation meanings
+- Quick reference for unfamiliar terms
+
+### 6. Stratum V2 Master Thesis
+**Path**: `./docs/references/technical-documents/bitcoin.mining/stratum.v2.master.thesis.pdf`
+
+**When to Reference**:
+- Stratum V2 protocol specifications
+- Mining pool communication standards
+- Protocol security improvements
+- Technical implementation details
+- Advanced mining infrastructure architecture
+
+### 7. Ultimate Bitcoin Mining Handbook
+**Path**: `./docs/references/technical-documents/bitcoin.mining/ultimate.bitcoin.mining.handbook.pdf`
+
+**When to Reference**:
+- Comprehensive mining guide and tutorials
+- End-to-end mining operation setup
+- Best practices and pro tips
+- Common pitfalls and solutions
+- All-in-one operational reference
+
 ## Usage Pattern
 
 When a user asks a question that requires specific details:
@@ -69,11 +99,14 @@ Claude Response Process:
 ## PDF Organization
 
 ```
-docs/
-├── bitcoin.mining.2024.pdf          (Market Overview)
-├── bitcoin.mining.economics.pdf     (Financial Analysis)
-├── bitcoin.mining.handbook.pdf      (Technical Operations)
-└── bitcoin.mining.heat.resue.pdf    (Sustainability)
+docs/references/technical-documents/bitcoin.mining/
+├── bitcoin.mining.2024.pdf                    (Market Overview)
+├── bitcoin.mining.economics.pdf               (Financial Analysis)
+├── bitcoin.mining.handbook.pdf                (Technical Operations)
+├── bitcoin.mining.heat.resue.pdf              (Sustainability)
+├── bitcoin.mining.glossery.pdf                (Terminology Reference)
+├── stratum.v2.master.thesis.pdf               (Protocol Specifications)
+└── ultimate.bitcoin.mining.handbook.pdf       (Comprehensive Guide)
 ```
 
 ## Best Practices

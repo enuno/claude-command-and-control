@@ -5,7 +5,7 @@ This skill provides comprehensive knowledge for implementing the Bitcoin protoco
 ## Source Document
 
 ### Building Bitcoin in Rust (419 pages)
-**File**: `docs/building.bitcoin.in.rust.pdf`
+**File**: `docs/technical-documents/bitcoin.development/building.bitcoin.in.rust.pdf`
 
 **Document Overview**:
 - **Type**: Technical implementation guide

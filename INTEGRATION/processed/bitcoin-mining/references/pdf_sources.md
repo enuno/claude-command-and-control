@@ -7,7 +7,7 @@ All Bitcoin mining documentation is available as PDF files in the repository. Cl
 ## Available PDFs
 
 ### 1. Bitcoin Mining 2024 Year in Review
-**Path**: `/Users/elvis/Documents/Git/HomeLab-Tools/claude-command-and-control/docs/bitcoin.mining.2024.pdf`
+**Path**: `./docs/bitcoin.mining.2024.pdf`
 
 **When to Reference**:
 - Industry trends and market analysis
@@ -16,7 +16,7 @@ All Bitcoin mining documentation is available as PDF files in the repository. Cl
 - Global hashrate distribution
 
 ### 2. Bitcoin Mining Economics
-**Path**: `/Users/elvis/Documents/Git/HomeLab-Tools/claude-command-and-control/docs/bitcoin.mining.economics.pdf`
+**Path**: `./docs/bitcoin.mining.economics.pdf`
 
 **When to Reference**:
 - Profitability calculations
@@ -25,7 +25,7 @@ All Bitcoin mining documentation is available as PDF files in the repository. Cl
 - Investment analysis
 
 ### 3. Bitcoin Mining Handbook
-**Path**: `/Users/elvis/Documents/Git/HomeLab-Tools/claude-command-and-control/docs/bitcoin.mining.handbook.pdf`
+**Path**: `./docs/bitcoin.mining.handbook.pdf`
 
 **When to Reference**:
 - Hardware specifications (ASIC miners)
@@ -35,7 +35,7 @@ All Bitcoin mining documentation is available as PDF files in the repository. Cl
 - Maintenance schedules
 
 ### 4. Bitcoin Mining Heat Reuse Strategies
-**Path**: `/Users/elvis/Documents/Git/HomeLab-Tools/claude-command-and-control/docs/bitcoin.mining.heat.resue.pdf`
+**Path**: `./docs/bitcoin.mining.heat.resue.pdf`
 
 **When to Reference**:
 - Heat recovery systems

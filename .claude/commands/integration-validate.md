@@ -12,7 +12,7 @@ Perform comprehensive quality assurance checks on recently integrated files to e
 
 ## Prerequisites
 - Files have been integrated via `/integration-process`
-- Integration report exists at `/INTEGRATION/logs/integration-report-[timestamp].md`
+- Integration report exists at `./INTEGRATION/logs/integration-report-[timestamp].md`
 
 ## Workflow
 
@@ -20,7 +20,7 @@ Perform comprehensive quality assurance checks on recently integrated files to e
 
 ```bash
 # Find most recent integration report
-!ls -t /INTEGRATION/logs/integration-report-*.md | head -1
+!ls -t ./INTEGRATION/logs/integration-report-*.md | head -1
 ```
 
 Read the report to identify which files were integrated and where.
@@ -174,7 +174,7 @@ Check markdown formatting:
 
 ### 8. Generate Validation Report
 
-Create `/INTEGRATION/logs/validation-report-[timestamp].md`:
+Create `./INTEGRATION/logs/validation-report-[timestamp].md`:
 
 ```markdown
 # Integration Validation Report
@@ -390,7 +390,7 @@ ISSUES FOUND:
   ⚠️  Warnings: 0
   ℹ️  Info: 0
 
-REPORT SAVED: /INTEGRATION/logs/validation-report-[timestamp].md
+REPORT SAVED: ./INTEGRATION/logs/validation-report-[timestamp].md
 
 STATUS: [✅ READY TO COMMIT | ⚠️ REVIEW WARNINGS | ❌ FIX ISSUES]
 
