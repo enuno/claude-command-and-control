@@ -25,7 +25,7 @@ This directory contains production-ready skill templates and examples for Claude
 ### Communication (1 skill)
 | Skill | Description |
 |-------|-------------|
-| **[communication/twilio-voice](communication/twilio-voice/)** | Comprehensive Twilio Voice API assistance for building voice applications, implementing calling solutions, debugging Twilio integrations, and learning best practices |
+| **[communication/twilio-voice](communication/twilio-voice/)** | Comprehensive Twilio Voice API assistance with AI integration patterns including OpenAI Realtime API, function-calling voice agents, Conversational Intelligence analytics, and production-ready implementation examples |
 
 ### Creative & Media (5 skills)
 | Skill | Description |
