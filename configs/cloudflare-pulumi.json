@@ -1,0 +1,43 @@
+{
+  "name": "cloudflare-pulumi",
+  "description": "Pulumi infrastructure as code for Cloudflare resources with TypeScript, Python, and Go support",
+  "base_url": "https://developers.cloudflare.com/pulumi/",
+  "start_urls": [
+    "https://developers.cloudflare.com/pulumi/get-started/",
+    "https://developers.cloudflare.com/pulumi/tutorial/",
+    "https://developers.cloudflare.com/pulumi/reference/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/pulumi/get-started/",
+      "/pulumi/tutorial/",
+      "/pulumi/reference/",
+      "/pulumi/how-to/",
+      "/pulumi/examples/"
+    ],
+    "exclude": [
+      "/workers/",
+      "/pages/",
+      "/analytics/",
+      "/fundamentals/",
+      "/learning/",
+      "/community/",
+      "/ai-gateway/",
+      "/ai-search/",
+      "/kv/"
+    ]
+  },
+  "categories": {
+    "getting_started": ["get-started", "quickstart", "introduction", "install"],
+    "tutorial": ["tutorial", "guides", "walkthrough"],
+    "reference": ["reference", "api", "resources"],
+    "examples": ["examples", "patterns", "use-cases"]
+  },
+  "selectors": {
+    "content": "article, .content, main",
+    "code": "pre code, .highlight"
+  },
+  "rate_limit": 0.5,
+  "max_pages": 80,
+  "user_agent": "Mozilla/5.0 (compatible; SkillSeekersBot/2.4; +https://github.com/yusufkaraaslan/Skill_Seekers)"
+}

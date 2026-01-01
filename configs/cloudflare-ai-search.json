@@ -1,0 +1,36 @@
+{
+  "name": "cloudflare-ai-search",
+  "description": "Cloudflare AI Search for semantic search and vector embeddings in Workers",
+  "base_url": "https://developers.cloudflare.com/ai-search/",
+  "start_urls": [
+    "https://developers.cloudflare.com/ai-search/get-started/",
+    "https://developers.cloudflare.com/ai-search/configuration/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/ai-search/get-started/",
+      "/ai-search/configuration/",
+      "/ai-search/how-to/",
+      "/ai-search/examples/"
+    ],
+    "exclude": [
+      "/workers/",
+      "/pages/",
+      "/analytics/",
+      "/fundamentals/",
+      "/learning/",
+      "/community/"
+    ]
+  },
+  "categories": {
+    "getting_started": ["get-started", "quickstart", "introduction"],
+    "configuration": ["configuration", "setup", "settings"]
+  },
+  "selectors": {
+    "content": "article, .content, main",
+    "code": "pre code, .highlight"
+  },
+  "rate_limit": 0.5,
+  "max_pages": 50,
+  "user_agent": "Mozilla/5.0 (compatible; SkillSeekersBot/2.4; +https://github.com/yusufkaraaslan/Skill_Seekers)"
+}

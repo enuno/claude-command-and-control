@@ -1049,6 +1049,13 @@ version: 1.0.0
 | **[brand-guidelines](skills-templates/brand-guidelines/)** | Anthropic brand colors and typography | Applying brand standards to artifacts |
 | **[canvas-design](skills-templates/canvas-design/)** | Visual art creation using design philosophy | Creating posters, art, or static visual pieces |
 | **[changelog-generator](skills-templates/changelog-generator/)** | Git commits to user-friendly changelogs | Preparing release notes or product updates |
+| **[cloudflare-ai-gateway](skills-templates/cloudflare-ai-gateway/)** | Unified interface to AI providers (OpenAI, Anthropic, Azure, HuggingFace) | Multi-provider AI proxy, caching, rate limiting, analytics |
+| **[cloudflare-ai-search](skills-templates/cloudflare-ai-search/)** | Semantic search and vector embeddings in Workers | Vector-based search, embedding models |
+| **[cloudflare-kv](skills-templates/cloudflare-kv/)** | Low-latency key-value storage at the edge | Edge storage, get/put/delete/list operations |
+| **[cloudflare-pages](skills-templates/cloudflare-pages/)** | JAMstack platform for static sites + serverless functions | 13 framework guides, Pages Functions, static hosting |
+| **[cloudflare-pulumi](skills-templates/cloudflare-pulumi/)** | Infrastructure as Code for Cloudflare resources | Multi-language IaC (TypeScript, Python, Go) |
+| **[cloudflare-r2](skills-templates/cloudflare-r2/)** | S3-compatible object storage with zero egress fees | S3 API, bucket management, data access |
+| **[cloudflare-workers](skills-templates/cloudflare-workers/)** | Serverless edge computing with V8 runtime | Runtime APIs, fetch handlers, Durable Objects, KV bindings |
 | **[competitive-ads-extractor](skills-templates/competitive-ads-extractor/)** | Analyze competitors' ads from ad libraries | Understanding competitor messaging and creative approaches |
 | **[conductor](skills-templates/conductor/)** | Build and deployment orchestration | Working with conductor, implementing conductor solutions, debugging conductor code |
 | **content-research-writer** | Writing assistance with research and citations | Writing articles, documentation, blog posts |

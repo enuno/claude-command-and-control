@@ -1,0 +1,46 @@
+{
+  "name": "cloudflare-pages",
+  "description": "Cloudflare Pages JAMstack platform for deploying static sites and full-stack applications",
+  "base_url": "https://developers.cloudflare.com/pages/",
+  "start_urls": [
+    "https://developers.cloudflare.com/pages/get-started/",
+    "https://developers.cloudflare.com/pages/framework-guides/",
+    "https://developers.cloudflare.com/pages/functions/",
+    "https://developers.cloudflare.com/pages/configuration/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/pages/get-started/",
+      "/pages/framework-guides/",
+      "/pages/functions/",
+      "/pages/configuration/",
+      "/pages/how-to/",
+      "/pages/tutorials/",
+      "/pages/platform/",
+      "/pages/migrations/"
+    ],
+    "exclude": [
+      "/pages/platform/pricing/",
+      "/pages/platform/limits/",
+      "/analytics/",
+      "/fundamentals/",
+      "/learning/",
+      "/community/",
+      "/workers/"
+    ]
+  },
+  "categories": {
+    "getting_started": ["get-started", "guide", "quickstart"],
+    "framework_guides": ["framework-guides", "deploy", "nextjs", "react", "vue", "gatsby", "hugo"],
+    "functions": ["functions", "routing", "middleware", "api"],
+    "configuration": ["configuration", "build", "redirects", "headers"],
+    "platform": ["platform", "bindings", "preview", "rollbacks"]
+  },
+  "selectors": {
+    "content": "article, .content, main",
+    "code": "pre code, .highlight"
+  },
+  "rate_limit": 0.5,
+  "max_pages": 150,
+  "user_agent": "Mozilla/5.0 (compatible; SkillSeekersBot/2.4; +https://github.com/yusufkaraaslan/Skill_Seekers)"
+}

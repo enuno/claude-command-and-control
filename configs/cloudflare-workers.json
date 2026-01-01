@@ -1,0 +1,45 @@
+{
+  "name": "cloudflare-workers",
+  "description": "Cloudflare Workers serverless platform for edge computing with V8 runtime",
+  "base_url": "https://developers.cloudflare.com/workers/",
+  "start_urls": [
+    "https://developers.cloudflare.com/workers/get-started/guide/",
+    "https://developers.cloudflare.com/workers/runtime-apis/",
+    "https://developers.cloudflare.com/workers/examples/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/workers/get-started/",
+      "/workers/runtime-apis/",
+      "/workers/configuration/",
+      "/workers/examples/",
+      "/workers/wrangler/",
+      "/workers/tutorials/",
+      "/workers/platform/",
+      "/workers/learning/"
+    ],
+    "exclude": [
+      "/workers/platform/pricing/",
+      "/workers/platform/limits/",
+      "/workers/observability/",
+      "/analytics/",
+      "/fundamentals/",
+      "/learning/",
+      "/community/"
+    ]
+  },
+  "categories": {
+    "getting_started": ["get-started", "guide", "quickstart"],
+    "runtime_apis": ["runtime-apis", "fetch", "cache", "kv", "durable-objects"],
+    "configuration": ["configuration", "compatibility-dates", "wrangler"],
+    "examples": ["examples", "tutorials"],
+    "platform": ["platform", "bindings", "routing"]
+  },
+  "selectors": {
+    "content": "article, .content, main",
+    "code": "pre code, .highlight"
+  },
+  "rate_limit": 0.5,
+  "max_pages": 200,
+  "user_agent": "Mozilla/5.0 (compatible; SkillSeekersBot/2.4; +https://github.com/yusufkaraaslan/Skill_Seekers)"
+}

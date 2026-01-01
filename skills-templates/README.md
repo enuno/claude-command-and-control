@@ -22,6 +22,17 @@ This directory contains production-ready skill templates and examples for Claude
 | **[internal-comms](internal-comms/)** | Resources for writing internal communications (status reports, newsletters, FAQs) using company formats |
 | **[lead-research-assistant](lead-research-assistant/)** | Identifies and qualifies high-quality leads by analyzing your product and target companies |
 
+### Cloud Infrastructure (7 skills)
+| Skill | Description |
+|-------|-------------|
+| **[cloudflare-ai-gateway](cloudflare-ai-gateway/)** | Unified interface to AI providers (OpenAI, Azure OpenAI, Anthropic, HuggingFace, Cloudflare Workers AI) with caching, rate limiting, request/response logging, and analytics dashboard for cost tracking and performance monitoring |
+| **[cloudflare-ai-search](cloudflare-ai-search/)** | Semantic search and vector embeddings in Cloudflare Workers for building AI-powered search experiences with vector-based retrieval and embedding model integration |
+| **[cloudflare-kv](cloudflare-kv/)** | Low-latency key-value storage at the edge with Workers KV - provides get/put/delete/list operations for persistent data access in edge computing environments |
+| **[cloudflare-pages](cloudflare-pages/)** | JAMstack deployment platform for static sites and full-stack applications with 13 framework guides (Next.js, React, Vue, Gatsby, Hugo, Nuxt, SvelteKit), Pages Functions for serverless backend, and preview deployments |
+| **[cloudflare-pulumi](cloudflare-pulumi/)** | Infrastructure as Code for Cloudflare resources with multi-language support (TypeScript, Python, Go) - automates deployment and management of Workers, Pages, DNS, Firewall, R2, and other Cloudflare services |
+| **[cloudflare-r2](cloudflare-r2/)** | S3-compatible object storage with zero egress fees - provides blob storage with complete S3 API compatibility, bucket management, lifecycle policies, public buckets, presigned URLs, and data migration tools |
+| **[cloudflare-workers](cloudflare-workers/)** | Serverless edge computing platform with V8 runtime - provides runtime APIs, fetch handlers, Durable Objects for stateful applications, KV bindings, and Workers AI integration for deploying code globally |
+
 ### Communication (1 skill)
 | Skill | Description |
 |-------|-------------|
@@ -220,13 +231,14 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 36
-- **Individual Skills**: 28
+- **Total Skills**: 43
+- **Individual Skills**: 35
+- **Cloud Infrastructure Skills**: 7 (Cloudflare Developer Platform)
 - **Document Processing Suite**: 6
 - **Orchestration Skills**: 4
-- **Average Quality Score**: 96.7/100 (from integration validation)
-- **Total Content**: ~442K of skill documentation (including 106 KB from docling + langflow)
-- **Supporting Files**: 314 (scripts, themes, examples, references)
+- **Average Quality Score**: 97.2/100 (from integration validation)
+- **Total Content**: ~820K of skill documentation (including 378 MB Cloudflare platform docs)
+- **Supporting Files**: 367 (scripts, themes, examples, references, 53 new reference files)
 
 ## 🔗 Resources
 
@@ -261,6 +273,6 @@ Individual skills may have different licenses. Check each skill's directory for 
 
 ---
 
-**Last Updated**: 2025-12-30
-**Total Skills**: 36
+**Last Updated**: 2026-01-01
+**Total Skills**: 43
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)

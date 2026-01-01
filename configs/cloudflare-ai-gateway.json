@@ -1,0 +1,41 @@
+{
+  "name": "cloudflare-ai-gateway",
+  "description": "Cloudflare AI Gateway for unified interface to AI providers with caching, rate limiting, and analytics",
+  "base_url": "https://developers.cloudflare.com/ai-gateway/",
+  "start_urls": [
+    "https://developers.cloudflare.com/ai-gateway/get-started/",
+    "https://developers.cloudflare.com/ai-gateway/configuration/",
+    "https://developers.cloudflare.com/ai-gateway/providers/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/ai-gateway/get-started/",
+      "/ai-gateway/configuration/",
+      "/ai-gateway/providers/",
+      "/ai-gateway/how-to/",
+      "/ai-gateway/tutorials/",
+      "/ai-gateway/observability/"
+    ],
+    "exclude": [
+      "/workers/",
+      "/pages/",
+      "/analytics/",
+      "/fundamentals/",
+      "/learning/",
+      "/community/"
+    ]
+  },
+  "categories": {
+    "getting_started": ["get-started", "quickstart", "introduction"],
+    "providers": ["providers", "openai", "azure", "anthropic", "huggingface", "workers-ai"],
+    "configuration": ["configuration", "caching", "rate-limiting", "logging"],
+    "observability": ["observability", "analytics", "monitoring", "logs"]
+  },
+  "selectors": {
+    "content": "article, .content, main",
+    "code": "pre code, .highlight"
+  },
+  "rate_limit": 0.5,
+  "max_pages": 100,
+  "user_agent": "Mozilla/5.0 (compatible; SkillSeekersBot/2.4; +https://github.com/yusufkaraaslan/Skill_Seekers)"
+}

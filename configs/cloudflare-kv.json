@@ -1,0 +1,43 @@
+{
+  "name": "cloudflare-kv",
+  "description": "Cloudflare Workers KV for low-latency key-value storage at the edge",
+  "base_url": "https://developers.cloudflare.com/kv/",
+  "start_urls": [
+    "https://developers.cloudflare.com/kv/get-started/",
+    "https://developers.cloudflare.com/kv/api/",
+    "https://developers.cloudflare.com/kv/reference/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/kv/get-started/",
+      "/kv/api/",
+      "/kv/reference/",
+      "/kv/learning/",
+      "/kv/examples/",
+      "/kv/configuration/"
+    ],
+    "exclude": [
+      "/workers/",
+      "/pages/",
+      "/analytics/",
+      "/fundamentals/",
+      "/learning/",
+      "/community/",
+      "/ai-gateway/",
+      "/ai-search/"
+    ]
+  },
+  "categories": {
+    "getting_started": ["get-started", "quickstart", "introduction"],
+    "api": ["api", "reference", "methods"],
+    "configuration": ["configuration", "setup", "bindings"],
+    "examples": ["examples", "patterns", "use-cases"]
+  },
+  "selectors": {
+    "content": "article, .content, main",
+    "code": "pre code, .highlight"
+  },
+  "rate_limit": 0.5,
+  "max_pages": 100,
+  "user_agent": "Mozilla/5.0 (compatible; SkillSeekersBot/2.4; +https://github.com/yusufkaraaslan/Skill_Seekers)"
+}

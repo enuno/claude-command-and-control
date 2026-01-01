@@ -1,0 +1,47 @@
+{
+  "name": "cloudflare-r2",
+  "description": "Cloudflare R2 object storage with S3-compatible API and zero egress fees",
+  "base_url": "https://developers.cloudflare.com/r2/",
+  "start_urls": [
+    "https://developers.cloudflare.com/r2/get-started/",
+    "https://developers.cloudflare.com/r2/api/",
+    "https://developers.cloudflare.com/r2/buckets/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/r2/get-started/",
+      "/r2/api/",
+      "/r2/buckets/",
+      "/r2/data-access/",
+      "/r2/examples/",
+      "/r2/learning/",
+      "/r2/migrations/"
+    ],
+    "exclude": [
+      "/workers/",
+      "/pages/",
+      "/analytics/",
+      "/fundamentals/",
+      "/community/",
+      "/ai-gateway/",
+      "/ai-search/",
+      "/kv/",
+      "/pulumi/"
+    ]
+  },
+  "categories": {
+    "getting_started": ["get-started", "quickstart", "introduction"],
+    "api": ["api", "s3", "workers", "bindings"],
+    "buckets": ["buckets", "storage", "objects"],
+    "data_access": ["data-access", "public-buckets", "presigned-urls"],
+    "examples": ["examples", "patterns", "use-cases"],
+    "migrations": ["migrations", "s3-migration"]
+  },
+  "selectors": {
+    "content": "article, .content, main",
+    "code": "pre code, .highlight"
+  },
+  "rate_limit": 0.5,
+  "max_pages": 100,
+  "user_agent": "Mozilla/5.0 (compatible; SkillSeekersBot/2.4; +https://github.com/yusufkaraaslan/Skill_Seekers)"
+}
