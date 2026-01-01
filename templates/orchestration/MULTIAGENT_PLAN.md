@@ -118,8 +118,8 @@ T1 (Architecture)
 
 **Selected:** Git Worktrees
 - **Rationale:** Fast setup (<1s), minimal overhead, sufficient isolation for trusted code
-- **Base Repository:** `/Users/elvis/Documents/Git/HomeLab-Tools/auth-feature`
-- **Worktree Parent:** `/Users/elvis/Documents/Git/HomeLab-Tools/auth-feature-worktrees/`
+- **Base Repository:** `<repository-root>`
+- **Worktree Parent:** `<repository-root>-worktrees/`
 
 **Alternative:** Docker Containers
 - **When to use:** Untrusted code, strict resource limits needed, compliance requirements
@@ -569,14 +569,14 @@ Before starting orchestration, verify:
 See Section 5 - Skills Composition Plan
 
 ### Worktree Locations
-- Orchestrator: `/Users/elvis/Documents/Git/HomeLab-Tools/auth-feature` (main)
-- T1 (arch): `/Users/elvis/Documents/Git/HomeLab-Tools/auth-feature-worktrees/arch`
-- T2 (oauth): `/Users/elvis/Documents/Git/HomeLab-Tools/auth-feature-worktrees/oauth`
-- T3 (jwt): `/Users/elvis/Documents/Git/HomeLab-Tools/auth-feature-worktrees/jwt`
-- T4 (session): `/Users/elvis/Documents/Git/HomeLab-Tools/auth-feature-worktrees/session`
-- T5 (bench): `/Users/elvis/Documents/Git/HomeLab-Tools/auth-feature-worktrees/bench`
-- T6 (audit): `/Users/elvis/Documents/Git/HomeLab-Tools/auth-feature-worktrees/audit`
-- T7 (docs): `/Users/elvis/Documents/Git/HomeLab-Tools/auth-feature-worktrees/docs`
+- Orchestrator: `<repository-root>` (main)
+- T1 (arch): `<repository-root>-worktrees/arch`
+- T2 (oauth): `<repository-root>-worktrees/oauth`
+- T3 (jwt): `<repository-root>-worktrees/jwt`
+- T4 (session): `<repository-root>-worktrees/session`
+- T5 (bench): `<repository-root>-worktrees/bench`
+- T6 (audit): `<repository-root>-worktrees/audit`
+- T7 (docs): `<repository-root>-worktrees/docs`
 
 ### Emergency Contacts
 - Orchestrator failure: Escalate to human operator

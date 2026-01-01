@@ -1245,8 +1245,8 @@ GO WITH CAUTION:
 
 **Worktree Structure:**
 ```
-/Users/elvis/auth-feature/                 # Main repository
-/Users/elvis/auth-feature-worktrees/
+~/projects/auth-feature/                   # Main repository
+~/projects/auth-feature-worktrees/
   ├── arch/                                # T1 worktree
   │   └── .git, src/, ...
   ├── oauth/                               # T2 worktree
