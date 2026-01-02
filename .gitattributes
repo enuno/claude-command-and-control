@@ -1,7 +1,61 @@
+# Git LFS Configuration for Claude Command & Control Repository
+# Large files are stored using Git LFS to keep repository size manageable
+
+# === PDF Documents ===
+# All PDF files (documentation, guides, references)
 *.pdf filter=lfs diff=lfs merge=lfs -text
+# === Large Reference Documentation ===
+# Skill reference files that tend to be very large (>1MB)
 **/references/llms-full.md filter=lfs diff=lfs merge=lfs -text
-**/references/llms-small.md filter=lfs diff=lfs merge=lfs -text
 **/references/llms.md filter=lfs diff=lfs merge=lfs -text
+**/references/llms-small.md filter=lfs diff=lfs merge=lfs -text
 **/references/llms-txt.md filter=lfs diff=lfs merge=lfs -text
 **/references/other.md filter=lfs diff=lfs merge=lfs -text
 **/references/api.md filter=lfs diff=lfs merge=lfs -text
+# === Binary Media Files ===
+# Images
+*.png filter=lfs diff=lfs merge=lfs -text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+*.svg filter=lfs diff=lfs merge=lfs -text
+*.ico filter=lfs diff=lfs merge=lfs -text
+*.webp filter=lfs diff=lfs merge=lfs -text
+# Videos
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.mov filter=lfs diff=lfs merge=lfs -text
+*.avi filter=lfs diff=lfs merge=lfs -text
+*.webm filter=lfs diff=lfs merge=lfs -text
+# Audio
+*.mp3 filter=lfs diff=lfs merge=lfs -text
+*.wav filter=lfs diff=lfs merge=lfs -text
+*.ogg filter=lfs diff=lfs merge=lfs -text
+# === Archives ===
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.tar.gz filter=lfs diff=lfs merge=lfs -text
+*.tgz filter=lfs diff=lfs merge=lfs -text
+*.rar filter=lfs diff=lfs merge=lfs -text
+*.7z filter=lfs diff=lfs merge=lfs -text
+# === Binary Executables ===
+*.exe filter=lfs diff=lfs merge=lfs -text
+*.dmg filter=lfs diff=lfs merge=lfs -text
+*.pkg filter=lfs diff=lfs merge=lfs -text
+*.deb filter=lfs diff=lfs merge=lfs -text
+*.rpm filter=lfs diff=lfs merge=lfs -text
+# === Database Files ===
+*.db filter=lfs diff=lfs merge=lfs -text
+*.sqlite filter=lfs diff=lfs merge=lfs -text
+*.sqlite3 filter=lfs diff=lfs merge=lfs -text
+# === Large Data Files ===
+# Only track very large CSV/JSON files (use sparingly)
+# **/data/*.csv filter=lfs diff=lfs merge=lfs -text
+# **/data/*.json filter=lfs diff=lfs merge=lfs -text
+# === Fonts ===
+*.ttf filter=lfs diff=lfs merge=lfs -text
+*.otf filter=lfs diff=lfs merge=lfs -text
+*.woff filter=lfs diff=lfs merge=lfs -text
+*.woff2 filter=lfs diff=lfs merge=lfs -text
+# === Note ===
+# Files already committed to git need migration using:
+# git lfs migrate import --include="*.pdf" --everything
+# See migration instructions in INTEGRATION/logs/lfs-setup-report.md
