@@ -72,6 +72,12 @@ This directory contains production-ready skill templates and examples for Claude
 |-------|-------------|
 | **[ai-workflow/langflow](ai-workflow/langflow/)** | Visual AI workflow platform with drag-and-drop interface, 200+ components, MCP client/server support, and enterprise deployment options (142k GitHub stars) |
 
+### AI Platforms & APIs (2 skills)
+| Skill | Description |
+|-------|-------------|
+| **[openrouter](openrouter/)** | Unified API gateway for 100+ AI models from multiple providers (OpenAI, Anthropic, Google, Meta, Mistral) - comprehensive documentation (331 KB) covering multi-provider routing, cost optimization, and model comparison |
+| **[venice-ai](venice-ai/)** | Privacy-focused AI platform assistance with 49 pages of comprehensive documentation (248 KB) covering platform features, API integration, authentication, and best practices |
+
 ### Document Processing (6 skills)
 | Skill | Description |
 |-------|-------------|

@@ -1083,6 +1083,7 @@ version: 1.0.0
 | **[lead-research-assistant](skills-templates/lead-research-assistant/)** | Lead identification and qualification | Sales, business development, or marketing research |
 | **[mcp-builder](skills-templates/mcp-builder/)** | MCP server development guide | Building Model Context Protocol servers |
 | **[meeting-insights-analyzer](skills-templates/meeting-insights-analyzer/)** | Meeting transcript analysis | Improving communication or leadership skills |
+| **[openrouter](skills-templates/openrouter/)** | Unified API gateway for 100+ AI models | Working with OpenRouter, multi-provider routing, cost optimization, model comparison |
 | **[pict-test-designer](skills-templates/pict-test-designer/)** | PICT pairwise test case design | Designing comprehensive test cases with minimal coverage |
 | **[prompt-engineering](skills-templates/prompt-engineering/)** | Advanced prompt engineering patterns | Writing commands, hooks, skills, or optimizing LLM interactions |
 | **[raffle-winner-picker](skills-templates/raffle-winner-picker/)** | Random winner selection | Running giveaways, raffles, or contests |
@@ -1100,6 +1101,7 @@ version: 1.0.0
 | **[ui-ux-pro-max](skills/ui-ux-pro-max/SKILL.md)** | UI/UX design intelligence with 50+ styles, color palettes, font pairings, and 8 framework stacks | Frontend design, component styling, accessibility |
 | **using-git-worktrees** | Isolated workspace management | Feature work needing isolation |
 | **using-superpowers** | Meta-skill for skill discovery | Starting any conversation, ensuring skill usage |
+| **[venice-ai](skills-templates/venice-ai/)** | Privacy-focused AI platform assistance | Working with Venice.ai, privacy-focused AI implementations, platform features |
 | **[video-downloader](skills-templates/video-downloader/)** | Video downloads from YouTube and platforms | Downloading videos for offline viewing or archival |
 | **[weavedb](skills-templates/data-services/weavedb/)** | Decentralized database protocol with zero-knowledge proofs | Building with WeaveDB, implementing decentralized databases, permanent storage solutions |
 | **[webapp-testing](skills-templates/webapp-testing/)** | Playwright-based web app testing | Testing local web applications or debugging UI |
