@@ -1,0 +1,13 @@
+{
+  "title": "be sure you are in the root directory",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "Now, you can preview and test your changes by [running Wrangler in your local development environment](https://developers.cloudflare.com/workers/development-testing/). Once you are ready to deploy you can run:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#be-sure-you-are-in-the-root-directory",
+  "links": []
+}

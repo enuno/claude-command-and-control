@@ -1,0 +1,8 @@
+{
+  "title": "cf.waf.score.class",
+  "content": "`cf.waf.score.class` String\n\nThe attack score class of the current request, based on the WAF attack score.\n\nCan have one of the following values: `attack`, `likely_attack`, `likely_clean`, `clean`.\n\nRequires a Cloudflare Business plan or above. You must also enable [attack score detection](https://developers.cloudflare.com/waf/detections/attack-score/).\n\n<page>\n---\ntitle: cf.waf.score.rce · Cloudflare Ruleset Engine docs\ndescription: An attack score from 1–99 classifying the command injection or\n  Remote Code Execution (RCE) attack vector.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.score.rce/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.score.rce/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#cf.waf.score.class",
+  "links": []
+}

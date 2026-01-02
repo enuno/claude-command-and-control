@@ -1,0 +1,8 @@
+{
+  "title": "ip.src.asnum",
+  "content": "`ip.src.asnum` Number\n\nThe 16-bit or 32-bit integer representing the Autonomous System (AS) number associated with the client IP address.\n\nThis field has the same value as the `ip.geoip.asnum` field, which is deprecated. The `ip.geoip.asnum` field is still available for new and existing rules, but you should use the `ip.src.asnum` field instead.\n\n*GeoIP is the registered trademark of MaxMind, Inc.*\n\n* Request\n* Geolocation\n\n<page>\n---\ntitle: ip.src · Cloudflare Ruleset Engine docs\ndescription: The client TCP IP address, which may be adjusted to reflect the\n  actual address of the client using HTTP headers such as `X-Forwarded-For` or\n  `X-Real-IP`.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/ip.src/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/ip.src/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#ip.src.asnum",
+  "links": []
+}

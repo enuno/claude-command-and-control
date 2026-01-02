@@ -1,0 +1,8 @@
+{
+  "title": "Enable catalog-level compaction (requires token)",
+  "content": "npx wrangler r2 bucket catalog compaction enable my-bucket --token <TOKEN>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#enable-catalog-level-compaction-(requires-token)",
+  "links": []
+}

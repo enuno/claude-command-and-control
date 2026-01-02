@@ -1,0 +1,28 @@
+{
+  "title": "Download dog.txt from the user-uploads bucket",
+  "content": "rclone copy r2:user-uploads/dog.txt .\nsh\nrclone copy long-video.mp4 r2:user-uploads/ --s3-upload-cutoff=100M --s3-chunk-size=100M\nsh",
+  "code_samples": [
+    {
+      "code": "### A note about multipart upload part sizes\n\nFor multipart uploads, part sizes can significantly affect the number of Class A operations that are used, which can alter how much you end up being charged. Every part upload counts as a separate operation, so larger part sizes will use fewer operations, but might be costly to retry if the upload fails. Also consider that a multipart upload is always going to consume at least 3 times as many operations as a single `PutObject`, because it will include at least one `CreateMultipartUpload`, `UploadPart` & `CompleteMultipartUpload` operations.\n\nBalancing part size depends heavily on your use-case, but these factors can help you minimize your bill, so they are worth thinking about.\n\nYou can configure rclone's multipart upload part size using the `--s3-chunk-size` CLI argument. Note that you might also have to adjust the `--s3-upload-cutoff` argument to ensure that rclone is using multipart uploads. Both of these can be set in your configuration file as well. Generally, `--s3-upload-cutoff` will be no less than `--s3-chunk-size`.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Generate presigned URLs\n\nYou can also generate presigned links which allow you to share public access to a file temporarily using the [rclone link](https://rclone.org/commands/rclone_link/) command.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "A note about multipart upload part sizes",
+      "id": "a-note-about-multipart-upload-part-sizes"
+    },
+    {
+      "level": "h2",
+      "text": "Generate presigned URLs",
+      "id": "generate-presigned-urls"
+    }
+  ],
+  "url": "llms-txt#download-dog.txt-from-the-user-uploads-bucket",
+  "links": []
+}

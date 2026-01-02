@@ -1,0 +1,13 @@
+{
+  "title": "cf.tls\\_client\\_auth.cert\\_issuer\\_ski",
+  "content": "`cf.tls_client_auth.cert_issuer_ski` String\n\nThe Subject Key Identifier (SKI) of the direct issuer of the certificate in the request.\n\nThis field is only filled in if the request includes a client certificate for [mTLS authentication](https://developers.cloudflare.com/ssl/client-certificates/enable-mtls/).\n\n<page>\n---\ntitle: cf.tls_client_auth.cert_not_after · Cloudflare Ruleset Engine docs\ndescription: The certificate in the request is not valid after this date.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_client_auth.cert_not_after/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_client_auth.cert_not_after/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"8204924CF49D471E855862706D889F58F6B784D3\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_issuer\\_ski",
+  "links": []
+}

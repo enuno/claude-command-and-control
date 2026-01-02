@@ -1,0 +1,8 @@
+{
+  "title": "Upload dog.txt to the user-uploads bucket",
+  "content": "rclone copy dog.txt r2:user-uploads/\nrclone tree r2:user-uploads",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#upload-dog.txt-to-the-user-uploads-bucket",
+  "links": []
+}

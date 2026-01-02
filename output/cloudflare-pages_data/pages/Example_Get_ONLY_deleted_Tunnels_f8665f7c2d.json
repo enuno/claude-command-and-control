@@ -1,0 +1,8 @@
+{
+  "title": "Example: Get ONLY deleted Tunnels",
+  "content": "curl \"https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/tunnels?is_deleted=true\" \\\n     -H \"Authorization: Bearer $API_TOKEN\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#example:-get-only-deleted-tunnels",
+  "links": []
+}

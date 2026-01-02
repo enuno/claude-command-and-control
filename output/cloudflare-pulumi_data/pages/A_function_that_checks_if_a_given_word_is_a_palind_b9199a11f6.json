@@ -1,0 +1,8 @@
+{
+  "title": "A function that checks if a given word is a palindrome",
+  "content": "def is_palindrome(word):\n    # Convert the word to lowercase\n    word = word.lower()\n\n# Reverse the word\n    reversed_word = word[::-1]\n\n# Check if the reversed word is the same as the original word\n    if word == reversed_word:\n        return True\n    else:\n        return False",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#a-function-that-checks-if-a-given-word-is-a-palindrome",
+  "links": []
+}

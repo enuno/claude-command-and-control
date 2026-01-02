@@ -1,0 +1,13 @@
+{
+  "title": "http.request.timestamp.sec",
+  "content": "`http.request.timestamp.sec` Integer\n\nThe timestamp when Cloudflare received the request, expressed as UNIX time in seconds.\n\nThe field value is 10 digits long.\n\nWhen validating HMAC tokens in an expression, pass this field as the `currentTimestamp` argument to the [`is_timed_hmac_valid_v0()`](https://developers.cloudflare.com/ruleset-engine/rules-language/functions/#hmac-validation) validation function.\n\nTo obtain the timestamp milliseconds, use the [`http.request.timestamp.msec`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.timestamp.msec/) field.\n\n<page>\n---\ntitle: http.request.timestamp.msec · Cloudflare Ruleset Engine docs\ndescription: The millisecond when Cloudflare received the request, between 0–999.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.timestamp.msec/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.timestamp.msec/index.md\n---",
+  "code_samples": [
+    {
+      "code": "1484063137",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#http.request.timestamp.sec",
+  "links": []
+}

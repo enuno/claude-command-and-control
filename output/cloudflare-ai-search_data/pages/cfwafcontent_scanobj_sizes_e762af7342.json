@@ -1,0 +1,8 @@
+{
+  "title": "cf.waf.content\\_scan.obj\\_sizes",
+  "content": "`cf.waf.content_scan.obj_sizes` Array\\<Integer>\n\nAn array of file sizes in bytes, in the order the content objects were detected in the request.\n\nRequires a Cloudflare Enterprise plan with [malicious uploads detection](https://developers.cloudflare.com/waf/detections/malicious-uploads/).",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#cf.waf.content\\_scan.obj\\_sizes",
+  "links": []
+}

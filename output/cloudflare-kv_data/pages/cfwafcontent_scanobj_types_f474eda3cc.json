@@ -1,0 +1,8 @@
+{
+  "title": "cf.waf.content\\_scan.obj\\_types",
+  "content": "`cf.waf.content_scan.obj_types` Array\\<String>\n\nAn array of file types in the order the content objects were detected in the request.\n\nIf Cloudflare cannot determine the file type of a content object, the corresponding value in the `obj_types` array will be `application/octet-stream`.\n\nRequires a Cloudflare Enterprise plan with [malicious uploads detection](https://developers.cloudflare.com/waf/detections/malicious-uploads/).",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#cf.waf.content\\_scan.obj\\_types",
+  "links": []
+}

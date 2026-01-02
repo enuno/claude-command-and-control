@@ -1,0 +1,13 @@
+{
+  "title": "raw\\.http.response.headers.values",
+  "content": "`raw.http.response.headers.values` Array\\<String>\n\nThe values of the headers in the HTTP response without any transformation.\n\nThis is the raw field version of the [`http.response.headers.values`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.response.headers.values/) field. Raw fields, prefixed with `raw.`, preserve original response values for later evaluations. These fields are immutable during the entire request evaluation workflow, and they are not affected by the actions of previously matched rules.",
+  "code_samples": [
+    {
+      "code": "Example 1: [\"application/json\"]\nExample 2: [\"This header value is longer than 10 bytes\"]",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#raw\\.http.response.headers.values",
+  "links": []
+}

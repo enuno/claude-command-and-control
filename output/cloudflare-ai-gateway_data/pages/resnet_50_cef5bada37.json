@@ -1,0 +1,51 @@
+{
+  "title": "resnet-50",
+  "content": "Image Classification • Microsoft\n\n@cf/microsoft/resnet-50\n\n50 layers deep image classification CNN trained on more than 1M images from ImageNet\n\n| Model Info | |\n| - | - |\n| More information | [link](https://www.microsoft.com/en-us/research/blog/microsoft-vision-model-resnet-50-combines-web-scale-data-and-multi-task-learning-to-achieve-state-of-the-art/) |\n| Unit Pricing | $0.0000025 per inference request |\n\n\\* indicates a required field\n\nThe image to classify\n\n* `image` array required\n\nAn array of integers that represent the image data constrained to 8-bit unsigned integer values\n\nA value between 0 and 255 (unsigned 8bit)\n\nA confidence value, between 0 and 1, indicating how certain the model is about the predicted label\n\nThe predicted category or class for the input image based on analysis\n\nThe following schemas are based on JSON Schema\n\n<page>\n---\ntitle: sqlcoder-7b-2 · Cloudflare Workers AI docs\ndescription: \"This model is intended to be used by non-technical users to\n  understand data inside their SQL databases. \"\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers-ai/models/sqlcoder-7b-2/\n  md: https://developers.cloudflare.com/workers-ai/models/sqlcoder-7b-2/index.md\n---",
+  "code_samples": [
+    {
+      "code": "export interface Env {\n  AI: Ai;\n}\n\n\nexport default {\n  async fetch(request, env): Promise<Response> {\n    const res = await fetch(\"https://cataas.com/cat\");\n    const blob = await res.arrayBuffer();\n\n\n    const inputs = {\n      image: [...new Uint8Array(blob)],\n    };\n\n\n    const response = await env.AI.run(\n      \"@cf/microsoft/resnet-50\",\n      inputs\n    );\n\n\n    return new Response(JSON.stringify(response));\n  },\n} satisfies ExportedHandler<Env>;",
+      "language": "ts"
+    },
+    {
+      "code": "curl https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/ai/run/@cf/microsoft/resnet-50  \\\n    -X POST  \\\n    -H \"Authorization: Bearer $CLOUDFLARE_API_TOKEN\"  \\\n    --data-binary \"@orange-llama.png\"",
+      "language": "sh"
+    },
+    {
+      "code": "{\n      \"oneOf\": [\n          {\n              \"type\": \"string\",\n              \"format\": \"binary\",\n              \"description\": \"The image to classify\"\n          },\n          {\n              \"type\": \"object\",\n              \"properties\": {\n                  \"image\": {\n                      \"type\": \"array\",\n                      \"description\": \"An array of integers that represent the image data constrained to 8-bit unsigned integer values\",\n                      \"items\": {\n                          \"type\": \"number\",\n                          \"description\": \"A value between 0 and 255 (unsigned 8bit)\"\n                      }\n                  }\n              },\n              \"required\": [\n                  \"image\"\n              ]\n          }\n      ]\n  }",
+      "language": "json"
+    },
+    {
+      "code": "{\n      \"type\": \"array\",\n      \"contentType\": \"application/json\",\n      \"items\": {\n          \"type\": \"object\",\n          \"properties\": {\n              \"score\": {\n                  \"type\": \"number\",\n                  \"description\": \"A confidence value, between 0 and 1, indicating how certain the model is about the predicted label\"\n              },\n              \"label\": {\n                  \"type\": \"string\",\n                  \"description\": \"The predicted category or class for the input image based on analysis\"\n              }\n          }\n      }\n  }",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Input",
+      "id": "input"
+    },
+    {
+      "level": "h3",
+      "text": "Output",
+      "id": "output"
+    },
+    {
+      "level": "h2",
+      "text": "API Schemas",
+      "id": "api-schemas"
+    }
+  ],
+  "url": "llms-txt#resnet-50",
+  "links": []
+}

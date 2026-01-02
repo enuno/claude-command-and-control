@@ -1,0 +1,101 @@
+{
+  "title": "Must end with this command",
+  "content": "exec bun /container-server/dist/index.js\nbash\n#!/bin/bash\n\nredis-server --daemonize yes\nuntil redis-cli ping; do sleep 1; done\n\nnode /workspace/api-server.js &\n\nexec bun /container-server/dist/index.js\ntypescript\nconst sandbox = getSandbox(env.Sandbox, \"my-sandbox\");\n\n// Set once, available for all subsequent commands\nawait sandbox.setEnvVars({\n  DATABASE_URL: env.DATABASE_URL,\n  API_KEY: env.API_KEY,\n});\n\nawait sandbox.exec(\"python migrate.py\"); // Has DATABASE_URL and API_KEY\nawait sandbox.exec(\"python seed.py\"); // Has DATABASE_URL and API_KEY\ntypescript\nawait sandbox.exec(\"node app.js\", {\n  env: {\n    NODE_ENV: \"production\",\n    PORT: \"3000\",\n  },\n});\n\n// Also works with startProcess()\nawait sandbox.startProcess(\"python server.py\", {\n  env: {\n    DATABASE_URL: env.DATABASE_URL,\n  },\n});\ntypescript\nconst session = await sandbox.createSession({\n  env: {\n    DATABASE_URL: env.DATABASE_URL,\n    SECRET_KEY: env.SECRET_KEY,\n  },\n});\n\n// All commands in this session have these vars\nawait session.exec(\"python migrate.py\");\nawait session.exec(\"python seed.py\");\nbash\nwrangler secret put OPENAI_API_KEY\nwrangler secret put DATABASE_URL\ntypescript\ninterface Env {\n  Sandbox: DurableObjectNamespace;\n  OPENAI_API_KEY: string;\n  DATABASE_URL: string;\n}\n\nexport default {\n  async fetch(request: Request, env: Env): Promise<Response> {\n    const sandbox = getSandbox(env.Sandbox, \"user-sandbox\");\n\n// Option 1: Set globally for all commands\n    await sandbox.setEnvVars({\n      OPENAI_API_KEY: env.OPENAI_API_KEY,\n      DATABASE_URL: env.DATABASE_URL,\n    });\n    await sandbox.exec(\"python analyze.py\");\n\n// Option 2: Pass per-command\n    await sandbox.exec(\"python analyze.py\", {\n      env: {\n        OPENAI_API_KEY: env.OPENAI_API_KEY,\n      },\n    });\n\nreturn Response.json({ success: true });\n  },\n};\ntypescript\nconst defaults = { NODE_ENV: \"production\", LOG_LEVEL: \"info\" };\n\nawait sandbox.exec(\"npm start\", {\n  env: { ...defaults, PORT: \"3000\", API_KEY: env.API_KEY },\n});\ntypescript\n// Production database session\nconst prodSession = await sandbox.createSession({\n  env: { DATABASE_URL: env.PROD_DATABASE_URL },\n});\n\n// Staging database session\nconst stagingSession = await sandbox.createSession({\n  env: { DATABASE_URL: env.STAGING_DATABASE_URL },\n});\n\n// Run migrations on both concurrently\nawait Promise.all([\n  prodSession.exec(\"python migrate.py\"),\n  stagingSession.exec(\"python migrate.py\"),\n]);\nbash\nwrangler secret put AWS_ACCESS_KEY_ID",
+  "code_samples": [
+    {
+      "code": "Your startup script must end with `exec bun /container-server/dist/index.js` to start the SDK's control plane.\n\n### Multiple services",
+      "language": "unknown"
+    },
+    {
+      "code": "## Related resources\n\n* [Image Management](https://developers.cloudflare.com/containers/platform-details/image-management/) - Building and pushing images to Cloudflare's registry\n* [Wrangler configuration](https://developers.cloudflare.com/sandbox/configuration/wrangler/) - Using custom images in wrangler.jsonc\n* [Docker documentation](https://docs.docker.com/reference/dockerfile/) - Complete Dockerfile syntax\n* [Container concepts](https://developers.cloudflare.com/sandbox/concepts/containers/) - Understanding the runtime environment\n\n</page>\n\n<page>\n---\ntitle: Environment variables · Cloudflare Sandbox SDK docs\ndescription: Pass configuration, secrets, and runtime settings to your sandboxes\n  using environment variables.\nlastUpdated: 2025-11-18T19:18:00.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/sandbox/configuration/environment-variables/\n  md: https://developers.cloudflare.com/sandbox/configuration/environment-variables/index.md\n---\n\nPass configuration, secrets, and runtime settings to your sandboxes using environment variables.\n\n## Three ways to set environment variables\n\nThe Sandbox SDK provides three methods for setting environment variables, each suited for different use cases:\n\n### 1. Sandbox-level with setEnvVars()\n\nSet environment variables globally for all commands in the sandbox:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Use when:** You need the same environment variables for multiple commands.\n\n### 2. Per-command with exec() options\n\nPass environment variables for a specific command:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Use when:** You need different environment variables for different commands, or want to override sandbox-level variables.\n\n### 3. Session-level with createSession()\n\nCreate an isolated session with its own environment variables:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Use when:** You need isolated execution contexts with different environment variables running concurrently.\n\n## Common patterns\n\n### Pass Worker secrets to sandbox\n\nSecurely pass secrets from your Worker to the sandbox. First, set secrets using Wrangler:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then pass them to your sandbox:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Combine default and specific variables",
+      "language": "unknown"
+    },
+    {
+      "code": "### Multiple isolated sessions\n\nRun different tasks with different environment variables concurrently:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Bucket mounting credentials\n\nWhen mounting S3-compatible object storage, the SDK uses **s3fs-fuse** under the hood, which requires AWS-style credentials. For R2, generate API tokens from the Cloudflare dashboard and provide them using AWS environment variable names:\n\n**Get R2 API tokens:**\n\n1. Go to [**R2** > **Overview**](https://dash.cloudflare.com/?to=/:account/r2) in the Cloudflare dashboard\n2. Select **Manage R2 API Tokens**\n3. Create a token with **Object Read & Write** permissions\n4. Copy the **Access Key ID** and **Secret Access Key**\n\n**Set credentials as Worker secrets:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Multiple services",
+      "id": "multiple-services"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Three ways to set environment variables",
+      "id": "three-ways-to-set-environment-variables"
+    },
+    {
+      "level": "h3",
+      "text": "1. Sandbox-level with setEnvVars()",
+      "id": "1.-sandbox-level-with-setenvvars()"
+    },
+    {
+      "level": "h3",
+      "text": "2. Per-command with exec() options",
+      "id": "2.-per-command-with-exec()-options"
+    },
+    {
+      "level": "h3",
+      "text": "3. Session-level with createSession()",
+      "id": "3.-session-level-with-createsession()"
+    },
+    {
+      "level": "h2",
+      "text": "Common patterns",
+      "id": "common-patterns"
+    },
+    {
+      "level": "h3",
+      "text": "Pass Worker secrets to sandbox",
+      "id": "pass-worker-secrets-to-sandbox"
+    },
+    {
+      "level": "h3",
+      "text": "Combine default and specific variables",
+      "id": "combine-default-and-specific-variables"
+    },
+    {
+      "level": "h3",
+      "text": "Multiple isolated sessions",
+      "id": "multiple-isolated-sessions"
+    },
+    {
+      "level": "h3",
+      "text": "Bucket mounting credentials",
+      "id": "bucket-mounting-credentials"
+    }
+  ],
+  "url": "llms-txt#must-end-with-this-command",
+  "links": []
+}

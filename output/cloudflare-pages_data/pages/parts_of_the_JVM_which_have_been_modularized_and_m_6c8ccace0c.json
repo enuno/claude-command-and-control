@@ -1,0 +1,54 @@
+{
+  "title": "parts of the JVM which have been modularized and made internal).",
+  "content": "JAVA_17_COMPATABILITY=\"--add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED\"\n\nspark-submit \\\n--conf \"spark.driver.extraJavaOptions=$JAVA_17_COMPATABILITY\" \\\n--conf \"spark.executor.extraJavaOptions=$JAVA_17_COMPATABILITY\" \\\n--class com.example.R2DataCatalogDemo target/scala-2.12/R2DataCatalogDemo-assembly-1.0.jar\nbash\nchmod +x submit.sh\nbash\nexport CATALOG_URI=\nexport WAREHOUSE=\nexport TOKEN=\nbash\n./submit.sh\nsql\n-- Create an Iceberg catalog named `r2` and set it as the current catalog\n\nCREATE EXTERNAL CATALOG r2\nPROPERTIES\n(\n    \"type\" = \"iceberg\",\n    \"iceberg.catalog.type\" = \"rest\",\n    \"iceberg.catalog.uri\" = \"<r2_catalog_uri>\",\n    \"iceberg.catalog.security\" = \"oauth2\",\n    \"iceberg.catalog.oauth2.token\" = \"<r2_api_token>\",\n    \"iceberg.catalog.warehouse\" = \"<r2_warehouse_name>\"\n);\n\n-- Create a database and display all databases in newly connected catalog\n\nCREATE DATABASE testdb;\n\nSHOW DATABASES FROM r2;\n\n+--------------------+\n| Database           |\n+--------------------+\n| information_schema |\n| testdb             |\n+--------------------+\n2 rows in set (0.66 sec)\nbash\nmkdir -p trino-catalog && cd trino-catalog/\nproperties",
+  "code_samples": [
+    {
+      "code": "Before running it, make sure the script is executable:",
+      "language": "unknown"
+    },
+    {
+      "code": "At this point, your project directory should be structured like this:\n\nBefore submitting the job, make sure you have the required environment variable set for your catalog URI, warehouse, and [Cloudflare API token](https://developers.cloudflare.com/r2/api/tokens/).",
+      "language": "unknown"
+    },
+    {
+      "code": "You are now ready to run the job:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: StarRocks · Cloudflare R2 docs\ndescription: Below is an example of using StarRocks to connect, query, modify\n  data from R2 Data Catalog (read-write).\nlastUpdated: 2025-07-31T10:17:29.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/data-catalog/config-examples/starrocks/\n  md: https://developers.cloudflare.com/r2/data-catalog/config-examples/starrocks/index.md\n---\n\nBelow is an example of using [StarRocks](https://docs.starrocks.io/docs/data_source/catalog/iceberg/iceberg_catalog/#rest) to connect, query, modify data from R2 Data Catalog (read-write).\n\n## Prerequisites\n\n* Sign up for a [Cloudflare account](https://dash.cloudflare.com/sign-up/workers-and-pages).\n* [Create an R2 bucket](https://developers.cloudflare.com/r2/buckets/create-buckets/) and [enable the data catalog](https://developers.cloudflare.com/r2/data-catalog/manage-catalogs/#enable-r2-data-catalog-on-a-bucket).\n* [Create an R2 API token](https://developers.cloudflare.com/r2/api/tokens/) with both [R2 and data catalog permissions](https://developers.cloudflare.com/r2/api/tokens/#permissions).\n* A running [StarRocks](https://www.starrocks.io/) frontend instance. You can use the [all-in-one](https://docs.starrocks.io/docs/quick_start/shared-nothing/#launch-starrocks) docker setup.\n\n## Example usage\n\nIn your running StarRocks instance, run these commands:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Apache Trino · Cloudflare R2 docs\ndescription: Below is an example of using Apache Trino to connect to R2 Data\n  Catalog. For more information on connecting to R2 Data Catalog with Trino,\n  refer to Trino documentation.\nlastUpdated: 2025-09-05T20:58:15.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/data-catalog/config-examples/trino/\n  md: https://developers.cloudflare.com/r2/data-catalog/config-examples/trino/index.md\n---\n\nBelow is an example of using [Apache Trino](https://trino.io/) to connect to R2 Data Catalog. For more information on connecting to R2 Data Catalog with Trino, refer to [Trino documentation](https://trino.io/docs/current/connector/iceberg.html).\n\n## Prerequisites\n\n* Sign up for a [Cloudflare account](https://dash.cloudflare.com/sign-up/workers-and-pages).\n* [Create an R2 bucket](https://developers.cloudflare.com/r2/buckets/create-buckets/) and [enable the data catalog](https://developers.cloudflare.com/r2/data-catalog/manage-catalogs/#enable-r2-data-catalog-on-a-bucket).\n* [Create an R2 API token, key, and secret](https://developers.cloudflare.com/r2/api/tokens/) with both [R2 and data catalog permissions](https://developers.cloudflare.com/r2/api/tokens/#permissions).\n* Install [Docker](https://docs.docker.com/get-docker/) to run the Trino container.\n\n## Setup\n\nCreate a local directory for the catalog configuration and change directories to it",
+      "language": "unknown"
+    },
+    {
+      "code": "Create a configuration file called `r2.properties` for your R2 Data Catalog connection:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Example usage",
+      "id": "example-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    }
+  ],
+  "url": "llms-txt#parts-of-the-jvm-which-have-been-modularized-and-made-internal).",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Cloudflare account ID",
+  "content": "variable \"cloudflare_account_id\" {\n  default = \"<ACCOUNT_ID>\"\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#cloudflare-account-id",
+  "links": []
+}

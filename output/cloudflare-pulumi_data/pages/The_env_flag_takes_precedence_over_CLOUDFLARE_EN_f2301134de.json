@@ -1,0 +1,8 @@
+{
+  "title": "The --env flag takes precedence over CLOUDFLARE_ENV",
+  "content": "CLOUDFLARE_ENV=dev wrangler deploy --env production",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#the---env-flag-takes-precedence-over-cloudflare_env",
+  "links": []
+}

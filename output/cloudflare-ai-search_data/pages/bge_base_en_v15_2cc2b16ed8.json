@@ -1,0 +1,55 @@
+{
+  "title": "bge-base-en-v1.5",
+  "content": "Text Embeddings • baai\n\n@cf/baai/bge-base-en-v1.5\n\nBAAI general embedding (Base) model that transforms any given text into a 768-dimensional vector\n\n| Model Info | |\n| - | - |\n| More information | [link](https://huggingface.co/BAAI/bge-base-en-v1.5) |\n| Maximum Input Tokens | 512 |\n| Output Dimensions | 768 |\n| Batch | Yes |\n| Unit Pricing | $0.067 per M input tokens |\n\nOpenAI compatible endpoints\n\nWorkers AI also supports OpenAI compatible API endpoints for `/v1/chat/completions` and `/v1/embeddings`. For more details, refer to [Configurations ](https://developers.cloudflare.com/workers-ai/configuration/open-ai-compatibility/).\n\n\\* indicates a required field\n\n* `text` one of required\n\nBatch of text values to embed\n\n* `items` string min 1\n\n* `pooling` string default mean\n\nThe pooling method used in the embedding process. \\`cls\\` pooling will generate more accurate embeddings on larger inputs - however, embeddings created with cls pooling are not compatible with embeddings generated with mean pooling. The default pooling method is \\`mean\\` in order for this to not be a breaking change, but we highly suggest using the new \\`cls\\` pooling for better accuracy.\n\n* `requests` array required\n\nBatch of the embeddings requests to run using async-queue\n\n* `text` one of required\n\nBatch of text values to embed\n\n* `items` string min 1\n\n* `pooling` string default mean\n\nThe pooling method used in the embedding process. \\`cls\\` pooling will generate more accurate embeddings on larger inputs - however, embeddings created with cls pooling are not compatible with embeddings generated with mean pooling. The default pooling method is \\`mean\\` in order for this to not be a breaking change, but we highly suggest using the new \\`cls\\` pooling for better accuracy.\n\nEmbeddings of the requested text values\n\nFloating point embedding representation shaped by the embedding model\n\nThe pooling method used in the embedding process.\n\n* `request_id` string\n\nThe async request id that can be used to obtain the results.\n\nThe following schemas are based on JSON Schema\n\n<page>\n---\ntitle: bge-large-en-v1.5 · Cloudflare Workers AI docs\ndescription: BAAI general embedding (Large) model that transforms any given text\n  into a 1024-dimensional vector\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers-ai/models/bge-large-en-v1.5/\n  md: https://developers.cloudflare.com/workers-ai/models/bge-large-en-v1.5/index.md\n---",
+  "code_samples": [
+    {
+      "code": "export interface Env {\n  AI: Ai;\n}\n\n\nexport default {\n  async fetch(request, env): Promise<Response> {\n\n\n    // Can be a string or array of strings]\n    const stories = [\n      \"This is a story about an orange cloud\",\n      \"This is a story about a llama\",\n      \"This is a story about a hugging emoji\",\n    ];\n\n\n    const embeddings = await env.AI.run(\n      \"@cf/baai/bge-base-en-v1.5\",\n      {\n        text: stories,\n      }\n    );\n\n\n    return Response.json(embeddings);\n  },\n} satisfies ExportedHandler<Env>;",
+      "language": "ts"
+    },
+    {
+      "code": "import os\nimport requests\n\n\n\n\nACCOUNT_ID = \"your-account-id\"\nAUTH_TOKEN = os.environ.get(\"CLOUDFLARE_AUTH_TOKEN\")\n\n\nstories = [\n  'This is a story about an orange cloud',\n  'This is a story about a llama',\n  'This is a story about a hugging emoji'\n]\n\n\nresponse = requests.post(\n  f\"https://api.cloudflare.com/client/v4/accounts/{ACCOUNT_ID}/ai/run/@cf/baai/bge-base-en-v1.5\",\n  headers={\"Authorization\": f\"Bearer {AUTH_TOKEN}\"},\n  json={\"text\": stories}\n)\n\n\nprint(response.json())",
+      "language": "py"
+    },
+    {
+      "code": "curl https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/ai/run/@cf/baai/bge-base-en-v1.5  \\\n  -X POST  \\\n  -H \"Authorization: Bearer $CLOUDFLARE_API_TOKEN\"  \\\n  -d '{ \"text\": [\"This is a story about an orange cloud\", \"This is a story about a llama\", \"This is a story about a hugging emoji\"] }'",
+      "language": "sh"
+    },
+    {
+      "code": "{\n      \"type\": \"object\",\n      \"oneOf\": [\n          {\n              \"properties\": {\n                  \"text\": {\n                      \"oneOf\": [\n                          {\n                              \"type\": \"string\",\n                              \"description\": \"The text to embed\",\n                              \"minLength\": 1\n                          },\n                          {\n                              \"type\": \"array\",\n                              \"description\": \"Batch of text values to embed\",\n                              \"items\": {\n                                  \"type\": \"string\",\n                                  \"description\": \"The text to embed\",\n                                  \"minLength\": 1\n                              },\n                              \"maxItems\": 100\n                          }\n                      ]\n                  },\n                  \"pooling\": {\n                      \"type\": \"string\",\n                      \"enum\": [\n                          \"mean\",\n                          \"cls\"\n                      ],\n                      \"default\": \"mean\",\n                      \"description\": \"The pooling method used in the embedding process. `cls` pooling will generate more accurate embeddings on larger inputs - however, embeddings created with cls pooling are not compatible with embeddings generated with mean pooling. The default pooling method is `mean` in order for this to not be a breaking change, but we highly suggest using the new `cls` pooling for better accuracy.\"\n                  }\n              },\n              \"required\": [\n                  \"text\"\n              ]\n          },\n          {\n              \"properties\": {\n                  \"requests\": {\n                      \"type\": \"array\",\n                      \"description\": \"Batch of the embeddings requests to run using async-queue\",\n                      \"items\": {\n                          \"properties\": {\n                              \"text\": {\n                                  \"oneOf\": [\n                                      {\n                                          \"type\": \"string\",\n                                          \"description\": \"The text to embed\",\n                                          \"minLength\": 1\n                                      },\n                                      {\n                                          \"type\": \"array\",\n                                          \"description\": \"Batch of text values to embed\",\n                                          \"items\": {\n                                              \"type\": \"string\",\n                                              \"description\": \"The text to embed\",\n                                              \"minLength\": 1\n                                          },\n                                          \"maxItems\": 100\n                                      }\n                                  ]\n                              },\n                              \"pooling\": {\n                                  \"type\": \"string\",\n                                  \"enum\": [\n                                      \"mean\",\n                                      \"cls\"\n                                  ],\n                                  \"default\": \"mean\",\n                                  \"description\": \"The pooling method used in the embedding process. `cls` pooling will generate more accurate embeddings on larger inputs - however, embeddings created with cls pooling are not compatible with embeddings generated with mean pooling. The default pooling method is `mean` in order for this to not be a breaking change, but we highly suggest using the new `cls` pooling for better accuracy.\"\n                              }\n                          },\n                          \"required\": [\n                              \"text\"\n                          ]\n                      }\n                  }\n              },\n              \"required\": [\n                  \"requests\"\n              ]\n          }\n      ]\n  }",
+      "language": "json"
+    },
+    {
+      "code": "{\n      \"oneOf\": [\n          {\n              \"type\": \"object\",\n              \"contentType\": \"application/json\",\n              \"properties\": {\n                  \"shape\": {\n                      \"type\": \"array\",\n                      \"items\": {\n                          \"type\": \"number\"\n                      }\n                  },\n                  \"data\": {\n                      \"type\": \"array\",\n                      \"description\": \"Embeddings of the requested text values\",\n                      \"items\": {\n                          \"type\": \"array\",\n                          \"description\": \"Floating point embedding representation shaped by the embedding model\",\n                          \"items\": {\n                              \"type\": \"number\"\n                          }\n                      }\n                  },\n                  \"pooling\": {\n                      \"type\": \"string\",\n                      \"enum\": [\n                          \"mean\",\n                          \"cls\"\n                      ],\n                      \"description\": \"The pooling method used in the embedding process.\"\n                  }\n              }\n          },\n          {\n              \"type\": \"object\",\n              \"contentType\": \"application/json\",\n              \"title\": \"Async response\",\n              \"properties\": {\n                  \"request_id\": {\n                      \"type\": \"string\",\n                      \"description\": \"The async request id that can be used to obtain the results.\"\n                  }\n              }\n          }\n      ]\n  }",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Input",
+      "id": "input"
+    },
+    {
+      "level": "h3",
+      "text": "Output",
+      "id": "output"
+    },
+    {
+      "level": "h2",
+      "text": "API Schemas",
+      "id": "api-schemas"
+    }
+  ],
+  "url": "llms-txt#bge-base-en-v1.5",
+  "links": []
+}

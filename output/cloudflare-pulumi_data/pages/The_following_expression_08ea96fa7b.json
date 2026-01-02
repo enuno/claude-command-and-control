@@ -1,0 +1,8 @@
+{
+  "title": "The following expression:",
+  "content": "http.request.full_uri wildcard \"*.example.com/*\" or http.request.full_uri wildcard \"http*://example.com/*\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#the-following-expression:",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Attempt to read an object called \"cat-pic.jpg\"",
+  "content": "curl https://your-worker.dev/cat-pic.jpg\n#=> test",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#attempt-to-read-an-object-called-\"cat-pic.jpg\"",
+  "links": []
+}

@@ -1,0 +1,28 @@
+{
+  "title": "Read the data back from the Iceberg table",
+  "content": "result_df = spark.read \\\n    .format(\"iceberg\") \\\n    .load(\"default.my_table\")\n\nresult_df.show()\nbash\nmkdir -p trino-catalog && cd trino-catalog/\nproperties",
+  "code_samples": [
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Apache Trino · Cloudflare R2 docs\ndescription: Below is an example of using Apache Trino to connect to R2 Data\n  Catalog. For more information on connecting to R2 Data Catalog with Trino,\n  refer to Trino documentation.\nlastUpdated: 2025-09-05T20:58:15.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/data-catalog/config-examples/trino/\n  md: https://developers.cloudflare.com/r2/data-catalog/config-examples/trino/index.md\n---\n\nBelow is an example of using [Apache Trino](https://trino.io/) to connect to R2 Data Catalog. For more information on connecting to R2 Data Catalog with Trino, refer to [Trino documentation](https://trino.io/docs/current/connector/iceberg.html).\n\n## Prerequisites\n\n* Sign up for a [Cloudflare account](https://dash.cloudflare.com/sign-up/workers-and-pages).\n* [Create an R2 bucket](https://developers.cloudflare.com/r2/buckets/create-buckets/) and [enable the data catalog](https://developers.cloudflare.com/r2/data-catalog/manage-catalogs/#enable-r2-data-catalog-on-a-bucket).\n* [Create an R2 API token, key, and secret](https://developers.cloudflare.com/r2/api/tokens/) with both [R2 and data catalog permissions](https://developers.cloudflare.com/r2/api/tokens/#permissions).\n* Install [Docker](https://docs.docker.com/get-docker/) to run the Trino container.\n\n## Setup\n\nCreate a local directory for the catalog configuration and change directories to it",
+      "language": "unknown"
+    },
+    {
+      "code": "Create a configuration file called `r2.properties` for your R2 Data Catalog connection:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    }
+  ],
+  "url": "llms-txt#read-the-data-back-from-the-iceberg-table",
+  "links": []
+}

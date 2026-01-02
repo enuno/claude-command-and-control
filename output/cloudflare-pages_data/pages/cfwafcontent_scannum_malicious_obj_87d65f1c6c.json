@@ -1,0 +1,8 @@
+{
+  "title": "cf.waf.content\\_scan.num\\_malicious\\_obj",
+  "content": "`cf.waf.content_scan.num_malicious_obj` Integer\n\nThe number of malicious content objects detected in the request (zero or greater).\n\nRequires a Cloudflare Enterprise plan with [malicious uploads detection](https://developers.cloudflare.com/waf/detections/malicious-uploads/).",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#cf.waf.content\\_scan.num\\_malicious\\_obj",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "CAA records added by Google Trust Services",
+  "content": "0 issue \"pki.goog; cansignhttpexchanges=yes\"\n0 issuewild \"pki.goog; cansignhttpexchanges=yes\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#caa-records-added-by-google-trust-services",
+  "links": []
+}

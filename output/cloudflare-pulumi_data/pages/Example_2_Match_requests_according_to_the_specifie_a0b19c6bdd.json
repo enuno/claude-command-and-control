@@ -1,0 +1,8 @@
+{
+  "title": "Example 2: Match requests according to the specified operator and the length/size entered for the header value.",
+  "content": "any(len(raw.http.response.headers.values[*])[*] gt 10)\n```\n\n* Response\n* Headers\n* Raw fields\n\n<page>\n---\ntitle: ssl · Cloudflare Ruleset Engine docs\ndescription: Returns `true` when the HTTP connection to the client is encrypted.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/ssl/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/ssl/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#example-2:-match-requests-according-to-the-specified-operator-and-the-length/size-entered-for-the-header-value.",
+  "links": []
+}

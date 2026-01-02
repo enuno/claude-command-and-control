@@ -1,0 +1,55 @@
+{
+  "title": "flux-1-schnell",
+  "content": "Text-to-Image • Black Forest Labs\n\n@cf/black-forest-labs/flux-1-schnell\n\nFLUX.1 \\[schnell] is a 12 billion parameter rectified flow transformer capable of generating images from text descriptions.\n\n| Model Info | |\n| - | - |\n| Terms and License | [link](https://bfl.ai/legal/terms-of-service) |\n| Unit Pricing | $0.000053 per 512 by 512 tile, $0.00011 per step |\n\nWorkers - Returning a data URI - TypeScript\n\nWorkers - Returning an image - TypeScript\n\n\\* indicates a required field\n\n* `prompt` string required min 1 max 2048\n\nA text description of the image you want to generate.\n\n* `steps` integer default 4 max 8\n\nThe number of diffusion steps; higher values can improve quality but take longer.\n\nThe generated image in Base64 format.\n\nThe following schemas are based on JSON Schema\n\n<page>\n---\ntitle: flux-2-dev · Cloudflare Workers AI docs\ndescription: FLUX.2 [dev] is an image model from Black Forest Labs where you can\n  generate highly realistic and detailed images, with multi-reference support.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers-ai/models/flux-2-dev/\n  md: https://developers.cloudflare.com/workers-ai/models/flux-2-dev/index.md\n---\n\n![Black Forest Labs logo](https://developers.cloudflare.com/_astro/blackforestlabs.Ccs-Y4-D.svg)",
+  "code_samples": [
+    {
+      "code": "export interface Env {\n  AI: Ai;\n}\n\n\nexport default {\n  async fetch(request, env): Promise<Response> {\n    const response = await env.AI.run('@cf/black-forest-labs/flux-1-schnell', {\n      prompt: 'a cyberpunk lizard',\n      seed: Math.floor(Math.random() * 10)\n    });\n    // response.image is base64 encoded which can be used directly as an <img src=\"\"> data URI\n    const dataURI = `data:image/jpeg;charset=utf-8;base64,${response.image}`;\n    return Response.json({ dataURI });\n  },\n} satisfies ExportedHandler<Env>;",
+      "language": "ts"
+    },
+    {
+      "code": "export interface Env {\n  AI: Ai;\n}\n\n\nexport default {\n  async fetch(request, env): Promise<Response> {\n    const response = await env.AI.run('@cf/black-forest-labs/flux-1-schnell', {\n      prompt: 'a cyberpunk lizard',\n      seed: Math.floor(Math.random() * 10)\n    });\n    // Convert from base64 string\n    const binaryString = atob(response.image);\n    // Create byte representation\n    const img = Uint8Array.from(binaryString, (m) => m.codePointAt(0));\n    return new Response(img, {\n      headers: {\n        'Content-Type': 'image/jpeg',\n      },\n    });\n  },\n} satisfies ExportedHandler<Env>;",
+      "language": "ts"
+    },
+    {
+      "code": "curl https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/ai/run/@cf/black-forest-labs/flux-1-schnell  \\\n  -X POST  \\\n  -H \"Authorization: Bearer $CLOUDFLARE_API_TOKEN\"  \\\n  -d '{ \"prompt\": \"cyberpunk cat\", \"seed\": \"Random positive integer\" }'",
+      "language": "sh"
+    },
+    {
+      "code": "{\n      \"type\": \"object\",\n      \"properties\": {\n          \"prompt\": {\n              \"type\": \"string\",\n              \"minLength\": 1,\n              \"maxLength\": 2048,\n              \"description\": \"A text description of the image you want to generate.\"\n          },\n          \"steps\": {\n              \"type\": \"integer\",\n              \"default\": 4,\n              \"maximum\": 8,\n              \"description\": \"The number of diffusion steps; higher values can improve quality but take longer.\"\n          }\n      },\n      \"required\": [\n          \"prompt\"\n      ]\n  }",
+      "language": "json"
+    },
+    {
+      "code": "{\n      \"type\": \"object\",\n      \"contentType\": \"application/json\",\n      \"properties\": {\n          \"image\": {\n              \"type\": \"string\",\n              \"description\": \"The generated image in Base64 format.\"\n          }\n      }\n  }",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Input",
+      "id": "input"
+    },
+    {
+      "level": "h3",
+      "text": "Output",
+      "id": "output"
+    },
+    {
+      "level": "h2",
+      "text": "API Schemas",
+      "id": "api-schemas"
+    }
+  ],
+  "url": "llms-txt#flux-1-schnell",
+  "links": []
+}

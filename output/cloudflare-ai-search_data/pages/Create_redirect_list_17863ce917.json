@@ -1,0 +1,8 @@
+{
+  "title": "Create redirect list",
+  "content": "resource \"cloudflare_list\" \"bulk_redirect_to_id\" {\n  account_id  = var.cloudflare_account_id\n  name        = var.bulk_redirect_list_name\n  description = var.bulk_redirect_list_description\n  kind        = \"redirect\"\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-redirect-list",
+  "links": []
+}

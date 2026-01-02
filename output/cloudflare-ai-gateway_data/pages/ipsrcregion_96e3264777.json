@@ -1,0 +1,13 @@
+{
+  "title": "ip.src.region",
+  "content": "`ip.src.region` String\n\nThe region name associated with the incoming request.\n\n* Request\n* Geolocation\n\n<page>\n---\ntitle: ip.src.region_code · Cloudflare Ruleset Engine docs\ndescription: The region code associated with the incoming request.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/ip.src.region_code/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/ip.src.region_code/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"Texas\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#ip.src.region",
+  "links": []
+}

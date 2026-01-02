@@ -1,0 +1,8 @@
+{
+  "title": "cf.verified\\_bot\\_category",
+  "content": "`cf.verified_bot_category` String\n\nProvides the type and purpose of a verified bot.\n\nFor more details, refer to [Verified bot categories](https://developers.cloudflare.com/bots/concepts/bot/verified-bots/#categories).\n\n<page>\n---\ntitle: cf.waf.auth_detected · Cloudflare Ruleset Engine docs\ndescription: Indicates whether the Cloudflare WAF detected authentication\n  credentials in the request.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.auth_detected/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.auth_detected/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#cf.verified\\_bot\\_category",
+  "links": []
+}

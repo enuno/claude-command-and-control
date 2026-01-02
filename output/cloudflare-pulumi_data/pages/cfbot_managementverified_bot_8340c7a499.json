@@ -1,0 +1,8 @@
+{
+  "title": "cf.bot\\_management.verified\\_bot",
+  "content": "`cf.bot_management.verified_bot` Boolean\n\nIndicates whether the request originated from a known good bot or crawler.\n\nProvides the same information as [`cf.client.bot`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.client.bot/).\n\nRequires a Cloudflare Enterprise plan with [Bot Management](https://developers.cloudflare.com/bots/plans/bm-subscription/) enabled.\n\n<page>\n---\ntitle: cf.client.bot · Cloudflare Ruleset Engine docs\ndescription: Indicates whether the request originated from a known good bot or crawler.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.client.bot/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.client.bot/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#cf.bot\\_management.verified\\_bot",
+  "links": []
+}

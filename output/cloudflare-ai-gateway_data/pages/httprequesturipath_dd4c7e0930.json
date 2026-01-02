@@ -1,0 +1,13 @@
+{
+  "title": "http.request.uri.path",
+  "content": "`http.request.uri.path` String\n\nThe URI path of the request.\n\n<page>\n---\ntitle: http.request.uri.path.extension · Cloudflare Ruleset Engine docs\ndescription: The lowercased file extension in the URI path without the dot (`.`) character.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.uri.path.extension/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.uri.path.extension/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"/articles/index\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#http.request.uri.path",
+  "links": []
+}

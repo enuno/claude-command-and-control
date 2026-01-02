@@ -1,0 +1,13 @@
+{
+  "title": "cf.tls\\_client\\_extensions\\_sha1",
+  "content": "`cf.tls_client_extensions_sha1` String\n\nThe SHA-1 fingerprint of TLS client extensions, encoded in Base64 using big-endian format.\n\nFor the little-endian version of this field, refer to [`cf.tls_client_extensions_sha1_le`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_client_extensions_sha1_le/).\n\n<page>\n---\ntitle: cf.tls_client_extensions_sha1_le · Cloudflare Ruleset Engine docs\ndescription: The SHA-1 fingerprint of TLS client extensions, encoded in Base64\n  using little-endian format.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_client_extensions_sha1_le/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_client_extensions_sha1_le/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"OWFiM2I5ZDc0YWI0YWYzZmFkMGU0ZjhlYjhiYmVkMjgxNTU5YTU2Mg==\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#cf.tls\\_client\\_extensions\\_sha1",
+  "links": []
+}

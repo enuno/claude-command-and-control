@@ -1,0 +1,17 @@
+{
+  "title": "http.request.uri.args.values",
+  "content": "`http.request.uri.args.values` Array\\<String>\n\nThe values of arguments in the HTTP URI query string.\n\nThe values are not pre-processed and retain the original case used in the request. They are in the same order as in the request.\n\nDuplicated values are listed multiple times.\n\n* **Decoding**: No decoding performed\n* **Non-ASCII**: Preserved\n\n<page>\n---\ntitle: http.request.uri.path.extension · Cloudflare Ruleset Engine docs\ndescription: The lowercased file extension in the URI path without the dot (`.`) character.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.uri.path.extension/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.uri.path.extension/index.md\n---",
+  "code_samples": [
+    {
+      "code": "[\"red+apples\"]",
+      "language": "txt"
+    },
+    {
+      "code": "any(http.request.uri.args.values[*] == \"red+apples\")",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#http.request.uri.args.values",
+  "links": []
+}

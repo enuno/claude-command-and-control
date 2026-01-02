@@ -1,0 +1,183 @@
+{
+  "title": "cmu requestCertificate -c=\"US\" -o=\"Example, Inc.\" -cn=\"ibm-cloudhsm.example.com\" -s=\"California\" -l=\"San Francisco\" -publichandle=60 -privatehandle=61 -outputfile=\"ecdsa.csr\" -sha256withecdsa",
+  "content": "Please enter password for token in slot 0 : ********\nUsing \"CKM_ECDSA_SHA256\" Mechanism\nyaml\nprivate_key_stores:\n  - dir: /etc/keyless/keys\nyaml\n- uri: pkcs11:token=KeylessSSL;object=myrsakeyid=a000??module-path=/usr/safenet/lunaclient/lib/libCryptoki2_64.so&pin-value=password&max-sessions=1\n- uri: pkcs11:token=KeylessSSL;object=myecdsakeyid=a001??module-path=/usr/safenet/lunaclient/lib/libCryptoki2_64.so&pin-value=password&max-sessions=1\nsh\nsudo systemctl restart gokeyless.service\nsudo systemctl status gokeyless.service -l\nbash\nsudo apt-get install -y softhsm2 opensc\n\ncat <<EOF | sudo tee /etc/softhsm/softhsm2.conf\ndirectories.tokendir = /var/lib/softhsm/tokens\nobjectstore.backend = file\nlog.level = DEBUG\nslots.removable = false\nEOF\n\nsudo mkdir /var/lib/softhsm/tokens\nsudo chown root:softhsm $_\nsudo chmod 0770 /var/lib/softhsm/tokens\nsudo usermod -G softhsm keyless\nsudo usermod -G softhsm $(whoami)\n\necho 'export SOFTHSM2_CONF=/etc/softhsm/softhsm2.conf' | tee -a ~/.profile\nsource ~/.profile\nsh\nsudo -u keyless softhsm2-util --init-token --slot 0 --label test-token --pin 1234 --so-pin 4321\nsh\nThe token has been initialized.\nbash\ncat <<EOF | tee csr.json\n{\n    \"hosts\": [\n        \"keyless-softhsm.example.com\"\n    ],\n    \"CN\": \"keyless-softhsm.example.com\",\n    \"key\": {\n        \"algo\": \"rsa\",\n        \"size\": 2048\n    },\n    \"names\": [{\n        \"C\": \"US\",\n        \"L\": \"San Francisco\",\n        \"O\": \"TLS Fun\",\n        \"OU\": \"Technical Operations\",\n        \"ST\": \"California\"\n    }]\n}\nEOF\n\ncfssl genkey csr.json | cfssljson -bare certificate\nsh\n2018/08/12 00:52:22 [INFO] generate received request\n2018/08/12 00:52:22 [INFO] received CSR\n2018/08/12 00:52:22 [INFO] generating key: rsa-2048\n2018/08/12 00:52:22 [INFO] encoded CSR\nsh\nopenssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in certificate-key.pem -out certificate-key.p8\nsudo chown keyless certificate-key.p8\n\nsudo -u keyless softhsm2-util --pin 1234 --import ./certificate-key.p8 --token test-token --id a000 --label rsa-privkey\nsh\nFound slot 915669571 with matching token label.\nThe key pair has been imported.\nbash\nsudo -u keyless pkcs11-tool --module /usr/lib/softhsm/libsofthsm2.so -l -p 1234 --token test-token --list-objects\nsh\nPublic Key Object; RSA 2048 bits\n  label:      rsa-privkey\n  ID:         a000\n  Usage:      verify\nPrivate Key Object; RSA\n  label:      rsa-privkey\n  ID:         a000\n  Usage:      sign\nyaml\nprivate_key_stores:\n  - dir: /etc/keyless/keys\nyaml\n- uri: pkcs11:token=test-token;id=%a0%00?module-path=/usr/lib/softhsm/libsofthsm2.so&pin-value=1234&max-sessions=1\nsh\nsudo systemctl restart gokeyless.service\nsudo systemctl status gokeyless.service -l\ntxt\nc5$ cat /proc/cpuinfo|grep \"model name\"\nmodel name  : Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz\nmodel name  : Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz\nmodel name  : Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz\nmodel name  : Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz\ntxt\nc5$ bench -ski $ECDSA_SKI -op ECDSA-SHA256 -bandwidth -duration 60s\nTotal operations completed: 2661570\nAverage operation duration: 22.543µs\ntxt\nc5$ bench -ski $RSA_SKI -op RSA-SHA256 -bandwidth -duration 60s\nTotal operations completed: 46560\nAverage operation duration: 1.288659ms.\nbash\nopenssl genrsa -aes256 -out rootca.key 4096\nbash\nopenssl req -x509 -new -nodes -key rootca.key -sha256 -days 1826 -out rootca.crt\nbash\nopenssl req -new -nodes -out cert.csr -newkey rsa:4096 -keyout cert.key\nbash\nopenssl x509 -req -in cert.csr -CA rootca.crt -CAkey rootca.key -CAcreateserial -out cert.crt -days 730 -sha256 -extfile ./cert.v3.ext\nplaintext\nbasicConstraints=CA:FALSE\nbash\nsudo yum install -y httpd\nsudo systemctl start httpd\nbash\nopenssl s_client -verify 5 -connect <your-application-load-balancer>:443 -quiet -state\nbash\ncurl --verbose https://<your-application-load-balancer>\n...\n* TLSv1.2 (IN), TLS handshake, Request CERT (13):\n...\nbash\nMYCERT=\"$(cat cert.crt|perl -pe 's/\\r?\\n/\\\\n/'|sed -e 's/..$//')\"\nMYKEY=\"$(cat cert.key|perl -pe 's/\\r?\\n/\\\\n/'|sed -e's/..$//')\"\n\nrequest_body=$(< <(cat <<EOF\n{\n\"certificate\": \"$MYCERT\",\n\"private_key\": \"$MYKEY\",\n\"bundle_method\":\"ubiquitous\"\n}\nEOF\n))",
+  "code_samples": [
+    {
+      "code": "***\n\n## 3. Obtain and upload signed certificates from your Certificate Authority (CA)\n\nProvide the CSRs created in the previous step to your organization's preferred CA, demonstrate control of your domain as requested, and then download the signed SSL certificates. Follow the instructions provided in [Upload Keyless SSL Certificates](https://developers.cloudflare.com/ssl/keyless-ssl/configuration/cloudflare-tunnel/#3-upload-keyless-ssl-certificates).\n\n***\n\n## 4. Modify your gokeyless config file and restart the service\n\nLastly, we need to modify the configuration file that the key server will read on startup. Change the `object=mykey` and `pin-value=username:password` values to match the key label you provided and CU user you created.\n\nOpen `/etc/keyless/gokeyless.yaml` and immediately after:",
+      "language": "unknown"
+    },
+    {
+      "code": "add:",
+      "language": "unknown"
+    },
+    {
+      "code": "With the config file saved, restart `gokeyless` and verify it started successfully.",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: SoftHSMv2 · Cloudflare SSL/TLS docs\ndescription: Learn how to use Keyless SSL with SoftHSMv2.\nlastUpdated: 2025-10-09T15:47:46.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/keyless-ssl/hardware-security-modules/softhsmv2/\n  md: https://developers.cloudflare.com/ssl/keyless-ssl/hardware-security-modules/softhsmv2/index.md\n---\n\nImportant\n\nSoftHSMv2 should not be considered any more secure than storing private keys directly on disk. No attempt is made below to secure this installation; it is provided simply for demonstration purposes.\n\n***\n\n## 1. Install and configure SoftHSMv2\n\nFirst, we install SoftHSMv2 and configure it to store tokens in the default location `/var/lib/softhsm/tokens`. We also need to give the `softhsm` group permission to this directory as this is how the `keyless` user will access this directory.",
+      "language": "unknown"
+    },
+    {
+      "code": "***\n\n## 2. Create a token and private keys, and generate CSRs\n\nNext, we create a token in slot 0 called `test-token` and secure it with a PIN of `1234`. In this slot we’ll store the RSA keys for our SSL certificates for `keyless-softhsm.example.com`.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "Using cfssl, we generate the [private keys and Certificate Signing Requests (CSRs)](https://github.com/cloudflare/cfssl), the latter of which will be sent to a Certificate Authority (CA) for signing.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "***\n\n## 3. Convert and import the key\n\nNow that the key has been generated, it’s time to load it into the slot we created. Before doing so, we need to convert from PKCS#1 to PKCS#8 format. During import, we specify the token and PIN from token initialization and provide a unique hexadecimal ID and label to the key.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "After importing we ask `pkcs11-tool` to confirm the objects have been successfully stored in the token.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "***\n\n## 4. Modify your gokeyless config file and restart the service\n\nWith the keys in place, it’s time to build the configuration file that the key server will read on startup. The `id` refers to the hexadecimal ID you provided to the `softhsm2-util` import statement; we used `a000` so it is encoded as `%a0%00`. The `module-path` will vary slightly based on the Linux distribution you are using. On Debian it should be `/usr/lib/softhsm/libsofthsm2.so`.\n\nOpen up `/etc/keyless/gokeyless.yaml` and immediately after",
+      "language": "unknown"
+    },
+    {
+      "code": "add",
+      "language": "unknown"
+    },
+    {
+      "code": "Save the config file, restart `gokeyless`, and verify it started successfully.",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: High availability · Cloudflare SSL/TLS docs\ndescription: The Cloudflare Keyless SSL server runs as a single binary with\n  minimal dependencies and is designed to be robust and reliable. However, the\n  network between your key server and Cloudflare may not be, which could prevent\n  new TLS connections.\nlastUpdated: 2024-10-18T13:25:38.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/keyless-ssl/reference/high-availability/\n  md: https://developers.cloudflare.com/ssl/keyless-ssl/reference/high-availability/index.md\n---\n\nThe Cloudflare Keyless SSL server runs as a single binary with minimal dependencies and is designed to be robust and reliable. However, the network between your key server and Cloudflare may not be, which could prevent new TLS connections.\n\nFor this reason, we strongly recommend that you run at least two key servers in a high availability configuration behind a load balancer. Set up health checks for each key server on the configured TCP port—2407 by default and failover as necessary or round-robin between active (healthy) key servers.\n\nFrom a network availability and performance perspective, advertise the IP address of your key server from multiple data centers (an anycast setup) so the Cloudflare global network can route to the closest key server via BGP. When you use anycast routing, you can also safely take a data center offline to perform maintenance.\n\n</page>\n\n<page>\n---\ntitle: Keyless delegation · Cloudflare SSL/TLS docs\ndescription: Keyless Delegation is Cloudflare's implementation of the emerging\n  delegated credentials standard (RFC 9345). When you upload a certificate for\n  use with Keyless that has the special extension permitting the use of\n  delegated credentials, Cloudflare will automatically produce a delegated\n  credential and use it at the edge with clients that support this feature. The\n  handshakes will complete without the extra latency induced by reaching back to\n  the Keyless Server, and there are additional advantages to flexibility in\n  algorithm choice.\nlastUpdated: 2024-10-18T13:25:38.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/keyless-ssl/reference/keyless-delegation/\n  md: https://developers.cloudflare.com/ssl/keyless-ssl/reference/keyless-delegation/index.md\n---\n\nKeyless Delegation is Cloudflare's implementation of the emerging delegated credentials standard ([RFC 9345](https://www.rfc-editor.org/rfc/rfc9345.html)). When you upload a certificate for use with Keyless that has the special extension permitting the use of delegated credentials, Cloudflare will automatically produce a delegated credential and use it at the edge with clients that support this feature. The handshakes will complete without the extra latency induced by reaching back to the Keyless Server, and there are [additional advantages to flexibility in algorithm choice](https://blog.cloudflare.com/keyless-delegation/).\n\nBehind the scenes we periodically create delegated credentials and sign them via Keyless, through the same mechanism used to sign the Certificate Verify messages our servers send when using Keyless. These credentials have a short lifetime, ensuring that if you disable Keyless the credentials created will become invalid within 24 hours. Supporting clients validate the credential, and the server can use the key it generated to sign the response to the TLS handshake without the round trip.\n\nFor security reasons certificates must contain a special identifier for use with delegated credentials. This takes the form of an optional X509 extension with NULL contents and the OID 1.3.6.1.4.1.44363.44. Your CA may need to make code changes to support delegated credentials.\n\nCurrently very few clients support delegated credentials, and only a handful of certificate authorities will issue certificates with the extension. We have had success with DigiCert. Firefox 77 and later support delegated credentials.\n\n</page>\n\n<page>\n---\ntitle: Scaling and benchmarking · Cloudflare SSL/TLS docs\ndescription: Cloudflare's Keyless SSL technology was designed to scale to\n  accommodate any sized workload using vertical and horizontal scaling, and\n  pre-computation techniques wherever possible, such as ECDSA. The goals of the\n  architectural design of the key server are to minimize latency while\n  maximizing signing operations per second.\nlastUpdated: 2024-10-18T13:25:38.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/keyless-ssl/reference/scaling-and-benchmarking/\n  md: https://developers.cloudflare.com/ssl/keyless-ssl/reference/scaling-and-benchmarking/index.md\n---\n\nCloudflare's Keyless SSL technology was designed to scale to accommodate any sized workload using vertical and horizontal scaling, and pre-computation techniques wherever possible, such as ECDSA. The goals of the architectural design of the key server are to minimize latency while maximizing signing operations per second.\n\nEach key server uses a worker pool model, with incoming client connections handled by its own pair of reader/writer goroutines and cryptographic work done in separate worker goroutines pulled from a global pool.\n\nWhere needed, multiple key servers can be deployed and balanced between using your preferred ingress load balancing configuration. For full high availability, make sure to deploy sufficient key servers to handle twice the expected workload.\n\n***\n\n## Key type\n\nKey servers support both ECDSA and RSA keys, though signatures for RSA are an [order of magnitude more expensive](https://blog.cloudflare.com/ecdsa-the-digital-signature-algorithm-of-a-better-internet/) to compute and thus consider type of keys used when planning the number of key servers in your deployment.\n\nECDSA signing can be broken down into two steps. Since the first step — generating random values (to be used later with the private key and message to be signed) — represents the majority of the computational cost, we pre-generate these random values to significantly reduce latency. ECDSA signing requests are computationally isolated from RSA signing requests using separate worker pools to keep them as fast as possible.\n\nAdditional details can be found in the [gokeyless server readme file](https://github.com/cloudflare/gokeyless#readme) file.\n\n***\n\n## Benchmarks\n\nWe conducted benchmarks using [Cloudflare's gokeyless bench tool](https://github.com/cloudflare/gokeyless/tree/master/cmd/bench) on a then current-generation, compute-optimized EC2 instance ([c5.xlarge](https://aws.amazon.com/ec2/instance-types/c5/)). This particular instance has 4 vCPUs powered by 3.0 GHz Intel Xeon processors:",
+      "language": "unknown"
+    },
+    {
+      "code": "By default, bench runs with one worker goroutine per core (4) and a maximum number of operating system threads equal to the total number of cores (in this case, `GOMAXPROCS=4`). As expected and explained above, ECDSA signature performance far exceeds that of RSA. The [results show](#results) that each core of this c5.xl machine can perform over 10,000 ECDSA signing operations/second and approximately 200 RSA signing operations/second.\n\nWhen planning your deployment, determine the maximum number of new TLS connections per second you expect to terminate using a given key server and scale accordingly. For full high availability, each data center running keyless should be able to terminate the full workload that you anticipate.\n\n### Results\n\n#### ECDSA",
+      "language": "unknown"
+    },
+    {
+      "code": "#### RSA",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: AWS integration · Cloudflare SSL/TLS docs\ndescription: Learn how to set up Cloudflare Authenticated Origin Pulls with the\n  AWS Application Load Balancer.\nlastUpdated: 2025-08-20T18:47:44.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/aws-alb-integration/\n  md: https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/aws-alb-integration/index.md\n---\n\nThis guide will walk you through how to set up [per-hostname](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/set-up/per-hostname/) authenticated origin pulls to securely connect to an AWS Application Load Balancer using [mutual TLS verify](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/mutual-authentication.html).\n\nYou can also find instructions on how to [rollback](#rollback-the-cloudflare-configuration) this setup in Cloudflare.\n\n## Before you begin\n\n* You should already have your AWS account and [EC2](https://docs.aws.amazon.com/ec2/?icmpid=docs_homepage_featuredsvcs) configured.\n* Note that this tutorial uses command-line interface (CLI) to generate a custom certificate, and [API calls](https://developers.cloudflare.com/fundamentals/api/get-started/) to configure Cloudflare Authenticated Origin Pulls.\n* For the most up-to-date documentation on how to set up AWS, refer to the [AWS documentation](https://docs.aws.amazon.com/).\n\n## 1. Generate a custom certificate\n\n1. Run the following command to generate a 4096-bit RSA private key, using AES-256 encryption. Enter a passphrase when prompted.",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Create the CA root certificate. When prompted, fill in the information to be included in the certificate. For the `Common Name` field, use the domain name as value, not the hostname.",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Create a Certificate Signing Request (CSR). When prompted, fill in the information to be included in the request. For the `Common Name` field, use the hostname as value.",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Sign the certificate using the `rootca.key` and `rootca.crt` created in previous steps.",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Make sure the certificate extensions file `cert.v3.ext` specifies the following:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 2. Configure AWS Application Load Balancer\n\n1. Upload the `rootca.cert` to an [S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html).\n2. [Create a trust store](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/mutual-authentication.html#create-trust-store) at your EC2 console, indicating the **S3 URI** where you uploaded the certificate.\n3. Create an EC2 instance and install an HTTPD daemon. Choose an [instance type](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html) according to your needs - it can be a minimal instance eligible to [AWS Free Tier](https://aws.amazon.com/free/). This tutorial was based on an example using t2.micro and [Amazon Linux 2023](https://docs.aws.amazon.com/linux/al2023/ug/what-is-amazon-linux.html).",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Create a [target group](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-application-load-balancer.html#configure-target-group) for your Application Load Balancer.\n\n   * Choose **Instances** as target type.\n   * Specify port `HTTP/80`.\n\n2. After you finish configuring the target group, confirm that the target group is [healthy](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html).\n\n3. [Configure a load balancer and a listener](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-application-load-balancer.html#configure-load-balancer).\n\n   * Choose the **Internet-facing** scheme.\n   * Switch the listener to port `443` so that the **mTLS** option is available, and select the target group created in previous steps.\n   * For **Default SSL/TLS server certificate**, choose **Import certificate** > **Import to ACM**, and add the certificate private key and body.\n   * Under **Client certificate handling**, select **Verify with trust store**.\n\n4. Save your settings.\n\n5. (Optional) Run the following commands to confirm that the Application Load Balancing is asking for the client certificate.",
+      "language": "unknown"
+    },
+    {
+      "code": "Since you have not yet uploaded the certificate to Cloudflare, the connection should fail (`read:errno=54`, for example).\n\nYou can also run `curl --verbose` and confirm `Request CERT (13)` is present within the SSL/TLS handshake:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Configure Cloudflare\n\n1. [Upload the certificate](https://developers.cloudflare.com/ssl/edge-certificates/custom-certificates/uploading/#upload-a-custom-certificate) you created in [Step 1](#1-generate-a-custom-certificate) to Cloudflare. You should use the leaf certificate, not the root CA.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "3. Obtain and upload signed certificates from your Certificate Authority (CA)",
+      "id": "3.-obtain-and-upload-signed-certificates-from-your-certificate-authority-(ca)"
+    },
+    {
+      "level": "h2",
+      "text": "4. Modify your gokeyless config file and restart the service",
+      "id": "4.-modify-your-gokeyless-config-file-and-restart-the-service"
+    },
+    {
+      "level": "h2",
+      "text": "1. Install and configure SoftHSMv2",
+      "id": "1.-install-and-configure-softhsmv2"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create a token and private keys, and generate CSRs",
+      "id": "2.-create-a-token-and-private-keys,-and-generate-csrs"
+    },
+    {
+      "level": "h2",
+      "text": "3. Convert and import the key",
+      "id": "3.-convert-and-import-the-key"
+    },
+    {
+      "level": "h2",
+      "text": "4. Modify your gokeyless config file and restart the service",
+      "id": "4.-modify-your-gokeyless-config-file-and-restart-the-service"
+    },
+    {
+      "level": "h2",
+      "text": "Key type",
+      "id": "key-type"
+    },
+    {
+      "level": "h2",
+      "text": "Benchmarks",
+      "id": "benchmarks"
+    },
+    {
+      "level": "h3",
+      "text": "Results",
+      "id": "results"
+    },
+    {
+      "level": "h2",
+      "text": "Before you begin",
+      "id": "before-you-begin"
+    },
+    {
+      "level": "h2",
+      "text": "1. Generate a custom certificate",
+      "id": "1.-generate-a-custom-certificate"
+    },
+    {
+      "level": "h2",
+      "text": "2. Configure AWS Application Load Balancer",
+      "id": "2.-configure-aws-application-load-balancer"
+    },
+    {
+      "level": "h2",
+      "text": "3. Configure Cloudflare",
+      "id": "3.-configure-cloudflare"
+    }
+  ],
+  "url": "llms-txt#cmu-requestcertificate--c=\"us\"--o=\"example,-inc.\"--cn=\"ibm-cloudhsm.example.com\"--s=\"california\"--l=\"san-francisco\"--publichandle=60--privatehandle=61--outputfile=\"ecdsa.csr\"--sha256withecdsa",
+  "links": []
+}

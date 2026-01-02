@@ -1,0 +1,654 @@
+{
+  "title": "Expose ports you plan to use",
+  "content": "EXPOSE 8000\nEXPOSE 8080\nEXPOSE 5173\njsonc\n{\n  \"containers\": [\n    {\n      \"class_name\": \"Sandbox\",\n      \"image\": \"./Dockerfile\"\n    }\n  ]\n}\njs\n  // Extract hostname from request\n  const { hostname } = new URL(request.url);\n\n// ❌ This will fail\n  await sandbox.exposePort(3000, { hostname }); // Error: Port 3000 is reserved\n\n// ✅ Use a different port\n  await sandbox.startProcess(\"node server.js\", { env: { PORT: \"8080\" } });\n  await sandbox.exposePort(8080, { hostname });\n  ts\n  // Extract hostname from request\n  const { hostname } = new URL(request.url);\n\n// ❌ This will fail\n  await sandbox.exposePort(3000, { hostname });  // Error: Port 3000 is reserved\n\n// ✅ Use a different port\n  await sandbox.startProcess('node server.js', { env: { PORT: '8080' } });\n  await sandbox.exposePort(8080, { hostname });\n  js\n  // Extract hostname from request\n  const { hostname } = new URL(request.url);\n\nawait sandbox.startProcess(\"npm run dev\");\n  await new Promise((resolve) => setTimeout(resolve, 3000));\n  await sandbox.exposePort(8080, { hostname });\n  ts\n  // Extract hostname from request\n  const { hostname } = new URL(request.url);\n\nawait sandbox.startProcess('npm run dev');\n  await new Promise(resolve => setTimeout(resolve, 3000));\n  await sandbox.exposePort(8080, { hostname });\n  js\n  // Extract hostname from request\n  const { hostname } = new URL(request.url);\n\nconst { ports } = await sandbox.getExposedPorts();\n  if (!ports.some((p) => p.port === 8080)) {\n    await sandbox.exposePort(8080, { hostname });\n  }\n  ts\n  // Extract hostname from request\n  const { hostname } = new URL(request.url);\n\nconst { ports } = await sandbox.getExposedPorts();\n  if (!ports.some(p => p.port === 8080)) {\n    await sandbox.exposePort(8080, { hostname });\n  }\n  js\n  // Create sandbox with normalization\n  const sandbox = getSandbox(env.Sandbox, \"MyProject-123\", { normalizeId: true });\n  await sandbox.exposePort(8080, { hostname });\n  ts\n  // Create sandbox with normalization\n  const sandbox = getSandbox(env.Sandbox, 'MyProject-123', { normalizeId: true });\n  await sandbox.exposePort(8080, { hostname });\n  js\n  import { getSandbox } from \"@cloudflare/sandbox\";\n\nconst sandbox = getSandbox(env.Sandbox, \"my-sandbox\");\n\n// Basic clone\n  await sandbox.gitCheckout(\"https://github.com/user/repo\");\n\n// Clone specific branch\n  await sandbox.gitCheckout(\"https://github.com/user/repo\", {\n    branch: \"develop\",\n  });\n\n// Shallow clone (faster for large repos)\n  await sandbox.gitCheckout(\"https://github.com/user/large-repo\", {\n    depth: 1,\n  });\n\n// Clone to specific directory\n  await sandbox.gitCheckout(\"https://github.com/user/my-app\", {\n    targetDir: \"/workspace/project\",\n  });\n  ts\n  import { getSandbox } from '@cloudflare/sandbox';\n\nconst sandbox = getSandbox(env.Sandbox, 'my-sandbox');\n\n// Basic clone\n  await sandbox.gitCheckout('https://github.com/user/repo');\n\n// Clone specific branch\n  await sandbox.gitCheckout('https://github.com/user/repo', {\n    branch: 'develop'\n  });\n\n// Shallow clone (faster for large repos)\n  await sandbox.gitCheckout('https://github.com/user/large-repo', {\n    depth: 1\n  });\n\n// Clone to specific directory\n  await sandbox.gitCheckout('https://github.com/user/my-app', {\n    targetDir: '/workspace/project'\n  });\n  js\n  const token = env.GITHUB_TOKEN;\n  const repoUrl = `https://${token}@github.com/user/private-repo.git`;\n\nawait sandbox.gitCheckout(repoUrl);\n  ts\n  const token = env.GITHUB_TOKEN;\n  const repoUrl = `https://${token}@github.com/user/private-repo.git`;\n\nawait sandbox.gitCheckout(repoUrl);\n  js\n  await sandbox.gitCheckout(\"https://github.com/user/my-app\");\n\nconst repoName = \"my-app\";\n\n// Install and build\n  await sandbox.exec(`cd ${repoName} && npm install`);\n  await sandbox.exec(`cd ${repoName} && npm run build`);\n\nconsole.log(\"Build complete\");\n  ts\n  await sandbox.gitCheckout('https://github.com/user/my-app');\n\nconst repoName = 'my-app';\n\n// Install and build\n  await sandbox.exec(`cd ${repoName} && npm install`);\n  await sandbox.exec(`cd ${repoName} && npm run build`);\n\nconsole.log('Build complete');\n  js\n  await sandbox.gitCheckout(\"https://github.com/user/repo\");\n\n// Switch branches\n  await sandbox.exec(\"cd repo && git checkout feature-branch\");\n\n// Create new branch\n  await sandbox.exec(\"cd repo && git checkout -b new-feature\");\n  ts\n  await sandbox.gitCheckout('https://github.com/user/repo');\n\n// Switch branches\n  await sandbox.exec('cd repo && git checkout feature-branch');\n\n// Create new branch\n  await sandbox.exec('cd repo && git checkout -b new-feature');\n  js\n  await sandbox.gitCheckout(\"https://github.com/user/repo\");\n\n// Modify a file\n  const readme = await sandbox.readFile(\"/workspace/repo/README.md\");\n  await sandbox.writeFile(\n    \"/workspace/repo/README.md\",\n    readme.content + \"\\n\\n## New Section\",\n  );\n\n// Commit changes\n  await sandbox.exec('cd repo && git config user.name \"Sandbox Bot\"');\n  await sandbox.exec('cd repo && git config user.email \"bot@example.com\"');\n  await sandbox.exec(\"cd repo && git add README.md\");\n  await sandbox.exec('cd repo && git commit -m \"Update README\"');\n  ts\n  await sandbox.gitCheckout('https://github.com/user/repo');\n\n// Modify a file\n  const readme = await sandbox.readFile('/workspace/repo/README.md');\n  await sandbox.writeFile('/workspace/repo/README.md', readme.content + '\\n\\n## New Section');\n\n// Commit changes\n  await sandbox.exec('cd repo && git config user.name \"Sandbox Bot\"');\n  await sandbox.exec('cd repo && git config user.email \"bot@example.com\"');\n  await sandbox.exec('cd repo && git add README.md');\n  await sandbox.exec('cd repo && git commit -m \"Update README\"');\n  js\n  if (!env.GITHUB_TOKEN) {\n    throw new Error(\"GITHUB_TOKEN not configured\");\n  }\n\nconst repoUrl = `https://${env.GITHUB_TOKEN}@github.com/user/private-repo.git`;\n  await sandbox.gitCheckout(repoUrl);\n  ts\n  if (!env.GITHUB_TOKEN) {\n    throw new Error('GITHUB_TOKEN not configured');\n  }\n\nconst repoUrl = `https://${env.GITHUB_TOKEN}@github.com/user/private-repo.git`;\n  await sandbox.gitCheckout(repoUrl);\n  js\n  await sandbox.gitCheckout(\"https://github.com/user/large-repo\", {\n    depth: 1,\n  });\n  ts\n  await sandbox.gitCheckout('https://github.com/user/large-repo', {\n    depth: 1\n  });\n  js\n  // Absolute paths\n  await sandbox.writeFile(\"/workspace/app.js\", code);\n\n// Relative paths (session-aware)\n  const session = await sandbox.createSession();\n  await session.exec(\"cd /workspace/my-project\");\n  await session.writeFile(\"app.js\", code); // Writes to /workspace/my-project/app.js\n  await session.writeFile(\"src/index.js\", code); // Writes to /workspace/my-project/src/index.js\n  ts\n  // Absolute paths\n  await sandbox.writeFile('/workspace/app.js', code);\n\n// Relative paths (session-aware)\n  const session = await sandbox.createSession();\n  await session.exec('cd /workspace/my-project');\n  await session.writeFile('app.js', code);  // Writes to /workspace/my-project/app.js\n  await session.writeFile('src/index.js', code);  // Writes to /workspace/my-project/src/index.js\n  js\n  import { getSandbox } from \"@cloudflare/sandbox\";\n\nconst sandbox = getSandbox(env.Sandbox, \"my-sandbox\");\n\n// Write text file\n  await sandbox.writeFile(\n    \"/workspace/app.js\",\n    `console.log('Hello from sandbox!');`,\n  );\n\n// Write JSON\n  const config = { name: \"my-app\", version: \"1.0.0\" };\n  await sandbox.writeFile(\n    \"/workspace/config.json\",\n    JSON.stringify(config, null, 2),\n  );\n\n// Write binary file (base64)\n  const buffer = await fetch(imageUrl).then((r) => r.arrayBuffer());\n  const base64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));\n  await sandbox.writeFile(\"/workspace/image.png\", base64, { encoding: \"base64\" });\n  ts\n  import { getSandbox } from '@cloudflare/sandbox';\n\nconst sandbox = getSandbox(env.Sandbox, 'my-sandbox');\n\n// Write text file\n  await sandbox.writeFile('/workspace/app.js', `console.log('Hello from sandbox!');`);\n\n// Write JSON\n  const config = { name: 'my-app', version: '1.0.0' };\n  await sandbox.writeFile('/workspace/config.json', JSON.stringify(config, null, 2));\n\n// Write binary file (base64)\n  const buffer = await fetch(imageUrl).then(r => r.arrayBuffer());\n  const base64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));\n  await sandbox.writeFile('/workspace/image.png', base64, { encoding: 'base64' });\n  js\n  // Read text file\n  const file = await sandbox.readFile(\"/workspace/app.js\");\n  console.log(file.content);\n\n// Read and parse JSON\n  const configFile = await sandbox.readFile(\"/workspace/config.json\");\n  const config = JSON.parse(configFile.content);\n\n// Read binary file\n  const imageFile = await sandbox.readFile(\"/workspace/image.png\", {\n    encoding: \"base64\",\n  });\n  return new Response(atob(imageFile.content), {\n    headers: { \"Content-Type\": \"image/png\" },\n  });\n\n// Force encoding for transmission (text → base64)\n  const textAsBase64 = await sandbox.readFile(\"/workspace/data.txt\", {\n    encoding: \"base64\",\n  });\n  // Useful for transmitting text files without encoding issues\n  ts\n  // Read text file\n  const file = await sandbox.readFile('/workspace/app.js');\n  console.log(file.content);\n\n// Read and parse JSON\n  const configFile = await sandbox.readFile('/workspace/config.json');\n  const config = JSON.parse(configFile.content);\n\n// Read binary file\n  const imageFile = await sandbox.readFile('/workspace/image.png', { encoding: 'base64' });\n  return new Response(atob(imageFile.content), {\n    headers: { 'Content-Type': 'image/png' }\n  });\n\n// Force encoding for transmission (text → base64)\n  const textAsBase64 = await sandbox.readFile('/workspace/data.txt', { encoding: 'base64' });\n  // Useful for transmitting text files without encoding issues\n  js\n  // Create directories\n  await sandbox.mkdir(\"/workspace/src\", { recursive: true });\n  await sandbox.mkdir(\"/workspace/tests\", { recursive: true });\n\n// Rename file\n  await sandbox.renameFile(\"/workspace/draft.txt\", \"/workspace/final.txt\");\n\n// Move file\n  await sandbox.moveFile(\"/tmp/download.txt\", \"/workspace/data.txt\");\n\n// Delete file\n  await sandbox.deleteFile(\"/workspace/temp.txt\");\n  ts\n  // Create directories\n  await sandbox.mkdir('/workspace/src', { recursive: true });\n  await sandbox.mkdir('/workspace/tests', { recursive: true });\n\n// Rename file\n  await sandbox.renameFile('/workspace/draft.txt', '/workspace/final.txt');\n\n// Move file\n  await sandbox.moveFile('/tmp/download.txt', '/workspace/data.txt');\n\n// Delete file\n  await sandbox.deleteFile('/workspace/temp.txt');\n  js\n  const files = {\n    \"/workspace/src/app.js\": 'console.log(\"app\");',\n    \"/workspace/src/utils.js\": 'console.log(\"utils\");',\n    \"/workspace/README.md\": \"# My Project\",\n  };\n\nawait Promise.all(\n    Object.entries(files).map(([path, content]) =>\n      sandbox.writeFile(path, content),\n    ),\n  );\n  ts\n  const files = {\n    '/workspace/src/app.js': 'console.log(\"app\");',\n    '/workspace/src/utils.js': 'console.log(\"utils\");',\n    '/workspace/README.md': '# My Project'\n  };\n\nawait Promise.all(\n    Object.entries(files).map(([path, content]) =>\n      sandbox.writeFile(path, content)\n    )\n  );\n  js\n  const result = await sandbox.exists(\"/workspace/config.json\");\n  if (!result.exists) {\n    // Create default config\n    await sandbox.writeFile(\"/workspace/config.json\", \"{}\");\n  }\n\n// Check directory\n  const dirResult = await sandbox.exists(\"/workspace/data\");\n  if (!dirResult.exists) {\n    await sandbox.mkdir(\"/workspace/data\");\n  }\n\n// Also available on sessions\n  const sessionResult = await session.exists(\"/workspace/temp.txt\");\n  ts\n  const result = await sandbox.exists('/workspace/config.json');\n  if (!result.exists) {\n    // Create default config\n    await sandbox.writeFile('/workspace/config.json', '{}');\n  }\n\n// Check directory\n  const dirResult = await sandbox.exists('/workspace/data');\n  if (!dirResult.exists) {\n    await sandbox.mkdir('/workspace/data');\n  }\n\n// Also available on sessions\n  const sessionResult = await session.exists('/workspace/temp.txt');\n  js\n  // Create directory, then write file\n  await sandbox.mkdir(\"/workspace/data\", { recursive: true });\n  await sandbox.writeFile(\"/workspace/data/file.txt\", content);\n  ts\n  // Create directory, then write file\n  await sandbox.mkdir('/workspace/data', { recursive: true });\n  await sandbox.writeFile('/workspace/data/file.txt', content);\n  js\n  // Write binary\n  await sandbox.writeFile(\"/workspace/image.png\", base64Data, {\n    encoding: \"base64\",\n  });\n\n// Read binary\n  const file = await sandbox.readFile(\"/workspace/image.png\", {\n    encoding: \"base64\",\n  });\n  ts\n  // Write binary\n  await sandbox.writeFile('/workspace/image.png', base64Data, {\n    encoding: 'base64'\n  });\n\n// Read binary\n  const file = await sandbox.readFile('/workspace/image.png', {\n    encoding: 'base64'\n  });\n  js\n  try {\n    // Invalid: contains invalid base64 characters\n    await sandbox.writeFile(\"/workspace/data.bin\", \"invalid!@#$\", {\n      encoding: \"base64\",\n    });\n  } catch (error) {\n    if (error.code === \"VALIDATION_FAILED\") {\n      // Content contains invalid base64 characters\n      console.error(\"Invalid base64 content\");\n    }\n  }\n  ts\n  try {\n    // Invalid: contains invalid base64 characters\n    await sandbox.writeFile('/workspace/data.bin', 'invalid!@#$', {\n      encoding: 'base64'\n    });\n  } catch (error) {\n    if (error.code === 'VALIDATION_FAILED') {\n      // Content contains invalid base64 characters\n      console.error('Invalid base64 content');\n    }\n  }\n  js\n  import { getSandbox } from \"@cloudflare/sandbox\";\n\nconst sandbox = getSandbox(env.Sandbox, \"data-processor\");\n\n// Mount R2 bucket\n  await sandbox.mountBucket(\"my-r2-bucket\", \"/data\", {\n    endpoint: \"https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com\",\n  });\n\n// Access bucket with standard filesystem operations\n  await sandbox.exec(\"ls\", { args: [\"/data\"] });\n  await sandbox.writeFile(\"/data/results.json\", JSON.stringify(results));\n\n// Use from Python\n  await sandbox.exec(\"python\", {\n    args: [\n      \"-c\",\n      `\n  import pandas as pd\n  df = pd.read_csv('/data/input.csv')\n  df.describe().to_csv('/data/summary.csv')\n  `,\n    ],\n  });\n  ts\n  import { getSandbox } from '@cloudflare/sandbox';\n\nconst sandbox = getSandbox(env.Sandbox, 'data-processor');\n\n// Mount R2 bucket\n  await sandbox.mountBucket('my-r2-bucket', '/data', {\n    endpoint: 'https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com'\n  });\n\n// Access bucket with standard filesystem operations\n  await sandbox.exec('ls', { args: ['/data'] });\n  await sandbox.writeFile('/data/results.json', JSON.stringify(results));\n\n// Use from Python\n  await sandbox.exec('python', { args: ['-c', `\n  import pandas as pd\n  df = pd.read_csv('/data/input.csv')\n  df.describe().to_csv('/data/summary.csv')\n  `] });\n  sh\nnpx wrangler secret put AWS_ACCESS_KEY_ID\nnpx wrangler secret put AWS_SECRET_ACCESS_KEY\njs\n  // Credentials automatically detected from environment\n  await sandbox.mountBucket(\"my-r2-bucket\", \"/data\", {\n    endpoint: \"https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com\",\n  });\n  ts\n  // Credentials automatically detected from environment\n  await sandbox.mountBucket('my-r2-bucket', '/data', {\n    endpoint: 'https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com'\n  });\n  js\n  await sandbox.mountBucket(\"my-r2-bucket\", \"/data\", {\n    endpoint: \"https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com\",\n    credentials: {\n      accessKeyId: env.R2_ACCESS_KEY_ID,\n      secretAccessKey: env.R2_SECRET_ACCESS_KEY,\n    },\n  });\n  ts\n  await sandbox.mountBucket('my-r2-bucket', '/data', {\n    endpoint: 'https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com',\n    credentials: {\n      accessKeyId: env.R2_ACCESS_KEY_ID,\n      secretAccessKey: env.R2_SECRET_ACCESS_KEY\n    }\n  });\n  js\n  await sandbox.mountBucket(\"dataset-bucket\", \"/data\", {\n    endpoint: \"https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com\",\n    readOnly: true,\n  });\n\n// Reads work\n  await sandbox.exec(\"cat\", { args: [\"/data/dataset.csv\"] });\n\n// Writes fail\n  await sandbox.writeFile(\"/data/new-file.txt\", \"data\"); // Error: Read-only filesystem\n  ts\n  await sandbox.mountBucket('dataset-bucket', '/data', {\n    endpoint: 'https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com',\n    readOnly: true\n  });\n\n// Reads work\n  await sandbox.exec('cat', { args: ['/data/dataset.csv'] });\n\n// Writes fail\n  await sandbox.writeFile('/data/new-file.txt', 'data');  // Error: Read-only filesystem\n  js\n  // Mount for processing\n  await sandbox.mountBucket(\"my-bucket\", \"/data\", { endpoint: \"...\" });\n\n// Do work\n  await sandbox.exec(\"python process_data.py\");\n\n// Clean up\n  await sandbox.unmountBucket(\"/data\");\n  ts\n  // Mount for processing\n  await sandbox.mountBucket('my-bucket', '/data', { endpoint: '...' });\n\n// Do work\n  await sandbox.exec('python process_data.py');\n\n// Clean up\n  await sandbox.unmountBucket('/data');\n  js\n  await sandbox.mountBucket(\"my-s3-bucket\", \"/data\", {\n    endpoint: \"https://s3.us-west-2.amazonaws.com\", // Regional endpoint\n    credentials: {\n      accessKeyId: env.AWS_ACCESS_KEY_ID,\n      secretAccessKey: env.AWS_SECRET_ACCESS_KEY,\n    },\n  });\n  ts\n  await sandbox.mountBucket('my-s3-bucket', '/data', {\n    endpoint: 'https://s3.us-west-2.amazonaws.com',  // Regional endpoint\n    credentials: {\n      accessKeyId: env.AWS_ACCESS_KEY_ID,\n      secretAccessKey: env.AWS_SECRET_ACCESS_KEY\n    }\n  });\n  js\n  await sandbox.mountBucket(\"my-gcs-bucket\", \"/data\", {\n    endpoint: \"https://storage.googleapis.com\",\n    credentials: {\n      accessKeyId: env.GCS_ACCESS_KEY_ID, // HMAC key\n      secretAccessKey: env.GCS_SECRET_ACCESS_KEY,\n    },\n  });\n  ts\n  await sandbox.mountBucket('my-gcs-bucket', '/data', {\n    endpoint: 'https://storage.googleapis.com',\n    credentials: {\n      accessKeyId: env.GCS_ACCESS_KEY_ID,  // HMAC key\n      secretAccessKey: env.GCS_SECRET_ACCESS_KEY\n    }\n  });\n  js\n  await sandbox.mountBucket(\"my-bucket\", \"/data\", {\n    endpoint: \"https://s3.us-west-000.backblazeb2.com\", // Provider-specific endpoint\n    credentials: {\n      accessKeyId: env.ACCESS_KEY_ID,\n      secretAccessKey: env.SECRET_ACCESS_KEY,\n    },\n  });\n  ts\n  await sandbox.mountBucket('my-bucket', '/data', {\n    endpoint: 'https://s3.us-west-000.backblazeb2.com',  // Provider-specific endpoint\n    credentials: {\n      accessKeyId: env.ACCESS_KEY_ID,\n      secretAccessKey: env.SECRET_ACCESS_KEY\n    }\n  });\n  sh\nnpx wrangler secret put AWS_ACCESS_KEY_ID\nnpx wrangler secret put AWS_SECRET_ACCESS_KEY\njs\n  try {\n    await sandbox.mountBucket(\"my-bucket\", \"/data\", {\n      endpoint: \"https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com\",\n    });\n  } catch (error) {\n    console.error(\"Mount failed:\", error.message);\n    // Check endpoint format, credentials, bucket existence\n  }\n  ts\n  try {\n    await sandbox.mountBucket('my-bucket', '/data', {\n      endpoint: 'https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com'\n    });\n  } catch (error) {\n    console.error('Mount failed:', error.message);\n    // Check endpoint format, credentials, bucket existence\n  }\n  js\n  // Unmount existing\n  await sandbox.unmountBucket(\"/data\");\n\n// Or use different path\n  await sandbox.mountBucket(\"bucket2\", \"/storage\", { endpoint: \"...\" });\n  ts\n  // Unmount existing\n  await sandbox.unmountBucket('/data');\n\n// Or use different path\n  await sandbox.mountBucket('bucket2', '/storage', { endpoint: '...' });\n  js\n  // Copy to local filesystem\n  await sandbox.exec(\"cp\", {\n    args: [\"/data/large-dataset.csv\", \"/workspace/dataset.csv\"],\n  });\n\n// Work with local copy (faster)\n  await sandbox.exec(\"python\", {\n    args: [\"process.py\", \"/workspace/dataset.csv\"],\n  });\n\n// Save results back to bucket\n  await sandbox.exec(\"cp\", {\n    args: [\"/workspace/results.json\", \"/data/results/output.json\"],\n  });\n  ts\n  // Copy to local filesystem\n  await sandbox.exec('cp', { args: ['/data/large-dataset.csv', '/workspace/dataset.csv'] });\n\n// Work with local copy (faster)\n  await sandbox.exec('python', { args: ['process.py', '/workspace/dataset.csv'] });\n\n// Save results back to bucket\n  await sandbox.exec('cp', { args: ['/workspace/results.json', '/data/results/output.json'] });\n  jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"my-sandbox-app\",\n    \"main\": \"src/index.ts\",\n    \"compatibility_date\": \"2025-12-31\",\n    \"routes\": [\n      {\n        \"pattern\": \"*.yourdomain.com/*\",\n        \"zone_name\": \"yourdomain.com\"\n      }\n    ]\n  }\n  toml\n  name = \"my-sandbox-app\"\n  main = \"src/index.ts\"\n  compatibility_date = \"2025-12-31\"\n\n[[routes]]\n  pattern = \"*.yourdomain.com/*\"\n  zone_name = \"yourdomain.com\"\n  sh\nnpx wrangler deploy\ntypescript\n// Extract hostname from request\nconst { hostname } = new URL(request.url);\n\nconst sandbox = getSandbox(env.Sandbox, 'test-sandbox');\nawait sandbox.startProcess('python -m http.server 8080');\nconst exposed = await sandbox.exposePort(8080, { hostname });\n\nconsole.log(exposed.exposedAt);\n// https://8080-test-sandbox.yourdomain.com\njs\n  import { getSandbox, parseSSEStream } from \"@cloudflare/sandbox\";\n\nconst sandbox = getSandbox(env.Sandbox, \"my-sandbox\");\n\nconst stream = await sandbox.execStream(\"npm run build\");\n\nfor await (const event of parseSSEStream(stream)) {\n    switch (event.type) {\n      case \"stdout\":\n        console.log(event.data);\n        break;\n\ncase \"stderr\":\n        console.error(event.data);\n        break;\n\ncase \"complete\":\n        console.log(\"Exit code:\", event.exitCode);\n        break;\n\ncase \"error\":\n        console.error(\"Failed:\", event.error);\n        break;\n    }\n  }\n  ts\n  import { getSandbox, parseSSEStream, type ExecEvent } from '@cloudflare/sandbox';\n\nconst sandbox = getSandbox(env.Sandbox, 'my-sandbox');\n\nconst stream = await sandbox.execStream('npm run build');\n\nfor await (const event of parseSSEStream<ExecEvent>(stream)) {\n    switch (event.type) {\n      case 'stdout':\n        console.log(event.data);\n        break;\n\ncase 'stderr':\n        console.error(event.data);\n        break;\n\ncase 'complete':\n        console.log('Exit code:', event.exitCode);\n        break;\n\ncase 'error':\n        console.error('Failed:', event.error);\n        break;\n    }\n  }\n  js\n  import { getSandbox } from \"@cloudflare/sandbox\";\n\nexport { Sandbox } from \"@cloudflare/sandbox\";\n\nexport default {\n    async fetch(request, env) {\n      const sandbox = getSandbox(env.Sandbox, \"builder\");\n\nconst stream = await sandbox.execStream(\"npm run build\");\n\nreturn new Response(stream, {\n        headers: {\n          \"Content-Type\": \"text/event-stream\",\n          \"Cache-Control\": \"no-cache\",\n        },\n      });\n    },\n  };\n  ts\n  import { getSandbox } from '@cloudflare/sandbox';\n\nexport { Sandbox } from '@cloudflare/sandbox';\n\nexport default {\n    async fetch(request: Request, env: Env): Promise<Response> {\n      const sandbox = getSandbox(env.Sandbox, 'builder');\n\nconst stream = await sandbox.execStream('npm run build');\n\nreturn new Response(stream, {\n        headers: {\n          'Content-Type': 'text/event-stream',\n          'Cache-Control': 'no-cache'\n        }\n      });\n    }\n  };\n  js\n  // Browser JavaScript\n  const eventSource = new EventSource(\"/build\");\n\neventSource.addEventListener(\"stdout\", (event) => {\n    const data = JSON.parse(event.data);\n    console.log(data.data);\n  });\n\neventSource.addEventListener(\"complete\", (event) => {\n    const data = JSON.parse(event.data);\n    console.log(\"Exit code:\", data.exitCode);\n    eventSource.close();\n  });\n  ts\n  // Browser JavaScript\n  const eventSource = new EventSource('/build');\n\neventSource.addEventListener('stdout', (event) => {\n    const data = JSON.parse(event.data);\n    console.log(data.data);\n  });\n\neventSource.addEventListener('complete', (event) => {\n    const data = JSON.parse(event.data);\n    console.log('Exit code:', data.exitCode);\n    eventSource.close();\n  });\n  js\n  import { parseSSEStream } from \"@cloudflare/sandbox\";\n\nconst process = await sandbox.startProcess(\"node server.js\");\n\nconst logStream = await sandbox.streamProcessLogs(process.id);\n\nfor await (const log of parseSSEStream(logStream)) {\n    console.log(log.data);\n\nif (log.data.includes(\"Server listening\")) {\n      console.log(\"Server is ready\");\n      break;\n    }\n  }\n  ts\n  import { parseSSEStream, type LogEvent } from '@cloudflare/sandbox';\n\nconst process = await sandbox.startProcess('node server.js');\n\nconst logStream = await sandbox.streamProcessLogs(process.id);\n\nfor await (const log of parseSSEStream<LogEvent>(logStream)) {\n    console.log(log.data);\n\nif (log.data.includes('Server listening')) {\n      console.log('Server is ready');\n      break;\n    }\n  }\n  js\n  const stream = await sandbox.execStream(\"npm run build\");\n\nfor await (const event of parseSSEStream(stream)) {\n    switch (event.type) {\n      case \"stdout\":\n        console.log(event.data);\n        break;\n\ncase \"error\":\n        throw new Error(`Build failed: ${event.error}`);\n\ncase \"complete\":\n        if (event.exitCode !== 0) {\n          throw new Error(`Build failed with exit code ${event.exitCode}`);\n        }\n        break;\n    }\n  }\n  ts\n  const stream = await sandbox.execStream('npm run build');\n\nfor await (const event of parseSSEStream<ExecEvent>(stream)) {\n    switch (event.type) {\n      case 'stdout':\n        console.log(event.data);\n        break;\n\ncase 'error':\n        throw new Error(`Build failed: ${event.error}`);\n\ncase 'complete':\n        if (event.exitCode !== 0) {\n          throw new Error(`Build failed with exit code ${event.exitCode}`);\n        }\n        break;\n    }\n  }\n  typescript\nBun.serve({\n  port: 8080,\n  hostname: \"0.0.0.0\",\n  fetch(req, server) {\n    if (server.upgrade(req)) {\n      return;\n    }\n    return new Response(\"WebSocket echo server\");\n  },\n  websocket: {\n    message(ws, message) {\n      ws.send(`Echo: ${message}`);\n    },\n    open(ws) {\n      console.log(\"Client connected\");\n    },\n    close(ws) {\n      console.log(\"Client disconnected\");\n    },\n  },\n});\n\nconsole.log(\"WebSocket server listening on port 8080\");\ndockerfile\nFROM docker.io/cloudflare/sandbox:0.3.3",
+  "code_samples": [
+    {
+      "code": "Update `wrangler.jsonc` to use your Dockerfile:",
+      "language": "unknown"
+    },
+    {
+      "code": "In production, all ports are available and controlled programmatically via `exposePort()` / `unexposePort()`.\n\n## Troubleshooting\n\n### Port 3000 is reserved\n\nPort 3000 is used by the internal Bun server and cannot be exposed:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "### Port not ready\n\nWait for the service to start before exposing:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "### Port already exposed\n\nCheck before exposing to avoid errors:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "### Uppercase sandbox ID error\n\n**Error**: `Preview URLs require lowercase sandbox IDs`\n\n**Cause**: You created a sandbox with uppercase characters (e.g., `\"MyProject-123\"`) but preview URLs always use lowercase in routing, causing a mismatch.\n\n**Solution**:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "This creates the Durable Object with ID `\"myproject-123\"`, matching the preview URL routing.\n\nSee [Sandbox options - normalizeId](https://developers.cloudflare.com/sandbox/configuration/sandbox-options/#normalizeid) for details.\n\n## Preview URL Format\n\n**Production**: `https://{port}-{sandbox-id}.yourdomain.com`\n\n* Port 8080: `https://8080-abc123.yourdomain.com`\n* Port 5173: `https://5173-abc123.yourdomain.com`\n\n**Local development**: `http://localhost:8787/...`\n\n**Note**: Port 3000 is reserved for the internal Bun server and cannot be exposed.\n\n## Related resources\n\n* [Ports API reference](https://developers.cloudflare.com/sandbox/api/ports/) - Complete port exposure API\n* [Background processes guide](https://developers.cloudflare.com/sandbox/guides/background-processes/) - Managing services\n* [Execute commands guide](https://developers.cloudflare.com/sandbox/guides/execute-commands/) - Starting services\n\n</page>\n\n<page>\n---\ntitle: Work with Git · Cloudflare Sandbox SDK docs\ndescription: Clone repositories, manage branches, and automate Git operations.\nlastUpdated: 2025-10-21T14:02:11.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/sandbox/guides/git-workflows/\n  md: https://developers.cloudflare.com/sandbox/guides/git-workflows/index.md\n---\n\nThis guide shows you how to clone repositories, manage branches, and automate Git operations in the sandbox.\n\n## Clone repositories\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Clone private repositories\n\nUse a personal access token in the URL:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Clone and build\n\nClone a repository and run build steps:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Work with branches\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Make changes and commit\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Best practices\n\n* **Use shallow clones** - Faster for large repos with `depth: 1`\n* **Store credentials securely** - Use environment variables for tokens\n* **Clean up** - Delete unused repositories to save space\n\n## Troubleshooting\n\n### Authentication fails\n\nVerify your token is set:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "### Large repository timeout\n\nUse shallow clone:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Related resources\n\n* [Files API reference](https://developers.cloudflare.com/sandbox/api/files/) - File operations after cloning\n* [Execute commands guide](https://developers.cloudflare.com/sandbox/guides/execute-commands/) - Run git commands\n* [Manage files guide](https://developers.cloudflare.com/sandbox/guides/manage-files/) - Work with cloned files\n\n</page>\n\n<page>\n---\ntitle: Manage files · Cloudflare Sandbox SDK docs\ndescription: Read, write, organize, and synchronize files in the sandbox.\nlastUpdated: 2025-11-18T19:18:00.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/sandbox/guides/manage-files/\n  md: https://developers.cloudflare.com/sandbox/guides/manage-files/index.md\n---\n\nThis guide shows you how to read, write, organize, and synchronize files in the sandbox filesystem.\n\n## Path conventions\n\nFile operations support both absolute and relative paths:\n\n* `/workspace` - Default working directory for application files\n* `/tmp` - Temporary files (may be cleared)\n* `/home` - User home directory\n\n- JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "- TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Write files\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Read files\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Organize files\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Batch operations\n\nWrite multiple files in parallel:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Check if file exists\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Best practices\n\n* **Use `/workspace`** - Default working directory for app files\n* **Use absolute paths** - Always use full paths like `/workspace/file.txt`\n* **Batch operations** - Use `Promise.all()` for multiple independent file writes\n* **Create parent directories** - Use `recursive: true` when creating nested paths\n* **Handle errors** - Check for `FILE_NOT_FOUND` errors gracefully\n\n## Troubleshooting\n\n### Directory doesn't exist\n\nCreate parent directories first:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "### Binary file encoding\n\nUse base64 for binary files:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "### Base64 validation errors\n\nWhen writing with `encoding: 'base64'`, content must contain only valid base64 characters:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Related resources\n\n* [Files API reference](https://developers.cloudflare.com/sandbox/api/files/) - Complete method documentation\n* [Execute commands guide](https://developers.cloudflare.com/sandbox/guides/execute-commands/) - Run file operations with commands\n* [Git workflows guide](https://developers.cloudflare.com/sandbox/guides/git-workflows/) - Clone and manage repositories\n* [Code Interpreter guide](https://developers.cloudflare.com/sandbox/guides/code-execution/) - Generate and execute code files\n\n</page>\n\n<page>\n---\ntitle: Mount buckets · Cloudflare Sandbox SDK docs\ndescription: Mount S3-compatible object storage as local filesystems for\n  persistent data storage.\nlastUpdated: 2025-11-18T19:18:00.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/sandbox/guides/mount-buckets/\n  md: https://developers.cloudflare.com/sandbox/guides/mount-buckets/index.md\n---\n\nMount S3-compatible object storage buckets as local filesystem paths. Access object storage using standard file operations.\n\nS3-compatible providers\n\nThe SDK works with any S3-compatible object storage provider. Examples include Cloudflare R2, Amazon S3, Google Cloud Storage, Backblaze B2, MinIO, and [many others](https://github.com/s3fs-fuse/s3fs-fuse/wiki/Non-Amazon-S3). The SDK automatically detects and optimizes for R2, S3, and GCS.\n\nProduction only\n\nBucket mounting does not work with `wrangler dev` because it requires FUSE support that wrangler does not currently provide. Deploy your Worker with `wrangler deploy` to use this feature. All other Sandbox SDK features work in local development.\n\n## When to mount buckets\n\nMount S3-compatible buckets when you need:\n\n* **Persistent data** - Data survives sandbox destruction\n* **Large datasets** - Process data without downloading\n* **Shared storage** - Multiple sandboxes access the same data\n* **Cost-effective persistence** - Cheaper than keeping sandboxes alive\n\n## Mount an R2 bucket\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "Mounting affects entire sandbox\n\nMounted buckets are visible across all sessions since they share the filesystem. Mount once per sandbox.\n\n## Credentials\n\n### Automatic detection\n\nSet credentials as Worker secrets and the SDK automatically detects them:",
+      "language": "unknown"
+    },
+    {
+      "code": "* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "### Explicit credentials\n\nPass credentials directly when needed:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Read-only mounts\n\nProtect data by mounting buckets in read-only mode:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Unmount buckets\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "Automatic cleanup\n\nMounted buckets are automatically unmounted when the sandbox is destroyed. Manual unmounting is optional.\n\n## Other providers\n\nThe SDK supports any S3-compatible object storage. Here are examples for common providers:\n\n### Amazon S3\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "### Google Cloud Storage\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "GCS requires HMAC keys\n\nGenerate HMAC keys in GCS console under Settings → Interoperability.\n\n### Other S3-compatible providers\n\nFor providers like Backblaze B2, MinIO, Wasabi, or others, use the standard mount pattern:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "For provider-specific configuration, see the [s3fs-fuse wiki](https://github.com/s3fs-fuse/s3fs-fuse/wiki/Non-Amazon-S3) which documents supported providers and their recommended flags.\n\n## Troubleshooting\n\n### Missing credentials error\n\n**Error**: `MissingCredentialsError: No credentials found`\n\n**Solution**: Set credentials as Worker secrets:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Mount failed error\n\n**Error**: `S3FSMountError: mount failed`\n\n**Common causes**:\n\n* Incorrect endpoint URL\n* Invalid credentials\n* Bucket doesn't exist\n* Network connectivity issues\n\nVerify your endpoint format and credentials:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "### Path already mounted error\n\n**Error**: `InvalidMountConfigError: Mount path already in use`\n\n**Solution**: Unmount first or use a different path:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "### Slow file access\n\nFile operations on mounted buckets are slower than local filesystem due to network latency.\n\n**Solution**: Copy frequently accessed files locally:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Best practices\n\n* **Mount early** - Mount buckets at sandbox initialization\n* **Use R2 for Cloudflare** - Zero egress fees and optimized configuration\n* **Secure credentials** - Always use Worker secrets, never hardcode\n* **Read-only when possible** - Protect data with read-only mounts\n* **Mount paths** - Use `/data`, `/storage`, or `/mnt/*` (avoid `/workspace`, `/tmp`)\n* **Handle errors** - Wrap mount operations in try/catch blocks\n* **Optimize access** - Copy frequently accessed files locally\n\n## Related resources\n\n* [Persistent storage tutorial](https://developers.cloudflare.com/sandbox/tutorials/persistent-storage/) - Complete R2 example\n* [Storage API reference](https://developers.cloudflare.com/sandbox/api/storage/) - Full method documentation\n* [Environment variables](https://developers.cloudflare.com/sandbox/configuration/environment-variables/) - Credential configuration\n* [R2 documentation](https://developers.cloudflare.com/r2/) - Learn about Cloudflare R2\n\n</page>\n\n<page>\n---\ntitle: Deploy to Production · Cloudflare Sandbox SDK docs\ndescription: Set up custom domains for preview URLs in production.\nlastUpdated: 2025-11-08T10:22:38.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/sandbox/guides/production-deployment/\n  md: https://developers.cloudflare.com/sandbox/guides/production-deployment/index.md\n---\n\nOnly required for preview URLs\n\nCustom domain setup is ONLY needed if you use `exposePort()` to expose services from sandboxes. If your application does not expose ports, you can deploy to `.workers.dev` without this configuration.\n\nDeploy your Sandbox SDK application to production with preview URL support. Preview URLs require wildcard DNS routing because they generate unique subdomains for each exposed port: `https://8080-abc123.yourdomain.com`.\n\nThe `.workers.dev` domain does not support wildcard subdomains, so production deployments that use preview URLs need a custom domain.\n\n## Prerequisites\n\n* Active Cloudflare zone with a domain\n* Worker that uses `exposePort()`\n* [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/) installed\n\n## Setup\n\n### Create Wildcard DNS Record\n\nIn the Cloudflare dashboard, go to your domain and create an A record:\n\n* **Type**: A\n* **Name**: \\* (wildcard)\n* **IPv4 address**: 192.0.2.0\n* **Proxy status**: Proxied (orange cloud)\n\nThis routes all subdomains through Cloudflare's proxy. The IP address `192.0.2.0` is a documentation address (RFC 5737) that Cloudflare recognizes when proxied.\n\n### Configure Worker Routes\n\nAdd a wildcard route to your Wrangler configuration:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Replace `yourdomain.com` with your actual domain. This routes all subdomain requests to your Worker and enables Cloudflare to provision SSL certificates automatically.\n\n### Deploy\n\nDeploy your Worker:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Verify\n\nTest that preview URLs work:",
+      "language": "unknown"
+    },
+    {
+      "code": "Visit the URL in your browser to confirm your service is accessible.\n\n## Troubleshooting\n\n* **CustomDomainRequiredError**: Verify your Worker is not deployed to `.workers.dev` and that the wildcard DNS record and route are configured correctly.\n* **SSL/TLS errors**: Wait a few minutes for certificate provisioning. Verify the DNS record is proxied and SSL/TLS mode is set to \"Full\" or \"Full (strict)\" in your dashboard.\n* **Preview URL not resolving**: Confirm the wildcard DNS record exists and is proxied. Wait 30-60 seconds for DNS propagation.\n* **Port not accessible**: Ensure your service binds to `0.0.0.0` (not `localhost`) and that `proxyToSandbox()` is called first in your Worker's fetch handler.\n\nFor detailed troubleshooting, see the [Workers routing documentation](https://developers.cloudflare.com/workers/configuration/routing/).\n\n## Related Resources\n\n* [Preview URLs](https://developers.cloudflare.com/sandbox/concepts/preview-urls/) - How preview URLs work\n* [Expose Services](https://developers.cloudflare.com/sandbox/guides/expose-services/) - Patterns for exposing ports\n* [Workers Routing](https://developers.cloudflare.com/workers/configuration/routing/) - Advanced routing configuration\n* [Cloudflare DNS](https://developers.cloudflare.com/dns/) - DNS management\n\n</page>\n\n<page>\n---\ntitle: Stream output · Cloudflare Sandbox SDK docs\ndescription: Handle real-time output from commands and processes.\nlastUpdated: 2025-11-08T10:22:38.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/sandbox/guides/streaming-output/\n  md: https://developers.cloudflare.com/sandbox/guides/streaming-output/index.md\n---\n\nThis guide shows you how to handle real-time output from commands, processes, and code execution.\n\n## When to use streaming\n\nUse streaming when you need:\n\n* **Real-time feedback** - Show progress as it happens\n* **Long-running operations** - Builds, tests, installations that take time\n* **Interactive applications** - Chat bots, code execution, live demos\n* **Large output** - Process output incrementally instead of all at once\n* **User experience** - Prevent users from waiting with no feedback\n\nUse non-streaming (`exec()`) for:\n\n* **Quick operations** - Commands that complete in seconds\n* **Small output** - When output fits easily in memory\n* **Post-processing** - When you need complete output before processing\n\n## Stream command execution\n\nUse `execStream()` to get real-time output:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Stream to client\n\nReturn streaming output to users via Server-Sent Events:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "Client-side consumption:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Stream process logs\n\nMonitor background process output:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Handle errors\n\nCheck exit codes and handle stream errors:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Best practices\n\n* **Always consume streams** - Don't let streams hang unconsumed\n* **Handle all event types** - Process stdout, stderr, complete, and error events\n* **Check exit codes** - Non-zero exit codes indicate failure\n* **Provide feedback** - Show progress to users for long operations\n\n## Related resources\n\n* [Commands API reference](https://developers.cloudflare.com/sandbox/api/commands/) - Complete streaming API\n* [Execute commands guide](https://developers.cloudflare.com/sandbox/guides/execute-commands/) - Command execution patterns\n* [Background processes guide](https://developers.cloudflare.com/sandbox/guides/background-processes/) - Process log streaming\n* [Code Interpreter guide](https://developers.cloudflare.com/sandbox/guides/code-execution/) - Stream code execution output\n\n</page>\n\n<page>\n---\ntitle: WebSocket Connections · Cloudflare Sandbox SDK docs\ndescription: Connect to WebSocket servers running in sandboxes.\nlastUpdated: 2025-12-15T13:56:05.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/sandbox/guides/websocket-connections/\n  md: https://developers.cloudflare.com/sandbox/guides/websocket-connections/index.md\n---\n\nThis guide shows you how to work with WebSocket servers running in your sandboxes.\n\n## Choose your approach\n\n**Expose via preview URL** - Get a public URL for external clients to connect to. Best for public chat rooms, multiplayer games, or real-time dashboards.\n\n**Connect with wsConnect()** - Your Worker establishes the WebSocket connection. Best for custom routing logic, authentication gates, or when your Worker needs real-time data from sandbox services.\n\n## Connect to WebSocket echo server\n\n**Create the echo server:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Extend the Dockerfile:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Port 3000 is reserved",
+      "id": "port-3000-is-reserved"
+    },
+    {
+      "level": "h3",
+      "text": "Port not ready",
+      "id": "port-not-ready"
+    },
+    {
+      "level": "h3",
+      "text": "Port already exposed",
+      "id": "port-already-exposed"
+    },
+    {
+      "level": "h3",
+      "text": "Uppercase sandbox ID error",
+      "id": "uppercase-sandbox-id-error"
+    },
+    {
+      "level": "h2",
+      "text": "Preview URL Format",
+      "id": "preview-url-format"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Clone repositories",
+      "id": "clone-repositories"
+    },
+    {
+      "level": "h2",
+      "text": "Clone private repositories",
+      "id": "clone-private-repositories"
+    },
+    {
+      "level": "h2",
+      "text": "Clone and build",
+      "id": "clone-and-build"
+    },
+    {
+      "level": "h2",
+      "text": "Work with branches",
+      "id": "work-with-branches"
+    },
+    {
+      "level": "h2",
+      "text": "Make changes and commit",
+      "id": "make-changes-and-commit"
+    },
+    {
+      "level": "h2",
+      "text": "Best practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Authentication fails",
+      "id": "authentication-fails"
+    },
+    {
+      "level": "h3",
+      "text": "Large repository timeout",
+      "id": "large-repository-timeout"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Path conventions",
+      "id": "path-conventions"
+    },
+    {
+      "level": "h2",
+      "text": "Write files",
+      "id": "write-files"
+    },
+    {
+      "level": "h2",
+      "text": "Read files",
+      "id": "read-files"
+    },
+    {
+      "level": "h2",
+      "text": "Organize files",
+      "id": "organize-files"
+    },
+    {
+      "level": "h2",
+      "text": "Batch operations",
+      "id": "batch-operations"
+    },
+    {
+      "level": "h2",
+      "text": "Check if file exists",
+      "id": "check-if-file-exists"
+    },
+    {
+      "level": "h2",
+      "text": "Best practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Directory doesn't exist",
+      "id": "directory-doesn't-exist"
+    },
+    {
+      "level": "h3",
+      "text": "Binary file encoding",
+      "id": "binary-file-encoding"
+    },
+    {
+      "level": "h3",
+      "text": "Base64 validation errors",
+      "id": "base64-validation-errors"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "When to mount buckets",
+      "id": "when-to-mount-buckets"
+    },
+    {
+      "level": "h2",
+      "text": "Mount an R2 bucket",
+      "id": "mount-an-r2-bucket"
+    },
+    {
+      "level": "h2",
+      "text": "Credentials",
+      "id": "credentials"
+    },
+    {
+      "level": "h3",
+      "text": "Automatic detection",
+      "id": "automatic-detection"
+    },
+    {
+      "level": "h3",
+      "text": "Explicit credentials",
+      "id": "explicit-credentials"
+    },
+    {
+      "level": "h2",
+      "text": "Read-only mounts",
+      "id": "read-only-mounts"
+    },
+    {
+      "level": "h2",
+      "text": "Unmount buckets",
+      "id": "unmount-buckets"
+    },
+    {
+      "level": "h2",
+      "text": "Other providers",
+      "id": "other-providers"
+    },
+    {
+      "level": "h3",
+      "text": "Amazon S3",
+      "id": "amazon-s3"
+    },
+    {
+      "level": "h3",
+      "text": "Google Cloud Storage",
+      "id": "google-cloud-storage"
+    },
+    {
+      "level": "h3",
+      "text": "Other S3-compatible providers",
+      "id": "other-s3-compatible-providers"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Missing credentials error",
+      "id": "missing-credentials-error"
+    },
+    {
+      "level": "h3",
+      "text": "Mount failed error",
+      "id": "mount-failed-error"
+    },
+    {
+      "level": "h3",
+      "text": "Path already mounted error",
+      "id": "path-already-mounted-error"
+    },
+    {
+      "level": "h3",
+      "text": "Slow file access",
+      "id": "slow-file-access"
+    },
+    {
+      "level": "h2",
+      "text": "Best practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Create Wildcard DNS Record",
+      "id": "create-wildcard-dns-record"
+    },
+    {
+      "level": "h3",
+      "text": "Configure Worker Routes",
+      "id": "configure-worker-routes"
+    },
+    {
+      "level": "h3",
+      "text": "Deploy",
+      "id": "deploy"
+    },
+    {
+      "level": "h2",
+      "text": "Verify",
+      "id": "verify"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h2",
+      "text": "Related Resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "When to use streaming",
+      "id": "when-to-use-streaming"
+    },
+    {
+      "level": "h2",
+      "text": "Stream command execution",
+      "id": "stream-command-execution"
+    },
+    {
+      "level": "h2",
+      "text": "Stream to client",
+      "id": "stream-to-client"
+    },
+    {
+      "level": "h2",
+      "text": "Stream process logs",
+      "id": "stream-process-logs"
+    },
+    {
+      "level": "h2",
+      "text": "Handle errors",
+      "id": "handle-errors"
+    },
+    {
+      "level": "h2",
+      "text": "Best practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Choose your approach",
+      "id": "choose-your-approach"
+    },
+    {
+      "level": "h2",
+      "text": "Connect to WebSocket echo server",
+      "id": "connect-to-websocket-echo-server"
+    }
+  ],
+  "url": "llms-txt#expose-ports-you-plan-to-use",
+  "links": []
+}

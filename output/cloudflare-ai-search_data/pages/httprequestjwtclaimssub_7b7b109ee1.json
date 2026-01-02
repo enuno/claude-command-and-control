@@ -1,0 +1,8 @@
+{
+  "title": "http.request.jwt.claims.sub",
+  "content": "`http.request.jwt.claims.sub` Map\\<Array\\<String>>\n\nThe `sub` (subject) claim identifies the principal that is the subject of the JWT.\n\nThe claims in a JWT are normally statements about the subject. For details, refer to the [Registered Claim Names](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1) in RFC 7519.\n\nRequires a Cloudflare Enterprise plan with a paid add-on.\n\nFor more information on validating JSON Web Tokens, refer to [JSON Web Tokens Validation](https://developers.cloudflare.com/api-shield/security/jwt-validation/) in the API Shield documentation.\n\n* Request\n* JWT validation\n\n<page>\n---\ntitle: http.request.jwt.claims.sub.names · Cloudflare Ruleset Engine docs\ndescription: The `sub` (subject) claim identifies the principal that is the\n  subject of the JWT.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.jwt.claims.sub.names/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.jwt.claims.sub.names/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#http.request.jwt.claims.sub",
+  "links": []
+}

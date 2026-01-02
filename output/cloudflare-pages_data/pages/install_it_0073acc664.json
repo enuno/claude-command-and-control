@@ -1,0 +1,8 @@
+{
+  "title": "Install it",
+  "content": "$ npm create cloudflare@latest agents-starter -- --template=\"cloudflare/agents-starter\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#install-it",
+  "links": []
+}

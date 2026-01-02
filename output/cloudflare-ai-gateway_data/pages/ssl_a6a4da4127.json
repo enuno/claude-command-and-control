@@ -1,0 +1,432 @@
+{
+  "title": "ssl",
+  "content": "Returns `true` when the HTTP connection to the client is encrypted.\n\n<page>\n---\ntitle: FAQ · Cloudflare Speed docs\ndescription: Read FAQs about Cloudflare Fonts\nlastUpdated: 2025-08-12T17:54:27.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/speed/optimization/content/fonts/faq/\n  md: https://developers.cloudflare.com/speed/optimization/content/fonts/faq/index.md\n---\n\nIn the following sections, you can find frequently asked questions about performance, privacy, security, implementation and integration.\n\n### How does Cloudflare Fonts improve website performance?\n\nBy serving fonts from your own domain through Cloudflare's optimized infrastructure, Cloudflare Fonts reduces DNS lookups, TLS connection setups and latency. This leads to faster page load times, enhancing the overall performance of your website.\n\n## Privacy and security\n\n### Does Cloudflare Fonts collect or log user data?\n\nNo, Cloudflare Fonts does not collect or log user data during the font delivery process. Cloudflare is committed to a [privacy-first](https://www.cloudflare.com/privacypolicy/) approach, ensuring that your users' data remains confidential.\n\n## Implementation and integration\n\n### Do I need to host my font files separately when using Cloudflare Fonts?\n\nNo, Cloudflare Fonts simplifies the font delivery process. You do not need to host font files separately. The service works by rewriting the webpage’s HTML. It removes Google Fonts links and replaces them with inline CSS.\n\n### Are there any code changes required to use Cloudflare Fonts?\n\nNo, you do not need any code changes to use Cloudflare Fonts.\n\n### Can I see analytics of font files served via Cloudflare Fonts?\n\nYes, as Cloudflare will be serving these fonts via your zone, analytics will appear within your Cloudflare dashboard. This allows you to analyze requests for font files that you would not have otherwise known about without Cloudflare Fonts.\n\n### Which path are Cloudflare Fonts requests made to?\n\nFont requests will be made to your origin with the `/cf-fonts/` path prefix.\n\n### What other transformations are made?\n\nCloudflare will strip any preconnect headers for Google Fonts domains from the HTML response body. This will improve performance by removing unnecessary connections.\n\n<page>\n---\ntitle: Cloudflare Fonts troubleshooting · Cloudflare Speed docs\ndescription: Troubleshoot issues with Cloudflare Fonts\nlastUpdated: 2025-08-12T17:54:27.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/speed/optimization/content/fonts/troubleshooting/\n  md: https://developers.cloudflare.com/speed/optimization/content/fonts/troubleshooting/index.md\n---\n\n## Validate the Fonts feature is working\n\nTo test that the Fonts feature is working correctly, follow these steps:\n\n1. With the Fonts feature disabled, navigate to your webpage and open the network panel in your browser's developer tools. For Chrome, right click on the webpage and select **Inspect**, which open the developer tools. Next, navigate to the **Network** tab within the console.\n2. Reload the page.\n3. In the Network tab, you should have a request to `fonts.googleapis.com`, and a request to `fonts.gstatic.com`. This means that Google Fonts are being downloaded for this page. If you do not have these requests in the list, either your webpage is not using Google Fonts, or your hosting provider might be optimizing the Google Fonts in some other way.\n4. [Enable Cloudflare Fonts](https://developers.cloudflare.com/speed/optimization/content/fonts/#get-started) and wait for a few seconds.\n5. In the inspect window, toggle **Disable cache** on and reload the page.\n6. In the network panel, you should now have a request to your zone on the `/cf-fonts/` path prefix. The requests to `fonts.googleapis.com` and `fonts.gstatic.com` should have disappeared. This means the feature is working correctly.\n\n## Feature is not working\n\nFor the feature to work, the response HTML (when the feature is disabled) must include a link tag with `href` pointing to `fonts.googleapis.com`. You can check this on the browser by viewing the source code of the webpage. As an example of what to look for, the following link tag is for the Roboto Google Font:\n\nIf the tag does not exist in the HTML, but you are still sure that your page is using Google Fonts, it might be that your hosting provider is optimizing your Google Fonts on the server. This can prevent Cloudflare Fonts from working properly.\n\n## Other issues with Cloudflare Fonts\n\nIf you experience any issues or have questions while using Cloudflare Fonts, refer to the [Cloudflare Community](https://community.cloudflare.com/) pages or contact [Cloudflare Support](https://developers.cloudflare.com/support/contacting-cloudflare-support/) for assistance.\n\n<page>\n---\ntitle: Enable Rocket Loader · Cloudflare Speed docs\ndescription: To enable or disable Rocket Loader, use the following instructions.\nlastUpdated: 2025-10-10T13:43:07.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/speed/optimization/content/rocket-loader/enable/\n  md: https://developers.cloudflare.com/speed/optimization/content/rocket-loader/enable/index.md\n---\n\nTo enable or disable Rocket Loader, use the following instructions.\n\nTo enable or disable **Rocket Loader** in the dashboard:\n\n1. In the Cloudflare dashboard, go to the **Speed** > **Settings** page.\n\n[Go to **Settings**](https://dash.cloudflare.com/?to=/:account/:zone/speed/optimization)\n\n2. Go to **Content Optimization**.\n\n3. For **Rocket Loader**, switch the toggle to **On**.\n\nIf you have a Content Security Policy (CSP) in place for your domain, you will need to [update your headers](https://developers.cloudflare.com/fundamentals/reference/policies-compliances/content-security-policies/#product-requirements) to support Rocket Loader.\n\nTo enable or disable **Rocket Loader** with the API, send a [`PATCH`](https://developers.cloudflare.com/api/resources/zones/subresources/settings/methods/edit/) request with `rocket_loader` as the setting name in the URI path, and the `value` parameter set to `\"on\"` or `\"off\"`.\n\nIf you have a Content Security Policy (CSP) in place for your domain, you will need to [update your headers](https://developers.cloudflare.com/fundamentals/reference/policies-compliances/content-security-policies/#product-requirements) to support Rocket Loader.\n\nTo use this feature on specific hostnames - instead of across your entire zone - use a [configuration rule](https://developers.cloudflare.com/rules/configuration-rules/).\n\n<page>\n---\ntitle: Ignore JavaScripts in Rocket Loader · Cloudflare Speed docs\ndescription: 'You can have Rocket Loader ignore individual scripts by adding the\n  data-cfasync=\"false\" attribute to the relevant script tag:'\nlastUpdated: 2025-02-24T10:31:59.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/speed/optimization/content/rocket-loader/ignore-javascripts/\n  md: https://developers.cloudflare.com/speed/optimization/content/rocket-loader/ignore-javascripts/index.md\n---\n\nYou can have Rocket Loader ignore individual scripts by adding the `data-cfasync=\"false\"` attribute to the relevant script tag:\n\nRocket Loader will still optimize the loading of all other scripts on the page.\n\nIf Rocket Loader is only impacting a specific page, use a [Configuration Rule](https://developers.cloudflare.com/rules/configuration-rules/) to exclude that page by URL.\n\n* Adding this attribute within JavaScript will not work if you wish to exclude the script from Rocket Loader.\n* If the script you want Rocket Loader to ignore has dependency on other JavaScript(s) on the page, those dependencies must also have the `data-cfasync=\"false\"` attribute.\n* The `data-cfasync` attribute must be added before the `src` attribute.\n* Rocket Loader will recognize the tag when either single or double quotes are placed around the attribute value.\n\n<page>\n---\ntitle: Content encoding issues · Cloudflare Speed docs\ndescription: \"If you are noticing any encoding errors with your HTML pages, we\n  recommend verifying that the impacted pages are explicitly setting the correct\n  charset in the Content-Type header from your origin for all text/html pages,\n  for example Content-Type: text/html; charset=utf-8. This is particularly\n  important if you are not using UTF-8 encoding standard for characters.\n  Alternatively you can set the correct charset within the HTML.\"\nlastUpdated: 2025-11-21T14:57:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/speed/optimization/content/troubleshooting/content-encoding-issues/\n  md: https://developers.cloudflare.com/speed/optimization/content/troubleshooting/content-encoding-issues/index.md\n---\n\nIf you are noticing any encoding errors with your HTML pages, we recommend verifying that the impacted pages are explicitly setting the correct charset in the `Content-Type` header from your origin for all text/html pages, for example `Content-Type: text/html; charset=utf-8`. This is particularly important if you are not using [UTF-8 encoding standard](https://en.wikipedia.org/wiki/UTF-8) for characters. Alternatively you can set the correct charset within the HTML.\n\nIf you believe these settings are correct, please inform us. You can find more information in [setting the HTTP charset parameter](https://www.w3.org/International/articles/http-charset/index) and in [HTML charset attribute](https://www.w3schools.com/tags/att_meta_charset.asp).\n\nAlternatively, you can use a [Configuration Rule](https://developers.cloudflare.com/rules/configuration-rules/) to disable features that rewrite HTML. This will send the content as-is to the browser.\n\nYou also have the option to turn off these features site-wide within the dashboard:\n\n* [Email Obfuscation](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/), located in the **Scrape Shield** section.\n* [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/), located in **Speed** > **Settings** > **Content Optimization** section.\n* [Automatic HTTPS Rewrites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/automatic-https-rewrites/), located in the **SSL/TLS** > **Edge Certificates** section.\n\nMisconfiguring the `Content-Type` or charset within HTML, or leaving them unspecified can lead to unintended consequences. This can disrupt the intended content presentation, resulting in disorganized rendering and potentially unclear characters. Properly configuring these elements ensures consistent and accurate interpretation, correct HTML modifications, and accurate rendering for browsers. This creates a seamless user experience and aligns with best practices in web development.\n\n<page>\n---\ntitle: Turn off Auto Minify via API · Cloudflare Speed docs\ndescription: Learn how to turn off Auto Minify via API in Cloudflare.\nlastUpdated: 2025-02-24T10:23:40.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/speed/optimization/content/troubleshooting/disable-auto-minify/\n  md: https://developers.cloudflare.com/speed/optimization/content/troubleshooting/disable-auto-minify/index.md\n---\n\nIf your site is still using deprecated features for [Auto Minify](https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2024-08-05), turn off Auto Minify via API.\n\nYou will need an [API token](https://developers.cloudflare.com/fundamentals/api/get-started/create-token/) with the following permissions:\n\n* *Zone* > *Zone Settings* > *Edit*\n* *Zone* > *Zone Settings* > *Read*\n\n## (Optional) Check zone status\n\nTo check your zone's Auto Minify status, send a `GET` request to the `/zones/{zone_id}/settings/minify` endpoint.\n\nIf any of the values in the highlighted line are `\"on\"`, then you need to turn them off.\n\n## Turn off Auto Minify using the API\n\nTo turn off Auto Minify for your zone, send a `PATCH` request to the `/zones/{zone_id}/settings/minify` endpoint. The value for `success` in the response should be `true`.\n\n<page>\n---\ntitle: Image optimization on optimized images · Cloudflare Speed docs\ndescription: Cloudflare's image optimization features will likely not help much\n  if you are already optimizing your images in some way (Smush.it, etc.).\nlastUpdated: 2024-08-13T19:56:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/speed/optimization/images/troubleshooting/multiple-optimizations/\n  md: https://developers.cloudflare.com/speed/optimization/images/troubleshooting/multiple-optimizations/index.md\n---\n\nCloudflare's [image optimization features](https://developers.cloudflare.com/speed/optimization/images/) will likely not help much if you are already optimizing your images in some way (Smush.it, etc.).\n\nCloudflare recommends not activating other services on top of Cloudflare, because this setup can lead to unexpected outcomes and potential issues.\n\n<page>\n---\ntitle: Polish statuses · Cloudflare Speed docs\nlastUpdated: 2024-08-13T19:56:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/speed/optimization/images/troubleshooting/polish/\n  md: https://developers.cloudflare.com/speed/optimization/images/troubleshooting/polish/index.md\n---\n\n<page>\n---\ntitle: Troubleshoot missing images · Cloudflare Speed docs\ndescription: If images are missing from your website, other Cloudflare features\n  may be interfering with those images.\nlastUpdated: 2025-09-15T16:47:39.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/speed/optimization/images/troubleshooting/troubleshooting-missing-images/\n  md: https://developers.cloudflare.com/speed/optimization/images/troubleshooting/troubleshooting-missing-images/index.md\n---\n\nIf images are missing from your website, other Cloudflare features may be interfering with those images.\n\n1. Perform one of the following actions:\n\n* [Purge cache](https://developers.cloudflare.com/cache/how-to/purge-cache) for the URL of the missing image file.\n   * [Temporarily pause Cloudflare](https://developers.cloudflare.com/fundamentals/manage-domains/pause-cloudflare/).\n   * Disable [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/enable/).\n   * Disable [Mirage](https://developers.cloudflare.com/speed/optimization/images/mirage/#enable-mirage) (deprecated).\n\n2. Retest the image load in a private browser tab.\n\n3. If the issue is not fixed, try another of the actions suggested in Step 1.\n\n<page>\n---\ntitle: Enhanced HTTP/2 Prioritization negatively affects iOS/Safari devices ·\n  Cloudflare Speed docs\ndescription: Occasionally, Enhanced HTTP/2 Prioritization can negatively affect\n  the experience of visitors using Safari on macOS or any browser on iOS.\nlastUpdated: 2024-08-13T19:56:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/speed/optimization/protocol/troubleshooting/enhanced-http2-prioritization-ios-safari/\n  md: https://developers.cloudflare.com/speed/optimization/protocol/troubleshooting/enhanced-http2-prioritization-ios-safari/index.md\n---\n\nOccasionally, [Enhanced HTTP/2 Prioritization](https://developers.cloudflare.com/speed/optimization/protocol/enhanced-http2-prioritization/) can negatively affect the experience of visitors using Safari on macOS or any browser on iOS.\n\nThese visitors may notice not being able to load the site properly, such as images not displaying or content taking too long to load.\n\nIf visitors using using Safari on macOS or any browser on iOS are experiencing issues with your site loading properly, try [disabling Enhanced HTTP/2 Prioritization](https://developers.cloudflare.com/speed/optimization/protocol/enhanced-http2-prioritization/#enable-enhanced-http2-prioritization).\n\nSometimes, [HTTP/2](https://developers.cloudflare.com/speed/optimization/protocol/http2/) will cause **Enhanced HTTP/2 Prioritization** to be re-enabled automatically.\n\nIf you notice this happening, also disable **HTTP/2**.\n\n<page>\n---\ntitle: Troubleshoot protocol issues · Cloudflare Speed docs\ndescription: This guide covers common HTTP/2 and HTTP/3 issues, including origin\n  incompatibility, multiplexing errors, and browser errors, with steps to\n  diagnose and resolve them.\nlastUpdated: 2025-03-14T11:28:00.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/speed/optimization/protocol/troubleshooting/protocol-troubleshooting/\n  md: https://developers.cloudflare.com/speed/optimization/protocol/troubleshooting/protocol-troubleshooting/index.md\n---\n\nThis guide covers common HTTP/2 and HTTP/3 issues, including origin incompatibility, multiplexing errors, and browser errors, with steps to diagnose and resolve them.\n\n## H2 to Origin - Origin incompatibility\n\n* The origin's `max_concurrent_streams` is negotiated during the handshake process.\n* If a `GOAWAY(0)` is received, it is likely due to a server restart or another reason causing the server to refuse new streams.\n* For more information, refer to [RFC 9113 - SETTINGS\\_MAX\\_CONCURRENT\\_STREAMS](https://datatracker.ietf.org/doc/html/rfc9113).\n\n## H2 Multiplexing - Origin incompatibility/issues\n\n* Multiplexing issues can arise due to incorrect server configurations.\n* Use [netlogs](https://www.chromium.org/developers/design-documents/network-stack/netlog/) to identify `SETTINGS_MAX_CONCURRENT_STREAMS` violations or unexpected `GOAWAY` frames.\n* For more information, refer to [Stream Concurrency Issues](https://datatracker.ietf.org/doc/html/rfc9113#name-stream-concurrency).\n\n## Generic browser errors\n\nCommon browser errors include:\n\n* `ERR_HTTP2_PROTOCOL_ERROR`\n* `ERR_HTTP3_PROTOCOL_ERROR`\n* `ERR_QUIC_PROTOCOL_ERROR`\n\nThese errors do not necessarily indicate a protocol-level issue. Follow these steps:\n\n1. Attempt reproduction using HTTP/1.1.\n2. If the issue persists in HTTP/1.1, address the underlying error before testing HTTP/2 or HTTP/3.\n3. If the issue does not persist, analyze netlogs for HTTP/2 or HTTP/3-specific issues.\n\nFor more information, refer to [Chromium URL Request Header](https://chromium.googlesource.com/chromium/src/+/HEAD/net/url_request/url_request.h).\n\n<page>\n---\ntitle: Cipher suites compliance standards · Cloudflare SSL/TLS docs\ndescription: Consider the following recommendations on custom cipher suites for\n  when your organization needs to comply with regulatory standards.\nlastUpdated: 2025-08-20T18:47:44.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/compliance-status/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/compliance-status/index.md\n---\n\nConsider the following recommendations on custom [cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/) for when your organization needs to comply with regulatory standards.\n\nRefer to [Customize cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/) to learn how to specify cipher suites at zone level or per hostname.\n\nAlso [enable TLS 1.3](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/tls-13/#enable-tls-13) on your zone and, when opting for [PCI DSS](#pci-dss), make sure to up your [Minimum TLS version](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/minimum-tls/) to `1.2`. Refer to [Cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/) and [TLS protocols](https://developers.cloudflare.com/ssl/reference/protocols/) to learn more.\n\nRecommended cipher suites for compliance with the [Payment Card Industry Data Security Standard (PCI DSS)](https://www.pcisecuritystandards.org/standards/pci-dss/). Enhances payment card data security.\n\n`AEAD-AES128-GCM-SHA256`[1](#user-content-fn-1), `AEAD-AES256-GCM-SHA384`[2](#user-content-fn-2), `AEAD-CHACHA20-POLY1305-SHA256`[3](#user-content-fn-3), `ECDHE-ECDSA-AES128-GCM-SHA256`, `ECDHE-RSA-AES128-GCM-SHA256`, `ECDHE-ECDSA-AES256-GCM-SHA384`, `ECDHE-RSA-AES256-GCM-SHA384`, `ECDHE-ECDSA-CHACHA20-POLY1305`, `ECDHE-RSA-CHACHA20-POLY1305`\n\nIf you are customizing cipher suites via API, refer to [Steps and API examples](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/api/#steps-and-api-examples) for a snippet you can copy with the formatted array.\n\nRecommended cipher suites for compliance with the [Federal Information Processing Standard (140-2)](https://csrc.nist.gov/pubs/fips/140-2/upd2/final). Used to approve cryptographic modules.\n\n`AES128-GCM-SHA256`, `AES128-SHA`, `AES128-SHA256`, `AES256-SHA`, `AES256-SHA256`, `DES-CBC3-SHA`, `ECDHE-ECDSA-AES128-GCM-SHA256`, `ECDHE-ECDSA-AES128-SHA`, `ECDHE-ECDSA-AES128-SHA256`, `ECDHE-ECDSA-AES256-GCM-SHA384`, `ECDHE-ECDSA-AES256-SHA384`, `ECDHE-RSA-AES128-GCM-SHA256`, `ECDHE-RSA-AES128-SHA`, `ECDHE-RSA-AES128-SHA256`, `ECDHE-RSA-AES256-GCM-SHA384`, `ECDHE-RSA-AES256-SHA`, `ECDHE-RSA-AES256-SHA384`\n\nIf you are customizing cipher suites via API, refer to [Steps and API examples](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/api/#steps-and-api-examples) for a snippet you can copy with the formatted array.\n\n1. Same as `TLS_AES_128_GCM_SHA256`. Refer to [TLS 1.3 cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/#tls-13) for details. [↩](#user-content-fnref-1)\n\n2. Same as `TLS_AES_256_GCM_SHA384`. Refer to [TLS 1.3 cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/#tls-13) for details. [↩](#user-content-fnref-2)\n\n3. Same as `TLS_CHACHA20_POLY1305_SHA256`. Refer to [TLS 1.3 cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/#tls-13) for details. [↩](#user-content-fnref-3)\n\n<page>\n---\ntitle: Customize cipher suites · Cloudflare SSL/TLS docs\ndescription: With an Advanced Certificate Manager subscription, you can restrict\n  connections between Cloudflare and clients — such as your visitor's browser —\n  to specific cipher suites.\nlastUpdated: 2025-09-17T15:45:30.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/index.md\n---\n\nWith an [Advanced Certificate Manager](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/) subscription, you can restrict connections between Cloudflare and clients — such as your visitor's browser — to specific [cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/).\n\nYou may want to do this to follow specific [recommendations](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/recommendations/), to [disable weak cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/troubleshooting/#ssl-labs-weak-ciphers-report), or to comply with [industry standards](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/compliance-status/).\n\nCustomizing cipher suites will not lead to any downtime in your SSL/TLS protection.\n\nIf you are a SaaS provider looking to restrict cipher suites for connections to [custom hostnames](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/domain-support/), this can be configured with a [Cloudflare for SaaS](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/) subscription. Refer to [TLS management](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/security/certificate-management/enforce-mtls/#cipher-suites) instead.\n\nCustom cipher suites is a hostname-level setting, which implies that:\n\n* When you customize cipher suites for a zone, this will affect all hostnames within that zone. If you are not familiar with what a Cloudflare zone is, refer to [Fundamentals](https://developers.cloudflare.com/fundamentals/concepts/accounts-and-zones/#zones).\n* The configuration is applicable to all edge certificates used to connect to the hostname(s), regardless of the [certificate type](https://developers.cloudflare.com/ssl/edge-certificates/) (universal, advanced, or custom).\n* If you need to use a per-hostname cipher suite customization, you must ensure that the hostname is specified on the certificate.\n\nCurrently, you have the following options:\n\n* Set custom cipher suites for a zone: either [via API](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/api/) or [on the dashboard](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/dashboard/).\n\n* Set custom cipher suites per-hostname: only available [via API](https://developers.cloudflare.com/api/resources/hostnames/subresources/settings/subresources/tls/methods/update/). Refer to the [how-to](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/api/) for details.\n\n* For guidance around custom hostnames, refer to [TLS settings - Cloudflare for SaaS](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/security/certificate-management/enforce-mtls/#cipher-suites).\n\nThis documentation only refers to connections [between clients and the Cloudflare network](https://developers.cloudflare.com/ssl/concepts/#edge-certificate). For connections between Cloudflare and your origin server, refer to [Origin server > Cipher suites](https://developers.cloudflare.com/ssl/origin-configuration/cipher-suites/).\n\n## Settings priority and ciphers order\n\nCloudflare uses the [hostname priority logic](https://developers.cloudflare.com/ssl/reference/certificate-and-hostname-priority/) to determine which setting to apply.\n\nECDSA cipher suites are prioritized over RSA, and Cloudflare preserves the specified cipher suites in the order they are set. This means that, if both ECDSA and RSA are used, Cloudflare presents the ECDSA ciphers first - in the order they were set - and then the RSA ciphers, also in the order they were set.\n\n<page>\n---\ntitle: Cipher suite recommendations · Cloudflare SSL/TLS docs\ndescription: Refer to the sections below for three different security levels and\n  how Cloudflare recommends that you set them up if you need to restrict the\n  cipher suites used between Cloudflare and clients that access your website or\n  application.\nlastUpdated: 2025-08-20T18:47:44.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/recommendations/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/recommendations/index.md\n---\n\nRefer to the sections below for three different security levels and how Cloudflare recommends that you set them up if you need to restrict the [cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/) used between Cloudflare and clients that access your website or application.\n\nRefer to [Customize cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/) to learn how to specify cipher suites at zone level or per hostname.\n\nBefore opting for [compatible](#compatible) or [modern](#modern), review the [related SSL/TLS settings](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/#related-ssltls-settings)[1](#user-content-fn-4).\n\nOffers the best security and performance, limiting your range of clients to modern devices and browsers. Supports TLS 1.2-1.3 cipher suites. All suites are forward-secret and support authenticated encryption (AEAD).\n\n`AEAD-AES128-GCM-SHA256`[2](#user-content-fn-1), `AEAD-AES256-GCM-SHA384`[3](#user-content-fn-2), `AEAD-CHACHA20-POLY1305-SHA256`[4](#user-content-fn-3),`ECDHE-ECDSA-AES128-GCM-SHA256`, `ECDHE-ECDSA-CHACHA20-POLY1305`, `ECDHE-RSA-AES128-GCM-SHA256`, `ECDHE-RSA-CHACHA20-POLY1305`, `ECDHE-ECDSA-AES256-GCM-SHA384`, `ECDHE-RSA-AES256-GCM-SHA384`\n\nIf you are customizing cipher suites via API, refer to [Steps and API examples](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/api/#steps-and-api-examples) for a snippet you can copy with the formatted array.\n\nProvides broader compatibility with somewhat weaker security. Supports TLS 1.2-1.3 cipher suites. All suites are forward-secret.\n\n`AEAD-AES128-GCM-SHA256`[2](#user-content-fn-1), `AEAD-AES256-GCM-SHA384`[3](#user-content-fn-2), `AEAD-CHACHA20-POLY1305-SHA256`[4](#user-content-fn-3), `ECDHE-ECDSA-AES128-GCM-SHA256`, `ECDHE-ECDSA-CHACHA20-POLY1305`, `ECDHE-RSA-AES128-GCM-SHA256`, `ECDHE-RSA-CHACHA20-POLY1305`, `ECDHE-ECDSA-AES256-GCM-SHA384`, `ECDHE-RSA-AES256-GCM-SHA384`, `ECDHE-ECDSA-AES128-SHA256`, `ECDHE-RSA-AES128-SHA256`, `ECDHE-ECDSA-AES256-SHA384`, `ECDHE-RSA-AES256-SHA384`\n\nIf you are customizing cipher suites via API, refer to [Steps and API examples](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/api/#steps-and-api-examples) for a snippet you can copy with the formatted array.\n\nIncludes all cipher suites that Cloudflare supports today. Broadest compatibility with the weakest security. Supports TLS 1.0-1.3 cipher suites.\n\n`AEAD-AES128-GCM-SHA256`[2](#user-content-fn-1), `AEAD-AES256-GCM-SHA384`[3](#user-content-fn-2), `AEAD-CHACHA20-POLY1305-SHA256`[4](#user-content-fn-3), `ECDHE-ECDSA-AES128-GCM-SHA256`, `ECDHE-ECDSA-CHACHA20-POLY1305`, `ECDHE-RSA-AES128-GCM-SHA256`, `ECDHE-RSA-CHACHA20-POLY1305`, `ECDHE-ECDSA-AES256-GCM-SHA384`, `ECDHE-RSA-AES256-GCM-SHA384`, `ECDHE-ECDSA-AES128-SHA256`, `ECDHE-RSA-AES128-SHA256`, `ECDHE-ECDSA-AES256-SHA384`, `ECDHE-RSA-AES256-SHA384`, `ECDHE-ECDSA-AES128-SHA`, `ECDHE-RSA-AES128-SHA`, `AES128-GCM-SHA256`, `AES128-SHA256`, `AES128-SHA`, `ECDHE-RSA-AES256-SHA`, `AES256-GCM-SHA384`, `AES256-SHA256`, `AES256-SHA`, `DES-CBC3-SHA`\n\nTo reset your option to the default, [use an empty array](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/#reset-to-default-values).\n\n1. Although configured independently, cipher suites interact with **Minimum TLS version** and **TLS 1.3**. [↩](#user-content-fnref-4)\n\n2. Same as `TLS_AES_128_GCM_SHA256`. Refer to [TLS 1.3 cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/#tls-13) for details. [↩](#user-content-fnref-1) [↩2](#user-content-fnref-1-2) [↩3](#user-content-fnref-1-3)\n\n3. Same as `TLS_AES_256_GCM_SHA384`. Refer to [TLS 1.3 cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/#tls-13) for details. [↩](#user-content-fnref-2) [↩2](#user-content-fnref-2-2) [↩3](#user-content-fnref-2-3)\n\n4. Same as `TLS_CHACHA20_POLY1305_SHA256`. Refer to [TLS 1.3 cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/#tls-13) for details. [↩](#user-content-fnref-3) [↩2](#user-content-fnref-3-2) [↩3](#user-content-fnref-3-3)\n\n<page>\n---\ntitle: Supported cipher suites · Cloudflare SSL/TLS docs\ndescription: Cloudflare supports the following cipher suites by default. If\n  needed, you can restrict your website or application to only use specific\n  cipher suites.\nlastUpdated: 2025-12-30T15:41:07.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/supported-cipher-suites/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/supported-cipher-suites/index.md\n---\n\nCloudflare supports the following cipher suites by default. If needed, you can [restrict your website or application](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/) to only use specific cipher suites.\n\n| Cipher name | Minimum protocol | [Security recommendation](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/recommendations/) | Cipher suite | IANA name |\n| - | - | - | - | - |\n| ECDHE-ECDSA-AES128-GCM-SHA256 | TLS 1.2 | Modern, Compatible, Legacy | \\[0xc02b] | TLS\\_ECDHE\\_ECDSA\\_WITH\\_AES\\_128\\_GCM\\_SHA256 |\n| ECDHE-ECDSA-CHACHA20-POLY1305 | TLS 1.2 | Modern, Compatible, Legacy | \\[0xcca9] | TLS\\_ECDHE\\_ECDSA\\_WITH\\_CHACHA20\\_POLY1305\\_SHA256 |\n| ECDHE-RSA-AES128-GCM-SHA256 | TLS 1.2 | Modern, Compatible, Legacy | \\[0xc02f] | TLS\\_ECDHE\\_RSA\\_WITH\\_AES\\_128\\_GCM\\_SHA256 |\n| ECDHE-RSA-CHACHA20-POLY1305 | TLS 1.2 | Modern, Compatible, Legacy | \\[0xcca8] | TLS\\_ECDHE\\_RSA\\_WITH\\_CHACHA20\\_POLY1305\\_SHA256 |\n| ECDHE-ECDSA-AES128-SHA256 | TLS 1.2 | Compatible, Legacy | \\[0xc023] | TLS\\_ECDHE\\_ECDSA\\_WITH\\_AES\\_128\\_CBC\\_SHA256 |\n| ECDHE-ECDSA-AES128-SHA | TLS 1.0 | Legacy | \\[0xc009] | TLS\\_ECDHE\\_ECDSA\\_WITH\\_AES\\_128\\_CBC\\_SHA |\n| ECDHE-RSA-AES128-SHA256 | TLS 1.2 | Compatible, Legacy | \\[0xc027] | TLS\\_ECDHE\\_RSA\\_WITH\\_AES\\_128\\_CBC\\_SHA256 |\n| ECDHE-RSA-AES128-SHA | TLS 1.0 | Legacy | \\[0xc013] | TLS\\_ECDHE\\_RSA\\_WITH\\_AES\\_128\\_CBC\\_SHA |\n| AES128-GCM-SHA256 | TLS 1.2 | Legacy | \\[0x9c] | TLS\\_RSA\\_WITH\\_AES\\_128\\_GCM\\_SHA256 |\n| AES128-SHA256 | TLS 1.2 | Legacy | \\[0x3c] | TLS\\_RSA\\_WITH\\_AES\\_128\\_CBC\\_SHA256 |\n| AES128-SHA | TLS 1.0 | Legacy | \\[0x2f] | TLS\\_RSA\\_WITH\\_AES\\_128\\_CBC\\_SHA |\n| ECDHE-ECDSA-AES256-GCM-SHA384 | TLS 1.2 | Modern, Compatible, Legacy | \\[0xc02c] | TLS\\_ECDHE\\_ECDSA\\_WITH\\_AES\\_256\\_GCM\\_SHA384 |\n| ECDHE-ECDSA-AES256-SHA384 | TLS 1.2 | Compatible, Legacy | \\[0xc024] | TLS\\_ECDHE\\_ECDSA\\_WITH\\_AES\\_256\\_CBC\\_SHA384 |\n| ECDHE-RSA-AES256-GCM-SHA384 | TLS 1.2 | Modern, Compatible, Legacy | \\[0xc030] | TLS\\_ECDHE\\_RSA\\_WITH\\_AES\\_256\\_GCM\\_SHA384 |\n| ECDHE-RSA-AES256-SHA384 | TLS 1.2 | Compatible, Legacy | \\[0xc028] | TLS\\_ECDHE\\_RSA\\_WITH\\_AES\\_256\\_CBC\\_SHA384 |\n| ECDHE-RSA-AES256-SHA | TLS 1.0 | Legacy | \\[0xc014] | TLS\\_ECDHE\\_RSA\\_WITH\\_AES\\_256\\_CBC\\_SHA |\n| AES256-GCM-SHA384 | TLS 1.2 | Legacy | \\[0x9d] | TLS\\_RSA\\_WITH\\_AES\\_256\\_GCM\\_SHA384 |\n| AES256-SHA256 | TLS 1.2 | Legacy | \\[0x3d] | TLS\\_RSA\\_WITH\\_AES\\_256\\_CBC\\_SHA256 |\n| AES256-SHA | TLS 1.0 | Legacy | \\[0x35] | TLS\\_RSA\\_WITH\\_AES\\_256\\_CBC\\_SHA |\n| DES-CBC3-SHA | TLS 1.0 | Legacy | \\[0x0a] | TLS\\_RSA\\_WITH\\_3DES\\_EDE\\_CBC\\_SHA |\n| AEAD-AES128-GCM-SHA256 \\* | TLS 1.3 | Modern, Compatible, Legacy | {0x13,0x01} | TLS\\_AES\\_128\\_GCM\\_SHA256 |\n| AEAD-AES256-GCM-SHA384 \\* | TLS 1.3 | Modern, Compatible, Legacy | {0x13,0x02} | TLS\\_AES\\_256\\_GCM\\_SHA384 |\n| AEAD-CHACHA20-POLY1305-SHA256 \\* | TLS 1.3 | Modern, Compatible, Legacy | {0x13,0x03} | TLS\\_CHACHA20\\_POLY1305\\_SHA256 |\n\n\\* TLS 1.3 minimum protocol\n\nCiphers `AEAD-AES128-GCM-SHA256`, `AEAD-AES256-GCM-SHA384`, and `AEAD-CHACHA20-POLY1305-SHA256` are automatically supported by your zone if you [enable TLS 1.3](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/tls-13/#enable-tls-13).\n\nTLS 1.3 uses the same cipher suite space as previous versions of TLS, but defines these cipher suites differently. TLS 1.3 only specifies the symmetric ciphers and cannot be used for TLS 1.2. Similarly, TLS 1.2 and lower cipher suites cannot be used with TLS 1.3 ([RFC 8446](https://www.rfc-editor.org/rfc/rfc8446.html)). BoringSSL also hard-codes cipher preferences in this order for TLS 1.3.\n\n<page>\n---\ntitle: Troubleshooting - Cipher suites — Edge certificates · Cloudflare SSL/TLS docs\ndescription: If you encounter issues with edge certificate cipher suites, refer\n  to the following scenarios.\nlastUpdated: 2025-10-24T08:44:04.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/troubleshooting/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/troubleshooting/index.md\n---\n\nIf you encounter issues with edge certificate cipher suites, refer to the following scenarios.\n\n## Compatibility with Minimum TLS Version\n\nWhen you adjust the setting used for your domain's [Minimum TLS Version](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/minimum-tls/), your domain only allows HTTPS connections using that TLS protocol version. As explained in [About cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/#related-ssltls-settings), although configured independently, cipher suites and TLS versions are closely related.\n\nMinimum TLS Version can cause issues if you are not supporting TLS 1.2 ciphers on your domain. If you experience issues, review your domain's [Minimum TLS Version](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/minimum-tls/) setting and Cloudflare's [supported ciphers list](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/supported-cipher-suites/).\n\n### Testing Minimum TLS version with curl\n\nTo test supported TLS versions, attempt a request to your website or application while specifying a TLS version.\n\nFor example, to test TLS 1.1, use the `curl` command below. Replace `www.example.com` with your Cloudflare domain and hostname.\n\nIf the TLS version you are testing is blocked by Cloudflare, the TLS handshake is not completed and returns an error:\n\n`* error:1400442E:SSL routines:CONNECT_CR_SRVR_HELLO:tlsv1 alert`\n\nLocal VPN or a device security client may prevent insecure connections using legacy protocols like TLS 1.0. Make sure to disable such network or security client before running the test on your device.\n\n## Compatibility with certificate encryption\n\nIf you [upload a custom certificate](https://developers.cloudflare.com/ssl/edge-certificates/custom-certificates/uploading/), make sure the certificate is compatible with the chosen cipher suites for your zone or hostname.\n\nFor example, if you upload an RSA certificate, your cipher suite selection cannot only support ECDSA certificates.\n\n## Compatibility with Cloudflare Pages\n\nIt is not possible to configure minimum TLS version nor cipher suites for [Cloudflare Pages](https://developers.cloudflare.com/pages/) hostnames.\n\n## API requirements for custom hostname certificate\n\nWhen using the [Edit Custom Hostname endpoint](https://developers.cloudflare.com/api/resources/custom_hostnames/methods/edit/), make sure to include `type` and `method` within the `ssl` object, as well as the `settings` specifications.\n\nIncluding the `settings` only will result in the error message `The SSL attribute is invalid. Please refer to the API documentation, check your input and try again`.\n\nYou cannot set specific TLS 1.3 ciphers. Instead, you can enable [TLS 1.3](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/tls-13/#enable-tls-13) for your entire zone and Cloudflare will use [all applicable TLS 1.3 cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/supported-cipher-suites/). In combination with this, you can still [disable weak cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/) for TLS 1.0-1.2.\n\n## SSL Labs weak ciphers report\n\nIf you try to [disable](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/) all of the `WEAK` cipher suites according to what is listed on a [Qualys SSL Labs](https://www.ssllabs.com/ssltest/) report, you might notice that the naming conventions are not the same.\n\nThis is because SSL Labs follows RFC cipher naming convention while Cloudflare follows OpenSSL cipher naming convention. The cipher suite names list in the [OpenSSL documentation](https://www.openssl.org/docs/man1.0.2/man1/ciphers.html) may help you map the names.\n\n## Warnings related to CVE-2019-1559\n\nEven though applications on Cloudflare are not vulnerable to [CVE-2019-1559](https://developers.cloudflare.com/ssl/reference/cloudflare-and-cve-2019-1559/), some security scanners may flag your application erroneously.\n\nTo remove these warnings, refer to [Customize cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/) and exclude the following ciphers:\n\n* `ECDHE-ECDSA-AES256-SHA384`\n* `ECDHE-ECDSA-AES128-SHA256`\n* `ECDHE-RSA-AES256-SHA384`\n\n<page>\n---\ntitle: Enable Total TLS · Cloudflare SSL/TLS docs\ndescription: \"To enable Total TLS - which issues individual certificates for\n  your proxied hostnames - follow these instructions:\"\nlastUpdated: 2025-10-28T14:13:10.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/total-tls/enable/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/total-tls/enable/index.md\n---\n\nTo enable [Total TLS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/total-tls/) - which issues individual certificates for your proxied hostnames - follow these instructions:\n\nTo enable Total TLS in the dashboard:\n\n1. In the Cloudflare dashboard, go to the **Edge Certificates** page.\n\n[Go to **Edge Certificates**](https://dash.cloudflare.com/?to=/:account/:zone/ssl-tls/edge-certificates)\n\n2. For **Total TLS**, switch the toggle to **On** and - if desired - choose an issuing **Certificate Authority**.\n\nTo enable Total TLS with the API, send a [`PATCH`](https://developers.cloudflare.com/api/resources/acm/subresources/total_tls/methods/create/) request with the `enabled` parameter set to your desired setting (`true` or `false`).\n\nYou can also specify a desired certificate authority by adding a value to the `certificate_authority` parameter.\n\n## Aspects to consider\n\n* Total TLS certificates follow the Common Name (CN) restriction of 64 characters ([RFC 5280](https://www.rfc-editor.org/rfc/rfc5280.html)). If you have a hostname that exceeds this length, you can create an [Advanced Certificate](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/manage-certificates/#create-a-certificate) via API to cover it.\n\n<page>\n---\ntitle: Total TLS error messages · Cloudflare SSL/TLS docs\ndescription: To help avoid ERR_SSL_VERSION_OR_CIPHER_MISMATCH errors, Cloudflare\n  automatically shows an error message - This hostname is not covered by a\n  certificate - on proxied DNS records not covered by a TLS certificate.\nlastUpdated: 2025-08-20T18:47:44.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/total-tls/error-messages/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/total-tls/error-messages/index.md\n---\n\nTo help avoid [`ERR_SSL_VERSION_OR_CIPHER_MISMATCH`](https://developers.cloudflare.com/ssl/troubleshooting/version-cipher-mismatch/) errors, Cloudflare automatically shows an error message - `This hostname is not covered by a certificate` - on proxied DNS records not covered by a TLS certificate.\n\nIf you recently [added your domain](https://developers.cloudflare.com/fundamentals/manage-domains/add-site/) to Cloudflare - meaning that your zone is in a [pending state](https://developers.cloudflare.com/dns/zone-setups/reference/domain-status/) - you can often ignore this warning.\n\nOnce most domains becomes **Active**, Cloudflare will automatically issue a Universal SSL certificate, which will provide SSL/TLS coverage and remove the warning message.\n\nSince there are a few nuances to certificate coverage and issuance timing, review [Enable Universal SSL certificates](https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/enable-universal-ssl/) to make sure your domain will receive SSL/TLS coverage automatically.\n\nIf your zone is already active on Cloudflare, this warning identifies subdomains that are not covered by your current SSL/TLS certificate.\n\nBy default, Cloudflare [Universal SSL certificates](https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/) only cover your apex domain and one level of subdomain.\n\n| Hostname | Covered by Universal certificate? |\n| - | - |\n| `example.com` | Yes |\n| `www.example.com` | Yes |\n| `docs.example.com` | Yes |\n| `dev.docs.example.com` | No |\n| `test.dev.api.example.com` | No |\n\nTo prevent insecure connections on a multi-level subdomain, do one of the following:\n\n* Enable [Total TLS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/total-tls/), which automatically issues individual certificates to your proxied hostnames not covered by a Universal certificate.\n* Order an [Advanced Certificate](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/manage-certificates/) covering the subdomain.\n* Upload a [Custom Certificate](https://developers.cloudflare.com/ssl/edge-certificates/custom-certificates/) covering the subdomain.\n\nIf none of these solutions work, you could also remove the multi-level subdomain.\n\n<page>\n---\ntitle: Delegated DCV — Domain Control Validation — SSL/TLS · Cloudflare SSL/TLS docs\ndescription: Delegated DCV allows zones with partial DNS setups - meaning\n  authoritative DNS is not provided by Cloudflare - to delegate the DCV process\n  to Cloudflare.\nlastUpdated: 2025-10-28T14:13:10.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/delegated-dcv/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/delegated-dcv/index.md\n---\n\nDelegated DCV allows zones with [partial DNS setups](https://developers.cloudflare.com/dns/zone-setups/partial-setup/) - meaning authoritative DNS is not provided by Cloudflare - to delegate the DCV process to Cloudflare.\n\nDCV Delegation requires you to place a one-time record that allows Cloudflare to auto-renew all future certificate orders, so that there’s no manual intervention at the time of the renewal.\n\nDCV Delegation will not work with Universal Certificates and requires the use of an [Advanced certificate](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/).\n\n| | Free | Pro | Business | Enterprise |\n| - | - | - | - | - |\n| Availability | Included with [Advanced Certificate Manager](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/) | Included with [Advanced Certificate Manager](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/) | Included with [Advanced Certificate Manager](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/) | Included with [Advanced Certificate Manager](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/) |\n\nYou should use Delegated DCV when all of the following conditions are true:\n\n* Your zone is using a [partial DNS setup](https://developers.cloudflare.com/dns/zone-setups/partial-setup/).\n* Cloudflare is not already [performing DCV automatically](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/).\n* Your zone is using an [Advanced certificate](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/).\n* The Certificate Authority is either Google Trust Services, SSL.com, or Let's Encrypt\n\n### Aspects to keep in mind\n\nAs explained in the [announcement blog post](https://blog.cloudflare.com/introducing-dcv-delegation/), currently, you can only delegate DCV to one provider at a time. This means:\n\n* If you also issue publicly trusted certificates for the same hostname for your [origin server](https://developers.cloudflare.com/ssl/concepts/#origin-certificate), this will no longer be possible. You can use [Cloudflare origin CA certificates](https://developers.cloudflare.com/ssl/origin-configuration/origin-ca/) instead.\n\n* If your zone is using multiple CDN providers, you might want to use an alternative [method](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/). This is because, once the DCV delegation is configured for Cloudflare, only Cloudflare will be able to perform DCV on your behalf, blocking your external CDN providers from doing the same.\n\nTo set up Delegated DCV:\n\n1. Order an [advanced certificate](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/manage-certificates/) for your zone, choosing `TXT` as the **Certificate validation method**.\n2. On the [**Edge Certificates**](https://dash.cloudflare.com/?to=/:account/:zone/ssl-tls/edge-certificates) page, go to **DCV Delegation for Partial Zones**.\n3. Copy the Cloudflare validation URL.\n4. At your authoritative DNS provider, create `CNAME` record(s) considering the following:\n\n* If your certificate only covers the apex domain and a wildcard, you only need to create a single `CNAME` record for your apex domain. Any direct subdomains will be covered as well.\n\n* If your certificate also covers subdomains specified by their name, you will need to add multiple `CNAME` records to your authoritative DNS provider, one for each specific subdomain.\n\nFor example, a certificate covering `example.com`, `*.example.com`, and `sub.example.com` would require the following records.\n\nRemove previous TXT records\n\nExisting TXT records for `_acme-challenge` will conflict with the delegated DCV CNAME record. Make sure to check and remove records such as the following:\n\nOnce the `CNAME` records are in place, Cloudflare will add TXT DCV tokens for every hostname on the Advanced certificate that has a DCV delegation record in place, as long as the zone is [active](https://developers.cloudflare.com/dns/zone-setups/reference/domain-status/) on Cloudflare.\n\nBecause DCV happens regularly, do not remove the `CNAME` record(s) at your authoritative DNS provider. Otherwise, Cloudflare will not be able to perform DCV on your behalf and your certificate will not be issued.\n\nIf you use a `dig` command to test, you should only be able see the placed tokens if the certificate is up for issuance.\n\nThis is because Cloudflare places the tokens when needed and then cleans them up.\n\nIf a hostname becomes unreachable during certificate renewal time, the certificate will not be able to be renewed automatically via Delegated DCV. Should you need to renew a certificate for a hostname that is not resolving currently, you can send a PATCH request to [the changing DCV method API endpoint](https://developers.cloudflare.com/api/resources/ssl/subresources/verification/methods/edit/) and change the method to TXT to proceed with manual renewal per [the TXT DCV method](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/txt/).\n\nOnce the hostname becomes resolvable again, [Delegated DCV](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/delegated-dcv/) will resume working as expected.\n\nIf you [move your zone to another account](https://developers.cloudflare.com/fundamentals/manage-domains/move-domain/), you will need to update the `CNAME` record at your authoritative DNS provider with a new validation URL.\n\n<page>\n---\ntitle: HTTP method — Domain Control Validation — SSL/TLS · Cloudflare SSL/TLS docs\ndescription: When you choose HTTP DCV, Cloudflare automatically adds a\n  verification HTTP token to your domain.\nlastUpdated: 2025-12-05T17:25:26.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/http/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/http/index.md\n---\n\nWhen you choose HTTP DCV, Cloudflare automatically adds a verification HTTP token to your domain.\n\nOnly use this method if your domain can tolerate a few minutes of downtime.\n\nIf you encounter issues with HTTP DCV, refer to the [troubleshooting guide](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/troubleshooting/).\n\nHTTP DCV is only available for [proxied domains](https://developers.cloudflare.com/dns/proxy-status/). It is possible to manually add the DCV token to the `.well-known/pki-validation/` directory on your origin web server to pre-validate your certificates.\n\nHTTP DCV validation does not work for wildcard certificates. If you want to use wildcard certificates, use [TXT validation](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/txt/).\n\nBased on your chosen certificate authority (CA), you may also not be able to use HTTP verification with [advanced certificates](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/).\n\n### Specify DCV method\n\nIf you want to use a [Universal SSL certificate](https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/enable-universal-ssl/), you will need to edit the `validation_method` [via the API](https://developers.cloudflare.com/api/resources/ssl/subresources/verification/methods/edit/) and specify your chosen validation method.\n\nAlternatively, you could [order an advanced certificate](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/manage-certificates/#create-a-certificate) via the API.\n\nIn either case, you would need to set a `\"validation_method\":\"http\"` parameter.\n\n### Review other Cloudflare settings\n\nTo make sure your domain does not accidentally block HTTP DCV, review your Cloudflare settings for [common setup issues](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/troubleshooting/).\n\nYour HTTP token will be available for the certificate authority as soon as you finish your [partial domain setup](https://developers.cloudflare.com/dns/zone-setups/partial-setup/setup/#3-add-dns-records).\n\nThis means that you need to add a CNAME record to Cloudflare in your authoritative DNS and create [proxied DNS records](https://developers.cloudflare.com/dns/proxy-status/) for your hostname within Cloudflare.\n\nThis process may involve a few minutes of downtime.\n\nWhat happens after you create your records\n\nCloudflare contacts one of our certificate authority (CA) providers and asks them to issue certificates for the specified hostname. The CA will then inform Cloudflare that we need to demonstrate control of this hostname by returning a `$DCV_TOKEN` at a specified `$DCV_FILENAME`; both the token and the filename are randomly generated by the CA and not known to Cloudflare ahead of time.\n\nFor example, if you create a new custom hostname for `site.example.com`, the CA might ask us to return the value `ca3-38734555d85e4421beb4a3e6d1645fe6` for a request to `http://site.example.com/.well-known/pki-validation/ca3-39f423f095be4983922ca0365308612d.txt\"`. As soon as we receive that value from the CA we make it accessible at our edge and ask the CA to confirm it is there so that they can complete validation and the certificate order.\n\nTo check whether your certificates have been validated and reissued:\n\n* **Dashboard**: Find the certificate(s) on the [**Edge Certificates**](https://dash.cloudflare.com/?to=/:account/:zone/ssl-tls/edge-certificates) page and make sure that the **Status** is **Active**.\n* **API**: Send a [`GET`](https://developers.cloudflare.com/api/resources/ssl/subresources/certificate_packs/methods/list/) request and confirm that your certificate(s) have `\"status\": \"active\"`.\n\nEven if you manually handle DCV when issuing certificates in a [partial DNS setup](https://developers.cloudflare.com/dns/zone-setups/partial-setup/), at certificate renewal, Cloudflare will attempt to automatically perform DCV via HTTP.\n\nIf all of the following conditions are confirmed at the first attempt, the renewal happens automatically via [HTTP](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/http/).\n\n* Hostnames are proxied.\n* Hostnames on the certificate resolve to the IPs assigned to the zone.\n* The certificate does not contain wildcards.\n\nTo automatically renew certificates that do not meet the referred criteria, consider using [Delegated DCV](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/delegated-dcv/).\n\nIf the conditions are met but HTTP DCV fails successively, the process will fall back to TXT. This schedule varies according to the certificate validity period.\n\n* 90-days certificates: after failing for 15 days\n* 30-days certificates: after failing for 7 days\n* 14-days certificates: after failing for 3 days\n\n<page>\n---\ntitle: TXT method — Domain Control Validation — SSL/TLS · Cloudflare SSL/TLS docs\ndescription: TXT record validation requires the creation of a TXT record in the\n  hostname's authoritative DNS.\nlastUpdated: 2025-10-27T14:28:58.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/txt/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/txt/index.md\n---\n\nTXT record validation requires the creation of a TXT record in the hostname's authoritative DNS.\n\nGenerally, you need to perform TXT-based DCV when your certificate [requires DCV](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/) and you cannot perform [Delegated DCV](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/delegated-dcv/).\n\n### Specify DCV method\n\nIf you want to use a [Universal SSL certificate](https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/enable-universal-ssl/), you will need to edit the `validation_method` [via the API](https://developers.cloudflare.com/api/resources/ssl/subresources/verification/methods/edit/) and specify your chosen validation method.\n\nAlternatively, you could [order an advanced certificate](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/) via the dashboard or the API.\n\nOnce you [create a new certificate](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/manage-certificates/#create-a-certificate) and choose the validation method of **TXT**, your tokens will be ready after a few seconds.\n\nThese tokens can be fetched through the API or the dashboard when the certificates are in a [pending validation](https://developers.cloudflare.com/ssl/reference/certificate-statuses/#new-certificates) state during custom hostname creation or during certificate renewals.\n\nYou can access these tokens using the API with the [`GET` request](https://developers.cloudflare.com/api/resources/ssl/subresources/certificate_packs/methods/get/) and including `status=pending_validation` as a request parameter.\n\nFor example, here are two tokens highlighted in the API response for a wildcard certificate.\n\n1. In the Cloudflare dashboard, go to the **Edge Certificates** page.\n\n[Go to **Edge Certificates**](https://dash.cloudflare.com/?to=/:account/:zone/ssl-tls/edge-certificates)\n\n2. Select a certificate.\n\n3. Copy the values for **Certificate validation TXT name** and **Certificate validation TXT value**.\n\nIf you had created a **wildcard** certificate, you would need to copy the values for two different validation TXT records.\n\n### Update DNS records\n\nAt your authoritative DNS provider, create a TXT record named the `txt_name` and containing the `txt_value`.\n\nRepeat this process for all the DCV records returned in the `validation_records` field to your Authoritative DNS provider.\n\nIf one or more of the hostnames on the certificate fail to validate, the certificate will not be issued or renewed.\n\nThis means that a wildcard certificate covering `example.com` and `*.example.com` will require two DCV tokens to be placed at the authoritative DNS provider. Similarly, a certificate with five hostnames in the SAN (including a wildcard) will require five DCV tokens to be placed at the authoritative DNS provider. Certificates with several packs (RSA and ECDSA for example) may also require several DCV tokens.\n\nOnce you update your DNS records, you can either [wait for the next retry](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/validation-backoff-schedule/) or request an immediate recheck.\n\nTo request an immediate recheck, send another [PATCH request](https://developers.cloudflare.com/api/resources/ssl/subresources/verification/methods/edit/) with the same `validation_method` as your current validation method.\n\nTXT records used for DCV can be removed from your authoritative DNS provider as soon as the certificate is issued.\n\nEven if you manually handle DCV when issuing certificates in a [partial DNS setup](https://developers.cloudflare.com/dns/zone-setups/partial-setup/), at certificate renewal, Cloudflare will attempt to automatically perform DCV via HTTP.\n\nIf all of the following conditions are confirmed at the first attempt, the renewal happens automatically via [HTTP](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/http/).\n\n* Hostnames are proxied.\n* Hostnames on the certificate resolve to the IPs assigned to the zone.\n* The certificate does not contain wildcards.\n\nTo automatically renew certificates that do not meet the referred criteria, consider using [Delegated DCV](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/delegated-dcv/).\n\nIf any one of the conditions is not met, the certificate renewal falls back to your chosen method and you will need to [repeat the DCV process](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/txt/#get-dcv-values) manually.\n\nCloudflare generates renewal tokens 30 days before certificate expiration.\n\n<page>\n---\ntitle: Manage AOP certificates · Cloudflare SSL/TLS docs\ndescription: Refer to the following sections to learn how to manage certificates\n  used with the different Authenticated Origin Pulls setups.\nlastUpdated: 2025-12-18T11:21:30.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/set-up/manage-certificates/\n  md: https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/set-up/manage-certificates/index.md\n---\n\nRefer to the following sections to learn how to manage certificates used with the different Authenticated Origin Pulls setups.\n\n## Expired certificates\n\nClient certificates are not deleted from Cloudflare upon expiration unless a [delete](https://developers.cloudflare.com/api/resources/origin_tls_client_auth/methods/delete/) request is sent to the Cloudflare API. However, requests are dropped at your origin if your origin only accepts a valid client certificate.\n\nMake sure you have [notifications](https://developers.cloudflare.com/notifications/notification-available/#ssltls) set up to get alerts 30 days and 14 days before an AOP certificate expires.\n\n## Use specialized certificates\n\nTo apply different client certificates simultaneously at both the zone and hostname level, you can combine zone-level and per-hostname custom certificates.\n\nFirst, set up [zone-level pulls](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/set-up/zone-level/) using a certificate. Then, upload multiple, specialized certificates for [individual hostnames](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/set-up/per-hostname/). Since per-hostname certificates are more specific, they take precedence over zone certificates.\n\n## Replace a certificate without downtime\n\nClient certificates are not deleted from Cloudflare upon expiration unless a [delete](https://developers.cloudflare.com/api/resources/origin_tls_client_auth/methods/delete/) request is sent to the Cloudflare API.\n\n1. [Upload the new certificate](https://developers.cloudflare.com/api/resources/origin_tls_client_auth/subresources/hostnames/subresources/certificates/methods/create/).\n2. [List your certificates](https://developers.cloudflare.com/api/resources/origin_tls_client_auth/subresources/hostnames/subresources/certificates/methods/list/) and note the ID for the certificate you uploaded.\n3. [Enable Authenticated Origin Pulls for the specific hostname](https://developers.cloudflare.com/api/resources/origin_tls_client_auth/subresources/hostnames/methods/update/), using the ID obtained in step 2 to specify the certificate you want to use:\n\nRequired API token permissions\n\nAt least one of the following [token permissions](https://developers.cloudflare.com/fundamentals/api/reference/permissions/) is required:\n\n* `SSL and Certificates Write`\n\nIf you keep both certificates, the API will state `active` for both but the most recently deployed certificate will be the one enabled and used.\n\n1. [Upload the new certificate](https://developers.cloudflare.com/api/resources/origin_tls_client_auth/methods/create/).\n2. [Check whether new certificate is Active](https://developers.cloudflare.com/api/resources/origin_tls_client_auth/methods/get/).\n3. Once certificate is active, [delete the previous certificate](https://developers.cloudflare.com/api/resources/origin_tls_client_auth/methods/delete/).\n\nIf you keep both certificates, the API will state `active` for both but the most recently deployed certificate will be the one enabled and used.\n\n<page>\n---\ntitle: Per-hostname authenticated origin pulls · Cloudflare SSL/TLS docs\ndescription: When you enable Authenticated Origin Pulls per hostname, all\n  proxied traffic to the specified hostname is authenticated at the origin web\n  server. You can use client certificates from your Private PKI to authenticate\n  connections from Cloudflare.\nlastUpdated: 2025-12-18T11:21:30.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/set-up/per-hostname/\n  md: https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/set-up/per-hostname/index.md\n---\n\nWhen you enable Authenticated Origin Pulls per hostname, all proxied traffic to the specified hostname is authenticated at the origin web server. You can use client certificates from your Private PKI to authenticate connections from Cloudflare.\n\nIt is not possible to set up per-hostname authenticated origin pulls with the [Cloudflare certificate](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/#aspects-to-consider).\n\nRefer to the steps below for an example of how to generate a custom certificate using OpenSSL. The CA root certificate that you use to issue the custom certificate should be the same CA that you will [upload to your origin](#2-configure-origin-to-accept-client-certificates).\n\n1. Run the following command to generate a 4096-bit RSA private key, using AES-256 encryption. Enter a passphrase when prompted.\n\n1. Create the CA root certificate. When prompted, fill in the information to be included in the certificate. For the `Common Name` field, use the domain name as value, not the hostname.\n\n1. Create a Certificate Signing Request (CSR). When prompted, fill in the information to be included in the request. For the `Common Name` field, use the hostname as value.\n\n1. Sign the certificate using the `rootca.key` and `rootca.crt` created in previous steps.\n\n1. Make sure the certificate extensions file `cert.v3.ext` specifies the following:\n\n## 1. Upload custom certificate\n\nUse the [`/origin_tls_client_auth/hostnames/certificates`](https://developers.cloudflare.com/api/resources/origin_tls_client_auth/subresources/hostnames/subresources/certificates/methods/create/) endpoint to upload your custom certificate.\n\nYou must upload a [leaf certificate](https://developers.cloudflare.com/ssl/concepts/#chain-of-trust). If you upload a root CA instead, the API will return a `missing leaf certificate` error.\n\n```bash\nMYCERT=\"$(cat cert.crt|perl -pe 's/\\r?\\n/\\\\n/'|sed -e 's/..$//')\"\nMYKEY=\"$(cat cert.key|perl -pe 's/\\r?\\n/\\\\n/'|sed -e's/..$//')\"\n\nrequest_body=$(< <(cat <<EOF\n{\n\"certificate\": \"$MYCERT\",\n\"private_key\": \"$MYKEY\",\n\"bundle_method\":\"ubiquitous\"\n}\nEOF\n))",
+  "code_samples": [
+    {
+      "code": "<link href=\"https://fonts.googleapis.com/css2?family=Roboto&display=swap\" rel=\"stylesheet\">",
+      "language": "html"
+    },
+    {
+      "code": "<script data-cfasync=\"false\" src=\"/javascript.js\"></script>",
+      "language": "html"
+    },
+    {
+      "code": "curl \"https://api.cloudflare.com/client/v4/zones/{zone_id}/settings/minify\" \\\n--header \"Authorization: Bearer <API_TOKEN>\"",
+      "language": "bash"
+    },
+    {
+      "code": "{\n  \"result\": {\n    \"id\": \"minify\",\n    \"value\": { \"css\": \"off\", \"html\": \"off\", \"js\": \"off\" },\n    \"modified_on\": null,\n    \"editable\": true\n  },\n  \"success\": true,\n  \"errors\": [],\n  \"messages\": []\n}",
+      "language": "json"
+    },
+    {
+      "code": "curl --request PATCH \\\n\"https://api.cloudflare.com/client/v4/zones/{zone_id}/settings/minify\" \\\n--header \"Authorization: Bearer <API_TOKEN>\" \\\n--header \"Content-Type: application/json\" \\\n--data '{ \"value\": { \"css\": \"off\",\"html\": \"off\",\"js\": \"off\" } }'",
+      "language": "bash"
+    },
+    {
+      "code": "{\n  \"result\": {\n    \"id\": \"minify\",\n    \"value\": { \"js\": \"off\", \"css\": \"off\", \"html\": \"off\" },\n    \"modified_on\": \"2024-11-15T19:32:20.882640Z\",\n    \"editable\": true\n  },\n  \"success\": true,\n  \"errors\": [],\n  \"messages\": []\n}",
+      "language": "json"
+    },
+    {
+      "code": "curl https://www.example.com -svo /dev/null --tls-max 1.1",
+      "language": "sh"
+    },
+    {
+      "code": "_acme-challenge.example.com CNAME example.com.<COPIED_VALIDATION_URL>.",
+      "language": "txt"
+    },
+    {
+      "code": "_acme-challenge.example.com CNAME example.com.<COPIED_VALIDATION_URL>.\n_acme-challenge.sub.example.com CNAME sub.example.com.<COPIED_VALIDATION_URL>.",
+      "language": "txt"
+    },
+    {
+      "code": "_acme-challenge.example.com TXT <CERTIFICATE_VALIDATION_VALUE>",
+      "language": "txt"
+    },
+    {
+      "code": "dig TXT +noadditional +noquestion +nocomments +nocmd +nostats _acme-challenge.example.com. @1.1.1.1\n\n\n_acme-challenge.example.com. 3600    IN    CNAME    example.com.<COPIED_VALIDATION_URL>",
+      "language": "sh"
+    },
+    {
+      "code": "{\n    \"result\": [\n      {\n        \"id\": \"<CERTIFICATE_ID>\",\n        \"type\": \"advanced\",\n        \"hosts\": [\"*.<DOMAIN>.com\", \"<DOMAIN>.com\"],\n        \"primary_certificate\": \"0\",\n        \"status\": \"pending_validation\",\n        \"certificates\": [],\n        \"created_on\": \"2022-10-12T21:46:21.979150Z\",\n        \"validity_days\": 90,\n        \"validation_method\": \"txt\",\n        \"validation_records\": [\n          {\n            \"status\": \"pending\",\n            \"txt_name\": \"_acme-challenge.<DOMAIN>.com\",\n            \"txt_value\": \"lXLOcN6cPv0nproViNcUHcahD9TrIPlNgdwesj0pYpk\"\n          },\n          {\n            \"status\": \"pending\",\n            \"txt_name\": \"_acme-challenge.<DOMAIN>.com\",\n            \"txt_value\": \"O0o8VgJu_OGu-T30_cvT-4xO5ZX1_2WsVNUrpUKE6ns\"\n          }\n        ],\n        \"certificate_authority\": \"google\"\n      }\n    ]\n  }",
+      "language": "json"
+    },
+    {
+      "code": "curl \"https://api.cloudflare.com/client/v4/zones/$ZONE_ID/origin_tls_client_auth/hostnames\" \\\n  --request PUT \\\n  --header \"X-Auth-Email: $CLOUDFLARE_EMAIL\" \\\n  --header \"X-Auth-Key: $CLOUDFLARE_API_KEY\" \\\n  --json '{\n    \"config\": [\n        {\n            \"enabled\": true,\n            \"hostname\": \"<HOSTNAME>\",\n            \"cert_id\": \"<CERT_ID>\"\n        }\n    ]\n  }'",
+      "language": "bash"
+    },
+    {
+      "code": "openssl genrsa -aes256 -out rootca.key 4096",
+      "language": "bash"
+    },
+    {
+      "code": "openssl req -x509 -new -nodes -key rootca.key -sha256 -days 1826 -out rootca.crt",
+      "language": "bash"
+    },
+    {
+      "code": "openssl req -new -nodes -out cert.csr -newkey rsa:4096 -keyout cert.key",
+      "language": "bash"
+    },
+    {
+      "code": "openssl x509 -req -in cert.csr -CA rootca.crt -CAkey rootca.key -CAcreateserial -out cert.crt -days 730 -sha256 -extfile ./cert.v3.ext",
+      "language": "bash"
+    },
+    {
+      "code": "basicConstraints=CA:FALSE",
+      "language": "plaintext"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Performance",
+      "id": "performance"
+    },
+    {
+      "level": "h3",
+      "text": "How does Cloudflare Fonts improve website performance?",
+      "id": "how-does-cloudflare-fonts-improve-website-performance?"
+    },
+    {
+      "level": "h2",
+      "text": "Privacy and security",
+      "id": "privacy-and-security"
+    },
+    {
+      "level": "h3",
+      "text": "Does Cloudflare Fonts collect or log user data?",
+      "id": "does-cloudflare-fonts-collect-or-log-user-data?"
+    },
+    {
+      "level": "h2",
+      "text": "Implementation and integration",
+      "id": "implementation-and-integration"
+    },
+    {
+      "level": "h3",
+      "text": "Do I need to host my font files separately when using Cloudflare Fonts?",
+      "id": "do-i-need-to-host-my-font-files-separately-when-using-cloudflare-fonts?"
+    },
+    {
+      "level": "h3",
+      "text": "Are there any code changes required to use Cloudflare Fonts?",
+      "id": "are-there-any-code-changes-required-to-use-cloudflare-fonts?"
+    },
+    {
+      "level": "h3",
+      "text": "Can I see analytics of font files served via Cloudflare Fonts?",
+      "id": "can-i-see-analytics-of-font-files-served-via-cloudflare-fonts?"
+    },
+    {
+      "level": "h3",
+      "text": "Which path are Cloudflare Fonts requests made to?",
+      "id": "which-path-are-cloudflare-fonts-requests-made-to?"
+    },
+    {
+      "level": "h3",
+      "text": "What other transformations are made?",
+      "id": "what-other-transformations-are-made?"
+    },
+    {
+      "level": "h2",
+      "text": "Validate the Fonts feature is working",
+      "id": "validate-the-fonts-feature-is-working"
+    },
+    {
+      "level": "h2",
+      "text": "Feature is not working",
+      "id": "feature-is-not-working"
+    },
+    {
+      "level": "h2",
+      "text": "Other issues with Cloudflare Fonts",
+      "id": "other-issues-with-cloudflare-fonts"
+    },
+    {
+      "level": "h2",
+      "text": "Limitations",
+      "id": "limitations"
+    },
+    {
+      "level": "h2",
+      "text": "Before you begin",
+      "id": "before-you-begin"
+    },
+    {
+      "level": "h2",
+      "text": "(Optional) Check zone status",
+      "id": "(optional)-check-zone-status"
+    },
+    {
+      "level": "h2",
+      "text": "Turn off Auto Minify using the API",
+      "id": "turn-off-auto-minify-using-the-api"
+    },
+    {
+      "level": "h2",
+      "text": "Solution",
+      "id": "solution"
+    },
+    {
+      "level": "h2",
+      "text": "H2 to Origin - Origin incompatibility",
+      "id": "h2-to-origin---origin-incompatibility"
+    },
+    {
+      "level": "h2",
+      "text": "H2 Multiplexing - Origin incompatibility/issues",
+      "id": "h2-multiplexing---origin-incompatibility/issues"
+    },
+    {
+      "level": "h2",
+      "text": "Generic browser errors",
+      "id": "generic-browser-errors"
+    },
+    {
+      "level": "h2",
+      "text": "PCI DSS",
+      "id": "pci-dss"
+    },
+    {
+      "level": "h2",
+      "text": "FIPS-140-2",
+      "id": "fips-140-2"
+    },
+    {
+      "level": "h2",
+      "text": "Footnotes",
+      "id": "footnotes"
+    },
+    {
+      "level": "h2",
+      "text": "How it works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h2",
+      "text": "Scope",
+      "id": "scope"
+    },
+    {
+      "level": "h2",
+      "text": "Settings priority and ciphers order",
+      "id": "settings-priority-and-ciphers-order"
+    },
+    {
+      "level": "h2",
+      "text": "Modern",
+      "id": "modern"
+    },
+    {
+      "level": "h2",
+      "text": "Compatible",
+      "id": "compatible"
+    },
+    {
+      "level": "h2",
+      "text": "Legacy (default)",
+      "id": "legacy-(default)"
+    },
+    {
+      "level": "h2",
+      "text": "Footnotes",
+      "id": "footnotes"
+    },
+    {
+      "level": "h2",
+      "text": "Compatibility with Minimum TLS Version",
+      "id": "compatibility-with-minimum-tls-version"
+    },
+    {
+      "level": "h3",
+      "text": "Testing Minimum TLS version with curl",
+      "id": "testing-minimum-tls-version-with-curl"
+    },
+    {
+      "level": "h2",
+      "text": "Compatibility with certificate encryption",
+      "id": "compatibility-with-certificate-encryption"
+    },
+    {
+      "level": "h2",
+      "text": "Compatibility with Cloudflare Pages",
+      "id": "compatibility-with-cloudflare-pages"
+    },
+    {
+      "level": "h2",
+      "text": "API requirements for custom hostname certificate",
+      "id": "api-requirements-for-custom-hostname-certificate"
+    },
+    {
+      "level": "h2",
+      "text": "TLS 1.3 settings",
+      "id": "tls-1.3-settings"
+    },
+    {
+      "level": "h2",
+      "text": "SSL Labs weak ciphers report",
+      "id": "ssl-labs-weak-ciphers-report"
+    },
+    {
+      "level": "h2",
+      "text": "Warnings related to CVE-2019-1559",
+      "id": "warnings-related-to-cve-2019-1559"
+    },
+    {
+      "level": "h2",
+      "text": "Aspects to consider",
+      "id": "aspects-to-consider"
+    },
+    {
+      "level": "h2",
+      "text": "Pending domains",
+      "id": "pending-domains"
+    },
+    {
+      "level": "h2",
+      "text": "Active domains",
+      "id": "active-domains"
+    },
+    {
+      "level": "h2",
+      "text": "Availability",
+      "id": "availability"
+    },
+    {
+      "level": "h2",
+      "text": "When to use",
+      "id": "when-to-use"
+    },
+    {
+      "level": "h3",
+      "text": "Aspects to keep in mind",
+      "id": "aspects-to-keep-in-mind"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h2",
+      "text": "Further details",
+      "id": "further-details"
+    },
+    {
+      "level": "h3",
+      "text": "Testing",
+      "id": "testing"
+    },
+    {
+      "level": "h3",
+      "text": "Renewal",
+      "id": "renewal"
+    },
+    {
+      "level": "h3",
+      "text": "Moved domains",
+      "id": "moved-domains"
+    },
+    {
+      "level": "h2",
+      "text": "Limitations",
+      "id": "limitations"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Specify DCV method",
+      "id": "specify-dcv-method"
+    },
+    {
+      "level": "h3",
+      "text": "Review other Cloudflare settings",
+      "id": "review-other-cloudflare-settings"
+    },
+    {
+      "level": "h3",
+      "text": "Complete DCV",
+      "id": "complete-dcv"
+    },
+    {
+      "level": "h2",
+      "text": "Renewal",
+      "id": "renewal"
+    },
+    {
+      "level": "h2",
+      "text": "When to use",
+      "id": "when-to-use"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Specify DCV method",
+      "id": "specify-dcv-method"
+    },
+    {
+      "level": "h3",
+      "text": "Get DCV values",
+      "id": "get-dcv-values"
+    },
+    {
+      "level": "h3",
+      "text": "Update DNS records",
+      "id": "update-dns-records"
+    },
+    {
+      "level": "h3",
+      "text": "Complete DCV",
+      "id": "complete-dcv"
+    },
+    {
+      "level": "h2",
+      "text": "Renewal",
+      "id": "renewal"
+    },
+    {
+      "level": "h2",
+      "text": "Expired certificates",
+      "id": "expired-certificates"
+    },
+    {
+      "level": "h2",
+      "text": "Use specialized certificates",
+      "id": "use-specialized-certificates"
+    },
+    {
+      "level": "h2",
+      "text": "Replace a certificate without downtime",
+      "id": "replace-a-certificate-without-downtime"
+    },
+    {
+      "level": "h3",
+      "text": "Per-hostname",
+      "id": "per-hostname"
+    },
+    {
+      "level": "h3",
+      "text": "Zone-level",
+      "id": "zone-level"
+    },
+    {
+      "level": "h2",
+      "text": "Before you begin",
+      "id": "before-you-begin"
+    },
+    {
+      "level": "h2",
+      "text": "1. Upload custom certificate",
+      "id": "1.-upload-custom-certificate"
+    }
+  ],
+  "url": "llms-txt#ssl",
+  "links": []
+}

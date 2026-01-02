@@ -1,0 +1,8 @@
+{
+  "title": "raw\\.http.request.uri.args",
+  "content": "`raw.http.request.uri.args` Map\\<Array\\<String>>\n\nThe raw HTTP URI arguments associated with a request represented as a Map (associative array).\n\nThis is the raw field version of the [`http.request.uri.args`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.uri.args/) field. Raw fields, prefixed with `raw.`, preserve original request values for later evaluations. These fields are immutable during the entire request evaluation workflow, and they are not affected by the actions of previously matched rules.\n\n* Request\n* URI\n* Raw fields\n\n<page>\n---\ntitle: raw.http.request.uri.args.values · Cloudflare Ruleset Engine docs\ndescription: The raw values of arguments in the HTTP URI query string.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/raw.http.request.uri.args.values/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/raw.http.request.uri.args.values/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#raw\\.http.request.uri.args",
+  "links": []
+}

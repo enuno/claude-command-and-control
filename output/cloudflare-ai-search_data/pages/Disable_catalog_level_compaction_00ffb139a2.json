@@ -1,0 +1,8 @@
+{
+  "title": "Disable catalog-level compaction",
+  "content": "npx wrangler r2 bucket catalog compaction disable my-bucket",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#disable-catalog-level-compaction",
+  "links": []
+}

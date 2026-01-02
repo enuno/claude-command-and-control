@@ -1,0 +1,8 @@
+{
+  "title": "we need to replace actual newlines in the CSR with ‘\\n’ before POST’ing",
+  "content": "$ CSR=$(cat ios.csr | perl -pe 's/\\n/\\\\n/g')\n$ request_body=$(< <(cat <<EOF\n{\n  \"validity_days\": 3650,\n  \"csr\":\"$CSR\"\n}\nEOF\n))",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#we-need-to-replace-actual-newlines-in-the-csr-with-‘\\n’-before-post’ing",
+  "links": []
+}

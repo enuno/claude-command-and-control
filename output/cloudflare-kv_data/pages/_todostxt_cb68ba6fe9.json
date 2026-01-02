@@ -1,0 +1,19 @@
+{
+  "title": "└── todos.txt",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "## Upload and retrieve objects\n\nThe [rclone copy](https://rclone.org/commands/rclone_copy/) command can be used to upload objects to an R2 bucket and vice versa - this allows you to upload files up to the 5 TB maximum object size that R2 supports.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Upload and retrieve objects",
+      "id": "upload-and-retrieve-objects"
+    }
+  ],
+  "url": "llms-txt#└──-todos.txt",
+  "links": []
+}

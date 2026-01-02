@@ -1,0 +1,51 @@
+{
+  "title": "using C3 or already committed your changes",
+  "content": "git init\ngit add .\ngit commit -m \"Initial commit\"\n\ngit branch -M main\ngit remote add origin https://github.com/<YOUR_GH_USERNAME>/<REPOSITORY_NAME>\ngit push -u origin main\nsh\n  npm create cloudflare@latest -- my-angular-app --framework=angular --platform=pages\n  sh\n  yarn create cloudflare my-angular-app --framework=angular --platform=pages\n  sh\n  pnpm create cloudflare@latest my-angular-app --framework=angular --platform=pages\n  sh",
+  "code_samples": [
+    {
+      "code": "### Create a Pages project\n\n## Learn more\n\nBy completing this guide, you have successfully deployed your site to Cloudflare Pages. To get started with other frameworks, [refer to the list of Framework guides](https://developers.cloudflare.com/pages/framework-guides/).\n\n| Configuration option | Value |\n| - | - |\n| Production branch | `main` |\n| Build command | `npm run build` |\n| Build directory | `dist/analog/public` |\n\nOptionally, you can customize the **Project name** field. It defaults to the GitHub repository's name, but it does not need to match. The **Project name** value is assigned as your `*.pages.dev` subdomain.\n\n1. After completing configuration, select the **Save and Deploy**.\n\nReview your first deploy pipeline in progress. Pages installs all dependencies and builds the project as specified. Cloudflare Pages will automatically rebuild your project and deploy it on every new pushed commit.\n\nAdditionally, you will have access to [preview deployments](https://developers.cloudflare.com/pages/configuration/preview-deployments/), which repeat the build-and-deploy process for pull requests. With these, you can preview changes to your project with a real URL before deploying your changes to production.\n\n</page>\n\n<page>\n---\ntitle: Angular · Cloudflare Pages docs\ndescription: Angular is an incredibly popular framework for building reactive\n  and powerful front-end applications.\nlastUpdated: 2025-09-15T21:45:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/framework-guides/deploy-an-angular-site/\n  md: https://developers.cloudflare.com/pages/framework-guides/deploy-an-angular-site/index.md\n---\n\n[Angular](https://angular.io/) is an incredibly popular framework for building reactive and powerful front-end applications.\n\nIn this guide, you will create a new Angular application and deploy it using Cloudflare Pages.\n\n## Create a new project using the `create-cloudflare` CLI (C3)\n\nUse the [`create-cloudflare`](https://www.npmjs.com/package/create-cloudflare) CLI (C3) to set up a new project. C3 will create a new project directory, initiate Angular's official setup tool, and provide the option to deploy instantly.\n\nTo use `create-cloudflare` to create a new Angular project, run the following command:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "`create-cloudflare` will install dependencies, including the [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/#check-your-wrangler-version) CLI and the Cloudflare Pages adapter, and ask you setup questions.\n\nGit integration\n\nThe initial deployment created via C3 is referred to as a [Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/). To set up a deployment via the Pages Git integration, refer to the [Git Integration](#git-integration) section below.\n\n## Git integration\n\nIn addition to [Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/) deployments, you can deploy projects via [Git integration](https://developers.cloudflare.com/pages/configuration/git-integration). Git integration allows you to connect a GitHub or GitLab repository to your Pages application and have your Pages application automatically built and deployed after each new commit is pushed to it.\n\nGit integration\n\nCurrently, you cannot add Git integration to existing Pages applications. If you have already deployed your application, you need to create a new Pages application in order to add Git integration to it.\n\nSetup requires a basic understanding of [Git](https://git-scm.com/). If you are new to Git, refer to GitHub's [summarized Git handbook](https://guides.github.com/introduction/git-handbook/) on how to set up Git on your local machine.\n\n### Create a GitHub repository\n\nCreate a new GitHub repository by visiting [repo.new](https://repo.new). After creating a new repository, go to your newly created project directory to prepare and push your local application to GitHub by running the following commands in your terminal:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Create a Pages project",
+      "id": "create-a-pages-project"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    },
+    {
+      "level": "h2",
+      "text": "Create a new project using the `create-cloudflare` CLI (C3)",
+      "id": "create-a-new-project-using-the-`create-cloudflare`-cli-(c3)"
+    },
+    {
+      "level": "h2",
+      "text": "Git integration",
+      "id": "git-integration"
+    },
+    {
+      "level": "h3",
+      "text": "Create a GitHub repository",
+      "id": "create-a-github-repository"
+    }
+  ],
+  "url": "llms-txt#using-c3-or-already-committed-your-changes",
+  "links": []
+}

@@ -1,0 +1,19 @@
+{
+  "title": "}",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "## Generate presigned URLs\n\nYou can also generate presigned links which allow you to share public access to a file temporarily.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Generate presigned URLs",
+      "id": "generate-presigned-urls"
+    }
+  ],
+  "url": "llms-txt#}",
+  "links": []
+}

@@ -1,0 +1,19 @@
+{
+  "title": "For endpoint post_image - only log requests that violate schema",
+  "content": "resource \"cloudflare_schema_validation_operation_settings\" \"post_image_log_only\" {\n  zone_id           = var.zone_id\n  operation_id      = cloudflare_api_shield_operation.post_image.id\n  mitigation_action = \"log\"\n}\ntf",
+  "code_samples": [
+    {
+      "code": "## Validate JWTs\n\nRefer to the example configuration below to perform [JWT Validation](https://developers.cloudflare.com/api-shield/security/jwt-validation/) on your zone.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Validate JWTs",
+      "id": "validate-jwts"
+    }
+  ],
+  "url": "llms-txt#for-endpoint-post_image---only-log-requests-that-violate-schema",
+  "links": []
+}

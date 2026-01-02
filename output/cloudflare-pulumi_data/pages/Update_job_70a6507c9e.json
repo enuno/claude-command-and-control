@@ -1,0 +1,8 @@
+{
+  "title": "Update job",
+  "content": "r = requests.put(logpush_url + \"/jobs/%s\" % id, headers=headers, data=json.dumps({\"enabled\":True}))\nprint(r.status_code, r.text)\nassert r.status_code == 200\nassert r.json()[\"result\"][\"enabled\"] == True",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#update-job",
+  "links": []
+}

@@ -1,0 +1,51 @@
+{
+  "title": "whisper",
+  "content": "Automatic Speech Recognition • OpenAI\n\nWhisper is a general-purpose speech recognition model. It is trained on a large dataset of diverse audio and is also a multitasking model that can perform multilingual speech recognition, speech translation, and language identification.\n\n| Model Info | |\n| - | - |\n| More information | [link](https://openai.com/research/whisper) |\n| Unit Pricing | $0.00045 per audio minute |\n\n\\* indicates a required field\n\n* `audio` array required\n\nAn array of integers that represent the audio data constrained to 8-bit unsigned integer values\n\nA value between 0 and 255\n\n* `text` string required\n\n* `word_count` number\n\nThe second this word begins in the recording\n\nThe ending second when the word completes\n\nThe following schemas are based on JSON Schema\n\n<page>\n---\ntitle: whisper-large-v3-turbo · Cloudflare Workers AI docs\ndescription: \"Whisper is a pre-trained model for automatic speech recognition\n  (ASR) and speech translation. \"\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers-ai/models/whisper-large-v3-turbo/\n  md: https://developers.cloudflare.com/workers-ai/models/whisper-large-v3-turbo/index.md\n---\n\n![OpenAI logo](https://developers.cloudflare.com/_astro/openai.ChTKThcR.svg)",
+  "code_samples": [
+    {
+      "code": "export interface Env {\n  AI: Ai;\n}\n\n\nexport default {\n  async fetch(request, env): Promise<Response> {\n    const res = await fetch(\n      \"https://github.com/Azure-Samples/cognitive-services-speech-sdk/raw/master/samples/cpp/windows/console/samples/enrollment_audio_katie.wav\"\n    );\n    const blob = await res.arrayBuffer();\n\n\n    const input = {\n      audio: [...new Uint8Array(blob)],\n    };\n\n\n    const response = await env.AI.run(\n      \"@cf/openai/whisper\",\n      input\n    );\n\n\n    return Response.json({ input: { audio: [] }, response });\n  },\n} satisfies ExportedHandler<Env>;",
+      "language": "ts"
+    },
+    {
+      "code": "curl https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/ai/run/@cf/openai/whisper  \\\n  -X POST  \\\n  -H \"Authorization: Bearer $CLOUDFLARE_API_TOKEN\"  \\\n  --data-binary \"@talking-llama.mp3\"",
+      "language": "sh"
+    },
+    {
+      "code": "{\n      \"oneOf\": [\n          {\n              \"type\": \"string\",\n              \"format\": \"binary\"\n          },\n          {\n              \"type\": \"object\",\n              \"properties\": {\n                  \"audio\": {\n                      \"type\": \"array\",\n                      \"description\": \"An array of integers that represent the audio data constrained to 8-bit unsigned integer values\",\n                      \"items\": {\n                          \"type\": \"number\",\n                          \"description\": \"A value between 0 and 255\"\n                      }\n                  }\n              },\n              \"required\": [\n                  \"audio\"\n              ]\n          }\n      ]\n  }",
+      "language": "json"
+    },
+    {
+      "code": "{\n      \"type\": \"object\",\n      \"contentType\": \"application/json\",\n      \"properties\": {\n          \"text\": {\n              \"type\": \"string\",\n              \"description\": \"The transcription\"\n          },\n          \"word_count\": {\n              \"type\": \"number\"\n          },\n          \"words\": {\n              \"type\": \"array\",\n              \"items\": {\n                  \"type\": \"object\",\n                  \"properties\": {\n                      \"word\": {\n                          \"type\": \"string\"\n                      },\n                      \"start\": {\n                          \"type\": \"number\",\n                          \"description\": \"The second this word begins in the recording\"\n                      },\n                      \"end\": {\n                          \"type\": \"number\",\n                          \"description\": \"The ending second when the word completes\"\n                      }\n                  }\n              }\n          },\n          \"vtt\": {\n              \"type\": \"string\"\n          }\n      },\n      \"required\": [\n          \"text\"\n      ]\n  }",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Input",
+      "id": "input"
+    },
+    {
+      "level": "h3",
+      "text": "Output",
+      "id": "output"
+    },
+    {
+      "level": "h2",
+      "text": "API Schemas",
+      "id": "api-schemas"
+    }
+  ],
+  "url": "llms-txt#whisper",
+  "links": []
+}

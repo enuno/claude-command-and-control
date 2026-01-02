@@ -1,0 +1,8 @@
+{
+  "title": "cf.waf.content\\_scan.has\\_failed",
+  "content": "`cf.waf.content_scan.has_failed` Boolean\n\nIndicates whether the file scanner was unable to scan all the content objects detected in the request.\n\nRequires a Cloudflare Enterprise plan with [malicious uploads detection](https://developers.cloudflare.com/waf/detections/malicious-uploads/).\n\n<page>\n---\ntitle: cf.waf.content_scan.has_malicious_obj · Cloudflare Ruleset Engine docs\ndescription: Indicates whether the request contains at least one malicious content object.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.content_scan.has_malicious_obj/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.content_scan.has_malicious_obj/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#cf.waf.content\\_scan.has\\_failed",
+  "links": []
+}

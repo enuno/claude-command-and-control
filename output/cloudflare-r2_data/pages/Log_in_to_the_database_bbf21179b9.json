@@ -1,0 +1,463 @@
+{
+  "title": "Log in to the database",
+  "content": "psql postgresql://MASTER_USERNAME:MASTER_PASSWORD@ENDPOINT_NAME:PORT/database_name\nsql\n-- Create a role for Hyperdrive\nCREATE ROLE hyperdrive;\n\n-- Allow Hyperdrive to connect\nGRANT CONNECT ON DATABASE postgres TO hyperdrive;\n\n-- Grant database privileges to the hyperdrive role\nGRANT ALL PRIVILEGES ON DATABASE postgres to hyperdrive;\n\n-- Create a specific user for Hyperdrive to log in as\nCREATE ROLE hyperdrive_user LOGIN PASSWORD 'sufficientlyRandomPassword';\n\n-- Grant this new user the hyperdrive role privileges\nGRANT hyperdrive to hyperdrive_user;\ntxt\npostgres://USERNAME:PASSWORD@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\nsh\n     npx wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=\"postgres://user:password@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\"\n     jsonc\n       {\n         \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n         \"name\": \"hyperdrive-example\",\n         \"main\": \"src/index.ts\",\n         \"compatibility_date\": \"2024-08-21\",\n         \"compatibility_flags\": [\n           \"nodejs_compat\"\n         ],\n         \"hyperdrive\": [\n           {\n             \"binding\": \"HYPERDRIVE\",\n             \"id\": \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n           }\n         ]\n       }\n       toml\n       name = \"hyperdrive-example\"\n       main = \"src/index.ts\"\n       compatibility_date = \"2024-08-21\"\n       compatibility_flags = [\"nodejs_compat\"]\n\n# Pasted from the output of `wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=[...]` above.\n       [[hyperdrive]]\n       binding = \"HYPERDRIVE\"\n       id = \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n       jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"hyperdrive-example\",\n    \"main\": \"src/index.ts\",\n    \"compatibility_date\": \"2024-08-21\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n      }\n    ]\n  }\n  toml\n  name = \"hyperdrive-example\"\n  main = \"src/index.ts\"\n  compatibility_date = \"2024-08-21\"\n  compatibility_flags = [\"nodejs_compat\"]\n\n# Pasted from the output of `wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=[...]` above.\n  [[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n  sh\n  npm i pg@>8.16.3\n  sh\n  yarn add pg@>8.16.3\n  sh\n  pnpm add pg@>8.16.3\n  sh\n  npm i -D @types/pg\n  sh\n  yarn add -D @types/pg\n  sh\n  pnpm add -D @types/pg\n  jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"compatibility_date\": \"2024-09-23\",\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<your-hyperdrive-id-here>\"\n      }\n    ]\n  }\n  toml\n  # required for database drivers to function\n  compatibility_flags = [\"nodejs_compat\"]\n  compatibility_date = \"2024-09-23\"\n\n[[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<your-hyperdrive-id-here>\"\n  ts\n// filepath: src/index.ts\nimport { Client } from \"pg\";\n\nexport default {\n  async fetch(\n    request: Request,\n    env: Env,\n    ctx: ExecutionContext,\n  ): Promise<Response> {\n    // Create a new client instance for each request.\n    const client = new Client({\n      connectionString: env.HYPERDRIVE.connectionString,\n    });\n\ntry {\n      // Connect to the database\n      await client.connect();\n      console.log(\"Connected to PostgreSQL database\");\n\n// Perform a simple query\n      const result = await client.query(\"SELECT * FROM pg_tables\");\n\nreturn Response.json({\n        success: true,\n        result: result.rows,\n      });\n    } catch (error: any) {\n      console.error(\"Database error:\", error.message);\n\nnew Response(\"Internal error occurred\", { status: 500 });\n    }\n  },\n};\ntxt\npostgres://USERNAME:PASSWORD@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\nsh\n     npx wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=\"postgres://user:password@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\"\n     jsonc\n       {\n         \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n         \"name\": \"hyperdrive-example\",\n         \"main\": \"src/index.ts\",\n         \"compatibility_date\": \"2024-08-21\",\n         \"compatibility_flags\": [\n           \"nodejs_compat\"\n         ],\n         \"hyperdrive\": [\n           {\n             \"binding\": \"HYPERDRIVE\",\n             \"id\": \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n           }\n         ]\n       }\n       toml\n       name = \"hyperdrive-example\"\n       main = \"src/index.ts\"\n       compatibility_date = \"2024-08-21\"\n       compatibility_flags = [\"nodejs_compat\"]\n\n# Pasted from the output of `wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=[...]` above.\n       [[hyperdrive]]\n       binding = \"HYPERDRIVE\"\n       id = \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n       jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"hyperdrive-example\",\n    \"main\": \"src/index.ts\",\n    \"compatibility_date\": \"2024-08-21\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n      }\n    ]\n  }\n  toml\n  name = \"hyperdrive-example\"\n  main = \"src/index.ts\"\n  compatibility_date = \"2024-08-21\"\n  compatibility_flags = [\"nodejs_compat\"]\n\n# Pasted from the output of `wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=[...]` above.\n  [[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n  sh\n  npm i pg@>8.16.3\n  sh\n  yarn add pg@>8.16.3\n  sh\n  pnpm add pg@>8.16.3\n  sh\n  npm i -D @types/pg\n  sh\n  yarn add -D @types/pg\n  sh\n  pnpm add -D @types/pg\n  jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"compatibility_date\": \"2024-09-23\",\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<your-hyperdrive-id-here>\"\n      }\n    ]\n  }\n  toml\n  # required for database drivers to function\n  compatibility_flags = [\"nodejs_compat\"]\n  compatibility_date = \"2024-09-23\"\n\n[[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<your-hyperdrive-id-here>\"\n  ts\n// filepath: src/index.ts\nimport { Client } from \"pg\";\n\nexport default {\n  async fetch(\n    request: Request,\n    env: Env,\n    ctx: ExecutionContext,\n  ): Promise<Response> {\n    // Create a new client instance for each request.\n    const client = new Client({\n      connectionString: env.HYPERDRIVE.connectionString,\n    });\n\ntry {\n      // Connect to the database\n      await client.connect();\n      console.log(\"Connected to PostgreSQL database\");\n\n// Perform a simple query\n      const result = await client.query(\"SELECT * FROM pg_tables\");\n\nreturn Response.json({\n        success: true,\n        result: result.rows,\n      });\n    } catch (error: any) {\n      console.error(\"Database error:\", error.message);\n\nnew Response(\"Internal error occurred\", { status: 500 });\n    }\n  },\n};\ntxt\npostgres://USERNAME:PASSWORD@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\nsh\n     npx wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=\"postgres://user:password@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\"\n     jsonc\n       {\n         \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n         \"name\": \"hyperdrive-example\",\n         \"main\": \"src/index.ts\",\n         \"compatibility_date\": \"2024-08-21\",\n         \"compatibility_flags\": [\n           \"nodejs_compat\"\n         ],\n         \"hyperdrive\": [\n           {\n             \"binding\": \"HYPERDRIVE\",\n             \"id\": \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n           }\n         ]\n       }\n       toml\n       name = \"hyperdrive-example\"\n       main = \"src/index.ts\"\n       compatibility_date = \"2024-08-21\"\n       compatibility_flags = [\"nodejs_compat\"]\n\n# Pasted from the output of `wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=[...]` above.\n       [[hyperdrive]]\n       binding = \"HYPERDRIVE\"\n       id = \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n       jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"hyperdrive-example\",\n    \"main\": \"src/index.ts\",\n    \"compatibility_date\": \"2024-08-21\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n      }\n    ]\n  }\n  toml\n  name = \"hyperdrive-example\"\n  main = \"src/index.ts\"\n  compatibility_date = \"2024-08-21\"\n  compatibility_flags = [\"nodejs_compat\"]\n\n# Pasted from the output of `wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=[...]` above.\n  [[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n  sh\n  npm i pg@>8.16.3\n  sh\n  yarn add pg@>8.16.3\n  sh\n  pnpm add pg@>8.16.3\n  sh\n  npm i -D @types/pg\n  sh\n  yarn add -D @types/pg\n  sh\n  pnpm add -D @types/pg\n  jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"compatibility_date\": \"2024-09-23\",\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<your-hyperdrive-id-here>\"\n      }\n    ]\n  }\n  toml\n  # required for database drivers to function\n  compatibility_flags = [\"nodejs_compat\"]\n  compatibility_date = \"2024-09-23\"\n\n[[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<your-hyperdrive-id-here>\"\n  ts\n// filepath: src/index.ts\nimport { Client } from \"pg\";\n\nexport default {\n  async fetch(\n    request: Request,\n    env: Env,\n    ctx: ExecutionContext,\n  ): Promise<Response> {\n    // Create a new client instance for each request.\n    const client = new Client({\n      connectionString: env.HYPERDRIVE.connectionString,\n    });\n\ntry {\n      // Connect to the database\n      await client.connect();\n      console.log(\"Connected to PostgreSQL database\");\n\n// Perform a simple query\n      const result = await client.query(\"SELECT * FROM pg_tables\");\n\nreturn Response.json({\n        success: true,\n        result: result.rows,\n      });\n    } catch (error: any) {\n      console.error(\"Database error:\", error.message);\n\nnew Response(\"Internal error occurred\", { status: 500 });\n    }\n  },\n};\ntxt\npostgres://USERNAME:PASSWORD@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\nsh\n     npx wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=\"postgres://user:password@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\"\n     jsonc\n       {\n         \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n         \"name\": \"hyperdrive-example\",\n         \"main\": \"src/index.ts\",\n         \"compatibility_date\": \"2024-08-21\",\n         \"compatibility_flags\": [\n           \"nodejs_compat\"\n         ],\n         \"hyperdrive\": [\n           {\n             \"binding\": \"HYPERDRIVE\",\n             \"id\": \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n           }\n         ]\n       }\n       toml\n       name = \"hyperdrive-example\"\n       main = \"src/index.ts\"\n       compatibility_date = \"2024-08-21\"\n       compatibility_flags = [\"nodejs_compat\"]\n\n# Pasted from the output of `wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=[...]` above.\n       [[hyperdrive]]\n       binding = \"HYPERDRIVE\"\n       id = \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n       jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"hyperdrive-example\",\n    \"main\": \"src/index.ts\",\n    \"compatibility_date\": \"2024-08-21\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n      }\n    ]\n  }\n  toml\n  name = \"hyperdrive-example\"\n  main = \"src/index.ts\"\n  compatibility_date = \"2024-08-21\"\n  compatibility_flags = [\"nodejs_compat\"]\n\n# Pasted from the output of `wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=[...]` above.\n  [[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n  sh\n  npm i pg@>8.16.3\n  sh\n  yarn add pg@>8.16.3\n  sh\n  pnpm add pg@>8.16.3\n  sh\n  npm i -D @types/pg\n  sh\n  yarn add -D @types/pg\n  sh\n  pnpm add -D @types/pg\n  jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"compatibility_date\": \"2024-09-23\",\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<your-hyperdrive-id-here>\"\n      }\n    ]\n  }\n  toml\n  # required for database drivers to function\n  compatibility_flags = [\"nodejs_compat\"]\n  compatibility_date = \"2024-09-23\"\n\n[[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<your-hyperdrive-id-here>\"\n  ts\n// filepath: src/index.ts\nimport { Client } from \"pg\";\n\nexport default {\n  async fetch(\n    request: Request,\n    env: Env,\n    ctx: ExecutionContext,\n  ): Promise<Response> {\n    // Create a new client instance for each request.\n    const client = new Client({\n      connectionString: env.HYPERDRIVE.connectionString,\n    });\n\ntry {\n      // Connect to the database\n      await client.connect();\n      console.log(\"Connected to PostgreSQL database\");\n\n// Perform a simple query\n      const result = await client.query(\"SELECT * FROM pg_tables\");\n\nreturn Response.json({\n        success: true,\n        result: result.rows,\n      });\n    } catch (error: any) {\n      console.error(\"Database error:\", error.message);\n\nnew Response(\"Internal error occurred\", { status: 500 });\n    }\n  },\n};\ntxt\n   fly ips allocate-v6 --app <pg-app-name>\n   txt\n   fly config save --app <pg-app-name>\n   toml\n   [[services]]\n     internal_port = 5432 # Postgres instance\n     protocol = \"tcp\"\n\n[[services.ports]]\n     handlers = [\"pg_tls\"]\n     port = 5432\n   txt\n   postgres://{username}:{password}@{public-hostname}:{port}/{database}?options\n   txt\npostgres://USERNAME:PASSWORD@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\nsh\n     npx wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=\"postgres://user:password@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\"\n     jsonc\n       {\n         \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n         \"name\": \"hyperdrive-example\",\n         \"main\": \"src/index.ts\",\n         \"compatibility_date\": \"2024-08-21\",\n         \"compatibility_flags\": [\n           \"nodejs_compat\"\n         ],\n         \"hyperdrive\": [\n           {\n             \"binding\": \"HYPERDRIVE\",\n             \"id\": \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n           }\n         ]\n       }\n       toml\n       name = \"hyperdrive-example\"\n       main = \"src/index.ts\"\n       compatibility_date = \"2024-08-21\"\n       compatibility_flags = [\"nodejs_compat\"]\n\n# Pasted from the output of `wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=[...]` above.\n       [[hyperdrive]]\n       binding = \"HYPERDRIVE\"\n       id = \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n       jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"hyperdrive-example\",\n    \"main\": \"src/index.ts\",\n    \"compatibility_date\": \"2024-08-21\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n      }\n    ]\n  }\n  toml\n  name = \"hyperdrive-example\"\n  main = \"src/index.ts\"\n  compatibility_date = \"2024-08-21\"\n  compatibility_flags = [\"nodejs_compat\"]\n\n# Pasted from the output of `wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=[...]` above.\n  [[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n  sh\n  npm i pg@>8.16.3\n  sh\n  yarn add pg@>8.16.3\n  sh\n  pnpm add pg@>8.16.3\n  sh\n  npm i -D @types/pg\n  sh\n  yarn add -D @types/pg\n  sh\n  pnpm add -D @types/pg\n  jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"compatibility_date\": \"2024-09-23\",\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<your-hyperdrive-id-here>\"\n      }\n    ]\n  }\n  toml\n  # required for database drivers to function\n  compatibility_flags = [\"nodejs_compat\"]\n  compatibility_date = \"2024-09-23\"\n\n[[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<your-hyperdrive-id-here>\"\n  ts\n// filepath: src/index.ts\nimport { Client } from \"pg\";\n\nexport default {\n  async fetch(\n    request: Request,\n    env: Env,\n    ctx: ExecutionContext,\n  ): Promise<Response> {\n    // Create a new client instance for each request.\n    const client = new Client({\n      connectionString: env.HYPERDRIVE.connectionString,\n    });\n\ntry {\n      // Connect to the database\n      await client.connect();\n      console.log(\"Connected to PostgreSQL database\");\n\n// Perform a simple query\n      const result = await client.query(\"SELECT * FROM pg_tables\");\n\nreturn Response.json({\n        success: true,\n        result: result.rows,\n      });\n    } catch (error: any) {\n      console.error(\"Database error:\", error.message);\n\nnew Response(\"Internal error occurred\", { status: 500 });\n    }\n  },\n};\nsh\ngcloud sql users create hyperdrive-user --instance=YOUR_INSTANCE_NAME --password=SUFFICIENTLY_LONG_PASSWORD\nsh",
+  "code_samples": [
+    {
+      "code": "Run the following SQL statements:",
+      "language": "unknown"
+    },
+    {
+      "code": "Refer to AWS' [documentation on user roles in PostgreSQL](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Appendix.PostgreSQL.CommonDBATasks.Roles.html) for more details.\n\nWith a database user, password, database endpoint (hostname and port) and database name (default: `postgres`), you can now set up Hyperdrive.\n\n## 3. Create a database configuration\n\nTo configure Hyperdrive, you will need:\n\n* The IP address (or hostname) and port of your database.\n* The database username (for example, `hyperdrive-demo`) you configured in a previous step.\n* The password associated with that username.\n* The name of the database you want Hyperdrive to connect to. For example, `postgres`.\n\nHyperdrive accepts the combination of these parameters in the common connection string format used by database drivers:",
+      "language": "unknown"
+    },
+    {
+      "code": "Most database providers will provide a connection string you can directly copy-and-paste directly into Hyperdrive.\n\n* Dashboard\n\n  To create a Hyperdrive configuration with the Cloudflare dashboard:\n\n  1. In the Cloudflare dashboard, go to the **Hyperdrive** page.\n\n     [Go to **Hyperdrive**](https://dash.cloudflare.com/?to=/:account/workers/hyperdrive)\n\n  2. Select **Create Configuration**.\n\n  3. Fill out the form, including the connection string.\n\n  4. Select **Create**.\n\n* Wrangler CLI\n\n  To create a Hyperdrive configuration with the [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/):\n\n  1. Open your terminal and run the following command. Replace `<NAME_OF_HYPERDRIVE_CONFIG>` with a name for your Hyperdrive configuration and paste the connection string provided from your database host, or replace `user`, `password`, `HOSTNAME_OR_IP_ADDRESS`, `port`, and `database_name` placeholders with those specific to your database:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. This command outputs a binding for the [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/):\n\n     * wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nHyperdrive will attempt to connect to your database with the provided credentials to verify they are correct before creating a configuration. If you encounter an error when attempting to connect, refer to Hyperdrive's [troubleshooting documentation](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug possible causes.\n\n## 3. Use Hyperdrive from your Worker\n\nInstall the `node-postgres` driver:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nThe minimum version of `node-postgres` required for Hyperdrive is `8.16.3`.\n\nIf using TypeScript, install the types package:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the required Node.js compatibility flags and Hyperdrive binding to your `wrangler.jsonc` file:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Create a new `Client` instance and pass the Hyperdrive `connectionString`:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Next steps\n\n* Learn more about [How Hyperdrive Works](https://developers.cloudflare.com/hyperdrive/concepts/how-hyperdrive-works/).\n* Refer to the [troubleshooting guide](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug common issues.\n* Understand more about other [storage options](https://developers.cloudflare.com/workers/platform/storage-options/) available to Cloudflare Workers.\n\n</page>\n\n<page>\n---\ntitle: Azure Database · Cloudflare Hyperdrive docs\ndescription: Connect Hyperdrive to a Azure Database for PostgreSQL instance.\nlastUpdated: 2025-08-20T20:59:04.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-database-providers/azure/\n  md: https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-database-providers/azure/index.md\n---\n\nThis example shows you how to connect Hyperdrive to an Azure Database for PostgreSQL instance.\n\n## 1. Allow Hyperdrive access\n\nTo allow Hyperdrive to connect to your database, you will need to ensure that Hyperdrive has valid credentials and network access.\n\nNote\n\nTo allow Hyperdrive to connect to your database, you must allow Cloudflare IPs to be able to access your database. You can either allow-list all IP address ranges (0.0.0.0 - 255.255.255.255) or restrict your IP access control list to the [IP ranges used by Hyperdrive](https://developers.cloudflare.com/hyperdrive/configuration/firewall-and-networking-configuration/).\n\nAlternatively, you can connect to your databases over in your private network using [Cloudflare Tunnels](https://developers.cloudflare.com/hyperdrive/configuration/connect-to-private-database/).\n\n### Azure Portal\n\n#### Public access networking\n\nTo connect to your Azure Database for PostgreSQL instance using public Internet connectivity:\n\n1. In the [Azure Portal](https://portal.azure.com/), select the instance you want Hyperdrive to connect to.\n2. Expand **Settings** > **Networking** > ensure **Public access** is enabled > in **Firewall rules** add `0.0.0.0` as **Start IP address** and `255.255.255.255` as **End IP address**.\n3. Select **Save** to persist your changes.\n4. Select **Overview** from the sidebar and note down the **Server name** of your instance.\n\nWith the username, password, server name, and database name (default: `postgres`), you can now create a Hyperdrive database configuration.\n\n#### Private access networking\n\nTo connect to a private Azure Database for PostgreSQL instance, refer to [Connect to a private database using Tunnel](https://developers.cloudflare.com/hyperdrive/configuration/connect-to-private-database/).\n\n## 2. Create a database configuration\n\nTo configure Hyperdrive, you will need:\n\n* The IP address (or hostname) and port of your database.\n* The database username (for example, `hyperdrive-demo`) you configured in a previous step.\n* The password associated with that username.\n* The name of the database you want Hyperdrive to connect to. For example, `postgres`.\n\nHyperdrive accepts the combination of these parameters in the common connection string format used by database drivers:",
+      "language": "unknown"
+    },
+    {
+      "code": "Most database providers will provide a connection string you can directly copy-and-paste directly into Hyperdrive.\n\n* Dashboard\n\n  To create a Hyperdrive configuration with the Cloudflare dashboard:\n\n  1. In the Cloudflare dashboard, go to the **Hyperdrive** page.\n\n     [Go to **Hyperdrive**](https://dash.cloudflare.com/?to=/:account/workers/hyperdrive)\n\n  2. Select **Create Configuration**.\n\n  3. Fill out the form, including the connection string.\n\n  4. Select **Create**.\n\n* Wrangler CLI\n\n  To create a Hyperdrive configuration with the [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/):\n\n  1. Open your terminal and run the following command. Replace `<NAME_OF_HYPERDRIVE_CONFIG>` with a name for your Hyperdrive configuration and paste the connection string provided from your database host, or replace `user`, `password`, `HOSTNAME_OR_IP_ADDRESS`, `port`, and `database_name` placeholders with those specific to your database:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. This command outputs a binding for the [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/):\n\n     * wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nHyperdrive will attempt to connect to your database with the provided credentials to verify they are correct before creating a configuration. If you encounter an error when attempting to connect, refer to Hyperdrive's [troubleshooting documentation](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug possible causes.\n\n## 3. Use Hyperdrive from your Worker\n\nInstall the `node-postgres` driver:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nThe minimum version of `node-postgres` required for Hyperdrive is `8.16.3`.\n\nIf using TypeScript, install the types package:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the required Node.js compatibility flags and Hyperdrive binding to your `wrangler.jsonc` file:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Create a new `Client` instance and pass the Hyperdrive `connectionString`:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Next steps\n\n* Learn more about [How Hyperdrive Works](https://developers.cloudflare.com/hyperdrive/concepts/how-hyperdrive-works/).\n* Refer to the [troubleshooting guide](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug common issues.\n* Understand more about other [storage options](https://developers.cloudflare.com/workers/platform/storage-options/) available to Cloudflare Workers.\n\n</page>\n\n<page>\n---\ntitle: CockroachDB · Cloudflare Hyperdrive docs\ndescription: Connect Hyperdrive to a CockroachDB database.\nlastUpdated: 2025-08-20T20:59:04.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-database-providers/cockroachdb/\n  md: https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-database-providers/cockroachdb/index.md\n---\n\nThis example shows you how to connect Hyperdrive to a [CockroachDB](https://www.cockroachlabs.com/) database cluster. CockroachDB is a PostgreSQL-compatible distributed SQL database with strong consistency guarantees.\n\n## 1. Allow Hyperdrive access\n\nTo allow Hyperdrive to connect to your database, you will need to ensure that Hyperdrive has valid user credentials and network access.\n\n### CockroachDB Console\n\nThe steps below assume you have an [existing CockroachDB Cloud account](https://www.cockroachlabs.com/docs/cockroachcloud/quickstart) and database cluster created.\n\nTo create and/or fetch your database credentials:\n\n1. Go to the [CockroachDB Cloud console](https://cockroachlabs.cloud/clusters) and select the cluster you want Hyperdrive to connect to.\n2. Select **SQL Users** from the sidebar on the left, and select **Add User**.\n3. Enter a username (for example, \\`hyperdrive-user), and select **Generate & Save Password**.\n4. Note down the username and copy the password to a temporary location.\n\nTo retrieve your database connection details:\n\n1. Go to the [CockroachDB Cloud console](https://cockroachlabs.cloud/clusters) and select the cluster you want Hyperdrive to connect to.\n2. Select **Connect** in the top right.\n3. Choose the user you created, for example,`hyperdrive-user`.\n4. Select the database, for example `defaultdb`.\n5. Select **General connection string** as the option.\n6. In the text box below, select **Copy** to copy the connection string.\n\nBy default, the CockroachDB cloud enables connections from the public Internet (`0.0.0.0/0`). If you have changed these settings on an existing cluster, you will need to allow connections from the public Internet for Hyperdrive to connect.\n\n## 2. Create a database configuration\n\nTo configure Hyperdrive, you will need:\n\n* The IP address (or hostname) and port of your database.\n* The database username (for example, `hyperdrive-demo`) you configured in a previous step.\n* The password associated with that username.\n* The name of the database you want Hyperdrive to connect to. For example, `postgres`.\n\nHyperdrive accepts the combination of these parameters in the common connection string format used by database drivers:",
+      "language": "unknown"
+    },
+    {
+      "code": "Most database providers will provide a connection string you can directly copy-and-paste directly into Hyperdrive.\n\n* Dashboard\n\n  To create a Hyperdrive configuration with the Cloudflare dashboard:\n\n  1. In the Cloudflare dashboard, go to the **Hyperdrive** page.\n\n     [Go to **Hyperdrive**](https://dash.cloudflare.com/?to=/:account/workers/hyperdrive)\n\n  2. Select **Create Configuration**.\n\n  3. Fill out the form, including the connection string.\n\n  4. Select **Create**.\n\n* Wrangler CLI\n\n  To create a Hyperdrive configuration with the [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/):\n\n  1. Open your terminal and run the following command. Replace `<NAME_OF_HYPERDRIVE_CONFIG>` with a name for your Hyperdrive configuration and paste the connection string provided from your database host, or replace `user`, `password`, `HOSTNAME_OR_IP_ADDRESS`, `port`, and `database_name` placeholders with those specific to your database:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. This command outputs a binding for the [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/):\n\n     * wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nHyperdrive will attempt to connect to your database with the provided credentials to verify they are correct before creating a configuration. If you encounter an error when attempting to connect, refer to Hyperdrive's [troubleshooting documentation](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug possible causes.\n\n## 3. Use Hyperdrive from your Worker\n\nInstall the `node-postgres` driver:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nThe minimum version of `node-postgres` required for Hyperdrive is `8.16.3`.\n\nIf using TypeScript, install the types package:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the required Node.js compatibility flags and Hyperdrive binding to your `wrangler.jsonc` file:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Create a new `Client` instance and pass the Hyperdrive `connectionString`:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Next steps\n\n* Learn more about [How Hyperdrive Works](https://developers.cloudflare.com/hyperdrive/concepts/how-hyperdrive-works/).\n* Refer to the [troubleshooting guide](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug common issues.\n* Understand more about other [storage options](https://developers.cloudflare.com/workers/platform/storage-options/) available to Cloudflare Workers.\n\n</page>\n\n<page>\n---\ntitle: Digital Ocean · Cloudflare Hyperdrive docs\ndescription: Connect Hyperdrive to a Digital Ocean Postgres database instance.\nlastUpdated: 2025-08-20T20:59:04.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-database-providers/digital-ocean/\n  md: https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-database-providers/digital-ocean/index.md\n---\n\nThis example shows you how to connect Hyperdrive to a Digital Ocean database instance.\n\n## 1. Allow Hyperdrive access\n\nTo allow Hyperdrive to connect to your database, you will need to ensure that Hyperdrive has valid user credentials and network access.\n\n### DigitalOcean Dashboard\n\n1. Go to the DigitalOcean dashboard and select the database you wish to connect to. 2. Go to the **Overview** tab. 3. Under the **Connection Details** panel, select **Public network**. 4. On the dropdown menu, select **Connection string** > **show-password**. 5. Copy the connection string.\n\nWith the connection string, you can now create a Hyperdrive database configuration.\n\n## 2. Create a database configuration\n\nTo configure Hyperdrive, you will need:\n\n* The IP address (or hostname) and port of your database.\n* The database username (for example, `hyperdrive-demo`) you configured in a previous step.\n* The password associated with that username.\n* The name of the database you want Hyperdrive to connect to. For example, `postgres`.\n\nHyperdrive accepts the combination of these parameters in the common connection string format used by database drivers:",
+      "language": "unknown"
+    },
+    {
+      "code": "Most database providers will provide a connection string you can directly copy-and-paste directly into Hyperdrive.\n\n* Dashboard\n\n  To create a Hyperdrive configuration with the Cloudflare dashboard:\n\n  1. In the Cloudflare dashboard, go to the **Hyperdrive** page.\n\n     [Go to **Hyperdrive**](https://dash.cloudflare.com/?to=/:account/workers/hyperdrive)\n\n  2. Select **Create Configuration**.\n\n  3. Fill out the form, including the connection string.\n\n  4. Select **Create**.\n\n* Wrangler CLI\n\n  To create a Hyperdrive configuration with the [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/):\n\n  1. Open your terminal and run the following command. Replace `<NAME_OF_HYPERDRIVE_CONFIG>` with a name for your Hyperdrive configuration and paste the connection string provided from your database host, or replace `user`, `password`, `HOSTNAME_OR_IP_ADDRESS`, `port`, and `database_name` placeholders with those specific to your database:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. This command outputs a binding for the [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/):\n\n     * wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nHyperdrive will attempt to connect to your database with the provided credentials to verify they are correct before creating a configuration. If you encounter an error when attempting to connect, refer to Hyperdrive's [troubleshooting documentation](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug possible causes.\n\n## 3. Use Hyperdrive from your Worker\n\nInstall the `node-postgres` driver:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nThe minimum version of `node-postgres` required for Hyperdrive is `8.16.3`.\n\nIf using TypeScript, install the types package:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the required Node.js compatibility flags and Hyperdrive binding to your `wrangler.jsonc` file:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Create a new `Client` instance and pass the Hyperdrive `connectionString`:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Next steps\n\n* Learn more about [How Hyperdrive Works](https://developers.cloudflare.com/hyperdrive/concepts/how-hyperdrive-works/).\n* Refer to the [troubleshooting guide](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug common issues.\n* Understand more about other [storage options](https://developers.cloudflare.com/workers/platform/storage-options/) available to Cloudflare Workers.\n\nNote\n\nIf you see a DNS-related error, it is possible that the DNS for your vendor's database has not yet been propagated. Try waiting 10 minutes before retrying the operation. Refer to [DigitalOcean support page](https://docs.digitalocean.com/support/why-does-my-domain-fail-to-resolve/) for more information.\n\n</page>\n\n<page>\n---\ntitle: Fly · Cloudflare Hyperdrive docs\ndescription: Connect Hyperdrive to a Fly Postgres database instance.\nlastUpdated: 2025-08-20T20:59:04.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-database-providers/fly/\n  md: https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-database-providers/fly/index.md\n---\n\nThis example shows you how to connect Hyperdrive to a Fly Postgres database instance.\n\n## 1. Allow Hyperdrive access\n\nYou can connect Hyperdrive to any existing Fly database by:\n\n1. Allocating a public IP address to your Fly database instance\n2. Configuring an external service\n3. Deploying the configuration\n4. Obtain the connection string, which is used to connect the database to Hyperdrive.\n\n1) Run the following command to [allocate a public IP address](https://fly.io/docs/postgres/connecting/connecting-external/#allocate-an-ip-address).",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\n   Cloudflare recommends using IPv6, but some Internet service providers may not support IPv6. In this case, [you can allocate an IPv4 address](https://fly.io/docs/postgres/connecting/connecting-with-flyctl/).\n\n2) [Configure an external service](https://fly.io/docs/postgres/connecting/connecting-external/#configure-an-external-service) by modifying the contents of your `fly.toml` file. Run the following command to download the `fly.toml` file.",
+      "language": "unknown"
+    },
+    {
+      "code": "Then, replace the `services` and `services.ports` section of the file with the following `toml` snippet:",
+      "language": "unknown"
+    },
+    {
+      "code": "3) [Deploy the new configuration](https://fly.io/docs/postgres/connecting/connecting-external/#deploy-with-the-new-configuration).\n\n4) [Obtain the connection string](https://fly.io/docs/postgres/connecting/connecting-external/#adapting-the-connection-string), which is in the form of:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 2. Create a database configuration\n\nTo configure Hyperdrive, you will need:\n\n* The IP address (or hostname) and port of your database.\n* The database username (for example, `hyperdrive-demo`) you configured in a previous step.\n* The password associated with that username.\n* The name of the database you want Hyperdrive to connect to. For example, `postgres`.\n\nHyperdrive accepts the combination of these parameters in the common connection string format used by database drivers:",
+      "language": "unknown"
+    },
+    {
+      "code": "Most database providers will provide a connection string you can directly copy-and-paste directly into Hyperdrive.\n\n* Dashboard\n\n  To create a Hyperdrive configuration with the Cloudflare dashboard:\n\n  1. In the Cloudflare dashboard, go to the **Hyperdrive** page.\n\n     [Go to **Hyperdrive**](https://dash.cloudflare.com/?to=/:account/workers/hyperdrive)\n\n  2. Select **Create Configuration**.\n\n  3. Fill out the form, including the connection string.\n\n  4. Select **Create**.\n\n* Wrangler CLI\n\n  To create a Hyperdrive configuration with the [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/):\n\n  1. Open your terminal and run the following command. Replace `<NAME_OF_HYPERDRIVE_CONFIG>` with a name for your Hyperdrive configuration and paste the connection string provided from your database host, or replace `user`, `password`, `HOSTNAME_OR_IP_ADDRESS`, `port`, and `database_name` placeholders with those specific to your database:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. This command outputs a binding for the [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/):\n\n     * wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nHyperdrive will attempt to connect to your database with the provided credentials to verify they are correct before creating a configuration. If you encounter an error when attempting to connect, refer to Hyperdrive's [troubleshooting documentation](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug possible causes.\n\n## 3. Use Hyperdrive from your Worker\n\nInstall the `node-postgres` driver:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nThe minimum version of `node-postgres` required for Hyperdrive is `8.16.3`.\n\nIf using TypeScript, install the types package:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the required Node.js compatibility flags and Hyperdrive binding to your `wrangler.jsonc` file:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Create a new `Client` instance and pass the Hyperdrive `connectionString`:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Next steps\n\n* Learn more about [How Hyperdrive Works](https://developers.cloudflare.com/hyperdrive/concepts/how-hyperdrive-works/).\n* Refer to the [troubleshooting guide](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug common issues.\n* Understand more about other [storage options](https://developers.cloudflare.com/workers/platform/storage-options/) available to Cloudflare Workers.\n\n</page>\n\n<page>\n---\ntitle: Google Cloud SQL · Cloudflare Hyperdrive docs\ndescription: Connect Hyperdrive to a Google Cloud SQL for Postgres database instance.\nlastUpdated: 2025-08-20T20:59:04.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-database-providers/google-cloud-sql/\n  md: https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-database-providers/google-cloud-sql/index.md\n---\n\nThis example shows you how to connect Hyperdrive to a Google Cloud SQL Postgres database instance.\n\n## 1. Allow Hyperdrive access\n\nTo allow Hyperdrive to connect to your database, you will need to ensure that Hyperdrive has valid user credentials and network access.\n\nNote\n\nTo allow Hyperdrive to connect to your database, you must allow Cloudflare IPs to be able to access your database. You can either allow-list all IP address ranges (0.0.0.0 - 255.255.255.255) or restrict your IP access control list to the [IP ranges used by Hyperdrive](https://developers.cloudflare.com/hyperdrive/configuration/firewall-and-networking-configuration/).\n\nAlternatively, you can connect to your databases over in your private network using [Cloudflare Tunnels](https://developers.cloudflare.com/hyperdrive/configuration/connect-to-private-database/).\n\n### Cloud Console\n\nWhen creating the instance or when editing an existing instance in the [Google Cloud Console](https://console.cloud.google.com/sql/instances):\n\nTo allow Hyperdrive to reach your instance:\n\n1. In the [Cloud Console](https://console.cloud.google.com/sql/instances), select the instance you want Hyperdrive to connect to.\n2. Expand **Connections** > **Networking** > ensure **Public IP** is enabled > **Add a Network** and input `0.0.0.0/0`.\n3. Select **Done** > **Save** to persist your changes.\n4. Select **Overview** from the sidebar and note down the **Public IP address** of your instance.\n\nTo create a user for Hyperdrive to connect as:\n\n1. Select **Users** in the sidebar.\n2. Select **Add User Account** > select **Built-in authentication**.\n3. Provide a name (for example, `hyperdrive-user`) > select **Generate** to generate a password.\n4. Copy this password to your clipboard before selecting **Add** to create the user.\n\nWith the username, password, public IP address and (optional) database name (default: `postgres`), you can now create a Hyperdrive database configuration.\n\n### gcloud CLI\n\nThe [gcloud CLI](https://cloud.google.com/sdk/docs/install) allows you to create a new user and enable Hyperdrive to connect to your database.\n\nUse `gcloud sql` to create a new user (for example, `hyperdrive-user`) with a strong password:",
+      "language": "unknown"
+    },
+    {
+      "code": "Run the following command to enable [Internet access](https://cloud.google.com/sql/docs/postgres/configure-ip) to your database instance:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "3. Create a database configuration",
+      "id": "3.-create-a-database-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "3. Use Hyperdrive from your Worker",
+      "id": "3.-use-hyperdrive-from-your-worker"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "1. Allow Hyperdrive access",
+      "id": "1.-allow-hyperdrive-access"
+    },
+    {
+      "level": "h3",
+      "text": "Azure Portal",
+      "id": "azure-portal"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create a database configuration",
+      "id": "2.-create-a-database-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "3. Use Hyperdrive from your Worker",
+      "id": "3.-use-hyperdrive-from-your-worker"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "1. Allow Hyperdrive access",
+      "id": "1.-allow-hyperdrive-access"
+    },
+    {
+      "level": "h3",
+      "text": "CockroachDB Console",
+      "id": "cockroachdb-console"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create a database configuration",
+      "id": "2.-create-a-database-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "3. Use Hyperdrive from your Worker",
+      "id": "3.-use-hyperdrive-from-your-worker"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "1. Allow Hyperdrive access",
+      "id": "1.-allow-hyperdrive-access"
+    },
+    {
+      "level": "h3",
+      "text": "DigitalOcean Dashboard",
+      "id": "digitalocean-dashboard"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create a database configuration",
+      "id": "2.-create-a-database-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "3. Use Hyperdrive from your Worker",
+      "id": "3.-use-hyperdrive-from-your-worker"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "1. Allow Hyperdrive access",
+      "id": "1.-allow-hyperdrive-access"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create a database configuration",
+      "id": "2.-create-a-database-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "3. Use Hyperdrive from your Worker",
+      "id": "3.-use-hyperdrive-from-your-worker"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "1. Allow Hyperdrive access",
+      "id": "1.-allow-hyperdrive-access"
+    },
+    {
+      "level": "h3",
+      "text": "Cloud Console",
+      "id": "cloud-console"
+    },
+    {
+      "level": "h3",
+      "text": "gcloud CLI",
+      "id": "gcloud-cli"
+    }
+  ],
+  "url": "llms-txt#log-in-to-the-database",
+  "links": []
+}

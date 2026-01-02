@@ -1,0 +1,63 @@
+{
+  "title": "About <product> or noun phrase",
+  "content": "Provide a brief description of why users should care about this information.\n\nExplain the page topic. Keep paragraphs short and concise to avoid large blocks of text. Feel free to use bulleted lists, notes, and headings for visual breaks.\nyaml\npcx_content_type: integration-guide\nplaintext\n---\nweight: xx\npcx_content_type: integration-guide\n---",
+  "code_samples": [
+    {
+      "code": "## Additional information\n\nDo not recreate information that's already available online. Instead, consider why a topic needs to be explained, what Cloudflare's perspective is on that topic, and what users need to understand about the topic in order to successfully use our products.\n\n## Examples\n\n[Load Balancing](https://developers.cloudflare.com/load-balancing/)\n\n[WAF](https://developers.cloudflare.com/waf/)\n\n[Magic Transit](https://developers.cloudflare.com/magic-transit/about/)\n\n</page>\n\n<page>\n---\ntitle: 3rd-party integration guide · Cloudflare Style Guide\ndescription: The purpose of a 3rd-party integration guide is to explain how to\n  use a 3rd-party product with Cloudflare. Although we want to help our\n  customers as integrations between different products can be a pain point,\n  there is a large risk and maintenance cost associated with specific types of\n  3rd-party resources.\nlastUpdated: 2025-10-23T22:25:50.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/style-guide/documentation-content-strategy/content-types/3rd-party-integration-guide/\n  md: https://developers.cloudflare.com/style-guide/documentation-content-strategy/content-types/3rd-party-integration-guide/index.md\n---\n\n## Purpose\n\nThe purpose of a 3rd-party integration guide is to explain how to use a 3rd-party product with Cloudflare. Although we want to help our customers as integrations between different products can be a pain point, there is a large risk and maintenance cost associated with specific types of 3rd-party resources.\n\n## Tone\n\ninstructional, straightforward\n\n## content\\_type",
+      "language": "unknown"
+    },
+    {
+      "code": "For more details, refer to [`pcx_content_type`](https://developers.cloudflare.com/style-guide/frontmatter/custom-properties/#pcx_content_type).\n\n## Structure\n\n### Required components\n\n[**Title**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/titles/): Short verb phrase in second-person imperative that includes the 3rd-party name. Do not use gerund phrases.\n\nIf a 3rd-party integration guide is with a specific Cloudflare technology partner, add a Markdown component that indicates `<partner>` after the title.\n\n[**Context**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/context/): An introductory paragraph on the following steps and what they will accomplish.\n\nProvide context to the reader that is not in the section heading.\n\nEnd with a colon or a period. Use a colon if it immediately precedes the steps. Use a period if there is more material (such as a note) between the context and the procedure.\n\nDo not provide context for steps with a partial sentence that is completed by the numbered steps.\n\nMention any unique considerations between the 3rd-party and Cloudflare.\n\n[**Prerequisites**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/prerequisites/): Tasks or conditions that must be completed before a user can complete a series of steps.\n\nFor 3rd-party integration guides, include information about what you need to interact with the third party for the following steps.\n\n[**Steps**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/steps-tasks-procedures/): Numbered steps that complete a task.\n\nLink out for basic concepts (Regex, JavaScript, web server maintenance).\n\nWarning\n\nStep-by-step instructions of 3rd-party environments are discouraged generally, but acceptable in certain situations. General preference is to link back to an article that someone else maintains.\n\nThey easily become out-of-date, especially if we can not access the 3rd-party product\n\n[**Links**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/links/): May be a bulleted list that references the 3rd-party product or in-text links to the 3rd-party process documentation.\n\nLink to reputable sources within reason.\n\n### Optional components\n\n[**Notes/warnings**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/notes-tips-warnings/)\n\n[**Examples**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/examples/)\n\n**Screenshots**\n\n**Tables**\n\n**Step validation**\n\nNote\n\nScreenshots of the 3rd-party product are highly discouraged. It has all the problems of video or screenshot maintenance, but with a much greater risk that something changes and we are not aware of it.\n\nIt may become a bigger problem if we can not access the 3rd-party product.\n\n## Templates\n\nSingle procedure 3rd-party integration guide",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Additional information",
+      "id": "additional-information"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "Purpose",
+      "id": "purpose"
+    },
+    {
+      "level": "h2",
+      "text": "Tone",
+      "id": "tone"
+    },
+    {
+      "level": "h2",
+      "text": "content\\_type",
+      "id": "content\\_type"
+    },
+    {
+      "level": "h2",
+      "text": "Structure",
+      "id": "structure"
+    },
+    {
+      "level": "h3",
+      "text": "Required components",
+      "id": "required-components"
+    },
+    {
+      "level": "h3",
+      "text": "Optional components",
+      "id": "optional-components"
+    },
+    {
+      "level": "h2",
+      "text": "Templates",
+      "id": "templates"
+    }
+  ],
+  "url": "llms-txt#about-<product>-or-noun-phrase",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Check if requests to a specific endpoint contain more than two content objects",
+  "content": "cf.waf.content_scan.num_obj > 2 and http.request.uri.path eq \"/upload\"\n```\n\n<page>\n---\ntitle: cf.waf.content_scan.obj_results · Cloudflare Ruleset Engine docs\ndescription: An array of scan results in the order the content objects were\n  detected in the request.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.content_scan.obj_results/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.content_scan.obj_results/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#check-if-requests-to-a-specific-endpoint-contain-more-than-two-content-objects",
+  "links": []
+}

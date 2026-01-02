@@ -1,0 +1,17 @@
+{
+  "title": "raw\\.http.response.headers.names",
+  "content": "`raw.http.response.headers.names` Array\\<String>\n\nThe names of the headers in the HTTP response without any transformation.\n\nThis is the raw field version of the [`http.response.headers.names`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.response.headers.names/) field. Raw fields, prefixed with `raw.`, preserve original response values for later evaluations. These fields are immutable during the entire request evaluation workflow, and they are not affected by the actions of previously matched rules.\n\n* Response\n* Headers\n* Raw fields\n\n<page>\n---\ntitle: raw.http.response.headers.values · Cloudflare Ruleset Engine docs\ndescription: The values of the headers in the HTTP response without any transformation.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/raw.http.response.headers.values/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/raw.http.response.headers.values/index.md\n---",
+  "code_samples": [
+    {
+      "code": "[\"content-type\"]",
+      "language": "txt"
+    },
+    {
+      "code": "any(raw.http.response.headers.names[*] == \"content-type\")",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#raw\\.http.response.headers.names",
+  "links": []
+}

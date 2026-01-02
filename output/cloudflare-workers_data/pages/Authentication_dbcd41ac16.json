@@ -1,0 +1,8 @@
+{
+  "title": "Authentication:",
+  "content": "#LoginGraceTime 2m\nPermitRootLogin yes\n#StrictModes yes\n#MaxAuthTries 6\n#MaxSessions 10",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#authentication:",
+  "links": []
+}

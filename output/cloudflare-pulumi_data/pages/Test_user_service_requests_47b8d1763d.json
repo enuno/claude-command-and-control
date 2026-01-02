@@ -1,0 +1,8 @@
+{
+  "title": "Test user service requests",
+  "content": "curl https://api-gateway.workers.dev/api/users",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#test-user-service-requests",
+  "links": []
+}

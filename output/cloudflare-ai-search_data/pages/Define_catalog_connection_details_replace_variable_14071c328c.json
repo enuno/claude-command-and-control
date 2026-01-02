@@ -1,0 +1,8 @@
+{
+  "title": "Define catalog connection details (replace variables)",
+  "content": "WAREHOUSE = \"<WAREHOUSE>\"\nTOKEN = \"<TOKEN>\"\nCATALOG_URI = \"<CATALOG_URI>\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#define-catalog-connection-details-(replace-variables)",
+  "links": []
+}

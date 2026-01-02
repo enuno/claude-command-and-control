@@ -1,0 +1,43 @@
+{
+  "title": "Delay all messages by 5 minutes as a default",
+  "content": "npx wrangler queues create $QUEUE-NAME --delivery-delay-secs=300\njs\n  export default {\n    async queue(batch, env, ctx) {\n      for (const msg of batch.messages) {\n        // Mark for retry and delay a singular message\n        // by 3600 seconds (1 hour)\n        msg.retry({ delaySeconds: 3600 });\n      }\n    },\n  };\n  ts\n  export default {\n    async queue(batch: MessageBatch, env: Env, ctx: ExecutionContext) {\n      for (const msg of batch.messages) {\n        // Mark for retry and delay a singular message\n        // by 3600 seconds (1 hour)\n        msg.retry({ delaySeconds: 3600 });\n      }\n    },\n  };\n  python\n  from workers import WorkerEntrypoint\n\nclass Default(WorkerEntrypoint):\n      async def queue(self, batch):\n          for msg in batch.messages:\n              # Mark for retry and delay a singular message\n              # by 3600 seconds (1 hour)\n              msg.retry(delaySeconds=3600)\n  js\n  export default {\n    async queue(batch, env, ctx) {\n      // Mark for retry and delay a batch of messages\n      // by 600 seconds (10 minutes)\n      batch.retryAll({ delaySeconds: 600 });\n    },\n  };\n  ts\n  export default {\n    async queue(batch: MessageBatch, env: Env, ctx: ExecutionContext) {\n      // Mark for retry and delay a batch of messages\n      // by 600 seconds (10 minutes)\n      batch.retryAll({ delaySeconds: 600 });\n    },\n  };\n  python\n  from workers import WorkerEntrypoint\n\nclass Default(WorkerEntrypoint):\n      async def queue(self, batch):\n          # Mark for retry and delay a batch of messages\n          # by 600 seconds (10 minutes)\n          batch.retryAll(delaySeconds=600)\n  sh",
+  "code_samples": [
+    {
+      "code": "### Delay on retry\n\nWhen [consuming messages from a queue](https://developers.cloudflare.com/queues/reference/how-queues-works/#consumers), you can choose to [explicitly mark messages to be retried](#explicit-acknowledgement-and-retries). Messages can be retried and delayed individually, or as an entire batch.\n\nTo delay an individual message within a batch:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* Python",
+      "language": "unknown"
+    },
+    {
+      "code": "To delay a batch of messages:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* Python",
+      "language": "unknown"
+    },
+    {
+      "code": "You can also choose to set a default retry delay to any messages that are retried due to either implicit failure or when calling `retry()` explicitly. This is set at the consumer level, and is supported in both push-based (Worker) and pull-based (HTTP) consumers.\n\nDelays can be configured via the `wrangler` CLI:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Delay on retry",
+      "id": "delay-on-retry"
+    }
+  ],
+  "url": "llms-txt#delay-all-messages-by-5-minutes-as-a-default",
+  "links": []
+}

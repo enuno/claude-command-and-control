@@ -1,0 +1,136 @@
+{
+  "title": "Account-level entry point ruleset for the 'http_ratelimit' phase",
+  "content": "resource \"cloudflare_ruleset\" \"account_rl_entrypoint\" {\n  account_id  = <ACCOUNT_ID>\n  name        = \"Account-level rate limiting\"\n  description = \"\"\n  kind        = \"root\"\n  phase       = \"http_ratelimit\"\n\ndepends_on = [cloudflare_ruleset.account_rl]\n\nrules {\n    # Deploy the previously defined custom ruleset containing a rate limiting rule\n    ref         = \"deploy_rate_limit_example_com\"\n    description = \"Deploy custom ruleset with RL rule\"\n    expression  = \"cf.zone.name eq \\\"example.com\\\" and cf.zone.plan eq \\\"ENT\\\"\"\n    action      = \"execute\"\n    action_parameters {\n      id = cloudflare_ruleset.account_rl.id\n    }\n  }\n}\ntf\nresource \"cloudflare_ruleset\" \"zone_rl_custom_response\" {\n  zone_id     = \"<ZONE_ID>\"\n  name        = \"Advanced rate limiting rule for my zone\"\n  description = \"\"\n  kind        = \"zone\"\n  phase       = \"http_ratelimit\"\n\nrules {\n    ref         = \"rate_limit_example_com_status_404\"\n    description = \"Rate limit requests to www.example.com when exceeding the threshold of 404 responses on /status/\"\n    expression  = \"http.host eq \\\"www.example.com\\\" and (http.request.uri.path matches \\\"^/status/\\\")\"\n    action      = \"block\"\n    action_parameters {\n      response {\n        status_code  = 429\n        content      = \"{\\\"response\\\": \\\"block\\\"}\"\n        content_type = \"application/json\"\n      }\n    }\n    ratelimit {\n      characteristics     = [\"ip.src\", \"cf.colo.id\"]\n      period              = 10\n      requests_per_period = 5\n      mitigation_timeout  = 30\n      counting_expression = \"(http.host eq \\\"www.example.com\\\") and (http.request.uri.path matches \\\"^/status/\\\") and (http.response.code eq 404)\"\n    }\n  }\n}\ntf\nresource \"cloudflare_ruleset\" \"transform_url_rewrite\" {\n  zone_id     = \"<ZONE_ID>\"\n  name        = \"Transform Rule performing a static URL rewrite\"\n  description = \"\"\n  kind        = \"zone\"\n  phase       = \"http_request_transform\"\n\nrules {\n    ref         = \"url_rewrite_old_folder\"\n    description = \"Example URL rewrite rule\"\n    expression  = \"(http.host eq \\\"example.com\\\" and http.request.uri.path eq \\\"/old-folder\\\")\"\n    action      = \"rewrite\"\n    action_parameters {\n      uri {\n        path {\n          value = \"/new-folder\"\n        }\n      }\n    }\n  }\n}\ntf\nresource \"cloudflare_ruleset\" \"transform_modify_request_headers\" {\n  zone_id     = \"<ZONE_ID>\"\n  name        = \"Transform Rule performing HTTP request header modifications\"\n  description = \"\"\n  kind        = \"zone\"\n  phase       = \"http_request_late_transform\"\n\nrules {\n    ref         = \"modify_request_headers\"\n    description = \"Example request header transform rule\"\n    expression  = \"true\"\n    action      = \"rewrite\"\n    action_parameters {\n      headers {\n        name      = \"my-header-1\"\n        operation = \"set\"\n        value     = \"Fixed value\"\n      }\n      headers {\n        name       = \"my-header-2\"\n        operation  = \"set\"\n        expression = \"cf.zone.name\"\n      }\n      headers {\n        name      = \"existing-header\"\n        operation = \"remove\"\n      }\n    }\n  }\n}\ntf\nresource \"cloudflare_ruleset\" \"transform_modify_response_headers\" {\n  zone_id     = \"<ZONE_ID>\"\n  name        = \"Transform Rule performing HTTP response header modifications\"\n  description = \"\"\n  kind        = \"zone\"\n  phase       = \"http_response_headers_transform\"\n\nrules {\n    ref         = \"modify_response_headers\"\n    description = \"Example response header transform rule\"\n    expression  = \"true\"\n    action      = \"rewrite\"\n    action_parameters {\n      headers {\n        name      = \"my-header-1\"\n        operation = \"set\"\n        value     = \"Fixed value\"\n      }\n      headers {\n        name       = \"my-header-2\"\n        operation  = \"set\"\n        expression = \"cf.zone.name\"\n      }\n      headers {\n        name      = \"existing-header\"\n        operation = \"remove\"\n      }\n    }\n  }\n}\ntf\nresource \"cloudflare_managed_headers\" \"tf_example\" {\n  zone_id = \"<ZONE_ID>\"\n\nmanaged_request_headers {\n    id      = \"add_visitor_location_headers\"\n    enabled = true\n  }\n\nmanaged_response_headers {\n    id      = \"remove_x-powered-by_header\"\n    enabled = true\n  }\n}\ntf\nresource \"cloudflare_ruleset\" \"zone_custom_firewall\" {\n  zone_id     = \"<ZONE_ID>\"\n  name        = \"Phase entry point ruleset for custom rules in my zone\"\n  description = \"\"\n  kind        = \"zone\"\n  phase       = \"http_request_firewall_custom\"\n\nrules {\n    ref         = \"block_non_default_ports\"\n    description = \"Block ports other than 80 and 443\"\n    expression  = \"(not cf.edge.server_port in {80 443})\"\n    action      = \"block\"\n  }\n}\ntf\nresource \"cloudflare_ruleset\" \"account_firewall_custom_ruleset\" {\n  account_id  = \"<ACCOUNT_ID>\"\n  name        = \"Custom ruleset blocking traffic in non-standard HTTP(S) ports\"\n  description = \"\"\n  kind        = \"custom\"\n  phase       = \"http_request_firewall_custom\"\n\nrules {\n    ref         = \"block_non_default_ports\"\n    description = \"Block ports other than 80 and 443\"\n    expression  = \"(not cf.edge.server_port in {80 443})\"\n    action      = \"block\"\n  }\n}\ntf\nresource \"cloudflare_ruleset\" \"account_firewall_custom_entrypoint\" {\n  account_id  = \"<ACCOUNT_ID>\"\n  name        = \"Account-level entry point ruleset for the http_request_firewall_custom phase deploying a custom ruleset\"\n  description = \"\"\n  kind        = \"root\"\n  phase       = \"http_request_firewall_custom\"\n\ndepends_on = [cloudflare_ruleset.account_firewall_custom_ruleset]\n\nrules {\n    ref         = \"deploy_custom_ruleset_example_com\"\n    description = \"Deploy custom ruleset for example.com\"\n    expression  = \"(cf.zone.name eq \\\"example.com\\\") and (cf.zone.plan eq \\\"ENT\\\")\"\n    action      = \"execute\"\n    action_parameters {\n      id = cloudflare_ruleset.account_firewall_custom_ruleset.id\n    }\n  }\n}\ntf",
+  "code_samples": [
+    {
+      "code": "To create another rate limiting rule, add a new `rules` object to the same `cloudflare_ruleset` resource.\n\n\n\n## Create an advanced rate limiting rule\n\nThis example creates a rate limiting rule in zone with ID `<ZONE_ID>` with:\n\n* A custom counting expression that includes a response field (`http.response.code`).\n* A custom JSON response for rate limited requests.\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    },
+    {
+      "code": "To create another rate limiting rule, add a new `rules` object to the same `cloudflare_ruleset` resource.\n\n\n</page>\n\n<page>\n---\ntitle: Transform Rules configuration using Terraform · Cloudflare Terraform docs\ndescription: \"This page provides examples of creating Transform Rules in a zone\n  using Terraform. The examples cover the following scenarios:\"\nlastUpdated: 2025-08-22T14:24:45.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/terraform/additional-configurations/transform-rules/\n  md: https://developers.cloudflare.com/terraform/additional-configurations/transform-rules/index.md\n---\n\nThis page provides examples of creating [Transform Rules](https://developers.cloudflare.com/rules/transform/) in a zone using Terraform. The examples cover the following scenarios:\n\n* [Create a URL rewrite rule](#create-a-url-rewrite-rule)\n* [Create a request header transform rule](#create-a-request-header-transform-rule)\n* [Create a response header transform rule](#create-a-response-header-transform-rule)\n* [Configure Managed Transforms](#configure-managed-transforms)\n\nIf you are using the Cloudflare API, refer to the following resources:\n\n* [Create a URL rewrite rule via API](https://developers.cloudflare.com/rules/transform/url-rewrite/create-api/)\n* [Create a request header transform rule via API](https://developers.cloudflare.com/rules/transform/request-header-modification/create-api/)\n* [Create a response header transform rule via API](https://developers.cloudflare.com/rules/transform/response-header-modification/create-api/)\n* [Configure Managed Transforms](https://developers.cloudflare.com/rules/transform/managed-transforms/configure/)\n\n## Before you start\n\n### Obtain the necessary account or zone IDs\n\nThe Terraform configurations provided in this page need the zone ID (or account ID) of the zone/account where you will deploy rulesets.\n\n* To retrieve the list of accounts you have access to, including their IDs, use the [List accounts](https://developers.cloudflare.com/api/resources/accounts/methods/list/) operation.\n* To retrieve the list of zones you have access to, including their IDs, use the [List zones](https://developers.cloudflare.com/api/resources/zones/methods/list/) operation.\n\n### Import or delete existing rulesets\n\nTerraform assumes that it has complete control over account and zone rulesets. If you already have rulesets configured in your account or zone, do one of the following:\n\n* [Import existing rulesets to Terraform](https://developers.cloudflare.com/terraform/advanced-topics/import-cloudflare-resources/) using the `cf-terraforming` tool. Recent versions of the tool can generate resource definitions for existing rulesets and import their configuration to Terraform state.\n* Start from scratch by [deleting existing rulesets](https://developers.cloudflare.com/ruleset-engine/rulesets-api/delete/#delete-ruleset) (account and zone rulesets with `\"kind\": \"root\"` and `\"kind\": \"zone\"`, respectively) and then defining your rulesets configuration in Terraform.\n\n***\n\n## Create a URL rewrite rule\n\nThe following example creates a URL rewrite rule that rewrites requests for `example.com/old-folder` to `example.com/new-folder`:\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    },
+    {
+      "code": "Use the `ref` field to get stable rule IDs across updates when using Terraform. Adding this field prevents Terraform from recreating the rule on changes. For more information, refer to [Troubleshooting](https://developers.cloudflare.com/terraform/troubleshooting/rule-id-changes/#how-to-keep-the-same-rule-id-between-modifications).\n\nTo create another URL rewrite rule, add a new `rules` object to the same `cloudflare_ruleset` resource.\n\n\n\nFor more information on rewriting URLs, refer to [URL Rewrite Rules](https://developers.cloudflare.com/rules/transform/url-rewrite/).\n\n## Create a request header transform rule\n\nThe following configuration example performs the following adjustments to HTTP request headers:\n\n* Adds a `my-header-1` header to the request with a static value.\n* Adds a `my-header-2` header to the request with a dynamic value defined by an expression.\n* Deletes the `existing-header` header from the request, if it exists.\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    },
+    {
+      "code": "Use the `ref` field to get stable rule IDs across updates when using Terraform. Adding this field prevents Terraform from recreating the rule on changes. For more information, refer to [Troubleshooting](https://developers.cloudflare.com/terraform/troubleshooting/rule-id-changes/#how-to-keep-the-same-rule-id-between-modifications).\n\nTo create another request header transform rule, add a new `rules` object to the same `cloudflare_ruleset` resource.\n\nFor more information on modifying request headers, refer to [Request Header Transform Rules](https://developers.cloudflare.com/rules/transform/request-header-modification/).\n\n## Create a response header transform rule\n\nThe following configuration example performs the following adjustments to HTTP response headers:\n\n* Adds a `my-header-1` header to the response with a static value.\n* Adds a `my-header-2` header to the response with a dynamic value defined by an expression.\n* Deletes the `existing-header` header from the response, if it exists.\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    },
+    {
+      "code": "Use the `ref` field to get stable rule IDs across updates when using Terraform. Adding this field prevents Terraform from recreating the rule on changes. For more information, refer to [Troubleshooting](https://developers.cloudflare.com/terraform/troubleshooting/rule-id-changes/#how-to-keep-the-same-rule-id-between-modifications).\n\nTo create another response header transform rule, add a new `rules` object to the same `cloudflare_ruleset` resource.\n\nFor more information on modifying response headers, refer to [Response Header Transform Rules](https://developers.cloudflare.com/rules/transform/response-header-modification/).\n\n## Configure Managed Transforms\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.\n\nUse the `cloudflare_managed_headers` Terraform resource to configure Managed Transforms. For example:",
+      "language": "unknown"
+    },
+    {
+      "code": "Make sure you include the Managed Transforms you are updating in the correct object (`managed_request_headers` or `managed_response_headers`).\n\nFor more information on Managed Transforms, refer to [Managed Transforms](https://developers.cloudflare.com/rules/transform/managed-transforms/).\n\n</page>\n\n<page>\n---\ntitle: WAF custom rules configuration using Terraform · Cloudflare Terraform docs\ndescription: \"This page provides examples of creating WAF custom rules in a zone\n  or account using Terraform. The examples cover the following scenarios:\"\nlastUpdated: 2025-11-27T11:05:45.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/terraform/additional-configurations/waf-custom-rules/\n  md: https://developers.cloudflare.com/terraform/additional-configurations/waf-custom-rules/index.md\n---\n\nThis page provides examples of creating [WAF custom rules](https://developers.cloudflare.com/waf/custom-rules/) in a zone or account using Terraform. The examples cover the following scenarios:\n\n* [Add a custom rule to a zone](#add-a-custom-rule-to-a-zone)\n* [Create and deploy a custom ruleset](#create-and-deploy-a-custom-ruleset)\n\nThe WAF documentation includes additional Terraform examples — refer to [More resources](#more-resources).\n\nIf you are using the Cloudflare API, refer to the following resources in the WAF documentation:\n\n* [Create a custom rule via API](https://developers.cloudflare.com/waf/custom-rules/create-api/)\n* [Create a custom ruleset using the API](https://developers.cloudflare.com/waf/account/custom-rulesets/create-api/)\n\nFor more information on deploying and configuring custom rulesets using the Rulesets API, refer to [Work with custom rulesets](https://developers.cloudflare.com/ruleset-engine/custom-rulesets/) in the Ruleset Engine documentation.\n\n## Before you start\n\n### Obtain the necessary account or zone IDs\n\nThe Terraform configurations provided in this page need the zone ID (or account ID) of the zone/account where you will deploy rulesets.\n\n* To retrieve the list of accounts you have access to, including their IDs, use the [List accounts](https://developers.cloudflare.com/api/resources/accounts/methods/list/) operation.\n* To retrieve the list of zones you have access to, including their IDs, use the [List zones](https://developers.cloudflare.com/api/resources/zones/methods/list/) operation.\n\n### Import or delete existing rulesets\n\nTerraform assumes that it has complete control over account and zone rulesets. If you already have rulesets configured in your account or zone, do one of the following:\n\n* [Import existing rulesets to Terraform](https://developers.cloudflare.com/terraform/advanced-topics/import-cloudflare-resources/) using the `cf-terraforming` tool. Recent versions of the tool can generate resource definitions for existing rulesets and import their configuration to Terraform state.\n* Start from scratch by [deleting existing rulesets](https://developers.cloudflare.com/ruleset-engine/rulesets-api/delete/#delete-ruleset) (account and zone rulesets with `\"kind\": \"root\"` and `\"kind\": \"zone\"`, respectively) and then defining your rulesets configuration in Terraform.\n\n***\n\n## Add a custom rule to a zone\n\nThe following example configures a custom rule in the zone entry point ruleset for the `http_request_firewall_custom` phase for zone with ID `<ZONE_ID>`. The rule will block all traffic on non-standard HTTP(S) ports:\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    },
+    {
+      "code": "To create another custom rule, add a new `rules` object to the same `cloudflare_ruleset` resource.\n\n\n\n## Create and deploy a custom ruleset\n\nNote\n\nAll customers can create custom rulesets at the [zone level](https://developers.cloudflare.com/waf/custom-rules/custom-rulesets/).\\\nCustom rulesets at the [account level](https://developers.cloudflare.com/waf/account/custom-rulesets/) require an Enterprise plan with a paid add-on.\n\nThe following example creates a [custom ruleset](https://developers.cloudflare.com/ruleset-engine/custom-rulesets/) in the account with ID `<ACCOUNT_ID>` containing a single custom rule. This custom ruleset is then deployed using a separate `cloudflare_ruleset` Terraform resource. If you do not deploy a custom ruleset, it will not execute.\n\nThe following configuration creates a custom ruleset with a single rule:\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    },
+    {
+      "code": "To create another custom rule in the custom ruleset, add a new `rules` object to the same `cloudflare_ruleset` resource.\n\n\n\nThe following configuration deploys the custom ruleset at the account level. It defines a dependency on the `account_firewall_custom_ruleset` resource and uses the ID of the created custom ruleset in `action_parameters`:\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    },
+    {
+      "code": "For more information on configuring and deploying custom rulesets, refer to [Work with custom rulesets](https://developers.cloudflare.com/ruleset-engine/custom-rulesets/) in the Ruleset Engine documentation.\n\n## More resources\n\n* [Malicious uploads detection: Add a custom rule to block malicious uploads](https://developers.cloudflare.com/waf/detections/malicious-uploads/terraform-examples/#add-a-custom-rule-to-block-malicious-uploads)\n* [Leaked credentials detection: Add a custom rule to challenge requests with leaked credentials](https://developers.cloudflare.com/waf/detections/leaked-credentials/terraform-examples/#add-a-custom-rule-to-challenge-requests-with-leaked-credentials)\n\n</page>\n\n<page>\n---\ntitle: WAF Managed Rules configuration using Terraform · Cloudflare Terraform docs\ndescription: \"This page provides examples of deploying and configuring WAF\n  Managed Rules in your zone or account using Terraform. It covers the following\n  configurations:\"\nlastUpdated: 2025-08-20T20:59:04.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/terraform/additional-configurations/waf-managed-rulesets/\n  md: https://developers.cloudflare.com/terraform/additional-configurations/waf-managed-rulesets/index.md\n---\n\nThis page provides examples of deploying and configuring [WAF Managed Rules](https://developers.cloudflare.com/waf/managed-rules/) in your zone or account using Terraform. It covers the following configurations:\n\n* [Deploy managed rulesets at the zone level](#deploy-managed-rulesets-at-the-zone-level)\n* [Deploy managed rulesets at the account level](#deploy-managed-rulesets-at-the-account-level)\n* [Configure exceptions](#configure-exceptions)\n* [Configure payload logging](#configure-payload-logging)\n* [Configure overrides](#configure-overrides)\n* [Configure the OWASP paranoia level, score threshold, and action](#configure-the-owasp-paranoia-level-score-threshold-and-action)\n\nIf you are using the Cloudflare API, refer to the following resources:\n\n* [Deploy a WAF managed ruleset via API](https://developers.cloudflare.com/waf/managed-rules/deploy-api/)\n* [Deploy a WAF managed ruleset via API (account)](https://developers.cloudflare.com/waf/account/managed-rulesets/deploy-api/)\n\nFor more information on deploying and configuring managed rulesets using the Rulesets API, refer to [Work with managed rulesets](https://developers.cloudflare.com/ruleset-engine/managed-rulesets/) in the Ruleset Engine documentation.\n\n## Before you start\n\n### Obtain the necessary account, zone, and managed ruleset IDs\n\nThe Terraform configurations provided in this page need the zone ID (or account ID) of the zone/account where you will deploy the managed rulesets.\n\n* To retrieve the list of accounts you have access to, including their IDs, use the [List accounts](https://developers.cloudflare.com/api/resources/accounts/methods/list/) operation.\n* To retrieve the list of zones you have access to, including their IDs, use the [List zones](https://developers.cloudflare.com/api/resources/zones/methods/list/) operation.\n\nThe deployment of managed rulesets via Terraform requires that you use the ruleset IDs. To find the IDs of managed rulesets, use the [List account rulesets](https://developers.cloudflare.com/api/resources/rulesets/methods/list/) operation. The response will include the description and IDs of existing managed rulesets.\n\nThe IDs of WAF managed rulesets are also available in the [WAF Managed Rules](https://developers.cloudflare.com/waf/managed-rules/#available-managed-rulesets) page.\n\n### Import or delete existing rulesets\n\nTerraform assumes that it has complete control over account and zone rulesets. If you already have rulesets configured in your account or zone, do one of the following:\n\n* [Import existing rulesets to Terraform](https://developers.cloudflare.com/terraform/advanced-topics/import-cloudflare-resources/) using the `cf-terraforming` tool. Recent versions of the tool can generate resource definitions for existing rulesets and import their configuration to Terraform state.\n* Start from scratch by [deleting existing rulesets](https://developers.cloudflare.com/ruleset-engine/rulesets-api/delete/#delete-ruleset) (account and zone rulesets with `\"kind\": \"root\"` and `\"kind\": \"zone\"`, respectively) and then defining your rulesets configuration in Terraform.\n\n***\n\n## Deploy managed rulesets at the zone level\n\nThe following example deploys two managed rulesets to the zone with ID `<ZONE_ID>` using Terraform, using a `cloudflare_ruleset` resource with two rules that execute the managed rulesets.\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Create an advanced rate limiting rule",
+      "id": "create-an-advanced-rate-limiting-rule"
+    },
+    {
+      "level": "h2",
+      "text": "Before you start",
+      "id": "before-you-start"
+    },
+    {
+      "level": "h3",
+      "text": "Obtain the necessary account or zone IDs",
+      "id": "obtain-the-necessary-account-or-zone-ids"
+    },
+    {
+      "level": "h3",
+      "text": "Import or delete existing rulesets",
+      "id": "import-or-delete-existing-rulesets"
+    },
+    {
+      "level": "h2",
+      "text": "Create a URL rewrite rule",
+      "id": "create-a-url-rewrite-rule"
+    },
+    {
+      "level": "h2",
+      "text": "Create a request header transform rule",
+      "id": "create-a-request-header-transform-rule"
+    },
+    {
+      "level": "h2",
+      "text": "Create a response header transform rule",
+      "id": "create-a-response-header-transform-rule"
+    },
+    {
+      "level": "h2",
+      "text": "Configure Managed Transforms",
+      "id": "configure-managed-transforms"
+    },
+    {
+      "level": "h2",
+      "text": "Before you start",
+      "id": "before-you-start"
+    },
+    {
+      "level": "h3",
+      "text": "Obtain the necessary account or zone IDs",
+      "id": "obtain-the-necessary-account-or-zone-ids"
+    },
+    {
+      "level": "h3",
+      "text": "Import or delete existing rulesets",
+      "id": "import-or-delete-existing-rulesets"
+    },
+    {
+      "level": "h2",
+      "text": "Add a custom rule to a zone",
+      "id": "add-a-custom-rule-to-a-zone"
+    },
+    {
+      "level": "h2",
+      "text": "Create and deploy a custom ruleset",
+      "id": "create-and-deploy-a-custom-ruleset"
+    },
+    {
+      "level": "h2",
+      "text": "More resources",
+      "id": "more-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Before you start",
+      "id": "before-you-start"
+    },
+    {
+      "level": "h3",
+      "text": "Obtain the necessary account, zone, and managed ruleset IDs",
+      "id": "obtain-the-necessary-account,-zone,-and-managed-ruleset-ids"
+    },
+    {
+      "level": "h3",
+      "text": "Import or delete existing rulesets",
+      "id": "import-or-delete-existing-rulesets"
+    },
+    {
+      "level": "h2",
+      "text": "Deploy managed rulesets at the zone level",
+      "id": "deploy-managed-rulesets-at-the-zone-level"
+    }
+  ],
+  "url": "llms-txt#account-level-entry-point-ruleset-for-the-'http_ratelimit'-phase",
+  "links": []
+}

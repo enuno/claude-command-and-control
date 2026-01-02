@@ -1,0 +1,58 @@
+{
+  "title": "Your configured Hyperdrive binding is \"HYPERDRIVE\"",
+  "content": "export CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE=\"postgres://user:password@your-database-host:5432/database\"\nnpx wrangler dev\nsh\nexport CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE=\"postgres://user:password@localhost:5432/databasename\"\nnpx wrangler dev\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"c020574a-5623-407b-be0c-cd192bab9545\",\n        \"localConnectionString\": \"postgres://user:password@localhost:5432/databasename\"\n      }\n    ]\n  }\n  toml\n  [[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"c020574a-5623-407b-be0c-cd192bab9545\"\n  localConnectionString = \"postgres://user:password@localhost:5432/databasename\"\n  jsonc\n  {\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"your-hyperdrive-id\",\n      },\n    ],\n  }\n  toml\n  [[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"your-hyperdrive-id\"\n  sh\nnpx wrangler dev --remote\nsh",
+  "code_samples": [
+    {
+      "code": "The environment variable format is `CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_<BINDING_NAME>`, where `<BINDING_NAME>` is the name of the binding assigned to your Hyperdrive in your [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/).\n\nTo unset an environment variable: `unset CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_<BINDING_NAME>`\n\nFor example, to set the connection string for a local database:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Configure in wrangler.toml\n\nAlternatively, you can set `localConnectionString` in your [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/):\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "If both an environment variable and `localConnectionString` in the Wrangler configuration file are set, the environment variable takes precedence.\n\n## Use `wrangler dev --remote`\n\nWhen you run `wrangler dev --remote`, your Worker runs in Cloudflare's network and uses your deployed Hyperdrive configuration. This means:\n\n* Your Worker code executes in Cloudflare's production environment, not locally\n* Hyperdrive's connection pooling and query caching are active\n* You connect to the database configured in your Hyperdrive configuration (created with `wrangler hyperdrive create`)\n* Changes made during the session interact with remote resources\n\nThis mode is useful for testing how your Worker behaves with Hyperdrive's features enabled before deploying.\n\nConfigure your Hyperdrive binding in `wrangler.jsonc`:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "To start a remote development session:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nThe `localConnectionString` field is not used with `wrangler dev --remote`. Instead, your Worker connects to the database configured in your deployed Hyperdrive configuration.\n\nWarning\n\nUse `wrangler dev --remote` with caution. Since your Worker runs in Cloudflare's production environment, any database writes or side effects will affect your production data.\n\nRefer to the [`wrangler dev` documentation](https://developers.cloudflare.com/workers/wrangler/commands/#dev) to learn more about how to configure a local development session.\n\n## Related resources\n\n* Use [`wrangler dev`](https://developers.cloudflare.com/workers/wrangler/commands/#dev) to run your Worker and Hyperdrive locally and debug issues before deploying.\n* Learn [how Hyperdrive works](https://developers.cloudflare.com/hyperdrive/concepts/how-hyperdrive-works/).\n* Understand how to [configure query caching in Hyperdrive](https://developers.cloudflare.com/hyperdrive/concepts/query-caching/).\n\n</page>\n\n<page>\n---\ntitle: Rotating database credentials · Cloudflare Hyperdrive docs\ndescription: \"You can change the connection information and credentials of your\n  Hyperdrive configuration in one of two ways:\"\nlastUpdated: 2025-04-08T01:03:45.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/hyperdrive/configuration/rotate-credentials/\n  md: https://developers.cloudflare.com/hyperdrive/configuration/rotate-credentials/index.md\n---\n\nYou can change the connection information and credentials of your Hyperdrive configuration in one of two ways:\n\n1. Create a new Hyperdrive configuration with the new connection information, and update your Worker to use the new Hyperdrive configuration.\n2. Update the existing Hyperdrive configuration with the new connection information and credentials.\n\n## Use a new Hyperdrive configuration\n\nCreating a new Hyperdrive configuration to update your database credentials allows you to keep your existing Hyperdrive configuration unchanged, gradually migrate your Worker to the new Hyperdrive configuration, and easily roll back to the previous configuration if needed.\n\nTo create a Hyperdrive configuration that connects to an existing PostgreSQL or MySQL database, use the [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) CLI or the [Cloudflare dashboard](https://dash.cloudflare.com/?to=/:account/workers/hyperdrive).",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Configure in wrangler.toml",
+      "id": "configure-in-wrangler.toml"
+    },
+    {
+      "level": "h2",
+      "text": "Use `wrangler dev --remote`",
+      "id": "use-`wrangler-dev---remote`"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Use a new Hyperdrive configuration",
+      "id": "use-a-new-hyperdrive-configuration"
+    }
+  ],
+  "url": "llms-txt#your-configured-hyperdrive-binding-is-\"hyperdrive\"",
+  "links": []
+}

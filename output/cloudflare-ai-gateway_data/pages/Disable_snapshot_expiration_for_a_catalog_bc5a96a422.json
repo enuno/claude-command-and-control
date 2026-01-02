@@ -1,0 +1,225 @@
+{
+  "title": "Disable snapshot expiration for a catalog",
+  "content": "npx wrangler r2 bucket catalog snapshot-expiration disable my-bucket\nsh\nnpx wrangler r2 bucket lock add <BUCKET_NAME> [OPTIONS]\nsh\nnpx wrangler r2 bucket lock set <BUCKET_NAME> --file <FILE_PATH>\nbash\ncurl -X PUT \"https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/r2/buckets/<BUCKET_NAME>/lock\" \\\n    -H \"Authorization: Bearer <API_TOKEN>\" \\\n    -H \"Content-Type: application/json\" \\\n    -d '{\n        \"rules\": [\n            {\n                \"id\": \"lock-logs-7d\",\n                \"enabled\": true,\n                \"prefix\": \"logs/\",\n                \"condition\": {\n                    \"type\": \"Age\",\n                    \"maxAgeSeconds\": 604800\n                }\n            },\n            {\n                \"id\": \"lock-images-indefinite\",\n                \"enabled\": true,\n                \"prefix\": \"images/\",\n                \"condition\": {\n                    \"type\": \"Indefinite\"\n                }\n            }\n        ]\n    }'\nsh\nnpx wrangler r2 bucket lock list <BUCKET_NAME>\nsh\nnpx wrangler r2 bucket lock remove <BUCKET_NAME> --id <RULE_ID>\njson\n[\n  {\n    \"AllowedOrigins\": [\"https://example.com\"],\n    \"AllowedMethods\": [\"PUT\"],\n    \"AllowedHeaders\": [\"Content-Type\"],\n    \"ExposeHeaders\": [\"ETag\"],\n    \"MaxAgeSeconds\": 3600\n  }\n]\njson\n{\n  \"rules\": [\n    {\n      \"allowed\": {\n        \"origins\": [\"https://example.com\"],\n        \"methods\": [\"GET\"]\n      }\n    }\n  ]\n}\nsh\nnpx wrangler r2 bucket cors set <BUCKET_NAME> --file cors.json\nsh\nnpx wrangler r2 bucket cors list <BUCKET_NAME>\njson\n[\n  {\n    \"AllowedOrigins\": [\"http://localhost:3000\"],\n    \"AllowedMethods\": [\"GET\"]\n  }\n]\nsh\nwrangler r2 bucket create your-bucket-name\nsh\nwrangler r2 bucket list\nsh\nwrangler r2 bucket delete BUCKET_TO_DELETE\nsh\nnpx wrangler r2 bucket notification create <BUCKET_NAME> --event-type <EVENT_TYPE> --queue <QUEUE_NAME>\nsh",
+  "code_samples": [
+    {
+      "code": "### Choose the right retention policy\n\nDifferent workloads require different snapshot retention strategies:\n\n* **Development/testing tables**: Shorter retention (2-7 days, 5 snapshots) to minimize storage costs\n* **Production analytics tables**: Medium retention (7-30 days, 10-20 snapshots) for debugging and analysis\n* **Compliance/audit tables**: Longer retention (30-90 days, 50+ snapshots) to meet regulatory requirements\n* **High-frequency ingest**: Higher minimum snapshot count to preserve more granular history\n\nThese are generic recommendations, make sure to consider:\n\n* Time travel requirements\n* Compliance requirements\n* Storage costs\n\n## Current limitations\n\n* During open beta, compaction will compact up to 2 GB worth of files once per hour for each table.\n* Only data files stored in parquet format are currently supported with compaction.\n* Orphan file cleanup is not supported yet.\n* Minimum target file size for compaction is 64 MB and maximum is 512 MB.\n\n</page>\n\n<page>\n---\ntitle: Bucket locks · Cloudflare R2 docs\ndescription: Bucket locks prevent the deletion and overwriting of objects in an\n  R2 bucket for a specified period — or indefinitely. When enabled, bucket locks\n  enforce retention policies on your objects, helping protect them from\n  accidental or premature deletions.\nlastUpdated: 2025-09-03T16:40:54.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/buckets/bucket-locks/\n  md: https://developers.cloudflare.com/r2/buckets/bucket-locks/index.md\n---\n\nBucket locks prevent the deletion and overwriting of objects in an R2 bucket for a specified period — or indefinitely. When enabled, bucket locks enforce retention policies on your objects, helping protect them from accidental or premature deletions.\n\n## Get started with bucket locks\n\nBefore getting started, you will need:\n\n* An existing R2 bucket. If you do not already have an existing R2 bucket, refer to [Create buckets](https://developers.cloudflare.com/r2/buckets/create-buckets/).\n* (API only) An API token with [permissions](https://developers.cloudflare.com/r2/api/tokens/#permissions) to edit R2 bucket configuration.\n\n### Enable bucket lock via dashboard\n\n1. In the Cloudflare dashboard, go to the **R2 object storage** page.\n\n   [Go to **Overview**](https://dash.cloudflare.com/?to=/:account/r2/overview)\n\n2. Select the bucket you would like to add bucket lock rule to.\n\n3. Switch to the **Settings** tab, then scroll down to the **Bucket lock rules** card.\n\n4. Select **Add rule** and enter the rule name, prefix, and retention period.\n\n5. Select **Save changes**.\n\n### Enable bucket lock via Wrangler\n\n1. Install [`npm`](https://docs.npmjs.com/getting-started).\n2. Install [Wrangler, the Developer Platform CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/).\n3. Log in to Wrangler with the [`wrangler login` command](https://developers.cloudflare.com/workers/wrangler/commands/#login).\n4. Add a bucket lock rule to your bucket by running the [`r2 bucket lock add` command](https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-lock-add).",
+      "language": "unknown"
+    },
+    {
+      "code": "Alternatively, you can set the entire bucket lock configuration for a bucket from a JSON file using the [`r2 bucket lock set` command](https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-lock-set).",
+      "language": "unknown"
+    },
+    {
+      "code": "The JSON file should be in the format of the request body of the [put bucket lock configuration API](https://developers.cloudflare.com/api/resources/r2/subresources/buckets/subresources/locks/methods/update/).\n\n### Enable bucket lock via API\n\nFor information about getting started with the Cloudflare API, refer to [Make API calls](https://developers.cloudflare.com/fundamentals/api/how-to/make-api-calls/). For information on required parameters and more examples of how to set bucket lock configuration, refer to the [API documentation](https://developers.cloudflare.com/api/resources/r2/subresources/buckets/subresources/locks/methods/update/).\n\nBelow is an example of setting a bucket lock configuration (a collection of rules):",
+      "language": "unknown"
+    },
+    {
+      "code": "This request creates two rules:\n\n* `lock-logs-7d`: Objects under the `logs/` prefix are retained for 7 days (604800 seconds).\n* `lock-images-indefinite`: Objects under the `images/` prefix are locked indefinitely.\n\nNote\n\nIf your bucket is setup with [jurisdictional restrictions](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions), you will need to pass a `cf-r2-jurisdiction` request header with that jurisdiction. For example, `cf-r2-jurisdiction: eu`.\n\n## Get bucket lock rules for your R2 bucket\n\n### Dashboard\n\n1. In the Cloudflare dashboard, go to the **R2 object storage** page.\n\n   [Go to **Overview**](https://dash.cloudflare.com/?to=/:account/r2/overview)\n\n2. Select the bucket you would like to add bucket lock rule to.\n\n3. Switch to the **Settings** tab, then scroll down to the **Bucket lock rules** card.\n\n### Wrangler\n\nTo list bucket lock rules, run the [`r2 bucket lock list` command](https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-lock-list):",
+      "language": "unknown"
+    },
+    {
+      "code": "### API\n\nFor more information on required parameters and examples of how to get bucket lock rules, refer to the [API documentation](https://developers.cloudflare.com/api/resources/r2/subresources/buckets/subresources/locks/methods/get/).\n\n## Remove bucket lock rules from your R2 bucket\n\n### Dashboard\n\n1. In the Cloudflare dashboard, go to the **R2 object storage** page.\n\n   [Go to **Overview**](https://dash.cloudflare.com/?to=/:account/r2/overview)\n\n2. Select the bucket you would like to add bucket lock rule to.\n\n3. Switch to the **Settings** tab, then scroll down to the **Bucket lock rules** card.\n\n4. Locate the rule you want to remove, select the `...` icon next to it, and then select **Delete**.\n\n### Wrangler\n\nTo remove a bucket lock rule, run the [`r2 bucket lock remove` command](https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-lock-remove):",
+      "language": "unknown"
+    },
+    {
+      "code": "### API\n\nTo remove bucket lock rules via API, exclude them from your updated configuration and use the [put bucket lock configuration API](https://developers.cloudflare.com/api/resources/r2/subresources/buckets/subresources/locks/methods/update/).\n\n## Bucket lock rules\n\nA bucket lock configuration can include up to 1,000 rules. Each rule specifies which objects it covers (via prefix) and how long those objects must remain locked. You can:\n\n* Lock objects for a specific duration. For example, 90 days.\n* Retain objects until a certain date. For example, until January 1, 2026.\n* Keep objects locked indefinitely.\n\nIf multiple rules apply to the same prefix or object key, the strictest (longest) retention requirement takes precedence.\n\n## Notes\n\n* Rules without prefix apply to all objects in the bucket.\n* Rules apply to both new and existing objects in the bucket.\n* Bucket lock rules take precedence over [lifecycle rules](https://developers.cloudflare.com/r2/buckets/object-lifecycles/). For example, if a lifecycle rule attempts to delete an object at 30 days but a bucket lock rule requires it be retained for 90 days, the object will not be deleted until the 90-day requirement is met.\n\n</page>\n\n<page>\n---\ntitle: Configure CORS · Cloudflare R2 docs\ndescription: Cross-Origin Resource Sharing (CORS) is a standardized method that\n  prevents domain X from accessing the resources of domain Y. It does so by\n  using special headers in HTTP responses from domain Y, that allow your browser\n  to verify that domain Y permits domain X to access these resources.\nlastUpdated: 2025-12-12T19:03:39.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/buckets/cors/\n  md: https://developers.cloudflare.com/r2/buckets/cors/index.md\n---\n\n[Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) is a standardized method that prevents domain X from accessing the resources of domain Y. It does so by using special headers in HTTP responses from domain Y, that allow your browser to verify that domain Y permits domain X to access these resources.\n\nWhile CORS can help protect your data from malicious websites, CORS is also used to interact with objects in your bucket and configure policies on your bucket.\n\nCORS is used when you interact with a bucket from a web browser, and you have two options:\n\n**[Set a bucket to public:](#use-cors-with-a-public-bucket)** This option makes your bucket accessible on the Internet as read-only, which means anyone can request and load objects from your bucket in their browser or anywhere else. This option is ideal if your bucket contains images used in a public blog.\n\n**[Presigned URLs:](#use-cors-with-a-presigned-url)** Allows anyone with access to the unique URL to perform specific actions on your bucket.\n\n## Prerequisites\n\nBefore you configure CORS, you must have:\n\n* An R2 bucket with at least one object. If you need to create a bucket, refer to [Create a public bucket](https://developers.cloudflare.com/r2/buckets/public-buckets/).\n* A domain you can use to access the object. This can also be a `localhost`.\n* (Optional) Access keys. An access key is only required when creating a presigned URL.\n\n## Use CORS with a public bucket\n\n[To use CORS with a public bucket](https://developers.cloudflare.com/r2/buckets/public-buckets/), ensure your bucket is set to allow public access.\n\nNext, [add a CORS policy](#add-cors-policies-from-the-dashboard) to your bucket to allow the file to be shared.\n\n## Use CORS with a presigned URL\n\n[Presigned URLs](https://developers.cloudflare.com/r2/api/s3/presigned-urls/) allow temporary access to perform specific actions on your bucket without exposing your credentials. While presigned URLs handle authentication, you still need to configure CORS when making requests from a browser.\n\nWhen a browser makes a request to a presigned URL on a different origin, the browser enforces CORS. Without a CORS policy, browser-based uploads and downloads using presigned URLs will fail, even though the presigned URL itself is valid.\n\nTo enable browser-based access with presigned URLs:\n\n1. [Add a CORS policy](#add-cors-policies-from-the-dashboard) to your bucket that allows requests from your application's origin.\n\n2. Set `AllowedMethods` to match the operations your presigned URLs perform, use `GET`, `PUT`, `HEAD`, and/or `DELETE`.\n\n3. Set `AllowedHeaders` to include any headers the client will send when using the presigned URL, such as headers for content type, checksums, caching, or custom metadata.\n\n4. (Optional) Set `ExposeHeaders` to allow your JavaScript to read response headers like `ETag`, which contains the object's hash and is useful for verifying uploads.\n\n5. (Optional) Set `MaxAgeSeconds` to cache the preflight response and reduce the number of preflight requests the browser makes.\n\nThe following example allows browser-based uploads from `https://example.com` with a `Content-Type` header:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Use CORS with a custom domain\n\n[Custom domains](https://developers.cloudflare.com/r2/buckets/public-buckets/#custom-domains) connected to an R2 bucket with a CORS policy automatically return CORS response headers for [cross-origin requests](https://fetch.spec.whatwg.org/#http-cors-protocol).\n\nCross-origin requests must include a valid `Origin` request header, for example, `Origin: https://example.com`. If you are testing directly or using a command-line tool such as `curl`, you will not see CORS `Access-Control-*` response headers unless the `Origin` request header is included in the request.\n\nCaching and CORS headers\n\nIf you set a CORS policy on a bucket that is already serving traffic using a custom domain, any existing cached assets will not reflect the CORS response headers until they are refreshed in cache. Use [Cache Purge](https://developers.cloudflare.com/cache/how-to/purge-cache/) to purge the cache for that hostname after making any CORS policy related changes.\n\n## Add CORS policies from the dashboard\n\n1. In the Cloudflare dashboard, go to the **R2 object storage** page.\n\n   [Go to **Overview**](https://dash.cloudflare.com/?to=/:account/r2/overview)\n\n2. Locate and select your bucket from the list.\n\n3. Select **Settings**.\n\n4. Under **CORS Policy**, select **Add CORS policy**.\n\n5. From the **JSON** tab, manually enter or copy and paste your policy into the text box.\n\n6. When you are done, select **Save**.\n\nYour policy displays on the **Settings** page for your bucket.\n\n## Add CORS policies via Wrangler CLI\n\nYou can configure CORS rules using the [Wrangler CLI](https://developers.cloudflare.com/r2/reference/wrangler-commands/).\n\n1. Create a JSON file with your CORS configuration:",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Apply the CORS policy to your bucket:",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Verify the CORS policy was applied:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Response headers\n\nThe following fields in an R2 CORS policy map to HTTP response headers. These response headers are only returned when the incoming HTTP request is a valid CORS request.\n\n| Field Name | Description | Example |\n| - | - | - |\n| `AllowedOrigins` | Specifies the value for the `Access-Control-Allow-Origin` header R2 sets when requesting objects in a bucket from a browser. | If a website at `www.test.com` needs to access resources (e.g. fonts, scripts) on a [custom domain](https://developers.cloudflare.com/r2/buckets/public-buckets/#custom-domains) of `static.example.com`, you would set `https://www.test.com` as an `AllowedOrigin`. |\n| `AllowedMethods` | Specifies the value for the `Access-Control-Allow-Methods` header R2 sets when requesting objects in a bucket from a browser. | `GET`, `POST`, `PUT` |\n| `AllowedHeaders` | Specifies the value for the `Access-Control-Allow-Headers` header R2 sets when requesting objects in this bucket from a browser.Cross-origin requests that include custom headers (e.g. `x-user-id`) should specify these headers as `AllowedHeaders`. | `x-requested-by`, `User-Agent` |\n| `ExposeHeaders` | Specifies the headers that can be exposed back, and accessed by, the JavaScript making the cross-origin request. If you need to access headers beyond the [safelisted response headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Access-Control-Expose-Headers#examples), such as `Content-Encoding` or `cf-cache-status`, you must specify it here. | `Content-Encoding`, `cf-cache-status`, `Date` |\n| `MaxAgeSeconds` | Specifies the amount of time (in seconds) browsers are allowed to cache CORS preflight responses. Browsers may limit this to 2 hours or less, even if the maximum value (86400) is specified. | `3600` |\n\n## Example\n\nThis example shows a CORS policy added for a bucket that contains the `Roboto-Light.ttf` object, which is a font file.\n\nThe `AllowedOrigins` specify the web server being used, and `localhost:3000` is the hostname where the web server is running. The `AllowedMethods` specify that only `GET` requests are allowed and can read objects in your bucket.",
+      "language": "unknown"
+    },
+    {
+      "code": "In general, a good strategy for making sure you have set the correct CORS rules is to look at the network request that is being blocked by your browser.\n\n* Make sure the rule's `AllowedOrigins` includes the origin where the request is being made from. (like `http://localhost:3000` or `https://yourdomain.com`)\n* Make sure the rule's `AllowedMethods` includes the blocked request's method.\n* Make sure the rule's `AllowedHeaders` includes the blocked request's headers.\n\nAlso note that CORS rule propagation can, in rare cases, take up to 30 seconds.\n\n## Common Issues\n\n* Only a cross-origin request will include CORS response headers.\n\n  * A cross-origin request is identified by the presence of an `Origin` HTTP request header, with the value of the `Origin` representing a valid, allowed origin as defined by the `AllowedOrigins` field of your CORS policy.\n  * A request without an `Origin` HTTP request header will *not* return any CORS response headers. Origin values must match exactly.\n\n* The value(s) for `AllowedOrigins` in your CORS policy must be a valid [HTTP Origin header value](https://fetch.spec.whatwg.org/#origin-header). A valid `Origin` header does *not* include a path component and must only be comprised of a `scheme://host[:port]` (where port is optional).\n\n  * Valid `AllowedOrigins` value: `https://static.example.com` - includes the scheme and host. A port is optional and implied by the scheme.\n  * Invalid `AllowedOrigins` value: `https://static.example.com/` or `https://static.example.com/fonts/Calibri.woff2` - incorrectly includes the path component.\n\n* If you need to access specific header values via JavaScript on the origin page, such as when using a video player, ensure you set `Access-Control-Expose-Headers` correctly and include the headers your JavaScript needs access to, such as `Content-Length`.\n\n</page>\n\n<page>\n---\ntitle: Create new buckets · Cloudflare R2 docs\ndescription: You can create a bucket from the Cloudflare dashboard or using Wrangler.\nlastUpdated: 2025-05-28T15:17:46.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/buckets/create-buckets/\n  md: https://developers.cloudflare.com/r2/buckets/create-buckets/index.md\n---\n\nYou can create a bucket from the Cloudflare dashboard or using Wrangler.\n\nNote\n\nWrangler is [a command-line tool](https://developers.cloudflare.com/workers/wrangler/install-and-update/) for building with Cloudflare's developer products, including R2.\n\nThe R2 support in Wrangler allows you to manage buckets and perform basic operations against objects in your buckets. For more advanced use-cases, including bulk uploads or mirroring files from legacy object storage providers, we recommend [rclone](https://developers.cloudflare.com/r2/examples/rclone/) or an [S3-compatible](https://developers.cloudflare.com/r2/api/s3/) tool of your choice.\n\n## Bucket-Level Operations\n\nCreate a bucket with the [`r2 bucket create`](https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-create) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\n* Bucket names can only contain lowercase letters (a-z), numbers (0-9), and hyphens (-).\n* Bucket names cannot begin or end with a hyphen.\n* Bucket names can only be between 3-63 characters in length.\n\nThe placeholder text is only for the example.\n\nList buckets in the current account with the [`r2 bucket list`](https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-list) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "Delete a bucket with the [`r2 bucket delete`](https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-delete) command. Note that the bucket must be empty and all objects must be deleted.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Notes\n\n* Bucket names and buckets are not public by default. To allow public access to a bucket, refer to [Public buckets](https://developers.cloudflare.com/r2/buckets/public-buckets/).\n* For information on controlling access to your R2 bucket with Cloudflare Access, refer to [Protect an R2 Bucket with Cloudflare Access](https://developers.cloudflare.com/r2/tutorials/cloudflare-access/).\n* Invalid (unauthorized) access attempts to private buckets do not incur R2 operations charges against that bucket. Refer to the [R2 pricing FAQ](https://developers.cloudflare.com/r2/pricing/#frequently-asked-questions) to understand what operations are billed vs. not billed.\n\n</page>\n\n<page>\n---\ntitle: Event notifications · Cloudflare R2 docs\ndescription: Event notifications send messages to your queue when data in your\n  R2 bucket changes. You can consume these messages with a consumer Worker or\n  pull over HTTP from outside of Cloudflare Workers.\nlastUpdated: 2025-09-03T16:40:54.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/buckets/event-notifications/\n  md: https://developers.cloudflare.com/r2/buckets/event-notifications/index.md\n---\n\nEvent notifications send messages to your [queue](https://developers.cloudflare.com/queues/) when data in your R2 bucket changes. You can consume these messages with a [consumer Worker](https://developers.cloudflare.com/queues/reference/how-queues-works/#create-a-consumer-worker) or [pull over HTTP](https://developers.cloudflare.com/queues/configuration/pull-consumers/) from outside of Cloudflare Workers.\n\n## Get started with event notifications\n\n### Prerequisites\n\nBefore getting started, you will need:\n\n* An existing R2 bucket. If you do not already have an existing R2 bucket, refer to [Create buckets](https://developers.cloudflare.com/r2/buckets/create-buckets/).\n* An existing queue. If you do not already have a queue, refer to [Create a queue](https://developers.cloudflare.com/queues/get-started/#2-create-a-queue).\n* A [consumer Worker](https://developers.cloudflare.com/queues/reference/how-queues-works/#create-a-consumer-worker) or [HTTP pull](https://developers.cloudflare.com/queues/configuration/pull-consumers/) enabled on your Queue.\n\n### Enable event notifications via Dashboard\n\n1. In the Cloudflare dashboard, go to the **R2 object storage** page.\n\n   [Go to **Overview**](https://dash.cloudflare.com/?to=/:account/r2/overview)\n\n2. Select the bucket you'd like to add an event notification rule to.\n\n3. Switch to the **Settings** tab, then scroll down to the **Event notifications** card.\n\n4. Select **Add notification** and choose the queue you'd like to receive notifications and the [type of events](https://developers.cloudflare.com/r2/buckets/event-notifications/#event-types) that will trigger them.\n\n5. Select **Add notification**.\n\n### Enable event notifications via Wrangler\n\n#### Set up Wrangler\n\nTo begin, install [`npm`](https://docs.npmjs.com/getting-started). Then [install Wrangler, the Developer Platform CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/).\n\n#### Enable event notifications on your R2 bucket\n\nLog in to Wrangler with the [`wrangler login` command](https://developers.cloudflare.com/workers/wrangler/commands/#login). Then add an [event notification rule](https://developers.cloudflare.com/r2/buckets/event-notifications/#event-notification-rules) to your bucket by running the [`r2 bucket notification create` command](https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-notification-create).",
+      "language": "unknown"
+    },
+    {
+      "code": "To add filtering based on `prefix` or `suffix` use the `--prefix` or `--suffix` flag, respectively.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Choose the right retention policy",
+      "id": "choose-the-right-retention-policy"
+    },
+    {
+      "level": "h2",
+      "text": "Current limitations",
+      "id": "current-limitations"
+    },
+    {
+      "level": "h2",
+      "text": "Get started with bucket locks",
+      "id": "get-started-with-bucket-locks"
+    },
+    {
+      "level": "h3",
+      "text": "Enable bucket lock via dashboard",
+      "id": "enable-bucket-lock-via-dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Enable bucket lock via Wrangler",
+      "id": "enable-bucket-lock-via-wrangler"
+    },
+    {
+      "level": "h3",
+      "text": "Enable bucket lock via API",
+      "id": "enable-bucket-lock-via-api"
+    },
+    {
+      "level": "h2",
+      "text": "Get bucket lock rules for your R2 bucket",
+      "id": "get-bucket-lock-rules-for-your-r2-bucket"
+    },
+    {
+      "level": "h3",
+      "text": "Dashboard",
+      "id": "dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Wrangler",
+      "id": "wrangler"
+    },
+    {
+      "level": "h3",
+      "text": "API",
+      "id": "api"
+    },
+    {
+      "level": "h2",
+      "text": "Remove bucket lock rules from your R2 bucket",
+      "id": "remove-bucket-lock-rules-from-your-r2-bucket"
+    },
+    {
+      "level": "h3",
+      "text": "Dashboard",
+      "id": "dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Wrangler",
+      "id": "wrangler"
+    },
+    {
+      "level": "h3",
+      "text": "API",
+      "id": "api"
+    },
+    {
+      "level": "h2",
+      "text": "Bucket lock rules",
+      "id": "bucket-lock-rules"
+    },
+    {
+      "level": "h2",
+      "text": "Notes",
+      "id": "notes"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Use CORS with a public bucket",
+      "id": "use-cors-with-a-public-bucket"
+    },
+    {
+      "level": "h2",
+      "text": "Use CORS with a presigned URL",
+      "id": "use-cors-with-a-presigned-url"
+    },
+    {
+      "level": "h2",
+      "text": "Use CORS with a custom domain",
+      "id": "use-cors-with-a-custom-domain"
+    },
+    {
+      "level": "h2",
+      "text": "Add CORS policies from the dashboard",
+      "id": "add-cors-policies-from-the-dashboard"
+    },
+    {
+      "level": "h2",
+      "text": "Add CORS policies via Wrangler CLI",
+      "id": "add-cors-policies-via-wrangler-cli"
+    },
+    {
+      "level": "h2",
+      "text": "Response headers",
+      "id": "response-headers"
+    },
+    {
+      "level": "h2",
+      "text": "Example",
+      "id": "example"
+    },
+    {
+      "level": "h2",
+      "text": "Common Issues",
+      "id": "common-issues"
+    },
+    {
+      "level": "h2",
+      "text": "Bucket-Level Operations",
+      "id": "bucket-level-operations"
+    },
+    {
+      "level": "h2",
+      "text": "Notes",
+      "id": "notes"
+    },
+    {
+      "level": "h2",
+      "text": "Get started with event notifications",
+      "id": "get-started-with-event-notifications"
+    },
+    {
+      "level": "h3",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h3",
+      "text": "Enable event notifications via Dashboard",
+      "id": "enable-event-notifications-via-dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Enable event notifications via Wrangler",
+      "id": "enable-event-notifications-via-wrangler"
+    }
+  ],
+  "url": "llms-txt#disable-snapshot-expiration-for-a-catalog",
+  "links": []
+}

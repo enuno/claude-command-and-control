@@ -1,0 +1,8 @@
+{
+  "title": "Add redirect item into the redirect list",
+  "content": "resource \"cloudflare_list_item\" \"bulk_redirect_to_id_item\" {\n  for_each = { for redirect in var.bulk_redirects : \"${redirect.source_url}\" => redirect }\n\naccount_id = var.cloudflare_account_id\n  list_id    = cloudflare_list.bulk_redirect_to_id.id\n\nredirect {\n    source_url  = each.value.source_url\n    target_url  = each.value.target_url\n    status_code = each.value.status_code\n  }\n\ndepends_on = [\n    cloudflare_list.bulk_redirect_to_id\n  ]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#add-redirect-item-into-the-redirect-list",
+  "links": []
+}

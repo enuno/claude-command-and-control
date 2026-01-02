@@ -1,0 +1,8 @@
+{
+  "title": "Anthropic API key",
+  "content": "npx wrangler secret put ANTHROPIC_API_KEY",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#anthropic-api-key",
+  "links": []
+}

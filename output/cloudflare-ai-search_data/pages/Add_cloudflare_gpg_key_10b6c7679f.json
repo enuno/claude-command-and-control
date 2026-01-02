@@ -1,0 +1,8 @@
+{
+  "title": "Add cloudflare gpg key",
+  "content": "curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#add-cloudflare-gpg-key",
+  "links": []
+}

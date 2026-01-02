@@ -1,0 +1,8 @@
+{
+  "title": "ip.src.continent",
+  "content": "`ip.src.continent` String\n\nThe continent code associated with the client IP address.\n\n* `\"AF\"`: Africa\n* `\"AN\"`: Antarctica\n* `\"AS\"`: Asia\n* `\"EU\"`: Europe\n* `\"NA\"`: North America\n* `\"OC\"`: Oceania\n* `\"SA\"`: South America\n* `\"T1\"`: Tor network\n\nThis field has the same value as the `ip.geoip.continent` field, which is deprecated. The `ip.geoip.continent` field is still available for new and existing rules, but you should use the `ip.src.continent` field instead.\n\n*GeoIP is the registered trademark of MaxMind, Inc.*\n\n* Request\n* Geolocation\n\n<page>\n---\ntitle: ip.src.country · Cloudflare Ruleset Engine docs\ndescription: The 2-letter country code in [ISO 3166-1 Alpha\n  2](https://www.iso.org/obp/ui/#search/code/) format.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/ip.src.country/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/ip.src.country/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#ip.src.continent",
+  "links": []
+}

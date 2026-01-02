@@ -1,0 +1,394 @@
+{
+  "title": "local",
+  "content": "#\n#1  inr.ruhep\nsh\nip rule add from 172.64.240.252 lookup viatunicmp\nsh\nip route add default dev vti0 table viatunicmp\nbash\nipsec start\nbash\nSecurity Associations (1 up, 0 connecting):\ncloudflare-ipsec[1]: ESTABLISHED 96 minutes ago, <IPSEC_TUNNEL_IDENTIFIER>.ipsec.cloudflare.com]...162.159.67.88[162.159.67.88]\ncloudflare-ipsec{4}:  INSTALLED, TUNNEL, reqid 1, ESP SPIs: c4e20a95_i c5373d00_o\ncloudflare-ipsec{4}:   0.0.0.0/0 === 0.0.0.0/0\nsh\nsudo tcpdump -i <OUTGOING_INTERFACE> esp and host <TUNNEL_CLOUDFLARE_ENDPOINT_IP>\nsh\nsudo tcpdump -i vti0 host 172.64.240.252\nbash\ncurl --request PUT \\\nhttps://api.cloudflare.com/client/v4/accounts/{account_id}/magic/ipsec_tunnels/{tunnel_id} \\\n--header \"X-Auth-Email: <EMAIL>\" \\\n--header \"X-Auth-Key: <API_KEY>\" \\\n--header \"Content-Type: application/json\" \\\n--data '{\n  \"health_check\": {\n    \"direction\": \"bidirectional\",\n    \"enabled\": true,\n    \"type\": \"request\",\n    \"rate\": \"low\"\n  }\n}'\nbash\n   set vpn ipsec-performance anti-replay window-size 0\n   bash\n   system gre tunnel add name <NAME_OF_YOUR_GRE_TUNNEL> local-gw <WAN_PORT> remote-gw <REMOTE_GATEWAY_IP_ADDRESS> local-ip <LOCAL_IP_ADDRESS> remote-ip <REMOTE_IP_ADDRESS>\n   bash\nsystem gre route add net <IP_ADDRESS> tunnelname <TUNNEL_NAME>\nbash\ncurl --request PUT \\\nhttps://api.cloudflare.com/client/v4/accounts/{account_id}/magic/ipsec_tunnels/{tunnel_id} \\\n--header \"X-Auth-Email: <EMAIL>\" \\\n--header \"X-Auth-Key: <API_KEY>\" \\\n--header \"Content-Type: application/json\" \\\n--data '{\n  \"health_check\": {\n    \"enabled\": true,\n    \"target\": \"172.64.240.252\",\n    \"type\": \"request\",\n    \"rate\": \"mid\"\n  }\n}'\nsh\ntcpdump -nn proto 1\nsh\ntcpdump: verbose output suppressed, use -v or -vv for full protocol decode\nlistening on any, link-type LINUX_SLL (Linux cooked v1), capture size 262144 bytes\n\n13:09:55.500453 xfrm1, IN: IP 172.70.51.31 > 172.64.240.252: ICMP echo request, id 33504, seq 0, length 64\n13:09:55.500480 xfrm1, OUT: IP 172.64.240.252 > 172.70.51.31: ICMP echo reply, id 33504, seq 0, length 64\n\n13:09:55.504669 xfrm1, IN: IP 172.71.29.66 > 172.64.240.252: ICMP echo request, id 60828, seq 0, length 64\n13:09:55.504695 xfrm1, OUT: IP 172.64.240.252 > 172.71.29.66: ICMP echo reply, id 60828, seq 0, length 64\nbash\nset interfaces vti <name of the vti interface> address\n'<PRIVATE_IP_ADDRESS_OF_IPSEC_TUNNEL_INTERFACE>'\nset vpn ipsec esp-group <NAME_OF_ESP_GROUP> compression 'disable'\nset vpn ipsec esp-group <NAME_OF_ESP_GROUP> lifetime '86400'\nset vpn ipsec esp-group <NAME_OF_ESP_GROUP> mode 'tunnel'\nset vpn ipsec esp-group <NAME_OF_ESP_GROUP> pfs 'enable'\nset vpn ipsec esp-group <NAME_OF_ESP_GROUP> proposal 1 encryption 'aes256gcm128'\nset vpn ipsec esp-group <NAME_OF_ESP_GROUP> proposal 1 hash 'sha512'\nset vpn ipsec ike-group <NAME_OF_IKE_GROUP> close-action 'none'\nset vpn ipsec ike-group <NAME_OF_IKE_GROUP> dead-peer-detection action 'restart'\nset vpn ipsec ike-group <NAME_OF_IKE_GROUP> dead-peer-detection interval '30'\nset vpn ipsec ike-group <NAME_OF_IKE_GROUP> dead-peer-detection timeout '120'\nset vpn ipsec ike-group <NAME_OF_IKE_GROUP> ikev2-reauth 'no'\nset vpn ipsec ike-group <NAME_OF_IKE_GROUP> key-exchange 'ikev2'\nset vpn ipsec ike-group <NAME_OF_IKE_GROUP> lifetime '28800'\nset vpn ipsec ike-group <NAME_OF_IKE_GROUP> mobike 'disable'\nset vpn ipsec ike-group <NAME_OF_IKE_GROUP> proposal 1 dh-group '20'\nset vpn ipsec ike-group <NAME_OF_IKE_GROUP> proposal 1 encryption 'aes256gcm128'\nset vpn ipsec ike-group <NAME_OF_IKE_GROUP> proposal 1 hash 'sha512'\nset vpn ipsec ipsec-interfaces interface '<UPLINK_INTF_TO_INTERNET/WAN>'\nset vpn ipsec logging log-level '2'\nset vpn ipsec options disable-route-autoinstall\nset vpn ipsec site-to-site peer <CF_ANYCAST_IP> authentication id '<IPSEC_ID_STRING_IN_RESULT_OF_PSK_KEY-GEN_VIA_CF_API>'\nset vpn ipsec site-to-site peer <CF_ANYCAST_IP> authentication pre-shared-secret '<PSK_KEY_STRING_GENERATED_VIA_CF_API>'\nset vpn ipsec site-to-site peer <CF_ANYCAST_IP> authentication remote-id '<CF_ANYCAST_IP>'\nset vpn ipsec site-to-site peer <CF_ANYCAST_IP> connection-type 'initiate'\nset vpn ipsec site-to-site peer <CF_ANYCAST_IP> ike-group '<NAME_OF_IKE_GROUP>'\nset vpn ipsec site-to-site peer <CF_ANYCAST_IP> ikev2-reauth 'no'\nset vpn ipsec site-to-site peer <CF_ANYCAST_IP> local-address '<IP_ADDR_OF_UPLINK_INTF_TO_INTERNET/WAN>'\nset vpn ipsec site-to-site peer <CF_ANYCAST_IP> vti bind '<NAME_OF_VTI_INTERFACE>'\nset vpn ipsec site-to-site peer <CF_ANYCAST_IP> vti esp-group '<NAME_OF_ESP_GROUP>'\nbash\n$logFile = \"${env:TEMP}/fleet-install-software.log\"\n\n$installProcess = Start-Process msiexec.exe `\n  -ArgumentList \"/quiet /norestart ORGANIZATION=your-team-name SUPPORT_URL=https://example.com /lv ${logFile} /i `\"${env:INSTALLER_PATH}`\"\" `\n  -PassThru -Verb RunAs -Wait\n\nGet-Content $logFile -Tail 500\n\nExit $installProcess.ExitCode\n\n} catch {\n  Write-Host \"Error: $_\"\n  Exit 1\n}\nsh\n#!/bin/sh",
+  "code_samples": [
+    {
+      "code": "1. Open the console and add a rule to match the routing table just created. This rule instructs the system to use routing table `viatunicmp` if the packet's source address is `172.64.240.252`:",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Add a route to the newly created routing table `viatunicmp`. This is the default route via the interface `vti0` in the `viatunicmp` table.",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Now, you can `start` IPsec. You can also `stop`, `restart` and show the `status` for the IPsec connection:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## 5. Check connection status\n\nAfter you finish configuring StrongSwan with Magic WAN, you can use tcpdump to investigate the status of health checks originated from Cloudflare.",
+      "language": "unknown"
+    },
+    {
+      "code": "In this example, the outgoing Internet interface shows that the IPsec encrypted packets (ESP) from Cloudflare's health check probes (both the request and response) are going through the IPsec tunnel we configured.\n\n![tcpdump shows the IPsec encrypted packets from Cloudflare's health probbes](https://developers.cloudflare.com/_astro/ipsec.CuiOceRh_1V6PpQ.webp)\n\nYou can also run tcpdump on `vti0` to check the decrypted packets.",
+      "language": "unknown"
+    },
+    {
+      "code": "![If you run tcpdump on vti0 you can check for decrypted packets](https://developers.cloudflare.com/_astro/tcpdump.CaDJay4I_22Gq1n.webp)\n\n</page>\n\n<page>\n---\ntitle: SonicWall · Cloudflare One docs\ndescription: \"This tutorial shows you how to use Magic WAN with the following\n  versions of the SonicWall appliances:\"\nlastUpdated: 2025-10-31T13:37:27.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/third-party/sonicwall/\n  md: https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/third-party/sonicwall/index.md\n---\n\nThis tutorial shows you how to use Magic WAN with the following versions of the SonicWall appliances:\n\n* **Hardware tested**:\n\n  * SonicWall NSv 470\n  * SonicWal 3700\n\n* **Software versions tested**:\n  * SonicOS 7.0.1\n\nYou can connect your SonicWall appliance through [IPsec tunnels](https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/how-to/configure-tunnel-endpoints/) to Magic WAN. Generic Routing Encapsulation (GRE) is not supported on SonicWall.\n\n## Topology\n\n![Topology diagram showing how to connect SonicWall appliances to Magic WAN](https://developers.cloudflare.com/_astro/topology.Qe7r1Gcs_Z2cR4HM.webp)\n\nThe following instructions show how to setup an IPsec connection on your SonicWall device. We will use the IP ranges from the above topology example to create the connections needed. Settings not explicitly mentioned can be left with their default values.\n\n## 1. Create an IPsec tunnel on your Cloudflare account\n\n1. Start by [creating your IPsec tunnels](https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/how-to/configure-tunnel-endpoints/#add-tunnels) on Cloudflare. Name and describe the tunnels as needed, and add the following settings:\n\n   * **Interface address**: Enter the internal tunnel IP on the Cloudflare side of the IPsec tunnel. In this example, it is `10.200.1.0/31`.\n   * **Customer endpoint**: Enter the WAN IP address of your SonicWall device. In our example, this is `198.51.100.2`.\n   * **Cloudflare endpoint**: Enter the IP address provided by Cloudflare. In our example, this is `1.2.3.4`.\n   * **Pre-shared key**: Select **Use my own pre-shared key** and paste a secure key of your own.\n\n2. Select **Add tunnels** when you are finished.\n\n3. After you create your tunnel, Cloudflare dashboard will load a list of tunnels set up for your account. Select the arrow to expand the tunnels you have just created, and check the following settings:\n\n   * **Customer endpoint**: Refers to the SonicWall WAN IP that the VPN policy is bound to (in red).\n   * **Cloudflare endpoint**: Refers to the anycast IP provided by Cloudflare (in blue).\n   * **FQDN ID**: The ID used in the VPN policy for the SonicWall's Local IKE ID. Copy this ID and save it. You will need it when configuring the tunnel on your SonicWall (in green).\n\n   ![An example of what your IPsec tunnel should look like](https://developers.cloudflare.com/_astro/step3.BQqYLGGy_Z1omATt.webp)\n\nNote\n\nThe interface address on the Cloudflare side of the tunnel is `10.200.1.0/31`. You will need to use `10.200.1.1/31` on the SonicWall side of the tunnel.\n\n## 2. Create static routes on Cloudflare dashboard\n\nStatic routes are required for any networks that will be reached via the IPsec tunnel. In our example, there are two networks: `172.31.3.0/24` and the tunnel network `10.200.1.0/31`.\n\n1. [Create your static routes](https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/how-to/configure-routes/#create-a-static-route). Name and describe them as needed, and add the following settings:\n\n   * **First tunnel**: Following our example, add `10.200.1.0/31` as the **Prefix** and `10.200.1.1` for the **Tunnel/Next hop**.\n   * **Second tunnel**: Following our example, add `172.31.3.0/24` as the **Prefix** and `10.200.1.1` for the **Tunnel/Next hop**.\n\n2. Select **Add routes** when you are finished.\n\n## 3. Add a VPN configuration in SonicWall\n\n1. Go to **Network** > **IPsec VPN** > **Rules and Settings**.\n\n2. Select **Add**.\n\n3. In **General** > **Security Policy** group, add the following settings:\n\n   * **Authentication Method**: *IKE Using Preshared Secret*.\n   * **IPsec Primary Gateway Name or Address**: Enter Cloudflare's anycast IP address for the primary gateway (in blue).\n\n4. In the **IKE Authentication** group, add the following settings:\n\n   * **Shared secret**: Paste the pre-shared key you use to create the IPsec tunnel in step 1 (in purple).\n   * **Local IKE ID**: Select *Domain name* from the dropdown menu, and paste here the **FQDN ID** you saved from step 1, after creating the IPsec tunnel (in green).\n   * **Peer IKE IDE**: Select *IPv4* Address from the dropdown menu, and enter the Cloudflare anycast IP address (in blue).\n\n![Configure a VPN policy on your SonicWall device](https://developers.cloudflare.com/_astro/3-vpn-config.D7Z_hEIs_2mY6og.webp)\n\n1. Select **Proposals**. VPN Policy is somewhat flexible. Adjust these settings to match your organization's preferred security policy. As an example, you can use the settings in the examples below.\n\n2. In the **IKE (Phase 1) Proposal** group, select the following settings:\n\n   * **Exchange**: *IKEv2 Mode*\n   * **DH Group**: *Group 20*\n   * **Encryption**: *AES-256*\n   * **Authentication**: *SHA256*\n   * **Life Time (seconds)**: `86400`\n\n3. In the **IPsec (Phase 2) Proposal** group, add the following settings:\n\n   * **Protocol**: *ESP*\n   * **Encryption**: *AESGCM16-256*\n   * **Authentication**: *None*\n   * **Enable Perfect Forward Secrecy**: Enabled\n   * **DH Group**: *Group 20*\n   * **Life Time (seconds)**: `28800`\n\n4. Select **Advanced**.\n\n5. Enable **Disable IPsec Anti-Replay**.\n\n6. In **VPN Policy bound to** select your WAN interface from the dropdown menu, to bind it to your VPN.\n\n7. Select **Save**.\n\n![Enable anti-replay on your SonicWall device](https://developers.cloudflare.com/_astro/5-anti-replay.Dth4Gt_P_ZwYCWu.webp)\n\n## 4. Add a VPN tunnel interface\n\nSonicOS requires a VPN tunnel interface to route traffic via Magic WAN. When creating the interface, use the prefix `10.200.1.1/31`. This matches with the Cloudflare side for this tunnel, which is `10.200.1.0`.\n\nNote\n\nYou will need to use a different IP pair for each tunnel/site.\n\n1. Go to **Network** > **System** > **Interfaces**.\n2. Select **Add interface** > **VPN Tunnel Interface**.\n3. For IP Address, use `10.200.1.1`.\n4. Enable **Ping**. This is required so the interface can be pinged for debugging and Magic WAN health checks.\n\n![Enable ping to that your interface can be pinged for debugging and Magic WAN health checks](https://developers.cloudflare.com/_astro/6-vpn-ping.C-1HHDpJ_Z18xDRn.webp)\n\n1. Select **Advanced**.\n2. Enable the **Enable Asymmetric Route Support** option. This is required for the Magic WAN tunnel health check.\n\n![Enable Asymmetric Route Support. It is required for Magic WAN health checks](https://developers.cloudflare.com/_astro/6-vpn-assymetric.z4MOIOv3_fuABl.webp)\n\n1. Select **OK**.\n\n## 5. Add address object(s)\n\nAddress objects are necessary for route policies. In our example, we have one other site that will be reached via Magic WAN. First, you need to create address objects for each network. Then, you need to create an address group that contains all the remote networks. This address group will be used in the next step to create the correct route policies.\n\nTo add an address object:\n\n1. Select **Object** > **Match Objects** > **Addresses**.\n2. Select **Address Objects** > **Add**.\n3. Enter the information for your address object - refer to the topology image for the examples this tutorial is using. Since the addresses are in the VPN zone, set the **Zone Assignment** for the object to *VPN*.\n4. Select **Save**. The window will stay on to facilitate multiple entries. Select **X** to close it.\n\n![Enter the appropriate settings for you object](https://developers.cloudflare.com/_astro/7-address-objects-settings.Dym3UpvD_bLprj.webp)\n\n1. Select **Address Groups** > **Add** to add a new address group.\n2. Enter a **Name** for your address group.\n3. Select the individual network objects you have created on the left menu, and add them to the group by selecting the right-facing arrow in the middle column.\n4. Select **Save**.\n\n![Copy the individual network objects and add them to your group](https://developers.cloudflare.com/_astro/7-add-objects-group.CYauQpR7_Z4W5mb.webp)\n\n## 6. Set up routing\n\nAdd a route using the address object or group just created as the destination.\n\n1. Select **Policy** > **Rules and Policies** > **Routing Rules**.\n2. Select **Add** to add your route policy.\n3. The **Next Hop** should be the VPN tunnel interface that was previously created in the interface panel.\n\n## 7. Add access rule for health checks\n\nAn additional access rule is required for Magic WAN health checks to work properly. This will enable the WAN IP to receive ICMP pings via the tunnel, and return them over the WAN.\n\n1. Select **Policy** > **Rules and Policies**.\n2. Select **Access Rules** > **Add**.\n3. Enter a descriptive name for your policy.\n4. In **Source / Destination** > **Destination > Port/Services**, select *ICMP* from the dropdown.\n5. Select **Optional Settings**.\n6. In **Others**, enable **Allow Management traffic**.\n\n## 8. Setup health checks\n\nYou have to [configure Magic WAN health checks](https://developers.cloudflare.com/magic-wan/configuration/manually/how-to/configure-tunnel-endpoints/#add-tunnels) correctly. Here is an example of how to set up health checks:",
+      "language": "unknown"
+    },
+    {
+      "code": "Health checks might take some time to stabilize after the configuration is changed.\n\n## 9. Verify tunnel status on Cloudflare dashboard\n\nThe Cloudflare dashboard monitors the health of all anycast tunnels on your account that route traffic from Cloudflare to your origin network. Refer to [Check tunnel health in the dashboard](https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/common-settings/check-tunnel-health-dashboard/) for more information.\n\n</page>\n\n<page>\n---\ntitle: Sophos Firewall · Cloudflare One docs\ndescription: \"This tutorial shows you how to use Magic WAN with the following\n  versions of the Sophos Firewall:\"\nlastUpdated: 2025-10-31T13:37:27.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/third-party/sophos-firewall/\n  md: https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/third-party/sophos-firewall/index.md\n---\n\nThis tutorial shows you how to use Magic WAN with the following versions of the Sophos Firewall:\n\n* **Sophos form factor tested:**\n\n  * Sophos Firewall XGS and XG series hardware\n  * Sophos Firewall virtual appliance on VMware\n\n* **Sophos software versions tested:**\n\n  * SFOS Version 19.0 MR2-Build 472\n  * SFOS Version 19.5.1 MR1-Build 278\n\nYou can connect through[ Generic Routing Encapsulation (GRE) or IPsec tunnels](https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/how-to/configure-tunnel-endpoints/) to Magic WAN.\n\n## IPsec connection\n\nThe following instructions show how to setup an IPsec connection on your Sophos Firewall device. Settings not explicitly mentioned can be left with their default values.\n\n### 1. Add an IPsec profile\n\n1. Go to **System** > **Profiles**.\n\n2. In **IPsec profiles**, select **Add**.\n\n3. In the **General settings** group, make sure you have the following settings:\n\n   * **Name**: Give your profile a descriptive name.\n   * **Key exchange**: **IKEv2**\n   * **Authentication mode**: **Main mode**\n\n4. In the **Phase 1** group, make sure you have the following settings:\n\n   * **DH group (key group)**: *20*\n   * **Encryption**: *AES256*\n   * **Authentication**: *SHA2 256*\n\n5. In the **Phase 2** group, select the following:\n\n   * **PFS group (DH group)**: *Same as phase-1*\n   * **Key life**: *28800*\n   * **Encryption**: *AES256*\n   * **Authentication**: *SHA2 256*\n\n6. Enable **Dead Peer Detection**.\n\n7. In **When peer unreachable**, select *Re-initiate*.\n\n8. Select **Save**.\n\n### 2. Create IPsec connection tunnel\n\nThe next step involves configuring a site-to-site IPsec VPN connection on your Sophos Firewall device.\n\n1. Go to **Configure** > **Site-to-site VPN**.\n\n2. In **IPsec**, select **Add**.\n\n3. In the **General settings** group, make sure you have the following settings:\n\n   * **Name**: Give your site-to-site VPN a descriptive name.\n   * **Connection type**: *Tunnel interface*\n   * **Gateway type**: *Initiate the connection*\n\n4. In the **Encryption** group, make sure you have the following settings:\n   * **Authentication type**: **Preshared key**\n\n5. In **Gateway settings**, make sure you have the following settings:\n\n   * **Gateway address**: Enter your Cloudflare anycast IP address provided by Cloudflare.\n   * **Local ID type**: Add the [IKE ID](https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/reference/gre-ipsec-tunnels/#supported-ike-id-formats) provided by Cloudflare.\n\n![Configure an IPsec tunnel.](https://developers.cloudflare.com/_astro/2-ipsec-tunnel.EuRwmMGh_wIMKi.webp)\n\nAfter setting up your IPsec tunnel, it will show up on the IPsec connections list with an **Active** status.\n\n![The IPsec tunnel should show up on the IPsec connections list.](https://developers.cloudflare.com/_astro/2b-ipsec-tunnel.DcLZdCzX_2gDzJX.webp)\n\n### 3. Assign the XFRM interface address\n\nYou must use an interface address from the `/31` subnet required to [configure tunnel endpoints](https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/how-to/configure-tunnel-endpoints/) on Magic WAN.\n\n1. Go to **Configure** > **Network**.\n2. In **Interfaces**, select the corresponding interface to the IPsec tunnel you created in [step 2](#2-create-ipsec-connection-tunnel).\n3. Edit the interface to assign an address from the `/31` subnet required to [configure tunnel endpoints](https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/how-to/configure-tunnel-endpoints/). When you are finished, it should look similar to the following:\n\n![Configure a XFRM interface.](https://developers.cloudflare.com/_astro/3-xfrm-interface.Dks8X1E8_ZPYrQT.webp)\n\n### 4. Add a firewall rule\n\n1. Go to **Protect** > **Rules and policies**.\n2. In **Firewall rules**, create a firewall rule with the criteria and security policies from your company that allows traffic to flow between Sophos and Magic WAN.\n\n![Create a firewall rule with the criteria and security policies from your company](https://developers.cloudflare.com/_astro/4-firewall-rule.CfVt6IDY_Z1zkMRq.webp)\n\n### 5. Disable IPsec anti-replay\n\nYou will have to disable IPsec Anti-Replay on your Sophos Firewall. Changing the anti-replay settings restarts the IPsec service, which causes tunnel-flap for all IPsec tunnels. This will also disable IPsec anti-replay protection for all VPN connections globally. Plan these changes accordingly.\n\nBelow are instruction on how to achieve this on SFOS version 19 and SFOS version 19.5:\n\n#### SFOS 19.0 MR2-Build 472 or 19.5 MR1-Build278 or later versions:\n\n1. Sign in to the CLI.\n\n2. Enter **4** to choose **Device console**, and enter the following command:",
+      "language": "unknown"
+    },
+    {
+      "code": "![Access the CLI to disable anti-replay](https://developers.cloudflare.com/_astro/5-sfos-19.CmXNwDG8_Z2sQ13W.webp)\n\n#### Older SFOS versions\n\nContact Sophos support.\n\n## GRE connection\n\n### 1. Configure a GRE tunnel between SFOS and Cloudflare\n\nStart by configuring a GRE tunnel between SFOS and the Cloudflare anycast IP address.\n\n1. Sign in to the CLI.\n\n2. Enter **4** to choose **Device console**, and enter the following command:",
+      "language": "unknown"
+    },
+    {
+      "code": "![Access the CLI to configure a GRE tunnel](https://developers.cloudflare.com/_astro/1-gre-connection.BwxtP6sM_Z12PvdG.webp)\n\n   For more details, refer to the [Sophos Firewall knowledge base](https://support.sophos.com/support/s/article/KB-000035813?language=en_US).\n\n### 2. Add a GRE or SD-WAN route to redirect traffic through the GRE tunnel\n\nThe detailed information on how to add a GRE or SD-WAN route to redirect traffic through the GRE tunnel, is in the next section ([Traffic redirection mechanism on Sophos Firewall](#traffic-redirection-mechanism-on-sophos-firewall)).\n\n### 3. Add a firewall rule for LAN/DMZ to VPN\n\nCreate a firewall rule with the criteria and security policies from your company that allows traffic to flow between Sophos and Magic WAN. This firewall rule should include the required networks and services.\n\n1. Go to **Protect** > **Rules and policies**.\n2. In **Firewall rules**, select **IPv4** > **Add firewall rule**.\n\n![Create a firewall rule with the criteria and security policies from your company](https://developers.cloudflare.com/_astro/4-firewall-rule.CfVt6IDY_Z1zkMRq.webp)\n\n## Traffic redirection mechanism on Sophos Firewall\n\nTo redirect traffic, you can add a static or an SD-WAN route.\n\n### IPsec\n\n#### Static route\n\nGo to **Configure** > **Routing** > **Static routes** to add an XFRM interface-based route. The interface will be automatically created when you set up a tunnel interface based on IPsec (such as the Cloudflare\\_MWAN example from above).\n\n![Go to static routes to add an XFRM interface-based route](https://developers.cloudflare.com/_astro/static-route.Cv8cjbPi_blRdV.webp)\n\n#### SD-WAN route\n\n1. Go to **Configure** > **Routing** > **Gateways** to create a custom gateway on the XFRM interface. The interface will be automatically created when you set up a tunnel interface based on IPsec (such as the Cloudflare\\_MWAN example from above).\n\n![Go to Gateways to add an XFRM interface-based route](https://developers.cloudflare.com/_astro/1-sd-wan-gateway.B-zYNWQF_Z2x4Oc6.webp)\n\n1. In **Configure** > **Routing** > **SD-WAN routes**, select **Add** to add the desired networks and services in the route to redirect traffic to Cloudflare. Enter a descriptive name for your connection, and the IP addresses you set up for your IPsec tunnels in **Incoming interface** and **Source networks**. Do not forget to choose the correct **Primary gateway** option.\n\n![Go to SD-WAN to add the desired networks and services in the route.](https://developers.cloudflare.com/_astro/2-sd-wan-routes.ZK7MHrV6_ZEhQ4a.webp)\n\n### GRE\n\nAdd a GRE or SD-WAN route or both.\n\n#### GRE route\n\nAdd the route on the CLI.\n\n1. Sign in to the CLI.\n2. Enter **4** to choose **Device console**, and enter the following command to create the tunnel:",
+      "language": "unknown"
+    },
+    {
+      "code": "![Add the route on the CLI.](https://developers.cloudflare.com/_astro/gre-route-cli.eRcqLJze_1WI8vl.webp)\n\n#### SD-WAN route\n\n1. Add a custom gateway on GRE with the peer IP address (from the `/31` subnet you chose earlier) as the Gateway IP address, and disable **Health check**.\n\n![Add a custom gateway on GRE.](https://developers.cloudflare.com/_astro/sd-wan-1-gre.CApTTOXu_Z2uMYKP.webp)\n\n1. Add an SD-WAN route with the desired networks and services in the route to redirect traffic to Cloudflare.\n\n![Add an SD-WAN route.](https://developers.cloudflare.com/_astro/2-sd-wan-routes.ZK7MHrV6_ZEhQ4a.webp)\n\n## Verify tunnel status on Cloudflare dashboard\n\nThe Cloudflare dashboard monitors the health of all anycast tunnels on your account that route traffic from Cloudflare to your origin network. Refer to [Check tunnel health in the dashboard](https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/common-settings/check-tunnel-health-dashboard/) for more information.\n\n### Make Cloudflare health checks work\n\n1. The ICMP probe packet from Cloudflare must be the type ICMP request, with anycast source IP. In the following example, we have used `172.64.240.252` as a target example:",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Go to **Configure** > **Network** > **Interfaces** > **Add alias**. Add the IP address provided by Cloudflare for the ICMP probe traffic. This is needed to prevent Sophos firewall from dropping them as spoof packets. This is not the same IP used to create VPN. This is the special IP address for probe traffic only.\n\n![Add the IP address provided by Cloudflare to prevent the probe from being dropped by the firewall.](https://developers.cloudflare.com/_astro/2-icmp-probe-firewall.BD1XaeDb_ZpN0sB.webp)\n\n1. ICMP reply from SFOS should go back via the same tunnel on which the probe packets are received. You will need to create an additional SD-WAN policy route.\n\n![Configure an SD-WAN route so the ICMP reply goes back to Cloudflare via the same tunnel.](https://developers.cloudflare.com/_astro/3-icmp-probe-reply.CX60fYHN_Z9vF1H.webp)\n\nPacket flow will look like the following:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## Verify tunnel status on Sophos Firewall dashboard\n\n### IPsec\n\nWhen the tunnel is working, its **Status** will be green.\n\n![If the tunnel is working, it will show up with a green status.](https://developers.cloudflare.com/_astro/2b-ipsec-tunnel.DcLZdCzX_2gDzJX.webp)\n\nThe corresponding XFRM interface will also show a **Connected** status.\n\n![The XFRM interface will also show a connected status.](https://developers.cloudflare.com/_astro/1-sd-wan-gateway.B-zYNWQF_Z2x4Oc6.webp)\n\n### GRE\n\nAccess the CLI and type `system gre tunnel show` to check the status of a GRE tunnel. When the tunnel is working, its Status will show up as **Enabled**.\n\n![The GRE tunnel will show a status of Enabled when working.](https://developers.cloudflare.com/_astro/gre-status-enabled.CkTEu5BC_ZlXB2y.webp) ![The GRE tunnel will show a status of Enabled when working.](https://developers.cloudflare.com/_astro/gre-status-enabled-b.D8-vH0Du_vfstx.webp)\n\n## Troubleshooting\n\nIf a tunnel shows a connected status at both ends, but is not established:\n\n* Check if the IPsec profile configuration is correct.\n* Make sure the corresponding tunnel interfaces are up.\n* Make sure routing configuration and route precedence are correctly set on SFOS.\n* Make sure a static back route is added on Cloudflare.\n* Firewall rules for specific zones and host or service must be added in SFOS. GRE and IPsec belong to the VPN zone.\n* Perform `tcpdump` to check if packets are going through the VPN or GRE tunnel as expected.\n* Perform a packet capture on Cloudflare to see if traffic is reaching the Cloudflare platform.\n\n</page>\n\n<page>\n---\ntitle: Ubiquiti · Cloudflare One docs\ndescription: Connect a Ubiquiti UniFi Gateway to Cloudflare's network using\n  Magic WAN. These steps use the Cloud Gateway Max (UCG-Max) but work with other\n  UniFi gateways supporting route-based IPsec VPNs, like the Dream Machine\n  series.\nlastUpdated: 2025-11-19T12:29:18.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/third-party/ubiquiti/\n  md: https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/third-party/ubiquiti/index.md\n---\n\nConnect a Ubiquiti UniFi Gateway to Cloudflare's network using Magic WAN. These steps use the Cloud Gateway Max (UCG-Max) but work with other UniFi gateways supporting route-based IPsec VPNs, like the Dream Machine series.\n\n## Prerequisites\n\n* Cloudflare account with Magic WAN enabled (contact your account team)\n\n* UniFi Cloud Gateway or Dream Machine with IPsec support\n\n* UniFi Network Application (self-hosted or cloud)\n\n* Static public IP from your ISP\n\n* Admin access to both Cloudflare and UniFi\n\n* Gather a **Magic Anycast IPv4** address from the **Leased IPs** section in the dashboard\n\n  * [Go to **Leased IPs**](https://dash.cloudflare.com/?to=/:account/ip-addresses/leased-ips)\n  * Contact your account team if you do not see any IPs listed.\n\n## 1. Configure Magic WAN\n\n1. Log in to [Cloudflare One](https://one.dash.cloudflare.com/), and go to **Networks**.\n2. Go to **Connectors** > **WAN Tunnels**, and select **Create**.\n\n1) Select **IPsec tunnel** > **Next**, and fill in the following settings:\n\n   * **Name**: `unifi-gw-primary`\n\n   * **IPv4 Interface Address**: `10.252.2.28/31` or refer to the [Tunnel endpoints documentation](https://developers.cloudflare.com/magic-wan/configuration/manually/how-to/configure-tunnel-endpoints/)\n\n   * **Customer Endpoint**: This should be your UniFi Gateway's WAN IP (for example, `203.0.113.10`)\n\n   * **Cloudflare Endpoint**: This should be one of the IPv4 addresses gathered from Leased IPs.\n\n   * Under **Tunnel Health checks**, select:\n\n     * **Health check rate**: Set to desired level\n     * **Health check type**: *Request*\n     * **Health check direction**: *Bidirectional*\n     * **Health check target**: *Default*\n\n   * Under **Pre-shared key**:\n     * Select **Add pre-shared key later**. This key will be given during the UniFi site-to-site VPN configuration.\n\n## 2. Configure site-to-site VPN on UniFi\n\n1. In UniFi Network, go to **Settings** > **VPN** > **Site-to-Site VPN**.\n\n2. Select **Create New**.\n\n3. Configure the following settings:\n\n   * **VPN Type:** `IPsec`.\n   * **Name:** `Cloudflare-Magic-WAN`.\n   * **Pre-shared key:** Copy this key. You need it for the Magic WAN tunnel.\n   * **Local IP:** Select the WAN interface (for example, `WAN1`).\n   * **Remote IP:** Enter the Cloudflare endpoint IP from [Step 1](#1-configure-magic-wan).\n   * **VPN Method:** Route Based.\n   * **Tunnel IP:** `10.252.2.29/31` or refer to the [Tunnel endpoints documentation](https://developers.cloudflare.com/magic-wan/configuration/manually/how-to/configure-tunnel-endpoints/).\n   * **Remote Networks:** Inside Cloudflare tunnel address (for example, `10.252.2.28/31`) and other remote subnets to access through Magic WAN.\n\n4. Set Advanced settings:\n\n   * **Key Exchange Version**: IKEv2.\n   * **IKE Encryption**: AES-256.\n   * **IKE Hash**: SHA256.\n   * **IKE DH Group**: 14.\n   * **IKE Lifetime**: 28800.\n   * **ESP Encryption**: AES-256.\n   * **ESP Hash**: SHA256.\n   * **ESP DH Group**: 14.\n   * **ESP Lifetime**: 28800.\n   * **PFS**: Enabled.\n   * **Local Authentication ID**: Auto.\n   * **Remote Authentication ID**: Uncheck **Auto**, and enter the Cloudflare Endpoint IP from [Step 1](#1-configure-magic-wan).\n   * **MTU**: 1436.\n\n5. Select **Apply**\n\n## 3. Add pre-shared key to Cloudflare\n\n1. Log in to [Cloudflare One](https://one.dash.cloudflare.com/), and go to **Networks**.\n2. In **WAN tunnels**, find the IPsec tunnel you have just created.\n\n1) Select your tunnel and then **Edit**.\n2) Paste the preshared key from [Step 2](#2-configure-site-to-site-vpn-on-unifi).\n3) Select **Save**.\n\n## 4. Configure Routes\n\n1. Log in to [Cloudflare One](https://one.dash.cloudflare.com/), and go to **Networks**.\n2. Go to **Routes** > **WAN routes** > **Create**.\n\n1) Enter the following settings:\n\n   * **Prefix**: Your local network (for example, `192.168.1.0/24`).\n   * **Tunnel/Next hop**: Select your tunnel.\n   * **Priority**: `100`.\n\n2) Select **Add routes** to add your static route.\n\n## Verify connections\n\nTo check your connections are working correctly, wait a few minutes, and then access both Cloudflare and UniFi to verify the tunnel's status:\n\nCloudflare\n\n1. Log in to [Cloudflare One](https://one.dash.cloudflare.com/), and go to **Insights**.\n2. Go to **Network visibility** > **WAN connector health**.\n3. Find the tunnel you have just created and make sure its status shows **Up**. Refer to [Check tunnel health in the dashboard](https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/common-settings/check-tunnel-health-dashboard/) for more information.\n\nUniFi\n\nGo to **Settings** > **VPN**, and make sure the status is **Connected**.\n\n## Troubleshooting\n\n**Tunnel down:**\n\n* Verify Peer IP, pre-shared key, and IPsec settings match on both sides\n* Check that the ISP is not blocking UDP ports `500`/`4500`\n\n**Traffic not routing:**\n\n* Verify Remote Subnets setting in UniFi VPN configuration\n* Check firewall rules are not blocking VPN traffic\n\n**Health check fails:**\n\n* Allow ICMP from Cloudflare to the customer-side tunnel IP\n* Target should be the `/31` interface IP, not your LAN gateway\n\n## Policy-based routing\n\nTo route only specific devices through Cloudflare (UniFi Network Application):\n\n1. Remove necessary routes from Remote Subnets in your VPN configuration.\n\n2. Go to **Settings** > **Policy Table**.\n\n3. Under **Policy Engine** select **Create New Policy** with the following settings:\n\n   * Select `Route`.\n   * **Name**: Provide a name for the policy.\n   * **Type**: *Policy-Based*.\n   * **Interface/VPN Tunnel**: Select the VPN Tunnel (for example, `Cloudflare-Magic-WAN`).\n   * **Kill Switch**: *Enabled* (recommended).\n   * **Source**: Select `Device/Network` and then choose the Device(s) or Network(s).\n   * **Destination**: *Any*.\n   * **Interface**: Your VPN tunnel.\n\n## Next Steps\n\n* Use [Magic Firewall](https://developers.cloudflare.com/magic-firewall/) for network policies.\n* Configure a second tunnel for redundancy.\n* Monitor traffic in the Magic WAN dashboard.\n\n***\n\nYou are now routing traffic through Cloudflare's network using Magic WAN.\n\n</page>\n\n<page>\n---\ntitle: Cisco SD-WAN · Cloudflare One docs\ndescription: Cloudflare partners with Cisco's SD-WAN solution to provide users\n  with an integrated SASE solution. The Cisco SD-WAN appliances (physical and\n  virtual) manage subnets associated with branch offices and cloud instances.\n  Anycast Tunnels are set up between these SD-WAN edge devices and Cloudflare to\n  securely route Internet-bound traffic. This tutorial describes how to\n  configure the Cisco Catalyst 8000 Edge Platforms (physical or virtual) in the\n  SD-WAN mode for north-south (Internet-bound) use cases.\nlastUpdated: 2025-10-31T13:37:27.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/third-party/viptela/\n  md: https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/third-party/viptela/index.md\n---\n\nCloudflare partners with Cisco's SD-WAN solution to provide users with an integrated SASE solution. The Cisco SD-WAN appliances (physical and virtual) manage subnets associated with branch offices and cloud instances. Anycast Tunnels are set up between these SD-WAN edge devices and Cloudflare to securely route Internet-bound traffic. This tutorial describes how to configure the Cisco Catalyst 8000 Edge Platforms (physical or virtual) in the SD-WAN mode for north-south (Internet-bound) use cases.\n\n## Prerequisites\n\nBefore setting up a connection between Cisco SD-WAN and Cloudflare, you must have:\n\n* Purchased Magic WAN and Secure Web Gateway.\n* Cloudflare provision Magic WAN and Secure Web Gateway.\n* Received two Cloudflare tunnel endpoints (anycast IP address) assigned to Magic WAN.\n* Cisco SD-WAN appliances (physical or virtual). This ensures specific Internet-bound traffic from the sites' private networks is routed over the anycast GRE tunnels to Secure Web Gateway to enforce a user's specific web access policies.\n* A static IP pair to use with the tunnel endpoints. The static IPs should be `/31` addresses separate from the IPs used in the subnet deployment.\n* Release 20.6 Controllers and vEdge Device Builds. You should also pair them with devices that are on at least version Cisco IOS XE SD-WAN 17.6. Refer to [Cisco documentation](https://www.cisco.com/c/en/us/support/docs/routers/sd-wan/215676-cisco-tac-and-bu-recommended-sd-wan-soft.html) to learn more Cisco softweare versions.\n\nNote\n\nThe SASE integration between Cisco SD-WAN and Cloudflare SSE was validated with Cisco SD-WAN 20.6.2 version with Catalyst 8kv router. For connectivity, we used GRE tunnels.\n\n## 1. Create a SIG template on Cisco vManage\n\nCisco vManage is Cisco's SD-WAN management tool that is used to manage all the SD-WAN appliances in branch offices.\n\nFor this example scenario, a generic template for `SIG-Branch` was created.\n\n![Traffic flow diagram for GRE](https://developers.cloudflare.com/_astro/viptela-flow-diagram-gre.BGa0DR7d_1E1VCz.webp)\n\nTo create a Secure Internet Gateway (SIG) using vManage:\n\n1. From **Cisco vManage** under **Configuration**, select **Generic** and **Add Tunnel**.\n2. Refer to the table below for the setting fields and their options.\n\n| Setting | Type/Detail |\n| - | - |\n| **Global Template** | Factory\\_Default\\_Global\\_CISCO\\_Template |\n| **Cisco Banner** | Factory\\_Default\\_Retail\\_Banner |\n| **Policy** | Branch-Local-Policy |\n\n**Transport & Management VPN settings**\n\n| Setting | Type/Detail |\n| - | - |\n| **Cisco VPN 0** | GCP-Branch-VPN0 |\n| **Cisco Secure Internet Gateway** | Branch-SIG-GRE-Template |\n| **Cisco VPN Interface Ethernet** | GCP-Branch-Public-Internet-TLOC |\n| **Cisco VPN Interface Ethernet** | GCP-VPN0-Interface |\n| **Cisco VPN 512** | Default\\_AWS\\_TGW\\_CSR\\_VPN512\\_V01 |\n\n**Basic Information settings**\n\n| Setting | Type/Detail |\n| - | - |\n| **Cisco System** | Default\\_BootStrap\\_Cisco\\_System\\_Template |\n| **Cisco Logging** | Default\\_Logging\\_Cisco\\_V01 |\n| **Cisco AAA** | AWS-Branch-AAA-Template |\n| **Cisco BFD** | Default\\_BFD\\_Cisco-V01 |\n| **Cisco OMP** | Default\\_AWS\\_TGW\\_CSR\\_OMP\\_IPv46\\_... |\n| **Cisco Security** | Default\\_Security\\_Cisco\\_V01 |\n\nWhen creating the Feature Template, you can choose values that apply globally or that are device specific. For example, the **Tunnel Source IP Address**, **Interface Name** and fields from **Update Tunnel** are device specific and should be chosen accordingly.\n\n## 2. Create tunnels in vManage\n\nFrom vManage, select **Configuration** > **Templates**. You should see the newly created template where you will update the device values.\n\nBecause the template was created to add GRE tunnels, you only need to update the device values. Note that **VPN0** is the default, and the WAN interface used to build the tunnel must be part of **VPN0**.\n\n![Update template fields for GRE tunnel](https://developers.cloudflare.com/_astro/viptela-update-device-template-gre.BQZzlgJi_1KlKnW.webp)\n\n## 3. Create tunnels in Cloudflare\n\nRefer to [Configure tunnel endpoints](https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/how-to/configure-tunnel-endpoints/) for more information on creating a GRE tunnel.\n\n![Established GRE tunne in Cloudflash dashboard](https://developers.cloudflare.com/_astro/viptela-gre-tunnel.BI5bFdGE_Z2oknv3.webp)\n\n## 4. Define static routes\n\nRefer to [Configure static routes](https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/how-to/configure-routes/#create-a-static-route) for more information on configuring your static routes.\n\n![Established GRE static routes in Cloudflare dashboard](https://developers.cloudflare.com/_astro/viptela-gre-static-routes.xe2lnYh6_ZdqsAT.webp)\n\n## 5. Validate traffic flow\n\nIn the example below, a request for `neverssl.com` was issued, which has a Cloudflare policy blocking traffic to `neverssl`.com.\n\nOn the client VM (192.168.30.3), a blocked response is visible.\n\n![cURL example for a request to neverssl.com](https://developers.cloudflare.com/_astro/viptela-curl-traffic-flow.DiSsMVxM_ZCu0Ac.webp)\n\nA matching blocked log line is visible from the Cloudflare logs.\n\n![A blocked log from Gateway Activity Log in the Cloudflare dashboard](https://developers.cloudflare.com/_astro/viptela-gre-swg-traffic.DD7CHYgi_Z2hBM1W.webp)\n\n## Add new tunnels using IPsec\n\nIPsec tunnels to Cloudflare can only be created on Cisco 8000v in the router mode today. Refer to the [Cisco IOS XE](https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/third-party/cisco-ios-xe/) for more information.\n\n</page>\n\n<page>\n---\ntitle: VyOS · Cloudflare One docs\ndescription: This tutorial contains configuration information and a sample\n  template for using a VyOS device with an IPsec configuration.\nlastUpdated: 2025-10-27T11:06:15.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/third-party/vyos/\n  md: https://developers.cloudflare.com/cloudflare-one/networks/connectors/wan-tunnels/configuration/manually/third-party/vyos/index.md\n---\n\nThis tutorial contains configuration information and a sample template for using a VyOS device with an IPsec configuration.\n\n## Notes\n\n* `vti <NAME_OF_VTI_INTERFACE` - Specifies the virtual tunnel interface of the IPsec tunnel.\n* `esp-group <NAME_OF_ESP_GROUP>` - Defines the ESP group for encrypted traffic defined by the tunnel or defines a particular ESP policy or profile.\n* `ike-group <NAME_OF_IKE_GROUP>` - Defines IKE group to use for key exchanges or defines a particular IKE policy or profile.\n* The IP addresses of the IPsec tunnel interfaces on both ends of the tunnel should be a pair of private IP addresses (RFC 1918) on the same `/31` or `/30` subnet, essentially specifying a point-to-point link.\n* The IPsec tunnel endpoint on this VyOS router is the `<IP_ADDR_OF_UPLINK_INTF_TO_INTERNET/WAN>`.\n* The IP address of the IPsec tunnel endpoint on the Cloudflare side is the anycast IP address provided by Cloudflare.\n* This router is configured to initiate the IPsec tunnel connection.\n\n## Configuration parameters\n\n### Phase 1\n\n* **Encryption**\n\n  * AES-GCM with 128-bit or 256-bit key length\n\n* **Integrity**\n\n  * SHA512\n\n### Phase 2\n\n* **Encryption**\n\n  * AES-GCM with 128-bit or 256-bit key length\n\n* **Integrity**\n\n  * SHA512\n\n* **PFS group**\n\n  * DH group 20 (348-bit random ECP group)\n\n## Configuration template",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Fleet · Cloudflare One docs\ndescription: This guide covers how to deploy the Cloudflare WARP client using\n  Fleet device management software.\nlastUpdated: 2025-10-21T14:33:19.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/warp/deployment/mdm-deployment/partners/fleet/\n  md: https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/warp/deployment/mdm-deployment/partners/fleet/index.md\n---\n\nThis guide covers how to deploy the Cloudflare WARP client using [Fleet](https://fleetdm.com/) device management software.\n\n## macOS\n\n### 1. Create a custom MDM file\n\n1. [Download](https://developers.cloudflare.com/cloudflare-one/static/mdm/CloudflareWARP.mobileconfig) an example `.mobileconfig` file.\n2. Modify the file with your desired [deployment parameters](https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/warp/deployment/mdm-deployment/parameters/).\n\n### 2. Upload MDM file to Fleet\n\n1. In the Fleet admin console, go to **Controls**.\n\n2. From the **Teams** dropdown, select the team (group of hosts) that requires Cloudflare WARP.\n\n3. Select **OS settings** > **Custom settings**.\n\n4. Select **Add profile** and upload the custom `.mobileconfig`.\n\n5. Select the hosts which require Cloudflare WARP:\n\n   * **All hosts**: Deploys WARP to all hosts in the team.\n   * **Custom**: Deploys WARP to a subset of the hosts in the team. Use [labels](https://fleetdm.com/guides/managing-labels-in-fleet#basic-article) to define the hosts that should be included or excluded.\n\n6. Select **Add profile**.\n\nThe defined hosts will immediately receive the deployment profile, but WARP is not yet installed.\n\n### 3. Download WARP package for macOS\n\nVisit the [Download page](https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/warp/download-warp/#macos) to review system requirements and download the installer for your operating system.\n\n### 4. Upload WARP package to Fleet\n\nTo add the WARP client installer package for distribution to your hosts enrolled in Fleet:\n\n1. In the Fleet admin console, go to **Software**.\n2. From the **Teams** dropdown, select the team (group of hosts) that requires Cloudflare WARP.\n3. Select **Add Software** and upload the `.pkg` file that was previously downloaded.\n\n### 5. Install WARP with Fleet\n\nTo deploy the uploaded `.pkg` file to your hosts:\n\n1. In the Fleet admin console, go to **Hosts**.\n2. Select the host that requires the WARP client.\n3. Go to **Software** and search for `Cloudflare`.\n4. Select **Actions** > **Install**.\n\nInstallation will happen automatically when the host comes online. To deploy with REST API or GitOps, refer to the [Fleet documentation](https://fleetdm.com/guides/deploy-software-packages).\n\nAfter deploying the WARP client, you can check its connection progress using the [Connectivity status](https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/warp/troubleshooting/connectivity-status/) messages displayed in the WARP GUI.\n\n### 6. Uninstall WARP with Fleet\n\nTo uninstall the Fleet-deployed WARP client:\n\n1. In the Fleet admin console, go to **Hosts**.\n2. Select the host that requires the WARP client to be uninstalled.\n3. Go to **Software** and search for `Cloudflare`.\n4. Select **Actions** > **Uninstall**.\n\n## Windows\n\n### 1. Download WARP package for Windows\n\nVisit the [Download page](https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/warp/download-warp/#windows) to review system requirements and download the installer for your operating system.\n\n### 2. Upload WARP package to Fleet\n\nTo add the WARP client installer package for distribution to your hosts enrolled in Fleet:\n\n1. In the Fleet admin console, go to **Software**.\n2. From the **Teams** dropdown, select the team (group of hosts) that requires Cloudflare WARP.\n3. Select **Add Software** and upload the `.msi` file that was previously downloaded.\n4. (Optional) To allow users to install WARP from Fleet Desktop, select **Self-service**.\n5. Select **Advanced options**.\n6. In **Install script**, replace the default script with the following:",
+      "language": "unknown"
+    },
+    {
+      "code": "Refer to [deployment parameters](https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/warp/deployment/mdm-deployment/parameters/) for a description of each argument.\n\n### 3. Install WARP with Fleet\n\nTo deploy the uploaded `.pkg` file to your hosts:\n\n1. In the Fleet admin console, go to **Hosts**.\n2. Select the host that requires the WARP client.\n3. Go to **Software** and search for `Cloudflare`.\n4. Select **Actions** > **Install**.\n\nInstallation will happen automatically when the host comes online. To deploy with REST API or GitOps, refer to the [Fleet documentation](https://fleetdm.com/guides/deploy-software-packages).\n\nAfter deploying the WARP client, you can check its connection progress using the [Connectivity status](https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/warp/troubleshooting/connectivity-status/) messages displayed in the WARP GUI.\n\n### 4. Uninstall WARP with Fleet\n\nTo uninstall the Fleet-deployed WARP client:\n\n1. In the Fleet admin console, go to **Hosts**.\n2. Select the host that requires the WARP client to be uninstalled.\n3. Go to **Software** and search for `Cloudflare`.\n4. Select **Actions** > **Uninstall**.\n\n## Linux\n\nFleet allows you to [execute custom scripts](https://fleetdm.com/guides/scripts) on Linux hosts. The following example script creates an [MDM file](https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/warp/deployment/mdm-deployment/#linux) and installs WARP on an Ubuntu 22.04 host:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "5. Check connection status",
+      "id": "5.-check-connection-status"
+    },
+    {
+      "level": "h2",
+      "text": "Topology",
+      "id": "topology"
+    },
+    {
+      "level": "h2",
+      "text": "1. Create an IPsec tunnel on your Cloudflare account",
+      "id": "1.-create-an-ipsec-tunnel-on-your-cloudflare-account"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create static routes on Cloudflare dashboard",
+      "id": "2.-create-static-routes-on-cloudflare-dashboard"
+    },
+    {
+      "level": "h2",
+      "text": "3. Add a VPN configuration in SonicWall",
+      "id": "3.-add-a-vpn-configuration-in-sonicwall"
+    },
+    {
+      "level": "h2",
+      "text": "4. Add a VPN tunnel interface",
+      "id": "4.-add-a-vpn-tunnel-interface"
+    },
+    {
+      "level": "h2",
+      "text": "5. Add address object(s)",
+      "id": "5.-add-address-object(s)"
+    },
+    {
+      "level": "h2",
+      "text": "6. Set up routing",
+      "id": "6.-set-up-routing"
+    },
+    {
+      "level": "h2",
+      "text": "7. Add access rule for health checks",
+      "id": "7.-add-access-rule-for-health-checks"
+    },
+    {
+      "level": "h2",
+      "text": "8. Setup health checks",
+      "id": "8.-setup-health-checks"
+    },
+    {
+      "level": "h2",
+      "text": "9. Verify tunnel status on Cloudflare dashboard",
+      "id": "9.-verify-tunnel-status-on-cloudflare-dashboard"
+    },
+    {
+      "level": "h2",
+      "text": "IPsec connection",
+      "id": "ipsec-connection"
+    },
+    {
+      "level": "h3",
+      "text": "1. Add an IPsec profile",
+      "id": "1.-add-an-ipsec-profile"
+    },
+    {
+      "level": "h3",
+      "text": "2. Create IPsec connection tunnel",
+      "id": "2.-create-ipsec-connection-tunnel"
+    },
+    {
+      "level": "h3",
+      "text": "3. Assign the XFRM interface address",
+      "id": "3.-assign-the-xfrm-interface-address"
+    },
+    {
+      "level": "h3",
+      "text": "4. Add a firewall rule",
+      "id": "4.-add-a-firewall-rule"
+    },
+    {
+      "level": "h3",
+      "text": "5. Disable IPsec anti-replay",
+      "id": "5.-disable-ipsec-anti-replay"
+    },
+    {
+      "level": "h2",
+      "text": "GRE connection",
+      "id": "gre-connection"
+    },
+    {
+      "level": "h3",
+      "text": "1. Configure a GRE tunnel between SFOS and Cloudflare",
+      "id": "1.-configure-a-gre-tunnel-between-sfos-and-cloudflare"
+    },
+    {
+      "level": "h3",
+      "text": "2. Add a GRE or SD-WAN route to redirect traffic through the GRE tunnel",
+      "id": "2.-add-a-gre-or-sd-wan-route-to-redirect-traffic-through-the-gre-tunnel"
+    },
+    {
+      "level": "h3",
+      "text": "3. Add a firewall rule for LAN/DMZ to VPN",
+      "id": "3.-add-a-firewall-rule-for-lan/dmz-to-vpn"
+    },
+    {
+      "level": "h2",
+      "text": "Traffic redirection mechanism on Sophos Firewall",
+      "id": "traffic-redirection-mechanism-on-sophos-firewall"
+    },
+    {
+      "level": "h3",
+      "text": "IPsec",
+      "id": "ipsec"
+    },
+    {
+      "level": "h3",
+      "text": "GRE",
+      "id": "gre"
+    },
+    {
+      "level": "h2",
+      "text": "Verify tunnel status on Cloudflare dashboard",
+      "id": "verify-tunnel-status-on-cloudflare-dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Make Cloudflare health checks work",
+      "id": "make-cloudflare-health-checks-work"
+    },
+    {
+      "level": "h2",
+      "text": "Verify tunnel status on Sophos Firewall dashboard",
+      "id": "verify-tunnel-status-on-sophos-firewall-dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "IPsec",
+      "id": "ipsec"
+    },
+    {
+      "level": "h3",
+      "text": "GRE",
+      "id": "gre"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "1. Configure Magic WAN",
+      "id": "1.-configure-magic-wan"
+    },
+    {
+      "level": "h2",
+      "text": "2. Configure site-to-site VPN on UniFi",
+      "id": "2.-configure-site-to-site-vpn-on-unifi"
+    },
+    {
+      "level": "h2",
+      "text": "3. Add pre-shared key to Cloudflare",
+      "id": "3.-add-pre-shared-key-to-cloudflare"
+    },
+    {
+      "level": "h2",
+      "text": "4. Configure Routes",
+      "id": "4.-configure-routes"
+    },
+    {
+      "level": "h2",
+      "text": "Verify connections",
+      "id": "verify-connections"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h2",
+      "text": "Policy-based routing",
+      "id": "policy-based-routing"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "1. Create a SIG template on Cisco vManage",
+      "id": "1.-create-a-sig-template-on-cisco-vmanage"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create tunnels in vManage",
+      "id": "2.-create-tunnels-in-vmanage"
+    },
+    {
+      "level": "h2",
+      "text": "3. Create tunnels in Cloudflare",
+      "id": "3.-create-tunnels-in-cloudflare"
+    },
+    {
+      "level": "h2",
+      "text": "4. Define static routes",
+      "id": "4.-define-static-routes"
+    },
+    {
+      "level": "h2",
+      "text": "5. Validate traffic flow",
+      "id": "5.-validate-traffic-flow"
+    },
+    {
+      "level": "h2",
+      "text": "Add new tunnels using IPsec",
+      "id": "add-new-tunnels-using-ipsec"
+    },
+    {
+      "level": "h2",
+      "text": "Notes",
+      "id": "notes"
+    },
+    {
+      "level": "h2",
+      "text": "Configuration parameters",
+      "id": "configuration-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Phase 1",
+      "id": "phase-1"
+    },
+    {
+      "level": "h3",
+      "text": "Phase 2",
+      "id": "phase-2"
+    },
+    {
+      "level": "h2",
+      "text": "Configuration template",
+      "id": "configuration-template"
+    },
+    {
+      "level": "h2",
+      "text": "macOS",
+      "id": "macos"
+    },
+    {
+      "level": "h3",
+      "text": "1. Create a custom MDM file",
+      "id": "1.-create-a-custom-mdm-file"
+    },
+    {
+      "level": "h3",
+      "text": "2. Upload MDM file to Fleet",
+      "id": "2.-upload-mdm-file-to-fleet"
+    },
+    {
+      "level": "h3",
+      "text": "3. Download WARP package for macOS",
+      "id": "3.-download-warp-package-for-macos"
+    },
+    {
+      "level": "h3",
+      "text": "4. Upload WARP package to Fleet",
+      "id": "4.-upload-warp-package-to-fleet"
+    },
+    {
+      "level": "h3",
+      "text": "5. Install WARP with Fleet",
+      "id": "5.-install-warp-with-fleet"
+    },
+    {
+      "level": "h3",
+      "text": "6. Uninstall WARP with Fleet",
+      "id": "6.-uninstall-warp-with-fleet"
+    },
+    {
+      "level": "h2",
+      "text": "Windows",
+      "id": "windows"
+    },
+    {
+      "level": "h3",
+      "text": "1. Download WARP package for Windows",
+      "id": "1.-download-warp-package-for-windows"
+    },
+    {
+      "level": "h3",
+      "text": "2. Upload WARP package to Fleet",
+      "id": "2.-upload-warp-package-to-fleet"
+    },
+    {
+      "level": "h3",
+      "text": "3. Install WARP with Fleet",
+      "id": "3.-install-warp-with-fleet"
+    },
+    {
+      "level": "h3",
+      "text": "4. Uninstall WARP with Fleet",
+      "id": "4.-uninstall-warp-with-fleet"
+    },
+    {
+      "level": "h2",
+      "text": "Linux",
+      "id": "linux"
+    }
+  ],
+  "url": "llms-txt#local",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "1. Process data (saves to R2)",
+  "content": "curl -X POST https://YOUR_WORKER_URL/process",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#1.-process-data-(saves-to-r2)",
+  "links": []
+}

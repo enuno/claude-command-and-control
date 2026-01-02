@@ -1,0 +1,23 @@
+{
+  "title": "Test the function",
+  "content": "print(is_palindrome(\"racecar\"))  # Output: True\nprint(is_palindrome(\"hello\"))    # Output: False\npython\nmodel = \"@hf/thebloke/deepseek-coder-6.7b-instruct-awq\"\n\nsystem_message = \"The user is going to give you code that isn't working. Explain to the user what might be wrong\"\n\ncode = \"\"\"# Welcomes our user\ndef hello_world(first_name=\"World\"):\n    print(f\"Hello, {name}!\")\n\"\"\"\n\nresponse = requests.post(\n    f\"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/{model}\",\n    headers={\"Authorization\": f\"Bearer {api_token}\"},\n    json={\"messages\": [\n        {\"role\": \"system\", \"content\": system_message},\n        {\"role\": \"user\", \"content\": code},\n    ]}\n)\ninference = response.json()\nresponse = inference[\"result\"][\"response\"]\ndisplay(Markdown(response))\npython",
+  "code_samples": [
+    {
+      "code": "### Assist in debugging\n\nWe've all been there, bugs happen. Sometimes those stacktraces can be very intimidating, and a great use case of using Code Generation is to assist in explaining the problem.",
+      "language": "unknown"
+    },
+    {
+      "code": "The error in your code is that you are trying to use a variable `name` which is not defined anywhere in your function. The correct variable to use is `first_name`. So, you should change `f\"Hello, {name}!\"` to `f\"Hello, {first_name}!\"`.\n\nHere is the corrected code:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Assist in debugging",
+      "id": "assist-in-debugging"
+    }
+  ],
+  "url": "llms-txt#test-the-function",
+  "links": []
+}

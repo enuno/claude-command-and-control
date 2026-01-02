@@ -1,0 +1,172 @@
+{
+  "title": "Test with version affinity - both requests should hit the same version",
+  "content": "curl -H \"Cookie: session_id=test123\" https://your-worker.example.com/\ncurl -H \"Cookie: session_id=test123\" https://your-worker.example.com/assets/index.js\njsonc\n  {\n    \"name\": \"my-worker\",\n    \"compatibility_date\": \"2025-12-31\",\n    \"assets\": {\n      \"directory\": \"./dist/\",\n      \"html_handling\": \"auto-trailing-slash\"\n    }\n  }\n  toml\n  name = \"my-worker\"\n  compatibility_date = \"2025-12-31\"\n\n[assets]\n  directory = \"./dist/\"\n  html_handling = \"auto-trailing-slash\"\n  jsonc\n  {\n    \"name\": \"my-worker\",\n    \"compatibility_date\": \"2025-12-31\",\n    \"assets\": {\n      \"directory\": \"./dist/\",\n      \"html_handling\": \"force-trailing-slash\"\n    }\n  }\n  toml\n  name = \"my-worker\"\n  compatibility_date = \"2025-12-31\"\n\n[assets]\n  directory = \"./dist/\"\n  html_handling = \"force-trailing-slash\"\n  jsonc\n  {\n    \"name\": \"my-worker\",\n    \"compatibility_date\": \"2025-12-31\",\n    \"assets\": {\n      \"directory\": \"./dist/\",\n      \"html_handling\": \"drop-trailing-slash\"\n    }\n  }\n  toml\n  name = \"my-worker\"\n  compatibility_date = \"2025-12-31\"\n\n[assets]\n  directory = \"./dist/\"\n  html_handling = \"drop-trailing-slash\"\n  jsonc\n  {\n    \"name\": \"my-worker\",\n    \"compatibility_date\": \"2025-12-31\",\n    \"assets\": {\n      \"directory\": \"./dist/\",\n      \"html_handling\": \"none\"\n    }\n  }\n  toml\n  name = \"my-worker\"\n  compatibility_date = \"2025-12-31\"\n\n[assets]\n  directory = \"./dist/\"\n  html_handling = \"none\"\n  jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"assets-on-a-path-example\",\n    \"main\": \"src/index.js\",\n    \"route\": \"example.com/blog/*\",\n    \"assets\": {\n      \"directory\": \"dist\"\n    }\n  }\n  toml\n  name = \"assets-on-a-path-example\"\n  main = \"src/index.js\"\n  route = \"example.com/blog/*\"\n\n[assets]\n  directory = \"dist\"\n  js\nconst mf = new Miniflare({\n  compatibilityDate: \"2021-11-12\",\n});\njs\nconst mf = new Miniflare({\n  compatibilityFlags: [\n    \"formdata_parser_supports_files\",\n    \"durable_object_fetch_allows_relative_url\",\n  ],\n});\njs\nimport { Miniflare, Request } from \"miniflare\";\n\nconst mf = new Miniflare({\n  modules: true,\n  script: `\n  export default {\n    async fetch(request, env, ctx) {\n      const body = JSON.stringify({\n        url: event.request.url,\n        header: event.request.headers.get(\"X-Message\"),\n      });\n      return new Response(body, {\n        headers: { \"Content-Type\": \"application/json\" },\n      });\n    })\n  }\n  `,\n});\n\nlet res = await mf.dispatchFetch(\"http://localhost:8787/\");\nconsole.log(await res.json()); // { url: \"http://localhost:8787/\", header: null }\n\nres = await mf.dispatchFetch(\"http://localhost:8787/1\", {\n  headers: { \"X-Message\": \"1\" },\n});\nconsole.log(await res.json()); // { url: \"http://localhost:8787/1\", header: \"1\" }\n\nres = await mf.dispatchFetch(\n  new Request(\"http://localhost:8787/2\", {\n    headers: { \"X-Message\": \"2\" },\n  }),\n);\nconsole.log(await res.json()); // { url: \"http://localhost:8787/2\", header: \"2\" }\njs\nconst res = await mf.dispatchFetch(\"http://localhost:8787\", {\n  headers: {\n    \"CF-IPCountry\": \"GB\",\n  },\n  cf: {\n    country: \"GB\",\n  },\n});\njs\nimport { Miniflare } from \"miniflare\";\n\nconst mf = new Miniflare({\n  script: `\n  addEventListener(\"fetch\", (event) => {\n    event.passThroughOnException();\n    throw new Error();\n  });\n  `,\n  upstream: \"https://miniflare.dev\",\n});\n// If you don't use the same upstream URL when dispatching, Miniflare will\n// rewrite it to match the upstream\nconst res = await mf.dispatchFetch(\"https://miniflare.dev/core/fetch\");\nconsole.log(await res.text()); // Source code of this page\njs\nconst mf = new Miniflare({\n  modules: true,\n});\njs\nexport default {\n  async fetch(request, env, ctx) {\n    // - `request` is the incoming `Request` instance\n    // - `env` contains bindings, KV namespaces, Durable Objects, etc\n    // - `ctx` contains `waitUntil` and `passThroughOnException` methods\n    return new Response(\"Hello Miniflare!\");\n  },\n  async scheduled(controller, env, ctx) {\n    // - `controller` contains `scheduledTime` and `cron` properties\n    // - `env` contains bindings, KV namespaces, Durable Objects, etc\n    // - `ctx` contains the `waitUntil` method\n    console.log(\"Doing something scheduled...\");\n  },\n};\njs\nconst mf = new Miniflare({\n  modulesRules: [\n    { type: \"ESModule\", include: [\"**/*.js\"], fallthrough: true },\n    { type: \"Text\", include: [\"**/*.txt\"] },\n  ],\n});\njs\n[\n  { type: \"ESModule\", include: [\"**/*.mjs\"] },\n  { type: \"CommonJS\", include: [\"**/*.js\", \"**/*.cjs\"] },\n];\njs\nimport { Miniflare, Response } from \"miniflare\";\n\nconst message = \"The count is \";\nconst mf = new Miniflare({\n  // Options shared between workers such as HTTP and persistence configuration\n  // should always be defined at the top level.\n  host: \"0.0.0.0\",\n  port: 8787,\n  kvPersist: true,\n\nworkers: [\n    {\n      name: \"worker\",\n      kvNamespaces: { COUNTS: \"counts\" },\n      serviceBindings: {\n        INCREMENTER: \"incrementer\",\n        // Service bindings can also be defined as custom functions, with access\n        // to anything defined outside Miniflare.\n        async CUSTOM(request) {\n          // `request` is the incoming `Request` object.\n          return new Response(message);\n        },\n      },\n      modules: true,\n      script: `export default {\n        async fetch(request, env, ctx) {\n          // Get the message defined outside\n          const response = await env.CUSTOM.fetch(\"http://host/\");\n          const message = await response.text();\n\n// Increment the count 3 times\n          await env.INCREMENTER.fetch(\"http://host/\");\n          await env.INCREMENTER.fetch(\"http://host/\");\n          await env.INCREMENTER.fetch(\"http://host/\");\n          const count = await env.COUNTS.get(\"count\");\n\nreturn new Response(message + count);\n        }\n      }`,\n    },\n    {\n      name: \"incrementer\",\n      // Note we're using the same `COUNTS` namespace as before, but binding it\n      // to `NUMBERS` instead.\n      kvNamespaces: { NUMBERS: \"counts\" },\n      // Worker formats can be mixed-and-matched\n      script: `addEventListener(\"fetch\", (event) => {\n        event.respondWith(handleRequest());\n      })\n      async function handleRequest() {\n        const count = parseInt((await NUMBERS.get(\"count\")) ?? \"0\") + 1;\n        await NUMBERS.put(\"count\", count.toString());\n        return new Response(count.toString());\n      }`,\n    },\n  ],\n});\nconst res = await mf.dispatchFetch(\"http://localhost\");\nconsole.log(await res.text()); // \"The count is 3\"\nawait mf.dispose();\njs\nconst mf = new Miniflare({\n  workers: [\n    {\n      scriptPath: \"./api/worker.js\",\n      routes: [\"http://127.0.0.1/api*\", \"api.mf/*\"],\n    },\n  ],\n});\nplaintext\n127.0.0.1 miniflare.test\n127.0.0.1 api.mf\nsh",
+  "code_samples": [
+    {
+      "code": "During gradual rollouts, monitor your Worker's analytics for increased 404 response rates, especially for asset files (`.js`, `.css`, `.png`). Use [Analytics Engine](https://developers.cloudflare.com/analytics/analytics-engine/) or [Logpush](https://developers.cloudflare.com/workers/observability/logs/logpush/) to track these metrics and catch asset mismatch issues early.\n\n## Best practices\n\nWhen deploying applications with fingerprinted assets using gradual rollouts:\n\n* Use version affinity (preferably session-based) to ensure consistent asset loading\n* Test asset loading using version overrides before increasing rollout percentages\n* Monitor 404 rates during deployments to catch issues quickly\n* Have rollback procedures ready in case asset problems arise\n* Choose session-based or user-based affinity depending on your application's authentication model\n\nWith proper version affinity configuration, you can safely perform gradual deployments of applications that use modern build tools and asset optimization without worrying about broken user experiences from missing assets.\n\n</page>\n\n<page>\n---\ntitle: HTML handling · Cloudflare Workers docs\ndescription: How to configure a HTML handling and trailing slashes for the\n  static assets of your Worker.\nlastUpdated: 2025-05-08T19:08:59.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/static-assets/routing/advanced/html-handling/\n  md: https://developers.cloudflare.com/workers/static-assets/routing/advanced/html-handling/index.md\n---\n\nForcing or dropping trailing slashes on request paths (for example, `example.com/page/` vs. `example.com/page`) is often something that developers wish to control for cosmetic reasons. Additionally, it can impact SEO because search engines often treat URLs with and without trailing slashes as different, separate pages. This distinction can lead to duplicate content issues, indexing problems, and overall confusion about the correct canonical version of a page.\n\nThe [`assets.html_handling` configuration](https://developers.cloudflare.com/workers/wrangler/configuration/#assets) determines the redirects and rewrites of requests for HTML content. It is used to specify the pattern for canonical URLs, thus where Cloudflare serves HTML content from, and additionally, where Cloudflare redirects non-canonical URLs to.\n\nTake the following directory structure:\n\n## Automatic trailing slashes (default)\n\nThis will usually give you the desired behavior automatically: individual files (e.g. `foo.html`) will be served *without* a trailing slash and folder index files (e.g. `foo/index.html`) will be served *with* a trailing slash.\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Based on the incoming requests, the following assets would be served:\n\n| Incoming Request | Response | Asset Served |\n| - | - | - |\n| /file | 200 | /dist/file.html |\n| /file.html | 307 to /file | - |\n| /file/ | 307 to /file | - |\n| /file/index | 307 to /file | - |\n| /file/index.html | 307 to /file | - |\n| /folder | 307 to /folder/ | - |\n| /folder.html | 307 to /folder | - |\n| /folder/ | 200 | /dist/folder/index.html |\n| /folder/index | 307 to /folder | - |\n| /folder/index.html | 307 to /folder | - |\n\n## Force trailing slashes\n\nAlternatively, you can force trailing slashes (`force-trailing-slash`).\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Based on the incoming requests, the following assets would be served:\n\n| Incoming Request | Response | Asset Served |\n| - | - | - |\n| /file | 307 to /file/ | - |\n| /file.html | 307 to /file/ | - |\n| /file/ | 200 | /dist/file.html |\n| /file/index | 307 to /file/ | - |\n| /file/index.html | 307 to /file/ | - |\n| /folder | 307 to /folder/ | - |\n| /folder.html | 307 to /folder/ | - |\n| /folder/ | 200 | /dist/folder/index.html |\n| /folder/index | 307 to /folder/ | - |\n| /folder/index.html | 307 to /folder/ | - |\n\n## Drop trailing slashes\n\nOr you can drop trailing slashes (`drop-trailing-slash`).\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Based on the incoming requests, the following assets would be served:\n\n| Incoming Request | Response | Asset Served |\n| - | - | - |\n| /file | 200 | /dist/file.html |\n| /file.html | 307 to /file | - |\n| /file/ | 307 to /file | - |\n| /file/index | 307 to /file | - |\n| /file/index.html | 307 to /file | - |\n| /folder | 200 | /dist/folder/index.html |\n| /folder.html | 307 to /folder | - |\n| /folder/ | 307 to /folder | - |\n| /folder/index | 307 to /folder | - |\n| /folder/index.html | 307 to /folder | - |\n\n## Disable HTML handling\n\nAlternatively, if you have bespoke needs, you can disable the built-in HTML handling entirely (`none`).\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Based on the incoming requests, the following assets would be served:\n\n| Incoming Request | Response | Asset Served |\n| - | - | - |\n| /file | Depends on `not_found_handling` | Depends on `not_found_handling` |\n| /file.html | 200 | /dist/file.html |\n| /file/ | Depends on `not_found_handling` | Depends on `not_found_handling` |\n| /file/index | Depends on `not_found_handling` | Depends on `not_found_handling` |\n| /file/index.html | Depends on `not_found_handling` | Depends on `not_found_handling` |\n| /folder | Depends on `not_found_handling` | Depends on `not_found_handling` |\n| /folder.html | Depends on `not_found_handling` | Depends on `not_found_handling` |\n| /folder/ | Depends on `not_found_handling` | Depends on `not_found_handling` |\n| /folder/index | Depends on `not_found_handling` | Depends on `not_found_handling` |\n| /folder/index.html | 200 | /dist/folder/index.html |\n\n</page>\n\n<page>\n---\ntitle: Serving a subdirectory · Cloudflare Workers docs\ndescription: How to configure a Worker with static assets on a subpath.\nlastUpdated: 2025-05-01T19:25:08.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/static-assets/routing/advanced/serving-a-subdirectory/\n  md: https://developers.cloudflare.com/workers/static-assets/routing/advanced/serving-a-subdirectory/index.md\n---\n\nNote\n\nThis feature requires Wrangler v3.98.0 or later.\n\nLike with any other Worker, [you can configure a Worker with assets to run on a path of your domain](https://developers.cloudflare.com/workers/configuration/routing/routes/). Assets defined for a Worker must be nested in a directory structure that mirrors the desired path.\n\nFor example, to serve assets from `example.com/blog/*`, create a `blog` directory in your asset directory.\n\nWith a [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/) like so:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "In this example, requests to `example.com/blog/` will serve the `index.html` file, and requests to `example.com/blog/posts/post1` will serve the `post1.html` file.\n\nIf you have a file outside the configured path, it will not be served, unless it is part of the `assets.not_found_handling` for [Single Page Applications](https://developers.cloudflare.com/workers/static-assets/routing/single-page-application/) or [custom 404 pages](https://developers.cloudflare.com/workers/static-assets/routing/static-site-generation/). For example, if you have a `home.html` file in the root of your asset directory, it will not be served when requesting `example.com/blog/home`. However, if needed, these files can still be manually fetched over [the binding](https://developers.cloudflare.com/workers/static-assets/binding/#binding).\n\n</page>\n\n<page>\n---\ntitle: 📅 Compatibility Dates · Cloudflare Workers docs\ndescription: >-\n  Miniflare uses compatibility dates to opt-into backwards-incompatible changes\n\n  from a specific date. If one isn't set, it will default to some time far in\n  the\n\n  past.\nlastUpdated: 2024-12-18T20:15:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/miniflare/core/compatibility/\n  md: https://developers.cloudflare.com/workers/testing/miniflare/core/compatibility/index.md\n---\n\n* [Compatibility Dates Reference](https://developers.cloudflare.com/workers/configuration/compatibility-dates)\n\n## Compatibility Dates\n\nMiniflare uses compatibility dates to opt-into backwards-incompatible changes from a specific date. If one isn't set, it will default to some time far in the past.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Compatibility Flags\n\nMiniflare also lets you opt-in/out of specific changes using compatibility flags:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: 📨 Fetch Events · Cloudflare Workers docs\ndescription: >-\n  Whenever an HTTP request is made, a Request object is dispatched to your\n  worker, then the generated Response is returned. The\n\n  Request object will include a\n\n  cf object.\n\n  Miniflare will log the method, path, status, and the time it took to respond.\nlastUpdated: 2025-09-26T09:58:28.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/miniflare/core/fetch/\n  md: https://developers.cloudflare.com/workers/testing/miniflare/core/fetch/index.md\n---\n\n* [`FetchEvent` Reference](https://developers.cloudflare.com/workers/runtime-apis/handlers/fetch/)\n\n## HTTP Requests\n\nWhenever an HTTP request is made, a `Request` object is dispatched to your worker, then the generated `Response` is returned. The `Request` object will include a [`cf` object](https://developers.cloudflare.com/workers/runtime-apis/request#incomingrequestcfproperties). Miniflare will log the method, path, status, and the time it took to respond.\n\nIf the Worker throws an error whilst generating a response, an error page containing the stack trace is returned instead.\n\n## Dispatching Events\n\nWhen using the API, the `dispatchFetch` function can be used to dispatch `fetch` events to your Worker. This can be used for testing responses. `dispatchFetch` has the same API as the regular `fetch` method: it either takes a `Request` object, or a URL and optional `RequestInit` object:",
+      "language": "unknown"
+    },
+    {
+      "code": "When dispatching events, you are responsible for adding [`CF-*` headers](https://developers.cloudflare.com/fundamentals/reference/http-headers/) and the [`cf` object](https://developers.cloudflare.com/workers/runtime-apis/request#incomingrequestcfproperties). This lets you control their values for testing:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Upstream\n\nMiniflare will call each `fetch` listener until a response is returned. If no response is returned, or an exception is thrown and `passThroughOnException()` has been called, the response will be fetched from the specified upstream instead:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: 📚 Modules · Cloudflare Workers docs\ndescription: \"Miniflare supports both the traditional service-worker and the\n  newer modules formats for writing workers. To use the modules format, enable\n  it with:\"\nlastUpdated: 2024-12-18T20:15:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/miniflare/core/modules/\n  md: https://developers.cloudflare.com/workers/testing/miniflare/core/modules/index.md\n---\n\n* [Modules Reference](https://developers.cloudflare.com/workers/reference/migrate-to-module-workers/)\n\n## Enabling Modules\n\nMiniflare supports both the traditional `service-worker` and the newer `modules` formats for writing workers. To use the `modules` format, enable it with:",
+      "language": "unknown"
+    },
+    {
+      "code": "You can then use `modules` worker scripts like the following:",
+      "language": "unknown"
+    },
+    {
+      "code": "String scripts via the `script` option are supported using the `modules` format, but you cannot import other modules using them. You must use a script file via the `scriptPath` option for this.\n\n## Module Rules\n\nMiniflare supports all module types: `ESModule`, `CommonJS`, `Text`, `Data` and `CompiledWasm`. You can specify additional module resolution rules as follows:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Default Rules\n\nThe following rules are automatically added to the end of your modules rules list. You can override them by specifying rules matching the same `globs`:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: 🔌 Multiple Workers · Cloudflare Workers docs\ndescription: Miniflare allows you to run multiple workers in the same instance.\n  All Workers can be defined at the same level, using the workers option.\nlastUpdated: 2024-12-18T20:15:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/miniflare/core/multiple-workers/\n  md: https://developers.cloudflare.com/workers/testing/miniflare/core/multiple-workers/index.md\n---\n\nMiniflare allows you to run multiple workers in the same instance. All Workers can be defined at the same level, using the `workers` option.\n\nHere's an example that uses a service binding to increment a value in a shared KV namespace:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Routing\n\nYou can enable routing by specifying `routes` via the API, using the [standard route syntax](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior). Note port numbers are ignored:",
+      "language": "unknown"
+    },
+    {
+      "code": "When using hostnames that aren't `localhost` or `127.0.0.1`, you may need to edit your computer's `hosts` file, so those hostnames resolve to `localhost`. On Linux and macOS, this is usually at `/etc/hosts`. On Windows, it's at `C:\\Windows\\System32\\drivers\\etc\\hosts`. For the routes above, we would need to append the following entries to the file:",
+      "language": "unknown"
+    },
+    {
+      "code": "Alternatively, you can customise the `Host` header when sending the request:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Best practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Automatic trailing slashes (default)",
+      "id": "automatic-trailing-slashes-(default)"
+    },
+    {
+      "level": "h2",
+      "text": "Force trailing slashes",
+      "id": "force-trailing-slashes"
+    },
+    {
+      "level": "h2",
+      "text": "Drop trailing slashes",
+      "id": "drop-trailing-slashes"
+    },
+    {
+      "level": "h2",
+      "text": "Disable HTML handling",
+      "id": "disable-html-handling"
+    },
+    {
+      "level": "h2",
+      "text": "Compatibility Dates",
+      "id": "compatibility-dates"
+    },
+    {
+      "level": "h2",
+      "text": "Compatibility Flags",
+      "id": "compatibility-flags"
+    },
+    {
+      "level": "h2",
+      "text": "HTTP Requests",
+      "id": "http-requests"
+    },
+    {
+      "level": "h2",
+      "text": "Dispatching Events",
+      "id": "dispatching-events"
+    },
+    {
+      "level": "h2",
+      "text": "Upstream",
+      "id": "upstream"
+    },
+    {
+      "level": "h2",
+      "text": "Enabling Modules",
+      "id": "enabling-modules"
+    },
+    {
+      "level": "h2",
+      "text": "Module Rules",
+      "id": "module-rules"
+    },
+    {
+      "level": "h3",
+      "text": "Default Rules",
+      "id": "default-rules"
+    },
+    {
+      "level": "h2",
+      "text": "Routing",
+      "id": "routing"
+    }
+  ],
+  "url": "llms-txt#test-with-version-affinity---both-requests-should-hit-the-same-version",
+  "links": []
+}

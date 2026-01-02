@@ -1,0 +1,8 @@
+{
+  "title": "Check if requests to a specific endpoint contain content objects other than PDFs",
+  "content": "any(cf.waf.content_scan.obj_types[*] != \"application/pdf\") and http.request.uri.path eq \"/upload\"\n```\n\n<page>\n---\ntitle: cf.waf.credential_check.password_leaked · Cloudflare Ruleset Engine docs\ndescription: Indicates whether the password detected in the request was previously leaked.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.credential_check.password_leaked/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.credential_check.password_leaked/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#check-if-requests-to-a-specific-endpoint-contain-content-objects-other-than-pdfs",
+  "links": []
+}

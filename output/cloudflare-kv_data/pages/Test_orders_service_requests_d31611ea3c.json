@@ -1,0 +1,184 @@
+{
+  "title": "Test orders service requests",
+  "content": "curl https://api-gateway.workers.dev/api/orders\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"services\": [\n      {\n        \"binding\": \"WORKFLOW_SERVICE\",\n        \"service\": \"workflows-starter\"\n      }\n    ]\n  }\n  toml\n  services = [\n  { binding = \"WORKFLOW_SERVICE\", service = \"workflows-starter\" }\n  ]\n  js\n  import { WorkerEntrypoint } from \"cloudflare:workers\";\n\nexport default class WorkflowsService extends WorkerEntrypoint {\n    // Currently, entrypoints without a named handler are not supported\n    async fetch() {\n      return new Response(null, { status: 404 });\n    }\n\nasync createInstance(payload) {\n      let instance = await this.env.MY_WORKFLOW.create({\n        params: payload,\n      });\n\nreturn Response.json({\n        id: instance.id,\n        details: await instance.status(),\n      });\n    }\n  }\n  ts\n  import { WorkerEntrypoint } from \"cloudflare:workers\";\n\ninterface Env {\n    MY_WORKFLOW: Workflow;\n  }\n\ntype Payload = {\n    hello: string;\n  };\n\nexport default class WorkflowsService extends WorkerEntrypoint<Env> {\n    // Currently, entrypoints without a named handler are not supported\n    async fetch() {\n      return new Response(null, { status: 404 });\n    }\n\nasync createInstance(payload: Payload) {\n      let instance = await this.env.MY_WORKFLOW.create({\n        params: payload,\n      });\n\nreturn Response.json({\n        id: instance.id,\n        details: await instance.status(),\n      });\n    }\n  }\n  js\n  export const onRequest = async (context) => {\n    // This payload could be anything from within your app or from your frontend\n    let payload = { hello: \"world\" };\n    return context.env.WORKFLOWS_SERVICE.createInstance(payload);\n  };\n  ts\n  interface Env {\n    WORKFLOW_SERVICE: Service;\n  }\n\nexport const onRequest: PagesFunction<Env> = async (context) => {\n    // This payload could be anything from within your app or from your frontend\n    let payload = { hello: \"world\" };\n    return context.env.WORKFLOWS_SERVICE.createInstance(payload);\n  };\n  js\n  // This is in the same file as your Workflow definition\n  export default {\n    async fetch(req, env) {\n      let instance = await env.MY_WORKFLOW.create({\n        params: payload,\n      });\n      return Response.json({\n        id: instance.id,\n        details: await instance.status(),\n      });\n    },\n  };\n  ts\n  // This is in the same file as your Workflow definition\n  export default {\n    async fetch(req: Request, env: Env): Promise<Response> {\n      let instance = await env.MY_WORKFLOW.create({\n        params: payload,\n      });\n      return Response.json({\n        id: instance.id,\n        details: await instance.status(),\n      });\n    },\n  };\n  js\n  export const onRequest = async (context) => {\n    // Other code\n    let payload = { hello: \"world\" };\n    const instanceStatus = await fetch(\"https://YOUR_WORKER.workers.dev/\", {\n      method: \"POST\",\n      body: JSON.stringify(payload), // Send a payload for our Worker to pass to the Workflow\n    });\n\nreturn Response.json(instanceStatus);\n  };\n  ts\n  export const onRequest: PagesFunction<Env> = async (context) => {\n    // Other code\n    let payload = { hello: \"world\" };\n    const instanceStatus = await fetch(\"https://YOUR_WORKER.workers.dev/\", {\n      method: \"POST\",\n      body: JSON.stringify(payload), // Send a payload for our Worker to pass to the Workflow\n    });\n\nreturn Response.json(instanceStatus);\n  };\n  js\n  export default {\n    async fetch(req, env) {\n      let someEvent = { url: req.url, createdTimestamp: Date.now() };\n      // Trigger our Workflow\n      // Pass our event as the second parameter to the `create` method\n      // on our Workflow binding.\n      let instance = await env.MY_WORKFLOW.create({\n        id: crypto.randomUUID(),\n        params: someEvent,\n      });\n\nreturn Response.json({\n        id: instance.id,\n        details: await instance.status(),\n      });\n    },\n  };\n  ts\n  export default {\n    async fetch(req: Request, env: Env) {\n      let someEvent = { url: req.url, createdTimestamp: Date.now() };\n      // Trigger our Workflow\n      // Pass our event as the second parameter to the `create` method\n      // on our Workflow binding.\n      let instance = await env.MY_WORKFLOW.create({\n        id: crypto.randomUUID(),\n        params: someEvent,\n      });\n\nreturn Response.json({\n        id: instance.id,\n        details: await instance.status(),\n      });\n    },\n  };\n  sh\nnpx wrangler@latest workflows trigger workflows-starter '{\"some\":\"data\"}'\nsh\n🚀 Workflow instance \"57c7913b-8e1d-4a78-a0dd-dce5a0b7aa30\" has been queued successfully\njs\n  export class MyWorkflow extends WorkflowEntrypoint {\n    async run(event, step) {\n      // Other steps in your Workflow\n      let event = await step.waitForEvent(\n        \"receive invoice paid webhook from Stripe\",\n        { type: \"stripe-webhook\", timeout: \"1 hour\" },\n      );\n      // Rest of your Workflow\n    }\n  }\n  ts\n  export class MyWorkflow extends WorkflowEntrypoint<Env, Params> {\n    async run(event: WorkflowEvent<Params>, step: WorkflowStep) {\n      // Other steps in your Workflow\n      let event = await step.waitForEvent<IncomingStripeWebhook>(\n        \"receive invoice paid webhook from Stripe\",\n        { type: \"stripe-webhook\", timeout: \"1 hour\" },\n      );\n      // Rest of your Workflow\n    }\n  }\n  js\n  let event = await step.waitForEvent(\"wait for human approval\", {\n    type: \"approval-flow\",\n    timeout: \"15 minutes\",\n  });\n  ts\n  let event = await step.waitForEvent(\n      \"wait for human approval\",\n      { type: \"approval-flow\", timeout: \"15 minutes\" },\n    );\n  js\n  try {\n    const event = await step.waitForEvent(\"wait for approval\", {\n      type: \"approval\",\n      timeout: \"1 hour\",\n    });\n    // Handle the received event\n  } catch (e) {\n    // Timeout occurred - handle the case where no event was received\n    console.log(\"No approval received, proceeding with default action\");\n  }\n  ts\n  try {\n    const event = await step.waitForEvent(\"wait for approval\", {\n      type: \"approval\",\n      timeout: \"1 hour\",\n    });\n    // Handle the received event\n  } catch (e) {\n    // Timeout occurred - handle the case where no event was received\n    console.log(\"No approval received, proceeding with default action\");\n  }\n  js\n  export default {\n    async fetch(req, env) {\n      const instanceId = new URL(req.url).searchParams.get(\"instanceId\");\n      const webhookPayload = await req.json();\n\nlet instance = await env.MY_WORKFLOW.get(instanceId);\n      // Send our event, with `type` matching the event type defined in\n      // our step.waitForEvent call\n      await instance.sendEvent({\n        type: \"stripe-webhook\",\n        payload: webhookPayload,\n      });\n\nreturn Response.json({\n        status: await instance.status(),\n      });\n    },\n  };\n  ts\n  export default {\n    async fetch(req: Request, env: Env) {\n      const instanceId = new URL(req.url).searchParams.get(\"instanceId\");\n      const webhookPayload = await req.json<Payload>();\n\nlet instance = await env.MY_WORKFLOW.get(instanceId);\n      // Send our event, with `type` matching the event type defined in\n      // our step.waitForEvent call\n      await instance.sendEvent({\n        type: \"stripe-webhook\",\n        payload: webhookPayload,\n      });\n\nreturn Response.json({\n        status: await instance.status(),\n      });\n    },\n  };\n  ts\nexport type WorkflowEvent<T> = {\n  // The data passed as the parameter when the Workflow instance was triggered\n  payload: T;\n  // The timestamp that the Workflow was triggered\n  timestamp: Date;\n  // ID of the current Workflow instance\n  instanceId: string;\n};\nts\n// Define a type that conforms to the events your Workflow instance is\n// instantiated with\ninterface YourEventType {\n  userEmail: string;\n  createdTimestamp: number;\n  metadata?: Record<string, string>;\n}\nts\n// Import the Workflow definition\nimport { WorkflowEntrypoint, WorkflowStep, WorkflowEvent} from 'cloudflare:workers';\n\nexport class MyWorkflow extends WorkflowEntrypoint {\n    // Pass your type as a type parameter to WorkflowEvent\n    // The 'payload' property will have the type of your parameter.\n    async run(event: WorkflowEvent<YourEventType>, step: WorkflowStep) {\n        let state = step.do(\"my first step\", async () => {\n          // Access your properties via event.payload\n          let userEmail = event.payload.userEmail\n          let createdTimestamp = event.payload.createdTimestamp\n        })\n\nstep.do(\"my second step\", async () => { /* your code here */ )\n    }\n}\nsh",
+  "code_samples": [
+    {
+      "code": "## Next steps\n\n* Add [authentication and authorization](https://developers.cloudflare.com/workers/examples/auth-with-headers/)\n* Implement [rate limiting](https://developers.cloudflare.com/durable-objects/api/)\n* Set up [monitoring and alerting](https://developers.cloudflare.com/analytics/analytics-engine/)\n* Explore [other examples](https://developers.cloudflare.com/workers-vpc/examples/)\n\n</page>\n\n<page>\n---\ntitle: Limits · Cloudflare Workers VPC\ndescription: Standard Workers limits apply for request size, timeout, and subrequests.\nlastUpdated: 2025-11-04T21:03:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers-vpc/reference/limits/\n  md: https://developers.cloudflare.com/workers-vpc/reference/limits/index.md\n---\n\n## Service limits\n\n| Resource | Limit |\n| - | - |\n| VPC Services per account | 1000 |\n\nStandard Workers limits apply for request size, timeout, and subrequests.\n\nNote\n\nWorkers VPC is currently in beta. Features and APIs may change before general availability. While in beta, Workers VPC is available for free to all Workers plans.\n\n</page>\n\n<page>\n---\ntitle: Pricing · Cloudflare Workers VPC\ndescription: Workers VPC requires a Workers plan. See Workers pricing for current rates.\nlastUpdated: 2025-11-04T21:03:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers-vpc/reference/pricing/\n  md: https://developers.cloudflare.com/workers-vpc/reference/pricing/index.md\n---\n\nWorkers VPC requires a Workers plan. See [Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/) for current rates.\n\nFree during Open Beta\n\nWorkers VPC is free during the open beta period. Standard Workers pricing applies for compute time and requests.\n\n</page>\n\n<page>\n---\ntitle: Troubleshoot and debug · Cloudflare Workers VPC\ndescription: Troubleshoot and debug errors commonly associated with Workers VPC.\nlastUpdated: 2025-11-14T21:25:44.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers-vpc/reference/troubleshooting/\n  md: https://developers.cloudflare.com/workers-vpc/reference/troubleshooting/index.md\n---\n\nTroubleshoot and debug errors commonly associated with Workers VPC.\n\n## Connection errors\n\nWorkers VPC may return errors at runtime when connecting to private services through Cloudflare Tunnel.\n\n### Tunnel errors\n\n| Error Message | Details | Recommended fixes |\n| - | - | - |\n| `Error: ProxyError: dns_error` | DNS resolution failed when attempting to connect to your private service through the tunnel. | This error may occur if your `cloudflared` version is outdated. Ensure you are running `cloudflared` version 2025.7.0 or later (latest version recommended). See [Cloudflare Tunnel update instructions](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/downloads/update-cloudflared/). |\n| `Error: ProxyError: dns_error` | Cloudflare Tunnel may be configured with `http2` protocol (`TUNNEL_TRANSPORT_PROTOCOL:http2`), which works for Cloudflare Zero Trust [(see note)](https://developers.cloudflare.com/workers-vpc/configuration/tunnel/#create-and-run-tunnel-cloudflared) traffic but prevents DNS resolution from Workers VPC. | Workers VPC requires Cloudflare Tunnel to connect using the [QUIC transport protocol](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/configure-tunnels/cloudflared-parameters/run-parameters/#protocol). Ensure outbound UDP traffic on port 7844 is allowed through your firewall. |\n| Requests not staying within VPC | Worker requests using `.fetch()` with a public hostname are routing out of the VPC to the hostname configured for the VPC Service. | Ensure your Worker code and the VPC Service use the internal VPC hostname for backend services, not a public hostname. |\n\n</page>\n\n<page>\n---\ntitle: Call Workflows from Pages · Cloudflare Workflows docs\ndescription: You can bind and trigger Workflows from Pages Functions by\n  deploying a Workers project with your Workflow definition and then invoking\n  that Worker using service bindings or a standard fetch() call.\nlastUpdated: 2025-12-03T14:33:51.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workflows/build/call-workflows-from-pages/\n  md: https://developers.cloudflare.com/workflows/build/call-workflows-from-pages/index.md\n---\n\nUse Static Assets\n\nTo call Workflows from Pages, you are required to deploy a separate Worker containing your Workflows. We recommend using [**Static Assets**](https://developers.cloudflare.com/workers/static-assets/) instead, as this allows you to add your Workflows directly to your Static Assets Worker.\n\nIf you wish to migrate your Pages project to Static Assets, follow this [guide](https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/).\n\n***\n\nYou can bind and trigger Workflows from [Pages Functions](https://developers.cloudflare.com/pages/functions/) by deploying a Workers project with your Workflow definition and then invoking that Worker using [service bindings](https://developers.cloudflare.com/pages/functions/bindings/#service-bindings) or a standard `fetch()` call.\n\nNote\n\nYou will need to deploy your Workflow as a standalone Workers project first before your Pages Function can call it. If you have not yet deployed a Workflow, refer to the Workflows [get started guide](https://developers.cloudflare.com/workflows/get-started/guide/).\n\n### Use Service Bindings\n\n[Service Bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/) allow you to call a Worker from another Worker or a Pages Function without needing to expose it directly.\n\nTo do this, you will need to:\n\n1. Deploy your Workflow in a Worker\n2. Create a Service Binding to that Worker in your Pages project\n3. Call the Worker remotely using the binding\n\nFor example, if you have a Worker called `workflows-starter`, you would create a new Service Binding in your Pages project as follows, ensuring that the `service` name matches the name of the Worker your Workflow is defined in:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Your Worker can expose a specific method (or methods) that only other Workers or Pages Functions can call over the Service Binding.\n\nIn the following example, we expose a specific `createInstance` method that accepts our `Payload` and returns the [`InstanceStatus`](https://developers.cloudflare.com/workflows/build/workers-api/#instancestatus) from the Workflows API:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "Your Pages Function would resemble the following:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "To learn more about binding to resources from Pages Functions, including how to bind via the Cloudflare dashboard, refer to the [bindings documentation for Pages Functions](https://developers.cloudflare.com/pages/functions/bindings/#service-bindings).\n\n### Using fetch\n\nService Bindings vs. fetch\n\nWe recommend using [Service Bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/) when calling a Worker in your own account.\n\nService Bindings don't require you to expose a public endpoint from your Worker, don't require you to configure authentication, and allow you to call methods on your Worker directly, avoiding the overhead of managing HTTP requests and responses.\n\nAn alternative to setting up a Service Binding is to call the Worker over HTTP by using the Workflows [Workers API](https://developers.cloudflare.com/workflows/build/workers-api/#workflow) to `create` a new Workflow instance for each incoming HTTP call to the Worker:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "Your [Pages Function](https://developers.cloudflare.com/pages/functions/get-started/) can then make a regular `fetch` call to the Worker:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "You can also choose to authenticate these requests by passing a shared secret in a header and validating that in your Worker.\n\n### Next steps\n\n* Learn more about how to programatically call and trigger Workflows from the [Workers API](https://developers.cloudflare.com/workflows/build/workers-api/)\n* Understand how to send [events and parameters](https://developers.cloudflare.com/workflows/build/events-and-parameters/) when triggering a Workflow\n* Review the [Rules of Workflows](https://developers.cloudflare.com/workflows/build/rules-of-workflows/) and best practices for writing Workflows\n\n</page>\n\n<page>\n---\ntitle: Events and parameters · Cloudflare Workflows docs\ndescription: When a Workflow is triggered, it can receive an optional event.\n  This event can include data that your Workflow can act on, including request\n  details, user data fetched from your database (such as D1 or KV) or from a\n  webhook, or messages from a Queue consumer.\nlastUpdated: 2025-12-12T19:04:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workflows/build/events-and-parameters/\n  md: https://developers.cloudflare.com/workflows/build/events-and-parameters/index.md\n---\n\nWhen a Workflow is triggered, it can receive an optional event. This event can include data that your Workflow can act on, including request details, user data fetched from your database (such as D1 or KV) or from a webhook, or messages from a Queue consumer.\n\nEvents are a powerful part of a Workflow, as you often want a Workflow to act on data. Because a given Workflow instance executes durably, events are a useful way to provide a Workflow with data that should be immutable (not changing) and/or represents data the Workflow needs to operate on at that point in time.\n\n## Pass data to a Workflow\n\nYou can pass parameters to a Workflow in three ways:\n\n* As an optional argument to the `create` method on a [Workflow binding](https://developers.cloudflare.com/workers/wrangler/commands/#trigger) when triggering a Workflow from a Worker.\n* Via the `--params` flag when using the `wrangler` CLI to trigger a Workflow.\n* Via the `step.waitForEvent` API, which allows a Workflow instance to wait for an event (and optional data) to be received *while it is running*. Workflow instances can be sent events from external services over HTTP or via the Workers API for Workflows.\n\nYou can pass any JSON-serializable object as a parameter.\n\nWarning\n\nA `WorkflowEvent` and its associated `payload` property are effectively *immutable*: any changes to an event are not persisted across the steps of a Workflow. This includes both cases when a Workflow is progressing normally, and in cases where a Workflow has to be restarted due to a failure.\n\nStore state durably by returning it from your `step.do` callbacks.\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "To pass parameters via the `wrangler` command-line interface, pass a JSON string as the second parameter to the `workflows trigger` sub-command:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "### Wait for events\n\nA running Workflow can wait for an event (or events) by calling `step.waitForEvent` within the Workflow, which allows you to send events to the Workflow in one of two ways:\n\n1. Via the [Workers API binding](https://developers.cloudflare.com/workflows/build/workers-api/): call `instance.sendEvent` to send events to specific workflow instances.\n2. Using the REST API (HTTP API)'s [Events endpoint](https://developers.cloudflare.com/api/resources/workflows/subresources/instances/subresources/events/methods/create/).\n\nBecause `waitForEvent` is part of the `WorkflowStep` API, you can call it multiple times within a Workflow, and use control flow to conditionally wait for an event.\n\nCalling `waitForEvent` requires you to specify an `type` (up to 100 characters [1](#user-content-fn-1)), which is used to match the corresponding `type` when sending an event to a Workflow instance.\n\nFor example, to wait for billing webhook:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "The above example:\n\n* Calls `waitForEvent` with a `type` of `stripe-webhook` - the corresponding `sendEvent` call would thus be `await instance.sendEvent({type: \"stripe-webhook\", payload: webhookPayload})`.\n* Uses a TypeScript [type parameter](https://www.typescriptlang.org/docs/handbook/2/generics.html) to type the return value of `step.waitForEvent` as our `IncomingStripeWebhook`.\n* Continues on with the rest of the Workflow.\n\nThe default timeout for a `waitForEvent` call is 24 hours, which can be changed by passing `{ timeout: WorkflowTimeoutDuration }` as the second argument to your `waitForEvent` call.\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "You can specify a timeout between 1 second and up to 365 days.\n\nTimeout behavior\n\nWhen `waitForEvent` times out, the Workflow will throw an error and the instance will fail. If you want your Workflow to continue even if the event is not received, wrap the `waitForEvent` call in a try-catch block:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "### Send events to running workflows\n\nWorkflow instances that are waiting on events using the `waitForEvent` API can be sent events using the `instance.sendEvent` API:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "- Similar to the [`waitForEvent`](#wait-for-events) example in this guide, the `type` property in our `waitForEvent` and `sendEvent` fields must match.\n- To send multiple events to a Workflow that has multiple `waitForEvent` calls, call `sendEvent` with the corresponding `type` property set (up to 100 characters [1](#user-content-fn-1)).\n- Events can also be sent using the REST API (HTTP API)'s [Events endpoint](https://developers.cloudflare.com/api/resources/workflows/subresources/instances/subresources/events/methods/create/).\n\nEvent timing\n\nYou can send an event to a Workflow instance *before* it reaches the corresponding `waitForEvent` call, as long as the instance has been created. The event will be buffered and delivered when the Workflow reaches the `waitForEvent` step with the matching `type`.\n\n## TypeScript and type parameters\n\nBy default, the `WorkflowEvent` passed to the `run` method of your Workflow definition has a type that conforms to the following, with `payload` (your data), `timestamp`, and `instanceId` properties:",
+      "language": "unknown"
+    },
+    {
+      "code": "You can optionally type these events by defining your own type and passing it as a [type parameter](https://www.typescriptlang.org/docs/handbook/2/generics.html#working-with-generic-type-variables) to the `WorkflowEvent`:",
+      "language": "unknown"
+    },
+    {
+      "code": "When you pass your `YourEventType` to `WorkflowEvent` as a type parameter, the `event.payload` property now has the type `YourEventType` throughout your workflow definition:",
+      "language": "unknown"
+    },
+    {
+      "code": "Warning\n\nProviding a type parameter does *not* validate that the incoming event matches your type definition. In TypeScript, properties (fields) that do not exist or conform to the type you provided will be dropped. If you need to validate incoming events, we recommend a library such as [zod](https://zod.dev/) or your own validator logic.\n\nYou can also provide a type parameter to the `Workflows` type when creating (triggering) a Workflow instance using the `create` method of the [Workers API](https://developers.cloudflare.com/workflows/build/workers-api/#workflow). Note that this does *not* propagate type information into the Workflow itself, as TypeScript types are a build-time construct. To provide the type of an incoming `WorkflowEvent`, refer to the [TypeScript and type parameters](https://developers.cloudflare.com/workflows/build/events-and-parameters/#typescript-and-type-parameters) section of the Workflows documentation.\n\n## Footnotes\n\n1. Match pattern: `^[a-zA-Z0-9_][a-zA-Z0-9-_]*$` [↩](#user-content-fnref-1) [↩2](#user-content-fnref-1-2)\n\n</page>\n\n<page>\n---\ntitle: Local Development · Cloudflare Workflows docs\ndescription: Workflows support local development using Wrangler, the\n  command-line interface for Workers. Wrangler runs an emulated version of\n  Workflows compared to the one that Cloudflare runs globally.\nlastUpdated: 2025-09-18T22:01:54.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workflows/build/local-development/\n  md: https://developers.cloudflare.com/workflows/build/local-development/index.md\n---\n\nWorkflows support local development using [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/), the command-line interface for Workers. Wrangler runs an emulated version of Workflows compared to the one that Cloudflare runs globally.\n\n## Prerequisites\n\nTo develop locally with Workflows, you will need:\n\n* [Wrangler v3.89.0](https://blog.cloudflare.com/wrangler3/) or later.\n\n* Node.js version of `18.0.0` or later. Consider using a Node version manager like [Volta](https://volta.sh/) or [nvm](https://github.com/nvm-sh/nvm) to avoid permission issues and change Node versions.\n\n* If you are new to Workflows and/or Cloudflare Workers, refer to the [Workflows Guide](https://developers.cloudflare.com/workflows/get-started/guide/) to install `wrangler` and deploy their first Workflows.\n\n## Start a local development session\n\nOpen your terminal and run the following commands to start a local development session:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "Service limits",
+      "id": "service-limits"
+    },
+    {
+      "level": "h2",
+      "text": "Connection errors",
+      "id": "connection-errors"
+    },
+    {
+      "level": "h3",
+      "text": "Tunnel errors",
+      "id": "tunnel-errors"
+    },
+    {
+      "level": "h3",
+      "text": "Use Service Bindings",
+      "id": "use-service-bindings"
+    },
+    {
+      "level": "h3",
+      "text": "Using fetch",
+      "id": "using-fetch"
+    },
+    {
+      "level": "h3",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "Pass data to a Workflow",
+      "id": "pass-data-to-a-workflow"
+    },
+    {
+      "level": "h3",
+      "text": "Wait for events",
+      "id": "wait-for-events"
+    },
+    {
+      "level": "h3",
+      "text": "Send events to running workflows",
+      "id": "send-events-to-running-workflows"
+    },
+    {
+      "level": "h2",
+      "text": "TypeScript and type parameters",
+      "id": "typescript-and-type-parameters"
+    },
+    {
+      "level": "h2",
+      "text": "Footnotes",
+      "id": "footnotes"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Start a local development session",
+      "id": "start-a-local-development-session"
+    }
+  ],
+  "url": "llms-txt#test-orders-service-requests",
+  "links": []
+}

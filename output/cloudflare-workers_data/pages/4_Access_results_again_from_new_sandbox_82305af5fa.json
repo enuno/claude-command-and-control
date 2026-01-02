@@ -1,0 +1,8 @@
+{
+  "title": "4. Access results again (from new sandbox)",
+  "content": "curl https://YOUR_WORKER_URL/results",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#4.-access-results-again-(from-new-sandbox)",
+  "links": []
+}

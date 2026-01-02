@@ -1,0 +1,13 @@
+{
+  "name": "weavedb",
+  "total_pages": 1,
+  "base_url": "https://docs.weavedb.dev/",
+  "llms_txt_detected": true,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "WeaveDB",
+      "url": "llms-txt#weavedb"
+    }
+  ]
+}

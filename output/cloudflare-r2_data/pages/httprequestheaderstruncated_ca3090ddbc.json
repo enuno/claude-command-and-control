@@ -1,0 +1,8 @@
+{
+  "title": "http.request.headers.truncated",
+  "content": "`http.request.headers.truncated` Boolean\n\nIndicates whether the HTTP request contains too many headers.\n\nWhen `true`, [`http.request.headers`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.headers/), [`http.request.headers.names`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.headers.names/), and [`http.request.headers.values`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.headers.values/) may not contain all of the headers sent in the HTTP request.\n\n<page>\n---\ntitle: http.request.jwt.claims.aud · Cloudflare Ruleset Engine docs\ndescription: The `aud` (audience) claim identifies the recipients that the JSON\n  Web Token (JWT) is intended for.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.jwt.claims.aud/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.jwt.claims.aud/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#http.request.headers.truncated",
+  "links": []
+}

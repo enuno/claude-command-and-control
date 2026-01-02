@@ -1,0 +1,278 @@
+{
+  "title": "Log in to the database",
+  "content": "mysql -h ENDPOINT_NAME -P PORT -u MASTER_USERNAME -p database_name\nsql\n-- Create a role for Hyperdrive\nCREATE ROLE hyperdrive;\n\n-- Allow Hyperdrive to connect\nGRANT CONNECT ON DATABASE mysql_db TO hyperdrive;\n\n-- Grant database privileges to the hyperdrive role\nGRANT ALL PRIVILEGES ON DATABASE mysql_db to hyperdrive;\n\n-- Create a specific user for Hyperdrive to log in as\nCREATE ROLE hyperdrive_user LOGIN PASSWORD 'sufficientlyRandomPassword';\n\n-- Grant this new user the hyperdrive role privileges\nGRANT hyperdrive to hyperdrive_user;\ntxt\nmysql://USERNAME:PASSWORD@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\nsh\nnpx wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=\"mysql://user:password@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\"\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"hyperdrive-example\",\n    \"main\": \"src/index.ts\",\n    \"compatibility_date\": \"2024-08-21\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n      }\n    ]\n  }\n  toml\n  name = \"hyperdrive-example\"\n  main = \"src/index.ts\"\n  compatibility_date = \"2024-08-21\"\n  compatibility_flags = [\"nodejs_compat\"]\n\n# Pasted from the output of `wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=[...]` above.\n  [[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n  sh\n  npm i mysql2@>3.13.0\n  sh\n  yarn add mysql2@>3.13.0\n  sh\n  pnpm add mysql2@>3.13.0\n  jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"compatibility_date\": \"2024-09-23\",\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<your-hyperdrive-id-here>\"\n      }\n    ]\n  }\n  toml\n  # required for database drivers to function\n  compatibility_flags = [\"nodejs_compat\"]\n  compatibility_date = \"2024-09-23\"\n\n[[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<your-hyperdrive-id-here>\"\n  ts\n// mysql2 v3.13.0 or later is required\nimport { createConnection } from \"mysql2/promise\";\n\nexport default {\n  async fetch(request, env, ctx): Promise<Response> {\n    // Create a connection using the mysql2 driver with the Hyperdrive credentials (only accessible from your Worker).\n    const connection = await createConnection({\n      host: env.HYPERDRIVE.host,\n      user: env.HYPERDRIVE.user,\n      password: env.HYPERDRIVE.password,\n      database: env.HYPERDRIVE.database,\n      port: env.HYPERDRIVE.port,\n\n// Required to enable mysql2 compatibility for Workers\n      disableEval: true,\n    });\n\ntry {\n      // Sample query\n      const [results, fields] = await connection.query(\"SHOW tables;\");\n\n// Clean up the client after the response is returned, before the Worker is killed\n      ctx.waitUntil(connection.end());\n\n// Return result rows as JSON\n      return Response.json({ results, fields });\n    } catch (e) {\n      console.error(e);\n    }\n  },\n} satisfies ExportedHandler<Env>;\ntxt\nmysql://USERNAME:PASSWORD@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\nsh\nnpx wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=\"mysql://user:password@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\"\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"hyperdrive-example\",\n    \"main\": \"src/index.ts\",\n    \"compatibility_date\": \"2024-08-21\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n      }\n    ]\n  }\n  toml\n  name = \"hyperdrive-example\"\n  main = \"src/index.ts\"\n  compatibility_date = \"2024-08-21\"\n  compatibility_flags = [\"nodejs_compat\"]\n\n# Pasted from the output of `wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=[...]` above.\n  [[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n  sh\n  npm i mysql2@>3.13.0\n  sh\n  yarn add mysql2@>3.13.0\n  sh\n  pnpm add mysql2@>3.13.0\n  jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"compatibility_date\": \"2024-09-23\",\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<your-hyperdrive-id-here>\"\n      }\n    ]\n  }\n  toml\n  # required for database drivers to function\n  compatibility_flags = [\"nodejs_compat\"]\n  compatibility_date = \"2024-09-23\"\n\n[[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<your-hyperdrive-id-here>\"\n  ts\n// mysql2 v3.13.0 or later is required\nimport { createConnection } from \"mysql2/promise\";\n\nexport default {\n  async fetch(request, env, ctx): Promise<Response> {\n    // Create a connection using the mysql2 driver with the Hyperdrive credentials (only accessible from your Worker).\n    const connection = await createConnection({\n      host: env.HYPERDRIVE.host,\n      user: env.HYPERDRIVE.user,\n      password: env.HYPERDRIVE.password,\n      database: env.HYPERDRIVE.database,\n      port: env.HYPERDRIVE.port,\n\n// Required to enable mysql2 compatibility for Workers\n      disableEval: true,\n    });\n\ntry {\n      // Sample query\n      const [results, fields] = await connection.query(\"SHOW tables;\");\n\n// Clean up the client after the response is returned, before the Worker is killed\n      ctx.waitUntil(connection.end());\n\n// Return result rows as JSON\n      return Response.json({ results, fields });\n    } catch (e) {\n      console.error(e);\n    }\n  },\n} satisfies ExportedHandler<Env>;\ntxt\nmysql://USERNAME:PASSWORD@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\nsh\nnpx wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=\"mysql://user:password@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\"\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"hyperdrive-example\",\n    \"main\": \"src/index.ts\",\n    \"compatibility_date\": \"2024-08-21\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n      }\n    ]\n  }\n  toml\n  name = \"hyperdrive-example\"\n  main = \"src/index.ts\"\n  compatibility_date = \"2024-08-21\"\n  compatibility_flags = [\"nodejs_compat\"]\n\n# Pasted from the output of `wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=[...]` above.\n  [[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n  sh\n  npm i mysql2@>3.13.0\n  sh\n  yarn add mysql2@>3.13.0\n  sh\n  pnpm add mysql2@>3.13.0\n  jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"compatibility_date\": \"2024-09-23\",\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<your-hyperdrive-id-here>\"\n      }\n    ]\n  }\n  toml\n  # required for database drivers to function\n  compatibility_flags = [\"nodejs_compat\"]\n  compatibility_date = \"2024-09-23\"\n\n[[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<your-hyperdrive-id-here>\"\n  ts\n// mysql2 v3.13.0 or later is required\nimport { createConnection } from \"mysql2/promise\";\n\nexport default {\n  async fetch(request, env, ctx): Promise<Response> {\n    // Create a connection using the mysql2 driver with the Hyperdrive credentials (only accessible from your Worker).\n    const connection = await createConnection({\n      host: env.HYPERDRIVE.host,\n      user: env.HYPERDRIVE.user,\n      password: env.HYPERDRIVE.password,\n      database: env.HYPERDRIVE.database,\n      port: env.HYPERDRIVE.port,\n\n// Required to enable mysql2 compatibility for Workers\n      disableEval: true,\n    });\n\ntry {\n      // Sample query\n      const [results, fields] = await connection.query(\"SHOW tables;\");\n\n// Clean up the client after the response is returned, before the Worker is killed\n      ctx.waitUntil(connection.end());\n\n// Return result rows as JSON\n      return Response.json({ results, fields });\n    } catch (e) {\n      console.error(e);\n    }\n  },\n} satisfies ExportedHandler<Env>;\ntxt\nmysql://USERNAME:PASSWORD@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\nsh\nnpx wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=\"mysql://user:password@HOSTNAME_OR_IP_ADDRESS:PORT/database_name\"\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"hyperdrive-example\",\n    \"main\": \"src/index.ts\",\n    \"compatibility_date\": \"2024-08-21\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n      }\n    ]\n  }\n  toml\n  name = \"hyperdrive-example\"\n  main = \"src/index.ts\"\n  compatibility_date = \"2024-08-21\"\n  compatibility_flags = [\"nodejs_compat\"]\n\n# Pasted from the output of `wrangler hyperdrive create <NAME_OF_HYPERDRIVE_CONFIG> --connection-string=[...]` above.\n  [[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<ID OF THE CREATED HYPERDRIVE CONFIGURATION>\"\n  sh\n  npm i mysql2@>3.13.0\n  sh\n  yarn add mysql2@>3.13.0\n  sh\n  pnpm add mysql2@>3.13.0\n  jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"compatibility_flags\": [\n      \"nodejs_compat\"\n    ],\n    \"compatibility_date\": \"2024-09-23\",\n    \"hyperdrive\": [\n      {\n        \"binding\": \"HYPERDRIVE\",\n        \"id\": \"<your-hyperdrive-id-here>\"\n      }\n    ]\n  }\n  toml\n  # required for database drivers to function\n  compatibility_flags = [\"nodejs_compat\"]\n  compatibility_date = \"2024-09-23\"\n\n[[hyperdrive]]\n  binding = \"HYPERDRIVE\"\n  id = \"<your-hyperdrive-id-here>\"\n  ts\n// mysql2 v3.13.0 or later is required\nimport { createConnection } from \"mysql2/promise\";\n\nexport default {\n  async fetch(request, env, ctx): Promise<Response> {\n    // Create a connection using the mysql2 driver with the Hyperdrive credentials (only accessible from your Worker).\n    const connection = await createConnection({\n      host: env.HYPERDRIVE.host,\n      user: env.HYPERDRIVE.user,\n      password: env.HYPERDRIVE.password,\n      database: env.HYPERDRIVE.database,\n      port: env.HYPERDRIVE.port,\n\n// Required to enable mysql2 compatibility for Workers\n      disableEval: true,\n    });\n\ntry {\n      // Sample query\n      const [results, fields] = await connection.query(\"SHOW tables;\");\n\n// Clean up the client after the response is returned, before the Worker is killed\n      ctx.waitUntil(connection.end());\n\n// Return result rows as JSON\n      return Response.json({ results, fields });\n    } catch (e) {\n      console.error(e);\n    }\n  },\n} satisfies ExportedHandler<Env>;\nsh",
+  "code_samples": [
+    {
+      "code": "Run the following SQL statements:",
+      "language": "unknown"
+    },
+    {
+      "code": "Refer to AWS' [documentation on user roles in MySQL](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Appendix.MySQL.CommonDBATasks.privilege-model.html) for more details.\n\nWith a database user, password, database endpoint (hostname and port), and database name, you can now set up Hyperdrive.\n\n## 3. Create a database configuration\n\nTo configure Hyperdrive, you will need:\n\n* The IP address (or hostname) and port of your database.\n* The database username (for example, `hyperdrive-demo`) you configured in a previous step.\n* The password associated with that username.\n* The name of the database you want Hyperdrive to connect to. For example, `mysql`.\n\nHyperdrive accepts the combination of these parameters in the common connection string format used by database drivers:",
+      "language": "unknown"
+    },
+    {
+      "code": "Most database providers will provide a connection string you can copy-and-paste directly into Hyperdrive.\n\nTo create a Hyperdrive configuration with the [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/), open your terminal and run the following command.\n\n* Replace \\<NAME\\_OF\\_HYPERDRIVE\\_CONFIG> with a name for your Hyperdrive configuration and paste the connection string provided from your database host, or,\n* Replace `user`, `password`, `HOSTNAME_OR_IP_ADDRESS`, `port`, and `database_name` placeholders with those specific to your database:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nHyperdrive will attempt to connect to your database with the provided credentials to verify they are correct before creating a configuration. If you encounter an error when attempting to connect, refer to Hyperdrive's [troubleshooting documentation](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug possible causes.\n\nThis command outputs a binding for the [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/):\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Use Hyperdrive from your Worker\n\nInstall the [mysql2](https://github.com/sidorares/node-mysql2) driver:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\n`mysql2` v3.13.0 or later is required\n\nAdd the required Node.js compatibility flags and Hyperdrive binding to your `wrangler.jsonc` file:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Create a new `connection` instance and pass the Hyperdrive parameters:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nThe minimum version of `mysql2` required for Hyperdrive is `3.13.0`.\n\n## Next steps\n\n* Learn more about [How Hyperdrive Works](https://developers.cloudflare.com/hyperdrive/concepts/how-hyperdrive-works/).\n* Refer to the [troubleshooting guide](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug common issues.\n* Understand more about other [storage options](https://developers.cloudflare.com/workers/platform/storage-options/) available to Cloudflare Workers.\n\n</page>\n\n<page>\n---\ntitle: Azure Database · Cloudflare Hyperdrive docs\ndescription: Connect Hyperdrive to a Azure Database for MySQL instance.\nlastUpdated: 2025-12-27T11:20:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/hyperdrive/examples/connect-to-mysql/mysql-database-providers/azure/\n  md: https://developers.cloudflare.com/hyperdrive/examples/connect-to-mysql/mysql-database-providers/azure/index.md\n---\n\nThis example shows you how to connect Hyperdrive to an Azure Database for MySQL instance.\n\n## 1. Allow Hyperdrive access\n\nTo allow Hyperdrive to connect to your database, you will need to ensure that Hyperdrive has valid credentials and network access.\n\nNote\n\nTo allow Hyperdrive to connect to your database, you must allow Cloudflare IPs to be able to access your database. You can either allow-list all IP address ranges (0.0.0.0 - 255.255.255.255) or restrict your IP access control list to the [IP ranges used by Hyperdrive](https://developers.cloudflare.com/hyperdrive/configuration/firewall-and-networking-configuration/).\n\nAlternatively, you can connect to your databases over in your private network using [Cloudflare Tunnels](https://developers.cloudflare.com/hyperdrive/configuration/connect-to-private-database/).\n\n### Azure Portal\n\n#### Public access networking\n\nTo connect to your Azure Database for MySQL instance using public Internet connectivity:\n\n1. In the [Azure Portal](https://portal.azure.com/), select the instance you want Hyperdrive to connect to.\n2. Expand **Settings** > **Networking** > ensure **Public access** is enabled > in **Firewall rules** add `0.0.0.0` as **Start IP address** and `255.255.255.255` as **End IP address**.\n3. Select **Save** to persist your changes.\n4. Select **Overview** from the sidebar and note down the **Server name** of your instance.\n\nWith the username, password, server name, and database name (default: `mysql`), you can now create a Hyperdrive database configuration.\n\n#### Private access networking\n\nTo connect to a private Azure Database for MySQL instance, refer to [Connect to a private database using Tunnel](https://developers.cloudflare.com/hyperdrive/configuration/connect-to-private-database/).\n\n## 2. Create a database configuration\n\nTo configure Hyperdrive, you will need:\n\n* The IP address (or hostname) and port of your database.\n* The database username (for example, `hyperdrive-demo`) you configured in a previous step.\n* The password associated with that username.\n* The name of the database you want Hyperdrive to connect to. For example, `mysql`.\n\nHyperdrive accepts the combination of these parameters in the common connection string format used by database drivers:",
+      "language": "unknown"
+    },
+    {
+      "code": "Most database providers will provide a connection string you can copy-and-paste directly into Hyperdrive.\n\nTo create a Hyperdrive configuration with the [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/), open your terminal and run the following command.\n\n* Replace \\<NAME\\_OF\\_HYPERDRIVE\\_CONFIG> with a name for your Hyperdrive configuration and paste the connection string provided from your database host, or,\n* Replace `user`, `password`, `HOSTNAME_OR_IP_ADDRESS`, `port`, and `database_name` placeholders with those specific to your database:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nHyperdrive will attempt to connect to your database with the provided credentials to verify they are correct before creating a configuration. If you encounter an error when attempting to connect, refer to Hyperdrive's [troubleshooting documentation](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug possible causes.\n\nThis command outputs a binding for the [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/):\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Use Hyperdrive from your Worker\n\nInstall the [mysql2](https://github.com/sidorares/node-mysql2) driver:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\n`mysql2` v3.13.0 or later is required\n\nAdd the required Node.js compatibility flags and Hyperdrive binding to your `wrangler.jsonc` file:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Create a new `connection` instance and pass the Hyperdrive parameters:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nThe minimum version of `mysql2` required for Hyperdrive is `3.13.0`.\n\n## Next steps\n\n* Learn more about [How Hyperdrive Works](https://developers.cloudflare.com/hyperdrive/concepts/how-hyperdrive-works/).\n* Refer to the [troubleshooting guide](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug common issues.\n* Understand more about other [storage options](https://developers.cloudflare.com/workers/platform/storage-options/) available to Cloudflare Workers.\n\n</page>\n\n<page>\n---\ntitle: Google Cloud SQL · Cloudflare Hyperdrive docs\ndescription: Connect Hyperdrive to a Google Cloud SQL database instance.\nlastUpdated: 2025-08-20T20:59:04.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/hyperdrive/examples/connect-to-mysql/mysql-database-providers/google-cloud-sql/\n  md: https://developers.cloudflare.com/hyperdrive/examples/connect-to-mysql/mysql-database-providers/google-cloud-sql/index.md\n---\n\nThis example shows you how to connect Hyperdrive to a Google Cloud SQL MySQL database instance.\n\n## 1. Allow Hyperdrive access\n\nTo allow Hyperdrive to connect to your database, you will need to ensure that Hyperdrive has valid user credentials and network access.\n\nNote\n\nTo allow Hyperdrive to connect to your database, you must allow Cloudflare IPs to be able to access your database. You can either allow-list all IP address ranges (0.0.0.0 - 255.255.255.255) or restrict your IP access control list to the [IP ranges used by Hyperdrive](https://developers.cloudflare.com/hyperdrive/configuration/firewall-and-networking-configuration/).\n\nAlternatively, you can connect to your databases over in your private network using [Cloudflare Tunnels](https://developers.cloudflare.com/hyperdrive/configuration/connect-to-private-database/).\n\n### Cloud Console\n\nWhen creating the instance or when editing an existing instance in the [Google Cloud Console](https://console.cloud.google.com/sql/instances):\n\nTo allow Hyperdrive to reach your instance:\n\n1. In the [Cloud Console](https://console.cloud.google.com/sql/instances), select the instance you want Hyperdrive to connect to.\n2. Expand **Connections** > **Networking** > ensure **Public IP** is enabled > **Add a Network** and input `0.0.0.0/0`.\n3. Select **Done** > **Save** to persist your changes.\n4. Select **Overview** from the sidebar and note down the **Public IP address** of your instance.\n\nTo create a user for Hyperdrive to connect as:\n\n1. Select **Users** in the sidebar.\n2. Select **Add User Account** > select **Built-in authentication**.\n3. Provide a name (for example, `hyperdrive-user`), then select **Generate** to generate a password.\n4. Copy this password to your clipboard before selecting **Add** to create the user.\n\nWith the username, password, public IP address and (optional) database name (default: `mysql`), you can now create a Hyperdrive database configuration.\n\n## 2. Create a database configuration\n\nTo configure Hyperdrive, you will need:\n\n* The IP address (or hostname) and port of your database.\n* The database username (for example, `hyperdrive-demo`) you configured in a previous step.\n* The password associated with that username.\n* The name of the database you want Hyperdrive to connect to. For example, `mysql`.\n\nHyperdrive accepts the combination of these parameters in the common connection string format used by database drivers:",
+      "language": "unknown"
+    },
+    {
+      "code": "Most database providers will provide a connection string you can copy-and-paste directly into Hyperdrive.\n\nTo create a Hyperdrive configuration with the [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/), open your terminal and run the following command.\n\n* Replace \\<NAME\\_OF\\_HYPERDRIVE\\_CONFIG> with a name for your Hyperdrive configuration and paste the connection string provided from your database host, or,\n* Replace `user`, `password`, `HOSTNAME_OR_IP_ADDRESS`, `port`, and `database_name` placeholders with those specific to your database:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nHyperdrive will attempt to connect to your database with the provided credentials to verify they are correct before creating a configuration. If you encounter an error when attempting to connect, refer to Hyperdrive's [troubleshooting documentation](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug possible causes.\n\nThis command outputs a binding for the [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/):\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Use Hyperdrive from your Worker\n\nInstall the [mysql2](https://github.com/sidorares/node-mysql2) driver:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\n`mysql2` v3.13.0 or later is required\n\nAdd the required Node.js compatibility flags and Hyperdrive binding to your `wrangler.jsonc` file:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Create a new `connection` instance and pass the Hyperdrive parameters:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nThe minimum version of `mysql2` required for Hyperdrive is `3.13.0`.\n\n## Next steps\n\n* Learn more about [How Hyperdrive Works](https://developers.cloudflare.com/hyperdrive/concepts/how-hyperdrive-works/).\n* Refer to the [troubleshooting guide](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug common issues.\n* Understand more about other [storage options](https://developers.cloudflare.com/workers/platform/storage-options/) available to Cloudflare Workers.\n\n</page>\n\n<page>\n---\ntitle: PlanetScale · Cloudflare Hyperdrive docs\ndescription: Connect Hyperdrive to a PlanetScale MySQL database.\nlastUpdated: 2025-08-20T20:59:04.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/hyperdrive/examples/connect-to-mysql/mysql-database-providers/planetscale/\n  md: https://developers.cloudflare.com/hyperdrive/examples/connect-to-mysql/mysql-database-providers/planetscale/index.md\n---\n\nThis example shows you how to connect Hyperdrive to a [PlanetScale](https://planetscale.com/) MySQL database.\n\n## 1. Allow Hyperdrive access\n\nYou can connect Hyperdrive to any existing PlanetScale MySQL-compatible database by creating a new user and fetching your database connection string.\n\n### PlanetScale Dashboard\n\n1. Go to the [**PlanetScale dashboard**](https://app.planetscale.com/) and select the database you wish to connect to.\n2. Click **Connect**. Enter `hyperdrive-user` as the password name (or your preferred name) and configure the permissions as desired. Select **Create password**. Note the username and password as they will not be displayed again.\n3. Select **Other** as your language or framework. Note down the database host, database name, database username, and password. You will need these to create a database configuration in Hyperdrive.\n\nWith the host, database name, username and password, you can now create a Hyperdrive database configuration.\n\n## 2. Create a database configuration\n\nTo configure Hyperdrive, you will need:\n\n* The IP address (or hostname) and port of your database.\n* The database username (for example, `hyperdrive-demo`) you configured in a previous step.\n* The password associated with that username.\n* The name of the database you want Hyperdrive to connect to. For example, `mysql`.\n\nHyperdrive accepts the combination of these parameters in the common connection string format used by database drivers:",
+      "language": "unknown"
+    },
+    {
+      "code": "Most database providers will provide a connection string you can copy-and-paste directly into Hyperdrive.\n\nTo create a Hyperdrive configuration with the [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/), open your terminal and run the following command.\n\n* Replace \\<NAME\\_OF\\_HYPERDRIVE\\_CONFIG> with a name for your Hyperdrive configuration and paste the connection string provided from your database host, or,\n* Replace `user`, `password`, `HOSTNAME_OR_IP_ADDRESS`, `port`, and `database_name` placeholders with those specific to your database:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nHyperdrive will attempt to connect to your database with the provided credentials to verify they are correct before creating a configuration. If you encounter an error when attempting to connect, refer to Hyperdrive's [troubleshooting documentation](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug possible causes.\n\nThis command outputs a binding for the [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/):\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Use Hyperdrive from your Worker\n\nInstall the [mysql2](https://github.com/sidorares/node-mysql2) driver:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\n`mysql2` v3.13.0 or later is required\n\nAdd the required Node.js compatibility flags and Hyperdrive binding to your `wrangler.jsonc` file:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Create a new `connection` instance and pass the Hyperdrive parameters:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nThe minimum version of `mysql2` required for Hyperdrive is `3.13.0`.\n\nNote\n\nWhen connecting to a PlanetScale database with Hyperdrive, you should use a driver like [node-postgres (pg)](https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-drivers-and-libraries/node-postgres/) or [Postgres.js](https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-drivers-and-libraries/postgres-js/) to connect directly to the underlying database instead of the [PlanetScale serverless driver](https://planetscale.com/docs/tutorials/planetscale-serverless-driver). Hyperdrive is optimized for database access for Workers and will perform global connection pooling and fast query routing by connecting directly to your database.\n\n## Next steps\n\n* Learn more about [How Hyperdrive Works](https://developers.cloudflare.com/hyperdrive/concepts/how-hyperdrive-works/).\n* Refer to the [troubleshooting guide](https://developers.cloudflare.com/hyperdrive/observability/troubleshooting/) to debug common issues.\n* Understand more about other [storage options](https://developers.cloudflare.com/workers/platform/storage-options/) available to Cloudflare Workers.\n\n</page>\n\n<page>\n---\ntitle: Drizzle ORM · Cloudflare Hyperdrive docs\ndescription: Drizzle ORM is a lightweight TypeScript ORM with a focus on type\n  safety. This example demonstrates how to use Drizzle ORM with PostgreSQL via\n  Cloudflare Hyperdrive in a Workers application.\nlastUpdated: 2025-08-15T12:23:26.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-drivers-and-libraries/drizzle-orm/\n  md: https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-drivers-and-libraries/drizzle-orm/index.md\n---\n\n[Drizzle ORM](https://orm.drizzle.team/) is a lightweight TypeScript ORM with a focus on type safety. This example demonstrates how to use Drizzle ORM with PostgreSQL via Cloudflare Hyperdrive in a Workers application.\n\n## Prerequisites\n\n* A Cloudflare account with Workers access\n* A PostgreSQL database\n* A [Hyperdrive configuration to your PostgreSQL database](https://developers.cloudflare.com/hyperdrive/get-started/#3-connect-hyperdrive-to-a-database)\n\n## 1. Install Drizzle\n\nInstall the Drizzle ORM and its dependencies such as the [postgres](https://github.com/porsager/postgres) driver:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "3. Create a database configuration",
+      "id": "3.-create-a-database-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "3. Use Hyperdrive from your Worker",
+      "id": "3.-use-hyperdrive-from-your-worker"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "1. Allow Hyperdrive access",
+      "id": "1.-allow-hyperdrive-access"
+    },
+    {
+      "level": "h3",
+      "text": "Azure Portal",
+      "id": "azure-portal"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create a database configuration",
+      "id": "2.-create-a-database-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "3. Use Hyperdrive from your Worker",
+      "id": "3.-use-hyperdrive-from-your-worker"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "1. Allow Hyperdrive access",
+      "id": "1.-allow-hyperdrive-access"
+    },
+    {
+      "level": "h3",
+      "text": "Cloud Console",
+      "id": "cloud-console"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create a database configuration",
+      "id": "2.-create-a-database-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "3. Use Hyperdrive from your Worker",
+      "id": "3.-use-hyperdrive-from-your-worker"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "1. Allow Hyperdrive access",
+      "id": "1.-allow-hyperdrive-access"
+    },
+    {
+      "level": "h3",
+      "text": "PlanetScale Dashboard",
+      "id": "planetscale-dashboard"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create a database configuration",
+      "id": "2.-create-a-database-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "3. Use Hyperdrive from your Worker",
+      "id": "3.-use-hyperdrive-from-your-worker"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "1. Install Drizzle",
+      "id": "1.-install-drizzle"
+    }
+  ],
+  "url": "llms-txt#log-in-to-the-database",
+  "links": []
+}

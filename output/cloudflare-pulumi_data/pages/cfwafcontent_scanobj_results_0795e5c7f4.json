@@ -1,0 +1,8 @@
+{
+  "title": "cf.waf.content\\_scan.obj\\_results",
+  "content": "`cf.waf.content_scan.obj_results` Array\\<String>\n\nAn array of scan results in the order the content objects were detected in the request.\n\nThe possible values are: `clean`, `suspicious`, `infected`, and `not scanned`.\n\nRequires a Cloudflare Enterprise plan with [malicious uploads detection](https://developers.cloudflare.com/waf/detections/malicious-uploads/).",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#cf.waf.content\\_scan.obj\\_results",
+  "links": []
+}

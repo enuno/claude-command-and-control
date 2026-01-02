@@ -1,0 +1,13 @@
+{
+  "title": "cf.tls\\_version",
+  "content": "`cf.tls_version` String\n\nThe TLS version of the connection to Cloudflare.\n\n<page>\n---\ntitle: cf.verified_bot_category · Cloudflare Ruleset Engine docs\ndescription: Provides the type and purpose of a verified bot.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.verified_bot_category/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.verified_bot_category/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"TLSv1.2\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#cf.tls\\_version",
+  "links": []
+}

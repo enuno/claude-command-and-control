@@ -1,0 +1,128 @@
+% Article Template
+% Basic structure for research papers, articles, and essays
+
+\documentclass[12pt,a4paper]{article}
+
+% ===== PACKAGES =====
+% Essential packages
+\usepackage[utf8]{inputenc}           % UTF-8 encoding
+\usepackage[T1]{fontenc}              % Font encoding
+\usepackage[margin=1in]{geometry}     % Page margins
+\usepackage{graphicx}                 % Include images
+\usepackage{amsmath,amssymb,amsthm}   % Math support
+
+% Optional but recommended packages
+\usepackage{hyperref}                 % Clickable links
+\usepackage{cite}                     % Citation management
+\usepackage{booktabs}                 % Professional tables
+\usepackage{listings}                 % Code listings
+\usepackage{xcolor}                   % Colors
+
+% ===== HYPERREF CONFIGURATION =====
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=cyan
+}
+
+% ===== TITLE PAGE INFORMATION =====
+\title{Your Article Title Here}
+\author{
+    Author Name\\
+    \texttt{email@example.com}\\
+    Institution Name
+}
+\date{\today}
+
+% ===== DOCUMENT START =====
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This is the abstract. It should concisely summarize your work, including the problem, method, results, and conclusions. Typically 150-250 words.
+\end{abstract}
+
+% ===== SECTIONS =====
+
+\section{Introduction}
+\label{sec:introduction}
+
+This is the introduction. Use \texttt{\\label\{sec:name\}} to label sections for cross-referencing. Reference a section like this: Section~\ref{sec:methods}.
+
+Key points to include:
+\begin{itemize}
+    \item Background and context
+    \item Problem statement
+    \item Research objectives
+    \item Paper organization
+\end{itemize}
+
+\section{Methods}
+\label{sec:methods}
+
+Describe your methodology here. You can include equations:
+
+\begin{equation}
+    E = mc^2
+    \label{eq:einstein}
+\end{equation}
+
+And reference them: Equation~\ref{eq:einstein} shows Einstein's mass-energy equivalence.
+
+\subsection{Experimental Setup}
+
+Subsections help organize complex sections.
+
+\section{Results}
+\label{sec:results}
+
+Present your results here. Include figures and tables:
+
+\begin{figure}[h]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{figures/example.pdf}
+    \caption{Example figure caption. Remove the \% above to include actual image.}
+    \label{fig:example}
+\end{figure}
+
+Reference figures using: Figure~\ref{fig:example}.
+
+\begin{table}[h]
+    \centering
+    \caption{Example table with professional formatting}
+    \label{tab:results}
+    \begin{tabular}{lcc}
+        \toprule
+        Parameter & Value & Unit \\
+        \midrule
+        Temperature & 25 & °C \\
+        Pressure & 1.0 & atm \\
+        Time & 60 & min \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\section{Discussion}
+\label{sec:discussion}
+
+Interpret your results and discuss their implications.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Summarize the main findings and suggest future work.
+
+% ===== BIBLIOGRAPHY =====
+% Option 1: Manual bibliography
+\begin{thebibliography}{99}
+    \bibitem{example}
+        Author, A. (2024). \textit{Title of Work}. Publisher.
+\end{thebibliography}
+
+% Option 2: BibTeX (uncomment and create references.bib)
+% \bibliographystyle{plain}
+% \bibliography{references}
+
+\end{document}

@@ -1,0 +1,13 @@
+{
+  "title": "ip.src.timezone.name",
+  "content": "`ip.src.timezone.name` String\n\nThe name of the timezone associated with the incoming request.\n\nThis field is only available in rewrite expressions of [Transform Rules](https://developers.cloudflare.com/rules/transform/).\n\n* Request\n* Geolocation\n\n<page>\n---\ntitle: ip.src.subdivision_2_iso_code · Cloudflare Ruleset Engine docs\ndescription: The ISO 3166-2 code for the second-level region associated with the IP address.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/ip.src.subdivision_2_iso_code/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/ip.src.subdivision_2_iso_code/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"America/Chicago\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#ip.src.timezone.name",
+  "links": []
+}

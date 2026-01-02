@@ -1,0 +1,8 @@
+{
+  "title": "Removes table from catalog but keeps data files in R2 storage",
+  "content": "spark.sql(\"DROP TABLE r2dc.namespace.table_name\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#removes-table-from-catalog-but-keeps-data-files-in-r2-storage",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "the PROFILE_PAYLOAD_ID_PREFIX variable",
+  "content": "profiles=$(/usr/bin/profiles show | grep \"$PROFILE_PAYLOAD_ID_PREFIX\" | sed 's/.*\\ //')",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#the-profile_payload_id_prefix-variable",
+  "links": []
+}

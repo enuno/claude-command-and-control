@@ -1,0 +1,8 @@
+{
+  "title": "Create a simple DataFrame",
+  "content": "df = spark.createDataFrame(\n    [(1, \"Alice\"), (2, \"Bob\"), (3, \"Charlie\")],\n    [\"id\", \"name\"]\n)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-a-simple-dataframe",
+  "links": []
+}

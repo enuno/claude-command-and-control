@@ -1,0 +1,8 @@
+{
+  "title": "Enable catalog-level snapshot expiration (all tables)",
+  "content": "npx wrangler r2 bucket catalog snapshot-expiration enable <BUCKET_NAME> \\\n  --token <API_TOKEN> \\\n  --older-than-days 7 \\\n  --retain-last 10",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#enable-catalog-level-snapshot-expiration-(all-tables)",
+  "links": []
+}

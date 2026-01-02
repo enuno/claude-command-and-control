@@ -1,0 +1,23 @@
+{
+  "title": "Replace 'a' with '\\' (backslash)",
+  "content": "regex_replace(http.host, \"a\", \"\\\\\")\ntxt\nregex_replace(http.host, \"\\\\\\\\\", \"a\")\ntxt",
+  "code_samples": [
+    {
+      "code": "Warning\n\nIn some situations you will need to double-escape a string — for example, when using the [`regex_replace()`](https://developers.cloudflare.com/ruleset-engine/rules-language/functions/#regex_replace) function with a regular expression matching a backslash (`\\`).\n\nIn this case, you must do the basic escaping required by strings as function parameters (using `\\\\` for each `\\` character) and also the regex escaping (using `\\\\` for each `\\` character), since the backslash has a special meaning in regular expressions.\n\nTherefore, to replace a backslash (`\\`) with the `a` character using `regex_replace()` you would use the following expression:",
+      "language": "unknown"
+    },
+    {
+      "code": "To avoid this situation, Cloudflare recommends that you use the [raw string syntax](#raw-string-syntax) for specifying regular expressions.\n\n### Raw string syntax\n\nTo specify a string (or regular expression) using the raw string syntax you use special delimiters:\n\n* The initial delimiter is composed of an `r` character, optionally followed by one or more `#` characters (up to 255), followed by a `\"` (double quote) character.\n* The ending delimiter is a `\"` (double quote) character followed by the same number of `#` characters as in the initial delimiter (from 0 to 255).\n\nIn a raw string there are no special characters, so all characters up to the ending delimiter are interpreted as is (there are no escape sequences).\n\nUnlike the quoted string syntax, the raw string syntax is always the same, regardless of the context where it is being used (for example, as a regular expression with a [regex operator](https://developers.cloudflare.com/ruleset-engine/rules-language/operators/#comparison-operators) or as a parameter of a [function call](https://developers.cloudflare.com/ruleset-engine/rules-language/functions/)).",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Raw string syntax",
+      "id": "raw-string-syntax"
+    }
+  ],
+  "url": "llms-txt#replace-'a'-with-'\\'-(backslash)",
+  "links": []
+}

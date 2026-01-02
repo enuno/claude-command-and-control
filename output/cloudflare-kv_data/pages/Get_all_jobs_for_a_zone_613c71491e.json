@@ -1,0 +1,8 @@
+{
+  "title": "Get all jobs for a zone",
+  "content": "r = requests.get(logpush_url + \"/jobs\", headers=headers)\nprint(r.status_code, r.text)\nassert r.status_code == 200\nassert len(r.json()[\"result\"]) > 0",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-all-jobs-for-a-zone",
+  "links": []
+}

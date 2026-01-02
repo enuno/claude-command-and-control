@@ -1,0 +1,205 @@
+{
+  "title": "**Using Keyboard Shortcuts to Execute Cells in Jupyter Notebooks**",
+  "content": "Executing cells in Jupyter Notebooks can be done quickly and efficiently using various keyboard shortcuts, saving you time and effort. Here are the shortcuts you can use:\n\n* **Shift + Enter**: Execute the current cell and insert a new cell below.\n* **Ctrl + Enter**: Execute the current cell and insert a new cell below, without creating a new output display.\n\n* **Shift + Enter**: Execute the current cell and insert a new cell below.\n* **Ctrl + Enter**: Execute the current cell and move to the next cell.\n\n**Additional Shortcuts**\n\n* **Alt + Enter**: Execute the current cell and create a new output display below (Mac), or move to the next cell (Windows/Linux).\n* **Ctrl + Shift + Enter**: Execute the current cell and create a new output display below (Mac), or create a new cell below (Windows/Linux).\n\n* You can also use the **Run Cell** button in the Jupyter Notebook toolbar, or the **Run** menu option (macOS) or **Run -> Run Cell** (Windows/Linux).\n* To execute a selection of cells, use **Shift + Alt + Enter** (Mac) or **Shift + Ctrl + Enter** (Windows/Linux).\n* To execute a cell and move to the next cell, use **Ctrl + Shift + Enter** (all platforms).\n\nBy using these keyboard shortcuts, you'll be able to work more efficiently and quickly in your Jupyter Notebooks. Happy coding!\n\nExplore all [Text to Image models](https://developers.cloudflare.com/workers-ai/models)\n\n![png](https://developers.cloudflare.com/workers-ai-notebooks/cloudflare-workers-ai/assets/output_13_0.png)\n\nExplore all [Image to Text](https://developers.cloudflare.com/workers-ai/models/) models\n\n![lava lamps](https://blog.cloudflare.com/content/images/2017/11/lava-lamps.jpg)\n\nThe image features a display of various colored lava lamps. There are at least 14 lava lamps in the scene, each with a different color and design. The lamps are arranged in a visually appealing manner, with some placed closer to the foreground and others further back. The display creates an eye-catching and vibrant atmosphere, showcasing the diverse range of lava lamps available.\n\n### Automatic Speech Recognition\n\nExplore all [Speech Recognition models](https://developers.cloudflare.com/workers-ai/models)\n\nExplore all [Translation models](https://developers.cloudflare.com/workers-ai/models)\n\nLa inteligencia artificial es bastante impresionante en estos días.Es un buen momento para ser un constructor\n\n### Text Classification\n\nExplore all [Text Classification models](https://developers.cloudflare.com/workers-ai/models)\n\n\\[TextClassification(label='NEGATIVE', score=0.00012679687642958015), TextClassification(label='POSITIVE', score=0.999873161315918)]\n\n### Image Classification\n\nExplore all [Image Classification models](https://developers.cloudflare.com/workers-ai/models#image-classification/)\n\n![jpeg](https://developers.cloudflare.com/workers-ai-notebooks/cloudflare-workers-ai/assets/output_27_0.jpg)\n\n\\[TextClassification(label='BURRITO', score=0.9999679327011108), TextClassification(label='GUACAMOLE', score=8.516660273016896e-06), TextClassification(label='BAGEL', score=4.689153229264775e-06), TextClassification(label='SPATULA', score=4.075985089002643e-06), TextClassification(label='POTPIE', score=3.0849002996546915e-06)]\n\nExplore all [Summarization](https://developers.cloudflare.com/workers-ai/models#summarization) based models\n\n'The Declaration of Independence was signed by the thirteen states on July 4, 1776. It was the first attempt at a U.S. Constitution. It declared the right of the people to change their Government.'\n\n<page>\n---\ntitle: Fine Tune Models With AutoTrain from HuggingFace · Cloudflare Workers AI docs\ndescription: Fine-tuning AI models with LoRA adapters on Workers AI allows\n  adding custom training data, like for LLM finetuning.\nlastUpdated: 2025-08-19T18:37:36.000Z\nchatbotDeprioritize: false\ntags: AI,LLM\nsource_url:\n  html: https://developers.cloudflare.com/workers-ai/guides/tutorials/fine-tune-models-with-autotrain/\n  md: https://developers.cloudflare.com/workers-ai/guides/tutorials/fine-tune-models-with-autotrain/index.md\n---\n\nFine tuning an AI model gives you the opportunity to add additional training data to the model. Workers AI allows for [Low-Rank Adaptation, LoRA, adapters](https://developers.cloudflare.com/workers-ai/features/fine-tunes/loras/) that will allow you to finetune our models.\n\nIn this tutorial, we will explore how to create our own LoRAs. We will focus on [LLM Finetuning using AutoTrain](https://huggingface.co/docs/autotrain/llm_finetuning).\n\n## 1. Create a CSV file with your training data\n\nStart by creating a CSV, Comma Separated Values, file. This file will only have one column named `text`. Set the header by adding the word `text` on a line by itself.\n\nNow you need to figure out what you want to add to your model.\n\nExample formats are below:\n\nIf your training row contains newlines, you should wrap it with quotes.\n\nDifferent models, like Mistral, will provide a specific [chat template/instruction format](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1#instruction-format)\n\n## 2. Configure the HuggingFace Autotrain Advanced Notebook\n\nOpen the [HuggingFace Autotrain Advanced Notebook](https://colab.research.google.com/github/huggingface/autotrain-advanced/blob/main/colabs/AutoTrain_LLM.ipynb)\n\nIn order to give your AutoTrain ample memory, you will need to need to choose a different Runtime. From the menu at the top of the Notebook choose Runtime > Change Runtime Type. Choose A100.\n\nThese GPUs will cost money. A typical AutoTrain session typically costs less than $1 USD.\n\nThe notebook contains a few interactive sections that we will need to change.\n\nModify the following fields\n\n* **project\\_name**: Choose a descriptive name for you to remember later\n\n* **model\\_name**: Choose from the one of the official HuggingFace base models that we support:\n\n* `mistralai/Mistral-7B-Instruct-v0.2`\n  * `google/gemma-2b-it`\n  * `google/gemma-7b-it`\n  * `meta-llama/llama-2-7b-chat-hf`\n\n### Optional Section: Push to Hub\n\nAlthough not required to use AutoTrain, creating a [HuggingFace account](https://huggingface.co/join) will help you keep your finetune artifacts in a handy repository for you to refer to later.\n\nIf you do not perform the HuggingFace setup you can still download your files from the Notebook.\n\nFollow the instructions [in the notebook](https://colab.research.google.com/github/huggingface/autotrain-advanced/blob/main/colabs/AutoTrain_LLM.ipynb) to create an account and token if necessary.\n\n### Section: Hyperparameters\n\nWe only need to change a few of these fields to ensure things work on Cloudflare Workers AI.\n\n* **quantization**: Change the drop down to `none`\n* **lora-r**: Change the value to `8`\n\nAt the time of this writing, changing the quantization field breaks the code generation. You may need to edit the code and put quotes around the value.\n\nChange the line that says `quantization = none` to `quantization = \"none\"`.\n\n## 3. Upload your CSV file to the Notebook\n\nNotebooks have a folder structure which you can access by clicking the folder icon on the left hand navigation bar.\n\nCreate a folder named data.\n\nYou can drag your CSV file into the notebook.\n\nEnsure that it is named **train.csv**\n\n## 4. Execute the Notebook\n\nIn the Notebook menu, choose Runtime > Run All.\n\nIt will run through each cell of the notebook, first doing installations, then configuring and running your AutoTrain session.\n\nThis might take some time depending on the size of your train.csv file.\n\nIf you encounter the following error, it is caused by an Out of Memory error. You might want to change your runtime to a bigger GPU backend.\n\n## 5. Download The LoRA\n\n### Optional: HuggingFace\n\nIf you pushed to HuggingFace you will find your new model card that you named in **project\\_name** above. Your model card is private by default. Navigate to the files and download the files listed below.\n\nIn your Notebook you can also find the needed files. A new folder that matches your **project\\_name** will be there.\n\nDownload the following files:\n\n* `adapter_model.safetensors`\n* `adapter_config.json`\n\n## 6. Update Adapter Config\n\nYou need to add one line to your `adapter_config.json` that you downloaded.\n\n`\"model_type\": \"mistral\"`\n\nWhere `model_type` is the architecture. Current valid values are `mistral`, `gemma`, and `llama`.\n\n## 7. Upload the Fine Tune to your Cloudflare Account\n\nNow that you have your files, you can add them to your account.\n\nYou can either use the [REST API or Wrangler](https://developers.cloudflare.com/workers-ai/features/fine-tunes/loras/).\n\n## 8. Use your Fine Tune in your Generations\n\nAfter you have your new fine tune all set up, you are ready to [put it to use in your inference requests](https://developers.cloudflare.com/workers-ai/features/fine-tunes/loras/#running-inference-with-loras).\n\n<page>\n---\ntitle: Choose the Right Text Generation Model · Cloudflare Workers AI docs\ndescription: There's a wide range of text generation models available through\n  Workers AI. In an effort to aid you in your journey of finding the right\n  model, this notebook will help you get to know your options in a speed dating\n  type of scenario.\nlastUpdated: 2025-08-19T18:37:36.000Z\nchatbotDeprioritize: false\ntags: AI,Python\nsource_url:\n  html: https://developers.cloudflare.com/workers-ai/guides/tutorials/how-to-choose-the-right-text-generation-model/\n  md: https://developers.cloudflare.com/workers-ai/guides/tutorials/how-to-choose-the-right-text-generation-model/index.md\n---\n\nA great way to explore the models that are available to you on [Workers AI](https://developers.cloudflare.com/workers-ai) is to use a [Jupyter Notebook](https://jupyter.org/).\n\nYou can [download the Workers AI Text Generation Exploration notebook](https://developers.cloudflare.com/workers-ai/static/documentation/notebooks/text-generation-model-exploration.ipynb) or view the embedded notebook below.\n\n## How to Choose The Right Text Generation Model\n\nModels come in different shapes and sizes, and choosing the right one for the task, can cause analysis paralysis.\n\nThe good news is that on the [Workers AI Text Generation](https://developers.cloudflare.com/workers-ai/models/) interface is always the same, no matter which model you choose.\n\nIn an effort to aid you in your journey of finding the right model, this notebook will help you get to know your options in a speed dating type of scenario.\n\n### Configuring your environment\n\nTo use the API you'll need your [Cloudflare Account ID](https://dash.cloudflare.com) (head to Workers & Pages > Overview > Account details > Account ID) and a [Workers AI enabled API Token](https://dash.cloudflare.com/profile/api-tokens).\n\nIf you want to add these files to your environment, you can create a new file named `.env`",
+  "code_samples": [
+    {
+      "code": "data = client.workers.ai.with_raw_response.run(\n    \"@cf/lykon/dreamshaper-8-lcm\",\n    account_id=account_id,\n    prompt=\"A software developer incredibly excited about AI, huge smile\",\n)\n\n\ndisplay(Image(data.read()))",
+      "language": "python"
+    },
+    {
+      "code": "url = \"https://blog.cloudflare.com/content/images/2017/11/lava-lamps.jpg\"\n\n\nimage_request = requests.get(url, allow_redirects=True)\n\n\ndisplay(Image(image_request.content, format=\"jpg\"))\n\n\ndata = client.workers.ai.run(\n    \"@cf/llava-hf/llava-1.5-7b-hf\",\n    account_id=account_id,\n    image=image_request.content,\n    prompt=\"Describe this photo\",\n    max_tokens=2048\n)\n\n\nprint(data[\"description\"])",
+      "language": "python"
+    },
+    {
+      "code": "url = \"https://raw.githubusercontent.com/craigsdennis/notebooks-cloudflare-workers-ai/main/assets/craig-rambling.mp3\"\ndisplay(Audio(url))\naudio = requests.get(url)\n\n\nresponse = client.workers.ai.run(\n    \"@cf/openai/whisper\",\n    account_id=account_id,\n    audio=audio.content\n)\n\n\nresponse",
+      "language": "python"
+    },
+    {
+      "code": "{'text': \"Hello there, I'm making a recording for a Jupiter notebook. That's a Python notebook, Jupiter, J-U-P-Y-T-E-R. Not to be confused with the planet. Anyways, let me hear, I'm gonna talk a little bit, I'm gonna make a little bit of noise, say some hard words, I'm gonna say Kubernetes, I'm not actually even talking about Kubernetes, I just wanna see if I can do Kubernetes. Anyway, this is a test of transcription and let's see how we're dead.\",\n     'word_count': 84,\n     'vtt': \"WEBVTT\\n\\n00.280 --> 01.840\\nHello there, I'm making a\\n\\n01.840 --> 04.060\\nrecording for a Jupiter notebook.\\n\\n04.060 --> 06.440\\nThat's a Python notebook, Jupiter,\\n\\n06.440 --> 07.720\\nJ -U -P -Y -T\\n\\n07.720 --> 09.420\\n-E -R. Not to be\\n\\n09.420 --> 12.140\\nconfused with the planet. Anyways,\\n\\n12.140 --> 12.940\\nlet me hear, I'm gonna\\n\\n12.940 --> 13.660\\ntalk a little bit, I'm\\n\\n13.660 --> 14.600\\ngonna make a little bit\\n\\n14.600 --> 16.180\\nof noise, say some hard\\n\\n16.180 --> 17.540\\nwords, I'm gonna say Kubernetes,\\n\\n17.540 --> 18.420\\nI'm not actually even talking\\n\\n18.420 --> 19.500\\nabout Kubernetes, I just wanna\\n\\n19.500 --> 20.300\\nsee if I can do\\n\\n20.300 --> 22.120\\nKubernetes. Anyway, this is a\\n\\n22.120 --> 24.080\\ntest of transcription and let's\\n\\n24.080 --> 26.280\\nsee how we're dead.\",\n     'words': [{'word': 'Hello',\n       'start': 0.2800000011920929,\n       'end': 0.7400000095367432},\n      {'word': 'there,', 'start': 0.7400000095367432, 'end': 1.2400000095367432},\n      {'word': \"I'm\", 'start': 1.2400000095367432, 'end': 1.4800000190734863},\n      {'word': 'making', 'start': 1.4800000190734863, 'end': 1.6799999475479126},\n      {'word': 'a', 'start': 1.6799999475479126, 'end': 1.840000033378601},\n      {'word': 'recording', 'start': 1.840000033378601, 'end': 2.2799999713897705},\n      {'word': 'for', 'start': 2.2799999713897705, 'end': 2.6600000858306885},\n      {'word': 'a', 'start': 2.6600000858306885, 'end': 2.799999952316284},\n      {'word': 'Jupiter', 'start': 2.799999952316284, 'end': 3.2200000286102295},\n      {'word': 'notebook.', 'start': 3.2200000286102295, 'end': 4.059999942779541},\n      {'word': \"That's\", 'start': 4.059999942779541, 'end': 4.28000020980835},\n      {'word': 'a', 'start': 4.28000020980835, 'end': 4.380000114440918},\n      {'word': 'Python', 'start': 4.380000114440918, 'end': 4.679999828338623},\n      {'word': 'notebook,', 'start': 4.679999828338623, 'end': 5.460000038146973},\n      {'word': 'Jupiter,', 'start': 5.460000038146973, 'end': 6.440000057220459},\n      {'word': 'J', 'start': 6.440000057220459, 'end': 6.579999923706055},\n      {'word': '-U', 'start': 6.579999923706055, 'end': 6.920000076293945},\n      {'word': '-P', 'start': 6.920000076293945, 'end': 7.139999866485596},\n      {'word': '-Y', 'start': 7.139999866485596, 'end': 7.440000057220459},\n      {'word': '-T', 'start': 7.440000057220459, 'end': 7.71999979019165},\n      {'word': '-E', 'start': 7.71999979019165, 'end': 7.920000076293945},\n      {'word': '-R.', 'start': 7.920000076293945, 'end': 8.539999961853027},\n      {'word': 'Not', 'start': 8.539999961853027, 'end': 8.880000114440918},\n      {'word': 'to', 'start': 8.880000114440918, 'end': 9.300000190734863},\n      {'word': 'be', 'start': 9.300000190734863, 'end': 9.420000076293945},\n      {'word': 'confused', 'start': 9.420000076293945, 'end': 9.739999771118164},\n      {'word': 'with', 'start': 9.739999771118164, 'end': 9.9399995803833},\n      {'word': 'the', 'start': 9.9399995803833, 'end': 10.039999961853027},\n      {'word': 'planet.', 'start': 10.039999961853027, 'end': 11.380000114440918},\n      {'word': 'Anyways,', 'start': 11.380000114440918, 'end': 12.140000343322754},\n      {'word': 'let', 'start': 12.140000343322754, 'end': 12.420000076293945},\n      {'word': 'me', 'start': 12.420000076293945, 'end': 12.520000457763672},\n      {'word': 'hear,', 'start': 12.520000457763672, 'end': 12.800000190734863},\n      {'word': \"I'm\", 'start': 12.800000190734863, 'end': 12.880000114440918},\n      {'word': 'gonna', 'start': 12.880000114440918, 'end': 12.9399995803833},\n      {'word': 'talk', 'start': 12.9399995803833, 'end': 13.100000381469727},\n      {'word': 'a', 'start': 13.100000381469727, 'end': 13.260000228881836},\n      {'word': 'little', 'start': 13.260000228881836, 'end': 13.380000114440918},\n      {'word': 'bit,', 'start': 13.380000114440918, 'end': 13.5600004196167},\n      {'word': \"I'm\", 'start': 13.5600004196167, 'end': 13.65999984741211},\n      {'word': 'gonna', 'start': 13.65999984741211, 'end': 13.739999771118164},\n      {'word': 'make', 'start': 13.739999771118164, 'end': 13.920000076293945},\n      {'word': 'a', 'start': 13.920000076293945, 'end': 14.199999809265137},\n      {'word': 'little', 'start': 14.199999809265137, 'end': 14.4399995803833},\n      {'word': 'bit', 'start': 14.4399995803833, 'end': 14.600000381469727},\n      {'word': 'of', 'start': 14.600000381469727, 'end': 14.699999809265137},\n      {'word': 'noise,', 'start': 14.699999809265137, 'end': 15.460000038146973},\n      {'word': 'say', 'start': 15.460000038146973, 'end': 15.859999656677246},\n      {'word': 'some', 'start': 15.859999656677246, 'end': 16},\n      {'word': 'hard', 'start': 16, 'end': 16.18000030517578},\n      {'word': 'words,', 'start': 16.18000030517578, 'end': 16.540000915527344},\n      {'word': \"I'm\", 'start': 16.540000915527344, 'end': 16.639999389648438},\n      {'word': 'gonna', 'start': 16.639999389648438, 'end': 16.719999313354492},\n      {'word': 'say', 'start': 16.719999313354492, 'end': 16.920000076293945},\n      {'word': 'Kubernetes,',\n       'start': 16.920000076293945,\n       'end': 17.540000915527344},\n      {'word': \"I'm\", 'start': 17.540000915527344, 'end': 17.65999984741211},\n      {'word': 'not', 'start': 17.65999984741211, 'end': 17.719999313354492},\n      {'word': 'actually', 'start': 17.719999313354492, 'end': 18},\n      {'word': 'even', 'start': 18, 'end': 18.18000030517578},\n      {'word': 'talking', 'start': 18.18000030517578, 'end': 18.420000076293945},\n      {'word': 'about', 'start': 18.420000076293945, 'end': 18.6200008392334},\n      {'word': 'Kubernetes,', 'start': 18.6200008392334, 'end': 19.1200008392334},\n      {'word': 'I', 'start': 19.1200008392334, 'end': 19.239999771118164},\n      {'word': 'just', 'start': 19.239999771118164, 'end': 19.360000610351562},\n      {'word': 'wanna', 'start': 19.360000610351562, 'end': 19.5},\n      {'word': 'see', 'start': 19.5, 'end': 19.719999313354492},\n      {'word': 'if', 'start': 19.719999313354492, 'end': 19.8799991607666},\n      {'word': 'I', 'start': 19.8799991607666, 'end': 19.940000534057617},\n      {'word': 'can', 'start': 19.940000534057617, 'end': 20.079999923706055},\n      {'word': 'do', 'start': 20.079999923706055, 'end': 20.299999237060547},\n      {'word': 'Kubernetes.',\n       'start': 20.299999237060547,\n       'end': 21.440000534057617},\n      {'word': 'Anyway,', 'start': 21.440000534057617, 'end': 21.799999237060547},\n      {'word': 'this', 'start': 21.799999237060547, 'end': 21.920000076293945},\n      {'word': 'is', 'start': 21.920000076293945, 'end': 22.020000457763672},\n      {'word': 'a', 'start': 22.020000457763672, 'end': 22.1200008392334},\n      {'word': 'test', 'start': 22.1200008392334, 'end': 22.299999237060547},\n      {'word': 'of', 'start': 22.299999237060547, 'end': 22.639999389648438},\n      {'word': 'transcription',\n       'start': 22.639999389648438,\n       'end': 23.139999389648438},\n      {'word': 'and', 'start': 23.139999389648438, 'end': 23.6200008392334},\n      {'word': \"let's\", 'start': 23.6200008392334, 'end': 24.079999923706055},\n      {'word': 'see', 'start': 24.079999923706055, 'end': 24.299999237060547},\n      {'word': 'how', 'start': 24.299999237060547, 'end': 24.559999465942383},\n      {'word': \"we're\", 'start': 24.559999465942383, 'end': 24.799999237060547},\n      {'word': 'dead.', 'start': 24.799999237060547, 'end': 26.280000686645508}]}",
+      "language": "javascript"
+    },
+    {
+      "code": "result = client.workers.ai.run(\n    \"@cf/meta/m2m100-1.2b\",\n    account_id=account_id,\n    text=\"Artificial intelligence is pretty impressive these days. It is a bonkers time to be a builder\",\n    source_lang=\"english\",\n    target_lang=\"spanish\"\n)\n\n\n\n\nprint(result[\"translated_text\"])",
+      "language": "python"
+    },
+    {
+      "code": "result = client.workers.ai.run(\n    \"@cf/huggingface/distilbert-sst-2-int8\",\n    account_id=account_id,\n    text=\"This taco is delicious\"\n)\n\n\nresult",
+      "language": "python"
+    },
+    {
+      "code": "url = \"https://raw.githubusercontent.com/craigsdennis/notebooks-cloudflare-workers-ai/main/assets/craig-and-a-burrito.jpg\"\nimage_request = requests.get(url, allow_redirects=True)\n\n\ndisplay(Image(image_request.content, format=\"jpg\"))\nresponse = client.workers.ai.run(\n    \"@cf/microsoft/resnet-50\",\n    account_id=account_id,\n    image=image_request.content\n)\nresponse",
+      "language": "python"
+    },
+    {
+      "code": "declaration_of_independence = \"\"\"In Congress, July 4, 1776. The unanimous Declaration of the thirteen united States of America, When in the Course of human events, it becomes necessary for one people to dissolve the political bands which have connected them with another, and to assume among the powers of the earth, the separate and equal station to which the Laws of Nature and of Nature's God entitle them, a decent respect to the opinions of mankind requires that they should declare the causes which impel them to the separation. We hold these truths to be self-evident, that all men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty and the pursuit of Happiness.--That to secure these rights, Governments are instituted among Men, deriving their just powers from the consent of the governed, --That whenever any Form of Government becomes destructive of these ends, it is the Right of the People to alter or to abolish it, and to institute new Government, laying its foundation on such principles and organizing its powers in such form, as to them shall seem most likely to effect their Safety and Happiness. Prudence, indeed, will dictate that Governments long established should not be changed for light and transient causes; and accordingly all experience hath shewn, that mankind are more disposed to suffer, while evils are sufferable, than to right themselves by abolishing the forms to which they are accustomed. But when a long train of abuses and usurpations, pursuing invariably the same Object evinces a design to reduce them under absolute Despotism, it is their right, it is their duty, to throw off such Government, and to provide new Guards for their future security.--Such has been the patient sufferance of these Colonies; and such is now the necessity which constrains them to alter their former Systems of Government. The history of the present King of Great Britain is a history of repeated injuries and usurpations, all having in direct object the establishment of an absolute Tyranny over these States. To prove this, let Facts be submitted to a candid world. He has refused his Assent to Laws, the most wholesome and necessary for the public good. He has forbidden his Governors to pass Laws of immediate and pressing importance, unless suspended in their operation till his Assent should be obtained; and when so suspended, he has utterly neglected to attend to them. He has refused to pass other Laws for the accommodation of large districts of people, unless those people would relinquish the right of Representation in the Legislature, a right inestimable to them and formidable to tyrants only. He has called together legislative bodies at places unusual, uncomfortable, and distant from the depository of their public Records, for the sole purpose of fatiguing them into compliance with his measures. He has dissolved Representative Houses repeatedly, for opposing with manly firmness his invasions on the rights of the people. He has refused for a long time, after such dissolutions, to cause others to be elected; whereby the Legislative powers, incapable of Annihilation, have returned to the People at large for their exercise; the State remaining in the mean time exposed to all the dangers of invasion from without, and convulsions within. He has endeavoured to prevent the population of these States; for that purpose obstructing the Laws for Naturalization of Foreigners; refusing to pass others to encourage their migrations hither, and raising the conditions of new Appropriations of Lands. He has obstructed the Administration of Justice, by refusing his Assent to Laws for establishing Judiciary powers. He has made Judges dependent on his Will alone, for the tenure of their offices, and the amount and payment of their salaries. He has erected a multitude of New Offices, and sent hither swarms of Officers to harrass our people, and eat out their substance. He has kept among us, in times of peace, Standing Armies without the Consent of our legislatures. He has affected to render the Military independent of and superior to the Civil power. He has combined with others to subject us to a jurisdiction foreign to our constitution, and unacknowledged by our laws; giving his Assent to their Acts of pretended Legislation: For Quartering large bodies of armed troops among us: For protecting them, by a mock Trial, from punishment for any Murders which they should commit on the Inhabitants of these States: For cutting off our Trade with all parts of the world: For imposing Taxes on us without our Consent: For depriving us in many cases, of the benefits of Trial by Jury: For transporting us beyond Seas to be tried for pretended offences For abolishing the free System of English Laws in a neighbouring Province, establishing therein an Arbitrary government, and enlarging its Boundaries so as to render it at once an example and fit instrument for introducing the same absolute rule into these Colonies: For taking away our Charters, abolishing our most valuable Laws, and altering fundamentally the Forms of our Governments: For suspending our own Legislatures, and declaring themselves invested with power to legislate for us in all cases whatsoever. He has abdicated Government here, by declaring us out of his Protection and waging War against us. He has plundered our seas, ravaged our Coasts, burnt our towns, and destroyed the lives of our people. He is at this time transporting large Armies of foreign Mercenaries to compleat the works of death, desolation and tyranny, already begun with circumstances of Cruelty & perfidy scarcely paralleled in the most barbarous ages, and totally unworthy the Head of a civilized nation. He has constrained our fellow Citizens taken Captive on the high Seas to bear Arms against their Country, to become the executioners of their friends and Brethren, or to fall themselves by their Hands. He has excited domestic insurrections amongst us, and has endeavoured to bring on the inhabitants of our frontiers, the merciless Indian Savages, whose known rule of warfare, is an undistinguished destruction of all ages, sexes and conditions. In every stage of these Oppressions We have Petitioned for Redress in the most humble terms: Our repeated Petitions have been answered only by repeated injury. A Prince whose character is thus marked by every act which may define a Tyrant, is unfit to be the ruler of a free people. Nor have We been wanting in attentions to our Brittish brethren. We have warned them from time to time of attempts by their legislature to extend an unwarrantable jurisdiction over us. We have reminded them of the circumstances of our emigration and settlement here. We have appealed to their native justice and magnanimity, and we have conjured them by the ties of our common kindred to disavow these usurpations, which, would inevitably interrupt our connections and correspondence. They too have been deaf to the voice of justice and of consanguinity. We must, therefore, acquiesce in the necessity, which denounces our Separation, and hold them, as we hold the rest of mankind, Enemies in War, in Peace Friends. We, therefore, the Representatives of the united States of America, in General Congress, Assembled, appealing to the Supreme Judge of the world for the rectitude of our intentions, do, in the Name, and by Authority of the good People of these Colonies, solemnly publish and declare, That these United Colonies are, and of Right ought to be Free and Independent States; that they are Absolved from all Allegiance to the British Crown, and that all political connection between them and the State of Great Britain, is and ought to be totally dissolved; and that as Free and Independent States, they have full Power to levy War, conclude Peace, contract Alliances, establish Commerce, and to do all other Acts and Things which Independent States may of right do. And for the support of this Declaration, with a firm reliance on the protection of divine Providence, we mutually pledge to each other our Lives, our Fortunes and our sacred Honor.\"\"\"\nlen(declaration_of_independence)",
+      "language": "python"
+    },
+    {
+      "code": "response = client.workers.ai.run(\n    \"@cf/facebook/bart-large-cnn\",\n    account_id=account_id,\n    input_text=declaration_of_independence\n)\n\n\nresponse[\"summary\"]",
+      "language": "python"
+    },
+    {
+      "code": "### Human: What is the meaning of life? ### Assistant: 42.",
+      "language": "text"
+    },
+    {
+      "code": "\"human: What is the meaning of life? \\n bot: 42.\"",
+      "language": "text"
+    },
+    {
+      "code": "<s>[INST] What is the meaning of life? [/INST] 42</s>",
+      "language": "text"
+    },
+    {
+      "code": "subprocess.CalledProcessError: Command '['/usr/bin/python3', '-m', 'autotrain.trainers.clm', '--training_config', 'blog-instruct/training_params.json']' died with <Signals.SIGKILL: 9>.",
+      "language": "bash"
+    },
+    {
+      "code": "import sys\n!{sys.executable} -m pip install requests python-dotenv",
+      "language": "python"
+    },
+    {
+      "code": "Requirement already satisfied: requests in ./venv/lib/python3.12/site-packages (2.31.0)\nRequirement already satisfied: python-dotenv in ./venv/lib/python3.12/site-packages (1.0.1)\nRequirement already satisfied: charset-normalizer<4,>=2 in ./venv/lib/python3.12/site-packages (from requests) (3.3.2)\nRequirement already satisfied: idna<4,>=2.5 in ./venv/lib/python3.12/site-packages (from requests) (3.6)\nRequirement already satisfied: urllib3<3,>=1.21.1 in ./venv/lib/python3.12/site-packages (from requests) (2.1.0)\nRequirement already satisfied: certifi>=2017.4.17 in ./venv/lib/python3.12/site-packages (from requests) (2023.11.17)",
+      "language": "plaintext"
+    },
+    {
+      "code": "import os\nfrom getpass import getpass\nfrom timeit import default_timer as timer\n\n\nfrom IPython.display import display, Image, Markdown, Audio\n\n\nimport requests",
+      "language": "python"
+    },
+    {
+      "code": "%load_ext dotenv\n%dotenv",
+      "language": "python"
+    },
+    {
+      "code": "CLOUDFLARE_API_TOKEN=\"YOUR-TOKEN\"\nCLOUDFLARE_ACCOUNT_ID=\"YOUR-ACCOUNT-ID\"",
+      "language": "bash"
+    },
+    {
+      "code": "if \"CLOUDFLARE_API_TOKEN\" in os.environ:\n    api_token = os.environ[\"CLOUDFLARE_API_TOKEN\"]\nelse:\n    api_token = getpass(\"Enter you Cloudflare API Token\")",
+      "language": "python"
+    },
+    {
+      "code": "if \"CLOUDFLARE_ACCOUNT_ID\" in os.environ:\n    account_id = os.environ[\"CLOUDFLARE_ACCOUNT_ID\"]\nelse:\n    account_id = getpass(\"Enter your account id\")",
+      "language": "python"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Text to Image",
+      "id": "text-to-image"
+    },
+    {
+      "level": "h3",
+      "text": "Image to Text",
+      "id": "image-to-text"
+    },
+    {
+      "level": "h3",
+      "text": "Automatic Speech Recognition",
+      "id": "automatic-speech-recognition"
+    },
+    {
+      "level": "h3",
+      "text": "Translations",
+      "id": "translations"
+    },
+    {
+      "level": "h3",
+      "text": "Text Classification",
+      "id": "text-classification"
+    },
+    {
+      "level": "h3",
+      "text": "Image Classification",
+      "id": "image-classification"
+    },
+    {
+      "level": "h2",
+      "text": "Summarization",
+      "id": "summarization"
+    },
+    {
+      "level": "h2",
+      "text": "1. Create a CSV file with your training data",
+      "id": "1.-create-a-csv-file-with-your-training-data"
+    },
+    {
+      "level": "h3",
+      "text": "Human: What is the meaning of life? ### Assistant: 42.",
+      "id": "human:-what-is-the-meaning-of-life?-###-assistant:-42."
+    },
+    {
+      "level": "h2",
+      "text": "2. Configure the HuggingFace Autotrain Advanced Notebook",
+      "id": "2.-configure-the-huggingface-autotrain-advanced-notebook"
+    },
+    {
+      "level": "h3",
+      "text": "Project Config",
+      "id": "project-config"
+    },
+    {
+      "level": "h3",
+      "text": "Optional Section: Push to Hub",
+      "id": "optional-section:-push-to-hub"
+    },
+    {
+      "level": "h3",
+      "text": "Section: Hyperparameters",
+      "id": "section:-hyperparameters"
+    },
+    {
+      "level": "h2",
+      "text": "3. Upload your CSV file to the Notebook",
+      "id": "3.-upload-your-csv-file-to-the-notebook"
+    },
+    {
+      "level": "h2",
+      "text": "4. Execute the Notebook",
+      "id": "4.-execute-the-notebook"
+    },
+    {
+      "level": "h2",
+      "text": "5. Download The LoRA",
+      "id": "5.-download-the-lora"
+    },
+    {
+      "level": "h3",
+      "text": "Optional: HuggingFace",
+      "id": "optional:-huggingface"
+    },
+    {
+      "level": "h3",
+      "text": "Notebook",
+      "id": "notebook"
+    },
+    {
+      "level": "h2",
+      "text": "6. Update Adapter Config",
+      "id": "6.-update-adapter-config"
+    },
+    {
+      "level": "h2",
+      "text": "7. Upload the Fine Tune to your Cloudflare Account",
+      "id": "7.-upload-the-fine-tune-to-your-cloudflare-account"
+    },
+    {
+      "level": "h2",
+      "text": "8. Use your Fine Tune in your Generations",
+      "id": "8.-use-your-fine-tune-in-your-generations"
+    },
+    {
+      "level": "h2",
+      "text": "How to Choose The Right Text Generation Model",
+      "id": "how-to-choose-the-right-text-generation-model"
+    },
+    {
+      "level": "h3",
+      "text": "Configuring your environment",
+      "id": "configuring-your-environment"
+    }
+  ],
+  "url": "llms-txt#**using-keyboard-shortcuts-to-execute-cells-in-jupyter-notebooks**",
+  "links": []
+}

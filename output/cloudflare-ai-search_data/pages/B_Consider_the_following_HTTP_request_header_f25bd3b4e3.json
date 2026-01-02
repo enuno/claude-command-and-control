@@ -1,0 +1,144 @@
+{
+  "title": "B) Consider the following HTTP request header:",
+  "content": "x-categories: groceries,,electronics\n\nsplit(http.request.headers[\"x-categories\"][0], \",\", 64)  will return [\"groceries\", \"\", \"electronics\"]\ntxt\n// If http.request.body.raw is \"asdfghjk\":\n\nsubstring(http.request.body.raw, 2, 5)   will return \"dfg\"\nsubstring(http.request.body.raw, 2)      will return \"dfghjk\"\nsubstring(http.request.body.raw, -2)     will return \"jk\"\nsubstring(http.request.body.raw, 0, -2)  will return \"asdfgh\"\ntxt\n// If cf.bot_management.score is 5:\nto_string(cf.bot_management.score)   will return \"5\"\n\n// If ssl is true:\nto_string(ssl)                       will return \"true\"\ntxt\nurl_decode(\"John%20Doe\")   will return \"John Doe\"\nurl_decode(\"John+Doe\")     will return \"John Doe\"\nurl_decode(\"%2520\")        will return \"%20\"\nurl_decode(\"%2520\", \"r\")   will return \" \"\n\n// Using url_decode() with the any() function:\nany(url_decode(http.request.body.form.values[*])[*] contains \"an xss attack\")\n\n// Using the u option to match a specific alphabet\nurl_decode(http.request.uri.path) matches \"(?u)\\p{Hangul}+\"\njava\nis_timed_hmac_valid_v0(\n  <String literal as Key>,\n  <String field as MessageMAC>,\n  <Integer literal as ttl>,\n  <Integer as currentTimeStamp>,\n  <Optional Integer literal as lengthOfSeparator, default: 0>,\n  <Optional String literal as flags>\n) -> <Bool as result>\njava\nhttp.host == \"downloads.example.com\"\nand not is_timed_hmac_valid_v0(\"mysecretkey\", http.request.uri, 100000, http.request.timestamp.sec, 8)\ntxt\n(.+)(.*)(\\d{10})-(.{43,})\ntxt\n/download/cat.jpg?verify=1484063787-IaLGSmELTvlhfd0ItdN6PhhHTFhzx73EX8uy%2FcSDiIU%3D\njava\nis_timed_hmac_valid_v0(\n  \"mysecretkey\",\n  http.request.uri,\n  100000,\n  http.request.timestamp.sec,\n  8\n)\njava\nis_timed_hmac_valid_v0(\n  \"mysecretkey\",\n  concat(\n    http.request.uri,\n    http.request.headers[\"timestamp\"][0],\n    \"-\",\n    http.request.headers[\"mac\"][0]),\n  100000,\n  http.request.timestamp.sec,\n  0\n)\ntxt\n<field> <comparison_operator> <value>\ntxt",
+  "code_samples": [
+    {
+      "code": "Note\n\nThe `split()` function is only available in [response header transform rules](https://developers.cloudflare.com/rules/transform/response-header-modification/) and [Custom Error Rules](https://developers.cloudflare.com/rules/custom-errors/#custom-error-rules).\n\n### `starts_with`\n\n`starts_with(source String, substring String)`: Boolean\n\nReturns `true` when the source starts with a given substring. Returns `false` otherwise. The source cannot be a literal value (like `\"foo\"`).\n\nFor example, if `http.request.uri.path` is `\"/blog/first-post\"`, then `starts_with(http.request.uri.path, \"/blog\")` will return `true`.\n\n### `substring`\n\n`substring(field String | Bytes, start Integer, end Integer optional)`: String\n\nReturns part of the `field` value (the value of a String or Bytes [field](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/)) from the `start` byte index up to (but excluding) the `end` byte index. The first byte in `field` has index `0`. If you do not provide the optional `end` index, the function returns the part of the string from `start` index to the end of the string.\n\nThe `start` and `end` indexes can be negative integer values, which allows you to access characters from the end of the string instead of the beginning.\n\nExamples:",
+      "language": "unknown"
+    },
+    {
+      "code": "### `to_string`\n\n`to_string(Integer | Boolean | IP address)`: String\n\nReturns the string representation of an Integer, Boolean, or IP address value.\n\nExamples:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nYou can only use the `to_string()` function in rewrite expressions of [Transform Rules](https://developers.cloudflare.com/rules/transform/) and target URL expressions of [dynamic URL redirects](https://developers.cloudflare.com/rules/url-forwarding/single-redirects/).\n\n### `upper`\n\n`upper(String)`: String\n\nConverts a string field to uppercase. Only lowercase ASCII bytes are converted. All other bytes are unaffected.\n\nFor example, if `http.host` is`\"www.cloudflare.com\"`, then `upper(http.host)` will return `\"WWW.CLOUDFLARE.COM\"`.\n\n### `url_decode`\n\n`url_decode(source String, options String optional)`: String\n\nDecodes a URL-formatted string defined in `source`, as in the following:\n\n* `%20` and `+` decode to a space character (` `).\n\n* `%E4%BD` decodes to `ä½`.\n\nThe `source` must be a field, that is, it cannot be a literal string.\n\nThe `options` parameter is optional. You must provide any options as a single string wrapped in quotes, such as `\"r\"` or `\"ur\"`. The available options are the following:\n\n* `r`: Applies recursive decoding. For example, `%2520` will be decoded twice (recursively) to a space character (` `).\n* `u`: Enables Unicode percent decoding. The result will be encoded in UTF-8. For example, `\"%u2601\"` would be decoded to a cloud emoji (`☁️`) encoded in UTF-8 (`\"\\xe2\\x98\\x81\"`, with a size of 3 bytes).\n\nExamples:",
+      "language": "unknown"
+    },
+    {
+      "code": "### `uuidv4`\n\n`uuidv4(source Bytes)`: String\n\nGenerates a random UUIDv4 (Universally Unique Identifier, version 4) based on the given argument (a source of randomness). To obtain an array of random bytes, use the [`cf.random_seed`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.random_seed/) field.\n\nFor example, `uuidv4(cf.random_seed)` will return a UUIDv4 similar to `49887398-6bcf-485f-8899-f15dbef4d1d5`.\n\nNote\n\nYou can only use the `uuidv4()` function in [rewrite expressions of Transform Rules](https://developers.cloudflare.com/rules/transform/).\n\n### `wildcard_replace`\n\n`wildcard_replace(source Bytes, wildcard_pattern Bytes, replacement Bytes, flags Bytes optional)`: String\n\nReplaces a `source` string, matched by a literal with zero or more `*` wildcard metacharacters, with a replacement string, returning the result. The replacement string can contain references to wildcard capture groups (for example, `${1}` and `${2}`), up to eight replacement references.\n\nIf there is no match, the function will return `source` unchanged.\n\nThe `source` parameter must be a field (it cannot be a literal string). Additionally, the entire `source` value must match the `wildcard_pattern` parameter (it cannot match only part of the field value).\n\nTo enter a literal `*` character in the `wildcard_pattern` parameter, you must escape it using `\\*`. Additionally, you must also escape `\\` using `\\\\`. Two unescaped `*` characters in a row (`**`) in this parameter are considered invalid and cannot be used. If you need to perform character escaping, it is recommended that you use the [raw string syntax](https://developers.cloudflare.com/ruleset-engine/rules-language/values/#raw-string-syntax) for the `wildcard_pattern` parameter.\n\nTo enter a literal `$` character in the `replacement` parameter, you must escape it using `$$`.\n\nTo perform case-sensitive wildcard matching, set the `flags` parameter to `\"s\"`.\n\nThis function uses lazy matching, that is, it tries to match each `*` metacharacter with the shortest possible string.\n\nYou can only use the `wildcard_replace()` function once in an expression, and you cannot nest it with the [`regex_replace()`](https://developers.cloudflare.com/ruleset-engine/rules-language/functions/#regex_replace) function.\n\nExamples:\n\n* If the full URI is `https://apps.example.com/calendar/admin?expand=true`,\\\n  `wildcard_replace(http.request.full_uri, \"https://*.example.com/*/*\", \"https://example.com/${1}/${2}/${3}\")` will return `https://example.com/apps/calendar/admin?expand=true`\n\n* If the full URI is `https://example.com/applications/app1`,\\\n  `wildcard_replace(http.request.full_uri, \"/applications/*\", \"/apps/${1}\")` will return `https://example.com/applications/app1` (unchanged value, since there is no match for the full URI value; you should use the `http.request.uri.path` field for URI path matching).\n\n* If the URI path is `/calendar`,\\\n  `wildcard_replace(http.request.uri.path, \"/*\", \"/apps/${1}\")` will return `/apps/calendar`.\n\n* If the URI path is `/Apps/calendar`,\\\n  `wildcard_replace(http.request.uri.path, \"/apps/*\", \"/${1}\")` will return `/calendar` (case-insensitive match by default).\n\n* If the URI path is `/Apps/calendar`,\\\n  `wildcard_replace(http.request.uri.path, \"/apps/*\", \"/${1}\", \"s\")` will return `/Apps/calendar` (unchanged value) because there is no case-sensitive match.\n\n* If the URI path is `/apps/calendar/login`,\\\n  `wildcard_replace(http.request.uri.path, \"/apps/*/login\", \"/${1}/login\")` will return `/calendar/login`.\n\nFor more examples of wildcard matching, refer to [Wildcard matching](https://developers.cloudflare.com/ruleset-engine/rules-language/operators/#wildcard-matching).\n\nNote\n\nCurrently, you can only use the `wildcard_replace()` function in rewrite expressions of [URL rewrites](https://developers.cloudflare.com/rules/transform/url-rewrite/) and target URL expressions of [dynamic URL redirects](https://developers.cloudflare.com/rules/url-forwarding/single-redirects/).\n\n## Magic Firewall Functions\n\n### `bit_slice`\n\n`bit_slice(protocol String, offset_start Number, offset_end Number)`: Number\n\nThis function looks for matches on a given slice of bits.\n\nThe offset starts on the given protocol header. For example, to match on the first bit of payload for a UDP packet, you must set `offset_start` to `64`.\n\nThis is primarily intended for use with `ip`, `udp`, and `tcp`.\n\nThe slice (`offset_end` – `offset_start`) cannot be longer than 32 bits, but multiple calls can be joined together by using logical expressions.\n\nThe `bit_slice` offset cannot exceed 2,040 bits.\n\n## HMAC validation\n\nNote\n\nAccess to the HMAC validation function requires a Cloudflare Pro, Business, or Enterprise plan.\n\n### Overview\n\nYou can validate hash-based message authentication code (HMAC) tokens in a rule expression by using the `is_timed_hmac_valid_v0()` function, which has this signature:",
+      "language": "unknown"
+    },
+    {
+      "code": "The `is_timed_hmac_valid_v0()` function has these parameter definitions:\n\n* `Key` String literal\n\n  * Specifies the secret cryptographic key for validating the HMAC.\n\n* `MessageMAC` String\n\n  * Contains a concatenation of these HMAC elements: `message`, `separator`, `timestamp`, `mac`. For a definition and an example, refer to [MessageMAC](#messagemac).\n\n* `ttl` Integer literal\n\n  * Defines the time-to-live for the HMAC token, expressed in seconds. Determines how long the token is valid, relative to the time it was issued.\n\n* `currentTimeStamp` Integer\n\n  * Represents the UNIX timestamp when Cloudflare received the request, expressed in seconds. Pass the `http.request.timestamp.sec` field as an approximate value to this argument.\n\n* `lengthOfSeparator` Integer literal optional\n\n  * Specifies the length of the `separator` between the `timestamp` and the `message` in the `MessageMAC`. Expressed in bytes, with a default value of `0`.\n\n* `flags` String literal optional\n\n  * When you set this optional argument to `'s'`, the function expects the value of the Base64-encoded `mac` in the `MessageMAC` argument to use the URL-safe character set with no padding.\n\n  * When you do **not** set the value of `flags` to `'s'`, you must URL encode the Base64 value for `mac` in the `MessageMAC` argument.\n\n### Usage\n\nThe `is_timed_hmac_valid_v0()` function uses the supplied *Key* to generate a message authentication code (MAC) from the `message` and the `timestamp` regions of the MessageMAC. When the generated MAC matches the `mac` region of the MessageMAC and the token has not expired, the HMAC is valid and the function returns `true`.\n\nFor example, the following expression matches requests to `downloads.example.com` that do not include valid HMAC tokens:",
+      "language": "unknown"
+    },
+    {
+      "code": "For examples of rules that use HMAC validation, refer to [Configure token authentication](https://developers.cloudflare.com/waf/custom-rules/use-cases/configure-token-authentication/) in the WAF documentation.\n\n### MessageMAC\n\nA valid MessageMAC satisfies the following regular expression:",
+      "language": "unknown"
+    },
+    {
+      "code": "and is composed of these parentheses-delimited expressions:\n\n| Expression | Description | Example |\n| - | - | - |\n| `(.+)` | The `message` to validate. | `/download/cat.jpg` |\n| `(.*)` | The `separator` between message and timestamp, commonly a parameter name. | `&verify=` |\n| `(\\d{10})` | The 10-digit UNIX `timestamp` when the MAC was issued, expressed in seconds. | `1484063137` |\n| `(.{43,})` | A Base64-encoded version of the `mac`. When you do not set the value of the `urlSafe` argument in the HMAC validation function to `'s'`, you must URL-encode the Base64 value for `mac`. When the Base64 MAC encoding is URL-safe, the `mac` value contains 43 bytes. Otherwise, the value will be 44 bytes or more, because of URL encoding. | `IaLGSmELTvlhfd0ItdN6PhhHTFhzx73EX8uy%2FcSDiIU%3D` |\n\nFor details on generating a MessageMAC, refer to [HMAC token generation](https://developers.cloudflare.com/waf/custom-rules/use-cases/configure-token-authentication/#hmac-token-generation).\n\n## HMAC validation examples\n\nNote\n\nWhen you do not use the optional `flags` argument for `is_timed_hmac_valid_v0()`, you must URL-encode the Base64 value for `mac` in the `MessageMAC` argument.\n\nFor more information, refer to [HMAC Validation: Overview](#overview).\n\n### MessageMAC in a single field\n\nConsider the case where the MessageMAC is contained entirely within a single field, as in this example URI path:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note how the URI maps to the elements of the MessageMAC:\n\n| Element | Value |\n| - | - |\n| `message` | `/download/cat.jpg` |\n| `separator` | `?verify=` (with length `8`) |\n| `timestamp` | `1484063787` |\n| `mac` | `IaLGSmELTvlhfd0ItdN6PhhHTFhzx73EX8uy%2FcSDiIU%3D` |\n\nWhen the MessageMAC is contained entirely within a single field such as `http.request.uri`, pass the field name to the `MessageMAC` argument of the HMAC validation function:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Concatenated MessageMAC argument\n\nTo compose a MessageMAC from more than one field, use the [`concat()`](#concat) function.\n\nThis example constructs the value of the `MessageMAC` argument by concatenating the request URI and two header fields:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Rule operators and grouping symbols · Cloudflare Ruleset Engine docs\ndescription: Learn about comparison, logical operators, and grouping symbols in\n  Cloudflare's Rules language. Understand precedence and how to structure\n  expressions.\nlastUpdated: 2025-10-22T08:15:41.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/operators/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/operators/index.md\n---\n\nThe Cloudflare Rules language supports comparison and logical operators:\n\n* [Comparison operators](#comparison-operators) specify how values defined in an expression must relate to the actual HTTP request value for the expression to return `true`.\n* [Logical operators](#logical-operators) combine two expressions to form a compound expression and use order of precedence to determine how an expression is evaluated.\n\n[Grouping symbols](#grouping-symbols) allow you to organize expressions, enforce precedence, and nest expressions.\n\n## Comparison operators\n\nComparison operators return `true` when a value from an HTTP request matches a value defined in an expression.\n\nThis is the general pattern for using comparison operators:",
+      "language": "unknown"
+    },
+    {
+      "code": "The Rules language supports these comparison operators:\n\n| Name | Operator Notation | Supported Data Types | | | | |\n| - | - | - | - | - | - | - |\n| | English | C-like | String1 | IP | Number | Example (operator in bold) |\n| Equal | `eq` | `==` | ✅ | ✅ | ✅ | `http.request.uri.path eq \"/articles/2008/\"` |\n| Not equal | `ne` | `!=` | ✅ | ✅ | ✅ | `ip.src ne 203.0.113.0` |\n| Less than | `lt` | `<` | ✅ | ❌ | ✅ | `cf.waf.score lt 10` |\n| Less than or equal | `le` | `<=` | ✅ | ❌ | ✅ | `cf.waf.score le 20` |\n| Greater than | `gt` | `>` | ✅ | ❌ | ✅ | `cf.waf.score gt 25` |\n| Greater than or equal | `ge` | `>=` | ✅ | ❌ | ✅ | `cf.waf.score ge 60` |\n| Contains | `contains` | | ✅ | ❌ | ❌ | `http.request.uri.path contains \"/articles/\"` |\n| [Wildcard](#wildcard-matching) (case-insensitive) | `wildcard` | | ✅ | ❌ | ❌ | `http.request.uri.path wildcard \"/articles/*\"` |\n| [Strict wildcard](#wildcard-matching) (case-sensitive) | `strict wildcard` | | ✅ | ❌ | ❌ | `http.request.uri.path strict wildcard \"/AdminTeam/*\"` |\n| [Matches regex](#regular-expression-matching)2 | `matches` | `~` | ✅ | ❌ | ❌ | `http.request.uri.path matches \"^/articles/200[7-8]/$\"` |\n| Is in set of values / list3 | `in` | | ✅ | ✅ | ✅ | `ip.src in { 203.0.113.0 203.0.113.1 }` `ip.src.asnum in $<LIST>` |\n\n1 All string operators are case-sensitive unless explicitly stated as case-insensitive, such as the `wildcard` operator.\\\n2 Access to the `matches` operator requires a Cloudflare Business or Enterprise plan.\\\n3 Currently, not all Cloudflare products support lists in their expressions. For more information on lists, refer to [Inline lists](https://developers.cloudflare.com/ruleset-engine/rules-language/values/#inline-lists) and [Lists](https://developers.cloudflare.com/waf/tools/lists/).\n\nWarning\n\nComparison operators entered using English notation (such as `eq`, `lt`, and `gt`) must be written in lowercase.\n\n### Additional operators in the Cloudflare dashboard\n\nThe Cloudflare dashboard may show the following additional operators, depending on the exact field and the type of rule:\n\n* *starts with* (corresponding to the [`starts_with()`](https://developers.cloudflare.com/ruleset-engine/rules-language/functions/#starts_with) function): Returns `true` when a string starts with a given substring, and `false` otherwise.\n\n* *ends with* (corresponding to the [`ends_with()`](https://developers.cloudflare.com/ruleset-engine/rules-language/functions/#ends_with) function): Returns `true` when a string ends with a given substring, and `false` otherwise.\n\n* *is in list* (corresponding to `<FIELD> in $<LIST_NAME>`): Returns `true` when the field value is present in the specified [list](https://developers.cloudflare.com/waf/tools/lists/), and `false` otherwise. For more information, refer to [Use lists in expressions](https://developers.cloudflare.com/waf/tools/lists/use-in-expressions/).\n\n* *is not in list* (corresponding to `not <FIELD> in $<LIST_NAME>`): Returns `true` when the field value is not present in the specified [list](https://developers.cloudflare.com/waf/tools/lists/), and `false` otherwise. For more information, refer to [Use lists in expressions](https://developers.cloudflare.com/waf/tools/lists/use-in-expressions/).\n\nNote\n\nWhen writing your own custom expressions, you must use the `starts_with()` and `ends_with()` functions in function calls, not as operators. For example:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "`starts_with`",
+      "id": "`starts_with`"
+    },
+    {
+      "level": "h3",
+      "text": "`substring`",
+      "id": "`substring`"
+    },
+    {
+      "level": "h3",
+      "text": "`to_string`",
+      "id": "`to_string`"
+    },
+    {
+      "level": "h3",
+      "text": "`upper`",
+      "id": "`upper`"
+    },
+    {
+      "level": "h3",
+      "text": "`url_decode`",
+      "id": "`url_decode`"
+    },
+    {
+      "level": "h3",
+      "text": "`uuidv4`",
+      "id": "`uuidv4`"
+    },
+    {
+      "level": "h3",
+      "text": "`wildcard_replace`",
+      "id": "`wildcard_replace`"
+    },
+    {
+      "level": "h2",
+      "text": "Magic Firewall Functions",
+      "id": "magic-firewall-functions"
+    },
+    {
+      "level": "h3",
+      "text": "`bit_slice`",
+      "id": "`bit_slice`"
+    },
+    {
+      "level": "h2",
+      "text": "HMAC validation",
+      "id": "hmac-validation"
+    },
+    {
+      "level": "h3",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h3",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "MessageMAC",
+      "id": "messagemac"
+    },
+    {
+      "level": "h2",
+      "text": "HMAC validation examples",
+      "id": "hmac-validation-examples"
+    },
+    {
+      "level": "h3",
+      "text": "MessageMAC in a single field",
+      "id": "messagemac-in-a-single-field"
+    },
+    {
+      "level": "h3",
+      "text": "Concatenated MessageMAC argument",
+      "id": "concatenated-messagemac-argument"
+    },
+    {
+      "level": "h2",
+      "text": "Comparison operators",
+      "id": "comparison-operators"
+    },
+    {
+      "level": "h3",
+      "text": "Additional operators in the Cloudflare dashboard",
+      "id": "additional-operators-in-the-cloudflare-dashboard"
+    }
+  ],
+  "url": "llms-txt#b)-consider-the-following-http-request-header:",
+  "links": []
+}

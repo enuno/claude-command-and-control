@@ -1,0 +1,13 @@
+{
+  "title": "http.request.method",
+  "content": "`http.request.method` String\n\nThe HTTP method, returned as a string of uppercase characters.\n\n<page>\n---\ntitle: http.request.timestamp.sec · Cloudflare Ruleset Engine docs\ndescription: The timestamp when Cloudflare received the request, expressed as\n  UNIX time in seconds.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.timestamp.sec/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.timestamp.sec/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"GET\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#http.request.method",
+  "links": []
+}

@@ -1,0 +1,45 @@
+{
+  "title": "Test downloading a specific file",
+  "content": "curl -i https://your-bucket-name.s3.us-west-2.amazonaws.com/test-file.txt\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"private-s3-gateway\",\n    \"main\": \"src/index.js\",\n    \"compatibility_date\": \"2024-01-01\",\n    \"vpc_services\": [\n      {\n        \"binding\": \"S3_STORAGE\",\n        \"service_id\": \"<YOUR_SERVICE_ID>\"\n      }\n    ]\n  }\n  toml\n  name = \"private-s3-gateway\"\n  main = \"src/index.js\"\n  compatibility_date = \"2024-01-01\"\n\n[[vpc_services]]\n  binding = \"S3_STORAGE\"\n  service_id = \"<YOUR_SERVICE_ID>\"\n  js\nexport default {\n  async fetch(request, env, ctx) {\n    try {\n      // Fetch a file from the private S3 bucket via VPC endpoint\n      const response = await env.S3_STORAGE.fetch(\"https://s3.us-west-2.amazonaws.com/my-bucket/data.json\");\n\n// Use the response from S3 to perform more logic in Workers, before returning the final response\n      return response;\n    } catch (error) {\n      return new Response(\"Storage unavailable\", { status: 503 });\n    }\n  },\n};\nbash\nnpx wrangler deploy\nbash",
+  "code_samples": [
+    {
+      "code": "## 4. Configure your Worker\n\nUpdate your `wrangler.toml`:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "## 5. Implement the Worker\n\nIn your Workers code, use the Workers VPC Service binding in order to send requests to the service:",
+      "language": "unknown"
+    },
+    {
+      "code": "This guide demonstrates how you could access private object storage from your Workers. You could use Workers VPC Services to fetch files directly and manipulate the responses to enable you to build more full-stack and backend functionality on Workers.\n\n## 6. Deploy and test\n\nNow, you can deploy and test your Worker that you have created:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "4. Configure your Worker",
+      "id": "4.-configure-your-worker"
+    },
+    {
+      "level": "h2",
+      "text": "5. Implement the Worker",
+      "id": "5.-implement-the-worker"
+    },
+    {
+      "level": "h2",
+      "text": "6. Deploy and test",
+      "id": "6.-deploy-and-test"
+    }
+  ],
+  "url": "llms-txt#test-downloading-a-specific-file",
+  "links": []
+}

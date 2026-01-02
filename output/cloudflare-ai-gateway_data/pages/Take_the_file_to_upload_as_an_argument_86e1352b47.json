@@ -1,0 +1,8 @@
+{
+  "title": "Take the file to upload as an argument",
+  "content": "filename = sys.argv[1]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#take-the-file-to-upload-as-an-argument",
+  "links": []
+}

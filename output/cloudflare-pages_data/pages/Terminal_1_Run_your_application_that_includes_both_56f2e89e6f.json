@@ -1,0 +1,8 @@
+{
+  "title": "Terminal 1: Run your application that includes both Web and API workers",
+  "content": "wrangler dev --config ./web/wrangler.jsonc --config ./api/wrangler.jsonc",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#terminal-1:-run-your-application-that-includes-both-web-and-api-workers",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "cf.tls\\_client\\_auth.cert\\_issuer\\_dn\\_rfc2253",
+  "content": "`cf.tls_client_auth.cert_issuer_dn_rfc2253` String\n\nThe Distinguished Name (DN) of the Certificate Authority (CA) that issued the certificate in the request in [RFC 2253](https://datatracker.ietf.org/doc/html/rfc2253) format.\n\nThis field is only filled in if the request includes a client certificate for [mTLS authentication](https://developers.cloudflare.com/ssl/client-certificates/enable-mtls/).\n\n<page>\n---\ntitle: cf.tls_client_auth.cert_issuer_serial · Cloudflare Ruleset Engine docs\ndescription: Serial number of the direct issuer of the certificate in the request.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_client_auth.cert_issuer_serial/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_client_auth.cert_issuer_serial/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"CN=Access Testing CA,OU=TX,O=Access Testing,L=Austin,ST=Texas,C=US\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_issuer\\_dn\\_rfc2253",
+  "links": []
+}

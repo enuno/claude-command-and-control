@@ -1,0 +1,21 @@
+{
+  "name": "terraform",
+  "total_pages": 3,
+  "base_url": "https://developer.hashicorp.com/terraform/",
+  "llms_txt_detected": false,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "Terraform overview | Terraform | HashiCorp Developer",
+      "url": "https://developer.hashicorp.com/terraform/docs"
+    },
+    {
+      "title": "Overview - Configuration Language | Terraform | HashiCorp Developer",
+      "url": "https://developer.hashicorp.com/terraform/language"
+    },
+    {
+      "title": "Terraform CLI Documentation | Terraform | HashiCorp Developer",
+      "url": "https://developer.hashicorp.com/terraform/cli"
+    }
+  ]
+}

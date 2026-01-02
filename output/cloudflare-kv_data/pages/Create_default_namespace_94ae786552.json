@@ -1,0 +1,8 @@
+{
+  "title": "Create default namespace",
+  "content": "catalog.create_namespace(\"default\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-default-namespace",
+  "links": []
+}

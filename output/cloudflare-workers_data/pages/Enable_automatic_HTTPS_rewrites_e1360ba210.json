@@ -1,0 +1,8 @@
+{
+  "title": "Enable automatic HTTPS rewrites",
+  "content": "resource \"cloudflare_zone_setting\" \"automatic_https_rewrites\" {\n  zone_id    = var.zone_id\n  setting_id = \"automatic_https_rewrites\"\n  value      = \"on\"\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#enable-automatic-https-rewrites",
+  "links": []
+}

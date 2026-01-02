@@ -1,0 +1,45 @@
+{
+  "title": "Create orders service",
+  "content": "npx wrangler vpc service create order-service \\\n  --type http \\\n  --tunnel-id <YOUR_TUNNEL_ID> \\\n  --hostname orders-api.internal.example.com\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"api-gateway\",\n    \"main\": \"src/index.js\",\n    \"compatibility_date\": \"2024-01-01\",\n    \"vpc_services\": [\n      {\n        \"binding\": \"USER_SERVICE\",\n        \"service_id\": \"<YOUR_USER_SERVICE_ID>\"\n      },\n      {\n        \"binding\": \"ORDER_SERVICE\",\n        \"service_id\": \"<YOUR_ORDER_SERVICE_ID>\"\n      }\n    ]\n  }\n  toml\n  name = \"api-gateway\"\n  main = \"src/index.js\"\n  compatibility_date = \"2024-01-01\"\n\n[[vpc_services]]\n  binding = \"USER_SERVICE\"\n  service_id = \"<YOUR_USER_SERVICE_ID>\"\n\n[[vpc_services]]\n  binding = \"ORDER_SERVICE\"\n  service_id = \"<YOUR_ORDER_SERVICE_ID>\"\n  js\nexport default {\n  async fetch(request, env, ctx) {\n    const url = new URL(request.url);\n\n// Route to internal services\n    if (url.pathname.startsWith('/api/users')) {\n      const response = await env.USER_SERVICE.fetch(\"https://user-api.internal.example.com\" + url.pathname);\n      return response;\n    } else if (url.pathname.startsWith('/api/orders')) {\n      const response = await env.ORDER_SERVICE.fetch(\"https://orders-api.internal.example.com\" + url.pathname);\n      return response;\n    }\n\nreturn new Response('Not Found', { status: 404 });\n  },\n};\nbash\nnpx wrangler deploy\nbash",
+  "code_samples": [
+    {
+      "code": "Note the service IDs returned for the next step.\n\n## 2. Configure your Worker\n\nUpdate your `wrangler.toml`:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Implement the Worker\n\nIn your Workers code, use the VPC Service bindings to route requests to the appropriate services:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 4. Deploy and test\n\nNow, you can deploy and test your Worker:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "2. Configure your Worker",
+      "id": "2.-configure-your-worker"
+    },
+    {
+      "level": "h2",
+      "text": "3. Implement the Worker",
+      "id": "3.-implement-the-worker"
+    },
+    {
+      "level": "h2",
+      "text": "4. Deploy and test",
+      "id": "4.-deploy-and-test"
+    }
+  ],
+  "url": "llms-txt#create-orders-service",
+  "links": []
+}

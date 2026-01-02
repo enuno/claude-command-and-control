@@ -1,0 +1,365 @@
+{
+  "title": "Replace example.com with your domain",
+  "content": "pulumi env set $E --plaintext pulumiConfig.domain example.com\nsh\n  npm install @pulumi/cloudflare\n  sh\n  added 1 package ...\n  sh\n  npm install @pulumi/cloudflare\n  sh\n  added 1 package ...\n  sh\n  echo \"pulumi_cloudflare>=5.38,<6.0.0\" >> requirements.txt\n  source venv/bin/activate\n  pip install -r requirements.txt\n  sh\n  ...Collecting pulumi-cloudflare...\n  sh\n  go get github.com/pulumi/pulumi-cloudflare/sdk/v3/go/cloudflare\n  sh\n  go: downloading github.com/pulumi/pulumi-cloudflare ...\n  xml\n  <dependency>\n      <groupId>com.pulumi</groupId>\n      <artifactId>cloudflare</artifactId>\n      <version>5.38.0</version>\n  </dependency>\n  sh\n  mvn clean install\n  sh\n  ...[INFO] BUILD SUCCESS...\n  sh\n  dotnet add package Pulumi.Cloudflare\n  sh\n  ...\n  info : Adding PackageReference for package 'Pulumi.Cloudflare' into project\n  ...\n  javascript\n  \"use strict\";\n  const pulumi = require(\"@pulumi/pulumi\");\n  const cloudflare = require(\"@pulumi/cloudflare\");\n\nconst config = new pulumi.Config();\n  const accountId = config.require(\"accountId\");\n  const domain = config.require(\"domain\");\n\nconst content = `export default {\n    async fetch(request) {\n      const options = { headers: { 'content-type': 'text/plain' } };\n      return new Response(\"Hello World!\", options);\n    },\n  };`;\n\nconst worker = new cloudflare.WorkersScript(\"hello-world-worker\", {\n    accountId: accountId,\n    name: \"hello-world-worker\",\n    content: content,\n    module: true, // ES6 module\n  });\n  typescript\n  import * as pulumi from \"@pulumi/pulumi\";\n  import * as cloudflare from \"@pulumi/cloudflare\";\n\nconst config = new pulumi.Config();\n  const accountId = config.require(\"accountId\");\n  const domain = config.require(\"domain\");\n\nconst content = `export default {\n    async fetch(request) {\n      const options = { headers: { 'content-type': 'text/plain' } };\n      return new Response(\"Hello World!\", options);\n    },\n  };`;\n\nconst worker = new cloudflare.WorkersScript(\"hello-world-worker\", {\n    accountId: accountId,\n    name: \"hello-world-worker\",\n    content: content,\n    module: true, // ES6 module\n  });\n  python\n  \"\"\"Pulumi program \"\"\"\n  import pulumi\n  import pulumi_cloudflare as cloudflare\n\nCONFIG = pulumi.Config()\n  ACCOUNT_ID = CONFIG.get(\"accountId\")\n  DOMAIN = CONFIG.require(\"domain\")\n  CONTENT = \"\"\"\n  export default {\n    async fetch(request) {\n      const options = { headers: { 'content-type': 'text/plain' } };\n      return new Response(\"Hello World!\", options);\n    },\n  };\n  \"\"\"\n\nworker = cloudflare.WorkersScript(\"hello-world-worker\",\n      account_id=ACCOUNT_ID,\n      name=\"hello-world-worker\",\n      content=CONTENT,\n      module=True  # ES6 module\n  )\n  go\n  package main\n\nimport (\n    \"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare\"\n    \"github.com/pulumi/pulumi/sdk/v3/go/pulumi\"\n    \"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config\"\n  )\n\nfunc main() {\n    pulumi.Run(func(ctx *pulumi.Context) error {\n      conf := config.New(ctx, \"\")\n      accountID := conf.Get(\"accountId\")\n      domain := conf.Get(\"domain\")\n      content := `\n      export default {\n        async fetch(request) {\n          const options = { headers: { 'content-type': 'text/plain' } };\n          return new Response(\"Hello World!\", options);\n        },\n      };\n      `\n      worker, err := cloudflare.NewWorkersScript(ctx, \"hello-world-worker\", &cloudflare.WorkersScriptArgs{\n        AccountId: pulumi.String(accountID),\n        Name:      pulumi.String(\"hello-world-worker\"),\n        Content:   pulumi.String(content),\n        Module:    pulumi.Bool(true), // ES6 module\n      })\n      if err != nil {\n        return err\n      }\n\nreturn nil\n    })\n  }\n  java\n  package myproject;\n\nimport com.pulumi.Pulumi;\n  import com.pulumi.cloudflare.WorkersScript;\n  import com.pulumi.cloudflare.WorkersScriptArgs;\n  import com.pulumi.core.Output;\n\npublic class App {\n      public static void main(String[] args) {\n          Pulumi.run(ctx -> {\n              var content = \"\"\"\n                export default {\n                  async fetch(request) {\n                    const options = { headers: { 'content-type': 'text/plain' } };\n                    return new Response(\"Hello World!\", options);\n                  },\n                };\n              \"\"\";\n\nvar accountId = ctx.config().require(\"accountId\");\n              var domain = ctx.config().require(\"domain\");\n              var worker = new WorkersScript(\"hello-world-worker\", WorkersScriptArgs.builder()\n                  .accountId(accountId)\n                  .name(\"hello-world-worker\")\n                  .content(content)\n                  .module(true)\n                  .build());\n\nreturn;\n          });\n      }\n  }\n  csharp\n  using Pulumi;\n  using Cloudflare = Pulumi.Cloudflare;\n\nreturn await Deployment.RunAsync(() =>\n  {\n      var config = new Config();\n      var accountId = config.Require(\"accountId\");\n      var domain = config.Require(\"domain\");\n      var content = @\"\n              export default {\n                  async fetch(request) {\n                      const options = { headers: { 'content-type': 'text/plain' } };\n                      return new Response(\"\"Hello World!\"\", options);\n                  },\n              };\n          \";\n\nvar worker = new Cloudflare.WorkersScript(\"hello-world-worker\", new()\n      {\n          AccountId = accountId,\n          Name = \"hello-world-worker\",\n          Content = content,\n          Module = true\n      });\n      return;\n  });\n  yaml\n  name: serverless-cloudflare\n  runtime: yaml\n  resources:\n    worker:\n      type: cloudflare:WorkersScript\n      properties:\n        accountId: \"${accountId}\"\n        name: \"hello-world-worker\"\n        content: |\n          export default {\n              async fetch(request) {\n                  const options = { headers: { 'content-type': 'text/plain' } };\n                  return new Response(\"Hello World!\", options);\n              },\n          };\n        module: true\n  javascript\n  const zone = cloudflare.getZone({\n    accountId: accountId,\n    name: domain,\n  });\n\nconst zoneId = zone.then((z) => z.zoneId);\n\nconst route = new cloudflare.WorkersRoute(\"hello-world-route\", {\n    zoneId: zoneId,\n    pattern: \"hello-world.\" + domain,\n    scriptName: worker.name,\n  });\n  typescript\n  const zone = cloudflare.getZone({\n    accountId: accountId,\n    name: domain,\n  });\n\nconst zoneId = zone.then((z) => z.zoneId);\n\nconst route = new cloudflare.WorkersRoute(\"hello-world-route\", {\n    zoneId: zoneId,\n    pattern: \"hello-world.\" + domain,\n    scriptName: worker.name,\n  });\n  python\n  zone = cloudflare.get_zone(account_id=ACCOUNT_ID, name=DOMAIN)\n  zone_id = zone.zone_id\n  route = cloudflare.WorkersRoute(\"hello-world-route\",\n      zone_id=zone_id,\n      pattern=\"hello-world.\" + DOMAIN,\n      script_name=worker.name\n  )\n  go\n  zone, err := cloudflare.LookupZone(ctx, &cloudflare.LookupZoneArgs{\n    AccountId: &accountID,\n    Name:      &domain,\n  }, nil)\n  if err != nil {\n    return err\n  }\n\nroute, err := cloudflare.NewWorkersRoute(ctx, \"hello-world-route\", &cloudflare.WorkersRouteArgs{\n    ZoneId:     pulumi.String(zone.Id),\n    Pattern:    pulumi.String(\"hello-world.\" + domain),\n    ScriptName: worker.Name,\n  })\n  if err != nil {\n    return err\n  }\n  java\n  final var zone = CloudflareFunctions.getZone(GetZoneArgs.builder()\n    .accountId(accountId)\n    .name(domain)\n    .build());\n  var route = new WorkersRoute(\"hello-world-route\", WorkersRouteArgs.builder()\n    .zoneId(zone.applyValue(getZoneResult -> getZoneResult.id()))\n    .pattern(\"hello-world.\" + domain)\n    .scriptName(worker.name())\n    .build());\n  csharp\n  var zone = Output.Create(Cloudflare.GetZone.InvokeAsync(new()\n  {\n      AccountId = accountId,\n      Name = domain,\n  }));\n  var route = new Cloudflare.WorkersRoute(\"hello-world-route\", new()\n  {\n      ZoneId = zone.Apply(z => z.Id),\n      Pattern = \"hello-world.\" + domain,\n      ScriptName = worker.Name,\n  });\n  yaml\n  # new top-level section\n  variables:\n    zone:\n      fn::invoke:\n        function: cloudflare:getZone\n        arguments:\n          accountId: ${accountId}\n          name: ${domain}\n  yaml\n  route:\n    type: cloudflare:WorkersRoute\n    properties:\n      zoneId: ${zone.id}\n      pattern: \"hello-world.${domain}\"\n      scriptName: ${worker.name}\n  javascript\n  const record = new cloudflare.Record(\"hello-world-record\", {\n    name: route.pattern,\n    type: \"A\",\n    content: \"192.0.2.1\",\n    zoneId: zoneId,\n    proxied: true,\n  });\n\nexports.url = pulumi.interpolate`https://${record.hostname}`;\n  typescript\n  const record = new cloudflare.Record(\"hello-world-record\", {\n    name: route.pattern,\n    type: \"A\",\n    content: \"192.0.2.1\",\n    zoneId: zoneId,\n    proxied: true,\n  });\n\nexport const url = pulumi.interpolate`https://${record.hostname}`;\n  python\n  record = cloudflare.Record(\"hello-world-record\",\n      name=route.pattern,\n      type=\"A\",\n      content=\"192.0.2.1\",\n      zone_id=zone_id,\n      proxied=True\n  )\n\nurl = pulumi.Output.concat(\"https://\", record.hostname)\n  pulumi.export('url', url)\n  go\n  record, err := cloudflare.NewRecord(ctx, \"hello-world-record\", &cloudflare.RecordArgs{\n    Name:    route.Pattern,\n    Type:    pulumi.String(\"A\"),\n    Content: pulumi.String(\"192.0.2.1\"),\n    ZoneId:  pulumi.String(zone.Id),\n    Proxied: pulumi.Bool(true),\n  })\n  if err != nil {\n    return err\n  }\n\nctx.Export(\"url\", pulumi.Sprintf(\"https://%s\", record.Hostname))\n  java\n  var record = new Record(\"hello-world-record\", RecordArgs.builder()\n      .name(route.pattern())\n      .type(\"A\")\n      .content(\"192.0.2.1\")\n      .zoneId(zone.applyValue(getZoneResult -> getZoneResult.id()))\n      .proxied(true)\n      .build());\n\nctx.export(\"url\", Output.format(\"https://%s\", record.hostname()));\n  csharp\n  var record = new Cloudflare.Record(\"hello-world-record\", new()\n  {\n      Name = route.Pattern,\n      Type = \"A\",\n      Content = \"192.0.2.1\",\n      ZoneId = zone.Apply(z => z.Id),\n      Proxied = true\n  });\n\nreturn new Dictionary<string, object?>\n  {\n      [\"url\"] = Output.Format($\"https://{record.Hostname}\")\n  };\n  yaml\n    record:\n      type: cloudflare:Record\n      properties:\n        name: ${route.pattern}\n        type: A\n        content: \"192.0.2.1\"\n        zoneId: ${zone.id}\n        proxied: true\n\noutputs:\n    url: \"https://${record.hostname}\"\n  javascript\n  \"use strict\";\n  const pulumi = require(\"@pulumi/pulumi\");\n  const cloudflare = require(\"@pulumi/cloudflare\");\n\nconst config = new pulumi.Config();\n  const accountId = config.require(\"accountId\");\n  const domain = config.require(\"domain\");\n\nconst content = `export default {\n    async fetch(request) {\n      const options = { headers: { 'content-type': 'text/plain' } };\n      return new Response(\"Hello World!\", options);\n    },\n  };`;\n\nconst worker = new cloudflare.WorkersScript(\"hello-world-worker\", {\n    accountId: accountId,\n    name: \"hello-world-worker\",\n    content: content,\n    module: true, // ES6 module\n  });\n\nconst zone = cloudflare.getZone({\n    accountId: accountId,\n    name: domain,\n  });\n\nconst zoneId = zone.then((z) => z.zoneId);\n\nconst route = new cloudflare.WorkersRoute(\"hello-world-route\", {\n    zoneId: zoneId,\n    pattern: \"hello-world.\" + domain,\n    scriptName: worker.name,\n  });\n\nconst record = new cloudflare.Record(\"hello-world-record\", {\n    name: route.pattern,\n    type: \"A\",\n    content: \"192.0.2.1\",\n    zoneId: zoneId,\n    proxied: true,\n  });\n\nexports.url = pulumi.interpolate`https://${record.hostname}`;\n  typescript\n  import * as pulumi from \"@pulumi/pulumi\";\n  import * as cloudflare from \"@pulumi/cloudflare\";\n\nconst config = new pulumi.Config();\n  const accountId = config.require(\"accountId\");\n  const domain = config.require(\"domain\");\n\nconst content = `export default {\n    async fetch(request) {\n      const options = { headers: { 'content-type': 'text/plain' } };\n      return new Response(\"Hello World!\", options);\n    },\n  };`;\n\nconst worker = new cloudflare.WorkersScript(\"hello-world-worker\", {\n    accountId: accountId,\n    name: \"hello-world-worker\",\n    content: content,\n    module: true, // ES6 module\n  });\n\nconst zone = cloudflare.getZone({\n    accountId: accountId,\n    name: domain,\n  });\n\nconst zoneId = zone.then((z) => z.zoneId);\n\nconst route = new cloudflare.WorkersRoute(\"hello-world-route\", {\n    zoneId: zoneId,\n    pattern: \"hello-world.\" + domain,\n    scriptName: worker.name,\n  });\n\nconst record = new cloudflare.Record(\"hello-world-record\", {\n    name: route.pattern,\n    type: \"A\",\n    content: \"192.0.2.1\",\n    zoneId: zoneId,\n    proxied: true,\n  });\n\nexport const url = pulumi.interpolate`https://${record.hostname}`;\n  python\n  \"\"\"Pulumi program \"\"\"\n  import pulumi\n  import pulumi_cloudflare as cloudflare\n\nCONFIG = pulumi.Config()\n  ACCOUNT_ID = CONFIG.get(\"accountId\")\n  DOMAIN = CONFIG.require(\"domain\")\n  CONTENT = \"\"\"\n  export default {\n    async fetch(request) {\n      const options = { headers: { 'content-type': 'text/plain' } };\n      return new Response(\"Hello World!\", options);\n    },\n  };\n  \"\"\"\n\nworker = cloudflare.WorkersScript(\"hello-world-worker\",\n      account_id=ACCOUNT_ID,\n      name=\"hello-world-worker\",\n      content=CONTENT,\n      module=True  # ES6 module\n  )\n\nzone = cloudflare.get_zone(account_id=ACCOUNT_ID, name=DOMAIN)\n  zone_id = zone.zone_id\n  route = cloudflare.WorkersRoute(\"hello-world-route\",\n      zone_id=zone_id,\n      pattern=\"hello-world.\" + DOMAIN,\n      script_name=worker.name\n  )\n\nrecord = cloudflare.Record(\"hello-world-record\",\n      name=route.pattern,\n      type=\"A\",\n      content=\"192.0.2.1\",\n      zone_id=zone_id,\n      proxied=True\n  )\n\nurl = pulumi.Output.concat(\"https://\", record.hostname)\n  pulumi.export('url', url)\n  go\n  package main\n\nimport (\n    \"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare\"\n    \"github.com/pulumi/pulumi/sdk/v3/go/pulumi\"\n    \"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config\"\n  )\n\nfunc main() {\n    pulumi.Run(func(ctx *pulumi.Context) error {\n      conf := config.New(ctx, \"\")\n      accountID := conf.Get(\"accountId\")\n      domain := conf.Get(\"domain\")\n      content := `\n      export default {\n        async fetch(request) {\n          const options = { headers: { 'content-type': 'text/plain' } };\n          return new Response(\"Hello World!\", options);\n        },\n      };\n      `\n      worker, err := cloudflare.NewWorkersScript(ctx, \"hello-world-worker\", &cloudflare.WorkersScriptArgs{\n        AccountId: pulumi.String(accountID),\n        Name:      pulumi.String(\"hello-world-worker\"),\n        Content:   pulumi.String(content),\n        Module:    pulumi.Bool(true), // ES6 module\n      })\n      if err != nil {\n        return err\n      }\n      zone, err := cloudflare.LookupZone(ctx, &cloudflare.LookupZoneArgs{\n        AccountId: &accountID,\n        Name:      &domain,\n      }, nil)\n      if err != nil {\n        return err\n      }\n\nroute, err := cloudflare.NewWorkersRoute(ctx, \"hello-world-route\", &cloudflare.WorkersRouteArgs{\n        ZoneId:     pulumi.String(zone.Id),\n        Pattern:    pulumi.String(\"hello-world.\" + domain),\n        ScriptName: worker.Name,\n      })\n      if err != nil {\n        return err\n      }\n\nrecord, err := cloudflare.NewRecord(ctx, \"hello-world-record\", &cloudflare.RecordArgs{\n        Name:    route.Pattern,\n        Type:    pulumi.String(\"A\"),\n        Content: pulumi.String(\"192.0.2.1\"),\n        ZoneId:  pulumi.String(zone.Id),\n        Proxied: pulumi.Bool(true),\n      })\n      if err != nil {\n        return err\n      }\n\nctx.Export(\"url\", pulumi.Sprintf(\"https://%s\", record.Hostname))\n\nreturn nil\n    })\n  }\n  java\n  package myproject;\n\nimport com.pulumi.Pulumi;\n  import com.pulumi.core.Output;\n  import com.pulumi.cloudflare.WorkersScript;\n  import com.pulumi.cloudflare.WorkersScriptArgs;\n  import com.pulumi.cloudflare.CloudflareFunctions;\n  import com.pulumi.cloudflare.inputs.GetZoneArgs;\n  import com.pulumi.cloudflare.WorkersRoute;\n  import com.pulumi.cloudflare.WorkersRouteArgs;\n  import com.pulumi.cloudflare.Record;\n  import com.pulumi.cloudflare.RecordArgs;\n\npublic class App {\n      public static void main(String[] args) {\n          Pulumi.run(ctx -> {\n              var content = \"\"\"\n          export default {\n            async fetch(request) {\n              const options = { headers: { 'content-type': 'text/plain' } };\n              return new Response(\"Hello World!\", options);\n            },\n          };\n        \"\"\";\n\nvar accountId = ctx.config().require(\"accountId\");\n              var domain = ctx.config().require(\"domain\");\n\nvar worker = new WorkersScript(\"hello-world-worker\", WorkersScriptArgs.builder()\n                  .accountId(accountId)\n                  .name(\"hello-world-worker\")\n                  .content(content)\n                  .module(true)\n                  .build());\n              final var zone = CloudflareFunctions.getZone(GetZoneArgs.builder()\n                  .accountId(accountId)\n                  .name(domain)\n                  .build());\n              var route = new WorkersRoute(\"hello-world-route\", WorkersRouteArgs.builder()\n                  .zoneId(zone.applyValue(getZoneResult -> getZoneResult.id()))\n                  .pattern(\"hello-world.\" + domain)\n                  .scriptName(worker.name())\n                  .build());\n              var record = new Record(\"hello-world-record\", RecordArgs.builder()\n                  .name(route.pattern())\n                  .type(\"A\")\n                  .content(\"192.0.2.1\")\n                  .zoneId(zone.applyValue(getZoneResult -> getZoneResult.id()))\n                  .proxied(true)\n                  .build());\n\nctx.export(\"url\", Output.format(\"https://%s\", record.hostname()));\n              return;\n          });\n      }\n  }\n  csharp\n  using System.Collections.Generic;\n  using Pulumi;\n  using Cloudflare = Pulumi.Cloudflare;\n\nreturn await Deployment.RunAsync(() =>\n  {\n      var config = new Config();\n      var accountId = config.Require(\"accountId\");\n      var domain = config.Require(\"domain\");\n      var content = @\"\n              export default {\n                  async fetch(request) {\n                      const options = { headers: { 'content-type': 'text/plain' } };\n                      return new Response(\"\"Hello World!\"\", options);\n                  },\n              };\n          \";\n\nvar worker = new Cloudflare.WorkersScript(\"hello-world-worker\", new()\n      {\n          AccountId = accountId,\n          Name = \"hello-world-worker\",\n          Content = content,\n          Module = true\n      });\n      var zone = Output.Create(Cloudflare.GetZone.InvokeAsync(new()\n      {\n          AccountId = accountId,\n          Name = domain,\n      }));\n      var route = new Cloudflare.WorkersRoute(\"hello-world-route\", new()\n      {\n          ZoneId = zone.Apply(z => z.Id),\n          Pattern = \"hello-world.\" + domain,\n          ScriptName = worker.Name,\n      });\n\nvar record = new Cloudflare.Record(\"hello-world-record\", new()\n      {\n          Name = route.Pattern,\n          Type = \"A\",\n          Content = \"192.0.2.1\",\n          ZoneId = zone.Apply(z => z.Id),\n          Proxied = true\n      });\n\nreturn new Dictionary<string, object?>\n      {\n          [\"url\"] = Output.Format($\"https://{record.Hostname}\")\n      };\n  });\n  yaml\n  name: serverless-cloudflare\n  runtime: yaml\n  variables:\n    zone:\n      fn::invoke:\n        function: cloudflare:getZone\n        arguments:\n          accountId: ${accountId}\n          name: ${domain}\n\nresources:\n    worker:\n      type: cloudflare:WorkersScript\n      properties:\n        accountId: \"${accountId}\"\n        name: \"hello-world-worker\"\n        content: |\n          export default {\n              async fetch(request) {\n                  const options = { headers: { 'content-type': 'text/plain' } };\n                  return new Response(\"Hello World!\", options);\n              },\n          };\n        module: true\n    route:\n      type: cloudflare:WorkersRoute\n      properties:\n        zoneId: ${zone.id}\n        pattern: \"hello-world.${domain}\"\n        scriptName: ${worker.name}\n    record:\n      type: cloudflare:Record\n      properties:\n        name: ${route.pattern}\n        type: A\n        content: \"192.0.2.1\"\n        zoneId: ${zone.id}\n        proxied: true\n\noutputs:\n    url: \"https://${record.hostname}\"\n  sh\npulumi up --yes\nsh\nwait for the dev stack to become ready\nsh\ncurl $(pulumi stack output url)\nsh\nHello, World!\nsh\npulumi destroy\nsh\npulumi stack rm dev\njs\ntry {\n  await env.MY_BUCKET.put(\"my-key\", data, { customMetadata: largeMetadata });\n} catch (error) {\n  console.error(error.message);\n  // \"put: Your metadata headers exceed the maximum allowed metadata size. (10012)\"\n}\nxml\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error>\n  <Code>NoSuchKey</Code>\n  <Message>The specified key does not exist.</Message>\n</Error>\njson\n\"com.cloudflare.edge.r2.bucket.<ACCOUNT_ID>_<JURISDICTION>_<BUCKET_NAME>\": \"*\"\njson\n\"com.cloudflare.api.account.<ACCOUNT_ID>\": {\n  \"com.cloudflare.edge.r2.bucket.*\": \"*\"\n}\njson\n[\n  {\n    \"id\": \"f267e341f3dd4697bd3b9f71dd96247f\",\n    \"effect\": \"allow\",\n    \"resources\": {\n      \"com.cloudflare.edge.r2.bucket.4793d734c0b8e484dfc37ec392b5fa8a_default_my-bucket\": \"*\",\n      \"com.cloudflare.edge.r2.bucket.4793d734c0b8e484dfc37ec392b5fa8a_eu_my-eu-bucket\": \"*\"\n    },\n    \"permission_groups\": [\n      {\n        \"id\": \"6a018a9f2fc74eb6b293b0c548f38b39\",\n        \"name\": \"Workers R2 Storage Bucket Item Read\"\n      }\n    ]\n  }\n]\nplaintext\nAWS_ACCESS_KEY_ID = <accessKeyId>\nAWS_SECRET_ACCESS_KEY = <secretAccessKey>\nAWS_SESSION_TOKEN = <sessionToken>\nbash",
+  "code_samples": [
+    {
+      "code": "### f. Install the Cloudflare package\n\nYou need to install the Cloudflare package for your language of choice in order to define Cloudflare resources in your Pulumi program.\n\nInstall the Cloudflare package by running the following command:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "* Python",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "* go",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "* Java\n\n  Below are Apache Maven instructions. For other Java project managers such as Gradle, see the official [Maven repository](https://central.sonatype.com/artifact/com.pulumi/cloudflare/overview)\n\n  1. Open your `pom.xml` file.\n  2. Add the Pulumi Cloudflare dependency inside the `<dependencies>` section.",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Run:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "* .NET",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "* YAML\n\n  There are no dependencies to download for YAML. Skip ahead.\n\n## 2. Define Cloudflare resources in code\n\nWith the Cloudflare package installed, you can now define any [supported Cloudflare resource](https://www.pulumi.com/registry/packages/cloudflare/) in your Pulumi program. Next, define a Worker, a Route, and a DNS Record.\n\n### a. Add a Workers script\n\nThe [Workers Script resource](https://www.pulumi.com/registry/packages/cloudflare/api-docs/workersscript/) represents a Cloudflare Worker that can be deployed to the Cloudflare network.\n\nReplace the contents of your entrypoint file with the following:\n\n* JavaScript\n\n  **Filename: `index.js`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript\n\n  **Filename: `index.ts`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* Python\n\n  **Filename: `__main__.py`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* go\n\n  **Filename: `main.go`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* Java\n\n  **Filename: `src/main/java/myproject/App.java`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* .NET\n\n  **Filename: `Program.cs`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* YAML\n\n  **Filename: `Pulumi.yaml`**",
+      "language": "unknown"
+    },
+    {
+      "code": "### b. Add a Route\n\nYou will now add a [Workers Route resource](https://www.pulumi.com/registry/packages/cloudflare/api-docs/workersroute/) to your Pulumi program so the Workers script can have an endpoint and be active. To properly configure the Route, you will also look up the zone ID for your domain.\n\nAdd the following code snippet to your entrypoint file **after** the Worker script resource:\n\n* JavaScript\n\n  **Filename: `index.js`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript\n\n  **Filename: `index.ts`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* Python\n\n  **Filename: `__main__.py`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* go\n\n  **Filename: `main.go`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* Java\n\n  **Filename: `src/main/java/myproject/App.java`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* .NET\n\n  **Filename: `Program.cs`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* YAML\n\n  **Filename: `Pulumi.yaml`**\n\n  Below the `runtime` key, add the following code:",
+      "language": "unknown"
+    },
+    {
+      "code": "Below the `worker` resource, add the following code:",
+      "language": "unknown"
+    },
+    {
+      "code": "### c. Add a DNS Record\n\nYou will now add a DNS [Record resource](https://www.pulumi.com/registry/packages/cloudflare/api-docs/record/) to resolve the previously configured Route. In the next step, you'll also output the Route URL so it can be easily accessed.\n\nAdd the following code snippet to your entrypoint file **after** the Route resource:\n\n* JavaScript\n\n  **Filename: `index.js`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript\n\n  **Filename: `index.ts`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* Python\n\n  **Filename: `__main__.py`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* go\n\n  **Filename: `main.go`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* Java\n\n  **Filename: `src/main/java/myproject/App.java`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* .NET\n\n  **Filename: `Program.cs`**\n\n  Notice the updated ' return ' statement because you're now exporting a value. Ensure that you also include `using System.Collections.Generic;` in your imports.",
+      "language": "unknown"
+    },
+    {
+      "code": "* YAML\n\n  Notice the new top-level `outputs` section.",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nYou may need to use `http` instead depending on your domain settings.\n\n### d. (Optional) Verify your code\n\nConfirm all your changes match the full solution below:\n\n* JavaScript\n\n  **Filename: `index.js`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript\n\n  **Filename: `index.ts`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* Python\n\n  **Filename: `__main__.py`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* go\n\n  **Filename: `main.go`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* Java\n\n  **Filename: `src/main/java/myproject/App.java`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* .NET\n\n  **Filename: `Program.cs`**",
+      "language": "unknown"
+    },
+    {
+      "code": "* YAML\n\n  **Filename: `Pulumi.yaml`**",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Deploy your application\n\nNow that you have defined all the Cloudflare resources, you can deploy the Hello World application to your Cloudflare account using the Pulumi CLI.\n\nTo deploy the changes, run:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## 4. Test the Worker\n\nYou incrementally added Cloudflare resources to run and access your Hello World application. You can test your application by curling the `url` output from the Pulumi stack.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## 5. Clean up\n\nIn this last step, you will clean up the resources and stack used throughout the tutorial.\n\n### a. Delete the Cloudflare resources",
+      "language": "unknown"
+    },
+    {
+      "code": "### b. Remove the Pulumi stack",
+      "language": "unknown"
+    },
+    {
+      "code": "## Next steps\n\nVisit the [Cloudflare package documentation](https://www.pulumi.com/docs/reference/pkg/cloudflare/) to explore other resources you can define with Pulumi and Cloudflare.\n\n</page>\n\n<page>\n---\ntitle: Error codes · Cloudflare R2 docs\ndescription: This page documents error codes returned by R2 when using the\n  Workers API or the S3-compatible API, along with recommended fixes to help\n  with troubleshooting.\nlastUpdated: 2025-12-29T18:01:22.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/api/error-codes/\n  md: https://developers.cloudflare.com/r2/api/error-codes/index.md\n---\n\nThis page documents error codes returned by R2 when using the [Workers API](https://developers.cloudflare.com/r2/api/workers/) or the [S3-compatible API](https://developers.cloudflare.com/r2/api/s3/), along with recommended fixes to help with troubleshooting.\n\n## How errors are returned\n\nFor the **Workers API**, R2 operations throw exceptions that you can catch. The error code is included at the end of the `message` property:",
+      "language": "unknown"
+    },
+    {
+      "code": "For the **S3-compatible API**, errors are returned as XML in the response body:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Error code reference\n\n### Authentication and authorization errors\n\n| Error Code | S3 Code | HTTP Status | Details | Recommended Fix |\n| - | - | - | - | - |\n| 10002 | Unauthorized | 401 | Missing or invalid authentication credentials. | Verify your [API token](https://developers.cloudflare.com/r2/api/tokens/) or access key credentials are correct and have not expired. |\n| 10003 | AccessDenied | 403 | Insufficient permissions for the requested operation. | Check that your [API token](https://developers.cloudflare.com/r2/api/tokens/) has the required permissions for the bucket and operation. |\n| 10018 | ExpiredRequest | 400 | Presigned URL or request signature has expired. | Regenerate the [presigned URL](https://developers.cloudflare.com/r2/api/s3/presigned-urls/) or signature. |\n| 10035 | SignatureDoesNotMatch | 403 | Request signature does not match calculated signature. | Verify your secret key and signing algorithm. Check for URL encoding issues. |\n| 10042 | NotEntitled | 403 | Account not entitled to this feature. | Ensure your account has an [R2 subscription](https://developers.cloudflare.com/r2/pricing/). |\n\n### Bucket errors\n\n| Error Code | S3 Code | HTTP Status | Details | Recommended Fix |\n| - | - | - | - | - |\n| 10005 | InvalidBucketName | 400 | Bucket name does not meet naming requirements. | Bucket names must be 3-63 chars, lowercase alphanumeric and hyphens, start/end with alphanumeric. |\n| 10006 | NoSuchBucket | 404 | The specified bucket does not exist. | Verify the bucket name is correct and the bucket exists in your account. |\n| 10008 | BucketNotEmpty | 409 | Cannot delete bucket that contains objects. | Delete all objects in the bucket before deleting the bucket. |\n| 10009 | TooManyBuckets | 400 | Account bucket limit exceeded (default: 1,000,000 buckets). | Request a limit increase via the [Limits Increase Request Form](https://forms.gle/ukpeZVLWLnKeixDu7). |\n| 10073 | BucketConflict | 409 | Bucket name already exists. | Choose a different bucket name. Bucket names must be unique within your account. |\n\n### Object errors\n\n| Error Code | S3 Code | HTTP Status | Details | Recommended Fix |\n| - | - | - | - | - |\n| 10007 | NoSuchKey | 404 | The specified object key does not exist. For the [Workers API](https://developers.cloudflare.com/r2/api/workers/workers-api-reference/), `get()` and `head()` return `null` instead of throwing. | Verify the object key is correct and the object has not been deleted. |\n| 10020 | InvalidObjectName | 400 | Object key contains invalid characters or is too long. | Use valid UTF-8 characters. Maximum key length is 1024 bytes. |\n| 100100 | EntityTooLarge | 400 | Object exceeds maximum size (5 GiB for single upload, 5 TiB for multipart). | Use [multipart upload](https://developers.cloudflare.com/r2/objects/multipart-objects/) for objects larger than 5 GiB. Maximum object size is 5 TiB. |\n| 10012 | MetadataTooLarge | 400 | Custom metadata exceeds the 8,192 byte limit. | Reduce custom metadata size. Maximum is 8,192 bytes total for all custom metadata. |\n| 10069 | ObjectLockedByBucketPolicy | 403 | Object is protected by a bucket lock rule and cannot be modified or deleted. | Wait for the retention period to expire. Refer to [bucket locks](https://developers.cloudflare.com/r2/buckets/bucket-locks/). |\n\n### Upload and request errors\n\n| Error Code | S3 Code | HTTP Status | Details | Recommended Fix |\n| - | - | - | - | - |\n| 10033 | MissingContentLength | 411 | `Content-Length` header required but missing. | Include the `Content-Length` header in PUT/POST requests. |\n| 10013 | IncompleteBody | 400 | Request body terminated before expected `Content-Length`. | Ensure the full request body is sent. Check for network interruptions or client timeouts. |\n| 10014 | InvalidDigest | 400 | Checksum header format is malformed. | Ensure checksums are properly encoded (base64 for SHA/CRC checksums). |\n| 10037 | BadDigest | 400 | Provided checksum does not match the uploaded content. | Verify data integrity and retry the upload. |\n| 10039 | InvalidRange | 416 | Requested byte range is not satisfiable. | Ensure the range start is less than object size. Check `Range` header format. |\n| 10031 | PreconditionFailed | 412 | Conditional headers (`If-Match`, `If-Unmodified-Since`, etc.) were not satisfied. | Object's ETag or modification time does not match your condition. Refetch and retry. Refer to [conditional operations](https://developers.cloudflare.com/r2/api/s3/extensions/#conditional-operations-in-putobject). |\n\n### Multipart upload errors\n\n| Error Code | S3 Code | HTTP Status | Details | Recommended Fix |\n| - | - | - | - | - |\n| 10011 | EntityTooSmall | 400 | Multipart part is below minimum size (5 MiB), except for the last part. | Ensure each part (except the last) is at least 5 MiB. |\n| 10024 | NoSuchUpload | 404 | Multipart upload does not exist or was aborted. | Verify the `uploadId` is correct. By default, incomplete multipart uploads expire after 7 days. Refer to [object lifecycles](https://developers.cloudflare.com/r2/buckets/object-lifecycles/). |\n| 10025 | InvalidPart | 400 | One or more parts could not be found when completing the upload. | Verify each part was uploaded successfully and use the exact ETag returned from `UploadPart`. |\n| 10048 | InvalidPart | 400 | All non-trailing parts must have the same size. | Ensure all parts except the last have identical sizes. R2 requires uniform part sizes for multipart uploads. |\n\n### Service errors\n\n| Error Code | S3 Code | HTTP Status | Details | Recommended Fix |\n| - | - | - | - | - |\n| 10001 | InternalError | 500 | An internal error occurred. | Retry the request. If persistent, check [Cloudflare Status](https://www.cloudflarestatus.com) or contact support. |\n| 10043 | ServiceUnavailable | 503 | Service is temporarily unavailable. | Retry with exponential backoff. Check [Cloudflare Status](https://www.cloudflarestatus.com). |\n| 10054 | ClientDisconnect | 400 | Client disconnected before request completed. | Check network connectivity and retry. |\n| 10058 | TooManyRequests | 429 | Rate limit exceeded. Often caused by multiple concurrent requests to the same object key (limit: 1 write/second per key). | Check if multiple clients are accessing the same object key. See [R2 limits](https://developers.cloudflare.com/r2/platform/limits/). |\n\n</page>\n\n<page>\n---\ntitle: S3 · Cloudflare R2 docs\nlastUpdated: 2025-12-29T18:01:22.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/r2/api/s3/\n  md: https://developers.cloudflare.com/r2/api/s3/index.md\n---\n\n* [Extensions](https://developers.cloudflare.com/r2/api/s3/extensions/)\n* [S3 API compatibility](https://developers.cloudflare.com/r2/api/s3/api/)\n* [Presigned URLs](https://developers.cloudflare.com/r2/api/s3/presigned-urls/)\n\n</page>\n\n<page>\n---\ntitle: Authentication · Cloudflare R2 docs\ndescription: You can generate an API token to serve as the Access Key for usage\n  with existing S3-compatible SDKs or XML APIs.\nlastUpdated: 2025-10-28T15:46:27.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/api/tokens/\n  md: https://developers.cloudflare.com/r2/api/tokens/index.md\n---\n\nYou can generate an API token to serve as the Access Key for usage with existing S3-compatible SDKs or XML APIs.\n\nNote\n\nThis page contains instructions on generating API tokens *specifically* for R2. Note that this is different from generating API tokens for other services, as documented in [Create API token](https://developers.cloudflare.com/fundamentals/api/get-started/create-token/).\n\nYou must purchase R2 before you can generate an API token.\n\nTo create an API token:\n\n1. In the Cloudflare dashboard, go to the **R2 object storage** page.\n\n   [Go to **Overview**](https://dash.cloudflare.com/?to=/:account/r2/overview)\n\n2. Select **Manage in API tokens**.\n\n3. Choose to create either:\n\n   * **Create Account API token** - These tokens are tied to the Cloudflare account itself and can be used by any authorized system or user. Only users with the Super Administrator role can view or create them. These tokens remain valid until manually revoked.\n   * **Create User API token** - These tokens are tied to your individual Cloudflare user. They inherit your personal permissions and become inactive if your user is removed from the account.\n\n4. Under **Permissions**, choose a permission types for your token. Refer to [Permissions](#permissions) for information about each option.\n\n5. (Optional) If you select the **Object Read and Write** or **Object Read** permissions, you can scope your token to a set of buckets.\n\n6. Select **Create Account API token** or **Create User API token**.\n\nAfter your token has been successfully created, review your **Secret Access Key** and **Access Key ID** values. These may often be referred to as Client Secret and Client ID, respectively.\n\nWarning\n\nYou will not be able to access your **Secret Access Key** again after this step. Copy and record both values to avoid losing them.\n\nYou will also need to configure the `endpoint` in your S3 client to `https://<ACCOUNT_ID>.r2.cloudflarestorage.com`.\n\nFind your [account ID in the Cloudflare dashboard](https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/).\n\nBuckets created with jurisdictions must be accessed via jurisdiction-specific endpoints:\n\n* European Union (EU): `https://<ACCOUNT_ID>.eu.r2.cloudflarestorage.com`\n* FedRAMP: `https://<ACCOUNT_ID>.fedramp.r2.cloudflarestorage.com`\n\nWarning\n\nJurisdictional buckets can only be accessed via the corresponding jurisdictional endpoint. Most S3 clients will not let you configure multiple `endpoints`, so you'll generally have to initialize one client per jurisdiction.\n\n## Permissions\n\n| Permission | Description |\n| - | - |\n| Admin Read & Write | Allows the ability to create, list, and delete buckets, edit bucket configuration, read, write, and list objects, and read and write to data catalog tables and associated metadata. |\n| Admin Read only | Allows the ability to list buckets and view bucket configuration, read and list objects, and read from the data catalog tables and associated metadata. |\n| Object Read & Write | Allows the ability to read, write, and list objects in specific buckets. |\n| Object Read only | Allows the ability to read and list objects in specific buckets. |\n\nNote\n\nCurrently **Admin Read & Write** or **Admin Read only** permission is required to use [R2 Data Catalog](https://developers.cloudflare.com/r2/data-catalog/).\n\n## Create API tokens via API\n\nYou can create API tokens via the API and use them to generate corresponding Access Key ID and Secret Access Key values. To get started, refer to [Create API tokens via the API](https://developers.cloudflare.com/fundamentals/api/how-to/create-via-api/). Below are the specifics for R2.\n\n### Access Policy\n\nAn Access Policy specifies what resources the token can access and the permissions it has.\n\n#### Resources\n\nThere are two relevant resource types for R2: `Account` and `Bucket`. For more information on the Account resource type, refer to [Account](https://developers.cloudflare.com/fundamentals/api/how-to/create-via-api/#account).\n\n##### Bucket\n\nInclude a set of R2 buckets or all buckets in an account.\n\nA specific bucket is represented as:",
+      "language": "unknown"
+    },
+    {
+      "code": "* `ACCOUNT_ID`: Refer to [Find zone and account IDs](https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/#find-account-id-workers-and-pages).\n* `JURISDICTION`: The [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#available-jurisdictions) where the R2 bucket lives. For buckets not created in a specific jurisdiction this value will be `default`.\n* `BUCKET_NAME`: The name of the bucket your Access Policy applies to.\n\nAll buckets in an account are represented as:",
+      "language": "unknown"
+    },
+    {
+      "code": "* `ACCOUNT_ID`: Refer to [Find zone and account IDs](https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/#find-account-id-workers-and-pages).\n\n#### Permission groups\n\nDetermine what [permission groups](https://developers.cloudflare.com/fundamentals/api/how-to/create-via-api/#permission-groups) should be applied.\n\n| Permission group | Resource | Description |\n| - | - | - |\n| `Workers R2 Storage Write` | Account | Can create, delete, and list buckets, edit bucket configuration, and read, write, and list objects. |\n| `Workers R2 Storage Read` | Account | Can list buckets and view bucket configuration, and read and list objects. |\n| `Workers R2 Storage Bucket Item Write` | Bucket | Can read, write, and list objects in buckets. |\n| `Workers R2 Storage Bucket Item Read` | Bucket | Can read and list objects in buckets. |\n| `Workers R2 Data Catalog Write` | Account | Can read from and write to data catalogs. This permission allows access to the Iceberg REST catalog interface. |\n| `Workers R2 Data Catalog Read` | Account | Can read from data catalogs. This permission allows read-only access to the Iceberg REST catalog interface. |\n\n#### Example Access Policy",
+      "language": "unknown"
+    },
+    {
+      "code": "### Get S3 API credentials from an API token\n\nYou can get the Access Key ID and Secret Access Key values from the response of the [Create Token](https://developers.cloudflare.com/api/resources/user/subresources/tokens/methods/create/) API:\n\n* Access Key ID: The `id` of the API token.\n* Secret Access Key: The SHA-256 hash of the API token `value`.\n\nRefer to [Authenticate against R2 API using auth tokens](https://developers.cloudflare.com/r2/examples/authenticate-r2-auth-tokens/) for a tutorial with JavaScript, Python, and Go examples.\n\n## Temporary access credentials\n\nIf you need to create temporary credentials for a bucket or a prefix/object within a bucket, you can use the [temp-access-credentials endpoint](https://developers.cloudflare.com/api/resources/r2/subresources/temporary_credentials/methods/create/) in the API. You will need an existing R2 token to pass in as the parent access key id. You can use the credentials from the API result for an S3-compatible request by setting the credential variables like so:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nThe temporary access key cannot have a permission that is higher than the parent access key. e.g. if the parent key is set to `Object Read Write`, the temporary access key could only have `Object Read Write` or `Object Read Only` permissions.\n\n</page>\n\n<page>\n---\ntitle: Workers API · Cloudflare R2 docs\nlastUpdated: 2025-12-29T18:01:22.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/r2/api/workers/\n  md: https://developers.cloudflare.com/r2/api/workers/index.md\n---\n\n* [Workers API reference](https://developers.cloudflare.com/r2/api/workers/workers-api-reference/)\n* [Use R2 from Workers](https://developers.cloudflare.com/r2/api/workers/workers-api-usage/)\n* [Use the R2 multipart API from Workers](https://developers.cloudflare.com/r2/api/workers/workers-multipart-usage/)\n\n</page>\n\n<page>\n---\ntitle: Connect to Iceberg engines · Cloudflare R2 docs\ndescription: Find detailed setup instructions for Apache Spark and other common\n  query engines.\nlastUpdated: 2025-09-25T04:10:41.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/r2/data-catalog/config-examples/\n  md: https://developers.cloudflare.com/r2/data-catalog/config-examples/index.md\n---\n\nBelow are configuration examples to connect various Iceberg engines to [R2 Data Catalog](https://developers.cloudflare.com/r2/data-catalog/):\n\n* [Apache Trino](https://developers.cloudflare.com/r2/data-catalog/config-examples/trino/)\n* [DuckDB](https://developers.cloudflare.com/r2/data-catalog/config-examples/duckdb/)\n* [PyIceberg](https://developers.cloudflare.com/r2/data-catalog/config-examples/pyiceberg/)\n* [Snowflake](https://developers.cloudflare.com/r2/data-catalog/config-examples/snowflake/)\n* [Spark (PySpark)](https://developers.cloudflare.com/r2/data-catalog/config-examples/spark-python/)\n* [Spark (Scala)](https://developers.cloudflare.com/r2/data-catalog/config-examples/spark-scala/)\n* [StarRocks](https://developers.cloudflare.com/r2/data-catalog/config-examples/starrocks/)\n\n</page>\n\n<page>\n---\ntitle: Deleting data · Cloudflare R2 docs\ndescription: How to properly delete data from R2 Data Catalog\nlastUpdated: 2025-12-18T17:16:51.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/data-catalog/deleting-data/\n  md: https://developers.cloudflare.com/r2/data-catalog/deleting-data/index.md\n---\n\n## Deleting data in R2 Data Catalog\n\nDeleting data from R2 Data Catalog or any Apache Iceberg catalog requires that operations are done in a transaction through the catalog itself. Manually deleting metadata or data files directly can lead to data catalog corruption.\n\n## Examples of enabling automatic table maintenance in R2 Data Catalog",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "f. Install the Cloudflare package",
+      "id": "f.-install-the-cloudflare-package"
+    },
+    {
+      "level": "h2",
+      "text": "2. Define Cloudflare resources in code",
+      "id": "2.-define-cloudflare-resources-in-code"
+    },
+    {
+      "level": "h3",
+      "text": "a. Add a Workers script",
+      "id": "a.-add-a-workers-script"
+    },
+    {
+      "level": "h3",
+      "text": "b. Add a Route",
+      "id": "b.-add-a-route"
+    },
+    {
+      "level": "h3",
+      "text": "c. Add a DNS Record",
+      "id": "c.-add-a-dns-record"
+    },
+    {
+      "level": "h3",
+      "text": "d. (Optional) Verify your code",
+      "id": "d.-(optional)-verify-your-code"
+    },
+    {
+      "level": "h2",
+      "text": "3. Deploy your application",
+      "id": "3.-deploy-your-application"
+    },
+    {
+      "level": "h2",
+      "text": "4. Test the Worker",
+      "id": "4.-test-the-worker"
+    },
+    {
+      "level": "h2",
+      "text": "5. Clean up",
+      "id": "5.-clean-up"
+    },
+    {
+      "level": "h3",
+      "text": "a. Delete the Cloudflare resources",
+      "id": "a.-delete-the-cloudflare-resources"
+    },
+    {
+      "level": "h3",
+      "text": "b. Remove the Pulumi stack",
+      "id": "b.-remove-the-pulumi-stack"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "How errors are returned",
+      "id": "how-errors-are-returned"
+    },
+    {
+      "level": "h2",
+      "text": "Error code reference",
+      "id": "error-code-reference"
+    },
+    {
+      "level": "h3",
+      "text": "Authentication and authorization errors",
+      "id": "authentication-and-authorization-errors"
+    },
+    {
+      "level": "h3",
+      "text": "Bucket errors",
+      "id": "bucket-errors"
+    },
+    {
+      "level": "h3",
+      "text": "Object errors",
+      "id": "object-errors"
+    },
+    {
+      "level": "h3",
+      "text": "Upload and request errors",
+      "id": "upload-and-request-errors"
+    },
+    {
+      "level": "h3",
+      "text": "Multipart upload errors",
+      "id": "multipart-upload-errors"
+    },
+    {
+      "level": "h3",
+      "text": "Service errors",
+      "id": "service-errors"
+    },
+    {
+      "level": "h2",
+      "text": "Permissions",
+      "id": "permissions"
+    },
+    {
+      "level": "h2",
+      "text": "Create API tokens via API",
+      "id": "create-api-tokens-via-api"
+    },
+    {
+      "level": "h3",
+      "text": "Access Policy",
+      "id": "access-policy"
+    },
+    {
+      "level": "h3",
+      "text": "Get S3 API credentials from an API token",
+      "id": "get-s3-api-credentials-from-an-api-token"
+    },
+    {
+      "level": "h2",
+      "text": "Temporary access credentials",
+      "id": "temporary-access-credentials"
+    },
+    {
+      "level": "h2",
+      "text": "Deleting data in R2 Data Catalog",
+      "id": "deleting-data-in-r2-data-catalog"
+    },
+    {
+      "level": "h2",
+      "text": "Examples of enabling automatic table maintenance in R2 Data Catalog",
+      "id": "examples-of-enabling-automatic-table-maintenance-in-r2-data-catalog"
+    }
+  ],
+  "url": "llms-txt#replace-example.com-with-your-domain",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Find instances of the old package name in your codebase",
+  "content": "grep -r 'agents-sdk' .",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#find-instances-of-the-old-package-name-in-your-codebase",
+  "links": []
+}

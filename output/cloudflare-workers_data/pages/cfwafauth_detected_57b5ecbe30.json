@@ -1,0 +1,8 @@
+{
+  "title": "cf.waf.auth\\_detected",
+  "content": "`cf.waf.auth_detected` Boolean\n\nIndicates whether the Cloudflare WAF detected authentication credentials in the request.\n\nRequires a Cloudflare Enterprise plan. You must also enable [leaked credentials detection](https://developers.cloudflare.com/waf/detections/leaked-credentials/).\n\n<page>\n---\ntitle: cf.waf.content_scan.has_failed · Cloudflare Ruleset Engine docs\ndescription: Indicates whether the file scanner was unable to scan all the\n  content objects detected in the request.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.content_scan.has_failed/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.content_scan.has_failed/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#cf.waf.auth\\_detected",
+  "links": []
+}

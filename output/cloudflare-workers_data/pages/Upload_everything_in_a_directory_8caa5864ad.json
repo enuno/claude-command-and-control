@@ -1,0 +1,833 @@
+{
+  "title": "Upload everything in a directory",
+  "content": "rclone copy /path/to/local/folder r2:bucket_name\nsh\nrclone ls r2:bucket_name\nsh\nwrangler r2 object put test-bucket/image.png --file=image.png\njson\n{\n  \"action\": { \"info\": \"CreateBucket\", \"result\": true, \"type\": \"create\" },\n  \"actor\": {\n    \"email\": \"<ACTOR_EMAIL>\",\n    \"id\": \"3f7b730e625b975bc1231234cfbec091\",\n    \"ip\": \"fe32:43ed:12b5:526::1d2:13\",\n    \"type\": \"user\"\n  },\n  \"id\": \"5eaeb6be-1234-406a-87ab-1971adc1234c\",\n  \"interface\": \"API\",\n  \"metadata\": { \"zone_name\": \"r2.cloudflarestorage.com\" },\n  \"newValue\": \"\",\n  \"newValueJson\": {},\n  \"oldValue\": \"\",\n  \"oldValueJson\": {},\n  \"owner\": { \"id\": \"1234d848c0b9e484dfc37ec392b5fa8a\" },\n  \"resource\": { \"id\": \"my-bucket\", \"type\": \"r2.bucket\" },\n  \"when\": \"2024-07-15T16:32:52.412Z\"\n}\njson\n{\n  \"type\": \"cf.r2.bucket.created\",\n  \"source\": {\n    \"type\": \"r2\"\n  },\n  \"payload\": {\n    \"name\": \"my-bucket\",\n    \"jurisdiction\": \"default\",\n    \"location\": \"WNAM\",\n    \"storageClass\": \"Standard\"\n  },\n  \"metadata\": {\n    \"accountId\": \"f9f79265f388666de8122cfb508d7776\",\n    \"eventSubscriptionId\": \"1830c4bb612e43c3af7f4cada31fbf3f\",\n    \"eventSchemaVersion\": 1,\n    \"eventTimestamp\": \"2025-05-01T02:48:57.132Z\"\n  }\n}\njson\n{\n  \"type\": \"cf.r2.bucket.deleted\",\n  \"source\": {\n    \"type\": \"r2\"\n  },\n  \"payload\": {\n    \"name\": \"my-bucket\",\n    \"jurisdiction\": \"default\"\n  },\n  \"metadata\": {\n    \"accountId\": \"f9f79265f388666de8122cfb508d7776\",\n    \"eventSubscriptionId\": \"1830c4bb612e43c3af7f4cada31fbf3f\",\n    \"eventSchemaVersion\": 1,\n    \"eventTimestamp\": \"2025-05-01T02:48:57.132Z\"\n  }\n}\njson\n{\n  \"type\": \"cf.superSlurper.job.started\",\n  \"source\": {\n    \"type\": \"superSlurper\"\n  },\n  \"payload\": {\n    \"id\": \"job-12345678-90ab-cdef-1234-567890abcdef\",\n    \"createdAt\": \"2025-05-01T02:48:57.132Z\",\n    \"overwrite\": true,\n    \"pathPrefix\": \"migrations/\",\n    \"source\": {\n      \"provider\": \"s3\",\n      \"bucket\": \"source-bucket\",\n      \"region\": \"us-east-1\",\n      \"endpoint\": \"s3.amazonaws.com\"\n    },\n    \"destination\": {\n      \"provider\": \"r2\",\n      \"bucket\": \"destination-bucket\",\n      \"jurisdiction\": \"default\"\n    }\n  },\n  \"metadata\": {\n    \"accountId\": \"f9f79265f388666de8122cfb508d7776\",\n    \"eventSubscriptionId\": \"1830c4bb612e43c3af7f4cada31fbf3f\",\n    \"eventSchemaVersion\": 1,\n    \"eventTimestamp\": \"2025-05-01T02:48:57.132Z\"\n  }\n}\njson\n{\n  \"type\": \"cf.superSlurper.job.paused\",\n  \"source\": {\n    \"type\": \"superSlurper\"\n  },\n  \"payload\": {\n    \"id\": \"job-12345678-90ab-cdef-1234-567890abcdef\"\n  },\n  \"metadata\": {\n    \"accountId\": \"f9f79265f388666de8122cfb508d7776\",\n    \"eventSubscriptionId\": \"1830c4bb612e43c3af7f4cada31fbf3f\",\n    \"eventSchemaVersion\": 1,\n    \"eventTimestamp\": \"2025-05-01T02:48:57.132Z\"\n  }\n}\njson\n{\n  \"type\": \"cf.superSlurper.job.resumed\",\n  \"source\": {\n    \"type\": \"superSlurper\"\n  },\n  \"payload\": {\n    \"id\": \"job-12345678-90ab-cdef-1234-567890abcdef\"\n  },\n  \"metadata\": {\n    \"accountId\": \"f9f79265f388666de8122cfb508d7776\",\n    \"eventSubscriptionId\": \"1830c4bb612e43c3af7f4cada31fbf3f\",\n    \"eventSchemaVersion\": 1,\n    \"eventTimestamp\": \"2025-05-01T02:48:57.132Z\"\n  }\n}\njson\n{\n  \"type\": \"cf.superSlurper.job.completed\",\n  \"source\": {\n    \"type\": \"superSlurper\"\n  },\n  \"payload\": {\n    \"id\": \"job-12345678-90ab-cdef-1234-567890abcdef\",\n    \"totalObjectsCount\": 1000,\n    \"skippedObjectsCount\": 10,\n    \"migratedObjectsCount\": 980,\n    \"failedObjectsCount\": 10\n  },\n  \"metadata\": {\n    \"accountId\": \"f9f79265f388666de8122cfb508d7776\",\n    \"eventSubscriptionId\": \"1830c4bb612e43c3af7f4cada31fbf3f\",\n    \"eventSchemaVersion\": 1,\n    \"eventTimestamp\": \"2025-05-01T02:48:57.132Z\"\n  }\n}\njson\n{\n  \"type\": \"cf.superSlurper.job.aborted\",\n  \"source\": {\n    \"type\": \"superSlurper\"\n  },\n  \"payload\": {\n    \"id\": \"job-12345678-90ab-cdef-1234-567890abcdef\",\n    \"totalObjectsCount\": 1000,\n    \"skippedObjectsCount\": 100,\n    \"migratedObjectsCount\": 500,\n    \"failedObjectsCount\": 50\n  },\n  \"metadata\": {\n    \"accountId\": \"f9f79265f388666de8122cfb508d7776\",\n    \"eventSubscriptionId\": \"1830c4bb612e43c3af7f4cada31fbf3f\",\n    \"eventSchemaVersion\": 1,\n    \"eventTimestamp\": \"2025-05-01T02:48:57.132Z\"\n  }\n}\njson\n{\n  \"type\": \"cf.superSlurper.job.object.migrated\",\n  \"source\": {\n    \"type\": \"superSlurper.job\",\n    \"jobId\": \"job-12345678-90ab-cdef-1234-567890abcdef\"\n  },\n  \"payload\": {\n    \"key\": \"migrations/file.txt\"\n  },\n  \"metadata\": {\n    \"accountId\": \"f9f79265f388666de8122cfb508d7776\",\n    \"eventSubscriptionId\": \"1830c4bb612e43c3af7f4cada31fbf3f\",\n    \"eventSchemaVersion\": 1,\n    \"eventTimestamp\": \"2025-05-01T02:48:57.132Z\"\n  }\n}\ngraphql\nquery R2VolumeExample(\n  $accountTag: string!\n  $startDate: Time\n  $endDate: Time\n  $bucketName: string\n) {\n  viewer {\n    accounts(filter: { accountTag: $accountTag }) {\n      r2OperationsAdaptiveGroups(\n        limit: 10000\n        filter: {\n          datetime_geq: $startDate\n          datetime_leq: $endDate\n          bucketName: $bucketName\n        }\n      ) {\n        sum {\n          requests\n        }\n        dimensions {\n          actionType\n        }\n      }\n    }\n  }\n}\ngraphql\nquery R2StorageExample(\n  $accountTag: string!\n  $startDate: Time\n  $endDate: Time\n  $bucketName: string\n) {\n  viewer {\n    accounts(filter: { accountTag: $accountTag }) {\n      r2StorageAdaptiveGroups(\n        limit: 10000\n        filter: {\n          datetime_geq: $startDate\n          datetime_leq: $endDate\n          bucketName: $bucketName\n        }\n        orderBy: [datetime_DESC]\n      ) {\n        max {\n          objectCount\n          uploadCount\n          payloadSize\n          metadataSize\n        }\n        dimensions {\n          datetime\n        }\n      }\n    }\n  }\n}\njs\nawait S3.send(\n  new CreateBucketCommand({\n    Bucket: \"YOUR_BUCKET_NAME\",\n    CreateBucketConfiguration: {\n      LocationConstraint: \"WNAM\",\n    },\n  }),\n);\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"r2_buckets\": [\n      {\n        \"bindings\": [\n          {\n            \"binding\": \"MY_BUCKET\",\n            \"bucket_name\": \"<YOUR_BUCKET_NAME>\",\n            \"jurisdiction\": \"<JURISDICTION>\"\n          }\n        ]\n      }\n    ]\n  }\n  toml\n  [[r2_buckets]]\n  bindings = [\n    { binding = \"MY_BUCKET\", bucket_name = \"<YOUR_BUCKET_NAME>\", jurisdiction = \"<JURISDICTION>\" }\n  ]\n  js\nimport { S3Client, CreateBucketCommand } from \"@aws-sdk/client-s3\";\nconst S3 = new S3Client({\n  endpoint: \"https://<account_id>.eu.r2.cloudflarestorage.com\",\n  credentials: {\n    accessKeyId: \"<access_key_id\",\n    secretAccessKey: \"<access_key_secret>\",\n  },\n  region: \"auto\",\n});\nawait S3.send(\n  new CreateBucketCommand({\n    Bucket: \"YOUR_BUCKET_NAME\",\n  }),\n);\nsh\n  npx wrangler r2 bucket create [NAME]\n  sh\n  pnpm wrangler r2 bucket create [NAME]\n  sh\n  yarn wrangler r2 bucket create [NAME]\n  sh\n  npx wrangler r2 bucket info [BUCKET]\n  sh\n  pnpm wrangler r2 bucket info [BUCKET]\n  sh\n  yarn wrangler r2 bucket info [BUCKET]\n  sh\n  npx wrangler r2 bucket delete [BUCKET]\n  sh\n  pnpm wrangler r2 bucket delete [BUCKET]\n  sh\n  yarn wrangler r2 bucket delete [BUCKET]\n  sh\n  npx wrangler r2 bucket list\n  sh\n  pnpm wrangler r2 bucket list\n  sh\n  yarn wrangler r2 bucket list\n  sh\n  npx wrangler r2 bucket catalog enable [BUCKET]\n  sh\n  pnpm wrangler r2 bucket catalog enable [BUCKET]\n  sh\n  yarn wrangler r2 bucket catalog enable [BUCKET]\n  sh\n  npx wrangler r2 bucket catalog disable [BUCKET]\n  sh\n  pnpm wrangler r2 bucket catalog disable [BUCKET]\n  sh\n  yarn wrangler r2 bucket catalog disable [BUCKET]\n  sh\n  npx wrangler r2 bucket catalog get [BUCKET]\n  sh\n  pnpm wrangler r2 bucket catalog get [BUCKET]\n  sh\n  yarn wrangler r2 bucket catalog get [BUCKET]\n  sh\n  npx wrangler r2 bucket catalog compaction enable [BUCKET] [NAMESPACE] [TABLE]\n  sh\n  pnpm wrangler r2 bucket catalog compaction enable [BUCKET] [NAMESPACE] [TABLE]\n  sh\n  yarn wrangler r2 bucket catalog compaction enable [BUCKET] [NAMESPACE] [TABLE]\n  bash",
+  "code_samples": [
+    {
+      "code": "Verify the upload with `rclone ls`:",
+      "language": "unknown"
+    },
+    {
+      "code": "For more information, refer to our [rclone example](https://developers.cloudflare.com/r2/examples/rclone/).\n\n### Wrangler\n\nNote\n\nWrangler supports uploading files up to 315MB and only allows one object at a time. For large files or bulk uploads, use [rclone](https://developers.cloudflare.com/r2/examples/rclone/) or another [S3-compatible](https://developers.cloudflare.com/r2/api/s3/) tool.\n\nUse [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) to upload objects. Run the [`r2 object put` command](https://developers.cloudflare.com/workers/wrangler/commands/#r2-object-put):",
+      "language": "unknown"
+    },
+    {
+      "code": "You can set the `Content-Type` (MIME type), `Content-Disposition`, `Cache-Control` and other HTTP header metadata through optional flags.\n\n</page>\n\n<page>\n---\ntitle: Audit Logs · Cloudflare R2 docs\ndescription: Audit logs provide a comprehensive summary of changes made within\n  your Cloudflare account, including those made to R2 buckets. This\n  functionality is available on all plan types, free of charge, and is always\n  enabled.\nlastUpdated: 2025-09-03T16:40:54.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/platform/audit-logs/\n  md: https://developers.cloudflare.com/r2/platform/audit-logs/index.md\n---\n\n[Audit logs](https://developers.cloudflare.com/fundamentals/account/account-security/review-audit-logs/) provide a comprehensive summary of changes made within your Cloudflare account, including those made to R2 buckets. This functionality is available on all plan types, free of charge, and is always enabled.\n\n## Viewing audit logs\n\nTo view audit logs for your R2 buckets, go to the **Audit logs** page.\n\n[Go to **Audit logs**](https://dash.cloudflare.com/?to=/:account/audit-log)\n\nFor more information on how to access and use audit logs, refer to [Review audit logs](https://developers.cloudflare.com/fundamentals/account/account-security/review-audit-logs/).\n\n## Logged operations\n\nThe following configuration actions are logged:\n\n| Operation | Description |\n| - | - |\n| CreateBucket | Creation of a new bucket. |\n| DeleteBucket | Deletion of an existing bucket. |\n| AddCustomDomain | Addition of a custom domain to a bucket. |\n| RemoveCustomDomain | Removal of a custom domain from a bucket. |\n| ChangeBucketVisibility | Change to the managed public access (`r2.dev`) settings of a bucket. |\n| PutBucketStorageClass | Change to the default storage class of a bucket. |\n| PutBucketLifecycleConfiguration | Change to the object lifecycle configuration of a bucket. |\n| DeleteBucketLifecycleConfiguration | Deletion of the object lifecycle configuration for a bucket. |\n| PutBucketCors | Change to the CORS configuration for a bucket. |\n| DeleteBucketCors | Deletion of the CORS configuration for a bucket. |\n\nNote\n\nLogs for data access operations, such as `GetObject` and `PutObject`, are not included in audit logs. To log HTTP requests made to public R2 buckets, use the [HTTP requests](https://developers.cloudflare.com/logs/logpush/logpush-job/datasets/zone/http_requests/) Logpush dataset.\n\n## Example log entry\n\nBelow is an example of an audit log entry showing the creation of a new bucket:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Event subscriptions · Cloudflare R2 docs\ndescription: Event subscriptions allow you to receive messages when events occur\n  across your Cloudflare account. Cloudflare products (e.g., KV, Workers AI,\n  Workers) can publish structured events to a queue, which you can then consume\n  with Workers or HTTP pull consumers to build custom workflows, integrations,\n  or logic.\nlastUpdated: 2025-11-06T01:33:23.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/platform/event-subscriptions/\n  md: https://developers.cloudflare.com/r2/platform/event-subscriptions/index.md\n---\n\n[Event subscriptions](https://developers.cloudflare.com/queues/event-subscriptions/) allow you to receive messages when events occur across your Cloudflare account. Cloudflare products (e.g., [KV](https://developers.cloudflare.com/kv/), [Workers AI](https://developers.cloudflare.com/workers-ai/), [Workers](https://developers.cloudflare.com/workers/)) can publish structured events to a [queue](https://developers.cloudflare.com/queues/), which you can then consume with Workers or [HTTP pull consumers](https://developers.cloudflare.com/queues/configuration/pull-consumers/) to build custom workflows, integrations, or logic.\n\nFor more information on [Event Subscriptions](https://developers.cloudflare.com/queues/event-subscriptions/), refer to the [management guide](https://developers.cloudflare.com/queues/event-subscriptions/manage-event-subscriptions/).\n\n## Available R2 events\n\n#### `bucket.created`\n\nTriggered when a bucket is created.\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "#### `bucket.deleted`\n\nTriggered when a bucket is deleted.\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "## Available Super Slurper events\n\n#### `job.started`\n\nTriggered when a migration job starts.\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "#### `job.paused`\n\nTriggered when a migration job pauses.\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "#### `job.resumed`\n\nTriggered when a migration job resumes.\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "#### `job.completed`\n\nTriggered when a migration job finishes.\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "#### `job.aborted`\n\nTriggered when a migration job is manually aborted.\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "#### `job.object.migrated`\n\nTriggered when an object is migrated.\n\n**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Limits · Cloudflare R2 docs\ndescription: >-\n  1 Bucket management operations include creating, deleting, listing,\n\n  and configuring buckets. This limit does not apply to reading or writing\n  objects to a bucket.\n\n   2 The object size limit is 5 GiB less than 5 TiB, so 4.995\n  TiB.\n\n   3 The max upload size is 5 MiB less than 5 GiB, so 4.995 GiB.\n\n   4 Max upload size applies to uploading a file via one request,\n  uploading a part of a multipart upload, or copying into a part of a multipart\n\n  upload. If you have a Worker, its inbound request size is constrained by\n\n  Workers request limits. The max\n\n  upload size limit does not apply to subrequests.\n\n   5 Concurrent writes  to the same object name (key) at a higher rate will cause you to see HTTP 429 (rate limited) responses, as you would with other object storage systems.\nlastUpdated: 2025-11-03T23:35:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/platform/limits/\n  md: https://developers.cloudflare.com/r2/platform/limits/index.md\n---\n\n| Feature | Limit |\n| - | - |\n| Data storage per bucket | Unlimited |\n| Maximum number of buckets per account | 1,000,000 |\n| Maximum rate of bucket management operations per bucket1 | 50 per second |\n| Number of custom domains per bucket | 50 |\n| Object key length | 1,024 bytes |\n| Object metadata size | 8,192 bytes |\n| Object size | 5 TiB per object2 |\n| Maximum upload size4 | 5 GiB (single-part) / 4.995TiB (multi-part) 3 |\n| Maximum upload parts | 10,000 |\n| Maximum concurrent writes to the same object name (key) | 1 per second 5 |\n\n1 Bucket management operations include creating, deleting, listing, and configuring buckets. This limit does *not* apply to reading or writing objects to a bucket.\\\n2 The object size limit is 5 GiB less than 5 TiB, so 4.995 TiB.\\\n3 The max upload size is 5 MiB less than 5 GiB, so 4.995 GiB.\\\n4 Max upload size applies to uploading a file via one request, uploading a part of a multipart upload, or copying into a part of a multipart upload. If you have a Worker, its inbound request size is constrained by [Workers request limits](https://developers.cloudflare.com/workers/platform/limits#request-limits). The max upload size limit does not apply to subrequests.\\\n5 Concurrent writes to the same object name (key) at a higher rate will cause you to see HTTP 429 (rate limited) responses, as you would with other object storage systems.\n\n\n\nLimits specified in MiB (mebibyte), GiB (gibibyte), or TiB (tebibyte) are storage units of measurement based on base-2. 1 GiB (gibibyte) is equivalent to 230 bytes (or 10243 bytes). This is distinct from 1 GB (gigabyte), which is 109 bytes (or 10003 bytes).\n\nNeed a higher limit?\n\nTo request an adjustment to a limit, complete the [Limit Increase Request Form](https://forms.gle/ukpeZVLWLnKeixDu7). If the limit can be increased, Cloudflare will contact you with next steps.\n\n## Rate limiting on managed public buckets through `r2.dev`\n\nManaged public bucket access through an `r2.dev` subdomain is not intended for production usage and has a variable rate limit applied to it. The `r2.dev` endpoint for your bucket is designed to enable testing.\n\n* If you exceed the rate limit (hundreds of requests/second), requests to your `r2.dev` endpoint will be temporarily throttled and you will receive a `429 Too Many Requests` response.\n* Bandwidth (throughput) may also be throttled when using the `r2.dev` endpoint.\n\nFor production use cases, connect a [custom domain](https://developers.cloudflare.com/r2/buckets/public-buckets/#custom-domains) to your bucket. Custom domains allow you to serve content from a domain you control (for example, `assets.example.com`), configure fine-grained caching, set up redirect and rewrite rules, mutate content via [Cloudflare Workers](https://developers.cloudflare.com/workers/), and get detailed URL-level analytics for content served from your R2 bucket.\n\n</page>\n\n<page>\n---\ntitle: Metrics and analytics · Cloudflare R2 docs\ndescription: R2 exposes analytics that allow you to inspect the requests and\n  storage of the buckets in your account.\nlastUpdated: 2025-11-24T20:04:17.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/platform/metrics-analytics/\n  md: https://developers.cloudflare.com/r2/platform/metrics-analytics/index.md\n---\n\nR2 exposes analytics that allow you to inspect the requests and storage of the buckets in your account.\n\nThe metrics displayed for a bucket in the [Cloudflare dashboard](https://dash.cloudflare.com/) are queried from Cloudflare's [GraphQL Analytics API](https://developers.cloudflare.com/analytics/graphql-api/). You can access the metrics [programmatically](#query-via-the-graphql-api) via GraphQL or HTTP client.\n\n## Metrics\n\nR2 currently has two datasets:\n\n| Dataset | GraphQL Dataset Name | Description |\n| - | - | - |\n| Operations | `r2OperationsAdaptiveGroups` | This dataset consists of the operations taken on a bucket within an account. |\n| Storage | `r2StorageAdaptiveGroups` | This dataset consists of the storage of a bucket within an account. |\n\n### Operations Dataset\n\n| Field | Description |\n| - | - |\n| actionType | The name of the operation performed. |\n| actionStatus | The status of the operation. Can be `success`, `userError`, or `internalError`. |\n| bucketName | The bucket this operation was performed on if applicable. For buckets with a jurisdiction specified, you must include the jurisdiction followed by an underscore before the bucket name. For example: `eu_your-bucket-name` |\n| objectName | The object this operation was performed on if applicable. |\n| responseStatusCode | The http status code returned by this operation. |\n| datetime | The time of the request. |\n\n### Storage Dataset\n\n| Field | Description |\n| - | - |\n| bucketName | The bucket this storage value is for. For buckets with a jurisdiction specified, you must include the [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions) followed by an underscore before the bucket name. For example: `eu_your-bucket-name` |\n| payloadSize | The size of the objects in the bucket. |\n| metadataSize | The size of the metadata of the objects in the bucket. |\n| objectCount | The number of objects in the bucket. |\n| uploadCount | The number of pending multipart uploads in the bucket. |\n| datetime | The time that this storage value represents. |\n\nMetrics can be queried (and are retained) for the past 31 days. These datasets require an `accountTag` filter with your Cloudflare account ID.\n\nQuerying buckets with jurisdiction restriction\n\nIn your account, you may have two buckets of the same name, one with a specified jurisdiction, and one without.\n\nTherefore, if you want to query metrics about a bucket which has a specified jurisdiction, you must include the [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions) followed by an underscore before the bucket name. For example: `eu_bucket-name`. This ensures you query the correct bucket.\n\n## View via the dashboard\n\nPer-bucket analytics for R2 are available in the Cloudflare dashboard. To view current and historical metrics for a bucket:\n\n1. In the Cloudflare dashboard, go to the **R2 object storage** page.\n\n   [Go to **Overview**](https://dash.cloudflare.com/?to=/:account/r2/overview)\n\n2. Select your bucket.\n\n3. Select the **Metrics** tab.\n\nYou can optionally select a time window to query. This defaults to the last 24 hours.\n\n## Query via the GraphQL API\n\nYou can programmatically query analytics for your R2 buckets via the [GraphQL Analytics API](https://developers.cloudflare.com/analytics/graphql-api/). This API queries the same dataset as the Cloudflare dashboard, and supports GraphQL [introspection](https://developers.cloudflare.com/analytics/graphql-api/features/discovery/introspection/).\n\n## Examples\n\n### Operations\n\nTo query the volume of each operation type on a bucket for a given time period you can run a query as such",
+      "language": "unknown"
+    },
+    {
+      "code": "[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBASgJgGoHsA2IC2YCiAPAQ0wAc0wAKAKBhgBICBjBlEAOwBcAVAgcwC4YAZ3YQAlqx4BCanWEEI7ACIF2YAZ1HYZtMKwAmy1es1htAIxAMA1mHYA5ImqEjxPSgEoYAbxkA3UWAA7pDeMjSMzGzsguQAZqJoqhACXjARLBzc-HTpUVkwAL6ePjSlMBAIAPLEkCqiKKyCAIJ6BMTsor5gAOIQLMQxYWUwaJqi7AIAjAAMs9NDZfGJkCkLw62qHdgA+jxgwAK0cgqGpsPrKrYm22QHdLoGl2tlFta2DtiHrzb2js+Fa2K-0EWFC5zKEH24GEgn+BX+ehMjXqjTB4PCDA6DU4UBqcLW8LKhIBBSAA\\&variables=N4IghgxhD2CuB2AXAKmA5iAXCAggYTwHkBVAOWQH0BJAERABoQBnRMAJ0RrEQFMsQATAAYBAVgC0ARgHiAzEOQCBmAQE5MsgBwAtBiB7wAJl179hYqTNmTkQgCwr1W3YwBGsCAGseiUmAC2fNgASgCiAAoAMvihFADqVMgAEhQAysjBVKQA4iAAvkA)\n\nThe `bucketName` field can be removed to get an account level overview of operations. The volume of operations can be broken down even further by adding more dimensions to the query.\n\n### Storage\n\nTo query the storage of a bucket over a given time period you can run a query as such.",
+      "language": "unknown"
+    },
+    {
+      "code": "[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBASgJgMoBcD2ECGBzMBRAD0wFsAHAGzAAoAoGGAEkwGNm0QA7FAFRwC4YAZxQQAlh2wBCOo2GYIKACKYUYAd1HEwMhmA4ATZavWbt9BgCMQzANZgUAORJqhI8dhoBKGAG8ZAN1EwAHdIXxl6FjZOFEEqADNRclUIAR8YKPYuXmwBJlYsnhwYAF9vP3pKmAhkdCxcAEF9TFIUUX8wAHEIdlI4iKqYck1RFAEARgAGacmBqsTkyDS5webVNq0AfVxgPLkFIzNBqrX7U03KXcY9QxUj4-orW3snLTynu0dnFfoSn5gMPpIAAhKACADapw2YE2ijwSAAwgBdFblf7ETAEcIPSpoCwAKzAzBQCMK-3oIAoaEw+lJMXJMFImCg5Gp+iQogAXvcHloUDSVJgOdz-n8cfpTBxBKI0FLsTiYFDTKKVmLKmq-iUgA\\&variables=N4IghgxhD2CuB2AXAKmA5iAXCAggYTwHkBVAOWQH0BJAERABoQBnRMAJ0RrEQFMsQATAAYBAVgC0ARgHiAzEOQCBmAQE5MsgBwAtBiB7wAJl179hYqTNmTkQgCwr1W3YwBGsCAGseiUmAC2fNgASgCiAAoAMvihFADqVMgAEhQAysjBVKQA4iAAvkA)\n\n</page>\n\n<page>\n---\ntitle: Release notes · Cloudflare R2 docs\ndescription: Subscribe to RSS\nlastUpdated: 2025-09-22T21:23:58.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/platform/release-notes/\n  md: https://developers.cloudflare.com/r2/platform/release-notes/index.md\n---\n\n[Subscribe to RSS](https://developers.cloudflare.com/r2/platform/release-notes/index.xml)\n\n## 2025-09-23\n\n* Fixed a bug where you could attempt to delete objects even if they had a bucket lock rule applied on the dashboard. Previously, they would momentarily vanish from the table but reappear after a page refresh. Now, the delete action is disabled on locked objects in the dashboard.\n\n## 2025-09-22\n\n* We’ve updated the R2 dashboard with a cleaner look to make it easier to find what you need and take action. You can find instructions for how you can use R2 with the various API interfaces in the side panel, and easily access documentation at the bottom.\n\n## 2025-07-03\n\n* The CRC-64/NVME Checksum algorithm is now supported for both single and multipart objects. This also brings support for the `FULL_OBJECT` Checksum Type on Multipart Uploads. See Checksum Type Compatibility [here](https://developers.cloudflare.com/r2/api/s3/api/).\n\n## 2024-12-03\n\n* [Server-side Encryption with Customer-Provided Keys](https://developers.cloudflare.com/r2/examples/ssec/) is now available to all users via the Workers and S3-compatible APIs.\n\n## 2024-11-21\n\n* Sippy can now be enabled on buckets in [jurisdictions](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions) (e.g., EU, FedRAMP).\n* Fixed an issue with Sippy where GET/HEAD requests to objects with certain special characters would result in error responses.\n\n## 2024-11-20\n\n* Oceania (OC) is now available as an R2 region.\n* The default maximum number of buckets per account is now 1 million. If you need more than 1 million buckets, contact [Cloudflare Support](https://developers.cloudflare.com/support/contacting-cloudflare-support/).\n* Public buckets accessible via custom domain now support Smart [Tiered Cache](https://developers.cloudflare.com/r2/buckets/public-buckets/#caching).\n\n## 2024-11-19\n\n* R2 [`bucket lifecycle` command](https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-lifecycle-add) added to Wrangler. Supports listing, adding, and removing object lifecycle rules.\n\n## 2024-11-14\n\n* R2 [`bucket info` command](https://developers.cloudflare.com/workers/wrangler/commands/r2-bucket-info) added to Wrangler. Displays location of bucket and common metrics.\n\n## 2024-11-08\n\n* R2 [`bucket dev-url` command](https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-dev-url-enable) added to Wrangler. Supports enabling, disabling, and getting status of bucket's [r2.dev public access URL](https://developers.cloudflare.com/r2/buckets/public-buckets/#enable-managed-public-access).\n\n## 2024-11-06\n\n* R2 [`bucket domain` command](https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-domain-add) added to Wrangler. Supports listing, adding, removing, and updating [R2 bucket custom domains](https://developers.cloudflare.com/r2/buckets/public-buckets/#custom-domains).\n\n## 2024-11-01\n\n* Add `minTLS` to response of [list custom domains](https://developers.cloudflare.com/api/resources/r2/subresources/buckets/subresources/domains/subresources/custom/methods/list/) endpoint.\n\n## 2024-10-28\n\n* Add [get custom domain](https://developers.cloudflare.com/api/resources/r2/subresources/buckets/subresources/domains/subresources/custom/methods/get/) endpoint.\n\n## 2024-10-21\n\n* Event notifications can now be configured for R2 buckets in [jurisdictions](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions) (e.g., EU, FedRAMP).\n\n## 2024-09-26\n\n* [Event notifications for R2](https://blog.cloudflare.com/builder-day-2024-announcements/#event-notifications-for-r2-is-now-ga) is now generally available. Event notifications now support higher throughput (up to 5,000 messages per second per Queue), can be configured in the dashboard and Wrangler, and support for lifecycle deletes.\n\n## 2024-09-18\n\n* Add the ability to set and [update minimum TLS version](https://developers.cloudflare.com/r2/buckets/public-buckets/#minimum-tls-version) for R2 bucket custom domains.\n\n## 2024-08-26\n\n* Added support for configuring R2 bucket custom domains via [API](https://developers.cloudflare.com/api/resources/r2/subresources/buckets/subresources/domains/subresources/custom/methods/create/).\n\n## 2024-08-21\n\n* [Sippy](https://developers.cloudflare.com/r2/data-migration/sippy/) is now generally available. Metrics for ongoing migrations can now be found in the dashboard or via the GraphQL analytics API.\n\n## 2024-07-08\n\n* Added migration log for [Super Slurper](https://developers.cloudflare.com/r2/data-migration/super-slurper/) to the migration summary in the dashboard.\n\n## 2024-06-12\n\n* [Super Slurper](https://developers.cloudflare.com/r2/data-migration/super-slurper/) now supports migrating objects up to 1TB in size.\n\n## 2024-06-07\n\n* Fixed an issue that prevented Sippy from copying over objects from S3 buckets with SSE set up.\n\n## 2024-06-06\n\n* R2 will now ignore the `x-purpose` request parameter.\n\n## 2024-05-29\n\n* Added support for [Infrequent Access](https://developers.cloudflare.com/r2/buckets/storage-classes/) storage class (beta).\n\n## 2024-05-24\n\n* Added [create temporary access tokens](https://developers.cloudflare.com/api/resources/r2/subresources/temporary_credentials/methods/create/) endpoint.\n\n## 2024-04-03\n\n* [Event notifications](https://developers.cloudflare.com/r2/buckets/event-notifications/) for R2 is now available as an open beta.\n* Super Slurper now supports migration from [Google Cloud Storage](https://developers.cloudflare.com/r2/data-migration/super-slurper/#supported-cloud-storage-providers).\n\n## 2024-02-20\n\n* When an `OPTIONS` request against the public entrypoint does not include an `origin` header, an `HTTP 400` instead of an `HTTP 401` is returned.\n\n## 2024-02-06\n\n* The response shape of `GET /buckets/:bucket/sippy` has changed.\n* The `/buckets/:bucket/sippy/validate` endpoint is exposed over APIGW to validate Sippy's configuration.\n* The shape of the configuration object when modifying Sippy's configuration has changed.\n\n## 2024-02-02\n\n* Updated [GetBucket](https://developers.cloudflare.com/api/resources/r2/subresources/buckets/methods/get/) endpoint: Now fetches by `bucket_name` instead of `bucket_id`.\n\n## 2024-01-30\n\n* Fixed a bug where the API would accept empty strings in the `AllowedHeaders` property of `PutBucketCors` actions.\n\n## 2024-01-26\n\n* Parts are now automatically sorted in ascending order regardless of input during `CompleteMultipartUpload`.\n\n## 2024-01-11\n\n* Sippy is available for Google Cloud Storage (GCS) beta.\n\n## 2023-12-11\n\n* The `x-id` query param for `S3 ListBuckets` action is now ignored.\n* The `x-id` query param is now ignored for all S3 actions.\n\n## 2023-10-23\n\n* `PutBucketCors` now only accepts valid origins.\n\n## 2023-09-01\n\n* Fixed an issue with `ListBuckets` where the `name_contains` parameter would also search over the jurisdiction name.\n\n## 2023-08-23\n\n* Config Audit Logs GA.\n\n## 2023-08-11\n\n* Users can now complete conditional multipart publish operations. When a condition failure occurs when publishing an upload, the upload is no longer available and is treated as aborted.\n\n## 2023-07-05\n\n* Improved performance for ranged reads on very large files. Previously ranged reads near the end of very large files would be noticeably slower than ranged reads on smaller files. Performance should now be consistently good independent of filesize.\n\n## 2023-06-21\n\n* [Multipart ETags](https://developers.cloudflare.com/r2/objects/multipart-objects/#etags) are now MD5 hashes.\n\n## 2023-06-16\n\n* Fixed a bug where calling [GetBucket](https://developers.cloudflare.com/api/resources/r2/subresources/buckets/methods/get/) on a non-existent bucket would return a 500 instead of a 404.\n* Improved S3 compatibility for ListObjectsV1, now nextmarker is only set when truncated is true.\n* The R2 worker bindings now support parsing conditional headers with multiple etags. These etags can now be strong, weak or a wildcard. Previously the bindings only accepted headers containing a single strong etag.\n* S3 putObject now supports sha256 and sha1 checksums. These were already supported by the R2 worker bindings.\n* CopyObject in the S3 compatible api now supports Cloudflare specific headers which allow the copy operation to be conditional on the state of the destination object.\n\n## 2023-04-01\n\n* [GetBucket](https://developers.cloudflare.com/api/resources/r2/subresources/buckets/methods/get/) is now available for use through the Cloudflare API.\n* [Location hints](https://developers.cloudflare.com/r2/reference/data-location/) can now be set when creating a bucket, both through the S3 API, and the dashboard.\n\n## 2023-03-16\n\n* The ListParts API has been implemented and is available for use.\n* HTTP2 is now enabled by default for new custom domains linked to R2 buckets.\n* Object Lifecycles are now available for use.\n* Bug fix: Requests to public buckets will now return the `Content-Encoding` header for gzip files when `Accept-Encoding: gzip` is used.\n\n## 2023-01-27\n\n* R2 authentication tokens created via the R2 token page are now scoped to a single account by default.\n\n## 2022-12-07\n\n* Fix CORS preflight requests for the S3 API, which allows using the S3 SDK in the browser.\n* Passing a range header to the `get` operation in the R2 bindings API should now work as expected.\n\n## 2022-11-30\n\n* Requests with the header `x-amz-acl: public-read` are no longer rejected.\n* Fixed issues with wildcard CORS rules and presigned URLs.\n* Fixed an issue where `ListObjects` would time out during delimited listing of unicode-normalized keys.\n* S3 API's `PutBucketCors` now rejects requests with unknown keys in the XML body.\n* Signing additional headers no longer breaks CORS preflight requests for presigned URLs.\n\n## 2022-11-21\n\n* Fixed a bug in `ListObjects` where `startAfter` would skip over objects with keys that have numbers right after the `startAfter` prefix.\n* Add worker bindings for multipart uploads.\n\n## 2022-11-17\n\n* Unconditionally return HTTP 206 on ranged requests to match behavior of other S3 compatible implementations.\n* Fixed a CORS bug where `AllowedHeaders` in the CORS config were being treated case-sensitively.\n\n## 2022-11-08\n\n* Copying multipart objects via `CopyObject` is re-enabled.\n* `UploadPartCopy` is re-enabled.\n\n## 2022-10-28\n\n* Multipart upload part sizes are always expected to be of the same size, but this enforcement is now done when you complete an upload instead of being done very time you upload a part.\n* Fixed a performance issue where concurrent multipart part uploads would get rejected.\n\n## 2022-10-26\n\n* Fixed ranged reads for multipart objects with part sizes unaligned to 64KiB.\n\n## 2022-10-19\n\n* `HeadBucket` now sets `x-amz-bucket-region` to `auto` in the response.\n\n## 2022-10-06\n\n* Temporarily disabled `UploadPartCopy` while we investigate an issue.\n\n## 2022-09-29\n\n* Fixed a CORS issue where `Access-Control-Allow-Headers` was not being set for preflight requests.\n\n## 2022-09-28\n\n* Fixed a bug where CORS configuration was not being applied to S3 endpoint.\n* No-longer render the `Access-Control-Expose-Headers` response header if `ExposeHeader` is not defined.\n* Public buckets will no-longer return the `Content-Range` response header unless the response is partial.\n* Fixed CORS rendering for the S3 `HeadObject` operation.\n* Fixed a bug where no matching CORS configuration could result in a `403` response.\n* Temporarily disable copying objects that were created with multipart uploads.\n* Fixed a bug in the Workers bindings where an internal error was being returned for malformed ranged `.get` requests.\n\n## 2022-09-27\n\n* CORS preflight responses and adding CORS headers for other responses is now implemented for S3 and public buckets. Currently, the only way to configure CORS is via the S3 API.\n* Fixup for bindings list truncation to work more correctly when listing keys with custom metadata that have `\"` or when some keys/values contain certain multi-byte UTF-8 values.\n* The S3 `GetObject` operation now only returns `Content-Range` in response to a ranged request.\n\n## 2022-09-19\n\n* The R2 `put()` binding options can now be given an `onlyIf` field, similar to `get()`, that performs a conditional upload.\n* The R2 `delete()` binding now supports deleting multiple keys at once.\n* The R2 `put()` binding now supports user-specified SHA-1, SHA-256, SHA-384, SHA-512 checksums in options.\n* User-specified object checksums will now be available in the R2 `get()` and `head()` bindings response. MD5 is included by default for non-multipart uploaded objects.\n\n## 2022-09-06\n\n* The S3 `CopyObject` operation now includes `x-amz-version-id` and `x-amz-copy-source-version-id` in the response headers for consistency with other methods.\n* The `ETag` for multipart files uploaded until shortly after Open Beta uploaded now include the number of parts as a suffix.\n\n## 2022-08-17\n\n* The S3 `DeleteObjects` operation no longer trims the space from around the keys before deleting. This would result in files with leading / trailing spaces not being able to be deleted. Additionally, if there was an object with the trimmed key that existed it would be deleted instead. The S3 `DeleteObject` operation was not affected by this.\n* Fixed presigned URL support for the S3 `ListBuckets` and `ListObjects` operations.\n\n## 2022-08-06\n\n* Uploads will automatically infer the `Content-Type` based on file body if one is not explicitly set in the `PutObject` request. This functionality will come to multipart operations in the future.\n\n## 2022-07-30\n\n* Fixed S3 conditionals to work properly when provided the `LastModified` date of the last upload, bindings fixes will come in the next release.\n* `If-Match` / `If-None-Match` headers now support arrays of ETags, Weak ETags and wildcard (`*`) as per the HTTP standard and undocumented AWS S3 behavior.\n\n## 2022-07-21\n\n* Added dummy implementation of the following operation that mimics the response that a basic AWS S3 bucket will return when first created: `GetBucketAcl`.\n\n## 2022-07-20\n\n* Added dummy implementations of the following operations that mimic the response that a basic AWS S3 bucket will return when first created:\n\n  * `GetBucketVersioning`\n  * `GetBucketLifecycleConfiguration`\n  * `GetBucketReplication`\n  * `GetBucketTagging`\n  * `GetObjectLockConfiguration`\n\n## 2022-07-19\n\n* Fixed an S3 compatibility issue for error responses with MinIO .NET SDK and any other tooling that expects no `xmlns` namespace attribute on the top-level `Error` tag.\n* List continuation tokens prior to 2022-07-01 are no longer accepted and must be obtained again through a new `list` operation.\n* The `list()` binding will now correctly return a smaller limit if too much data would otherwise be returned (previously would return an `Internal Error`).\n\n## 2022-07-14\n\n* Improvements to 500s: we now convert errors, so things that were previously concurrency problems for some operations should now be `TooMuchConcurrency` instead of `InternalError`. We've also reduced the rate of 500s through internal improvements.\n* `ListMultipartUpload` correctly encodes the returned `Key` if the `encoding-type` is specified.\n\n## 2022-07-13\n\n* S3 XML documents sent to R2 that have an XML declaration are not rejected with `400 Bad Request` / `MalformedXML`.\n* Minor S3 XML compatibility fix impacting Arq Backup on Windows only (not the Mac version). Response now contains XML declaration tag prefix and the xmlns attribute is present on all top-level tags in the response.\n* Beta `ListMultipartUploads` support.\n\n## 2022-07-06\n\n* Support the `r2_list_honor_include` compat flag coming up in an upcoming runtime release (default behavior as of 2022-07-14 compat date). Without that compat flag/date, list will continue to function implicitly as `include: ['httpMetadata', 'customMetadata']` regardless of what you specify.\n* `cf-create-bucket-if-missing` can be set on a `PutObject`/`CreateMultipartUpload` request to implicitly create the bucket if it does not exist.\n* Fix S3 compatibility with MinIO client spec non-compliant XML for publishing multipart uploads. Any leading and trailing quotes in `CompleteMultipartUpload` are now optional and ignored as it seems to be the actual non-standard behavior AWS implements.\n\n## 2022-07-01\n\n* Unsupported search parameters to `ListObjects`/`ListObjectsV2` are now rejected with `501 Not Implemented`.\n\n* Fixes for Listing:\n\n  * Fix listing behavior when the number of files within a folder exceeds the limit (you'd end up seeing a CommonPrefix for that large folder N times where N = number of children within the CommonPrefix / limit).\n  * Fix corner case where listing could cause objects with sharing the base name of a \"folder\" to be skipped.\n  * Fix listing over some files that shared a certain common prefix.\n\n* `DeleteObjects` can now handle 1000 objects at a time.\n\n* S3 `CreateBucket` request can specify `x-amz-bucket-object-lock-enabled` with a value of `false` and not have the requested rejected with a `NotImplemented` error. A value of `true` will continue to be rejected as R2 does not yet support object locks.\n\n## 2022-06-17\n\n* Fixed a regression for some clients when using an empty delimiter.\n* Added support for S3 pre-signed URLs.\n\n## 2022-06-16\n\n* Fixed a regression in the S3 API `UploadPart` operation where `TooMuchConcurrency` & `NoSuchUpload` errors were being returned as `NoSuchBucket`.\n\n## 2022-06-13\n\n* Fixed a bug with the S3 API `ListObjectsV2` operation not returning empty folder/s as common prefixes when using delimiters.\n* The S3 API `ListObjectsV2` `KeyCount` parameter now correctly returns the sum of keys and common prefixes rather than just the keys.\n* Invalid cursors for list operations no longer fail with an `InternalError` and now return the appropriate error message.\n\n## 2022-06-10\n\n* The `ContinuationToken` field is now correctly returned in the response if provided in a S3 API `ListObjectsV2` request.\n* Fixed a bug where the S3 API `AbortMultipartUpload` operation threw an error when called multiple times.\n\n## 2022-05-27\n\n* Fixed a bug where the S3 API's `PutObject` or the `.put()` binding could fail but still show the bucket upload as successful.\n* If [conditional headers](https://datatracker.ietf.org/doc/html/rfc7232) are provided to S3 API `UploadObject` or `CreateMultipartUpload` operations, and the object exists, a `412 Precondition Failed` status code will be returned if these checks are not met.\n\n## 2022-05-20\n\n* Fixed a bug when `Accept-Encoding` was being used in `SignedHeaders` when sending requests to the S3 API would result in a `SignatureDoesNotMatch` response.\n\n## 2022-05-17\n\n* Fixed a bug where requests to the S3 API were not handling non-encoded parameters used for the authorization signature.\n* Fixed a bug where requests to the S3 API where number-like keys were being parsed as numbers instead of strings.\n\n## 2022-05-16\n\n* Add support for S3 [virtual-hosted style paths](https://docs.aws.amazon.com/AmazonS3/latest/userguide/VirtualHosting.html), such as `<BUCKET>.<ACCOUNT_ID>.r2.cloudflarestorage.com` instead of path-based routing (`<ACCOUNT_ID>.r2.cloudflarestorage.com/<BUCKET>`).\n* Implemented `GetBucketLocation` for compatibility with external tools, this will always return a `LocationConstraint` of `auto`.\n\n## 2022-05-06\n\n* S3 API `GetObject` ranges are now inclusive (`bytes=0-0` will correctly return the first byte).\n* S3 API `GetObject` partial reads return the proper `206 Partial Content` response code.\n* Copying from a non-existent key (or from a non-existent bucket) to another bucket now returns the proper `NoSuchKey` / `NoSuchBucket` response.\n* The S3 API now returns the proper `Content-Type: application/xml` response header on relevant endpoints.\n* Multipart uploads now have a `-N` suffix on the etag representing the number of parts the file was published with.\n* `UploadPart` and `UploadPartCopy` now return proper error messages, such as `TooMuchConcurrency` or `NoSuchUpload`, instead of 'internal error'.\n* `UploadPart` can now be sent a 0-length part.\n\n## 2022-05-05\n\n* When using the S3 API, an empty string and `us-east-1` will now alias to the `auto` region for compatibility with external tools.\n* `GetBucketEncryption`, `PutBucketEncryption` and `DeleteBucketEncrypotion` are now supported (the only supported value currently is `AES256`).\n* Unsupported operations are explicitly rejected as unimplemented rather than implicitly converting them into `ListObjectsV2`/`PutBucket`/`DeleteBucket` respectively.\n* S3 API `CompleteMultipartUploads` requests are now properly escaped.\n\n## 2022-05-03\n\n* Pagination cursors are no longer returned when the keys in a bucket is the same as the `MaxKeys` argument.\n* The S3 API `ListBuckets` operation now accepts `cf-max-keys`, `cf-start-after` and `cf-continuation-token` headers behave the same as the respective URL parameters.\n* The S3 API `ListBuckets` and `ListObjects` endpoints now allow `per_page` to be 0.\n* The S3 API `CopyObject` source parameter now requires a leading slash.\n* The S3 API `CopyObject` operation now returns a `NoSuchBucket` error when copying to a non-existent bucket instead of an internal error.\n* Enforce the requirement for `auto` in SigV4 signing and the `CreateBucket` `LocationConstraint` parameter.\n* The S3 API `CreateBucket` operation now returns the proper `location` response header.\n\n## 2022-04-14\n\n* The S3 API now supports unchunked signed payloads.\n* Fixed `.put()` for the Workers R2 bindings.\n* Fixed a regression where key names were not properly decoded when using the S3 API.\n* Fixed a bug where deleting an object and then another object which is a prefix of the first could result in errors.\n* The S3 API `DeleteObjects` operation no longer returns an error even though an object has been deleted in some cases.\n* Fixed a bug where `startAfter` and `continuationToken` were not working in list operations.\n* The S3 API `ListObjects` operation now correctly renders `Prefix`, `Delimiter`, `StartAfter` and `MaxKeys` in the response.\n* The S3 API `ListObjectsV2` now correctly honors the `encoding-type` parameter.\n* The S3 API `PutObject` operation now works with `POST` requests for `s3cmd` compatibility.\n\n## 2022-04-04\n\n* The S3 API `DeleteObjects` request now properly returns a `MalformedXML` error instead of `InternalError` when provided with more than 128 keys.\n\n</page>\n\n<page>\n---\ntitle: Choose a storage product · Cloudflare R2 docs\nlastUpdated: 2024-08-13T19:56:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/platform/storage-options/\n  md: https://developers.cloudflare.com/r2/platform/storage-options/index.md\n---\n\n\n</page>\n\n<page>\n---\ntitle: Troubleshooting · Cloudflare R2 docs\ndescription: If you are encountering a CORS error despite setting up everything\n  correctly, you may follow this troubleshooting guide to help you.\nlastUpdated: 2025-06-09T14:04:54.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/platform/troubleshooting/\n  md: https://developers.cloudflare.com/r2/platform/troubleshooting/index.md\n---\n\n## Troubleshooting 403 / CORS issues with R2\n\nIf you are encountering a CORS error despite setting up everything correctly, you may follow this troubleshooting guide to help you.\n\nIf you see a 401/403 error above the CORS error in your browser console, you are dealing with a different issue (not CORS related).\n\nIf you do have a CORS issue, refer to [Resolving CORS issues](#if-it-is-actually-cors).\n\n### If you are using a custom domain\n\n1. Open developer tools on your browser.\n2. Go to the **Network** tab and find the failing request. You may need to reload the page, as requests are only logged after developer tools have been opened.\n3. Check the response headers for the following two headers:\n\n* `cf-cache-status`\n* `cf-mitigated`\n\n#### If you have a `cf-mitigated` header\n\nYour request was blocked by one of your WAF rules. Inspect your [Security Events](https://developers.cloudflare.com/waf/analytics/security-events/) to identify the cause of the block.\n\n#### If you do not have a `cf-cache-status` header\n\nYour request was blocked by [Hotlink Protection](https://developers.cloudflare.com/waf/tools/scrape-shield/hotlink-protection/).\n\nEdit your Hotlink Protection settings using a [Configuration Rule](https://developers.cloudflare.com/rules/configuration-rules/), or disable it completely.\n\n### If you are using the S3 API\n\nYour request may be incorrectly signed. You may obtain a better error message by trying the request over curl.\n\nRefer to the working S3 signing examples on the [Examples](https://developers.cloudflare.com/r2/examples/aws/) page.\n\n### If it is actually CORS\n\nHere are some common issues with CORS configurations:\n\n* `ExposeHeaders` is missing headers like `ETag`\n* `AllowedHeaders` is missing headers like `Authorization` or `Content-Type`\n* `AllowedMethods` is missing methods like `POST`/`PUT`\n\n## HTTP 5XX Errors and capacity limitations of Cloudflare R2\n\nWhen you encounter an HTTP 5XX error, it is usually a sign that your Cloudflare R2 bucket has been overwhelmed by too many concurrent requests. These errors can trigger bucket-wide read and write locks, affecting the performance of all ongoing operations.\n\nTo avoid these disruptions, it is important to implement strategies for managing request volume.\n\nHere are some mitigations you can employ:\n\n### Monitor concurrent requests\n\nTrack the number of concurrent requests to your bucket. If a client encounters a 5XX error, ensure that it retries the operation and communicates with other clients. By coordinating, clients can collectively slow down, reducing the request rate and maintaining a more stable flow of successful operations.\n\nIf your users are directly uploading to the bucket (for example, using the S3 or Workers API), you may not be able to monitor or enforce a concurrency limit. In that case, we recommend bucket sharding.\n\n### Bucket sharding\n\nFor higher capacity at the cost of added complexity, consider bucket sharding. This approach distributes reads and writes across multiple buckets, reducing the load on any single bucket. While sharding cannot prevent a single hot object from exhausting capacity, it can mitigate the overall impact and improve system resilience.\n\n## Objects named `This object is unnamed`\n\nIn the Cloudflare dashboard, you can choose to view objects with `/` in the name as folders by selecting **View prefixes as directories**.\n\nFor example, an object named `example/object` will be displayed as below.\n\nObject names which end with `/` will cause the Cloudflare dashboard to render the object as a folder with an unnamed object inside.\n\nFor example, uploading an object named `example/` into an R2 bucket will be displayed as below.\n\n</page>\n\n<page>\n---\ntitle: Consistency model · Cloudflare R2 docs\ndescription: This page details R2's consistency model, including where R2 is\n  strongly, globally consistent and which operations this applies to.\nlastUpdated: 2024-08-13T19:56:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/reference/consistency/\n  md: https://developers.cloudflare.com/r2/reference/consistency/index.md\n---\n\nThis page details R2's consistency model, including where R2 is strongly, globally consistent and which operations this applies to.\n\nR2 can be described as \"strongly consistent\", especially in comparison to other distributed object storage systems. This strong consistency ensures that operations against R2 see the latest (accurate) state: clients should be able to observe the effects of any write, update and/or delete operation immediately, globally.\n\n## Terminology\n\nIn the context of R2, *strong* consistency and *eventual* consistency have the following meanings:\n\n* **Strongly consistent** - The effect of an operation will be observed globally, immediately, by all clients. Clients will not observe 'stale' (inconsistent) state.\n* **Eventually consistent** - Clients may not see the effect of an operation immediately. The state may take a some time (typically seconds to a minute) to propagate globally.\n\n## Operations and Consistency\n\nOperations against R2 buckets and objects adhere to the following consistency guarantees:\n\nAdditional notes:\n\n* In the event two clients are writing (`PUT` or `DELETE`) to the same key, the last writer to complete \"wins\".\n* When performing a multipart upload, read-after-write consistency continues to apply once all parts have been successfully uploaded. In the case the same part is uploaded (in error) from multiple writers, the last write will win.\n* Copying an object within the same bucket also follows the same read-after-write consistency that writing a new object would. The \"copied\" object is immediately readable by all clients once the copy operation completes.\n\n## Caching\n\nNote\n\nBy default, Cloudflare's cache will cache common, cacheable status codes automatically [per our cache documentation](https://developers.cloudflare.com/cache/how-to/configure-cache-status-code/#edge-ttl).\n\nWhen connecting a [custom domain](https://developers.cloudflare.com/r2/buckets/public-buckets/#custom-domains) to an R2 bucket and enabling caching for objects served from that bucket, the consistency model is necessarily relaxed when accessing content via a domain with caching enabled.\n\nSpecifically, you should expect:\n\n* An object you delete from R2, but that is still cached, will still be available. You should [purge the cache](https://developers.cloudflare.com/cache/how-to/purge-cache/) after deleting objects if you need that delete to be reflected.\n* By default, Cloudflare’s cache will [cache HTTP 404 (Not Found) responses](https://developers.cloudflare.com/cache/how-to/configure-cache-status-code/#edge-ttl) automatically. If you upload an object to that same path, the cache may continue to return HTTP 404s until the cache TTL (Time to Live) expires and the new object is fetched from R2 or the [cache is purged](https://developers.cloudflare.com/cache/how-to/purge-cache/).\n* An object for a given key is overwritten with a new object: the old (previous) object will continue to be served to clients until the cache TTL expires (or the object is evicted) or the cache is purged.\n\nThe cache does not affect access via [Worker API bindings](https://developers.cloudflare.com/r2/api/workers/) or the [S3 API](https://developers.cloudflare.com/r2/api/s3/), as these operations are made directly against the bucket and do not transit through the cache.\n\n</page>\n\n<page>\n---\ntitle: Data location · Cloudflare R2 docs\ndescription: Learn how the location of data stored in R2 is determined and about\n  the different available inputs that control the physical location where\n  objects in your buckets are stored.\nlastUpdated: 2025-09-03T16:40:54.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/reference/data-location/\n  md: https://developers.cloudflare.com/r2/reference/data-location/index.md\n---\n\nLearn how the location of data stored in R2 is determined and about the different available inputs that control the physical location where objects in your buckets are stored.\n\n## Automatic (recommended)\n\nWhen you create a new bucket, the data location is set to Automatic by default. Currently, this option chooses a bucket location in the closest available region to the create bucket request based on the location of the caller.\n\n## Location Hints\n\nLocation Hints are optional parameters you can provide during bucket creation to indicate the primary geographical location you expect data will be accessed from.\n\nUsing Location Hints can be a good choice when you expect the majority of access to data in a bucket to come from a different location than where the create bucket request originates. Keep in mind Location Hints are a best effort and not a guarantee, and they should only be used as a way to optimize performance by placing regularly updated content closer to users.\n\n### Set hints via the Cloudflare dashboard\n\nYou can choose to automatically create your bucket in the closest available region based on your location or choose a specific location from the list.\n\n1. In the Cloudflare dashboard, go to the **R2 object storage** page.\n\n   [Go to **Overview**](https://dash.cloudflare.com/?to=/:account/r2/overview)\n\n2. Select **Create bucket**.\n\n3. Enter a name for the bucket.\n\n4. Under **Location**, leave *None* selected for automatic selection or choose a region from the list.\n\n5. Select **Create bucket** to complete the bucket creation process.\n\n### Set hints via the S3 API\n\nYou can set the Location Hint via the `LocationConstraint` parameter using the S3 API:",
+      "language": "unknown"
+    },
+    {
+      "code": "Refer to [Examples](https://developers.cloudflare.com/r2/examples/) for additional examples from other S3 SDKs.\n\n### Available hints\n\nThe following hint locations are supported:\n\n| Hint | Hint description |\n| - | - |\n| wnam | Western North America |\n| enam | Eastern North America |\n| weur | Western Europe |\n| eeur | Eastern Europe |\n| apac | Asia-Pacific |\n| oc | Oceania |\n\n### Additional considerations\n\nLocation Hints are only honored the first time a bucket with a given name is created. If you delete and recreate a bucket with the same name, the original bucket’s location will be used.\n\n## Jurisdictional Restrictions\n\nJurisdictional Restrictions guarantee objects in a bucket are stored within a specific jurisdiction.\n\nUse Jurisdictional Restrictions when you need to ensure data is stored and processed within a jurisdiction to meet data residency requirements, including local regulations such as the [GDPR](https://gdpr-info.eu/) or [FedRAMP](https://blog.cloudflare.com/cloudflare-achieves-fedramp-authorization/).\n\n### Set jurisdiction via the Cloudflare dashboard\n\n1. In the Cloudflare dashboard, go to the **R2 object storage** page.\n\n   [Go to **Overview**](https://dash.cloudflare.com/?to=/:account/r2/overview)\n\n2. Select **Create bucket**.\n\n3. Enter a name for the bucket.\n\n4. Under **Location**, select **Specify jurisdiction** and choose a jurisdiction from the list.\n\n5. Select **Create bucket** to complete the bucket creation process.\n\n### Using jurisdictions from Workers\n\nTo access R2 buckets that belong to a jurisdiction from [Workers](https://developers.cloudflare.com/workers/), you will need to specify the jurisdiction as well as the bucket name as part of your [bindings](https://developers.cloudflare.com/r2/api/workers/workers-api-usage/#3-bind-your-bucket-to-a-worker) in your [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/):\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "For more information on getting started, refer to [Use R2 from Workers](https://developers.cloudflare.com/r2/api/workers/workers-api-usage/).\n\n### Using jurisdictions with the S3 API\n\nWhen interacting with R2 resources that belong to a defined jurisdiction with the S3 API or existing S3-compatible SDKs, you must specify the [jurisdiction](#available-jurisdictions) in your S3 endpoint:\n\n`https://<ACCOUNT_ID>.<JURISDICTION>.r2.cloudflarestorage.com`\n\nYou can use your jurisdiction-specific endpoint for any [supported S3 API operations](https://developers.cloudflare.com/r2/api/s3/api/). When using a jurisdiction endpoint, you will not be able to access R2 resources outside of that jurisdiction.\n\nThe example below shows how to create an R2 bucket in the `eu` jurisdiction using the [`@aws-sdk/client-s3`](https://www.npmjs.com/package/@aws-sdk/client-s3) package for JavaScript.",
+      "language": "unknown"
+    },
+    {
+      "code": "Refer to [Examples](https://developers.cloudflare.com/r2/examples/) for additional examples from other S3 SDKs.\n\n### Available jurisdictions\n\nThe following jurisdictions are supported:\n\n| Jurisdiction | Jurisdiction description |\n| - | - |\n| eu | European Union |\n| fedramp | FedRAMP |\n\nNote\n\nCloudflare Enterprise customers may contact their account team or [Cloudflare Support](https://developers.cloudflare.com/support/contacting-cloudflare-support/) to get access to the FedRAMP jurisdiction.\n\n### Limitations\n\nThe following services do not interact with R2 resources with assigned jurisdictions:\n\n* [Super Slurper](https://developers.cloudflare.com/r2/data-migration/) (*coming soon*)\n* [Logpush](https://developers.cloudflare.com/logs/logpush/logpush-job/enable-destinations/r2/). As a workaround to this limitation, you can set up a [Logpush job using an S3-compatible endpoint](https://developers.cloudflare.com/data-localization/how-to/r2/#send-logs-to-r2-via-s3-compatible-endpoint) to store logs in an R2 bucket in the jurisdiction of your choice.\n\n### Additional considerations\n\nOnce an R2 bucket is created, the jurisdiction cannot be changed.\n\n</page>\n\n<page>\n---\ntitle: Data security · Cloudflare R2 docs\ndescription: This page details the data security properties of R2, including\n  encryption-at-rest (EAR), encryption-in-transit (EIT), and Cloudflare's\n  compliance certifications.\nlastUpdated: 2024-08-13T19:56:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/reference/data-security/\n  md: https://developers.cloudflare.com/r2/reference/data-security/index.md\n---\n\nThis page details the data security properties of R2, including encryption-at-rest (EAR), encryption-in-transit (EIT), and Cloudflare's compliance certifications.\n\n## Encryption at Rest\n\nAll objects stored in R2, including their metadata, are encrypted at rest. Encryption and decryption are automatic, do not require user configuration to enable, and do not impact the effective performance of R2.\n\nEncryption keys are managed by Cloudflare and securely stored in the same key management systems we use for managing encrypted data across Cloudflare internally.\n\nObjects are encrypted using [AES-256](https://www.cloudflare.com/learning/ssl/what-is-encryption/), a widely tested, highly performant and industry-standard encryption algorithm. R2 uses GCM (Galois/Counter Mode) as its preferred mode.\n\n## Encryption in Transit\n\nData transfer between a client and R2 is secured using the same [Transport Layer Security](https://www.cloudflare.com/learning/ssl/transport-layer-security-tls/) (TLS/SSL) supported on all Cloudflare domains.\n\nAccess over plaintext HTTP (without TLS/SSL) can be disabled by connecting a [custom domain](https://developers.cloudflare.com/r2/buckets/public-buckets/#custom-domains) to your R2 bucket and enabling [Always Use HTTPS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/always-use-https/).\n\nNote\n\nR2 custom domains use Cloudflare for SaaS certificates and cannot be customized. Even if you have [Advanced Certificate Manager](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/), the advanced certificate will not be used due to [certificate prioritization](https://developers.cloudflare.com/ssl/reference/certificate-and-hostname-priority/).\n\n## Compliance\n\nTo learn more about Cloudflare's adherence to industry-standard security compliance certifications, visit the Cloudflare [Trust Hub](https://www.cloudflare.com/trust-hub/compliance-resources/).\n\n</page>\n\n<page>\n---\ntitle: Durability · Cloudflare R2 docs\ndescription: R2 is designed to provide 99.999999999% (eleven 9s) of annual\n  durability.  This means that if you store 10,000,000 objects on R2, you can\n  expect to lose an object once every 10,000 years on average.\nlastUpdated: 2025-11-13T10:50:22.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/reference/durability/\n  md: https://developers.cloudflare.com/r2/reference/durability/index.md\n---\n\nR2 is designed to provide 99.999999999% (eleven 9s) of annual durability. This means that if you store 10,000,000 objects on R2, you can expect to lose an object once every 10,000 years on average.\n\n## How R2 achieves eleven-nines durability\n\nR2's durability is built on multiple layers of redundancy and data protection:\n\n* **Replication**: When you upload an object, R2 stores multiple \"copies\" of that object through either full replication and/or erasure coding. This ensures that the full or partial failure of any individual disk does not result in data loss. Erasure coding distributes parts of the object across multiple disks, ensuring that even if some disks fail, the object can still be reconstructed from a subset of the available parts, preventing hardware failure or physical impacts to data centers (such as fire or floods) from causing data loss.\n\n* **Hardware redundancy**: Storage clusters are comprised of hardware distributed across several data centers within a geographic region. This physical distribution ensures that localized failures—such as power outages, network disruptions, or hardware malfunctions at a single facility—do not result in data loss.\n\n* **Synchronous writes**: R2 returns an `HTTP 200 (OK)` for a write via API or otherwise indicates success only when data has been persisted to disk. We do not rely on asynchronous replication to support underlying durability guarantees. This is critical to R2’s consistency guarantees and mitigates the chance of a client receiving a successful API response without the underlying metadata and storage infrastructure having persisted the change.\n\n### Considerations\n\n* Durability is not a guarantee of data availability. It is a measure of the likelihood of data loss.\n* R2 provides an availability [SLA of 99.9%](https://www.cloudflare.com/r2-service-level-agreement/)\n* Durability does not prevent intentional or accidental deletion of data. Use [bucket locks](https://developers.cloudflare.com/r2/buckets/bucket-locks/) and/or bucket-scoped [API tokens](https://developers.cloudflare.com/r2/api/tokens/) to limit access to data.\n* Durability is also distinct from [consistency](https://developers.cloudflare.com/r2/reference/consistency/), which describes how reads and writes are reflected in the system's state (e.g. eventual consistency vs. strong consistency).\n\n</page>\n\n<page>\n---\ntitle: Unicode interoperability · Cloudflare R2 docs\ndescription: R2 is built on top of Workers and supports Unicode natively. One\n  nuance of Unicode that is often overlooked is the issue of filename\n  interoperability due to Unicode equivalence.\nlastUpdated: 2024-08-13T19:56:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/reference/unicode-interoperability/\n  md: https://developers.cloudflare.com/r2/reference/unicode-interoperability/index.md\n---\n\nR2 is built on top of Workers and supports Unicode natively. One nuance of Unicode that is often overlooked is the issue of [filename interoperability](https://en.wikipedia.org/wiki/Filename#Encoding_indication_interoperability) due to [Unicode equivalence](https://en.wikipedia.org/wiki/Unicode_equivalence).\n\nBased on feedback from our users, we have chosen to NFC-normalize key names before storing by default. This means that `Héllo` and `Héllo`, for example, are the same object in R2 but different objects in other storage providers. Although `Héllo` and `Héllo` may be different character byte sequences, they are rendered the same.\n\nR2 preserves the encoding for display though. When you list the objects, you will get back the last encoding you uploaded with.\n\nThere are still some platform-specific differences to consider:\n\n* Windows and macOS filenames are case-insensitive while R2 and Linux are not.\n* Windows console support for Unicode can be error-prone. Make sure to run `chcp 65001` before using command-line tools or use Cygwin if your object names appear to be incorrect.\n* Linux allows distinct files that are unicode-equivalent because filenames are byte streams. Unicode-equivalent filenames on Linux will point to the same R2 object.\n\nIf it is important for you to be able to bypass the unicode equivalence and use byte-oriented key names, contact your Cloudflare account team.\n\n</page>\n\n<page>\n---\ntitle: Partners · Cloudflare R2 docs\nlastUpdated: 2025-01-29T16:47:18.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/r2/reference/partners/\n  md: https://developers.cloudflare.com/r2/reference/partners/index.md\n---\n\n\n</page>\n\n<page>\n---\ntitle: Wrangler commands · Cloudflare R2 docs\ndescription: Interact with buckets in an R2 store.\nlastUpdated: 2025-11-18T09:49:05.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/reference/wrangler-commands/\n  md: https://developers.cloudflare.com/r2/reference/wrangler-commands/index.md\n---\n\n## `r2 bucket`\n\nInteract with buckets in an R2 store.\n\nNote\n\nThe `r2 bucket` commands allow you to manage application data in the Cloudflare network to be accessed from Workers using [the R2 API](https://developers.cloudflare.com/r2/api/workers/workers-api-reference/).\n\n### `r2 bucket create`\n\nCreate a new R2 bucket\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[NAME]` string required\n\n  The name of the new bucket\n\n- `--location` string\n\n  The optional location hint that determines geographic placement of the R2 bucket\n\n- `--storage-class` string alias: --s\n\n  The default storage class for objects uploaded to this bucket\n\n- `--jurisdiction` string alias: --J\n\n  The jurisdiction where the new bucket will be created\n\n- `--use-remote` boolean\n\n  Use a remote binding when adding the newly created resource to your config\n\n- `--update-config` boolean\n\n  Automatically update your config file with the newly added resource\n\n- `--binding` string\n\n  The binding name of this resource in your Worker\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n### `r2 bucket info`\n\nGet information about an R2 bucket\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[BUCKET]` string required\n\n  The name of the bucket to retrieve info for\n\n- `--jurisdiction` string alias: --J\n\n  The jurisdiction where the bucket exists\n\n- `--json` boolean default: false\n\n  Return the bucket information as JSON\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n### `r2 bucket delete`\n\nDelete an R2 bucket\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[BUCKET]` string required\n\n  The name of the bucket to delete\n\n- `--jurisdiction` string alias: --J\n\n  The jurisdiction where the bucket exists\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n### `r2 bucket list`\n\nList R2 buckets\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `--jurisdiction` string alias: --J\n\n  The jurisdiction to list\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n### `r2 bucket catalog enable`\n\nEnable the data catalog on an R2 bucket\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[BUCKET]` string required\n\n  The name of the bucket to enable\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n### `r2 bucket catalog disable`\n\nDisable the data catalog for an R2 bucket\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[BUCKET]` string required\n\n  The name of the bucket to disable the data catalog for\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n### `r2 bucket catalog get`\n\nGet the status of the data catalog for an R2 bucket\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[BUCKET]` string required\n\n  The name of the R2 bucket whose data catalog status to retrieve\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n### `r2 bucket catalog compaction enable`\n\nEnable automatic file compaction for your R2 data catalog or a specific table\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[BUCKET]` string required\n\n  The name of the bucket which contains the catalog\n\n- `[NAMESPACE]` string\n\n  The namespace containing the table (optional, for table-level compaction)\n\n- `[TABLE]` string\n\n  The name of the table (optional, for table-level compaction)\n\n- `--target-size` number default: 128\n\n  The target size for compacted files in MB (allowed values: 64, 128, 256, 512)\n\n- `--token` string\n\n  A cloudflare api token with access to R2 and R2 Data Catalog (required for catalog-level compaction settings only)\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\nExamples:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Wrangler",
+      "id": "wrangler"
+    },
+    {
+      "level": "h2",
+      "text": "Viewing audit logs",
+      "id": "viewing-audit-logs"
+    },
+    {
+      "level": "h2",
+      "text": "Logged operations",
+      "id": "logged-operations"
+    },
+    {
+      "level": "h2",
+      "text": "Example log entry",
+      "id": "example-log-entry"
+    },
+    {
+      "level": "h2",
+      "text": "Available R2 events",
+      "id": "available-r2-events"
+    },
+    {
+      "level": "h2",
+      "text": "Available Super Slurper events",
+      "id": "available-super-slurper-events"
+    },
+    {
+      "level": "h2",
+      "text": "Rate limiting on managed public buckets through `r2.dev`",
+      "id": "rate-limiting-on-managed-public-buckets-through-`r2.dev`"
+    },
+    {
+      "level": "h2",
+      "text": "Metrics",
+      "id": "metrics"
+    },
+    {
+      "level": "h3",
+      "text": "Operations Dataset",
+      "id": "operations-dataset"
+    },
+    {
+      "level": "h3",
+      "text": "Storage Dataset",
+      "id": "storage-dataset"
+    },
+    {
+      "level": "h2",
+      "text": "View via the dashboard",
+      "id": "view-via-the-dashboard"
+    },
+    {
+      "level": "h2",
+      "text": "Query via the GraphQL API",
+      "id": "query-via-the-graphql-api"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h3",
+      "text": "Operations",
+      "id": "operations"
+    },
+    {
+      "level": "h3",
+      "text": "Storage",
+      "id": "storage"
+    },
+    {
+      "level": "h2",
+      "text": "2025-09-23",
+      "id": "2025-09-23"
+    },
+    {
+      "level": "h2",
+      "text": "2025-09-22",
+      "id": "2025-09-22"
+    },
+    {
+      "level": "h2",
+      "text": "2025-07-03",
+      "id": "2025-07-03"
+    },
+    {
+      "level": "h2",
+      "text": "2024-12-03",
+      "id": "2024-12-03"
+    },
+    {
+      "level": "h2",
+      "text": "2024-11-21",
+      "id": "2024-11-21"
+    },
+    {
+      "level": "h2",
+      "text": "2024-11-20",
+      "id": "2024-11-20"
+    },
+    {
+      "level": "h2",
+      "text": "2024-11-19",
+      "id": "2024-11-19"
+    },
+    {
+      "level": "h2",
+      "text": "2024-11-14",
+      "id": "2024-11-14"
+    },
+    {
+      "level": "h2",
+      "text": "2024-11-08",
+      "id": "2024-11-08"
+    },
+    {
+      "level": "h2",
+      "text": "2024-11-06",
+      "id": "2024-11-06"
+    },
+    {
+      "level": "h2",
+      "text": "2024-11-01",
+      "id": "2024-11-01"
+    },
+    {
+      "level": "h2",
+      "text": "2024-10-28",
+      "id": "2024-10-28"
+    },
+    {
+      "level": "h2",
+      "text": "2024-10-21",
+      "id": "2024-10-21"
+    },
+    {
+      "level": "h2",
+      "text": "2024-09-26",
+      "id": "2024-09-26"
+    },
+    {
+      "level": "h2",
+      "text": "2024-09-18",
+      "id": "2024-09-18"
+    },
+    {
+      "level": "h2",
+      "text": "2024-08-26",
+      "id": "2024-08-26"
+    },
+    {
+      "level": "h2",
+      "text": "2024-08-21",
+      "id": "2024-08-21"
+    },
+    {
+      "level": "h2",
+      "text": "2024-07-08",
+      "id": "2024-07-08"
+    },
+    {
+      "level": "h2",
+      "text": "2024-06-12",
+      "id": "2024-06-12"
+    },
+    {
+      "level": "h2",
+      "text": "2024-06-07",
+      "id": "2024-06-07"
+    },
+    {
+      "level": "h2",
+      "text": "2024-06-06",
+      "id": "2024-06-06"
+    },
+    {
+      "level": "h2",
+      "text": "2024-05-29",
+      "id": "2024-05-29"
+    },
+    {
+      "level": "h2",
+      "text": "2024-05-24",
+      "id": "2024-05-24"
+    },
+    {
+      "level": "h2",
+      "text": "2024-04-03",
+      "id": "2024-04-03"
+    },
+    {
+      "level": "h2",
+      "text": "2024-02-20",
+      "id": "2024-02-20"
+    },
+    {
+      "level": "h2",
+      "text": "2024-02-06",
+      "id": "2024-02-06"
+    },
+    {
+      "level": "h2",
+      "text": "2024-02-02",
+      "id": "2024-02-02"
+    },
+    {
+      "level": "h2",
+      "text": "2024-01-30",
+      "id": "2024-01-30"
+    },
+    {
+      "level": "h2",
+      "text": "2024-01-26",
+      "id": "2024-01-26"
+    },
+    {
+      "level": "h2",
+      "text": "2024-01-11",
+      "id": "2024-01-11"
+    },
+    {
+      "level": "h2",
+      "text": "2023-12-11",
+      "id": "2023-12-11"
+    },
+    {
+      "level": "h2",
+      "text": "2023-10-23",
+      "id": "2023-10-23"
+    },
+    {
+      "level": "h2",
+      "text": "2023-09-01",
+      "id": "2023-09-01"
+    },
+    {
+      "level": "h2",
+      "text": "2023-08-23",
+      "id": "2023-08-23"
+    },
+    {
+      "level": "h2",
+      "text": "2023-08-11",
+      "id": "2023-08-11"
+    },
+    {
+      "level": "h2",
+      "text": "2023-07-05",
+      "id": "2023-07-05"
+    },
+    {
+      "level": "h2",
+      "text": "2023-06-21",
+      "id": "2023-06-21"
+    },
+    {
+      "level": "h2",
+      "text": "2023-06-16",
+      "id": "2023-06-16"
+    },
+    {
+      "level": "h2",
+      "text": "2023-04-01",
+      "id": "2023-04-01"
+    },
+    {
+      "level": "h2",
+      "text": "2023-03-16",
+      "id": "2023-03-16"
+    },
+    {
+      "level": "h2",
+      "text": "2023-01-27",
+      "id": "2023-01-27"
+    },
+    {
+      "level": "h2",
+      "text": "2022-12-07",
+      "id": "2022-12-07"
+    },
+    {
+      "level": "h2",
+      "text": "2022-11-30",
+      "id": "2022-11-30"
+    },
+    {
+      "level": "h2",
+      "text": "2022-11-21",
+      "id": "2022-11-21"
+    },
+    {
+      "level": "h2",
+      "text": "2022-11-17",
+      "id": "2022-11-17"
+    },
+    {
+      "level": "h2",
+      "text": "2022-11-08",
+      "id": "2022-11-08"
+    },
+    {
+      "level": "h2",
+      "text": "2022-10-28",
+      "id": "2022-10-28"
+    },
+    {
+      "level": "h2",
+      "text": "2022-10-26",
+      "id": "2022-10-26"
+    },
+    {
+      "level": "h2",
+      "text": "2022-10-19",
+      "id": "2022-10-19"
+    },
+    {
+      "level": "h2",
+      "text": "2022-10-06",
+      "id": "2022-10-06"
+    },
+    {
+      "level": "h2",
+      "text": "2022-09-29",
+      "id": "2022-09-29"
+    },
+    {
+      "level": "h2",
+      "text": "2022-09-28",
+      "id": "2022-09-28"
+    },
+    {
+      "level": "h2",
+      "text": "2022-09-27",
+      "id": "2022-09-27"
+    },
+    {
+      "level": "h2",
+      "text": "2022-09-19",
+      "id": "2022-09-19"
+    },
+    {
+      "level": "h2",
+      "text": "2022-09-06",
+      "id": "2022-09-06"
+    },
+    {
+      "level": "h2",
+      "text": "2022-08-17",
+      "id": "2022-08-17"
+    },
+    {
+      "level": "h2",
+      "text": "2022-08-06",
+      "id": "2022-08-06"
+    },
+    {
+      "level": "h2",
+      "text": "2022-07-30",
+      "id": "2022-07-30"
+    },
+    {
+      "level": "h2",
+      "text": "2022-07-21",
+      "id": "2022-07-21"
+    },
+    {
+      "level": "h2",
+      "text": "2022-07-20",
+      "id": "2022-07-20"
+    },
+    {
+      "level": "h2",
+      "text": "2022-07-19",
+      "id": "2022-07-19"
+    },
+    {
+      "level": "h2",
+      "text": "2022-07-14",
+      "id": "2022-07-14"
+    },
+    {
+      "level": "h2",
+      "text": "2022-07-13",
+      "id": "2022-07-13"
+    },
+    {
+      "level": "h2",
+      "text": "2022-07-06",
+      "id": "2022-07-06"
+    },
+    {
+      "level": "h2",
+      "text": "2022-07-01",
+      "id": "2022-07-01"
+    },
+    {
+      "level": "h2",
+      "text": "2022-06-17",
+      "id": "2022-06-17"
+    },
+    {
+      "level": "h2",
+      "text": "2022-06-16",
+      "id": "2022-06-16"
+    },
+    {
+      "level": "h2",
+      "text": "2022-06-13",
+      "id": "2022-06-13"
+    },
+    {
+      "level": "h2",
+      "text": "2022-06-10",
+      "id": "2022-06-10"
+    },
+    {
+      "level": "h2",
+      "text": "2022-05-27",
+      "id": "2022-05-27"
+    },
+    {
+      "level": "h2",
+      "text": "2022-05-20",
+      "id": "2022-05-20"
+    },
+    {
+      "level": "h2",
+      "text": "2022-05-17",
+      "id": "2022-05-17"
+    },
+    {
+      "level": "h2",
+      "text": "2022-05-16",
+      "id": "2022-05-16"
+    },
+    {
+      "level": "h2",
+      "text": "2022-05-06",
+      "id": "2022-05-06"
+    },
+    {
+      "level": "h2",
+      "text": "2022-05-05",
+      "id": "2022-05-05"
+    },
+    {
+      "level": "h2",
+      "text": "2022-05-03",
+      "id": "2022-05-03"
+    },
+    {
+      "level": "h2",
+      "text": "2022-04-14",
+      "id": "2022-04-14"
+    },
+    {
+      "level": "h2",
+      "text": "2022-04-04",
+      "id": "2022-04-04"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting 403 / CORS issues with R2",
+      "id": "troubleshooting-403-/-cors-issues-with-r2"
+    },
+    {
+      "level": "h3",
+      "text": "If you are using a custom domain",
+      "id": "if-you-are-using-a-custom-domain"
+    },
+    {
+      "level": "h3",
+      "text": "If you are using the S3 API",
+      "id": "if-you-are-using-the-s3-api"
+    },
+    {
+      "level": "h3",
+      "text": "If it is actually CORS",
+      "id": "if-it-is-actually-cors"
+    },
+    {
+      "level": "h2",
+      "text": "HTTP 5XX Errors and capacity limitations of Cloudflare R2",
+      "id": "http-5xx-errors-and-capacity-limitations-of-cloudflare-r2"
+    },
+    {
+      "level": "h3",
+      "text": "Monitor concurrent requests",
+      "id": "monitor-concurrent-requests"
+    },
+    {
+      "level": "h3",
+      "text": "Bucket sharding",
+      "id": "bucket-sharding"
+    },
+    {
+      "level": "h2",
+      "text": "Objects named `This object is unnamed`",
+      "id": "objects-named-`this-object-is-unnamed`"
+    },
+    {
+      "level": "h2",
+      "text": "Terminology",
+      "id": "terminology"
+    },
+    {
+      "level": "h2",
+      "text": "Operations and Consistency",
+      "id": "operations-and-consistency"
+    },
+    {
+      "level": "h2",
+      "text": "Caching",
+      "id": "caching"
+    },
+    {
+      "level": "h2",
+      "text": "Automatic (recommended)",
+      "id": "automatic-(recommended)"
+    },
+    {
+      "level": "h2",
+      "text": "Location Hints",
+      "id": "location-hints"
+    },
+    {
+      "level": "h3",
+      "text": "Set hints via the Cloudflare dashboard",
+      "id": "set-hints-via-the-cloudflare-dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Set hints via the S3 API",
+      "id": "set-hints-via-the-s3-api"
+    },
+    {
+      "level": "h3",
+      "text": "Available hints",
+      "id": "available-hints"
+    },
+    {
+      "level": "h3",
+      "text": "Additional considerations",
+      "id": "additional-considerations"
+    },
+    {
+      "level": "h2",
+      "text": "Jurisdictional Restrictions",
+      "id": "jurisdictional-restrictions"
+    },
+    {
+      "level": "h3",
+      "text": "Set jurisdiction via the Cloudflare dashboard",
+      "id": "set-jurisdiction-via-the-cloudflare-dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Using jurisdictions from Workers",
+      "id": "using-jurisdictions-from-workers"
+    },
+    {
+      "level": "h3",
+      "text": "Using jurisdictions with the S3 API",
+      "id": "using-jurisdictions-with-the-s3-api"
+    },
+    {
+      "level": "h3",
+      "text": "Available jurisdictions",
+      "id": "available-jurisdictions"
+    },
+    {
+      "level": "h3",
+      "text": "Limitations",
+      "id": "limitations"
+    },
+    {
+      "level": "h3",
+      "text": "Additional considerations",
+      "id": "additional-considerations"
+    },
+    {
+      "level": "h2",
+      "text": "Encryption at Rest",
+      "id": "encryption-at-rest"
+    },
+    {
+      "level": "h2",
+      "text": "Encryption in Transit",
+      "id": "encryption-in-transit"
+    },
+    {
+      "level": "h2",
+      "text": "Compliance",
+      "id": "compliance"
+    },
+    {
+      "level": "h2",
+      "text": "How R2 achieves eleven-nines durability",
+      "id": "how-r2-achieves-eleven-nines-durability"
+    },
+    {
+      "level": "h3",
+      "text": "Considerations",
+      "id": "considerations"
+    },
+    {
+      "level": "h2",
+      "text": "`r2 bucket`",
+      "id": "`r2-bucket`"
+    },
+    {
+      "level": "h3",
+      "text": "`r2 bucket create`",
+      "id": "`r2-bucket-create`"
+    },
+    {
+      "level": "h3",
+      "text": "`r2 bucket info`",
+      "id": "`r2-bucket-info`"
+    },
+    {
+      "level": "h3",
+      "text": "`r2 bucket delete`",
+      "id": "`r2-bucket-delete`"
+    },
+    {
+      "level": "h3",
+      "text": "`r2 bucket list`",
+      "id": "`r2-bucket-list`"
+    },
+    {
+      "level": "h3",
+      "text": "`r2 bucket catalog enable`",
+      "id": "`r2-bucket-catalog-enable`"
+    },
+    {
+      "level": "h3",
+      "text": "`r2 bucket catalog disable`",
+      "id": "`r2-bucket-catalog-disable`"
+    },
+    {
+      "level": "h3",
+      "text": "`r2 bucket catalog get`",
+      "id": "`r2-bucket-catalog-get`"
+    },
+    {
+      "level": "h3",
+      "text": "`r2 bucket catalog compaction enable`",
+      "id": "`r2-bucket-catalog-compaction-enable`"
+    }
+  ],
+  "url": "llms-txt#upload-everything-in-a-directory",
+  "links": []
+}

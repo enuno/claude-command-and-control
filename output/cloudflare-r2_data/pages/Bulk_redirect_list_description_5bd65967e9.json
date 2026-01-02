@@ -1,0 +1,8 @@
+{
+  "title": "Bulk redirect list description",
+  "content": "variable \"bulk_redirect_list_description\" {\n  default = \"my bulk redirect description\"\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#bulk-redirect-list-description",
+  "links": []
+}

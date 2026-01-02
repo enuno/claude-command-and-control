@@ -1,0 +1,8 @@
+{
+  "title": "Enable catalog-level compaction (all tables)",
+  "content": "npx wrangler r2 bucket catalog compaction enable my-bucket \\\n  --target-size 128 \\\n  --token $R2_CATALOG_TOKEN",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#enable-catalog-level-compaction-(all-tables)",
+  "links": []
+}

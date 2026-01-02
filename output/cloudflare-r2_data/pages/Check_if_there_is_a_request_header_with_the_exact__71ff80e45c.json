@@ -1,0 +1,58 @@
+{
+  "title": "Check if there is a request header with the exact name provided as the first query argument:",
+  "content": "has_value(http.request.headers.name, http.request.uri.args.names[0])\ntxt\n// If http.request.uri.query is \"order=asc&country=GB\":\n\nremove_query_args(http.request.uri.query, \"country\")  will return \"order=asc\"\nremove_query_args(http.request.uri.query, \"order\")    will return \"country=GB\"\nremove_query_args(http.request.uri.query, \"search\")   will return \"order=asc&country=GB\" (unchanged)\n\n// If http.request.uri.query is \"category=Foo&order=desc&category=Bar\":\n\nremove_query_args(http.request.uri.query, \"order\")    will return \"category=Foo&category=Bar\"\nremove_query_args(http.request.uri.query, \"category\") will return \"order=desc\"\ntxt",
+  "code_samples": [
+    {
+      "code": "### `len`\n\n`len(String | Bytes | Array)`: Integer\n\nReturns the byte length of a String or Bytes value, or the number of elements in an array.\n\nFor example, if the value of `http.host` is `\"example.com\"`, then `len(http.host)` will return `11`.\n\n### `lookup_json_integer`\n\n`lookup_json_integer(field String, key String | Integer, key String | Integer optional, ...)`: Integer\n\nReturns the integer value associated with the supplied `key` in `field`.\n\nThe `field` must be a string representation of a valid JSON document.\n\nThe `key` can be an attribute name, a zero-based position number in a JSON array, or a combination of these two options (as extra function parameters), while following the hierarchy of the JSON document to obtain a specific integer value.\n\nNote: This function only works for plain integers. For example, it will not work for floating numbers with a zero decimal part such as `42.0`.\n\nExamples:\n\n* Given the following JSON object contained in the `http.request.body.raw` field:\\\n  `{ \"record_id\": \"aed53a\", \"version\": 2 }`\\\n  Then `lookup_json_integer(http.request.body.raw, \"version\")` will return `2`.\n\n* Given the following nested object:\\\n  `{ \"product\": { \"id\": 356 } }`\\\n  Then `lookup_json_integer(http.request.body.raw, \"product\", \"id\")` will return `356`.\n\n* Given the following JSON array at the root level:\\\n  `[\"first_item\", -234]`\\\n  Then `lookup_json_integer(http.request.body.raw, 1)` will return `-234`.\n\n* Given the following array in a JSON object attribute:\\\n  `{ \"network_ids\": [123, 456] }`\\\n  Then `lookup_json_integer(http.request.body.raw, \"network_ids\", 0)` will return `123`.\n\n* Given the following root-level array of JSON objects:\\\n  `[{ \"product_id\": 123 }, { \"product_id\": 456 }]`\\\n  Then `lookup_json_integer(http.request.body.raw, 1, \"product_id\")` will return `456`.\n\n### `lookup_json_string`\n\n`lookup_json_string(field String, key String | Integer, key String | Integer optional, ...)`: String\n\nReturns the string value associated with the supplied `key` in `field`.\n\nThe `field` must be a string representation of a valid JSON document.\n\nThe `key` can be an attribute name, a zero-based position number in a JSON array, or a combination of these two options (as extra function parameters), while following the hierarchy of the JSON document to obtain a specific value.\n\nExamples:\n\n* Given the following JSON object contained in the `http.request.body.raw` field:\\\n  `{ \"company\": \"cloudflare\", \"product\": \"rulesets\" }`\\\n  Then `lookup_json_string(http.request.body.raw, \"company\") == \"cloudflare\"` will return `true`.\n\n* Given the following nested object:\\\n  `{ \"network\": { \"name\": \"cloudflare\" } }`\\\n  Then `lookup_json_string(http.request.body.raw, \"network\", \"name\") == \"cloudflare\"` will return `true`.\n\n* Given the following JSON array at the root level:\\\n  `[\"other_company\", \"cloudflare\"]`\\\n  Then `lookup_json_string(http.request.body.raw, 1) == \"cloudflare\"` will return `true`.\n\n* Given the following array in a JSON object attribute:\\\n  `{ \"networks\": [\"other_company\", \"cloudflare\"] }`\\\n  Then `lookup_json_string(http.request.body.raw, \"networks\", 1) == \"cloudflare\"` will return `true`.\n\n* Given the following root-level array of JSON objects:\\\n  `[{ \"network\": \"other_company\" }, { \"network\": \"cloudflare\" }]`\\\n  Then `lookup_json_string(http.request.body.raw, 1, \"network\") == \"cloudflare\"` will return `true`.\n\n### `lower`\n\n`lower(String)`: String\n\nConverts a string field to lowercase. Only uppercase ASCII bytes are converted. All other bytes are unaffected.\n\nFor example, if `http.host` is `\"WWW.cloudflare.com\"`, then `lower(http.host) == \"www.cloudflare.com\"` will return `true`.\n\n### `regex_replace`\n\n`regex_replace(source String, regular_expression String, replacement String)`: String\n\nReplaces a part of a source string matched by a regular expression with a replacement string, returning the result. The replacement string can contain references to regular expression capture groups (for example, `${1}` and `${2}`), up to eight replacement references.\n\nExamples:\n\n* Literal match replace:\\\n  `regex_replace(\"/foo/bar\", \"/bar$\", \"/baz\") == \"/foo/baz\"`\n\n* If there is no match, the input string does not change:\\\n  `regex_replace(\"/x\", \"^/y$\", \"/mumble\") == \"/x\"`\n\n* Match is case-sensitive by default:\\\n  `regex_replace(\"/foo\", \"^/FOO$\", \"/x\") == \"/foo\"`\n\n* When there are multiple matches, only one replacement occurs (the first one):\\\n  `regex_replace(\"/a/a\", \"/a\", \"/b\") == \"/b/a\"`\n\n* Escape a `$` in the replacement string by prefixing it with another `$`:\\\n  `regex_replace(\"/b\", \"^/b$\", \"/b$$\") == \"/b$\"`\n\n* Replace with capture groups:\\\n  `regex_replace(\"/foo/a/path\", \"^/foo/([^/]*)/(.*)$\", \"/bar/${2}/${1}\") == \"/bar/path/a/\"`\n\nCreate capture groups by putting part of the regular expression in parentheses. Then, reference a capture group using `${<NUMBER>}` in the replacement string, where `<NUMBER>` is the number of the capture group.\n\nYou can only use the `regex_replace()` function once in an expression, and you cannot nest it with the [`wildcard_replace()`](https://developers.cloudflare.com/ruleset-engine/rules-language/functions/#wildcard_replace) function.\n\nNote\n\nCurrently, the `regex_replace()` function is only available in rewrite expressions of [Transform Rules](https://developers.cloudflare.com/rules/transform/) and target URL expressions of [dynamic URL redirects](https://developers.cloudflare.com/rules/url-forwarding/single-redirects/).\n\n### `remove_bytes`\n\n`remove_bytes(Bytes)`: Bytes\n\nReturns a new byte array with all the occurrences of the given bytes removed.\n\nFor example, if `http.host` is `\"www.cloudflare.com\"`, then `remove_bytes(http.host, \"\\x2e\\x77\")` will return `\"cloudflarecom\"`.\n\n### `remove_query_args`\n\n`remove_query_args(field String, query_param1 String, query_param2 String, ...)`: String\n\nRemoves one or more query string parameters from a URI query string. Returns a string without the specified parameters.\n\nThe `field` must be one of the following:\n\n* `http.request.uri.query`\n* `raw.http.request.uri.query`\n\nThe `field` cannot be a literal value such as `\"search=foo&order=asc\"`.\n\nThe `remove_query_args()` function will remove all specified parameters (as `query_param1`, `query_param2`, etc.) , including repeated occurrences of the same parameter.\n\nThe ordering of unaffected query parameters will be preserved.\n\nExamples:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nYou can only use the `remove_query_args()` function in [rewrite expressions of Transform Rules](https://developers.cloudflare.com/rules/transform/).\n\n### `split`\n\n`split(input String, separator String, limit Integer)`: Array\\<String>\n\nSplits the `input` string into an array of strings by breaking the initial string at every occurrence of the `separator` string. The returned array will contain at most `limit` number of elements.\n\nIf you provide a `limit` value lower than the actual number of substrings in the split string, the last element of the returned array will contain the remainder of the string.\n\nThe `separator` must be a non-empty literal string.\n\nThe `limit` is mandatory, and it must be a literal integer between 1 and 128.\n\nIf `input` is nil, the returned value will be nil.\n\nThis function does the opposite of the [`join()`](#join) function.\n\nExamples:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "`len`",
+      "id": "`len`"
+    },
+    {
+      "level": "h3",
+      "text": "`lookup_json_integer`",
+      "id": "`lookup_json_integer`"
+    },
+    {
+      "level": "h3",
+      "text": "`lookup_json_string`",
+      "id": "`lookup_json_string`"
+    },
+    {
+      "level": "h3",
+      "text": "`lower`",
+      "id": "`lower`"
+    },
+    {
+      "level": "h3",
+      "text": "`regex_replace`",
+      "id": "`regex_replace`"
+    },
+    {
+      "level": "h3",
+      "text": "`remove_bytes`",
+      "id": "`remove_bytes`"
+    },
+    {
+      "level": "h3",
+      "text": "`remove_query_args`",
+      "id": "`remove_query_args`"
+    },
+    {
+      "level": "h3",
+      "text": "`split`",
+      "id": "`split`"
+    }
+  ],
+  "url": "llms-txt#check-if-there-is-a-request-header-with-the-exact-name-provided-as-the-first-query-argument:",
+  "links": []
+}

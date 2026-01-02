@@ -1,0 +1,8 @@
+{
+  "title": "The host is resolvable by running a container under this custom network",
+  "content": "❯ docker run --rm --net demo alpine nslookup connectivity-check.warp-svc.\nServer:         127.0.0.11\nAddress:        127.0.0.11:53Non-authoritative answer:\nName:   connectivity-check.warp-svc\nAddress: ::ffff:127.0.2.2\nName:   connectivity-check.warp-svc\nAddress: ::ffff:127.0.2.3Non-authoritative answer:\nName:   connectivity-check.warp-svc\nAddress: 127.0.2.2\nName:   connectivity-check.warp-svc\nAddress: 127.0.2.3",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#the-host-is-resolvable-by-running-a-container-under-this-custom-network",
+  "links": []
+}

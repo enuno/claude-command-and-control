@@ -1,0 +1,8 @@
+{
+  "title": "Next time you run wrangler deploy, this will use the configuration in your newly generated wrangler.jsonc file",
+  "content": "* You must use Wrangler version 4.24.4 or later in order to use this feature\n\n<page>\n---\ntitle: WARP client for macOS (version 2025.7.106.1) · Changelog\ndescription: WARP client for macOS (version 2025.7.106.1)\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/changelog/2025-09-10-warp-macos-beta/\n  md: https://developers.cloudflare.com/changelog/2025-09-10-warp-macos-beta/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#next-time-you-run-wrangler-deploy,-this-will-use-the-configuration-in-your-newly-generated-wrangler.jsonc-file",
+  "links": []
+}

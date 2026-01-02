@@ -1,0 +1,8 @@
+{
+  "title": "Test if URI path contains 'a\"#b'",
+  "content": "http.request.uri.path matches r##\"a\"#b\"##",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#test-if-uri-path-contains-'a\"#b'",
+  "links": []
+}

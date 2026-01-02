@@ -1,0 +1,95 @@
+{
+  "title": "String manipulation",
+  "content": "curl -X POST https://ai-code-executor.YOUR_SUBDOMAIN.workers.dev/execute \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"question\": \"Reverse the string \\\"Hello World\\\"\"}'\nsh\n  npm create cloudflare@latest -- analyze-data --template=cloudflare/sandbox-sdk/examples/minimal\n  sh\n  yarn create cloudflare analyze-data --template=cloudflare/sandbox-sdk/examples/minimal\n  sh\n  pnpm create cloudflare@latest analyze-data --template=cloudflare/sandbox-sdk/examples/minimal\n  sh\ncd analyze-data\nsh\n  npm i @anthropic-ai/sdk\n  sh\n  yarn add @anthropic-ai/sdk\n  sh\n  pnpm add @anthropic-ai/sdk\n  typescript\nimport { getSandbox, proxyToSandbox, type Sandbox } from \"@cloudflare/sandbox\";\nimport Anthropic from \"@anthropic-ai/sdk\";\n\nexport { Sandbox } from \"@cloudflare/sandbox\";\n\ninterface Env {\n  Sandbox: DurableObjectNamespace<Sandbox>;\n  ANTHROPIC_API_KEY: string;\n}\n\nexport default {\n  async fetch(request: Request, env: Env): Promise<Response> {\n    const proxyResponse = await proxyToSandbox(request, env);\n    if (proxyResponse) return proxyResponse;\n\nif (request.method !== \"POST\") {\n      return Response.json(\n        { error: \"POST CSV file and question\" },\n        { status: 405 },\n      );\n    }\n\ntry {\n      const formData = await request.formData();\n      const csvFile = formData.get(\"file\") as File;\n      const question = formData.get(\"question\") as string;\n\nif (!csvFile || !question) {\n        return Response.json(\n          { error: \"Missing file or question\" },\n          { status: 400 },\n        );\n      }\n\n// Upload CSV to sandbox\n      const sandbox = getSandbox(env.Sandbox, `analysis-${Date.now()}`);\n      const csvPath = \"/workspace/data.csv\";\n      await sandbox.writeFile(csvPath, await csvFile.text());\n\n// Analyze CSV structure\n      const structure = await sandbox.exec(\n        `python3 -c \"import pandas as pd; df = pd.read_csv('${csvPath}'); print(f'Rows: {len(df)}'); print(f'Columns: {list(df.columns)[:5]}')\"`,\n      );\n\nif (!structure.success) {\n        return Response.json(\n          { error: \"Failed to read CSV\", details: structure.stderr },\n          { status: 400 },\n        );\n      }\n\n// Generate analysis code with Claude\n      const code = await generateAnalysisCode(\n        env.ANTHROPIC_API_KEY,\n        csvPath,\n        question,\n        structure.stdout,\n      );\n\n// Write and execute the analysis code\n      await sandbox.writeFile(\"/workspace/analyze.py\", code);\n      const result = await sandbox.exec(\"python /workspace/analyze.py\");\n\nif (!result.success) {\n        return Response.json(\n          { error: \"Analysis failed\", details: result.stderr },\n          { status: 500 },\n        );\n      }\n\n// Check for generated chart\n      let chart = null;\n      try {\n        const chartFile = await sandbox.readFile(\"/workspace/chart.png\");\n        const buffer = new Uint8Array(chartFile.content);\n        chart = `data:image/png;base64,${btoa(String.fromCharCode(...buffer))}`;\n      } catch {\n        // No chart generated\n      }\n\nawait sandbox.destroy();\n\nreturn Response.json({\n        success: true,\n        output: result.stdout,\n        chart,\n        code,\n      });\n    } catch (error: any) {\n      return Response.json({ error: error.message }, { status: 500 });\n    }\n  },\n};\n\nasync function generateAnalysisCode(\n  apiKey: string,\n  csvPath: string,\n  question: string,\n  csvStructure: string,\n): Promise<string> {\n  const anthropic = new Anthropic({ apiKey });\n\nconst response = await anthropic.messages.create({\n    model: \"claude-sonnet-4-5\",\n    max_tokens: 2048,\n    messages: [\n      {\n        role: \"user\",\n        content: `CSV at ${csvPath}:\n${csvStructure}\n\nQuestion: \"${question}\"\n\nGenerate Python code that:\n- Reads CSV with pandas\n- Answers the question\n- Saves charts to /workspace/chart.png if helpful\n- Prints findings to stdout\n\nUse pandas, numpy, matplotlib.`,\n      },\n    ],\n    tools: [\n      {\n        name: \"generate_python_code\",\n        description: \"Generate Python code for data analysis\",\n        input_schema: {\n          type: \"object\",\n          properties: {\n            code: { type: \"string\", description: \"Complete Python code\" },\n          },\n          required: [\"code\"],\n        },\n      },\n    ],\n  });\n\nfor (const block of response.content) {\n    if (block.type === \"tool_use\" && block.name === \"generate_python_code\") {\n      return (block.input as { code: string }).code;\n    }\n  }\n\nthrow new Error(\"Failed to generate code\");\n}\nsh\necho \"ANTHROPIC_API_KEY=your_api_key_here\" > .dev.vars\nsh",
+  "code_samples": [
+    {
+      "code": "## What you built\n\nYou created an AI code execution system that:\n\n* Accepts natural language questions\n* Generates Python code with Claude\n* Executes code securely in isolated sandboxes\n* Returns results with error handling\n\n## Next steps\n\n* [Analyze data with AI](https://developers.cloudflare.com/sandbox/tutorials/analyze-data-with-ai/) - Add pandas and matplotlib for data analysis\n* [Code Interpreter API](https://developers.cloudflare.com/sandbox/api/interpreter/) - Use the built-in code interpreter instead of exec\n* [Streaming output](https://developers.cloudflare.com/sandbox/guides/streaming-output/) - Show real-time execution progress\n* [API reference](https://developers.cloudflare.com/sandbox/api/) - Explore all available methods\n\n## Related resources\n\n* [Anthropic Claude documentation](https://docs.anthropic.com/)\n* [Workers AI](https://developers.cloudflare.com/workers-ai/) - Use Cloudflare's built-in models\n\n</page>\n\n<page>\n---\ntitle: Analyze data with AI · Cloudflare Sandbox SDK docs\ndescription: Upload CSV files, generate analysis code with Claude, and return\n  visualizations.\nlastUpdated: 2025-10-21T14:02:11.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/sandbox/tutorials/analyze-data-with-ai/\n  md: https://developers.cloudflare.com/sandbox/tutorials/analyze-data-with-ai/index.md\n---\n\nBuild an AI-powered data analysis system that accepts CSV uploads, uses Claude to generate Python analysis code, executes it in sandboxes, and returns visualizations.\n\n**Time to complete**: 25 minutes\n\n## Prerequisites\n\n1. Sign up for a [Cloudflare account](https://dash.cloudflare.com/sign-up/workers-and-pages).\n2. Install [`Node.js`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).\n\nNode.js version manager\n\nUse a Node version manager like [Volta](https://volta.sh/) or [nvm](https://github.com/nvm-sh/nvm) to avoid permission issues and change Node.js versions. [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/), discussed later in this guide, requires a Node version of `16.17.0` or later.\n\nYou'll also need:\n\n* An [Anthropic API key](https://console.anthropic.com/) for Claude\n* [Docker](https://www.docker.com/) running locally\n\n## 1. Create your project\n\nCreate a new Sandbox SDK project:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## 2. Install dependencies\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Build the analysis handler\n\nReplace `src/index.ts`:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 4. Set up local environment variables\n\nCreate a `.dev.vars` file in your project root for local development:",
+      "language": "unknown"
+    },
+    {
+      "code": "Replace `your_api_key_here` with your actual API key from the [Anthropic Console](https://console.anthropic.com/).\n\nNote\n\nThe `.dev.vars` file is automatically gitignored and only used during local development with `npm run dev`.\n\n## 5. Test locally\n\nDownload a sample CSV:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "What you built",
+      "id": "what-you-built"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "1. Create your project",
+      "id": "1.-create-your-project"
+    },
+    {
+      "level": "h2",
+      "text": "2. Install dependencies",
+      "id": "2.-install-dependencies"
+    },
+    {
+      "level": "h2",
+      "text": "3. Build the analysis handler",
+      "id": "3.-build-the-analysis-handler"
+    },
+    {
+      "level": "h2",
+      "text": "4. Set up local environment variables",
+      "id": "4.-set-up-local-environment-variables"
+    },
+    {
+      "level": "h2",
+      "text": "5. Test locally",
+      "id": "5.-test-locally"
+    }
+  ],
+  "url": "llms-txt#string-manipulation",
+  "links": []
+}

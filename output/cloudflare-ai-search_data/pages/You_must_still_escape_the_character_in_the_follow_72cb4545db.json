@@ -1,0 +1,8 @@
+{
+  "title": "You must still escape the '\\' character in the following raw string because it has a special meaning in regular expressions",
+  "content": "regex_replace(http.host, r\"\\\\\", \"a\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#you-must-still-escape-the-'\\'-character-in-the-following-raw-string-because-it-has-a-special-meaning-in-regular-expressions",
+  "links": []
+}

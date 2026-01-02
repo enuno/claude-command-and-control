@@ -1,0 +1,17 @@
+{
+  "title": "http.request.headers.names",
+  "content": "`http.request.headers.names` Array\\<String>\n\nThe names of the headers in the HTTP request.\n\nThe names are not pre-processed and retain the original case used in the request.\n\nThe order of header names is not guaranteed but will match [`http.request.headers.values`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.headers.values/).\n\nDuplicate headers are listed multiple times.\n\n* **Decoding**: No decoding performed\n* **Whitespace**: Preserved\n* **Non-ASCII**: Preserved\n\nWhen the HTTP request contains too many headers, this field may not contain the names of all of the headers sent in the HTTP request. In this situation, the [`http.request.headers.truncated`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.headers.truncated/) field will be set to `true`.\n\n**Note**: In HTTP/2, the names of HTTP headers are always in lowercase. Recent versions of the `curl` tool [enable HTTP/2 by default](https://curl.se/docs/manpage.html#--http2) for HTTPS connections.\n\n<page>\n---\ntitle: http.request.headers.values · Cloudflare Ruleset Engine docs\ndescription: The values of the headers in the HTTP request.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.headers.values/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.headers.values/index.md\n---",
+  "code_samples": [
+    {
+      "code": "[\"content-type\"]",
+      "language": "txt"
+    },
+    {
+      "code": "any(http.request.headers.names[*] == \"content-type\")",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#http.request.headers.names",
+  "links": []
+}

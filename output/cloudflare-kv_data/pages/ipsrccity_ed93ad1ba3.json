@@ -1,0 +1,13 @@
+{
+  "title": "ip.src.city",
+  "content": "The city associated with the client IP address.\n\n* Request\n* Geolocation\n\n<page>\n---\ntitle: ip.src.continent · Cloudflare Ruleset Engine docs\ndescription: The continent code associated with the client IP address.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/ip.src.continent/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/ip.src.continent/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"San Francisco\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#ip.src.city",
+  "links": []
+}

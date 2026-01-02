@@ -1,0 +1,32 @@
+{
+  "title": "File operations",
+  "content": "curl http://localhost:8787/file\nsh\nnpx wrangler deploy\nsh\nnpx wrangler containers list\nsh",
+  "code_samples": [
+    {
+      "code": "You should see JSON responses with the command output and file contents.\n\n## 4. Deploy to production\n\nDeploy your Worker and container:",
+      "language": "unknown"
+    },
+    {
+      "code": "This will:\n\n1. Build your container image using Docker\n2. Push it to Cloudflare's Container Registry\n3. Deploy your Worker globally\n\nWait for provisioning\n\nAfter first deployment, wait 2-3 minutes before making requests. The Worker deploys immediately, but the container needs time to provision.\n\nCheck deployment status:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 5. Test your deployment\n\nVisit your Worker URL (shown in deploy output):",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "4. Deploy to production",
+      "id": "4.-deploy-to-production"
+    },
+    {
+      "level": "h2",
+      "text": "5. Test your deployment",
+      "id": "5.-test-your-deployment"
+    }
+  ],
+  "url": "llms-txt#file-operations",
+  "links": []
+}

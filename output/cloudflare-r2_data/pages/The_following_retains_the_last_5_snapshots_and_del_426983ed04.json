@@ -1,0 +1,8 @@
+{
+  "title": "The following retains the last 5 snapshots and deletes files older than Nov 28, 2024",
+  "content": "spark.sql(\"\"\"\n  CALL r2dc.system.expire_snapshots(\n    table => 'r2dc.namespace_name.table_name',\n    older_than => TIMESTAMP '2024-11-28 00:00:00',\n     retain_last => 5\n  )\n\"\"\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#the-following-retains-the-last-5-snapshots-and-deletes-files-older-than-nov-28,-2024",
+  "links": []
+}

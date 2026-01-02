@@ -1,0 +1,201 @@
+% Report Template
+% For longer documents with chapters (thesis, technical reports)
+
+\documentclass[12pt,a4paper]{report}
+
+% ===== PACKAGES =====
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{cite}
+\usepackage{booktabs}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+
+% ===== PAGE STYLE =====
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Line spacing
+\onehalfspacing
+
+% ===== HYPERREF CONFIGURATION =====
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=cyan,
+    pdftitle={Report Title},
+    pdfauthor={Author Name}
+}
+
+% ===== TITLE PAGE INFORMATION =====
+\title{
+    {\LARGE\textbf{Report Title}}\\[1cm]
+    {\large Subtitle if needed}
+}
+\author{
+    Author Name\\
+    \texttt{email@example.com}\\[0.5cm]
+    Institution Name\\
+    Department Name
+}
+\date{\today}
+
+% ===== DOCUMENT START =====
+\begin{document}
+
+% ===== FRONT MATTER =====
+\pagenumbering{roman}
+
+\maketitle
+
+\begin{abstract}
+This is the abstract. Provide a concise summary of the entire report, including objectives, methods, key findings, and conclusions. Typically 250-500 words for a report.
+\end{abstract}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+% ===== MAIN MATTER =====
+\clearpage
+\pagenumbering{arabic}
+
+\chapter{Introduction}
+\label{ch:introduction}
+
+This is the introduction chapter. Reports use chapters as the top-level division.
+
+\section{Background}
+\label{sec:background}
+
+Provide context and background information.
+
+\section{Objectives}
+\label{sec:objectives}
+
+State the objectives of this report clearly:
+\begin{enumerate}
+    \item First objective
+    \item Second objective
+    \item Third objective
+\end{enumerate}
+
+\section{Scope}
+\label{sec:scope}
+
+Define what is and isn't covered in this report.
+
+\chapter{Literature Review}
+\label{ch:literature}
+
+Review relevant previous work and research.
+
+\section{Topic Area 1}
+
+Discuss first major topic area.
+
+\section{Topic Area 2}
+
+Discuss second major topic area.
+
+\chapter{Methodology}
+\label{ch:methodology}
+
+Describe your methods, approach, or experimental design.
+
+\section{Research Design}
+
+Explain your overall approach.
+
+\section{Data Collection}
+
+Describe how data was collected.
+
+\section{Analysis Methods}
+
+Explain analytical techniques used.
+
+\chapter{Results}
+\label{ch:results}
+
+Present your findings systematically.
+
+\section{Key Finding 1}
+
+Present first major finding with supporting evidence.
+
+\begin{figure}[h]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{figures/result1.pdf}
+    \caption{Example results figure}
+    \label{fig:result1}
+\end{figure}
+
+\section{Key Finding 2}
+
+Present second major finding.
+
+\chapter{Discussion}
+\label{ch:discussion}
+
+Interpret your results and discuss their implications.
+
+\section{Interpretation of Results}
+
+What do the results mean?
+
+\section{Limitations}
+
+Acknowledge limitations of your work.
+
+\section{Implications}
+
+Discuss broader implications.
+
+\chapter{Conclusion}
+\label{ch:conclusion}
+
+\section{Summary of Findings}
+
+Recap the main findings.
+
+\section{Recommendations}
+
+Provide actionable recommendations.
+
+\section{Future Work}
+
+Suggest directions for future research or development.
+
+% ===== BIBLIOGRAPHY =====
+\bibliographystyle{plain}
+% \bibliography{references}
+
+% Manual bibliography if not using BibTeX
+\begin{thebibliography}{99}
+    \bibitem{example}
+        Author, A. (2024). \textit{Title of Work}. Publisher.
+\end{thebibliography}
+
+% ===== APPENDICES =====
+\appendix
+
+\chapter{Additional Data}
+\label{app:data}
+
+Supplementary material, detailed data, or extended proofs.
+
+\chapter{Code Listings}
+\label{app:code}
+
+Source code or detailed algorithms.
+
+\end{document}

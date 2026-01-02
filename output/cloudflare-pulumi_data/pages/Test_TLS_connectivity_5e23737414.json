@@ -1,0 +1,8 @@
+{
+  "title": "Test TLS connectivity",
+  "content": "openssl s_client -connect 1.1.1.1:853\nopenssl s_client -connect 1.0.0.1:853",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#test-tls-connectivity",
+  "links": []
+}

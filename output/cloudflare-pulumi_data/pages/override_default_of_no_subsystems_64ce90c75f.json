@@ -1,0 +1,8 @@
+{
+  "title": "override default of no subsystems",
+  "content": "Subsystem    sftp    /usr/lib/openssh/sftp-server",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#override-default-of-no-subsystems",
+  "links": []
+}

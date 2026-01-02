@@ -1,0 +1,8 @@
+{
+  "title": "Terminal 2",
+  "content": "This is useful when different teams maintain different Workers, or when each Worker has its own build setup or tooling.\n\nCheck out the [Developing with multiple Workers](https://developers.cloudflare.com/workers/development-testing/multi-workers) guide to learn more about the different approaches and when to use each one.\n\n<page>\n---\ntitle: Mail authentication requirements for Email Routing · Changelog\ndescription: Emails will need to be authenticated either via SPF or DKIM in\n  order to be forwarded.\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/changelog/2025-06-30-mail-authentication/\n  md: https://developers.cloudflare.com/changelog/2025-06-30-mail-authentication/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#terminal-2",
+  "links": []
+}

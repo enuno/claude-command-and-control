@@ -1,0 +1,8 @@
+{
+  "title": "cf.waf.score.sqli",
+  "content": "`cf.waf.score.sqli` Number\n\nAn attack score from 1–99 classifying the SQL injection (SQLi) attack vector.\n\nRequires a Cloudflare Enterprise plan. You must also enable [attack score detection](https://developers.cloudflare.com/waf/detections/attack-score/).\n\n<page>\n---\ntitle: cf.waf.score.rce · Cloudflare Ruleset Engine docs\ndescription: An attack score from 1–99 classifying the command injection or\n  Remote Code Execution (RCE) attack vector.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.score.rce/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.score.rce/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#cf.waf.score.sqli",
+  "links": []
+}

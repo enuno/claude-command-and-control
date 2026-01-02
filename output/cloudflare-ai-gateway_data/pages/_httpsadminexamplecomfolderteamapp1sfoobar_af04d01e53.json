@@ -1,0 +1,88 @@
+{
+  "title": "- https://admin.example.com/folder/team/app1/?s=foobar",
+  "content": "txt\n<expression> <logical_operator> <expression>\njava\nExpression1 and Expression2 or Expression3\njava\n(Expression1 and Expression2) or Expression3\njava\nExpression1 and (Expression2 or Expression3)\nsql\n(\n (http.host eq \"api.example.com\" and http.request.uri.path eq \"/api/v2/auth\") or\n (http.host matches \"^(www|store|blog)\\.example\\.com\" and http.request.uri.path contains \"wp-login.php\") or\n ip.src.country in {\"CN\" \"TH\" \"US\" \"ID\" \"KR\" \"MY\" \"IT\" \"SG\" \"GB\"} or ip.src.asnum in {12345 54321 11111}\n) and not ip.src in {11.22.33.0/24}\nsql\n\"^(www|store|blog)\\.example\\.com\"\ntxt",
+  "code_samples": [
+    {
+      "code": "The matching algorithm used by the `wildcard` operator is case-insensitive. To perform case-sensitive wildcard matching, use the `strict wildcard` operator.\n\nTo enter a literal `*` character in a literal string with wildcards you must escape it using `\\*`. Additionally, you must also escape `\\` using `\\\\`. Two unescaped `*` characters in a row (`**`) in a wildcard literal string are considered invalid and cannot be used. If you need to perform character escaping, it is recommended that you use the [raw string syntax](https://developers.cloudflare.com/ruleset-engine/rules-language/values/#raw-string-syntax) to specify a literal string with wildcards.\n\nWildcard matching versus regex matching\n\nThe `wildcard`/`strict wildcard` operators always consider the entire field value (left-side operand) when determining if there is a match. The `matches` operator can match a partial value.\n\n### Regular expression matching\n\nCustomers on Business and Enterprise plans have access to the `matches` operator. Regular expression matching is performed using the Rust regular expression engine.\n\nIf you are using a regular expression, you can test it using a tool like [Regular Expressions 101](https://regex101.com/?flavor=rust\\&regex=) or [Rustexp](https://rustexp.lpil.uk/).\n\nFor more information on regular expressions, refer to [String values and regular expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/values/#string-values-and-regular-expressions).\n\n## Logical operators\n\nLogical operators combine two or more expressions into a single compound expression. A compound expression has this general syntax:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Supported logical operators\n\nEach logical operator has an [order of precedence](#order-of-precedence). The order of precedence (along with [grouping symbols](#grouping-symbols)) determines the order in which Cloudflare evaluates logical operators in an expression. The `not` operator ranks first in order of precedence.\n\n| Name | English Notation | C-like Notation | Example | Order of Precedence |\n| - | - | - | - | - |\n| Logical NOT | `not` | `!` | `not ( http.host eq \"www​.cloudflare​.com\" and ip.src in {203.0.113.0/24} )` | 1 |\n| Logical AND | `and` | `&&` | `http.host eq \"www​.cloudflare​.com\" and ip.src in {203.0.113.0/24}` | 2 |\n| Logical XOR (exclusive OR) | `xor` | `^^` | `http.host eq \"www​.cloudflare​.com\" xor ip.src in {203.0.113.0/24}` | 3 |\n| Logical OR | `or` | `\\|\\|` | `http.host eq \"www​.cloudflare​.com\" or ip.src in 203.0.113.0/24` | 4 |\n\nWarning\n\nLogical operators entered using English notation (such as `not`, `and`, and `or`) must be written in lowercase.\n\n### Order of precedence\n\nWhen writing compound expressions, it is important to be aware of the precedence of logical operators so that your expression is evaluated the way you expect.\n\nFor example, consider the following generic expression, which uses `and` and `or` operators:",
+      "language": "unknown"
+    },
+    {
+      "code": "If these operators had no order of precedence, it would not be clear which of two interpretations is correct:\n\n1. Match when Expression 1 and Expression 2 are both true **or** when Expression 3 is true.\n2. Match when Expression 1 is true **and** either Expression 2 or Expression 3 is true.\n\nSince the logical `and` operator has precedence over logical `or`, the `and` operator must be evaluated first. Interpretation 1 is correct.\n\nTo avoid ambiguity when working with logical operators, use grouping symbols so that the order of evaluation is explicit.\n\n## Grouping symbols\n\nThe Rules language supports parentheses (`(`,`)`) as grouping symbols. Grouping symbols allow you to organize expressions, enforce precedence, and nest expressions.\n\nOnly the [Expression Editor](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/edit-expressions/#expression-editor) and the [Cloudflare API](https://developers.cloudflare.com/api/) support grouping symbols. The [Expression Builder](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/edit-expressions/#expression-builder) does not.\n\n### Group expressions\n\nUse parentheses to explicitly group expressions that should be evaluated together. In this example, the parentheses do not alter the evaluation of the expression, but they unambiguously call out which logical operators to evaluate first.",
+      "language": "unknown"
+    },
+    {
+      "code": "Because grouping symbols are so explicit, you are less likely to make errors when you use them to write compound expressions.\n\n### Enforce precedence\n\nGrouping symbols are a powerful tool to enforce precedence for grouped elements of a compound expression. In this example, parentheses force the logical `or` operator to be evaluated before the logical `and`:",
+      "language": "unknown"
+    },
+    {
+      "code": "Without parentheses, the logical `and` operator would take precedence.\n\n### Nest expressions\n\nYou can nest expressions grouped by parentheses inside other groups to create very precise, sophisticated expressions, such as this example for a rule designed to block access to a domain:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note that when evaluating the precedence of logical operators, parentheses inside strings delimited by quotes are ignored, such as those in the following regular expression, drawn from the example above:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Values · Cloudflare Ruleset Engine docs\ndescription: Learn about values in Cloudflare's Rules language, including\n  string, boolean, array, and map types, and how to use them in rule\n  expressions.\nlastUpdated: 2025-12-23T12:15:33.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/values/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/values/index.md\n---\n\nWhen an HTTP request reaches the Cloudflare global network, Cloudflare creates a table of field–value pairs against which to match expressions. This table exists for as long as the current request is being processed.\n\nThe values that populate the lookup tables of the Rules language are drawn from a variety of sources:\n\n* **Primitive properties** are obtained directly from the request (`http.request.uri.path`, for example).\n* **Derived values** are the product of a transformation, composition, or basic operation. For example, the transformation `lower(http.request.uri.path)` converts the value of `http.request.uri.path` to lowercase.\n* **Computed values** are the product of a lookup, computation, or other intelligence. For example, Cloudflare uses a machine learning process to dynamically calculate attack scores, represented by `cf.waf.score*` fields.\n\nBesides these values, expressions may also contain literal values. These are static, known values that you incorporate into expressions to compare them with values from request/response fields with or without any transformations.\n\nWhen working with values in rule expressions, keep in mind the information in the following sections.\n\n## String values and regular expressions\n\nStrings are sequences of bytes enclosed by specific delimiters.\n\nCloudflare rules support two formats for specifying literal strings, including regular expressions: [quoted literal strings](#quoted-string-syntax) and [raw strings](#raw-string-syntax). These formats have different delimiters and escaping mechanisms.\n\nYou can use either of the two string formats to specify regular expressions in an expression. However, Cloudflare recommends that you use the [raw string syntax](#raw-string-syntax), since the quoted string syntax has complex escaping rules and can lead to unexpected behaviors if not thoroughly tested.\n\nRegular expression matching is performed using the Rust regular expression engine.\n\n### Quoted string syntax\n\nWhen using the quoted string syntax, a string literal is delimited by `\"` (double quote) characters. This format requires that you escape special characters `\"` and `\\` using `\\\"` and `\\\\`, respectively.\n\nThe quoted string syntax has the following additional escaping requirements:\n\n* When used to specify a regular expression on the right-hand side of the [regex operator](https://developers.cloudflare.com/ruleset-engine/rules-language/operators/#comparison-operators) (`matches` or `~`), the string is parsed using regex escaping rules.\n* When used on the right hand-side of expressions with other operators, or in [function parameters](https://developers.cloudflare.com/ruleset-engine/rules-language/functions/), the string is parsed using basic escaping rules.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Regular expression matching",
+      "id": "regular-expression-matching"
+    },
+    {
+      "level": "h2",
+      "text": "Logical operators",
+      "id": "logical-operators"
+    },
+    {
+      "level": "h3",
+      "text": "Supported logical operators",
+      "id": "supported-logical-operators"
+    },
+    {
+      "level": "h3",
+      "text": "Order of precedence",
+      "id": "order-of-precedence"
+    },
+    {
+      "level": "h2",
+      "text": "Grouping symbols",
+      "id": "grouping-symbols"
+    },
+    {
+      "level": "h3",
+      "text": "Group expressions",
+      "id": "group-expressions"
+    },
+    {
+      "level": "h3",
+      "text": "Enforce precedence",
+      "id": "enforce-precedence"
+    },
+    {
+      "level": "h3",
+      "text": "Nest expressions",
+      "id": "nest-expressions"
+    },
+    {
+      "level": "h2",
+      "text": "String values and regular expressions",
+      "id": "string-values-and-regular-expressions"
+    },
+    {
+      "level": "h3",
+      "text": "Quoted string syntax",
+      "id": "quoted-string-syntax"
+    }
+  ],
+  "url": "llms-txt#--https://admin.example.com/folder/team/app1/?s=foobar",
+  "links": []
+}

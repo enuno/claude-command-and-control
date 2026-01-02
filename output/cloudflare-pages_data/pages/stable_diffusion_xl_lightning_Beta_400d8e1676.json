@@ -1,0 +1,51 @@
+{
+  "title": "stable-diffusion-xl-lightning Beta",
+  "content": "Text-to-Image • bytedance\n\n@cf/bytedance/stable-diffusion-xl-lightning\n\nSDXL-Lightning is a lightning-fast text-to-image generation model. It can generate high-quality 1024px images in a few steps.\n\n| Model Info | |\n| - | - |\n| More information | [link](https://huggingface.co/ByteDance/SDXL-Lightning) |\n| Beta | Yes |\n| Unit Pricing | $0.00 per step |\n\n\\* indicates a required field\n\n* `prompt` string required min 1\n\nA text description of the image you want to generate\n\n* `negative_prompt` string\n\nText describing elements to avoid in the generated image\n\n* `height` integer min 256 max 2048\n\nThe height of the generated image in pixels\n\n* `width` integer min 256 max 2048\n\nThe width of the generated image in pixels\n\nFor use with img2img tasks. An array of integers that represent the image data constrained to 8-bit unsigned integer values\n\nA value between 0 and 255\n\nFor use with img2img tasks. A base64-encoded string of the input image\n\nAn array representing An array of integers that represent mask image data for inpainting constrained to 8-bit unsigned integer values\n\nA value between 0 and 255\n\n* `num_steps` integer default 20 max 20\n\nThe number of diffusion steps; higher values can improve quality but take longer\n\n* `strength` number default 1\n\nA value between 0 and 1 indicating how strongly to apply the transformation during img2img tasks; lower values make the output closer to the input image\n\n* `guidance` number default 7.5\n\nControls how closely the generated image should adhere to the prompt; higher values make the image more aligned with the prompt\n\nRandom seed for reproducibility of the image generation\n\nThe binding returns a `ReadableStream` with the image in JPEG or PNG format (check the model's output schema).\n\nThe following schemas are based on JSON Schema\n\n<page>\n---\ntitle: starling-lm-7b-beta · Cloudflare Workers AI docs\ndescription: We introduce Starling-LM-7B-beta, an open large language model\n  (LLM) trained by Reinforcement Learning from AI Feedback (RLAIF).\n  Starling-LM-7B-beta is trained from Openchat-3.5-0106 with our new reward\n  model Nexusflow/Starling-RM-34B and policy optimization method Fine-Tuning\n  Language Models from Human Preferences (PPO).\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers-ai/models/starling-lm-7b-beta/\n  md: https://developers.cloudflare.com/workers-ai/models/starling-lm-7b-beta/index.md\n---",
+  "code_samples": [
+    {
+      "code": "export interface Env {\n  AI: Ai;\n}\n\n\nexport default {\n  async fetch(request, env): Promise<Response> {\n\n\n    const inputs = {\n      prompt: \"cyberpunk cat\",\n    };\n\n\n    const response = await env.AI.run(\n      \"@cf/bytedance/stable-diffusion-xl-lightning\",\n      inputs\n    );\n\n\n    return new Response(response, {\n      headers: {\n        \"content-type\": \"image/jpg\",\n      },\n    });\n  },\n} satisfies ExportedHandler<Env>;",
+      "language": "ts"
+    },
+    {
+      "code": "curl https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/ai/run/@cf/bytedance/stable-diffusion-xl-lightning  \\\n  -X POST  \\\n  -H \"Authorization: Bearer $CLOUDFLARE_API_TOKEN\"  \\\n  -d '{ \"prompt\": \"cyberpunk cat\" }'",
+      "language": "sh"
+    },
+    {
+      "code": "{\n      \"type\": \"object\",\n      \"properties\": {\n          \"prompt\": {\n              \"type\": \"string\",\n              \"minLength\": 1,\n              \"description\": \"A text description of the image you want to generate\"\n          },\n          \"negative_prompt\": {\n              \"type\": \"string\",\n              \"description\": \"Text describing elements to avoid in the generated image\"\n          },\n          \"height\": {\n              \"type\": \"integer\",\n              \"minimum\": 256,\n              \"maximum\": 2048,\n              \"description\": \"The height of the generated image in pixels\"\n          },\n          \"width\": {\n              \"type\": \"integer\",\n              \"minimum\": 256,\n              \"maximum\": 2048,\n              \"description\": \"The width of the generated image in pixels\"\n          },\n          \"image\": {\n              \"type\": \"array\",\n              \"description\": \"For use with img2img tasks. An array of integers that represent the image data constrained to 8-bit unsigned integer values\",\n              \"items\": {\n                  \"type\": \"number\",\n                  \"description\": \"A value between 0 and 255\"\n              }\n          },\n          \"image_b64\": {\n              \"type\": \"string\",\n              \"description\": \"For use with img2img tasks. A base64-encoded string of the input image\"\n          },\n          \"mask\": {\n              \"type\": \"array\",\n              \"description\": \"An array representing An array of integers that represent mask image data for inpainting constrained to 8-bit unsigned integer values\",\n              \"items\": {\n                  \"type\": \"number\",\n                  \"description\": \"A value between 0 and 255\"\n              }\n          },\n          \"num_steps\": {\n              \"type\": \"integer\",\n              \"default\": 20,\n              \"maximum\": 20,\n              \"description\": \"The number of diffusion steps; higher values can improve quality but take longer\"\n          },\n          \"strength\": {\n              \"type\": \"number\",\n              \"default\": 1,\n              \"description\": \"A value between 0 and 1 indicating how strongly to apply the transformation during img2img tasks; lower values make the output closer to the input image\"\n          },\n          \"guidance\": {\n              \"type\": \"number\",\n              \"default\": 7.5,\n              \"description\": \"Controls how closely the generated image should adhere to the prompt; higher values make the image more aligned with the prompt\"\n          },\n          \"seed\": {\n              \"type\": \"integer\",\n              \"description\": \"Random seed for reproducibility of the image generation\"\n          }\n      },\n      \"required\": [\n          \"prompt\"\n      ]\n  }",
+      "language": "json"
+    },
+    {
+      "code": "{\n      \"type\": \"string\",\n      \"contentType\": \"image/png\",\n      \"format\": \"binary\",\n      \"description\": \"The generated image in PNG format\"\n  }",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Input",
+      "id": "input"
+    },
+    {
+      "level": "h3",
+      "text": "Output",
+      "id": "output"
+    },
+    {
+      "level": "h2",
+      "text": "API Schemas",
+      "id": "api-schemas"
+    }
+  ],
+  "url": "llms-txt#stable-diffusion-xl-lightning-beta",
+  "links": []
+}

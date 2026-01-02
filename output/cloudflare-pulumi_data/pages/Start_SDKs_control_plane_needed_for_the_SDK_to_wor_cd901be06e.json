@@ -1,0 +1,79 @@
+{
+  "title": "Start SDK's control plane (needed for the SDK to work)",
+  "content": "exec bun dist/index.js\njs\n  import { getSandbox } from \"@cloudflare/sandbox\";\n\nexport { Sandbox } from \"@cloudflare/sandbox\";\n\nexport default {\n    async fetch(request, env) {\n      if (request.headers.get(\"Upgrade\")?.toLowerCase() === \"websocket\") {\n        const sandbox = getSandbox(env.Sandbox, \"echo-service\");\n        return await sandbox.wsConnect(request, 8080);\n      }\n\nreturn new Response(\"WebSocket endpoint\");\n    },\n  };\n  ts\n  import { getSandbox } from '@cloudflare/sandbox';\n\nexport { Sandbox } from \"@cloudflare/sandbox\";\n\nexport default {\n    async fetch(request: Request, env: Env): Promise<Response> {\n      if (request.headers.get('Upgrade')?.toLowerCase() === 'websocket') {\n        const sandbox = getSandbox(env.Sandbox, 'echo-service');\n        return await sandbox.wsConnect(request, 8080);\n      }\n\nreturn new Response('WebSocket endpoint');\n\n}\n  };\n  javascript\nconst ws = new WebSocket('wss://your-worker.com');\nws.onmessage = (event) => console.log(event.data);\nws.send('Hello!'); // Receives: \"Echo: Hello!\"\njs\n  import { getSandbox, proxyToSandbox } from \"@cloudflare/sandbox\";\n\nexport { Sandbox } from \"@cloudflare/sandbox\";\n\nexport default {\n    async fetch(request, env) {\n      // Auto-route all requests via proxyToSandbox first\n      const proxyResponse = await proxyToSandbox(request, env);\n      if (proxyResponse) return proxyResponse;\n\n// Extract hostname from request\n      const { hostname } = new URL(request.url);\n      const sandbox = getSandbox(env.Sandbox, \"echo-service\");\n\n// Expose the port to get preview URL\n      const { exposedAt } = await sandbox.exposePort(8080, { hostname });\n\n// Return URL to clients\n      if (request.url.includes(\"/ws-url\")) {\n        return Response.json({ url: exposedAt.replace(\"https\", \"wss\") });\n      }\n\nreturn new Response(\"Not found\", { status: 404 });\n    },\n  };\n  ts\n  import { getSandbox, proxyToSandbox } from '@cloudflare/sandbox';\n\nexport { Sandbox } from '@cloudflare/sandbox';\n\nexport default {\n    async fetch(request: Request, env: Env): Promise<Response> {\n      // Auto-route all requests via proxyToSandbox first\n      const proxyResponse = await proxyToSandbox(request, env);\n      if (proxyResponse) return proxyResponse;\n\n// Extract hostname from request\n      const { hostname } = new URL(request.url);\n      const sandbox = getSandbox(env.Sandbox, 'echo-service');\n\n// Expose the port to get preview URL\n      const { exposedAt } = await sandbox.exposePort(8080, { hostname });\n\n// Return URL to clients\n      if (request.url.includes('/ws-url')) {\n        return Response.json({ url: exposedAt.replace('https', 'wss') });\n      }\n\nreturn new Response('Not found', { status: 404 });\n\n}\n  };\n  javascript\n// Get the preview URL\nconst response = await fetch('https://your-worker.com/ws-url');\nconst { url } = await response.json();\n\n// Connect\nconst ws = new WebSocket(url);\nws.onmessage = (event) => console.log(event.data);\nws.send('Hello!'); // Receives: \"Echo: Hello!\"\njs\n  import { getSandbox } from \"@cloudflare/sandbox\";\n\nexport { Sandbox } from \"@cloudflare/sandbox\";\n\nlet initialized = false;\n\nexport default {\n    async fetch(request, env) {\n      // Get or create a sandbox instance\n      const sandbox = getSandbox(env.Sandbox, \"data-processor\");\n\n// Check for WebSocket upgrade\n      const upgrade = request.headers.get(\"Upgrade\")?.toLowerCase();\n\nif (upgrade === \"websocket\") {\n        // Initialize server on first connection\n        if (!initialized) {\n          await sandbox.writeFile(\n            \"/workspace/server.js\",\n            `Bun.serve({\n              port: 8080,\n              fetch(req, server) {\n                server.upgrade(req);\n              },\n              websocket: {\n                message(ws, msg) {\n                  ws.send(\\`Echo: \\${msg}\\`);\n                }\n              }\n            });`,\n          );\n          await sandbox.startProcess(\"bun /workspace/server.js\");\n          initialized = true;\n        }\n        // Connect to WebSocket server\n        return await sandbox.wsConnect(request, 8080);\n      }\n\nreturn new Response(\"Processed real-time data\");\n    },\n  };\n  ts\n  import { getSandbox } from '@cloudflare/sandbox';\n\nexport { Sandbox } from '@cloudflare/sandbox';\n\nlet initialized = false;\n\nexport default {\n    async fetch(request: Request, env: Env): Promise<Response> {\n\n// Get or create a sandbox instance\n      const sandbox = getSandbox(env.Sandbox, 'data-processor');\n\n// Check for WebSocket upgrade\n      const upgrade = request.headers.get('Upgrade')?.toLowerCase();\n\nif (upgrade === 'websocket') {\n        // Initialize server on first connection\n        if (!initialized) {\n          await sandbox.writeFile(\n            '/workspace/server.js',\n            `Bun.serve({\n              port: 8080,\n              fetch(req, server) {\n                server.upgrade(req);\n              },\n              websocket: {\n                message(ws, msg) {\n                  ws.send(\\`Echo: \\${msg}\\`);\n                }\n              }\n            });`\n          );\n          await sandbox.startProcess(\n            'bun /workspace/server.js'\n          );\n          initialized = true;\n        }\n        // Connect to WebSocket server\n        return await sandbox.wsConnect(request, 8080);\n      }\n\nreturn new Response('Processed real-time data');\n\n}\n  };\n  js\n  console.log(request.headers.get(\"Upgrade\")); // 'websocket'\n  console.log(request.headers.get(\"Connection\")); // 'Upgrade'\n  ts\n  console.log(request.headers.get('Upgrade'));    // 'websocket'\n  console.log(request.headers.get('Connection')); // 'Upgrade'\n  dockerfile\nFROM docker.io/cloudflare/sandbox:0.3.3\n\nCOPY echo-server.ts /workspace/echo-server.ts\nCOPY startup.sh /container-server/startup.sh\nRUN chmod +x /container-server/startup.sh",
+  "code_samples": [
+    {
+      "code": "**Connect from your Worker:**\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "**Client connects:**",
+      "language": "unknown"
+    },
+    {
+      "code": "## Expose WebSocket service via preview URL\n\nGet a public URL for your WebSocket server:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "**Client connects to preview URL:**",
+      "language": "unknown"
+    },
+    {
+      "code": "## Connect from Worker to get real-time data\n\nYour Worker can connect to a WebSocket service to get real-time data, even when the incoming request isn't a WebSocket:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "This pattern is useful when you need streaming data from sandbox services but want to return HTTP responses to clients.\n\n## Troubleshooting\n\n### Upgrade failed\n\nVerify request has WebSocket headers:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "### Local development\n\nExpose ports in Dockerfile for `wrangler dev`:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Expose WebSocket service via preview URL",
+      "id": "expose-websocket-service-via-preview-url"
+    },
+    {
+      "level": "h2",
+      "text": "Connect from Worker to get real-time data",
+      "id": "connect-from-worker-to-get-real-time-data"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Upgrade failed",
+      "id": "upgrade-failed"
+    },
+    {
+      "level": "h3",
+      "text": "Local development",
+      "id": "local-development"
+    }
+  ],
+  "url": "llms-txt#start-sdk's-control-plane-(needed-for-the-sdk-to-work)",
+  "links": []
+}

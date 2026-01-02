@@ -1,0 +1,191 @@
+% IEEE Conference Paper Template
+% For IEEE conference submissions (two-column format)
+
+\documentclass[conference]{IEEEtran}
+
+% ===== PACKAGES =====
+\usepackage[utf8]{inputenc}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+% ===== HYPERREF CONFIGURATION =====
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+% ===== DOCUMENT START =====
+\begin{document}
+
+% ===== TITLE =====
+\title{Your Paper Title Here: Capitalize Main Words\\
+{\footnotesize \textsuperscript{*}Note: Sub-titles are not captured in Xplore and should not be used}
+}
+
+% ===== AUTHORS =====
+\author{
+    \IEEEauthorblockN{1\textsuperscript{st} First Author}
+    \IEEEauthorblockA{\textit{dept. name} \\
+    \textit{organization name}\\
+    City, Country \\
+    email@example.com}
+    \and
+    \IEEEauthorblockN{2\textsuperscript{nd} Second Author}
+    \IEEEauthorblockA{\textit{dept. name} \\
+    \textit{organization name}\\
+    City, Country \\
+    email@example.com}
+    \and
+    \IEEEauthorblockN{3\textsuperscript{rd} Third Author}
+    \IEEEauthorblockA{\textit{dept. name} \\
+    \textit{organization name}\\
+    City, Country \\
+    email@example.com}
+}
+
+\maketitle
+
+% ===== ABSTRACT =====
+\begin{abstract}
+This document is a template for IEEE conference papers. The abstract should be 150-250 words and should concisely state what was done, how it was done, principal results, and their significance. Do not cite references in the abstract.
+\end{abstract}
+
+% ===== KEYWORDS =====
+\begin{IEEEkeywords}
+component, formatting, style, styling, insert, keyword
+\end{IEEEkeywords}
+
+% ===== INTRODUCTION =====
+\section{Introduction}
+This is the introduction section. The first paragraph should provide context and background. Subsequent paragraphs should clearly state the problem being addressed, the approach taken, and the contributions of this work.
+
+The main contributions of this paper are:
+\begin{itemize}
+    \item First contribution
+    \item Second contribution
+    \item Third contribution
+\end{itemize}
+
+The rest of this paper is organized as follows. Section~\ref{sec:related} reviews related work. Section~\ref{sec:method} describes our methodology. Section~\ref{sec:results} presents experimental results. Finally, Section~\ref{sec:conclusion} concludes the paper.
+
+% ===== RELATED WORK =====
+\section{Related Work}
+\label{sec:related}
+
+Discuss previous work in the field. Cite papers using \texttt{\\cite\{reference\}} like this~\cite{example1}. For multiple citations, use~\cite{example1,example2,example3}.
+
+Compare and contrast your approach with existing methods. Highlight what makes your work novel or different.
+
+% ===== METHODOLOGY =====
+\section{Methodology}
+\label{sec:method}
+
+Describe your approach in detail. Use equations when appropriate:
+
+\begin{equation}
+    f(x) = \int_{-\infty}^{\infty} e^{-x^2} dx
+    \label{eq:example}
+\end{equation}
+
+Refer to equations as Eq.~\ref{eq:example} or (\ref{eq:example}).
+
+\subsection{Subsection Example}
+
+Break complex sections into subsections for clarity.
+
+\subsection{Algorithm Description}
+
+Use algorithmic environment for algorithms:
+
+\begin{algorithmic}
+\STATE $x \leftarrow 0$
+\WHILE{$x < 10$}
+    \STATE $x \leftarrow x + 1$
+\ENDWHILE
+\end{algorithmic}
+
+% ===== EXPERIMENTAL RESULTS =====
+\section{Experimental Results}
+\label{sec:results}
+
+Present your experimental setup and results.
+
+\subsection{Experimental Setup}
+
+Describe datasets, parameters, and evaluation metrics.
+
+\subsection{Results and Discussion}
+
+Present results with figures and tables.
+
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=0.9\columnwidth]{example-image}}
+    \caption{Example figure caption. IEEE figures span one column.}
+    \label{fig:example}
+\end{figure}
+
+Reference figures as Fig.~\ref{fig:example}.
+
+\begin{table}[htbp]
+    \caption{Example Table}
+    \begin{center}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Method} & \textbf{Accuracy (\%)} & \textbf{Time (s)} \\
+        \hline
+        Baseline & 85.2 & 10.5 \\
+        Method A & 88.7 & 12.3 \\
+        \textbf{Our Method} & \textbf{91.4} & \textbf{11.2} \\
+        \hline
+    \end{tabular}
+    \label{tab:results}
+    \end{center}
+\end{table}
+
+Reference tables as Table~\ref{tab:results}.
+
+% ===== CONCLUSION =====
+\section{Conclusion}
+\label{sec:conclusion}
+
+Summarize the main findings of your work. Restate the key contributions and their significance. Discuss limitations and suggest directions for future research.
+
+% ===== ACKNOWLEDGMENTS =====
+\section*{Acknowledgment}
+
+The authors would like to thank... (if applicable)
+
+% ===== REFERENCES =====
+\begin{thebibliography}{00}
+
+\bibitem{example1} A. Author, ``Title of the Article,'' \textit{Journal Name}, vol. X, no. Y, pp. ZZ-ZZ, Month Year.
+
+\bibitem{example2} B. Author, C. Coauthor, ``Conference Paper Title,'' in \textit{Proc. Conference Name}, City, Country, Year, pp. XX-YY.
+
+\bibitem{example3} D. Author, \textit{Book Title}, Edition. City: Publisher, Year.
+
+\end{thebibliography}
+
+% Alternative: Use BibTeX
+% \bibliographystyle{IEEEtran}
+% \bibliography{IEEEabrv,references}
+
+\end{document}
+
+% ===== IMPORTANT NOTES =====
+%
+% 1. IEEE papers are typically 6-8 pages for conferences
+% 2. Figures should be high quality (vector preferred)
+% 3. Check specific conference requirements for:
+%    - Page limits
+%    - Formatting requirements
+%    - Submission guidelines
+% 4. Remove author information for blind review if required
+% 5. Compile with: pdflatex ieee-paper-template.tex

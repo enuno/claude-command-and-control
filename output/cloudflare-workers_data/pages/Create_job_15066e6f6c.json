@@ -1,0 +1,8 @@
+{
+  "title": "Create job",
+  "content": "r = requests.post(logpush_url + \"/jobs\", headers=headers, data=json.dumps({\"destination_conf\":destination_conf}))\nprint(r.status_code, r.text)\nassert r.status_code == 201\nassert r.json()[\"result\"][\"enabled\"] == False",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-job",
+  "links": []
+}

@@ -1,0 +1,53 @@
+{
+  "title": "Disable snapshot expiration for a specific table",
+  "content": "npx wrangler r2 bucket catalog snapshot-expiration disable <BUCKET_NAME> <NAMESPACE> <TABLE>\njson\n[\n  {\n    \"id\": \"f267e341f3dd4697bd3b9f71dd96247f\",\n    \"effect\": \"allow\",\n    \"resources\": {\n      \"com.cloudflare.edge.r2.bucket.4793d734c0b8e484dfc37ec392b5fa8a_default_my-bucket\": \"*\",\n      \"com.cloudflare.edge.r2.bucket.4793d734c0b8e484dfc37ec392b5fa8a_eu_my-eu-bucket\": \"*\"\n    },\n    \"permission_groups\": [\n      {\n        \"id\": \"d229766a2f7f4d299f20eaa8c9b1fde9\",\n        \"name\": \"Workers R2 Data Catalog Write\"\n      },\n      {\n        \"id\": \"2efd5506f9c8494dacb1fa10a3e7d5b6\",\n        \"name\": \"Workers R2 Storage Bucket Item Write\"\n      }\n    ]\n  }\n]\nbash",
+  "code_samples": [
+    {
+      "code": "## Authenticate your Iceberg engine\n\nTo connect your Iceberg engine to R2 Data Catalog, you must provide a Cloudflare API token with **both** R2 Data Catalog permissions and R2 storage permissions. Iceberg engines interact with R2 Data Catalog to perform table operations. The catalog also provides engines with SigV4 credentials, which are required to access the underlying data files stored in R2.\n\n### Create API token in the dashboard\n\nCreate an [R2 API token](https://developers.cloudflare.com/r2/api/tokens/#permissions) with **Admin Read & Write** or **Admin Read only** permissions. These permissions include both:\n\n* Access to R2 Data Catalog (read-only or read/write, depending on chosen permission)\n* Access to R2 storage (read-only or read/write, depending on chosen permission)\n\nProviding the resulting token value to your Iceberg engine gives it the ability to manage catalog metadata and handle data operations (reads or writes to R2).\n\n### Create API token via API\n\nTo create an API token programmatically for use with R2 Data Catalog, you'll need to specify both R2 Data Catalog and R2 storage permission groups in your [Access Policy](https://developers.cloudflare.com/r2/api/tokens/#access-policy).\n\n#### Example Access Policy",
+      "language": "unknown"
+    },
+    {
+      "code": "To learn more about how to create API tokens for R2 Data Catalog using the API, including required permission groups and usage examples, refer to the [Create API tokens via API documentation](https://developers.cloudflare.com/r2/api/tokens/#create-api-tokens-via-api).\n\n## Learn more\n\n[Get started ](https://developers.cloudflare.com/r2/data-catalog/get-started/)Learn how to enable the R2 Data Catalog on your bucket, load sample data, and run your first query.\n\n[Connect to Iceberg engines ](https://developers.cloudflare.com/r2/data-catalog/config-examples/)Find detailed setup instructions for Apache Spark and other common query engines.\n\n</page>\n\n<page>\n---\ntitle: Table maintenance · Cloudflare R2 docs\ndescription: Learn how R2 Data Catalog automates table maintenance\nlastUpdated: 2025-12-18T17:16:51.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/data-catalog/table-maintenance/\n  md: https://developers.cloudflare.com/r2/data-catalog/table-maintenance/index.md\n---\n\nTable maintenance encompasses a set of operations that keep your Apache Iceberg tables performant and cost-efficient over time. As data is written, updated, and deleted, tables accumulate metadata and files that can degrade query performance over time.\n\nR2 Data Catalog automates two critical maintenance operations:\n\n* **Compaction**: Combines small data files into larger, more efficient files to improve query performance\n* **Snapshot expiration**: Removes old table snapshots to reduce metadata overhead and storage costs\n\nWithout regular maintenance, tables can suffer from:\n\n* **Query performance degradation**: More files to scan means slower queries and higher compute costs\n* **Increased storage costs**: Accumulation of small files and old snapshots consumes unnecessary storage\n* **Metadata overhead**: Large metadata files slow down query planning and table operations\n\nBy enabling automatic table maintenance, R2 Data Catalog ensures your tables remain optimized without having to manually run them yourself.\n\n## Why do I need compaction?\n\nEvery write operation in [Apache Iceberg](https://iceberg.apache.org/), no matter how small or large, results in a series of new files being generated. As time goes on, the number of files can grow unbounded. This can lead to:\n\n* Slower queries and increased I/O operations: Without compaction, query engines will have to open and read each individual file, resulting in longer query times and increased costs.\n* Increased metadata overhead: Query engines must scan metadata files to determine which ones to read. With thousands of small files, query planning takes longer even before data is accessed.\n* Reduced compression efficiency: Smaller files compress less efficiently than larger files, leading to higher storage costs and more data to transfer during queries.\n\n## R2 Data Catalog automatic compaction\n\nR2 Data Catalog can now [manage compaction](https://developers.cloudflare.com/r2/data-catalog/manage-catalogs/) for Apache Iceberg tables stored in R2. When enabled, compaction runs automatically and combines new files that have not been compacted yet.\n\nCompacted files are prefixed with `compacted-` in the `/data/` directory of a respective table.\n\n### Examples",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Authenticate your Iceberg engine",
+      "id": "authenticate-your-iceberg-engine"
+    },
+    {
+      "level": "h3",
+      "text": "Create API token in the dashboard",
+      "id": "create-api-token-in-the-dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Create API token via API",
+      "id": "create-api-token-via-api"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    },
+    {
+      "level": "h2",
+      "text": "Why do I need compaction?",
+      "id": "why-do-i-need-compaction?"
+    },
+    {
+      "level": "h2",
+      "text": "R2 Data Catalog automatic compaction",
+      "id": "r2-data-catalog-automatic-compaction"
+    },
+    {
+      "level": "h3",
+      "text": "Examples",
+      "id": "examples"
+    }
+  ],
+  "url": "llms-txt#disable-snapshot-expiration-for-a-specific-table",
+  "links": []
+}

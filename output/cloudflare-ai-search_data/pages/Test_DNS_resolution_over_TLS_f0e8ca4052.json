@@ -1,0 +1,53 @@
+{
+  "title": "Test DNS resolution over TLS",
+  "content": "kdig +tls @1.1.1.1 id.server CH TXT\nkdig +tls @1.0.0.1 id.server CH TXT\nsh\ncurl -H 'accept: application/dns-json' 'https://cloudflare-dns.com/dns-query?name=cloudflare.com&type=AAAA'\npowershell\n(Invoke-WebRequest -Uri 'https://cloudflare-dns.com/dns-query?name=cloudflare.com&type=AAAA').RawContent\n```\n\n### First hop failures\n\nIf your traceroute fails at the first hop, the issue is likely hardware-related. Your router may have a hardcoded route for 1.1.1.1. When reporting this issue, include:\n\n* Router make and model\n* ISP name\n* Any relevant router configuration details\n\n## Additional resources\n\n* [1.1.1.1 DNS Resolver homepage](https://1.1.1.1)\n* [DNS over TLS documentation](https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-tls/)\n* [Diagnostic tool](https://one.one.one.one/help/)\n\n<page>\n---\ntitle: 404 - Page Not Found · Cloudflare Agents docs\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/agents/404/\n  md: https://developers.cloudflare.com/agents/404/index.md\n---",
+  "code_samples": [
+    {
+      "code": "### Windows\n\nWindows does not include a standalone DoT client. You can test TLS connectivity using OpenSSL after installing it manually.\n\n## DNS-over-HTTPS (DoH) troubleshooting\n\n### Linux/macOS",
+      "language": "unknown"
+    },
+    {
+      "code": "### Windows",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Windows",
+      "id": "windows"
+    },
+    {
+      "level": "h2",
+      "text": "DNS-over-HTTPS (DoH) troubleshooting",
+      "id": "dns-over-https-(doh)-troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Linux/macOS",
+      "id": "linux/macos"
+    },
+    {
+      "level": "h3",
+      "text": "Windows",
+      "id": "windows"
+    },
+    {
+      "level": "h2",
+      "text": "Common issues",
+      "id": "common-issues"
+    },
+    {
+      "level": "h3",
+      "text": "First hop failures",
+      "id": "first-hop-failures"
+    },
+    {
+      "level": "h2",
+      "text": "Additional resources",
+      "id": "additional-resources"
+    }
+  ],
+  "url": "llms-txt#test-dns-resolution-over-tls",
+  "links": []
+}

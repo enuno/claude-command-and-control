@@ -1,0 +1,17 @@
+{
+  "title": "Manual scripted installation",
+  "content": "curl -sSfL <https://get.tur.so/install.sh> | bash\nsh\nturso --version\nsh",
+  "code_samples": [
+    {
+      "code": "After you have installed the Turso CLI, verify that the CLI is in your shell path:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#manual-scripted-installation",
+  "links": []
+}

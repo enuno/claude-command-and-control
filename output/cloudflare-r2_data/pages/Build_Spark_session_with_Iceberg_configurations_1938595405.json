@@ -1,0 +1,8 @@
+{
+  "title": "Build Spark session with Iceberg configurations",
+  "content": "spark = SparkSession.builder \\\n  .appName(\"R2DataCatalogExample\") \\\n  .config('spark.jars.packages', 'org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.6.1,org.apache.iceberg:iceberg-aws-bundle:1.6.1') \\\n  .config(\"spark.sql.extensions\", \"org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions\") \\\n  .config(\"spark.sql.catalog.my_catalog\", \"org.apache.iceberg.spark.SparkCatalog\") \\\n  .config(\"spark.sql.catalog.my_catalog.type\", \"rest\") \\\n  .config(\"spark.sql.catalog.my_catalog.uri\", CATALOG_URI) \\\n  .config(\"spark.sql.catalog.my_catalog.warehouse\", WAREHOUSE) \\\n  .config(\"spark.sql.catalog.my_catalog.token\", TOKEN) \\\n  .config(\"spark.sql.catalog.my_catalog.header.X-Iceberg-Access-Delegation\", \"vended-credentials\") \\\n  .config(\"spark.sql.catalog.my_catalog.s3.remote-signing-enabled\", \"false\") \\\n  .config(\"spark.sql.defaultCatalog\", \"my_catalog\") \\\n  .getOrCreate()\nspark.sql(\"USE my_catalog\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#build-spark-session-with-iceberg-configurations",
+  "links": []
+}

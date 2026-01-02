@@ -1,0 +1,479 @@
+{
+  "title": "Dispatches to the \"api\" worker",
+  "content": "$ curl \"http://localhost:8787/todos/update/1\" -H \"Host: api.mf\"\njs\n// Dispatches to the \"api\" worker\nconst res = await mf.dispatchFetch(\"http://api.mf/todos/update/1\", { ... });\njs\nconst mf = new Miniflare({\n  queueProducers: { MY_QUEUE: \"my-queue\" },\n  queueProducers: [\"MY_QUEUE\"], // If binding and queue names are the same\n});\njs\nconst mf = new Miniflare({\n  queueConsumers: {\n    \"my-queue\": {\n      maxBatchSize: 5, // default: 5\n      maxBatchTimeout: 1 /* second(s) */, // default: 1\n      maxRetries: 2, // default: 2\n      deadLetterQueue: \"my-dead-letter-queue\", // default: none\n    },\n  },\n  queueConsumers: [\"my-queue\"], // If using default consumer options\n});\njs\nconst mf = new Miniflare({\n  workers: [\n    {\n      name: \"a\",\n      modules: true,\n      script: `\n      export default {\n        async fetch(request, env, ctx) {\n          await env.QUEUE.send(await request.text());\n        }\n      }\n      `,\n      queueProducers: { QUEUE: \"my-queue\" },\n    },\n    {\n      name: \"b\",\n      modules: true,\n      script: `\n      export default {\n        async queue(batch, env, ctx) {\n          console.log(batch);\n        }\n      }\n      `,\n      queueConsumers: { \"my-queue\": { maxBatchTimeout: 1 } },\n    },\n  ],\n});\n\nconst queue = await mf.getQueueProducer(\"QUEUE\", \"a\"); // Get from worker \"a\"\nawait queue.send(\"message\"); // Logs \"message\" 1 second later\njs\nconst mf = new Miniflare({\n  crons: [\"15 * * * *\", \"45 * * * *\"],\n});\nsh\n$ curl \"http://localhost:8787/cdn-cgi/mf/scheduled\"\nsh\n$ curl \"http://localhost:8787/cdn-cgi/mf/scheduled?time=1000\"\n$ curl \"http://localhost:8787/cdn-cgi/mf/scheduled?cron=*+*+*+*+*\"\njs\nimport { Miniflare } from \"miniflare\";\n\nconst mf = new Miniflare({\n  modules: true,\n  script: `\n  export default {\n    async scheduled(controller, env, ctx) {\n      const lastScheduledController = controller;\n      if (controller.cron === \"* * * * *\") controller.noRetry();\n    }\n  }\n  `,\n});\n\nconst worker = await mf.getWorker();\n\nlet scheduledResult = await worker.scheduled({\n  cron: \"* * * * *\",\n});\nconsole.log(scheduledResult); // { outcome: 'ok', noRetry: true }\n\nscheduledResult = await worker.scheduled({\n  scheduledTime: new Date(1000),\n  cron: \"30 * * * *\",\n});\n\nconsole.log(scheduledResult); // { outcome: 'ok', noRetry: false }\njs\nimport { Miniflare, createFetchMock } from \"miniflare\";\n\n// Create `MockAgent` and connect it to the `Miniflare` instance\nconst fetchMock = createFetchMock();\nconst mf = new Miniflare({\n  modules: true,\n  script: `\n  export default {\n    async fetch(request, env, ctx) {\n      const res = await fetch(\"https://example.com/thing\");\n      const text = await res.text();\n      return new Response(\\`response:\\${text}\\`);\n    }\n  }\n  `,\n  fetchMock,\n});\n\n// Throw when no matching mocked request is found\n// (see https://undici.nodejs.org/#/docs/api/MockAgent?id=mockagentdisablenetconnect)\nfetchMock.disableNetConnect();\n\n// Mock request to https://example.com/thing\n// (see https://undici.nodejs.org/#/docs/api/MockAgent?id=mockagentgetorigin)\nconst origin = fetchMock.get(\"https://example.com\");\n// (see https://undici.nodejs.org/#/docs/api/MockPool?id=mockpoolinterceptoptions)\norigin\n  .intercept({ method: \"GET\", path: \"/thing\" })\n  .reply(200, \"Mocked response!\");\n\nconst res = await mf.dispatchFetch(\"http://localhost:8787/\");\nconsole.log(await res.text()); // \"response:Mocked response!\"\njs\nconst mf = new Miniflare({\n  bindings: {\n    KEY1: \"value1\",\n    KEY2: \"value2\",\n  },\n});\njs\nconst mf = new Miniflare({\n  textBlobBindings: { TEXT: \"text.txt\" },\n  dataBlobBindings: { DATA: \"data.bin\" },\n});\njs\nexport default {\n  fetch(request) {\n    const [client, server] = Object.values(new WebSocketPair());\n\nserver.accept();\n    server.addEventListener(\"message\", (event) => {\n      server.send(event.data);\n    });\n\nreturn new Response(null, {\n      status: 101,\n      webSocket: client,\n    });\n  },\n};\njs\nimport { Miniflare } from \"miniflare\";\n\nconst mf = new Miniflare({\n  modules: true,\n  scriptPath: \"echo.mjs\",\n});\n\nconst res = await mf.dispatchFetch(\"https://example.com\", {\n  headers: {\n    Upgrade: \"websocket\",\n  },\n});\nconst webSocket = res.webSocket;\nwebSocket.accept();\nwebSocket.addEventListener(\"message\", (event) => {\n  console.log(event.data);\n});\n\nwebSocket.send(\"Hello!\"); // Above listener logs \"Hello!\"\nsh\n$ npx wrangler@3 dev\nts\n    interface QueueConsumerOptions {\n      // /queues/platform/configuration/#consumer\n      maxBatchSize?: number; // default: 5\n      maxBatchTimeout?: number /* seconds */; // default: 1\n      maxRetries?: number; // default: 2\n      deadLetterQueue?: string; // default: none\n    }\n    ts\n    import { Miniflare, Response } from \"miniflare\";\n\nconst message = \"The count is \";\n    const mf = new Miniflare({\n      // Options shared between Workers such as HTTP and persistence configuration\n      // should always be defined at the top level.\n      host: \"0.0.0.0\",\n      port: 8787,\n      kvPersist: true,\n\nworkers: [\n        {\n          name: \"worker\",\n          kvNamespaces: { COUNTS: \"counts\" },\n          serviceBindings: {\n            INCREMENTER: \"incrementer\",\n            // Service bindings can also be defined as custom functions, with access\n            // to anything defined outside Miniflare.\n            async CUSTOM(request) {\n              // `request` is the incoming `Request` object.\n              return new Response(message);\n            },\n          },\n          modules: true,\n          script: `export default {\n            async fetch(request, env, ctx) {\n              // Get the message defined outside\n              const response = await env.CUSTOM.fetch(\"http://host/\");\n              const message = await response.text();\n\n// Increment the count 3 times\n              await env.INCREMENTER.fetch(\"http://host/\");\n              await env.INCREMENTER.fetch(\"http://host/\");\n              await env.INCREMENTER.fetch(\"http://host/\");\n              const count = await env.COUNTS.get(\"count\");\n\nreturn new Response(message + count);\n            }\n          }`,\n        },\n        {\n          name: \"incrementer\",\n          // Note we're using the same `COUNTS` namespace as before, but binding it\n          // to `NUMBERS` instead.\n          kvNamespaces: { NUMBERS: \"counts\" },\n          // Worker formats can be mixed-and-matched\n          script: `addEventListener(\"fetch\", (event) => {\n            event.respondWith(handleRequest());\n          })\n          async function handleRequest() {\n            const count = parseInt((await NUMBERS.get(\"count\")) ?? \"0\") + 1;\n            await NUMBERS.put(\"count\", count.toString());\n            return new Response(count.toString());\n          }`,\n        },\n      ],\n    });\n    const res = await mf.dispatchFetch(\"http://localhost\");\n    console.log(await res.text()); // \"The count is 3\"\n    await mf.dispose();\n    js\naddEventListener(\"fetch\", (e) => {\n  e.respondWith(caches.default.match(\"http://miniflare.dev\"));\n});\njs\nawait caches.open(\"cache_name\");\njs\nconst mf = new Miniflare({\n  cachePersist: true, // Defaults to ./.mf/cache\n  cachePersist: \"./data\", // Custom path\n});\njs\nimport { Miniflare, Response } from \"miniflare\";\n\nconst mf = new Miniflare({\n  modules: true,\n  script: `\n  export default {\n    async fetch(request) {\n      const url = new URL(request.url);\n      const cache = caches.default;\n      if(url.pathname === \"/put\") {\n        await cache.put(\"https://miniflare.dev/\", new Response(\"1\", {\n          headers: { \"Cache-Control\": \"max-age=3600\" },\n        }));\n      }\n      return cache.match(\"https://miniflare.dev/\");\n    }\n  }\n  `,\n});\nlet res = await mf.dispatchFetch(\"http://localhost:8787/put\");\nconsole.log(await res.text()); // 1\n\nconst caches = await mf.getCaches(); // Gets the global caches object\nconst cachedRes = await caches.default.match(\"https://miniflare.dev/\");\nconsole.log(await cachedRes.text()); // 1\n\nawait caches.default.put(\n  \"https://miniflare.dev\",\n  new Response(\"2\", {\n    headers: { \"Cache-Control\": \"max-age=3600\" },\n  }),\n);\nres = await mf.dispatchFetch(\"http://localhost:8787\");\nconsole.log(await res.text()); // 2\njs\nconst mf = new Miniflare({\n  cache: false,\n});\njs\nconst mf = new Miniflare({\n  d1Databases:{\n    DB:\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\n  }\n});\njs\nconst db = await mf.getD1Database(\"DB\");\nconst stmt = await db.prepare(\"<Query>\");\nconst returnValue = await stmt.run();\n\nreturn Response.json(returnValue.results);\njs\nconst mf = new Miniflare({\n  modules: true,\n  script: `\n  export class Object1 {\n    async fetch(request) {\n      ...\n    }\n  }\n  export default {\n    fetch(request) {\n      ...\n    }\n  }\n  `,\n  durableObjects: {\n    // Note Object1 is exported from main (string) script\n    OBJECT1: \"Object1\",\n  },\n});\njs\nconst mf = new Miniflare({\n  durableObjectsPersist: true, // Defaults to ./.mf/do\n  durableObjectsPersist: \"./data\", // Custom path\n});\njs\nimport { Miniflare } from \"miniflare\";\n\nconst mf = new Miniflare({\n  modules: true,\n  durableObjects: { TEST_OBJECT: \"TestObject\" },\n  script: `\n  export class TestObject {\n    constructor(state) {\n      this.storage = state.storage;\n    }\n\nasync fetch(request) {\n      const url = new URL(request.url);\n      if (url.pathname === \"/put\") await this.storage.put(\"key\", 1);\n      return new Response((await this.storage.get(\"key\")).toString());\n    }\n  }\n\nexport default {\n    async fetch(request, env) {\n      const stub = env.TEST_OBJECT.getByName(\"test\");\n      return stub.fetch(request);\n    }\n  }\n  `,\n});\n\nconst ns = await mf.getDurableObjectNamespace(\"TEST_OBJECT\");\nconst stub = ns.getByName(\"test\");\nconst doRes = await stub.fetch(\"http://localhost:8787/put\");\nconsole.log(await doRes.text()); // \"1\"\n\nconst res = await mf.dispatchFetch(\"http://localhost:8787/\");\nconsole.log(await res.text()); // \"1\"\njs\nconst mf = new Miniflare({\n  kvNamespaces: [\"TEST_NAMESPACE1\", \"TEST_NAMESPACE2\"],\n});\njs\nexport default {\n  async fetch(request, env) {\n    return new Response(await env.TEST_NAMESPACE1.get(\"key\"));\n  },\n};\njs\nimport { Miniflare } from \"miniflare\";\n\nconst mf = new Miniflare({\n  modules: true,\n  script: `\n  export default {\n    async fetch(request, env, ctx) {\n      const value = parseInt(await env.TEST_NAMESPACE.get(\"count\")) + 1;\n      await env.TEST_NAMESPACE.put(\"count\", value.toString());\n      return new Response(value.toString());\n    },\n  }\n  `,\n  kvNamespaces: [\"TEST_NAMESPACE\"],\n});\n\nconst ns = await mf.getKVNamespace(\"TEST_NAMESPACE\");\nawait ns.put(\"count\", \"1\");\n\nconst res = await mf.dispatchFetch(\"http://localhost:8787/\");\nconsole.log(await res.text()); // 2\nconsole.log(await ns.get(\"count\")); // 2\njs\nconst mf = new Miniflare({\n  r2Buckets: [\"BUCKET1\", \"BUCKET2\"],\n});\njs\nimport { Miniflare } from \"miniflare\";\n\nconst mf = new Miniflare({\n  modules: true,\n  script: `\n  export default {\n    async fetch(request, env, ctx) {\n      const object = await env.BUCKET.get(\"count\");\n      const value = parseInt(await object.text()) + 1;\n      await env.BUCKET.put(\"count\", value.toString());\n      return new Response(value.toString());\n    }\n  }\n  `,\n  r2Buckets: [\"BUCKET\"],\n});\n\nconst bucket = await mf.getR2Bucket(\"BUCKET\");\nawait bucket.put(\"count\", \"1\");\n\nconst res = await mf.dispatchFetch(\"http://localhost:8787/\");\nconsole.log(await res.text()); // 2\nconsole.log(await (await bucket.get(\"count\")).text()); // 2\njs\nimport { unstable_dev } from \"wrangler\"\n\nit(\"dispatches fetch event\", () => {\n  const worker = await unstable_dev(\"src/index.ts\");\n  const resp = await worker.fetch(\"http://example.com\");\n  ...\n})\njs\nimport { SELF } from \"cloudflare:test\";\nimport \"../src/\"; // Currently required to automatically rerun tests when `main` changes\n\nit(\"dispatches fetch event\", async () => {\n  const response = await SELF.fetch(\"http://example.com\");\n  ...\n});\njs\nawait unstable_dev(\"src/index.ts\", {\n  config: \"wrangler.toml\",\n});\njs\nexport default defineWorkersConfig({\n  test: {\n    poolOptions: {\n      workers: {\n        wrangler: {\n          configPath: \"wrangler.toml\",\n        },\n      },\n    },\n  },\n});\n---\ndiff\nimport { unstable_dev } from \"wrangler\";\nimport type { UnstableDevWorker } from \"wrangler\";\nimport worker from \"src/index.ts\";\n\ndescribe(\"Worker\", () => {\n  let worker: UnstableDevWorker;\n  ...\n});\nsh\nnpm uninstall vitest-environment-miniflare\nnpm install --save-dev --save-exact vitest@~3.0.0\nnpm install --save-dev @cloudflare/vitest-pool-workers\ndiff\nimport { defineWorkersConfig } from \"@cloudflare/vitest-pool-workers/config\";\n\nexport default defineWorkersConfig({\n  test: {\n    environment: \"miniflare\",\n    environmentOptions: { ... },\n    poolOptions: {\n      workers: {\n        miniflare: { ... },\n        wrangler: { configPath: \"./wrangler.toml\" },\n      },\n    },\n  },\n});\ndiff\n{\n  \"compilerOptions\": {\n    ...,\n    \"types\": [\n      ...\n      \"vitest-environment-miniflare/globals\"\n      \"@cloudflare/vitest-pool-workers\"\n    ]\n  },\n}\ndiff\nimport { it } from \"vitest\";\nimport { env } from \"cloudflare:test\";\n\nit(\"does something\", () => {\n  const env = getMiniflareBindings();\n  // ...\n});\nts\ndeclare module \"cloudflare:test\" {\n  interface ProvidedEnv {\n    NAMESPACE: KVNamespace;\n  }\n  // ...or if you have an existing `Env` type...\n  interface ProvidedEnv extends Env {}\n}\ndiff\nconst describe = setupMiniflareIsolatedStorage();\nimport { describe } from \"vitest\";\ndiff\nimport { createExecutionContext, waitOnExecutionContext } from \"cloudflare:test\";\n\nit(\"does something\", () => {\n  // ...\n  const ctx = new ExecutionContext();\n  const ctx = createExecutionContext();\n  const response = worker.fetch(request, env, ctx);\n  await getMiniflareWaitUntil(ctx);\n  await waitOnExecutionContext(ctx);\n});\ndiff\nimport { beforeAll, afterAll } from \"vitest\";\nimport { fetchMock } from \"cloudflare:test\";\n\nconst fetchMock = getMiniflareFetchMock();\nbeforeAll(() => {\n  fetchMock.activate();\n  fetchMock.disableNetConnect();\n  fetchMock\n    .get(\"https://example.com\")\n    .intercept({ path: \"/\" })\n    .reply(200, \"data\");\n});\nafterAll(() => fetchMock.assertNoPendingInterceptors());\ndiff\nimport { env, runInDurableObject } from \"cloudflare:test\";\n\nit(\"does something\", async () => {\n  const env = getMiniflareBindings();\n  const id = env.OBJECT.newUniqueId();\n  const stub = env.OBJECT.get(id);\n\nconst storage = await getMiniflareDurableObjectStorage(id);\n  doSomethingWith(storage);\n  await runInDurableObject(stub, async (instance, state) => {\n    doSomethingWith(state.storage);\n  });\n\nconst state = await getMiniflareDurableObjectState(id);\n  doSomethingWith(state);\n  await runInDurableObject(stub, async (instance, state) => {\n    doSomethingWith(state);\n  });\n\nconst instance = await getMiniflareDurableObjectInstance(id);\n  await runWithMiniflareDurableObjectGates(state, async () => {\n    doSomethingWith(instance);\n  });\n  await runInDurableObject(stub, async (instance) => {\n    doSomethingWith(instance);\n  });\n});\ndiff\nimport { env, runDurableObjectAlarm } from \"cloudflare:test\";\n\nit(\"does something\", async () => {\n  const env = getMiniflareBindings();\n  const id = env.OBJECT.newUniqueId();\n  await flushMiniflareDurableObjectAlarms([id]);\n  const stub = env.OBJECT.get(id);\n  const ran = await runDurableObjectAlarm(stub);\n});\ndiff\nimport { env, listDurableObjectIds } from \"cloudflare:test\";\n\nit(\"does something\", async () => {\n  const ids = await getMiniflareDurableObjectIds(\"OBJECT\");\n  const ids = await listDurableObjectIds(env.OBJECT);\n});\nplaintext\ndist/\n├── index.html\n├── assets/\n│   ├── index-a1b2c3d4.js    # Main bundle with content hash\n│   ├── index-e5f6g7h8.css   # Styles with content hash\n│   └── logo-i9j0k1l2.svg    # Images with content hash\ntxt\nhttp.cookie contains \"session_id\"\ntxt\nhttp.cookie contains \"user_id\"\nbash",
+  "code_samples": [
+    {
+      "code": "When using the API, Miniflare will use the request's URL to determine which Worker to dispatch to.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Durable Objects\n\nMiniflare supports the `script_name` option for accessing Durable Objects exported by other scripts. See [📌 Durable Objects](https://developers.cloudflare.com/workers/testing/miniflare/storage/durable-objects#using-a-class-exported-by-another-script) for more details.\n\n</page>\n\n<page>\n---\ntitle: 🚥 Queues · Cloudflare Workers docs\ndescription: \"Specify Queue producers to add to your environment as follows:\"\nlastUpdated: 2024-12-18T20:15:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/miniflare/core/queues/\n  md: https://developers.cloudflare.com/workers/testing/miniflare/core/queues/index.md\n---\n\n* [Queues Reference](https://developers.cloudflare.com/queues/)\n\n## Producers\n\nSpecify Queue producers to add to your environment as follows:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Consumers\n\nSpecify Workers to consume messages from your Queues as follows:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Manipulating Outside Workers\n\nFor testing, it can be valuable to interact with Queues outside a Worker. You can do this by using the `workers` option to run multiple Workers in the same instance:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: ⏰ Scheduled Events · Cloudflare Workers docs\ndescription: |-\n  scheduled events are automatically dispatched according to the specified cron\n  triggers:\nlastUpdated: 2024-12-18T20:15:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/miniflare/core/scheduled/\n  md: https://developers.cloudflare.com/workers/testing/miniflare/core/scheduled/index.md\n---\n\n* [`ScheduledEvent` Reference](https://developers.cloudflare.com/workers/runtime-apis/handlers/scheduled/)\n\n## Cron Triggers\n\n`scheduled` events are automatically dispatched according to the specified cron triggers:",
+      "language": "unknown"
+    },
+    {
+      "code": "## HTTP Triggers\n\nBecause waiting for cron triggers is annoying, you can also make HTTP requests to `/cdn-cgi/mf/scheduled` to trigger `scheduled` events:",
+      "language": "unknown"
+    },
+    {
+      "code": "To simulate different values of `scheduledTime` and `cron` in the dispatched event, use the `time` and `cron` query parameters:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Dispatching Events\n\nWhen using the API, the `getWorker` function can be used to dispatch `scheduled` events to your Worker. This can be used for testing responses. It takes optional `scheduledTime` and `cron` parameters, which default to the current time and the empty string respectively. It will return a promise which resolves to an array containing data returned by all waited promises:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: 🕸 Web Standards · Cloudflare Workers docs\ndescription: >-\n  When using the API, Miniflare allows you to substitute custom Responses for\n\n  fetch() calls using undici's\n\n  MockAgent API.\n\n  This is useful for testing Workers that make HTTP requests to other services.\n  To\n\n  enable fetch mocking, create a\n\n  MockAgent\n\n  using the createFetchMock() function, then set this using the fetchMock\n\n  option.\nlastUpdated: 2024-12-18T20:15:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/miniflare/core/standards/\n  md: https://developers.cloudflare.com/workers/testing/miniflare/core/standards/index.md\n---\n\n* [Web Standards Reference](https://developers.cloudflare.com/workers/runtime-apis/web-standards)\n* [Encoding Reference](https://developers.cloudflare.com/workers/runtime-apis/encoding)\n* [Fetch Reference](https://developers.cloudflare.com/workers/runtime-apis/fetch)\n* [Request Reference](https://developers.cloudflare.com/workers/runtime-apis/request)\n* [Response Reference](https://developers.cloudflare.com/workers/runtime-apis/response)\n* [Streams Reference](https://developers.cloudflare.com/workers/runtime-apis/streams)\n* [Web Crypto Reference](https://developers.cloudflare.com/workers/runtime-apis/web-crypto)\n\n## Mocking Outbound `fetch` Requests\n\nWhen using the API, Miniflare allows you to substitute custom `Response`s for `fetch()` calls using `undici`'s [`MockAgent` API](https://undici.nodejs.org/#/docs/api/MockAgent?id=mockagentgetorigin). This is useful for testing Workers that make HTTP requests to other services. To enable `fetch` mocking, create a [`MockAgent`](https://undici.nodejs.org/#/docs/api/MockAgent?id=mockagentgetorigin) using the `createFetchMock()` function, then set this using the `fetchMock` option.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Subrequests\n\nMiniflare does not support limiting the amount of [subrequests](https://developers.cloudflare.com/workers/platform/limits#account-plan-limits). Please keep this in mind if you make a large amount of subrequests from your Worker.\n\n</page>\n\n<page>\n---\ntitle: 🔑 Variables and Secrets · Cloudflare Workers docs\ndescription: \"Variable and secrets are bound as follows:\"\nlastUpdated: 2024-12-18T20:15:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/miniflare/core/variables-secrets/\n  md: https://developers.cloudflare.com/workers/testing/miniflare/core/variables-secrets/index.md\n---\n\n## Bindings\n\nVariable and secrets are bound as follows:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Text and Data Blobs\n\nText and data blobs can be loaded from files. File contents will be read and bound as `string`s and `ArrayBuffer`s respectively.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Globals\n\nInjecting arbitrary globals is not supported by [workerd](https://github.com/cloudflare/workerd). If you're using a service Worker, bindings will be injected as globals, but these must be JSON-serialisable.\n\n</page>\n\n<page>\n---\ntitle: ✉️ WebSockets · Cloudflare Workers docs\ndescription: |-\n  Miniflare will always upgrade Web Socket connections. The Worker must respond\n  with a status 101 Switching Protocols response including a webSocket. For\n  example, the Worker below implements an echo WebSocket server:\nlastUpdated: 2024-12-18T20:15:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/miniflare/core/web-sockets/\n  md: https://developers.cloudflare.com/workers/testing/miniflare/core/web-sockets/index.md\n---\n\n* [WebSockets Reference](https://developers.cloudflare.com/workers/runtime-apis/websockets)\n* [Using WebSockets](https://developers.cloudflare.com/workers/examples/websockets/)\n\n## Server\n\nMiniflare will always upgrade Web Socket connections. The Worker must respond with a status `101 Switching Protocols` response including a `webSocket`. For example, the Worker below implements an echo WebSocket server:",
+      "language": "unknown"
+    },
+    {
+      "code": "When using `dispatchFetch`, you are responsible for handling WebSockets by using the `webSocket` property on `Response`. As an example, if the above worker script was stored in `echo.mjs`:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: ⬆️ Migrating from Version 2 · Cloudflare Workers docs\ndescription: >-\n  Miniflare v3 now uses workerd, the\n\n  open-source Cloudflare Workers runtime. This is the same runtime that's\n  deployed\n\n  on Cloudflare's network, giving bug-for-bug compatibility and practically\n\n  eliminating behavior mismatches. Refer to the\n\n  Miniflare v3 and\n\n  Wrangler v3 announcements for more\n\n  information.\nlastUpdated: 2025-03-11T13:27:33.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/miniflare/migrations/from-v2/\n  md: https://developers.cloudflare.com/workers/testing/miniflare/migrations/from-v2/index.md\n---\n\nMiniflare v3 now uses [`workerd`](https://github.com/cloudflare/workerd), the open-source Cloudflare Workers runtime. This is the same runtime that's deployed on Cloudflare's network, giving bug-for-bug compatibility and practically eliminating behavior mismatches. Refer to the [Miniflare v3](https://blog.cloudflare.com/miniflare-and-workerd/) and [Wrangler v3 announcements](https://blog.cloudflare.com/wrangler3/) for more information.\n\n## CLI Changes\n\nMiniflare v3 no longer includes a standalone CLI. To get the same functionality, you will need to switch over to [Wrangler](https://developers.cloudflare.com/workers/wrangler/). Wrangler v3 uses Miniflare v3 by default. To start a local development server, run:",
+      "language": "unknown"
+    },
+    {
+      "code": "If there are features from the Miniflare CLI you would like to see in Wrangler, please open an issue on [GitHub](https://github.com/cloudflare/workers-sdk/issues/new/choose).\n\n## API Changes\n\nWe have tried to keep Miniflare v3's API close to Miniflare v2 where possible, but many options and methods have been removed or changed with the switch to the open-source `workerd` runtime. See the [Getting Started guide for the new API docs](https://developers.cloudflare.com/workers/testing/miniflare/get-started)\n\n### Updated Options\n\n* `kvNamespaces/r2Buckets/d1Databases`\n\n  * In addition to `string[]`s, these options now accept `Record<string, string>`s, mapping binding names to namespace IDs/bucket names/database IDs. This means multiple Workers can bind to the same namespace/bucket/database under different names.\n\n* `queueBindings`\n\n  * Renamed to `queueProducers`. This either accepts a `Record<string, string>` mapping binding names to queue names, or a `string[]` of binding names to queues of the same name.\n\n* `queueConsumers`\n\n  * Either accepts a `Record<string, QueueConsumerOptions>` mapping queue names to consumer options, or a `string[]` of queue names to consume with default options. `QueueConsumerOptions` has the following type:",
+      "language": "unknown"
+    },
+    {
+      "code": "* `cfFetch`\n\n  * Renamed to `cf`. Either accepts a `boolean`, `string` (as before), or an object to use a the `cf` object for incoming requests.\n\n### Removed Options\n\n* `wranglerConfigPath/wranglerConfigEnv`\n\n  * Miniflare no longer handles Wrangler's configuration. To programmatically start up a Worker based on Wrangler configuration, use the [`unstable_dev()`](https://developers.cloudflare.com/workers/wrangler/api/#unstable_dev) API.\n\n* `packagePath`\n\n  * Miniflare no longer loads script paths from `package.json` files. Use the `scriptPath` option to specify your script instead.\n\n* `watch`\n\n  * Miniflare's API is primarily intended for testing use cases, where file watching isn't usually required. This option was here to enable Miniflare's CLI which has now been removed. If you need to watch files, consider using a separate file watcher like [`fs.watch()`](https://nodejs.org/api/fs.html#fswatchfilename-options-listener) or [`chokidar`](https://github.com/paulmillr/chokidar), and calling `setOptions()` with your original configuration on change.\n\n* `logUnhandledRejections`\n\n  * Unhandled rejections can be handled in Workers with [`addEventListener(\"unhandledrejection\")`](https://community.cloudflare.com/t/2021-10-21-workers-runtime-release-notes/318571).\n\n* `globals`\n\n  * Injecting arbitrary globals is not supported by [`workerd`](https://github.com/cloudflare/workerd). If you're using a service worker, `bindings` will be injected as globals, but these must be JSON-serialisable.\n\n* `https/httpsKey(Path)/httpsCert(Path)/httpsPfx(Path)/httpsPassphrase`\n\n  * Miniflare does not support starting HTTPS servers yet. These options may be added back in a future release.\n\n* `crons`\n\n  * [`workerd`](https://github.com/cloudflare/workerd) does not support triggering scheduled events yet. This option may be added back in a future release.\n\n* `mounts`\n\n  * Miniflare no longer has the concept of parent and child Workers. Instead, all Workers can be defined at the same level, using the new `workers` option. Here's an example that uses a service binding to increment a value in a shared KV namespace:",
+      "language": "unknown"
+    },
+    {
+      "code": "* `metaProvider`\n\n  * The `cf` object and `X-Forwarded-Proto`/`X-Real-IP` headers can be specified when calling `dispatchFetch()` instead. A default `cf` object can be specified using the new `cf` option too.\n\n* `durableObjectAlarms`\n\n  * Miniflare now always enables Durable Object alarms.\n\n* `globalAsyncIO/globalTimers/globalRandom`\n\n  * [`workerd`](https://github.com/cloudflare/workerd) cannot support these options without fundamental changes.\n\n* `actualTime`\n\n  * Miniflare now always returns the current time.\n\n* `inaccurateCpu`\n\n  * Set the `inspectorPort: 9229` option to enable the V8 inspector. Visit `chrome://inspect` in Google Chrome to open DevTools and perform CPU profiling.\n\n### Updated Methods\n\n* `setOptions()`\n  * Miniflare v3 now requires a full configuration object to be passed, instead of a partial patch.\n\n### Removed Methods\n\n* `reload()`\n  * Call `setOptions()` with the original configuration object to reload Miniflare.\n* `createServer()/startServer()`\n  * Miniflare now always starts a [`workerd`](https://github.com/cloudflare/workerd) server listening on the configured `host` and `port`, so these methods are redundant.\n* `dispatchScheduled()/startScheduled()`\n  * The functionality of `dispatchScheduled` can now be done via `getWorker()`. For more information read the [scheduled events documentation](https://developers.cloudflare.com/workers/testing/miniflare/core/scheduled#dispatching-events).\n* `dispatchQueue()`\n  * Use the `queue()` method on [service bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings) or [queue producer bindings](https://developers.cloudflare.com/queues/configuration/configure-queues/#producer-worker-configuration) instead.\n* `getGlobalScope()/getBindings()/getModuleExports()`\n  * These methods returned objects from inside the Workers sandbox. Since Miniflare now uses [`workerd`](https://github.com/cloudflare/workerd), which runs in a different process, these methods can no longer be supported.\n* `addEventListener()`/`removeEventListener()`\n  * Miniflare no longer emits `reload` events. As Miniflare no longer watches files, reloads are only triggered by initialisation or `setOptions()` calls. In these cases, it's possible to wait for the reload with either `await mf.ready` or `await mf.setOptions()` respectively.\n* `Response#waitUntil()`\n  * [`workerd`](https://github.com/cloudflare/workerd) does not support waiting for all `waitUntil()`ed promises yet.\n\n### Removed Packages\n\n* `@miniflare/*`\n  * Miniflare is now contained within a single `miniflare` package.\n\n</page>\n\n<page>\n---\ntitle: ✨ Cache · Cloudflare Workers docs\ndescription: \"Access to the default cache is enabled by default:\"\nlastUpdated: 2024-12-18T20:15:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/miniflare/storage/cache/\n  md: https://developers.cloudflare.com/workers/testing/miniflare/storage/cache/index.md\n---\n\n* [Cache Reference](https://developers.cloudflare.com/workers/runtime-apis/cache)\n* [How the Cache works](https://developers.cloudflare.com/workers/reference/how-the-cache-works/#cache-api) (note that cache using `fetch` is unsupported)\n\n## Default Cache\n\nAccess to the default cache is enabled by default:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Named Caches\n\nYou can access a namespaced cache using `open`. Note that you cannot name your cache `default`, trying to do so will throw an error:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Persistence\n\nBy default, cached data is stored in memory. It will persist between reloads, but not different `Miniflare` instances. To enable persistence to the file system, specify the cache persistence option:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Manipulating Outside Workers\n\nFor testing, it can be useful to put/match data from cache outside a Worker. You can do this with the `getCaches` method:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Disabling\n\nBoth default and named caches can be disabled with the `disableCache` option. When disabled, the caches will still be available in the sandbox, they just won't cache anything. This may be useful during development:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: 💾 D1 · Cloudflare Workers docs\ndescription: \"Specify D1 Databases to add to your environment as follows:\"\nlastUpdated: 2025-01-09T09:58:03.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/miniflare/storage/d1/\n  md: https://developers.cloudflare.com/workers/testing/miniflare/storage/d1/index.md\n---\n\n* [D1 Reference](https://developers.cloudflare.com/d1/)\n\n## Databases\n\nSpecify D1 Databases to add to your environment as follows:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Working with D1 Databases\n\nFor testing, it can be useful to put/get data from D1 storage bound to a Worker. You can do this with the `getD1Database` method:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: 📌 Durable Objects · Cloudflare Workers docs\ndescription: \"Specify Durable Objects to add to your environment as follows:\"\nlastUpdated: 2025-08-21T12:34:40.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/miniflare/storage/durable-objects/\n  md: https://developers.cloudflare.com/workers/testing/miniflare/storage/durable-objects/index.md\n---\n\n* [Durable Objects Reference](https://developers.cloudflare.com/durable-objects/api/)\n* [Using Durable Objects](https://developers.cloudflare.com/durable-objects/)\n\n## Objects\n\nSpecify Durable Objects to add to your environment as follows:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Persistence\n\nBy default, Durable Object data is stored in memory. It will persist between reloads, but not different `Miniflare` instances. To enable persistence to the file system, specify the Durable Object persistence option:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Manipulating Outside Workers\n\nFor testing, it can be useful to make requests to your Durable Objects from outside a worker. You can do this with the `getDurableObjectNamespace` method.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Using a Class Exported by Another Script\n\nMiniflare supports the `script_name` option for accessing Durable Objects exported by other scripts. This requires mounting the other worker as described in [🔌 Multiple Workers](https://developers.cloudflare.com/workers/testing/miniflare/core/multiple-workers).\n\n</page>\n\n<page>\n---\ntitle: 📦 KV · Cloudflare Workers docs\ndescription: \"Specify KV namespaces to add to your environment as follows:\"\nlastUpdated: 2024-12-18T20:15:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/miniflare/storage/kv/\n  md: https://developers.cloudflare.com/workers/testing/miniflare/storage/kv/index.md\n---\n\n* [KV Reference](https://developers.cloudflare.com/kv/api/)\n\n## Namespaces\n\nSpecify KV namespaces to add to your environment as follows:",
+      "language": "unknown"
+    },
+    {
+      "code": "You can now access KV namespaces in your workers:",
+      "language": "unknown"
+    },
+    {
+      "code": "Miniflare supports all KV operations and data types.\n\n## Manipulating Outside Workers\n\nFor testing, it can be useful to put/get data from KV outside a worker. You can do this with the `getKVNamespace` method:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: 🪣 R2 · Cloudflare Workers docs\ndescription: \"Specify R2 Buckets to add to your environment as follows:\"\nlastUpdated: 2024-12-18T20:15:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/miniflare/storage/r2/\n  md: https://developers.cloudflare.com/workers/testing/miniflare/storage/r2/index.md\n---\n\n* [R2 Reference](https://developers.cloudflare.com/r2/api/workers/workers-api-reference/)\n\n## Buckets\n\nSpecify R2 Buckets to add to your environment as follows:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Manipulating Outside Workers\n\nFor testing, it can be useful to put/get data from R2 storage outside a worker. You can do this with the `getR2Bucket` method:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Migrate from unstable_dev · Cloudflare Workers docs\ndescription: Migrate from the\n  [`unstable_dev`](/workers/wrangler/api/#unstable_dev) API to writing tests\n  with the Workers Vitest integration.\nlastUpdated: 2025-04-10T14:17:11.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/vitest-integration/migration-guides/migrate-from-unstable-dev/\n  md: https://developers.cloudflare.com/workers/testing/vitest-integration/migration-guides/migrate-from-unstable-dev/index.md\n---\n\nThe [`unstable_dev`](https://developers.cloudflare.com/workers/wrangler/api/#unstable_dev) API has been a recommended approach to run integration tests. The `@cloudflare/vitest-pool-workers` package integrates directly with Vitest for fast re-runs, supports both unit and integration tests, all whilst providing isolated per-test storage.\n\nThis guide demonstrates key differences between tests written with the `unstable_dev` API and the Workers Vitest integration. For more information on writing tests with the Workers Vitest integration, refer to [Write your first test](https://developers.cloudflare.com/workers/testing/vitest-integration/write-your-first-test/).\n\n## Reference a Worker for integration testing\n\nWith `unstable_dev`, to trigger a `fetch` event, you would do this:",
+      "language": "unknown"
+    },
+    {
+      "code": "With the Workers Vitest integration, you can accomplish the same goal using `SELF` from `cloudflare:test`. `SELF` is a [service binding](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/) to the default export defined by the `main` option in your [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/). This `main` Worker runs in the same isolate as tests so any global mocks will apply to it too.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Stop a Worker\n\nWith the Workers Vitest integration, there is no need to stop a Worker via `worker.stop()`. This functionality is handled automatically after tests run.\n\n## Import Wrangler configuration\n\nVia the `unstable_dev` API, you can reference a [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/) by adding it as an option:",
+      "language": "unknown"
+    },
+    {
+      "code": "With the Workers Vitest integration, you can now set this reference to a [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/) in `vitest.config.js` for all of your tests:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Test service Workers\n\nUnlike the `unstable_dev` API, the Workers Vitest integration does not support testing Workers using the service worker format. You will need to first [migrate to the ES modules format](https://developers.cloudflare.com/workers/reference/migrate-to-module-workers/) in order to use the Workers Vitest integration.\n\n## Define types\n\nYou can remove `UnstableDevWorker` imports from your code. Instead, follow the [Write your first test guide](https://developers.cloudflare.com/workers/testing/vitest-integration/write-your-first-test/#define-types) to define types for all of your tests.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Related resources\n\n* [Write your first test](https://developers.cloudflare.com/workers/testing/vitest-integration/write-your-first-test/#define-types) - Write unit tests against Workers.\n\n</page>\n\n<page>\n---\ntitle: Migrate from Miniflare 2's test environments · Cloudflare Workers docs\ndescription: Migrate from [Miniflare\n  2](https://github.com/cloudflare/miniflare?tab=readme-ov-file) to the Workers\n  Vitest integration.\nlastUpdated: 2025-05-13T16:21:30.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/testing/vitest-integration/migration-guides/migrate-from-miniflare-2/\n  md: https://developers.cloudflare.com/workers/testing/vitest-integration/migration-guides/migrate-from-miniflare-2/index.md\n---\n\n[Miniflare 2](https://github.com/cloudflare/miniflare?tab=readme-ov-file) provided custom environments for Jest and Vitest in the `jest-environment-miniflare` and `vitest-environment-miniflare` packages respectively. The `@cloudflare/vitest-pool-workers` package provides similar functionality using modern Miniflare versions and the [`workerd` runtime](https://github.com/cloudflare/workerd). `workerd` is the same JavaScript/WebAssembly runtime that powers Cloudflare Workers. Using `workerd` practically eliminates behavior mismatches between your tests and deployed code. Refer to the [Miniflare 3 announcement](https://blog.cloudflare.com/miniflare-and-workerd) for more information.\n\nWarning\n\nCloudflare no longer provides a Jest testing environment for Workers. If you previously used Jest, you will need to [migrate to Vitest](https://vitest.dev/guide/migration.html#migrating-from-jest) first, then follow the rest of this guide. Vitest provides built-in support for TypeScript, ES modules, and hot-module reloading for tests out-of-the-box.\n\nWarning\n\nThe Workers Vitest integration does not support testing Workers using the service worker format. [Migrate to ES modules format](https://developers.cloudflare.com/workers/reference/migrate-to-module-workers/) first.\n\n## Install the Workers Vitest integration\n\nFirst, you will need to uninstall the old environment and install the new pool. Vitest environments can only customize the global scope, whereas pools can run tests using a completely different runtime. In this case, the pool runs your tests inside [`workerd`](https://github.com/cloudflare/workerd) instead of Node.js.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Update your Vitest configuration file\n\nAfter installing the Workers Vitest configuration, update your Vitest configuration file to use the pool instead. Most Miniflare configuration previously specified `environmentOptions` can be moved to `poolOptions.workers.miniflare` instead. Refer to [Miniflare's `WorkerOptions` interface](https://github.com/cloudflare/workers-sdk/blob/main/packages/miniflare/README.md#interface-workeroptions) for supported options and the [Miniflare version 2 to 3 migration guide](https://developers.cloudflare.com/workers/testing/miniflare/migrations/from-v2/) for more information. If you relied on configuration stored in a Wrangler file, set `wrangler.configPath` too.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Update your TypeScript configuration file\n\nIf you are using TypeScript, update your `tsconfig.json` to include the correct ambient `types`:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Access bindings\n\nTo access [bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/) in your tests, use the `env` helper from the `cloudflare:test` module.",
+      "language": "unknown"
+    },
+    {
+      "code": "If you are using TypeScript, add an ambient `.d.ts` declaration file defining a `ProvidedEnv` `interface` in the `cloudflare:test` module to control the type of `env`:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Use isolated storage\n\nIsolated storage is now enabled by default. You no longer need to include `setupMiniflareIsolatedStorage()` in your tests.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Work with `waitUntil()`\n\nThe `new ExecutionContext()` constructor and `getMiniflareWaitUntil()` function are now `createExecutionContext()` and `waitOnExecutionContext()` respectively. Note `waitOnExecutionContext()` now returns an empty `Promise<void>` instead of a `Promise` resolving to the results of all `waitUntil()`ed `Promise`s.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Mock outbound requests\n\nThe `getMiniflareFetchMock()` function has been replaced with the new `fetchMock` helper from the `cloudflare:test` module. `fetchMock` has the same type as the return type of `getMiniflareFetchMock()`. There are a couple of differences between `fetchMock` and the previous return value of `getMiniflareFetchMock()`:\n\n* `fetchMock` is deactivated by default, whereas previously it would start activated. This deactivation prevents unnecessary buffering of request bodies if you are not using `fetchMock`. You will need to call `fetchMock.activate()` before calling `fetch()` to enable it.\n* `fetchMock` is reset at the start of each test run, whereas previously, interceptors added in previous runs would apply to the current one. This ensures test runs are not affected by previous runs.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Use Durable Object helpers\n\nThe `getMiniflareDurableObjectStorage()`, `getMiniflareDurableObjectState()`, `getMiniflareDurableObjectInstance()`, and `runWithMiniflareDurableObjectGates()` functions have all been replaced with a single `runInDurableObject()` function from the `cloudflare:test` module. The `runInDurableObject()` function accepts a `DurableObjectStub` with a callback accepting the Durable Object and corresponding `DurableObjectState` as arguments. Consolidating these functions into a single function simplifies the API surface, and ensures instances are accessed with the correct request context and [gating behavior](https://blog.cloudflare.com/durable-objects-easy-fast-correct-choose-three/). Refer to the [Test APIs page](https://developers.cloudflare.com/workers/testing/vitest-integration/test-apis/) for more details.",
+      "language": "unknown"
+    },
+    {
+      "code": "The `flushMiniflareDurableObjectAlarms()` function has been replaced with the `runDurableObjectAlarm()` function from the `cloudflare:test` module. The `runDurableObjectAlarm()` function accepts a single `DurableObjectStub` and returns a `Promise` that resolves to `true` if an alarm was scheduled and the `alarm()` handler was executed, or `false` otherwise. To \"flush\" multiple instances' alarms, call `runDurableObjectAlarm()` in a loop.",
+      "language": "unknown"
+    },
+    {
+      "code": "Finally, the `getMiniflareDurableObjectIds()` function has been replaced with the `listDurableObjectIds()` function from the `cloudflare:test` module. The `listDurableObjectIds()` function now accepts a `DurableObjectNamespace` instance instead of a namespace `string` to provide stricter typing. Note the `listDurableObjectIds()` function now respects isolated storage. If enabled, IDs of objects created in other tests will not be returned.",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Gradual rollouts · Cloudflare Workers docs\ndescription: Provide static asset routing solutions for gradual Worker deployments.\nlastUpdated: 2025-09-29T13:12:29.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers/static-assets/routing/advanced/gradual-rollouts/\n  md: https://developers.cloudflare.com/workers/static-assets/routing/advanced/gradual-rollouts/index.md\n---\n\n[Gradual deployments](https://developers.cloudflare.com/workers/configuration/versions-and-deployments/gradual-deployments/) route requests to different Worker versions based on configured percentages. When your Worker serves static assets, this per-request routing can cause asset reference mismatches that result in 404 errors and broken user experiences.\n\nModern JavaScript frameworks commonly generate fingerprinted asset filenames during builds. For example, when you build a React application with Vite, your assets might look like:",
+      "language": "unknown"
+    },
+    {
+      "code": "During a gradual rollout between two versions of your application, you might have:\n\n**Version A (old build):**\n\n* `index.html` references `assets/index-a1b2c3d4.js`\n* `assets/index-a1b2c3d4.js` exists\n\n**Version B (new build):**\n\n* `index.html` references `assets/index-m3n4o5p6.js`\n* `assets/index-m3n4o5p6.js` exists\n\nIf a user's initial request for `/` goes to Version A, they'll receive HTML that references `index-a1b2c3d4.js`. However, when their browser then requests `/assets/index-a1b2c3d4.js`, that request might be routed to Version B, which only contains `index-m3n4o5p6.js`, resulting in a 404 error.\n\nThis issue affects applications built with any framework that fingerprints assets, including:\n\n* **React** (Create React App, Next.js, Vite)\n* **Vue** (Vue CLI, Nuxt.js, Vite)\n* **Angular** (Angular CLI)\n* **Svelte** (SvelteKit, Vite)\n* **Static site generators** that optimize asset loading\n\n## Preventing asset mismatches with version affinity\n\n[Version affinity](https://developers.cloudflare.com/workers/configuration/versions-and-deployments/gradual-deployments/#version-affinity) ensures all requests from the same user are handled by the same Worker version, preventing asset reference mismatches entirely. You can configure this using [Transform Rules](https://developers.cloudflare.com/rules/transform/request-header-modification/) to automatically set the `Cloudflare-Workers-Version-Key` header.\n\n### Session-based affinity\n\nFor applications with user sessions, use session identifiers:\n\nText in **Expression Editor**:",
+      "language": "unknown"
+    },
+    {
+      "code": "Selected operation under **Modify request header**: *Set dynamic*\n\n**Header name**: `Cloudflare-Workers-Version-Key`\n\n**Value**: `http.request.cookies[\"session_id\"][0]`\n\n### User-based affinity\n\nFor authenticated applications, use user identifiers stored in cookies or headers:\n\nText in **Expression Editor**:",
+      "language": "unknown"
+    },
+    {
+      "code": "Selected operation under **Modify request header**: *Set dynamic*\n\n**Header name**: `Cloudflare-Workers-Version-Key`\n\n**Value**: `http.request.cookies[\"user_id\"][0]`\n\n## Testing and monitoring\n\nBefore rolling out to production, verify that your version affinity setup works correctly:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Durable Objects",
+      "id": "durable-objects"
+    },
+    {
+      "level": "h2",
+      "text": "Producers",
+      "id": "producers"
+    },
+    {
+      "level": "h2",
+      "text": "Consumers",
+      "id": "consumers"
+    },
+    {
+      "level": "h2",
+      "text": "Manipulating Outside Workers",
+      "id": "manipulating-outside-workers"
+    },
+    {
+      "level": "h2",
+      "text": "Cron Triggers",
+      "id": "cron-triggers"
+    },
+    {
+      "level": "h2",
+      "text": "HTTP Triggers",
+      "id": "http-triggers"
+    },
+    {
+      "level": "h2",
+      "text": "Dispatching Events",
+      "id": "dispatching-events"
+    },
+    {
+      "level": "h2",
+      "text": "Mocking Outbound `fetch` Requests",
+      "id": "mocking-outbound-`fetch`-requests"
+    },
+    {
+      "level": "h2",
+      "text": "Subrequests",
+      "id": "subrequests"
+    },
+    {
+      "level": "h2",
+      "text": "Bindings",
+      "id": "bindings"
+    },
+    {
+      "level": "h2",
+      "text": "Text and Data Blobs",
+      "id": "text-and-data-blobs"
+    },
+    {
+      "level": "h2",
+      "text": "Globals",
+      "id": "globals"
+    },
+    {
+      "level": "h2",
+      "text": "Server",
+      "id": "server"
+    },
+    {
+      "level": "h2",
+      "text": "CLI Changes",
+      "id": "cli-changes"
+    },
+    {
+      "level": "h2",
+      "text": "API Changes",
+      "id": "api-changes"
+    },
+    {
+      "level": "h3",
+      "text": "Updated Options",
+      "id": "updated-options"
+    },
+    {
+      "level": "h3",
+      "text": "Removed Options",
+      "id": "removed-options"
+    },
+    {
+      "level": "h3",
+      "text": "Updated Methods",
+      "id": "updated-methods"
+    },
+    {
+      "level": "h3",
+      "text": "Removed Methods",
+      "id": "removed-methods"
+    },
+    {
+      "level": "h3",
+      "text": "Removed Packages",
+      "id": "removed-packages"
+    },
+    {
+      "level": "h2",
+      "text": "Default Cache",
+      "id": "default-cache"
+    },
+    {
+      "level": "h2",
+      "text": "Named Caches",
+      "id": "named-caches"
+    },
+    {
+      "level": "h2",
+      "text": "Persistence",
+      "id": "persistence"
+    },
+    {
+      "level": "h2",
+      "text": "Manipulating Outside Workers",
+      "id": "manipulating-outside-workers"
+    },
+    {
+      "level": "h2",
+      "text": "Disabling",
+      "id": "disabling"
+    },
+    {
+      "level": "h2",
+      "text": "Databases",
+      "id": "databases"
+    },
+    {
+      "level": "h2",
+      "text": "Working with D1 Databases",
+      "id": "working-with-d1-databases"
+    },
+    {
+      "level": "h2",
+      "text": "Objects",
+      "id": "objects"
+    },
+    {
+      "level": "h2",
+      "text": "Persistence",
+      "id": "persistence"
+    },
+    {
+      "level": "h2",
+      "text": "Manipulating Outside Workers",
+      "id": "manipulating-outside-workers"
+    },
+    {
+      "level": "h2",
+      "text": "Using a Class Exported by Another Script",
+      "id": "using-a-class-exported-by-another-script"
+    },
+    {
+      "level": "h2",
+      "text": "Namespaces",
+      "id": "namespaces"
+    },
+    {
+      "level": "h2",
+      "text": "Manipulating Outside Workers",
+      "id": "manipulating-outside-workers"
+    },
+    {
+      "level": "h2",
+      "text": "Buckets",
+      "id": "buckets"
+    },
+    {
+      "level": "h2",
+      "text": "Manipulating Outside Workers",
+      "id": "manipulating-outside-workers"
+    },
+    {
+      "level": "h2",
+      "text": "Reference a Worker for integration testing",
+      "id": "reference-a-worker-for-integration-testing"
+    },
+    {
+      "level": "h2",
+      "text": "Stop a Worker",
+      "id": "stop-a-worker"
+    },
+    {
+      "level": "h2",
+      "text": "Import Wrangler configuration",
+      "id": "import-wrangler-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Test service Workers",
+      "id": "test-service-workers"
+    },
+    {
+      "level": "h2",
+      "text": "Define types",
+      "id": "define-types"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Install the Workers Vitest integration",
+      "id": "install-the-workers-vitest-integration"
+    },
+    {
+      "level": "h2",
+      "text": "Update your Vitest configuration file",
+      "id": "update-your-vitest-configuration-file"
+    },
+    {
+      "level": "h2",
+      "text": "Update your TypeScript configuration file",
+      "id": "update-your-typescript-configuration-file"
+    },
+    {
+      "level": "h2",
+      "text": "Access bindings",
+      "id": "access-bindings"
+    },
+    {
+      "level": "h2",
+      "text": "Use isolated storage",
+      "id": "use-isolated-storage"
+    },
+    {
+      "level": "h2",
+      "text": "Work with `waitUntil()`",
+      "id": "work-with-`waituntil()`"
+    },
+    {
+      "level": "h2",
+      "text": "Mock outbound requests",
+      "id": "mock-outbound-requests"
+    },
+    {
+      "level": "h2",
+      "text": "Use Durable Object helpers",
+      "id": "use-durable-object-helpers"
+    },
+    {
+      "level": "h2",
+      "text": "Preventing asset mismatches with version affinity",
+      "id": "preventing-asset-mismatches-with-version-affinity"
+    },
+    {
+      "level": "h3",
+      "text": "Session-based affinity",
+      "id": "session-based-affinity"
+    },
+    {
+      "level": "h3",
+      "text": "User-based affinity",
+      "id": "user-based-affinity"
+    },
+    {
+      "level": "h2",
+      "text": "Testing and monitoring",
+      "id": "testing-and-monitoring"
+    }
+  ],
+  "url": "llms-txt#dispatches-to-the-\"api\"-worker",
+  "links": []
+}

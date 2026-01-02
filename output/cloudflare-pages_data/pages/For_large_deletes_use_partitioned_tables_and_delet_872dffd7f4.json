@@ -1,0 +1,19 @@
+{
+  "title": "For large deletes, use partitioned tables and delete entire partitions for faster performance:",
+  "content": "spark.sql(\"\"\"\n    DELETE FROM r2dc.namespace.table_name\n    WHERE date_partition < '2024-01-01'\n\"\"\")\npy",
+  "code_samples": [
+    {
+      "code": "### Dropping tables and namespaces",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Dropping tables and namespaces",
+      "id": "dropping-tables-and-namespaces"
+    }
+  ],
+  "url": "llms-txt#for-large-deletes,-use-partitioned-tables-and-delete-entire-partitions-for-faster-performance:",
+  "links": []
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Joins all HTTP request header names into a single string, with names separated by commas",
+  "content": "join(http.request.headers.names, \",\")\ntxt",
+  "code_samples": [
+    {
+      "code": "Note\n\nThe `join()` function is only available in [Transform Rules](https://developers.cloudflare.com/rules/transform/), [custom rules](https://developers.cloudflare.com/waf/custom-rules/), and [Custom Error Rules](https://developers.cloudflare.com/rules/custom-errors/#custom-error-rules).\n\n### `has_key`\n\n`has_key(map: Map<T>, key: String)`: Boolean\n\nReturns true if the `key` specified in the second argument, which can be a literal or a dynamic string, is an existing key in the `map` provided as first argument; returns false otherwise.\n\nThe data type of the values in `map` (indicated by `T`) can be any type.\n\nIf any of the arguments is nil, the returned value will be nil.\n\nExamples:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "`has_key`",
+      "id": "`has_key`"
+    }
+  ],
+  "url": "llms-txt#joins-all-http-request-header-names-into-a-single-string,-with-names-separated-by-commas",
+  "links": []
+}

@@ -1,0 +1,38 @@
+{
+  "title": "smart-turn-v2",
+  "content": "Voice Activity Detection • pipecat-ai\n\n@cf/pipecat-ai/smart-turn-v2\n\nAn open source, community-driven, native audio turn detection model in 2nd version\n\n| Model Info | |\n| - | - |\n| Batch | Yes |\n| Real-time | Yes |\n| Unit Pricing | $0.00034 per audio minute |\n\n\\* indicates a required field\n\n* `audio` object required\n\nreadable stream with audio data and content-type specified for that data\n\n* `body` object required\n\n* `contentType` string required\n\ntype of data PCM data that's sent to the inference server as raw array\n\n* `audio` string required\n\nbase64 encoded audio data\n\ntype of data PCM data that's sent to the inference server as raw array\n\n* `is_complete` boolean\n\nif true, end-of-turn was detected\n\n* `probability` number\n\nprobability of the end-of-turn detection\n\nThe following schemas are based on JSON Schema\n\n<page>\n---\ntitle: resnet-50 · Cloudflare Workers AI docs\ndescription: 50 layers deep image classification CNN trained on more than 1M\n  images from ImageNet\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers-ai/models/resnet-50/\n  md: https://developers.cloudflare.com/workers-ai/models/resnet-50/index.md\n---\n\n![Microsoft logo](https://developers.cloudflare.com/_astro/microsoft.BfW2Sks3.svg)",
+  "code_samples": [
+    {
+      "code": "{\n      \"type\": \"object\",\n      \"oneOf\": [\n          {\n              \"properties\": {\n                  \"audio\": {\n                      \"type\": \"object\",\n                      \"description\": \"readable stream with audio data and content-type specified for that data\",\n                      \"properties\": {\n                          \"body\": {\n                              \"type\": \"object\"\n                          },\n                          \"contentType\": {\n                              \"type\": \"string\"\n                          }\n                      },\n                      \"required\": [\n                          \"body\",\n                          \"contentType\"\n                      ]\n                  },\n                  \"dtype\": {\n                      \"type\": \"string\",\n                      \"description\": \"type of data PCM data that's sent to the inference server as raw array\",\n                      \"enum\": [\n                          \"uint8\",\n                          \"float32\",\n                          \"float64\"\n                      ]\n                  }\n              },\n              \"required\": [\n                  \"audio\"\n              ]\n          },\n          {\n              \"properties\": {\n                  \"audio\": {\n                      \"type\": \"string\",\n                      \"description\": \"base64 encoded audio data\"\n                  },\n                  \"dtype\": {\n                      \"type\": \"string\",\n                      \"description\": \"type of data PCM data that's sent to the inference server as raw array\",\n                      \"enum\": [\n                          \"uint8\",\n                          \"float32\",\n                          \"float64\"\n                      ]\n                  }\n              },\n              \"required\": [\n                  \"audio\"\n              ]\n          }\n      ]\n  }",
+      "language": "json"
+    },
+    {
+      "code": "{\n      \"type\": \"object\",\n      \"contentType\": \"application/json\",\n      \"properties\": {\n          \"is_complete\": {\n              \"type\": \"boolean\",\n              \"description\": \"if true, end-of-turn was detected\"\n          },\n          \"probability\": {\n              \"type\": \"number\",\n              \"description\": \"probability of the end-of-turn detection\"\n          }\n      }\n  }",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Input",
+      "id": "input"
+    },
+    {
+      "level": "h3",
+      "text": "Output",
+      "id": "output"
+    },
+    {
+      "level": "h2",
+      "text": "API Schemas",
+      "id": "api-schemas"
+    }
+  ],
+  "url": "llms-txt#smart-turn-v2",
+  "links": []
+}

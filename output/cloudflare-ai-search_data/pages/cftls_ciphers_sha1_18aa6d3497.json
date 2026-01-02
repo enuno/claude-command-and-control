@@ -1,0 +1,13 @@
+{
+  "title": "cf.tls\\_ciphers\\_sha1",
+  "content": "`cf.tls_ciphers_sha1` String\n\nThe SHA-1 fingerprint of the client TLS cipher list in received order, encoded in Base64 using big-endian format.\n\n<page>\n---\ntitle: cf.tls_client_auth.cert_fingerprint_sha1 · Cloudflare Ruleset Engine docs\ndescription: The SHA-1 fingerprint of the certificate in the request.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_client_auth.cert_fingerprint_sha1/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_client_auth.cert_fingerprint_sha1/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"GXSPDLP4G3X+prK73a4wBuOaHRc=\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#cf.tls\\_ciphers\\_sha1",
+  "links": []
+}

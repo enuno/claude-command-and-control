@@ -1,0 +1,8 @@
+{
+  "title": "Test DNS resolution",
+  "content": "nslookup example.com 1.1.1.1\nnslookup example.com 1.0.0.1\nnslookup example.com 8.8.8.8",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#test-dns-resolution",
+  "links": []
+}

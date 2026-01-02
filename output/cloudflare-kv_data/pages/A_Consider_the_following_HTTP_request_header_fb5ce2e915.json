@@ -1,0 +1,8 @@
+{
+  "title": "A) Consider the following HTTP request header:",
+  "content": "x-categories: groceries,electronics,diy,auto\n\nsplit(http.request.headers[\"x-categories\"][0], \",\", 64)  will return [\"groceries\", \"electronics\", \"diy\", \"auto\"]\nsplit(http.request.headers[\"x-categories\"][0], \",\", 3)   will return [\"groceries\", \"electronics\", \"diy,auto\"]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#a)-consider-the-following-http-request-header:",
+  "links": []
+}

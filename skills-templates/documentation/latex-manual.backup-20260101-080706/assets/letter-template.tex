@@ -1,0 +1,84 @@
+% Formal Letter Template
+% For business letters, cover letters, and formal correspondence
+
+\documentclass[11pt]{letter}
+
+% ===== PACKAGES =====
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+
+% ===== SENDER INFORMATION =====
+% Your address (appears at top right)
+\address{
+    Your Name\\
+    Your Street Address\\
+    City, State ZIP Code\\
+    Country (if international)
+}
+
+% Your signature name
+\signature{Your Name\\Your Title (optional)}
+
+% Date format
+\date{\today}  % Or specify: \date{January 1, 2024}
+
+% ===== DOCUMENT START =====
+\begin{document}
+
+% ===== LETTER CONTENT =====
+\begin{letter}{
+    % Recipient address
+    Recipient Name\\
+    Recipient Title\\
+    Company/Organization Name\\
+    Street Address\\
+    City, State ZIP Code
+}
+
+% Opening salutation
+\opening{Dear [Mr./Ms./Dr.] [Last Name]:}
+
+% ===== FIRST PARAGRAPH =====
+% State purpose of the letter
+This is the opening paragraph where you state the purpose of your letter. Be clear and direct about why you are writing.
+
+% ===== BODY PARAGRAPHS =====
+% Provide details, explanations, or supporting information
+This is the body of the letter where you provide more detailed information. You can have multiple paragraphs as needed.
+
+Each paragraph should focus on a single main point or topic. Keep paragraphs concise and well-organized.
+
+% ===== CLOSING PARAGRAPH =====
+% Summary and call to action
+This is the closing paragraph where you summarize your main points and indicate what action you would like the recipient to take, or what you will do next.
+
+% Closing salutation
+\closing{Sincerely,}
+
+% Optional: Enclosures
+% \encl{Resume, Portfolio}
+
+% Optional: CC (carbon copy)
+% \cc{Person 1, Person 2}
+
+% Optional: PS (postscript)
+% \ps{P.S. Additional brief note if needed.}
+
+\end{letter}
+
+\end{document}
+
+% ===== USAGE NOTES =====
+% 
+% Common closings:
+% - Formal: Sincerely, Respectfully, Yours truly
+% - Less formal: Best regards, Kind regards, Warm regards
+%
+% Salutation tips:
+% - Use "Dear [Title] [Last Name]:" for formal letters
+% - Use "Dear Hiring Manager:" if name unknown
+% - Use "To Whom It May Concern:" as last resort
+%
+% Compile with: pdflatex letter-template.tex

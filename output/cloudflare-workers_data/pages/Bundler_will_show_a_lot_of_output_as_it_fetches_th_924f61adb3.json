@@ -1,0 +1,291 @@
+{
+  "title": "Bundler will show a lot of output as it fetches the dependencies",
+  "content": "sh\ngit add Gemfile Gemfile.lock\ngit commit -m \"deps: added Gemfiles\"\ngit push origin main\nsh\nCF_API_TOKEN=<YOUR_CF_API_TOKEN> CF_ACCOUNT_ID=<ACCOUNT_ID> CF_PAGES_PROJECT_NAME=<PROJECT_NAME> npm start\nsh\nCF_API_TOKEN=<YOUR_CF_API_TOKEN> CF_ACCOUNT_ID=<ACCOUNT_ID> CF_PAGES_PROJECT_NAME=<PROJECT_NAME> CF_DELETE_ALIASED_DEPLOYMENTS=true npm start\nsh",
+  "code_samples": [
+    {
+      "code": "This should complete successfully. If not, verify that you have copied the `github-pages` line above exactly, and have not commented it out with a leading `#`.\n\nYou will now need to commit these files to your repository so that Cloudflare Pages can reference them in the following steps:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Configuring your Pages project\n\nWith your GitHub Pages project now explicitly specifying its dependencies, you can start configuring Cloudflare Pages. The process is almost identical to [deploying a Jekyll site](https://developers.cloudflare.com/pages/framework-guides/deploy-a-jekyll-site/).\n\nNote\n\nIf you are configuring your Cloudflare Pages site for the first time, refer to the [Git integration guide](https://developers.cloudflare.com/pages/get-started/git-integration/), which explains how to connect your existing Git repository to Cloudflare Pages.\n\nTo deploy your site to Pages:\n\n1. In the Cloudflare dashboard, go to the **Workers & Pages** page.\n\n   [Go to **Workers & Pages**](https://dash.cloudflare.com/?to=/:account/workers-and-pages)\n\n2. Select **Create application** > **Pages** > **Import an existing Git repository**.\n\n3. Select the new GitHub repository that you created and, in the **Set up builds and deployments** section, provide the following information:\n\n| Configuration option | Value |\n| - | - |\n| Production branch | `main` |\n| Build command | `jekyll build` |\n| Build directory | `_site` |\n\nAfter you have configured your site, you can begin your first deploy. You should see Cloudflare Pages installing `jekyll`, your project dependencies, and building your site, before deploying it.\n\nNote\n\nFor the complete guide to deploying your first site to Cloudflare Pages, refer to the [Get started guide](https://developers.cloudflare.com/pages/get-started/).\n\nAfter deploying your site, you will receive a unique subdomain for your project on `*.pages.dev`. Every time you commit new code to your Jekyll site, Cloudflare Pages will automatically rebuild your project and deploy it. You will also get access to [preview deployments](https://developers.cloudflare.com/pages/configuration/preview-deployments/) on new pull requests, so you can preview how changes look to your site before deploying them to production.\n\n## Migrating your custom domain\n\nIf you are using a [custom domain with GitHub Pages](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site), you must update your DNS record(s) to point at your new Cloudflare Pages deployment. This will require you to update the `CNAME` record at the DNS provider for your domain to point to `<your-pages-site>.pages.dev`, replacing `<your-username>.github.io`.\n\nNote that it may take some time for DNS caches to expire and for this change to be reflected, depending on the DNS TTL (time-to-live) value you set when you originally created the record.\n\nRefer to the [adding a custom domain](https://developers.cloudflare.com/pages/configuration/custom-domains/#add-a-custom-domain) section of the Get started guide for a list of detailed steps.\n\n## What's next?\n\n* Learn how to [customize HTTP response headers](https://developers.cloudflare.com/pages/how-to/add-custom-http-headers/) for your Pages site using Cloudflare Workers.\n* Understand how to [rollback a potentially broken deployment](https://developers.cloudflare.com/pages/configuration/rollbacks/) to a previously working version.\n* [Configure redirects](https://developers.cloudflare.com/pages/configuration/redirects/) so that visitors are always directed to your 'canonical' custom domain.\n\n</page>\n\n<page>\n---\ntitle: Changelog · Cloudflare Pages docs\ndescription: Subscribe to RSS\nlastUpdated: 2025-09-15T21:45:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/platform/changelog/\n  md: https://developers.cloudflare.com/pages/platform/changelog/index.md\n---\n\n[Subscribe to RSS](https://developers.cloudflare.com/pages/platform/changelog/index.xml)\n\n## 2025-04-18\n\n**Action recommended - Node.js 18 end-of-life and impact on Pages Build System V2**\n\n* If you are using [Pages Build System V2](https://developers.cloudflare.com/pages/configuration/build-image/) for a Git-connected Pages project, note that the default Node.js version, **Node.js 18**, will end its LTS support on **April 30, 2025**.\n\n* Pages will not change the default Node.js version in the Build System V2 at this time, instead, we **strongly recommend pinning a modern Node.js version** to ensure your builds are consistent and secure.\n\n* You can [pin any Node.js version](https://developers.cloudflare.com/pages/configuration/build-image/#override-default-versions) by:\n\n  1. Adding a `NODE_VERSION` environment variable with the desired version specified as the value.\n  2. Adding a `.node-version` file with the desired version specified in the file.\n\n* Pinning helps avoid unexpected behavior and ensures your builds stay up-to-date with your chosen runtime. We also recommend pinning all critical tools and languages that your project relies on.\n\n## 2025-02-26\n\n**Support for pnpm 10 in build system**\n\n* Pages build system now supports building projects that use **pnpm 10** as the package manager. If your build previously failed due to this unsupported version, retry your build. No config changes needed.\n\n## 2024-12-19\n\n**Cloudflare GitHub App Permissions Update**\n\n* Cloudflare is requesting updated permissions for the [Cloudflare GitHub App](https://github.com/apps/cloudflare-workers-and-pages) to enable features like automatically creating a repository on your GitHub account and deploying the new repository for you when getting started with a template. This feature is coming out soon to support a better onboarding experience.\n\n  * **Requested permissions:**\n\n    * [Repository Administration](https://docs.github.com/en/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-administration) (read/write) to create repositories.\n    * [Contents](https://docs.github.com/en/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-contents) (read/write) to push code to the created repositories.\n\n  * **Who is impacted:**\n\n    * Existing users will be prompted to update permissions when GitHub sends an email with subject \"\\[GitHub] Cloudflare Workers & Pages is requesting updated permission\" on December 19th, 2024.\n    * New users installing the app will see the updated permissions during the connecting repository process.\n\n  * **Action:** Review and accept the permissions update to use upcoming features. *If you decline or take no action, you can continue connecting repositories and deploying changes via the Cloudflare GitHub App as you do today, but new features requiring these permissions will not be available.*\n\n  * **Questions?** Visit [#github-permissions-update](https://discord.com/channels/595317990191398933/1313895851520688163) in the Cloudflare Developers Discord.\n\n## 2024-10-24\n\n**Updating Bun version to 1.1.33 in V2 build system**\n\n* Bun version is being updated from `1.0.1` to `1.1.33` in Pages V2 build system. This is a minor version change, please see details at [Bun](https://bun.sh/blog/bun-v1.1.33).\n* If you wish to use a previous Bun version, you can [override default version](https://developers.cloudflare.com/pages/configuration/build-image/#overriding-default-versions).\n\n## 2023-09-13\n\n**Support for D1's new storage subsystem and build error message improvements**\n\n* Added support for D1's [new storage subsystem](https://blog.cloudflare.com/d1-turning-it-up-to-11/). All Git builds and deployments done with Wrangler v3.5.0 and up can use the new subsystem.\n* Builds which fail due to exceeding the [build time limit](https://developers.cloudflare.com/pages/platform/limits/#builds) will return a proper error message indicating so rather than `Internal error`.\n* New and improved error messages for other build failures\n\n## 2023-08-23\n\n**Commit message limit increase**\n\n* Commit messages can now be up to 384 characters before being trimmed.\n\n## 2023-08-01\n\n**Support for newer TLDs**\n\n* Support newer TLDs such as `.party` and `.music`.\n\n## 2023-07-11\n\n**V2 build system enabled by default**\n\n* V2 build system is now default for all new projects.\n\n## 2023-07-10\n\n**Sped up project creation**\n\n* Sped up project creation.\n\n## 2023-05-19\n\n**Build error message improvement**\n\n* Builds which fail due to Out of memory (OOM) will return a proper error message indicating so rather than `Internal error`.\n\n## 2023-05-17\n\n**V2 build system beta**\n\n* The V2 build system is now available in open beta. Enable the V2 build system by going to your Pages project in the Cloudflare dashboard and selecting **Settings** > [**Build & deployments**](https://dash.cloudflare.com?to=/:account/pages/view/:pages-project/settings/builds-deployments) > **Build system version**.\n\n## 2023-05-16\n\n**Support for Smart Placement**\n\n* [Smart placement](https://developers.cloudflare.com/workers/configuration/smart-placement/) can now be enabled for Pages within your Pages Project by going to **Settings** > [**Functions**](https://dash.cloudflare.com?to=/:account/pages/view/:pages-project/settings/functions).\n\n## 2023-03-23\n\n**Git projects can now see files uploaded**\n\n* Files uploaded are now visible for Git projects, you can view them in the [Cloudflare dashboard](https://dash.cloudflare.com?to=/:account/pages/view/:pages-project/:pages-deployment/files).\n\n## 2023-03-20\n\n**Notifications for Pages are now available**\n\n* Notifications for Pages events are now available in the [Cloudflare dashboard](https://dash.cloudflare.com?to=/:account/notifications). Events supported include:\n\n  * Deployment started.\n  * Deployment succeeded.\n  * Deployment failed.\n\n## 2023-02-14\n\n**Analytics Engine now available in Functions**\n\n* Added support for [Analytics Engine](https://developers.cloudflare.com/analytics/analytics-engine/) in Functions.\n\n## 2023-01-05\n\n**Queues now available in Functions**\n\n* Added support for [Queues](https://developers.cloudflare.com/queues/) producer in Functions.\n\n## 2022-12-15\n\n**API messaging update**\n\nUpdated all API messaging to be more helpful.\n\n## 2022-12-01\n\n**Ability to delete aliased deployments**\n\n* Aliased deployments can now be deleted. If using the API, you will need to add the query parameter `force=true`.\n\n## 2022-11-19\n\n**Deep linking to a Pages deployment**\n\n* You can now deep-link to a Pages deployment in the dashboard with `:pages-deployment`. An example would be `https://dash.cloudflare.com?to=/:account/pages/view/:pages-project/:pages-deployment`.\n\n## 2022-11-17\n\n**Functions GA and other updates**\n\n* Pages functions are now GA. For more information, refer to the [blog post](https://blog.cloudflare.com/pages-function-goes-ga/).\n\n* We also made the following updates to Functions:\n\n  * [Functions metrics](https://dash.cloudflare.com?to=/:account/pages/view/:pages-project/analytics/production) are now available in the dashboard.\n  * [Functions billing](https://developers.cloudflare.com/pages/functions/pricing/) is now available.\n  * The [Unbound usage model](https://developers.cloudflare.com/workers/platform/limits/#response-limits) is now available for Functions.\n  * [Secrets](https://developers.cloudflare.com/pages/functions/bindings/#secrets) are now available.\n  * Functions tailing is now available via the [dashboard](https://dash.cloudflare.com?to=/:account/pages/view/:pages-project/:pages-deployment/functions) or with Wrangler (`wrangler pages deployment tail`).\n\n## 2022-11-15\n\n**Service bindings now available in Functions**\n\n* Service bindings are now available in Functions. For more details, refer to the [docs](https://developers.cloudflare.com/pages/functions/bindings/#service-bindings).\n\n## 2022-11-03\n\n**Ansi color codes in build logs**\n\nBuild log now supports ansi color codes.\n\n## 2022-10-05\n\n**Deep linking to a Pages project**\n\n* You can now deep-link to a Pages project in the dashboard with `:pages-project`. An example would be `https://dash.cloudflare.com?to=/:account/pages/view/:pages-project`.\n\n## 2022-09-12\n\n**Increased domain limits**\n\nPreviously, all plans had a maximum of 10 [custom domains](https://developers.cloudflare.com/pages/configuration/custom-domains/) per project.\n\nNow, the limits are:\n\n* **Free**: 100 custom domains.\n* **Pro**: 250 custom domains.\n* **Business** and **Enterprise**: 500 custom domains.\n\n## 2022-09-08\n\n**Support for \\_routes.json**\n\n* Pages now offers support for `_routes.json`. For more details, refer to the [documentation](https://developers.cloudflare.com/pages/functions/routing/#functions-invocation-routes).\n\n## 2022-08-25\n\n**Increased build log expiration time**\n\nBuild log expiration time increased from 2 weeks to 1 year.\n\n## 2022-08-08\n\n**New bindings supported**\n\n* R2 and D1 [bindings](https://developers.cloudflare.com/pages/functions/bindings/) are now supported.\n\n## 2022-07-05\n\n**Added support for .dev.vars in wrangler pages**\n\nPages now supports `.dev.vars` in `wrangler pages`, which allows you to use use environmental variables during your local development without chaining `--env`s.\n\nThis functionality requires Wrangler v2.0.16 or higher.\n\n## 2022-06-13\n\n**Added deltas to wrangler pages publish**\n\nPages has added deltas to `wrangler pages publish`.\n\nWe now keep track of the files that make up each deployment and intelligently only upload the files that we have not seen. This means that similar subsequent deployments should only need to upload a minority of files and this will hopefully make uploads even faster.\n\nThis functionality requires Wrangler v2.0.11 or higher.\n\n## 2022-06-08\n\n**Added branch alias to PR comments**\n\n* PR comments for Pages previews now include the branch alias.\n\n</page>\n\n<page>\n---\ntitle: Known issues · Cloudflare Pages docs\ndescription: \"Here are some known bugs and issues with Cloudflare Pages:\"\nlastUpdated: 2025-12-12T21:19:19.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/platform/known-issues/\n  md: https://developers.cloudflare.com/pages/platform/known-issues/index.md\n---\n\nHere are some known bugs and issues with Cloudflare Pages:\n\n## Builds and deployment\n\n* GitHub and GitLab are currently the only supported platforms for automatic CI/CD builds. [Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/) allows you to integrate your own build platform or upload from your local computer.\n\n* Incremental builds are currently not supported in Cloudflare Pages.\n\n* Uploading a `/functions` directory through the dashboard's Direct Upload option does not work (refer to [Using Functions in Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/#functions)).\n\n* Commits/PRs from forked repositories will not create a preview. Support for this will come in the future.\n\n## Git configuration\n\n* If you deploy using the Git integration, you cannot switch to Direct Upload later. However, if you already use a Git-integrated project and do not want to trigger deployments every time you push a commit, you can [disable/pause automatic deployments](https://developers.cloudflare.com/pages/configuration/git-integration/#disable-automatic-deployments). Alternatively, you can delete your Pages project and create a new one pointing at a different repository if you need to update it.\n\n## Build configuration\n\n* `*.pages.dev` subdomains currently cannot be changed. If you need to change your `*.pages.dev` subdomain, delete your project and create a new one.\n\n* Hugo builds automatically run an old version. To run the latest version of Hugo (for example, `0.101.0`), you will need to set an environment variable. Set `HUGO_VERSION` to `0.101.0` or the Hugo version of your choice.\n\n* By default, Cloudflare uses Node `12.18.0` in the Pages build environment. If you need to use a newer Node version, refer to the [Build configuration page](https://developers.cloudflare.com/pages/configuration/build-configuration/) for configuration options.\n\n* For users migrating from Netlify, Cloudflare does not support Netlify's Forms feature. [Pages Functions](https://developers.cloudflare.com/pages/functions/) are available as an equivalent to Netlify's Serverless Functions.\n\n## Custom Domains\n\n* It is currently not possible to add a custom domain with\n\n  * a wildcard, for example, `*.domain.com`.\n  * a Worker already routed on that domain.\n\n* It is currently not possible to add a custom domain with a Cloudflare Access policy already enabled on that domain.\n\n* Cloudflare's Load Balancer does not work with `*.pages.dev` projects; an `Error 1000: DNS points to prohibited IP` will appear.\n\n* When adding a custom domain, the domain will not verify if Cloudflare cannot validate a request for an SSL certificate on that hostname. In order for the SSL to validate, ensure Cloudflare Access or a Cloudflare Worker is allowing requests to the validation path: `http://{domain_name}/.well-known/acme-challenge/*`.\n\n* [Advanced Certificates](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/) cannot be used with Cloudflare Pages due to Cloudflare for SaaS's [certificate prioritization](https://developers.cloudflare.com/ssl/reference/certificate-and-hostname-priority/).\n\n## Pages Functions\n\n* [Functions](https://developers.cloudflare.com/pages/functions/) does not currently support adding/removing polyfills, so your bundler (for example, webpack) may not run.\n\n* `passThroughOnException()` is not currently available for Advanced Mode Pages Functions (Pages Functions which use an `_worker.js` file).\n\n* `passThroughOnException()` is not currently as resilient as it is in Workers. We currently wrap Pages Functions code in a `try`/`catch` block and fallback to calling `env.ASSETS.fetch()`. This means that any critical failures (such as exceeding CPU time or exceeding memory) may still throw an error.\n\n## Enable Access on your `*.pages.dev` domain\n\nIf you would like to enable [Cloudflare Access](https://www.cloudflare.com/teams-access/)] for your preview deployments and your `*.pages.dev` domain, you must:\n\n1. In the Cloudflare dashboard, go to the **Workers & Pages** page.\n\n   [Go to **Workers & Pages**](https://dash.cloudflare.com/?to=/:account/workers-and-pages)\n\n2. Select your Pages project.\n\n3. Go to **Settings** > **Enable access policy**.\n\n4. Select **Manage** on the Access policy created for your preview deployments.\n\n5. Under **Access** > **Applications**, select your project.\n\n6. Select **Configure**.\n\n7. Under **Public hostname**, in the **Subdomain** field, delete the wildcard (`*`) and select **Save application**. You may need to change the **Application name** at this step to avoid an error.\n\nAt this step, your `*.pages.dev` domain has been secured behind Access. To resecure your preview deployments:\n\n1. Go back to your Pages project > **Settings** > **General** > and reselect **Enable access policy**.\n2. Review that two Access policies, one for your `*.pages.dev` domain and one for your preview deployments (`*.<YOUR_SITE>.pages.dev`), have been created.\n\nIf you have a custom domain and protected your `*.pages.dev` domain behind Access, you must:\n\n1. Select **Add an application** > **Self hosted** in [Cloudflare Zero Trust](https://one.dash.cloudflare.com/).\n2. Input an **Application name** and select your custom domain from the *Domain* dropdown menu.\n3. Select **Next** and configure your access rules to define who can reach the Access authentication page.\n4. Select **Add application**.\n\nWarning\n\nIf you do not configure an Access policy for your custom domain, an Access authentication will render but not work for your custom domain visitors. If your Pages project has a custom domain, make sure to add an Access policy as described above in steps 10 through 13 to avoid any authentication issues.\n\nIf you have an issue that you do not see listed, let the team know in the Cloudflare Workers Discord. Get your invite at [discord.cloudflare.com](https://discord.cloudflare.com), and share your bug report in the #pages-general channel.\n\n## Delete a project with a high number of deployments\n\nYou may not be able to delete your Pages project if it has a high number (over 100) of deployments. The Cloudflare team is tracking this issue.\n\nAs a workaround, review the following steps to delete all deployments in your Pages project. After you delete your deployments, you will be able to delete your Pages project.\n\n1. Download the `delete-all-deployments.zip` file by going to the following link: <https://pub-505c82ba1c844ba788b97b1ed9415e75.r2.dev/delete-all-deployments.zip>.\n2. Extract the `delete-all-deployments.zip` file.\n3. Open your terminal and `cd` into the `delete-all-deployments` directory.\n4. In the `delete-all-deployments` directory, run `npm install` to install dependencies.\n5. Review the following commands to decide which deletion you would like to proceed with:\n\n* To delete all deployments except for the live production deployment (excluding [aliased deployments](https://developers.cloudflare.com/pages/configuration/preview-deployments/#preview-aliases)):",
+      "language": "unknown"
+    },
+    {
+      "code": "* To delete all deployments except for the live production deployment (including [aliased deployments](https://developers.cloudflare.com/pages/configuration/preview-deployments/#preview-aliases), for example, `staging.example.pages.dev`):",
+      "language": "unknown"
+    },
+    {
+      "code": "To find your Cloudflare API token, log in to the [Cloudflare dashboard](https://dash.cloudflare.com), select the user icon on the upper righthand side of your screen > go to **My Profile** > **API Tokens**.\n\nYou need a token with `Cloudflare Pages Edit` permissions.\n\nTo find your Account ID, refer to [Find your zone and account ID](https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/).\n\n## Use Pages as Origin in Cloudflare Load Balancer\n\n[Cloudflare Load Balancing](https://developers.cloudflare.com/load-balancing/) will not work without the host header set. To use a Pages project as target, make sure to select **Add host header** when [creating a pool](https://developers.cloudflare.com/load-balancing/pools/create-pool/#create-a-pool), and set both the host header value and the endpoint address to your `pages.dev` domain.\n\nRefer to [Use Cloudflare Pages as origin](https://developers.cloudflare.com/load-balancing/pools/cloudflare-pages-origin/) for a complete tutorial.\n\n</page>\n\n<page>\n---\ntitle: Limits · Cloudflare Pages docs\ndescription: Below are limits observed by the Cloudflare Free plan. For more\n  details on removing these limits, refer to the Cloudflare plans page.\nlastUpdated: 2025-09-15T21:45:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/platform/limits/\n  md: https://developers.cloudflare.com/pages/platform/limits/index.md\n---\n\nBelow are limits observed by the Cloudflare Free plan. For more details on removing these limits, refer to the [Cloudflare plans](https://www.cloudflare.com/plans) page.\n\nNeed a higher limit?\n\nTo request an adjustment to a limit, complete the [Limit Increase Request Form](https://forms.gle/ukpeZVLWLnKeixDu7). If the limit can be increased, Cloudflare will contact you with next steps.\n\n## Builds\n\nEach time you push new code to your Git repository, Pages will build and deploy your site. You can build up to 500 times per month on the Free plan. Refer to the Pro and Business plans in [Pricing](https://pages.cloudflare.com/#pricing) if you need more builds.\n\nBuilds will timeout after 20 minutes. Concurrent builds are counted per account.\n\n## Custom domains\n\nBased on your Cloudflare plan type, a Pages project is limited to a specific number of custom domains. This limit is on a per-project basis.\n\n| Free | Pro | Business | Enterprise |\n| - | - | - | - |\n| 100 | 250 | 500 | 500[1](#user-content-fn-1) |\n\n## Files\n\nPages uploads each file on your site to Cloudflare's globally distributed network to deliver a low latency experience to every user that visits your site. Cloudflare Pages sites can contain up to 20,000 files.\n\n## File size\n\nThe maximum file size for a single Cloudflare Pages site asset is 25 MiB.\n\nLarger Files\n\nTo serve larger files, consider uploading them to [R2](https://developers.cloudflare.com/r2/) and utilizing the [public bucket](https://developers.cloudflare.com/r2/buckets/public-buckets/) feature. You can also use [custom domains](https://developers.cloudflare.com/r2/buckets/public-buckets/#connect-a-bucket-to-a-custom-domain), such as `static.example.com`, for serving these files.\n\n## Functions\n\nRequests to [Pages functions](https://developers.cloudflare.com/pages/functions/) count towards your quota for Workers plans, including requests from your Function to KV or Durable Object bindings.\n\nPages supports the [Standard usage model](https://developers.cloudflare.com/workers/platform/pricing/#example-pricing-standard-usage-model).\n\n## Headers\n\nA `_headers` file can have a maximum of 100 header rules.\n\nAn individual header in a `_headers` file can have a maximum of 2,000 characters. For managing larger headers, it is recommended to implement [Pages Functions](https://developers.cloudflare.com/pages/functions/).\n\n## Preview deployments\n\nYou can have an unlimited number of [preview deployments](https://developers.cloudflare.com/pages/configuration/preview-deployments/) active on your project at a time.\n\n## Redirects\n\nA `_redirects` file can have a maximum of 2,000 static redirects and 100 dynamic redirects, for a combined total of 2,100 redirects. It is recommended to use [Bulk Redirects](https://developers.cloudflare.com/pages/configuration/redirects/#surpass-_redirects-limits) when you have a need for more than the `_redirects` file supports.\n\n## Users\n\nYour Pages site can be managed by an unlimited number of users via the Cloudflare dashboard. Note that this does not correlate with your Git project – you can manage both public and private repositories, open issues, and accept pull requests via without impacting your Pages site.\n\n## Projects\n\nCloudflare Pages has a soft limit of 100 projects within your account in order to prevent abuse. If you need this limit raised, contact your Cloudflare account team or use the Limit Increase Request Form at the top of this page.\n\nIn order to protect against abuse of the service, Cloudflare may temporarily disable your ability to create new Pages projects, if you are deploying a large number of applications in a short amount of time. Contact support if you need this limit increased.\n\n## Footnotes\n\n1. If you need more custom domains, contact your account team. [↩](#user-content-fnref-1)\n\n</page>\n\n<page>\n---\ntitle: Choose a data or storage product · Cloudflare Pages docs\nlastUpdated: 2025-05-09T17:32:11.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/platform/storage-options/\n  md: https://developers.cloudflare.com/pages/platform/storage-options/index.md\n---\n\n\n</page>\n\n<page>\n---\ntitle: Add a React form with Formspree · Cloudflare Pages docs\ndescription: Learn how to add a React form with Formspree, a back-end service\n  that handles form processing and storage.\nlastUpdated: 2025-10-09T15:47:46.000Z\nchatbotDeprioritize: false\ntags: Forms,JavaScript\nsource_url:\n  html: https://developers.cloudflare.com/pages/tutorials/add-a-react-form-with-formspree/\n  md: https://developers.cloudflare.com/pages/tutorials/add-a-react-form-with-formspree/index.md\n---\n\nAlmost every React website needs a form to collect user data. [Formspree](https://formspree.io/) is a back-end service that handles form processing and storage, allowing developers to include forms on their website without writing server-side code or functions.\n\nIn this tutorial, you will create a `<form>` component using React and add it to a single page application built with `create-react-app`. Though you are using `create-react-app` (CRA), the concepts will apply to any React framework including Next.js, Gatsby, and more. You will use Formspree to collect the submitted data and send out email notifications when new submissions arrive, without requiring any server-side coding.\n\nYou will deploy your site to Cloudflare Pages. Refer to the [Get started guide](https://developers.cloudflare.com/pages/get-started/) to familiarize yourself with the platform.\n\n## Setup\n\nTo begin, create a new React project on your local machine with `create-react-app`. Then create a [new GitHub repository](https://repo.new/), and attach the GitHub location as a remote destination:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Configuring your Pages project",
+      "id": "configuring-your-pages-project"
+    },
+    {
+      "level": "h2",
+      "text": "Migrating your custom domain",
+      "id": "migrating-your-custom-domain"
+    },
+    {
+      "level": "h2",
+      "text": "What's next?",
+      "id": "what's-next?"
+    },
+    {
+      "level": "h2",
+      "text": "2025-04-18",
+      "id": "2025-04-18"
+    },
+    {
+      "level": "h2",
+      "text": "2025-02-26",
+      "id": "2025-02-26"
+    },
+    {
+      "level": "h2",
+      "text": "2024-12-19",
+      "id": "2024-12-19"
+    },
+    {
+      "level": "h2",
+      "text": "2024-10-24",
+      "id": "2024-10-24"
+    },
+    {
+      "level": "h2",
+      "text": "2023-09-13",
+      "id": "2023-09-13"
+    },
+    {
+      "level": "h2",
+      "text": "2023-08-23",
+      "id": "2023-08-23"
+    },
+    {
+      "level": "h2",
+      "text": "2023-08-01",
+      "id": "2023-08-01"
+    },
+    {
+      "level": "h2",
+      "text": "2023-07-11",
+      "id": "2023-07-11"
+    },
+    {
+      "level": "h2",
+      "text": "2023-07-10",
+      "id": "2023-07-10"
+    },
+    {
+      "level": "h2",
+      "text": "2023-05-19",
+      "id": "2023-05-19"
+    },
+    {
+      "level": "h2",
+      "text": "2023-05-17",
+      "id": "2023-05-17"
+    },
+    {
+      "level": "h2",
+      "text": "2023-05-16",
+      "id": "2023-05-16"
+    },
+    {
+      "level": "h2",
+      "text": "2023-03-23",
+      "id": "2023-03-23"
+    },
+    {
+      "level": "h2",
+      "text": "2023-03-20",
+      "id": "2023-03-20"
+    },
+    {
+      "level": "h2",
+      "text": "2023-02-14",
+      "id": "2023-02-14"
+    },
+    {
+      "level": "h2",
+      "text": "2023-01-05",
+      "id": "2023-01-05"
+    },
+    {
+      "level": "h2",
+      "text": "2022-12-15",
+      "id": "2022-12-15"
+    },
+    {
+      "level": "h2",
+      "text": "2022-12-01",
+      "id": "2022-12-01"
+    },
+    {
+      "level": "h2",
+      "text": "2022-11-19",
+      "id": "2022-11-19"
+    },
+    {
+      "level": "h2",
+      "text": "2022-11-17",
+      "id": "2022-11-17"
+    },
+    {
+      "level": "h2",
+      "text": "2022-11-15",
+      "id": "2022-11-15"
+    },
+    {
+      "level": "h2",
+      "text": "2022-11-03",
+      "id": "2022-11-03"
+    },
+    {
+      "level": "h2",
+      "text": "2022-10-05",
+      "id": "2022-10-05"
+    },
+    {
+      "level": "h2",
+      "text": "2022-09-12",
+      "id": "2022-09-12"
+    },
+    {
+      "level": "h2",
+      "text": "2022-09-08",
+      "id": "2022-09-08"
+    },
+    {
+      "level": "h2",
+      "text": "2022-08-25",
+      "id": "2022-08-25"
+    },
+    {
+      "level": "h2",
+      "text": "2022-08-08",
+      "id": "2022-08-08"
+    },
+    {
+      "level": "h2",
+      "text": "2022-07-05",
+      "id": "2022-07-05"
+    },
+    {
+      "level": "h2",
+      "text": "2022-06-13",
+      "id": "2022-06-13"
+    },
+    {
+      "level": "h2",
+      "text": "2022-06-08",
+      "id": "2022-06-08"
+    },
+    {
+      "level": "h2",
+      "text": "Builds and deployment",
+      "id": "builds-and-deployment"
+    },
+    {
+      "level": "h2",
+      "text": "Git configuration",
+      "id": "git-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Build configuration",
+      "id": "build-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Custom Domains",
+      "id": "custom-domains"
+    },
+    {
+      "level": "h2",
+      "text": "Pages Functions",
+      "id": "pages-functions"
+    },
+    {
+      "level": "h2",
+      "text": "Enable Access on your `*.pages.dev` domain",
+      "id": "enable-access-on-your-`*.pages.dev`-domain"
+    },
+    {
+      "level": "h2",
+      "text": "Delete a project with a high number of deployments",
+      "id": "delete-a-project-with-a-high-number-of-deployments"
+    },
+    {
+      "level": "h2",
+      "text": "Use Pages as Origin in Cloudflare Load Balancer",
+      "id": "use-pages-as-origin-in-cloudflare-load-balancer"
+    },
+    {
+      "level": "h2",
+      "text": "Builds",
+      "id": "builds"
+    },
+    {
+      "level": "h2",
+      "text": "Custom domains",
+      "id": "custom-domains"
+    },
+    {
+      "level": "h2",
+      "text": "Files",
+      "id": "files"
+    },
+    {
+      "level": "h2",
+      "text": "File size",
+      "id": "file-size"
+    },
+    {
+      "level": "h2",
+      "text": "Functions",
+      "id": "functions"
+    },
+    {
+      "level": "h2",
+      "text": "Headers",
+      "id": "headers"
+    },
+    {
+      "level": "h2",
+      "text": "Preview deployments",
+      "id": "preview-deployments"
+    },
+    {
+      "level": "h2",
+      "text": "Redirects",
+      "id": "redirects"
+    },
+    {
+      "level": "h2",
+      "text": "Users",
+      "id": "users"
+    },
+    {
+      "level": "h2",
+      "text": "Projects",
+      "id": "projects"
+    },
+    {
+      "level": "h2",
+      "text": "Footnotes",
+      "id": "footnotes"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    }
+  ],
+  "url": "llms-txt#bundler-will-show-a-lot-of-output-as-it-fetches-the-dependencies",
+  "links": []
+}

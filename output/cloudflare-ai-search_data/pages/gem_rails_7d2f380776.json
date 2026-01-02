@@ -1,0 +1,13 @@
+{
+  "title": "gem \"rails\"",
+  "content": "gem \"github-pages\", group: :jekyll_plugins\nsh\nbundle update",
+  "code_samples": [
+    {
+      "code": "Run `bundle update`, which will install the `github-pages` gem for you, and create a `Gemfile.lock` file with the resolved dependency versions.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#gem-\"rails\"",
+  "links": []
+}

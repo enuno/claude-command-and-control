@@ -1,0 +1,13 @@
+{
+  "title": "This will deploy to production, not dev",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "#### Use with build tools\n\nThe `CLOUDFLARE_ENV` environment variable is particularly useful when working with build tools like Vite. You can set the environment once during the build process, and it will be used for both building and deploying your Worker:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#this-will-deploy-to-production,-not-dev",
+  "links": []
+}

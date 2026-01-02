@@ -1,0 +1,8 @@
+{
+  "title": "Upload/Update single file",
+  "content": "s3.upload_fileobj(io.BytesIO(file_content), 'my-bucket', 'dog.png')",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#upload/update-single-file",
+  "links": []
+}

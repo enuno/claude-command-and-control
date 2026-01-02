@@ -1,0 +1,722 @@
+{
+  "title": "An array of Request is the result of httpRequests query.",
+  "content": "type Request {\n    trustedClientCategory: TrustedClientCategory!\n    # ... other fields\n}\ngraphql\nzones(filter: {zoneTag: \"your Zone ID\"}) {\n    ...\n}\ngraphql\nfilter\n    { zoneTag: t }\n    { zoneTag_gt: t }\n    { zoneTag_in: [t, ...] }\ngraphql\nfilter\n  { kvs }\nkvs\n  kv\n  kv, kvs\nkv\n  k: v\n  k_op: v\n  AND: [filters]\n  OR: [filters]\nfilters\n  filter\n  filter, filters\ngraphql\nquery GeneralExample($zoneTag: string, $start: Time) {\n  viewer {\n    zones(filter: { zoneTag: $zoneTag }) {\n      httpRequestsAdaptiveGroups(\n        filter: { datetime_gt: $start, clientCountryName: \"GB\" }\n        limit: 1\n      ) {\n        count\n      }\n    }\n  }\n}\ngraphql\nhttpRequestsAdaptiveGroups(filter: {datetime: \"2018-01-01T10:00:00Z\"}) {\n    ...\n}\nsql\nWHERE datetime=\"2018-01-01T10:00:00Z\"\ngraphql\nhttpRequests1hGroups(filter: {datetime_gt: \"2018-01-01T10:00:00Z\", datetime_lt: \"2018-01-01T11:00:00Z\"}) {\n    ...\n}\nsql\nWHERE (datetime > \"2018-01-01T10:00:00Z\") AND (datetime < \"2018-01-01T10:00:00Z\")\ngraphql\nhttpRequestsAdaptiveGroups(\n        filter: {\n          datetime: \"2018-01-01T10:00:00Z\",\n          OR:[{clientCountryName: \"US\"}, {clientCountryName: \"GB\"}]) {\n    ...\n}\nsql\nWHERE datetime=\"2018-01-01T10:00:00Z\"\n  AND ((clientCountryName = \"US\") OR (clientCountryName = \"GB\"))\ngraphql\nmnmFlowDataAdaptiveGroups(filter: {ruleIDs_has: \"rule-id\"}) {\n    ...\n}\nsql\nWHERE has(ruleIDs, 'rule-id')\ngraphql\nmnmFlowDataAdaptiveGroups(filter: {ruleIDs_hasall: [\"rule-id-1\", \"rule-id-2\"]}) {\n    ...\n}\nsql\nWHERE has(ruleIDs, 'rule-id-1') AND has(ruleIDs, 'rule-id-2')\njavascript\nfirewallEventsAdaptive (limit: 2, orderBy: [datetime_ASC, clientCountryName_ASC]) {\n    datetime\n    clientCountryName\n}\njavascript\n{\n  \"firewallEventsAdaptive\" : [\n    {\n      \"datetime\": \"2018-11-12T00:00:00Z\",\n      \"clientCountryName\": \"UM\"\n    },\n    {\n      \"datetime\": \"2018-11-12T00:00:00Z\",\n      \"clientCountryName\": \"US\"\n    }\n  ]\n}\njavascript\nfirewallEventsAdaptive (limit: 2, orderBy: [datetime_ASC, clientCountryName_ASC], filter: {datetime_geq: \"2018-11-12T00:00:00Z\", clientCountryName_gt: \"US\"}) {\n    datetime\n    clientCountryName\n}\njavascript\n{\n  \"firewallEventsAdaptive\" : [\n    {\n      \"datetime\": \"2018-11-12T00:00:00Z\",\n      \"clientCountryName\": \"UY\"\n    },\n    {\n      \"datetime\": \"2018-11-12T00:00:00Z\",\n      \"clientCountryName\": \"UZ\"\n    }\n  ]\n}\njavascript\nfirewallEventsAdaptive (limit: 2, orderBy: [datetime_DESC, clientCountryName_DESC, filter: {datetime_leq: \"2018-11-12T00:00:00Z\", clientCountryName_lt: \"UY\"}]) {\n  datetime\n  clientCountryName\n}\njavascript\n{\n  \"firewallEventsAdaptive\" : [\n    {\n      \"datetime\": \"2018-11-12T00:00:00Z\",\n      \"clientCountryName\": \"US\"\n    },\n    {\n      \"datetime\": \"2018-11-12T00:00:00Z\",\n      \"clientCountryName\": \"UM\"\n    }\n  ]\n}\njavascript\ntype SubRequest {\n    url: String!\n    status: Int\n}\n\ntype Request {\n    date: Date!\n    datetime: DateTime!\n    subRequests: [SubRequest!]!\n}\njavascript\n{\n    requests {\n        date\n        subRequests {\n            # discard the url, only need the status\n            status\n        }\n    }\n}\njavascript\n{\n    \"requests\": [\n        {\n            \"date\": \"2018-01-01\",\n            \"subRequests\": [{\"status\": 404}, {\"status\": 200}, {\"status\": 404}]\n        },\n        {\n            \"date\": \"2018-01-01\",\n            \"subRequests\": [{\"status\": 200}]\n        }\n    ]\n}\njavascript\ntype URLStatsMapElem {\n    url: String!\n    requests: Int\n    bytes: Int\n}\n\ntype Request {\n    date: Date!\n    datetime: DateTime!\n    urlStatsMap: [URLStatsMapElem!]!\n}\njavascript\n{\n    requests {\n        sum {\n            urlStatsMap {\n                url\n                requests\n                bytes\n            }\n        }\n        dimensions {\n            date\n        }\n    }\n}\njavascript\n{\n    \"requests\": [\n        {\n            \"sum\": {\n                \"urlStatsMap\": [\n                    {\n                        \"url\": \"hello-world.org/1\",\n                        \"requests\": 123,\n                        \"bytes\": 1024\n                    },\n                    {\n                        \"url\": \"hello-world.org/10\",\n                        \"requests\": 1230,\n                        \"bytes\": 10240\n                    }\n                ]\n            }\n            \"dimensions\" {\n                \"date\": \"2018-10-19\"\n            }\n        },\n        ...\n    ]\n}\ngraphql\nquery NestedFields($zoneTag: string, $start: Time, $end: Time) {\n  viewer {\n    zones(filter: { zoneTag: $zoneTag }) {\n      events(limit: 2, filter: { datetime_geq: $start, datetime_leq: $end }) {\n        matches {\n          ruleId\n          action\n          source\n        }\n      }\n    }\n  }\n}\njavascript\n{\n  \"data\": {\n    \"viewer\": {\n      \"zones\": [\n        {\n          \"events\": [\n            {\n              \"matches\": [\n                {\n                  \"action\": \"allow\",\n                  \"ruleId\": \"rule-id-one\",\n                  \"source\": \"asn\"\n                },\n                {\n                  \"action\": \"block\",\n                  \"ruleId\": \"rule-id-two\",\n                  \"source\": \"asn\"\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    }\n  },\n  \"errors\": null\n}\ngraphql\nquery MapCapacity(\n  $zoneTag: string\n  $dateStart: Date\n  $dateEnd: Date\n  $start: Time\n  $end: Time\n) {\n  viewer {\n    zones(filter: { zoneTag: $zoneTag }) {\n      httpRequests1mGroups(\n        limit: 10\n        filter: {\n          date_geq: $dateStart\n          date_leq: $dateEnd\n          datetime_geq: $start\n          datetime_lt: $end\n        }\n      ) {\n        sum {\n          countryMap {\n            clientCountryName\n            requests\n            bytes\n            threats\n          }\n        }\n        dimensions {\n          datetimeHour\n        }\n      }\n    }\n  }\n}\njavascript\n{\n  \"data\": {\n    \"viewer\": {\n      \"zones\": [\n        {\n          \"httpRequests1mGroups\": [\n            {\n              \"dimensions\": {\n                \"datetime\": \"2019-03-08T17:00:00Z\"\n              },\n              \"sum\": {\n                \"countryMap\": [\n                  {\n                    \"bytes\": 51911317,\n                    \"clientCountryName\": \"XK\",\n                    \"requests\": 4492,\n                    \"threats\": 0\n                  },\n                  {\n                    \"bytes\": 1816103586,\n                    \"clientCountryName\": \"T1\",\n                    \"requests\": 132423,\n                    \"threats\": 0\n                  },\n                  ...\n                ]\n              }\n            }\n          ]\n        }\n      ]\n    }\n  },\n  \"errors\": null\n}\ngraphql\nfirewallEventsAdaptive (orderBy: [clientCountryName_ASC]) {\n    clientCountryName\n}\ngraphql\nfirewallEventsAdaptive (orderBy: [clientCountryName_ASC, datetime_DESC]) {\n    clientCountryName\n    datetime\n}\ngraphql\nhttpRequests1hGroups (orderBy: [sum_bytes_DESC]){\n    sum {\n        bytes\n        requests\n    }\n    dimensions {\n        datetime\n    }\n}\njson\n{\n  \"query\": \"{viewer { ... }}\",\n  \"variables\": {}\n}\nbash\necho '{ \"query\":\n  \"{\n    viewer {\n      zones(filter: { zoneTag: $zoneTag }) {\n        firewallEventsAdaptive(\n          filter: $filter\n          limit: 10\n          orderBy: [datetime_DESC]\n        ) {\n          action\n          clientAsn\n          clientCountryName\n          clientIP\n          clientRequestPath\n          clientRequestQuery\n          datetime\n          source\n          userAgent\n        }\n      }\n    }\n  }\",\n  \"variables\": {\n    \"zoneTag\": \"<zone-tag>\",\n    \"filter\": {\n      \"datetime_geq\": \"2022-07-24T11:00:00Z\",\n      \"datetime_leq\": \"2022-07-24T12:00:00Z\"\n    }\n  }\n}' | tr -d '\\n' | curl --silent \\\nhttps://api.cloudflare.com/client/v4/graphql \\\n--header \"Authorization: Bearer <API_TOKEN>\" \\\n--header \"Content-Type: application/json\" \\\n--data @-\ntxt\n  object-name: object-type-definition\njson\n{\n  \"query\": \"\",\n  \"variables\": {}\n}\ngraphql\nquery ASingleDatasetExample($zoneTag: string, $start: Time, $end: Time) {\n  viewer {\n    zones(filter: { zoneTag: $zoneTag }) {\n      firewallEventsAdaptive(\n        filter: { datetime_gt: $start, datetime_lt: $end }\n        limit: 2\n        orderBy: [datetime_DESC]\n      ) {\n        action\n        datetime\n        host: clientRequestHTTPHost\n      }\n    }\n  }\n}\njson\n{\n  \"zoneTag\": \"<zone-tag>\",\n  \"start\": \"2020-08-03T02:07:05Z\",\n  \"end\": \"2020-08-03T17:07:05Z\"\n}\njson\n{\n  \"data\": {\n    \"viewer\": {\n      \"zones\": [\n        {\n          \"firewallEventsAdaptive\": [\n            {\n              \"action\": \"log\",\n              \"host\": \"cloudflare.guru\",\n              \"datetime\": \"2020-08-03T17:07:03Z\"\n            },\n            {\n              \"action\": \"log\",\n              \"host\": \"cloudflare.guru\",\n              \"datetime\": \"2020-08-03T17:07:01Z\"\n            }\n          ]\n        }\n      ]\n    }\n  },\n  \"errors\": null\n}\ngraphql\nquery MultipleDatasetsExample(\n  $zoneTag: string\n  $start: Time\n  $end: Time\n  $ts: Date\n) {\n  viewer {\n    zones(filter: { zoneTag: $zoneTag }) {\n      last10Events: firewallEventsAdaptive(\n        filter: { datetime_gt: $start, datetime_lt: $end }\n        limit: 10\n        orderBy: [datetime_DESC]\n      ) {\n        action\n        datetime\n        host: clientRequestHTTPHost\n      }\n      top3DeviceTypes: httpRequestsAdaptiveGroups(\n        filter: { date: $ts }\n        limit: 10\n        orderBy: [count_DESC]\n      ) {\n        count\n        dimensions {\n          device: clientDeviceType\n        }\n      }\n    }\n  }\n}\njson\n{\n  \"zoneTag\": \"<zone-tag>\",\n  \"start\": \"2022-10-02T00:26:49Z\",\n  \"end\": \"2022-10-04T14:26:49Z\",\n  \"ts\": \"2022-10-04\"\n}\njson\n{\n  \"data\": {\n    \"viewer\": {\n      \"zones\": [\n        {\n          \"last10Events\": [\n            {\n              \"action\": \"block\",\n              \"country\": \"TR\",\n              \"datetime\": \"2022-10-04T08:41:09Z\"\n            },\n            {\n              \"action\": \"block\",\n              \"country\": \"TR\",\n              \"datetime\": \"2022-10-04T08:41:09Z\"\n            },\n            {\n              \"action\": \"block\",\n              \"country\": \"RU\",\n              \"datetime\": \"2022-10-04T01:09:36Z\"\n            },\n            {\n              \"action\": \"block\",\n              \"country\": \"US\",\n              \"datetime\": \"2022-10-03T14:26:49Z\"\n            },\n            {\n              \"action\": \"block\",\n              \"country\": \"US\",\n              \"datetime\": \"2022-10-03T14:26:46Z\"\n            },\n            {\n              \"action\": \"block\",\n              \"country\": \"CN\",\n              \"datetime\": \"2022-10-02T23:51:26Z\"\n            },\n            {\n              \"action\": \"block\",\n              \"country\": \"TR\",\n              \"datetime\": \"2022-10-02T23:39:41Z\"\n            },\n            {\n              \"action\": \"block\",\n              \"country\": \"TR\",\n              \"datetime\": \"2022-10-02T23:39:41Z\"\n            }\n          ],\n          \"top3DeviceTypes\": [\n            {\n              \"count\": 4580,\n              \"dimensions\": {\n                \"device\": \"desktop\"\n              }\n            }\n          ]\n        }\n      ]\n    }\n  },\n  \"errors\": null\n}\ngraphql\n{\n  viewer {\n    zones(filter: { zoneTag: $zoneTag }) {\n      series: httpRequests1mByColoGroups(\n        limit: 5\n        orderBy: [sum_requests_DESC]\n        filter: { datetime_geq: $start, datetime_lt: $end }\n      ) {\n        sum {\n          requests\n          bytes\n        }\n        dimensions {\n          coloCode\n        }\n      }\n    }\n  }\n}\njson\n{\n  \"data\": {\n    \"viewer\": {\n      \"zones\": [\n        {\n          \"series\": [\n            {\n              \"dimensions\": {\n                \"coloCode\": \"LHR\"\n              },\n              \"sum\": {\n                \"bytes\": 18260055,\n                \"requests\": 4404\n              }\n            },\n            {\n              \"dimensions\": {\n                \"coloCode\": \"AMS\"\n              },\n              \"sum\": {\n                \"bytes\": 17563009,\n                \"requests\": 4302\n              }\n            },\n            {\n              \"dimensions\": {\n                \"coloCode\": \"CDG\"\n              },\n              \"sum\": {\n                \"bytes\": 17200434,\n                \"requests\": 4032\n              }\n            },\n            {\n              \"dimensions\": {\n                \"coloCode\": \"PTY\"\n              },\n              \"sum\": {\n                \"bytes\": 10400209,\n                \"requests\": 2707\n              }\n            },\n            {\n              \"dimensions\": {\n                \"coloCode\": \"JIB\"\n              },\n              \"sum\": {\n                \"bytes\": 9040105,\n                \"requests\": 2601\n              }\n            }\n          ]\n        }\n      ]\n    }\n  },\n  \"errors\": null\n}\ngraphql\nquery MigrationSample($zoneTag: string, $start: Time, $end: Time) {\n  viewer {\n    zones(filter: { zoneTag: $zoneTag }) {\n      series: httpRequestsAdaptiveGroups(\n        limit: 5\n        orderBy: [count_DESC]\n        filter: {\n          datetime_geq: $start\n          datetime_lt: $end\n          requestSource: \"eyeball\"\n        }\n      ) {\n        count\n        avg {\n          sampleInterval\n        }\n        sum {\n          visits\n          edgeResponseBytes\n        }\n        dimensions {\n          coloCode\n        }\n      }\n    }\n  }\n}\njson\n{\n  \"data\": {\n    \"viewer\": {\n      \"zones\": [\n        {\n          \"series\": [\n            {\n              \"avg\": {\n                \"sampleInterval\": 10\n              },\n              \"count\": 4350,\n              \"dimensions\": {\n                \"coloCode\": \"LHR\"\n              },\n              \"sum\": {\n                \"edgeResponseBytes\": 17860000,\n                \"visits\": 4120\n              }\n            },\n            {\n              \"avg\": {\n                \"sampleInterval\": 10\n              },\n              \"count\": 4210,\n              \"dimensions\": {\n                \"coloCode\": \"AMS\"\n              },\n              \"sum\": {\n                \"edgeResponseBytes\": 17110000,\n                \"visits\": 3910\n              }\n            },\n            {\n              \"avg\": {\n                \"sampleInterval\": 10\n              },\n              \"count\": 3890,\n              \"dimensions\": {\n                \"coloCode\": \"CDG\"\n              },\n              \"sum\": {\n                \"edgeResponseBytes\": 17050000,\n                \"visits\": 3700\n              }\n            },\n            {\n              \"avg\": {\n                \"sampleInterval\": 10\n              },\n              \"count\": 2550,\n              \"dimensions\": {\n                \"coloCode\": \"PTY\"\n              },\n              \"sum\": {\n                \"edgeResponseBytes\": 10286000,\n                \"visits\": 2130\n              }\n            },\n            {\n              \"avg\": {\n                \"sampleInterval\": 10\n              },\n              \"count\": 2410,\n              \"dimensions\": {\n                \"coloCode\": \"JIB\"\n              },\n              \"sum\": {\n                \"edgeResponseBytes\": 9029000,\n                \"visits\": 2080\n              }\n            }\n          ]\n        }\n      ]\n    }\n  },\n  \"errors\": null\n}\ngraphql\n{\n  viewer\n  {\n    accounts(filter: {accountTag: \"<REDACTED>\"})\n    {\n      magicTransitNetworkAnalyticsAdaptiveGroups(\n        filter: {\n          datetime_gt: \"2021-10-01T00:00:00Z\",\n          datetime_lt: \"2021-10-05T00:00:00Z\",\n          outcome_like: \"drop\",\n          mitigationSystem_neq: \"magic-firewall\"\n        },\n        limit: 20,\n        orderBy: [ipDestinationAddress_ASC])\n      {\n        dimensions {\n          outcome\n          mitigationSystem\n          ipSourceAddress\n          ipDestinationAddress\n          ipProtocol\n          destinationPort\n        }\n      }\n    }\n  }\n}\nbash\ncurl \"https://api.cloudflare.com/client/v4/zones/<ZONE_ID>/analytics/dashboard?since=2019-09-08T20:00:00Z&until=2019-09-08T20:02:00Z&continuous=false\" \\\n--header \"Authorization: Bearer <API_TOKEN>\" --silent | jq .\njson\n{\n  \"success\": true,\n  \"query\": {\n    \"since\": \"2019-09-08T20:00:00Z\",\n    \"until\": \"2019-09-08T20:02:00Z\",\n    \"time_delta\": 1\n  },\n  \"errors\": [],\n  \"messages\": [],\n  \"result\": {\n    \"timeseries\": [\n      {\n        \"since\": \"2019-09-08T20:00:00Z\",\n        \"until\": \"2019-09-08T20:01:00Z\",\n        \"requests\": {\n          \"all\": 15,\n          \"cached\": 12,\n          \"uncached\": 3,\n          \"ssl\": {\n            \"encrypted\": 13,\n            \"unencrypted\": 2\n          },\n          \"http_status\": {\n            \"200\": 4,\n            \"403\": 11\n          },\n          \"content_type\": {\n            \"html\": 12,\n            \"png\": 3\n          },\n          \"country\": {\n            \"CN\": 6,\n            \"IE\": 1,\n            \"US\": 3,\n            \"VN\": 5\n          },\n          \"ip_class\": {\n            \"monitoringService\": 4,\n            \"noRecord\": 11\n          },\n          \"ssl_protocol\": {\n            \"TLSv1.2\": 13,\n            \"none\": 2\n          }\n        },\n        \"bandwidth\": {\n          \"all\": 312740,\n          \"cached\": 309930,\n          \"uncached\": 2810,\n          \"ssl\": {\n            \"encrypted\": 309276,\n            \"unencrypted\": 3464\n          },\n          \"ssl_protocol\": {\n            \"TLSv1.2\": 13,\n            \"none\": 2\n          },\n          \"content_type\": {\n            \"html\": 32150,\n            \"png\": 280590\n          },\n          \"country\": {\n            \"CN\": 10797,\n            \"IE\": 98224,\n            \"US\": 185176,\n            \"VN\": 18543\n          }\n        },\n        \"threats\": {\n          \"all\": 6,\n          \"type\": {\n            \"user.ban.ctry\": 6\n          },\n          \"country\": {\n            \"CN\": 6\n          }\n        },\n        \"pageviews\": {\n          \"all\": 1,\n          \"search_engine\": {\n            \"pingdom\": 1\n          }\n        },\n        \"uniques\": {\n          \"all\": 11\n        }\n      },\n      {\n        \"since\": \"2019-09-08T20:01:00Z\",\n        \"until\": \"2019-09-08T20:02:00Z\",\n        \"requests\": {\n          \"all\": 4,\n          \"cached\": 1,\n          \"uncached\": 3,\n          \"ssl\": {\n            \"encrypted\": 4,\n            \"unencrypted\": 0\n          },\n          \"http_status\": {\n            \"200\": 4\n          },\n          \"content_type\": {\n            \"html\": 1,\n            \"png\": 3\n          },\n          \"country\": {\n            \"CA\": 2,\n            \"US\": 2\n          },\n          \"ip_class\": {\n            \"monitoringService\": 4\n          },\n          \"ssl_protocol\": {\n            \"TLSv1.2\": 4\n          }\n        },\n        \"bandwidth\": {\n          \"all\": 283399,\n          \"cached\": 280590,\n          \"uncached\": 2809,\n          \"ssl\": {\n            \"encrypted\": 283399,\n            \"unencrypted\": 0\n          },\n          \"ssl_protocol\": {\n            \"TLSv1.2\": 4\n          },\n          \"content_type\": {\n            \"html\": 2809,\n            \"png\": 280590\n          },\n          \"country\": {\n            \"CA\": 101033,\n            \"US\": 182366\n          }\n        },\n        \"threats\": {\n          \"all\": 0,\n          \"type\": {},\n          \"country\": {}\n        },\n        \"pageviews\": {\n          \"all\": 1,\n          \"search_engine\": {\n            \"pingdom\": 1\n          }\n        },\n        \"uniques\": {\n          \"all\": 4\n        }\n      }\n    ],\n    \"totals\": {\n      \"since\": \"2019-09-08T20:00:00Z\",\n      \"until\": \"2019-09-08T20:02:00Z\",\n      \"requests\": {\n        \"all\": 19,\n        \"cached\": 13,\n        \"uncached\": 6,\n        \"ssl\": {\n          \"encrypted\": 17,\n          \"unencrypted\": 2\n        },\n        \"http_status\": {\n          \"200\": 8,\n          \"403\": 11\n        },\n        \"content_type\": {\n          \"html\": 13,\n          \"png\": 6\n        },\n        \"country\": {\n          \"CA\": 2,\n          \"CN\": 6,\n          \"IE\": 1,\n          \"US\": 5,\n          \"VN\": 5\n        },\n        \"ip_class\": {\n          \"monitoringService\": 8,\n          \"noRecord\": 11\n        },\n        \"ssl_protocol\": {\n          \"TLSv1.2\": 17,\n          \"none\": 2\n        }\n      },\n      \"bandwidth\": {\n        \"all\": 596139,\n        \"cached\": 590520,\n        \"uncached\": 5619,\n        \"ssl\": {\n          \"encrypted\": 592675,\n          \"unencrypted\": 3464\n        },\n        \"ssl_protocol\": {\n          \"TLSv1.2\": 17,\n          \"none\": 2\n        },\n        \"content_type\": {\n          \"html\": 34959,\n          \"png\": 561180\n        },\n        \"country\": {\n          \"CA\": 101033,\n          \"CN\": 10797,\n          \"IE\": 98224,\n          \"US\": 367542,\n          \"VN\": 18543\n        }\n      },\n      \"threats\": {\n        \"all\": 6,\n        \"type\": {\n          \"user.ban.ctry\": 6\n        },\n        \"country\": {\n          \"CN\": 6\n        }\n      },\n      \"pageviews\": {\n        \"all\": 2,\n        \"search_engine\": {\n          \"pingdom\": 2\n        }\n      },\n      \"uniques\": {\n        \"all\": 15\n      }\n    }\n  }\n}\ngraphql\nquery ZoneAnalyticsMigrationSample($zoneTag: string, $start: Time, $end: Time) {\n  viewer {\n    zones(filter: { zoneTag: $zoneTag }) {\n      httpRequests1mGroups(\n        orderBy: [datetimeFiveMinutes_ASC]\n        limit: 100\n        filter: { datetime_geq: $start, datetime_lt: $end }\n      ) {\n        dimensions {\n          datetimeFiveMinutes\n        }\n        sum {\n          browserMap {\n            pageViews\n            uaBrowserFamily\n          }\n          bytes\n          cachedBytes\n          cachedRequests\n          contentTypeMap {\n            bytes\n            requests\n            edgeResponseContentTypeName\n          }\n          clientSSLMap {\n            requests\n            clientSSLProtocol\n          }\n          countryMap {\n            bytes\n            requests\n            threats\n            clientCountryName\n          }\n          encryptedBytes\n          encryptedRequests\n          ipClassMap {\n            requests\n            ipType\n          }\n          pageViews\n          requests\n          responseStatusMap {\n            requests\n            edgeResponseStatus\n          }\n          threats\n          threatPathingMap {\n            requests\n            threatPathingName\n          }\n        }\n        uniq {\n          uniques\n        }\n      }\n    }\n  }\n}\njson\n{\n  \"data\": {\n    \"viewer\": {\n      \"zones\": [\n        {\n          \"httpRequests1mGroups\": [\n            {\n              \"dimensions\": {\n                \"datetimeFiveMinutes\": \"2019-09-08T20:00:00Z\"\n              },\n              \"sum\": {\n                \"browserMap\": [\n                  {\n                    \"pageViews\": 1,\n                    \"uaBrowserFamily\": \"PingdomBot\"\n                  }\n                ],\n                \"bytes\": 312740,\n                \"cachedBytes\": 309930,\n                \"cachedRequests\": 12,\n                \"clientSSLMap\": [\n                  {\n                    \"clientSSLProtocol\": \"none\",\n                    \"requests\": 2\n                  },\n                  {\n                    \"clientSSLProtocol\": \"TLSv1.2\",\n                    \"requests\": 13\n                  }\n                ],\n                \"contentTypeMap\": [\n                  {\n                    \"bytes\": 280590,\n                    \"edgeResponseContentTypeName\": \"png\",\n                    \"requests\": 3\n                  },\n                  {\n                    \"bytes\": 32150,\n                    \"edgeResponseContentTypeName\": \"html\",\n                    \"requests\": 12\n                  }\n                ],\n                \"countryMap\": [\n                  {\n                    \"bytes\": 10797,\n                    \"clientCountryName\": \"CN\",\n                    \"requests\": 6,\n                    \"threats\": 6\n                  },\n                  {\n                    \"bytes\": 98224,\n                    \"clientCountryName\": \"IE\",\n                    \"requests\": 1,\n                    \"threats\": 0\n                  },\n                  {\n                    \"bytes\": 185176,\n                    \"clientCountryName\": \"US\",\n                    \"requests\": 3,\n                    \"threats\": 0\n                  },\n                  {\n                    \"bytes\": 18543,\n                    \"clientCountryName\": \"VN\",\n                    \"requests\": 5,\n                    \"threats\": 0\n                  }\n                ],\n                \"encryptedBytes\": 309276,\n                \"encryptedRequests\": 13,\n                \"ipClassMap\": [\n                  {\n                    \"ipType\": \"monitoringService\",\n                    \"requests\": 4\n                  },\n                  {\n                    \"ipType\": \"noRecord\",\n                    \"requests\": 11\n                  }\n                ],\n                \"pageViews\": 1,\n                \"requests\": 15,\n                \"responseStatusMap\": [\n                  {\n                    \"edgeResponseStatus\": 200,\n                    \"requests\": 4\n                  },\n                  {\n                    \"edgeResponseStatus\": 403,\n                    \"requests\": 11\n                  }\n                ],\n                \"threatPathingMap\": [\n                  {\n                    \"requests\": 6,\n                    \"threatPathingName\": \"user.ban.ctry\"\n                  }\n                ],\n                \"threats\": 6\n              },\n              \"uniq\": {\n                \"uniques\": 11\n              }\n            },\n            {\n              \"dimensions\": {\n                \"datetimeFiveMinutes\": \"2019-09-08T20:01:00Z\"\n              },\n              \"sum\": {\n                \"browserMap\": [\n                  {\n                    \"pageViews\": 1,\n                    \"uaBrowserFamily\": \"PingdomBot\"\n                  }\n                ],\n                \"bytes\": 283399,\n                \"cachedBytes\": 280590,\n                \"cachedRequests\": 1,\n                \"clientSSLMap\": [\n                  {\n                    \"clientSSLProtocol\": \"TLSv1.2\",\n                    \"requests\": 4\n                  }\n                ],\n                \"contentTypeMap\": [\n                  {\n                    \"bytes\": 280590,\n                    \"edgeResponseContentTypeName\": \"png\",\n                    \"requests\": 3\n                  },\n                  {\n                    \"bytes\": 2809,\n                    \"edgeResponseContentTypeName\": \"html\",\n                    \"requests\": 1\n                  }\n                ],\n                \"countryMap\": [\n                  {\n                    \"bytes\": 101033,\n                    \"clientCountryName\": \"CA\",\n                    \"requests\": 2,\n                    \"threats\": 0\n                  },\n                  {\n                    \"bytes\": 182366,\n                    \"clientCountryName\": \"US\",\n                    \"requests\": 2,\n                    \"threats\": 0\n                  }\n                ],\n                \"encryptedBytes\": 283399,\n                \"encryptedRequests\": 4,\n                \"ipClassMap\": [\n                  {\n                    \"ipType\": \"monitoringService\",\n                    \"requests\": 4\n                  }\n                ],\n                \"pageViews\": 1,\n                \"requests\": 4,\n                \"responseStatusMap\": [\n                  {\n                    \"edgeResponseStatus\": 200,\n                    \"requests\": 4\n                  }\n                ],\n                \"threatPathingMap\": [],\n                \"threats\": 0\n              },\n              \"uniq\": {\n                \"uniques\": 4\n              }\n            }\n          ]\n        }\n      ]\n    }\n  },\n  \"errors\": null\n}\nbash\ncurl -H \"Authorization: Bearer $API_TOKEN\" \"https://api.cloudflare.com/client/v4/zones/$ZONE_ID/analytics/colos?since=2020-12-10T00:00:00Z\"  > colos_endpoint_output.json\nbash\ncat colos_endpoint_output.json | jq  -c '.result[] | {colo_id: .colo_id, timeseries: .timeseries[]} | {colo_id: .colo_id, timeslot: .timeseries.since, requests: .timeseries.requests.all, bandwidth: .timeseries.bandwidth.all} | select(.requests > 0) | select(.colo_id == \"ZRH\") '\nbash\n.result[]\nbash\n{colo_id: .colo_id, timeseries: .timeseries[]}\nbash\n{colo_id: .colo_id, timeslot: .timeseries.since, requests: .timeseries.requests.all, bandwidth: .timeseries.bandwidth.all}\nbash\nselect(.requests > 0) | select(.colo_id == \"ZRH\")\njson\n{\"colo_id\":\"ZRH\",\"timeslot\":\"2020-12-10T00:00:00Z\",\"requests\":601,\"bandwidth\":683581}\n{\"colo_id\":\"ZRH\",\"timeslot\":\"2020-12-10T01:00:00Z\",\"requests\":484,\"bandwidth\":550936}\n{\"colo_id\":\"ZRH\",\"timeslot\":\"2020-12-10T02:00:00Z\",\"requests\":326,\"bandwidth\":370627}\n{\"colo_id\":\"ZRH\",\"timeslot\":\"2020-12-10T03:00:00Z\",\"requests\":354,\"bandwidth\":402527}\n{\"colo_id\":\"ZRH\",\"timeslot\":\"2020-12-10T04:00:00Z\",\"requests\":446,\"bandwidth\":507234}\n{\"colo_id\":\"ZRH\",\"timeslot\":\"2020-12-10T05:00:00Z\",\"requests\":692,\"bandwidth\":787688}\n{\"colo_id\":\"ZRH\",\"timeslot\":\"2020-12-10T06:00:00Z\",\"requests\":1474,\"bandwidth\":1676166}\n{\"colo_id\":\"ZRH\",\"timeslot\":\"2020-12-10T07:00:00Z\",\"requests\":2839,\"bandwidth\":3226871}\n{\"colo_id\":\"ZRH\",\"timeslot\":\"2020-12-10T08:00:00Z\",\"requests\":2953,\"bandwidth\":3358487}\n{\"colo_id\":\"ZRH\",\"timeslot\":\"2020-12-10T09:00:00Z\",\"requests\":2550,\"bandwidth\":2901823}\n{\"colo_id\":\"ZRH\",\"timeslot\":\"2020-12-10T10:00:00Z\",\"requests\":2203,\"bandwidth\":2504615}\n...\ntxt\n{\n  viewer {\n    zones(filter: {zoneTag:\"$ZONE_TAG\"}) {\n      httpRequestsAdaptiveGroups(filter: {datetime_gt: \"2020-12-10T00:00:00Z\", coloCode:\"ZRH\"}, limit:10000, orderBy: [datetimeHour_ASC]) {\n        count\n        sum {\n          edgeResponseBytes\n        }\n        avg {\n          sampleInterval\n        }\n        count\n        dimensions {\n          datetimeHour\n          coloCode\n        }\n      }\n    }\n  }\n}\nbash\ncurl -X POST -H \"Authorization: Bearer $API_TOKEN\"  https://api.cloudflare.com/client/v4/graphql -d \"@./coloGroups.json\" > graphqlColoGroupsResponse.json\nbash\ncat graphqlColoGroupsResponse.json| jq -c '.data.viewer.zones[] | .httpRequestsAdaptiveGroups[] | {colo_id: .dimensions.coloCode, timeslot: .dimensions.datetimeHour, requests: .count, bandwidth: .sum.edgeResponseBytes}'\nbash\n.data.viewer.zones[]\nbash\n.httpRequestsAdaptiveGroups[]\nbash\n{colo_id: .dimensions.coloCode, timeslot: .dimensions.datetimeHour, requests: .count, bandwidth: .sum.edgeResponseBytes}\ntxt\nnetwork-analytics-attacks-<START_TIME>-<END_TIME>.json\nbash\necho '{ \"query\":\n  \"query RequestsAndDataTransferByHostname($zoneTag: string, $filter:filter) {\n    viewer {\n      zones(filter: {zoneTag: $zoneTag}) {\n        httpRequestsAdaptiveGroups(limit: 10, filter: $filter) {\n          sum {\n            visits\n            edgeResponseBytes\n          }\n          dimensions {\n            datetimeHour\n          }\n        }\n      }\n    }\n  }\",\n  \"variables\": {\n    \"zoneTag\": \"<CLOUDFLARE_ZONE_TAG>\",\n    \"filter\": {\n      \"datetime_geq\": \"2022-07-20T11:00:00Z\",\n      \"datetime_lt\": \"2022-07-24T12:00:00Z\",\n      \"clientRequestHTTPHost\": \"hostname.example.com\",\n      \"requestSource\": \"eyeball\"\n    }\n  }\n}' | tr -d '\\n' | curl --silent \\\nhttps://api.cloudflare.com/client/v4/graphql \\\n--header \"Authorization: Bearer <API_TOKEN>\" \\\n--header \"Accept: application/json\" \\\n--header \"Content-Type: application/json\" \\\n--data @- | jq .\njson\n{\n  \"data\": {\n    \"viewer\": {\n      \"zones\": [\n        {\n          \"httpRequestsAdaptiveGroups\": [\n            {\n              \"dimensions\": {\n                \"datetimeHour\": \"2022-07-21T10:00:00Z\"\n              },\n              \"sum\": {\n                \"edgeResponseBytes\": 19849385,\n                \"visits\": 4383\n              }\n            },\n            {\n              \"dimensions\": {\n                \"datetimeHour\": \"2022-07-21T06:00:00Z\"\n              },\n              \"sum\": {\n                \"edgeResponseBytes\": 20607204,\n                \"visits\": 4375\n              }\n            },\n            {\n              \"dimensions\": {\n                \"datetimeHour\": \"2022-07-26T05:00:00Z\"\n              },\n              \"sum\": {\n                \"edgeResponseBytes\": 20170839,\n                \"visits\": 4519\n              }\n            },\n            {\n              \"dimensions\": {\n                \"datetimeHour\": \"2022-07-23T08:00:00Z\"\n              },\n              \"sum\": {\n                \"edgeResponseBytes\": 20141860,\n                \"visits\": 4448\n              }\n            },\n            {\n              \"dimensions\": {\n                \"datetimeHour\": \"2022-07-25T15:00:00Z\"\n              },\n              \"sum\": {\n                \"edgeResponseBytes\": 21070367,\n                \"visits\": 4469\n              }\n            },\n            {\n              \"dimensions\": {\n                \"datetimeHour\": \"2022-07-28T08:00:00Z\"\n              },\n              \"sum\": {\n                \"edgeResponseBytes\": 19200774,\n                \"visits\": 4345\n              }\n            },\n            {\n              \"dimensions\": {\n                \"datetimeHour\": \"2022-07-26T02:00:00Z\"\n              },\n              \"sum\": {\n                \"edgeResponseBytes\": 20758067,\n                \"visits\": 4502\n              }\n            },\n            {\n              \"dimensions\": {\n                \"datetimeHour\": \"2022-07-20T19:00:00Z\"\n              },\n              \"sum\": {\n                \"edgeResponseBytes\": 22127811,\n                \"visits\": 4443\n              }\n            },\n            {\n              \"dimensions\": {\n                \"datetimeHour\": \"2022-07-27T15:00:00Z\"\n              },\n              \"sum\": {\n                \"edgeResponseBytes\": 20480644,\n                \"visits\": 4268\n              }\n            },\n            {\n              \"dimensions\": {\n                \"datetimeHour\": \"2022-07-27T17:00:00Z\"\n              },\n              \"sum\": {\n                \"edgeResponseBytes\": 19885704,\n                \"visits\": 4287\n              }\n            }\n          ]\n        }\n      ]\n    }\n  },\n  \"errors\": null\n}\nbash\ncurl --silent \\\nhttps://api.cloudflare.com/client/v4/graphql \\\n--header \"Authorization: Bearer <API_TOKEN>\" \\\n--header \"Content-Type: application/json\" \\\n--data '{\n  \"query\": \"{viewer {zones(filter: {zoneTag: $zoneTag}) {topPaths: httpRequestsAdaptiveGroups(filter: $filter, limit: 10, orderBy: [sum_edgeResponseBytes_DESC]) {count sum {edgeResponseBytes} dimensions {metric: clientRequestPath}}}}}\",\n  \"variables\": {\n    \"zoneTag\": \"'$ARG'\",\n    \"filter\": {\n      \"AND\": [\n        {\n          \"datetime_geq\": \"'$OLDDATE'\",\n          \"datetime_leq\": \"'$CURRENTDATE'\"\n        },\n        {\n          \"requestSource\": \"eyeball\"\n        }\n      ]\n    }\n  }\n}' | jq -r 'try .data.viewer.zones[].topPaths[] | \"\\\"\\(.dimensions.metric)\\\": \\(.sum.edgeResponseBytes)\"' | sort\nbash\necho '{ \"query\":\n  \"query accessLoginRequestsAdaptiveGroups($accountTag: string, $rayId: string, $datetimeStart: string, $datetimeEnd: string) {\n    viewer {\n      accounts(filter: {accountTag: $accountTag}) {\n        accessLoginRequestsAdaptiveGroups(limit: 100, filter: {datetime_geq: $datetimeStart, datetime_leq: $datetimeEnd, cfRayId: $rayId}, orderBy: [datetime_ASC]) {\n          dimensions {\n            datetime\n            isSuccessfulLogin\n            hasWarpEnabled\n            hasGatewayEnabled\n            hasExistingJWT\n            approvingPolicyId\n            cfRayId\n            ipAddress\n            userUuid\n            identityProvider\n            country\n            deviceId\n            mtlsStatus\n            mtlsCertSerialId\n            mtlsCommonName\n            serviceTokenId\n          }\n        }\n      }\n    }\n  }\",\n  \"variables\": {\n    \"accountTag\": \"<CLOUDFLARE_ACCOUNT_TAG>\",\n    \"rayId\": \"74e4ac510dfdc44f\",\n    \"datetimeStart\": \"2022-09-20T14:36:38Z\",\n    \"datetimeEnd\": \"2022-09-22T14:36:38Z\"\n}\n}' | tr -d '\\n' | curl --silent \\\nhttps://api.cloudflare.com/client/v4/graphql \\\n--header \"Authorization: Bearer <API_TOKEN>\" \\\n--header \"Accept: application/json\" \\\n--header \"Content-Type: application/json\" \\\n--data @- | jq .\njson\n{\n  \"data\": {\n    \"viewer\": {\n      \"accounts\": [\n        {\n          \"accessLoginRequestsAdaptiveGroups\": [\n            {\n              \"dimensions\": {\n                \"approvingPolicyId\": \"\",\n                \"cfRayId\": \"744927037ce06d68\",\n                \"country\": \"US\",\n                \"datetime\": \"2022-09-02T20:56:27Z\",\n                \"deviceId\": \"\",\n                \"hasExistingJWT\": 0,\n                \"hasGatewayEnabled\": 0,\n                \"hasWarpEnabled\": 0,\n                \"identityProvider\": \"nonidentity\",\n                \"ipAddress\": \"2a09:bac0:15::814:7b37\",\n                \"isSuccessfulLogin\": 0,\n                \"mtlsCertSerialId\": \"\",\n                \"mtlsCommonName\": \"\",\n                \"mtlsStatus\": \"NONE\",\n                \"serviceTokenId\": \"\",\n                \"userUuid\": \"\"\n              }\n            }\n          ]\n        }\n      ]\n    }\n  },\n  \"errors\": null\n}\nbash\necho '{ \"query\":\n  \"query ListFirewallEvents($zoneTag: string, $filter: FirewallEventsAdaptiveFilter_InputObject) {\n    viewer {\n      zones(filter: { zoneTag: $zoneTag }) {\n        firewallEventsAdaptive(\n          filter: $filter\n          limit: 10\n          orderBy: [datetime_DESC]\n        ) {\n          action\n          clientAsn\n          clientCountryName\n          clientIP\n          clientRequestPath\n          clientRequestQuery\n          datetime\n          source\n          userAgent\n        }\n      }\n    }\n  }\",\n  \"variables\": {\n    \"zoneTag\": \"<CLOUDFLARE_ZONE_TAG>\",\n    \"filter\": {\n      \"datetime_geq\": \"2022-07-24T11:00:00Z\",\n      \"datetime_leq\": \"2022-07-24T12:00:00Z\"\n    }\n  }\n}' | tr -d '\\n' | curl --silent \\\nhttps://api.cloudflare.com/client/v4/graphql \\\n--header \"Authorization: Bearer <API_TOKEN>\" \\\n--header \"Accept: application/json\" \\\n--header \"Content-Type: application/json\" \\\n--data @-\nbash\n... | curl --silent \\\nhttps://api.cloudflare.com/client/v4/graphql \\\n--header \"Authorization: Bearer <API_TOKEN>\" \\\n--header \"Accept: application/json\" \\\n--header \"Content-Type: application/json\" \\\n--data @- | jq .\n\n#=> {\n#=>   \"data\": {\n#=>     \"viewer\": {\n#=>       \"zones\": [\n#=>         {\n#=>           \"firewallEventsAdaptive\": [\n#=>             {\n#=>               \"action\": \"log\",\n#=>               \"clientAsn\": \"5089\",\n#=>               \"clientCountryName\": \"GB\",\n#=>               \"clientIP\": \"203.0.113.69\",\n#=>               \"clientRequestPath\": \"/%3Cscript%3Ealert()%3C/script%3E\",\n#=>               \"clientRequestQuery\": \"\",\n#=>               \"datetime\": \"2020-04-24T10:11:24Z\",\n#=>               \"source\": \"waf\",\n#=>               \"userAgent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36\"\n#=>             },\n#=>             {\n#=>               \"action\": \"log\",\n#=>               \"clientAsn\": \"5089\",\n#=>               \"clientCountryName\": \"GB\",\n#=>               \"clientIP\": \"203.0.113.69\",\n#=>               \"clientRequestPath\": \"/%3Cscript%3Ealert()%3C/script%3E\",\n#=>               \"clientRequestQuery\": \"\",\n#=>               \"datetime\": \"2020-04-24T10:11:24Z\",\n#=>               \"source\": \"waf\",\n#=>               \"userAgent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36\"\n#=>             },\n#=>             {\n#=>               \"action\": \"log\",\n#=>               \"clientAsn\": \"5089\",\n#=>               \"clientCountryName\": \"GB\",\n#=>               \"clientIP\": \"203.0.113.69\",\n#=>               \"clientRequestPath\": \"/%3Cscript%3Ealert()%3C/script%3E\",\n#=>               \"clientRequestQuery\": \"\",\n#=>               \"datetime\": \"2020-04-24T10:11:24Z\",\n#=>               \"source\": \"waf\",\n#=>               \"userAgent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36\"\n#=>             },\n#=>             {\n#=>               \"action\": \"log\",\n#=>               \"clientAsn\": \"5089\",\n#=>               \"clientCountryName\": \"GB\",\n#=>               \"clientIP\": \"203.0.113.69\",\n#=>               \"clientRequestPath\": \"/%3Cscript%3Ealert()%3C/script%3E\",\n#=>               \"clientRequestQuery\": \"\",\n#=>               \"datetime\": \"2020-04-24T10:11:24Z\",\n#=>               \"source\": \"waf\",\n#=>               \"userAgent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36\"\n#=>             },\n#=>             {\n#=>               \"action\": \"log\",\n#=>               \"clientAsn\": \"5089\",\n#=>               \"clientCountryName\": \"GB\",\n#=>               \"clientIP\": \"203.0.113.69\",\n#=>               \"clientRequestPath\": \"/%3Cscript%3Ealert()%3C/script%3E\",\n#=>               \"clientRequestQuery\": \"\",\n#=>               \"datetime\": \"2020-04-24T10:11:24Z\",\n#=>               \"source\": \"waf\",\n#=>               \"userAgent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36\"\n#=>             },\n#=>             {\n#=>               \"action\": \"log\",\n#=>               \"clientAsn\": \"5089\",\n#=>               \"clientCountryName\": \"GB\",\n#=>               \"clientIP\": \"203.0.113.69\",\n#=>               \"clientRequestPath\": \"/%3Cscript%3Ealert()%3C/script%3E\",\n#=>               \"clientRequestQuery\": \"\",\n#=>               \"datetime\": \"2020-04-24T10:11:24Z\",\n#=>               \"source\": \"waf\",\n#=>               \"userAgent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36\"\n#=>             },\n#=>             {\n#=>               \"action\": \"log\",\n#=>               \"clientAsn\": \"5089\",\n#=>               \"clientCountryName\": \"GB\",\n#=>               \"clientIP\": \"203.0.113.69\",\n#=>               \"clientRequestPath\": \"/%3Cscript%3Ealert()%3C/script%3E\",\n#=>               \"clientRequestQuery\": \"\",\n#=>               \"datetime\": \"2020-04-24T10:11:24Z\",\n#=>               \"source\": \"waf\",\n#=>               \"userAgent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36\"\n#=>             },\n#=>             {\n#=>               \"action\": \"block\",\n#=>               \"clientAsn\": \"5089\",\n#=>               \"clientCountryName\": \"GB\",\n#=>               \"clientIP\": \"203.0.113.69\",\n#=>               \"clientRequestPath\": \"/%3Cscript%3Ealert()%3C/script%3E\",\n#=>               \"clientRequestQuery\": \"\",\n#=>               \"datetime\": \"2020-04-24T10:11:24Z\",\n#=>               \"source\": \"waf\",\n#=>               \"userAgent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36\"\n#=>             },\n#=>             {\n#=>               \"action\": \"log\",\n#=>               \"clientAsn\": \"58224\",\n#=>               \"clientCountryName\": \"IR\",\n#=>               \"clientIP\": \"2.183.175.37\",\n#=>               \"clientRequestPath\": \"/api/v2\",\n#=>               \"clientRequestQuery\": \"\",\n#=>               \"datetime\": \"2020-04-24T10:00:54Z\",\n#=>               \"source\": \"waf\",\n#=>               \"userAgent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36\"\n#=>             },\n#=>             {\n#=>               \"action\": \"log\",\n#=>               \"clientAsn\": \"58224\",\n#=>               \"clientCountryName\": \"IR\",\n#=>               \"clientIP\": \"2.183.175.37\",\n#=>               \"clientRequestPath\": \"/api/v2\",\n#=>               \"clientRequestQuery\": \"\",\n#=>               \"datetime\": \"2020-04-24T10:00:54Z\",\n#=>               \"source\": \"waf\",\n#=>               \"userAgent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36\"\n#=>             }\n#=>           ]\n#=>         }\n#=>       ]\n#=>     }\n#=>   },\n#=>   \"errors\": null\n#=> }\nbash\necho '{ \"query\":\n  \"query IDSActivity {\n    viewer {\n      accounts(filter: { accountTag: $accountTag }) {\n        magicIDPSNetworkAnalyticsAdaptiveGroups(\n          filter: $filter\n          limit: 10\n        ) {\n          sum {\n            bits\n            packets\n          }\n          dimensions {\n            datetimeFiveMinutes\n          }\n        }\n      }\n    }\n  }\",\n  \"variables\": {\n    \"accountTag\": \"<CLOUDFLARE_ACCOUNT_TAG>\",\n    \"filter\": {\n      \"datetime_geq\": \"2023-06-20T11:00:00.000Z\",\n      \"datetime_leq\": \"2023-06-20T12:00:00.000Z\",\n      \"verdict\": \"drop\",\n      \"outcome\": \"pass\"\n    }\n  }\n}' | tr -d '\\n' | curl --silent \\\nhttps://api.cloudflare.com/client/v4/graphql \\\n--header \"Authorization: Bearer <API_TOKEN>\" \\\n--header \"Accept: application/json\" \\\n--header \"Content-Type: application/json\" \\\n--data @-\nbash\n... | curl --silent \\\nhttps://api.cloudflare.com/client/v4/graphql \\\n--header \"Authorization: Bearer <API_TOKEN>\" \\\n--header \"Accept: application/json\" \\\n--header \"Content-Type: application/json\" \\\n--data @- | jq .\n\n#=> {\n#=>   \"data\": {\n#=>     \"viewer\": {\n#=>       \"accounts\": [\n#=>         {\n#=>           \"magicIDPSNetworkAnalyticsAdaptiveGroups\": [\n#=>             {\n#=>               sum: { bits:  327680, packets: 16384 },\n#=>               dimensions: {\n#=>                 datetimeFiveMinute: '2021-05-12T22:00-00:00'\n#=>               }\n#=>             },\n#=>             {\n#=>               sum: { bits:  360448, packets: 8192 },\n#=>               dimensions: {\n#=>                 datetimeFiveMinute: '2021-05-12T22:05-00:00'\n#=>               }\n#=>             },\n#=>             {\n#=>               sum: { bits:  327680, packets: 8192 },\n#=>               dimensions: {\n#=>                 datetimeFiveMinute: '2021-05-12T22:05-00:00'\n#=>               }\n#=>             },\n#=>             {\n#=>               sum: { bits:  360448, packets: 8192 },\n#=>               dimensions: {\n#=>                 datetimeFiveMinute: '2021-05-12T22:20-00:00'\n#=>               }\n#=>             },\n#=>             {\n#=>               sum: { bits:  327680, packets: 8192 },\n#=>               dimensions: {\n#=>                 datetimeFiveMinute: '2021-05-12T22:20-00:00'\n#=>               }\n#=>             }\n#=>           ]\n#=>         }\n#=>       ]\n#=>     }\n#=>   },\n#=>   \"errors\": null\n#=> }\nbash\necho '{ \"query\":\n  \"query MFWActivity {\n    viewer {\n      accounts(filter: { accountTag: $accountTag }) {\n        magicFirewallSamplesAdaptiveGroups(\n          filter: $filter\n          limit: 10\n          orderBy: [datetimeFiveMinute_DESC]\n        ) {\n          sum {\n            bits\n            packets\n          }\n          dimensions {\n            datetimeFiveMinute\n            ruleId\n          }\n        }\n      }\n    }\n  }\",\n  \"variables\": {\n    \"accountTag\": \"<CLOUDFLARE_ACCOUNT_TAG>\",\n    \"filter\": {\n      \"datetime_geq\": \"2022-07-24T11:00:00Z\",\n      \"datetime_leq\": \"2022-07-24T11:10:00Z\"\n    }\n  }\n}' | tr -d '\\n' | curl --silent \\\nhttps://api.cloudflare.com/client/v4/graphql \\\n--header \"Authorization: Bearer <API_TOKEN>\" \\\n--header \"Accept: application/json\" \\\n--header \"Content-Type: application/json\" \\\n--data @-\nbash\n... | curl --silent \\\nhttps://api.cloudflare.com/client/v4/graphql \\\n--header \"Authorization: Bearer <API_TOKEN>\" \\\n--header \"Accept: application/json\" \\\n--header \"Content-Type: application/json\" \\\n--data @- | jq .\n\n#=> {\n#=>   \"data\": {\n#=>     \"viewer\": {\n#=>       \"accounts\": [\n#=>         {\n#=>           \"magicFirewallSamplesAdaptiveGroups\": [\n#=>             {\n#=>               sum: { bits:  327680, packets: 16384 },\n#=>               dimensions: {\n#=>                 datetimeFiveMinute: '2021-05-12T22:00-00:00',\n#=>                 ruleId: 'bdfa8f8f0ae142b4a70ef15f6160e532'\n#=>               }\n#=>             },\n#=>             {\n#=>               sum: { bits:  360448, packets: 8192 },\n#=>               dimensions: {\n#=>                 datetimeFiveMinute: '2021-05-12T22:05-00:00',\n#=>                 ruleId: 'bdfa8f8f0ae142b4a70ef15f6160e532'\n#=>               }\n#=>             },\n#=>             {\n#=>               sum: { bits:  327680, packets: 8192 },\n#=>               dimensions: {\n#=>                 datetimeFiveMinute: '2021-05-12T22:05-00:00',\n#=>                 ruleId: 'bdfa8f8f0ae142b4a70ef15f6160e532'\n#=>               }\n#=>             },\n#=>             {\n#=>               sum: { bits:  360448, packets: 8192 },\n#=>               dimensions: {\n#=>                 datetimeFiveMinute: '2021-05-12T22:20-00:00',\n#=>                 ruleId: 'bdfa8f8f0ae142b4a70ef15f6160e532'\n#=>               }\n#=>             },\n#=>             {\n#=>               sum: { bits:  327680, packets: 8192 },\n#=>               dimensions: {\n#=>                 datetimeFiveMinute: '2021-05-12T22:20-00:00',\n#=>                 ruleId: 'bdfa8f8f0ae142b4a70ef15f6160e532'\n#=>               }\n#=>             }\n#=>           ]\n#=>         }\n#=>       ]\n#=>     }\n#=>   },\n#=>   \"errors\": null\n#=> }\nbash\nPAYLOAD='{ \"query\":\n  \"query GetTunnelHealthCheckResults($accountTag: string, $datetimeStart: string, $datetimeEnd: string) {\n      viewer {\n        accounts(filter: {accountTag: $accountTag}) {\n          magicTransitTunnelTrafficAdaptiveGroups(\n            limit: 100,\n            filter: {\n              datetime_geq: $datetimeStart,\n              datetime_lt:  $datetimeEnd,\n              direction: $direction\n            }\n          ) {\n            avg {\n              bitRateFiveMinutes\n            }\n            dimensions {\n              tunnelName\n              datetimeFiveMinutes\n            }\n          }\n        }\n      }\n  }\",\n    \"variables\": {\n      \"accountTag\": \"<CLOUDFLARE_ACCOUNT_TAG>\",\n      \"direction\": \"ingress\",\n      \"datetimeStart\": \"2022-05-04T11:00:00.000Z\",\n      \"datetimeEnd\": \"2022-05-04T12:00:00.000Z\"\n    }\n  }\n}'",
+  "code_samples": [
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Filtering · Cloudflare Analytics docs\ndescription: Filters constrain queries to a particular account or set of zones,\n  requests by date, or those from a specific user agent, for example. Without\n  filters, queries can suffer performance degradation, results can exceed\n  supported bounds, and the data returned can be noisy.\nlastUpdated: 2025-05-14T00:02:06.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/features/filtering/\n  md: https://developers.cloudflare.com/analytics/graphql-api/features/filtering/index.md\n---\n\nFilters constrain queries to a particular account or set of zones, requests by date, or those from a specific user agent, for example. Without filters, queries can suffer performance degradation, results can exceed supported bounds, and the data returned can be noisy.\n\n## Filter Structure\n\nThe GraphQL filter is represented by the [GraphQL Input Object](https://graphql.github.io/graphql-spec/June2018/#sec-Input-Objects), which exposes Boolean algebra on nodes.\n\nYou can use filters as an argument on the following resources:\n\n* zones\n* accounts\n* tables (datasets)\n\n### Zone filter\n\nAllows querying zone-related data by zone ID (`zoneTag`).",
+      "language": "unknown"
+    },
+    {
+      "code": "The zone filter must conform to the following grammar:",
+      "language": "unknown"
+    },
+    {
+      "code": "Compound filters (comma-separated, `AND`, `OR`) are not supported.\n\nUse the `zoneTag: t` and `zoneTag_in: [t, ...]` forms when you know the zone IDs. Use the `zoneTag_gt: t` form with limits to traverse all zones if the zone IDs are not known. Zones always sort alphanumerically.\n\nOmit the filter to get results for all zones (up to the supported limit).\n\n### Account filter\n\nThe account filter uses the same structure and rules as the zone filter, except that it uses the Account ID (`accountTag`) instead of the Zone ID (`zoneTag`).\n\nYou must specify an account filter when making an account-scoped query, and you cannot query multiple accounts simultaneously.\n\nNote\n\nNetwork Analytics queries require an Account ID (`accountTag`) filter.\n\n### Table (dataset) filter\n\nTable filters require that you query at least one node. Use the `AND` operator to create and combine multi-node filters. Table filters also support the `OR` operator, which you must specify explicitly.\n\nThe following grammar describes the table filter, where `k` is the GraphQL node on which to filter and `op` is one of the supported operators for that node:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Operators\n\nOperator support varies, depending on the node type and node name.\n\n#### Array operators\n\nThe following operators are supported for all array types:\n\n| Operator | Comparison |\n| - | - |\n| `has` | array contains a value |\n| `hasall` | array contains all of a list of values |\n| `hasany` | array contains at least one of a list of values |\n\n#### Scalar operators\n\nThe following operators are supported for all scalar types:\n\n| Operator | Comparison |\n| - | - |\n| `gt` | greater than |\n| `lt` | less than |\n| `geq` | greater or equal to |\n| `leq` | less or equal to |\n| `neq` | not equal |\n| `in` | in |\n\n#### String operators\n\nThe `like` operator is available for string comparisons and supports the `%` character as a wildcard.\n\n## Examples\n\nNote\n\nFiltering times are based on event start timestamps, which means requests that end after the filter may be included in queries (as long as they start within the given time).\n\n### General example",
+      "language": "unknown"
+    },
+    {
+      "code": "[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBA4mAdpAhgGwKIA8UFsAOaYAFACQBeA9sgCooDmAXDAM4AuEAlovQDQyl2KCG2Y1OuMAEoYAbwBQMGADdOYAO6Q5ipTCrIWxAGac0bSM1l7qYOkwH7bDGAF8ZC3boAWbNvgBKYKBg7CwAggAmKPhsnMpgcBCUIPiGOp5KJmYWcjBR5rGSAPr0ogJCIvwAxmhqiGwAwsn10AByeGDMAERwAEJdrukZtbicZQCMQ0ruU7pVzWyzLkPLSssuQA\\&variables=N4IgXg9gdgpgKgQwOYgFwgFoHkByBRAfQEkAREAGhAGcAXBAJxrRACYAGFgVgFoBGF7gGY2cFi1TDUbAOwYQAXyA)\n\n### Filter on a specific node\n\nThe following GraphQL example shows how to filter a specific node. The SQL equivalent follows.\n\n#### GraphQL",
+      "language": "unknown"
+    },
+    {
+      "code": "#### SQL",
+      "language": "unknown"
+    },
+    {
+      "code": "### Filter on multiple fields\n\nThe following GraphQL example shows how to apply a filter to multiple fields, in this case two datetime fields. The SQL equivalent follows.\n\n#### GraphQL",
+      "language": "unknown"
+    },
+    {
+      "code": "#### SQL",
+      "language": "unknown"
+    },
+    {
+      "code": "### Filter using the `OR` operator\n\nThe following GraphQL example demonstrates using the `OR` operator in a filter. This `OR` operator filters for the value `US` or `GB` in the `clientCountryName` field.\n\n#### GraphQL",
+      "language": "unknown"
+    },
+    {
+      "code": "#### SQL",
+      "language": "unknown"
+    },
+    {
+      "code": "### Filter an array by one value\n\nThe following GraphQL examples show how to filter an array field to only return data that includes a specific value. The SQL equivalent follows.\n\n#### GraphQL",
+      "language": "unknown"
+    },
+    {
+      "code": "#### SQL",
+      "language": "unknown"
+    },
+    {
+      "code": "### Filter an array by multiple values\n\nThe following GraphQL examples show how to filter an array field to only return data that includes several values. The SQL equivalent follows.\n\n#### GraphQL",
+      "language": "unknown"
+    },
+    {
+      "code": "#### SQL",
+      "language": "unknown"
+    },
+    {
+      "code": "### Filter end users\n\nAdd the `requestSource` filter for `eyeball` to return request, data transfer, and visit data about only the end users of your website. This will exclude actions taken by Cloudflare products (for example, cache purge, healthchecks, Workers subrequests) on your zone.\n\n## Subqueries (advanced filters)\n\nSubqueries are not currently supported. You can use two GraphQL queries as a workaround for this limitation.\n\n</page>\n\n<page>\n---\ntitle: Pagination · Cloudflare Analytics docs\ndescription: Pagination – breaking up your query results into smaller parts –\n  can be done using limit, orderBy, and filtering parameters. The GraphQL\n  Analytics API does not support cursors for pagination.\nlastUpdated: 2024-09-11T11:09:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/features/pagination/\n  md: https://developers.cloudflare.com/analytics/graphql-api/features/pagination/index.md\n---\n\nPagination – breaking up your query results into smaller parts – can be done using `limit`, `orderBy`, and filtering parameters. The GraphQL Analytics API does not support cursors for pagination.\n\n* `limit` (integer) defines how many records to return.\n* `orderBy` (string) defines the sort order for the data.\n\n## Query pages without cursors\n\nOur examples assume that the `date` and `clientCountryName` relationships are unique.\n\n### Get the first *n* results of a query\n\nTo limit results, add the `limit` parameter as an integer. For example, query the first two records:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nSpecifying a sort order by date returns less specific results than specifying a sort order by date and country.\n\n**Response**",
+      "language": "unknown"
+    },
+    {
+      "code": "### Query for the next page using filters\n\nTo get the next *n* results, specify a filter to exclude the last result from the previous query. Taking the previous example, you can do this by appending the greater-than operator (`_gt`) to the `clientCountryName` field and the greater-or-equal operator (`_geq`) to the `datetime` field. This is where being specific about sort order comes into play. You are less likely to miss results using a more granular sort order.",
+      "language": "unknown"
+    },
+    {
+      "code": "**Response**",
+      "language": "unknown"
+    },
+    {
+      "code": "### Query the previous page\n\nTo get the previous *n* results, reverse the filters and sort order.",
+      "language": "unknown"
+    },
+    {
+      "code": "**Response**",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Nested Structures · Cloudflare Analytics docs\ndescription: \"Two kinds of nested structures that are supported: arrays and\n  maps. Fields of either of these types are arrays; when they are part of a\n  query result, which is already an array of objects, they become nested\n  arrays.\"\nlastUpdated: 2025-05-15T16:26:01.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/features/nested-structures/\n  md: https://developers.cloudflare.com/analytics/graphql-api/features/nested-structures/index.md\n---\n\nTwo kinds of nested structures that are supported: **arrays** and **maps**. Fields of either of these types are arrays; when they are part of a query result, which is already an array of objects, they become nested arrays.\n\n## Arrays\n\nThe GraphQL API supports two different sorts of arrays:\n\n* Some arrays contain scalar types (for example, `[String]`) and function like ordinary fields that [can be filtered](https://developers.cloudflare.com/analytics/graphql-api/features/filtering/)\n* Some arrays contain more complex types (for example, `[Subrequest]`.) The following section describes their behaviour.\n\nArrays of non-scalar types behave as a single value. There is no way to paginate through, filter, filter by, group, or group by the array.\n\nOn the other hand, you can choose which fields of the underlying type you want fetched.\n\nFor example, given arrays like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "You can run a query to get the status by subrequest:",
+      "language": "unknown"
+    },
+    {
+      "code": "The results would be:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Maps\n\nMaps behave like arrays, but can be grouped using the `sum` function. They are used in aggregated datasets, such as `httpRequest1dGroups`.\n\nExample maps:",
+      "language": "unknown"
+    },
+    {
+      "code": "Query:",
+      "language": "unknown"
+    },
+    {
+      "code": "Response:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Examples\n\nQuery array fields in raw datasets:",
+      "language": "unknown"
+    },
+    {
+      "code": "[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBAcmAzgFzAEwGIEswBs2IAUAJAF4D2AdmACoCGA5gFwwoRaUMA0MxKdEZCxpYAtmB7EwlNMLFgAlDADeAKBgwAbjgDukFeo0wK1IgDMsuVBBbLjVWoxZkH9BjAC+StUaNhN0shEuGJYQjAATDwWVpC2MGh0qMjyAPoMYMDO-II8iclpuJnO0mie3oa+GqJJAMYAFkgGVVUQIEUAkmiVLTB0tSlUPS2I5CAQtWDDRh7Ts77znqoeQA\\&variables=N4IgXg9gdgpgKgQwOYgFwgFoHkByBRAfQEkAREAGhAGcAXBAJxrRACYAGFgVgFoBGF7gGY2cFi1TDUbAOwYKIGFAAmzdlz4DBvOGwAsEtlNkgAvkA)\n\nExample response:",
+      "language": "unknown"
+    },
+    {
+      "code": "Query maps fields in aggregated datasets:",
+      "language": "unknown"
+    },
+    {
+      "code": "[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBAsgQwA4GFkIMYEsAuUAUAUDDACQBeA9gHZgAqCA5gFwwDOOEW1jxZAJghxgAyjgQQcrACJCwfUoOEBRavxlyFHCVJh0sAW3klSYNa31HCAShgBvPgDcsYAO6R7fElVpt8AMywAG2EIVjsYH3omVgoaaMYYAF9bBxJ0mAALHBwkACUwUDAONgBGAwBxCEoQJD8vDJggw1xWUoAGBozAkMhwrsalMAB9RkLYobEdAYyh4aDxgTlVfhn0oZxDEbHgWO1JNZINrfndUzU1pIHUtbYQA09Gxowa6k4oRCRHp+fmsxwUK93gA5BBWH6NCCFcAlQ7pABGUGEbDhJBwmShQhREJIVwheJ+-C21DYWBobG+EOORgAEjUIJcBgTcXwrkkgA\\&variables=N4IgXg9gdgpgKgQwOYgFwgFoHkByBRAfQEkAREAGhABMEAXGAZVoQCda0QAmABk4FYAtAEZOAgMzcK1OjDxQqHHv2GixQqQGdmbRb0Ejx3OJ06oJqbgHYMUmPN3KDauNwAsZ7hesgAvkA)\n\nExample response:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Sorting · Cloudflare Analytics docs\ndescription: You can specify the order of the query result elements using the\n  orderBy argument. By default, the results are sorted by the primary key of a\n  dataset (table). If you specify another field to sort on, the primary key is\n  also used in the sorting key, allowing results to remain consistent for\n  pagination.\nlastUpdated: 2024-09-11T11:09:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/features/sorting/\n  md: https://developers.cloudflare.com/analytics/graphql-api/features/sorting/index.md\n---\n\nYou can specify the order of the query result elements using the `orderBy` argument. By default, the results are sorted by the primary key of a dataset (table). If you specify another field to sort on, the primary key is also used in the sorting key, allowing results to remain consistent for pagination.\n\nThe default order for an aggregated dataset is by the fields on which the aggregated data is grouped. If you specify a different order, the aggregation group is appended to your specified ordering.\n\nNote\n\nOrdering within nested structures is not supported.\n\n## Examples\n\n### Raw data sorting",
+      "language": "unknown"
+    },
+    {
+      "code": "### Raw data sorting using multiple fields",
+      "language": "unknown"
+    },
+    {
+      "code": "### Group sorting by aggregation function",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Authentication · Cloudflare Analytics docs\ndescription: Cloudflare separates service configuration by zone. When there are\n  multiple accounts, each with many zones, it is important to restrict GraphQL\n  Analytics API access to only those account and zone resources that are\n  relevant for the task at hand.\nlastUpdated: 2024-08-13T19:56:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/getting-started/authentication/\n  md: https://developers.cloudflare.com/analytics/graphql-api/getting-started/authentication/index.md\n---\n\nCloudflare separates service configuration by zone. When there are multiple accounts, each with many zones, it is important to restrict GraphQL Analytics API access to only those account and zone resources that are relevant for the task at hand.\n\nTo secure access to your GraphQL Analytics data, use a Cloudflare API key or token to authenticate an API request.\n\nThis table outlines the differences between Cloudflare API keys and tokens:\n\n| Authentication Method | Description |\n| - | - |\n| [API Tokens](https://developers.cloudflare.com/fundamentals/api/get-started/create-token/) | Cloudflare recommends API Tokens as the preferred way to interact with Cloudflare APIs. You can configure the scope of tokens to limit access to account and zone resources, and you can define the Cloudflare APIs to which the token authorizes access. |\n| [API Keys](https://developers.cloudflare.com/fundamentals/api/get-started/keys/) | Unique to each Cloudflare user and used only for authentication. API keys do not authorize access to accounts or zones.Use the Global API Key for authentication. |\n\nTo create and configure GraphQL Analytics API tokens, refer to [Configure an Analytics API token](https://developers.cloudflare.com/analytics/graphql-api/getting-started/authentication/api-token-auth/).\n\nTo find and retrieve API keys, as well as edit HTTP headers for authentication in GraphiQL, refer to [Authenticate with a Cloudflare API key](https://developers.cloudflare.com/analytics/graphql-api/getting-started/authentication/api-key-auth/).\n\n</page>\n\n<page>\n---\ntitle: Execute a GraphQL query with curl · Cloudflare Analytics docs\ndescription: >-\n  Using a plain curl to send a query provides the ability to slice-n-dice with\n  the\n\n  results and apply post-processing if needed. For example, converting\n\n  results received from GraphQL API into a CSV format.\nlastUpdated: 2024-11-14T18:56:08.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/getting-started/execute-graphql-query/\n  md: https://developers.cloudflare.com/analytics/graphql-api/getting-started/execute-graphql-query/index.md\n---\n\nUsing a plain curl to send a query provides the ability to slice-n-dice with the results and apply post-processing if needed. For example, converting results received from GraphQL API into a CSV format.\n\nFor more functionality, like auto-completion, schema exploring, etc., you can look at GraphQL [clients](https://developers.cloudflare.com/analytics/graphql-api/getting-started/compose-graphql-query/).\n\nGraphQL API expects JSON with two essentials fields: \"query\" and \"variables\".\n\nA query should be stripped from newline symbols and sent as a single-line string when the variables is an object full of values for all placeholders used in the query:",
+      "language": "unknown"
+    },
+    {
+      "code": "It is still possible to use a human-friendly query though. In the example below you can see how `echo` piped together with `tr` to provide a proper payload with `curl`:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Compose a query in GraphiQL · Cloudflare Analytics docs\ndescription: Learn how to use a GraphiQL client to compose and execute a GraphQL\n  query. This guide covers setting up a query, selecting the dataset, and\n  configuring parameters and fields.\nlastUpdated: 2025-02-25T17:51:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/getting-started/compose-graphql-query/\n  md: https://developers.cloudflare.com/analytics/graphql-api/getting-started/compose-graphql-query/index.md\n---\n\nMany clients might need help using [the semantics](https://developers.cloudflare.com/analytics/graphql-api/getting-started/querying-basics/) of GraphQL and exploring the possibilities of Cloudflare GraphQL API.\n\nThis page details how to use a [GraphiQL client](https://github.com/graphql/graphiql/tree/main/packages/graphiql#readme) to compose and execute a GraphQL query.\n\n## Prerequisites\n\nYou can find all details on how to [configure](https://developers.cloudflare.com/analytics/graphql-api/getting-started/authentication/graphql-client-headers/) a client here.\n\n## Set up a query and choose a dataset\n\nClick on the editing pane of GraphiQL and add this base query, replacing `zone-id` with your Cloudflare zone ID:\n\n![Adding a base query in the GraphiQL pane](https://developers.cloudflare.com/_astro/graphiql-base-query.fKm6YnqW_I1Dme.webp)\n\nNote\n\nTo find the zone's tag, log in to your Cloudflare account and select the site for which you want to obtain the tag. In the Cloudflare dashboard **Overview** page, scroll to the **API** section in the right sidebar, which displays your zone and account tags.\n\nTo assist query building, the GraphiQL client has word completion. Insert your cursor in the query, in this case on the line below `zones`, and start entering a value to engage the feature. For example, when you type `firewall`, a popup menu displays the datasets that return firewall information:\n\n![GraphiQL word completion assistant to query building](https://developers.cloudflare.com/_astro/graphiql-word-completion.iSRM-VK6_usfaM.webp)\n\nThe text at the bottom of the list displays a short description of the data that the node returns.\n\nSelect the dataset you want to query and insert it. Either select the item in the list, or scroll using arrow keys and press the `Return` key.\n\n## Supply required parameters\n\nHover your mouse over a field to display a tooltip that describes the dataset. In this example, hovering over the `firewallEventsAdaptive` node displays this description:\n\n![Hovering the mouse over a field to display its description](https://developers.cloudflare.com/_astro/graphiql-set-up-base-query.1fPWncy2_7BUdV.webp)\n\nTo display information about the dataset, including required parameters, select the dataset name (blue text). The **Documentation Explorer** opens and displays details about the dataset:\n\n![Documentation Explorer window displaying dataset details](https://developers.cloudflare.com/_astro/graphiql-parameters.CM7npJ7C_xpjc7.webp)\n\nNote that the `filter` and `limit` arguments are required, as indicated by the exclamation mark (`!`) after their type definitions (gold text). In this example, the `orderBy` argument is not required, though when used it requires a value of type `ZoneFirewallEventsAdaptiveOrderBy`.\n\nTo browse a list of supported filter fields, select the filter type definition (gold text) in the Documentation Explorer. In this example, the type is `ZoneFirewallEventsAdaptiveFilter_InputObject`:\n\n![Browsing GraphiQL filter fields](https://developers.cloudflare.com/_astro/graphiql-filter-fields.DeLcvFBV_20rPYl.webp)\n\nThis example query shows the required `filter` and `limit` arguments for `firewallEventsAdaptive` (as well as for the rest of GraphQL nodes):\n\n![Example of GraphiQL query arguments](https://developers.cloudflare.com/_astro/graphiql-filter-values.vYQN7N4B_Z8f8MW.webp)\n\n## Define the fields used by your query\n\nTo browse the fields you can use with your query, hover your cursor over the dataset name in your query, and in the tooltip that displays, select the data type definition (gold text):\n\n![Hovering the mouse over a dataset to display available fields](https://developers.cloudflare.com/_astro/graphiql-set-up-base-query.1fPWncy2_7BUdV.webp)\n\n**The Documentation Explorer** opens and displays a list of fields:\n\n![Documentation Explorer window displaying list of fields](https://developers.cloudflare.com/_astro/graphiql-return-fields.DaJ56iiT_85DBa.webp)\n\nTo add the data fields that you want to read, type an opening brace (`{`) after the closing parenthesis for the parameters, then start typing the name of a field that you want to fetch. Use word completion to choose a field.\n\nThis example query returns the `action`, `datetime`, `clientRequestHTTPHost`, and `userAgent` fields:\n\n![Example query with return fields](https://developers.cloudflare.com/_astro/graphiql-query-return-field-values.D6RsP235_Z1ahRPF.webp)\n\nOnce you have entered all the fields you want to query, select the **Play** button to submit the query. The response pane will contain the data fetched from the configured GraphQL API endpoint:\n\n![GraphiQL response pane](https://developers.cloudflare.com/_astro/create-query-fw-data-set-play.dQ7w2sGu_Z2wb43u.webp)\n\n## Variable substitution\n\nThe GraphiQL client allows you to use placeholders for value and supply them via the `variables` part of the payload.\n\nPlaceholder names should start with `$` character, and you do not need to wrap placeholders in quotes when you use them in the query.\n\nValues for placeholders should be provided in JSON format, in which placeholders are addressed without `$` character. As an example, for a placeholder `$zoneTag` GraphQL API will read a value from the `zoneTag` field of supplied variables object.\n\nTo supply a value for a placeholder, select the **Query Variables** pane and edit a JSON object that defines your variables.\n\nThis example query uses the `zoneTag` query variable to represent the zone ID:\n\n![Example of GraphiQL query variables](https://developers.cloudflare.com/_astro/graphiql-query-variables.D9uAtvLs_Z1m91MW.webp)\n\n</page>\n\n<page>\n---\ntitle: Explore the GraphQL schema · Cloudflare Analytics docs\ndescription: |-\n  Many GraphQL clients support browsing the GraphQL schema by taking care of\n  introspection. In this page, we will cover GraphiQL and Altair clients.\nlastUpdated: 2025-05-15T16:26:01.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/getting-started/explore-graphql-schema/\n  md: https://developers.cloudflare.com/analytics/graphql-api/getting-started/explore-graphql-schema/index.md\n---\n\nMany GraphQL clients support browsing the GraphQL schema by taking care of [introspection](https://developers.cloudflare.com/analytics/graphql-api/features/discovery/introspection/). In this page, we will cover GraphiQL and Altair clients.\n\n[GraphiQL](https://github.com/graphql/graphiql/tree/main/packages/graphiql#readme) and [Altair](https://altairgraphql.dev/#download) are open-source GraphQL clients that provide a tool to compose a query, execute it, and inspect the results. And as a bonus, they also allow you to browse GraphQL schema.\n\n## Prerequisites\n\nBefore you begin, do not forget to [configure](https://developers.cloudflare.com/analytics/graphql-api/getting-started/authentication/graphql-client-headers/) the API endpoint and HTTP headers.\n\nThe screenshots below are done from GraphiQL. However, Altair provides the same functionality and you will not find any difficulties following the same instructions to explore the schema.\n\n## Open the Documentation Explorer\n\nTo open the GraphiQL Documentation Explorer, select the **Docs** link in the header of the response pane:\n\n![Clicking GraphiQL Docs link to open Documentation Explorer](https://developers.cloudflare.com/_astro/graphiql-docs-link.EkyLJzjS_TmHI3.webp)\n\nThe **Documentation Explorer** opens and displays a list of available objects:\n\n![GraphiQL Doc Explorer pane](https://developers.cloudflare.com/_astro/graphiql-doc-explorer.Bd9kpJrN_ZVMeBR.webp)\n\nObjects in the **Documentation Explorer** use this syntax:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Find the type definition of an object\n\nWhen you first open the **Documentation Explorer** pane, the `mutation` and `query` root types display:\n\n![Documentation Explorer displaying mutation and query nodes](https://developers.cloudflare.com/_astro/graphiql-doc-explorer-query-mutations.BbRcxejs_2hDt3c.webp)\n\nIn this example, `query` is the name of a root, and `Query` is the type definition.\n\n## Find the fields available for a type definition\n\nClick on the **type definition** of a node to view the fields that it provides. The **Documentation Explorer** also displays descriptions of the nodes.\n\nFor example, select the **Query** type definition. The **Documentation Explorer** displays the fields that `Query` provides. In this example, the fields are `cost` and `viewer`:\n\n![Documentation Explorer displaying cost and viewer fields](https://developers.cloudflare.com/_astro/graphiql-doc-explorer-view-cost.CT9nC44o_5muPD.webp)\n\nTo explore the schema, select the names of objects and definitions. You can also use the search input (magnifying glass icon) and breadcrumb links in the header.\n\n## Find the arguments associated with a field\n\nClick the type definition of the `viewer` field (gold text) to list its sub-fields. The `viewer` field provides sub-fields that allow you to query `accounts` or `zones` data:\n\n![Displaying viewer fields](https://developers.cloudflare.com/_astro/graphiql-doc-explorer-viewer-fields.BKFriIIB_Z1c4mqp.webp)\n\nThe `accounts` and `zones` nodes take arguments to specify which dataset to query.\n\nFor example, `zones` can take a filter of `ZoneFilter_InputObject` type as an argument. To view the fields available to filter, select **ZoneFilter\\_InputObject**.\n\n## Find the datasets available for a zone\n\nTo view a list of the datasets available to query, select the **zone** type definition (gold text):\n\n![Clicking zone type definition](https://developers.cloudflare.com/_astro/graphiql-doc-explorer-zones.DMRVzjxA_Z21gv0H.webp)\n\nA list of datasets displays in the **Fields** section, each with list of valid arguments and a brief description. Arguments that end with an exclamation mark (`!`) are required.\n\n![Fields section displaying datasets available](https://developers.cloudflare.com/_astro/graphiql-doc-explorer-zone-fields.OMeSzfCd_1sBAUr.webp)\n\nUse the search input (magnifying glass icon) to find specific datasets:\n\n![Searching a dataset in the Documentation Explorer](https://developers.cloudflare.com/_astro/graphiql-doc-explorer-find-firewall.CkSNHI_E_Omc0O.webp)\n\nTo select a dataset, select its name.\n\nThe definition for the dataset displays. This example shows the `firewallEventsAdaptive` dataset:\n\n![Example of a dataset definition](https://developers.cloudflare.com/_astro/graphiql-doc-explorer-firewallevents-definition.CsFujHwT_ZcrNcf.webp)\n\n## Find the fields available for a dataset\n\nTo view the fields available for a particular dataset, select on its type definition (gold text).\n\nFor example, select the **ZoneFirewallEventsAdaptive** type definition to view the fields available for the `firewallEventsAdaptive` dataset:\n\n![Clicking type definition to visualize fields available for a dataset](https://developers.cloudflare.com/_astro/graphiql-doc-explorer-firewall-type-definition.CKad-SDm_EPsSu.webp)\n\nThe list of fields displays:\n\n![Displaying available fields for a dataset](https://developers.cloudflare.com/_astro/graphiql-doc-explorer-firewall-fields.K45OyD1Z_Z10VJ0w.webp)\n\nFor more information on using GraphiQL, please visit this [guide](https://developers.cloudflare.com/analytics/graphql-api/getting-started/compose-graphql-query/).\n\n</page>\n\n<page>\n---\ntitle: Querying basics · Cloudflare Analytics docs\ndescription: Learn the basics of querying with Cloudflare's GraphQL API.\n  Understand query structure, schema, and how to fetch data using GraphQL\n  queries.\nlastUpdated: 2025-05-29T18:16:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/getting-started/querying-basics/\n  md: https://developers.cloudflare.com/analytics/graphql-api/getting-started/querying-basics/index.md\n---\n\n## Structure of a GraphQL query\n\nGraphQL structures data as a graph. GraphQL uses a schema to define the objects and their hierarchy in your data graph. You can explore the edges of the graph by using queries to get the needed data. These queries must respect the structure of the schema.\n\nA **node**, followed by its **fields**, is at the core of a GraphQL query. A node is an object of a specific **type**; the type specifies the fields that make up the object.\n\nA field can be another node where the appropriate query would contain nested elements. Some nodes look like functions that can take on arguments to limit the scope of what they can act on. You can apply filters at each node.\n\n## Cloudflare GraphQL schema\n\nA typical query against the Cloudflare GraphQL schema is made up of four main components:\n\n* `viewer` - is the root node,\n* `zones` or `accounts` - indicate the scope of the query, that is the domain area or account you want to query. The `viewer` can access one `zones` or `accounts`, or both,\n* **data node** or **dataset** - represent the data you want to query. `zones` or `accounts` may contain one or more datasets. To find out more about discovering nodes, please refer to [introspection](https://developers.cloudflare.com/analytics/graphql-api/features/discovery/introspection/),\n* **fieldset** - a set of fields or nested fields of the **dataset**.\n\nThe query to Cloudflare GraphQL API must be sent over HTTP POST request with payload in JSON format that consists of these fields:",
+      "language": "unknown"
+    },
+    {
+      "code": "From the above structure, the `query` field must contain a GraphQL query formatted as a **single line** string (meaning all newline symbols should be stripped / escaped), when `variables` is an object that contains all values of used placeholders in the query itself.\n\n## A single dataset example\n\nIn the following example, the GraphQL query fetches a `datetime`, `action`, and client request HTTP host as `host` field of 2 WAF events from zone-scoped `firewallEventsAdaptive` dataset.",
+      "language": "unknown"
+    },
+    {
+      "code": "[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBAggZQJYDsDmAbMARAhgF1wGcx8BRAD1wFsAHLACgBIAvAexTABVc0AuGEXwRUaADQwmQ3BHwCuSamAlMwKACbzFYAJQwA3gCgYMAG5IwAd0gHjJmO05EGAMyQZ8kAfocduvAVY-HjQYAF89I3t7NwgrXAwMMlM1fCI4dVxafCQUhjtokzcPLwMYTM8cpQB9NDlJaVkJCtJtao9AtXVwgsKMRSR6gCZe6LYIdUgAISgBAG0WqrBq7DIEAGEAXVGYSJ2TXABjHI598oJWpTOACzYhAUP+1IAlMFAwIQAJLi4ABU+7vgdmFeiCTCCwkA\\&variables=N4IgXg9gdgpgKgQwOYgFwgFoHkByBRAfQEkAREAGhAGcAXBAJxrRACYAGFgVgFoBGF7gGY2cFi1TDUbAOwYKIGFAAmzdlz4DBvOGwAsEtlNkgAvkA)\n\nIn the query above, we have variable placeholders: $zoneTag, $start, and $end. We provide values for those placeholders alongside the query by placing them into `variables` field of the payload. Note that the examples below use the UTC timezone, indicated by the letter \"Z\".",
+      "language": "unknown"
+    },
+    {
+      "code": "There are multiple ways to send your query to Cloudflare GraphQL API. You can use you favourite GraphQL client or CLI to send a request via curl. We have a [how-to guide](https://developers.cloudflare.com/analytics/graphql-api/getting-started/compose-graphql-query/) about using GraphiQL client, also check a guide on how to execute a query with a curl [here](https://developers.cloudflare.com/analytics/graphql-api/getting-started/execute-graphql-query/).",
+      "language": "unknown"
+    },
+    {
+      "code": "## Query multiple datasets in a single GraphQL API request\n\nAs previously mentioned, a query might contain one or multiple nodes (datasets). At the API level, the data extraction would be done simultaneously, but the response would be delayed until all dataset queries got their results. If any fails during the execution, the entire query will be terminated, and the error will be returned.",
+      "language": "unknown"
+    },
+    {
+      "code": "[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBAsiANgFwJYAdFgCIENm4DOYyhAogB64C2mYAFAFAwwAkAXgPYB2YAKrgDmALhiFkEVN0HM243BGSi+qamFmsw3ACbLV6lq1Ki8ydQEoYAb1kA3VGADuka7JZdehegDNUKSKJWMB78QqIcPKGCMAC+ljYsiTCIRMgAjAAMZLZaxjC+EE64iIjZuYQAgtq46Gg5TElJvv4QgTDVZmhqAPqCSnIEigA07fgk+t0o4VrasW6NiKqo-ZnzSZwQ2pAAQlCiANod4z3YZADKAMIAumsw8bcsuADGaDwPo5367wAWnOKiT0WuQASmBQGBxAAJPh8AAKkL+yFuMVuyE46AAzNgwPYnvwoOgIaJvshkOhQeDxJVqrVUDkAOIQTggdBed7NMytawfMDhUhzRqJRbUZaiVaClgbLYQXYHJ7M7jIbqnS43QX3CUweUgRXvbT6biEVA8QiuTUsLa43laoGK7FWvgEgwSlGC12Jd0omJAA\\&variables=N4IgXg9gdgpgKgQwOYgFwgFoHkByBRAfQEkAREAGhAGcAXBAJxrRACYAGFgVgFoBGF7gGY2cFi1TDUbAOwYKIGFAAmzdlz4DBvOGwAsEtlNnyaVVRx78hvEAF8gA)",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## Helpful Resources\n\nHere are some helpful articles about working with the Cloudflare Analytics API and GraphQL.\n\n### Cloudflare specific\n\n* [How to find your zoneTag using the API](https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/)\n\n### General info on the GraphQL framework\n\n* [How to use GraphQL (tutorials)](https://www.howtographql.com/)\n* [Thinking in Graphs](https://graphql.org/learn/thinking-in-graphs/)\n* [What data can you can query in the GraphQL type system (schemas)](https://graphql.org/learn/schema/)\n* [How to pass variables in GraphiQL (Medium article with quick tips)](https://medium.com/graphql-mastery/graphql-quick-tip-how-to-pass-variables-into-a-mutation-in-graphiql-23ecff4add57)\n\n</page>\n\n<page>\n---\ntitle: HTTP Requests by Colo Groups to HTTP Requests by Adaptive Groups ·\n  Cloudflare Analytics docs\ndescription: This guide shares considerations when migrating from the deprecated\n  httpRequests1mByColoGroups and httpRequests1dByColoGroups GraphQL API nodes to\n  the httpRequestsAdaptiveGroups GraphQL API node.\nlastUpdated: 2025-05-14T00:02:06.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/migration-guides/graphql-api-analytics/\n  md: https://developers.cloudflare.com/analytics/graphql-api/migration-guides/graphql-api-analytics/index.md\n---\n\nThis guide shares considerations when migrating from the deprecated `httpRequests1mByColoGroups` and `httpRequests1dByColoGroups` GraphQL API nodes to the `httpRequestsAdaptiveGroups` GraphQL API node.\n\nFor example, if you wanted to see which five data centers had the most number of requests, the total number of those requests, and the total amount of data transfer, in the past you used the `httpRequests1mByColoGroups` GraphQL API node as in the following example:",
+      "language": "unknown"
+    },
+    {
+      "code": "Response",
+      "language": "unknown"
+    },
+    {
+      "code": "## `httpRequestsAdaptiveGroups` GraphQL API node\n\nWith the deprecation of the `httpRequests1mByColoGroups` and `httpRequests1dByColoGroups` GraphQL API nodes, use the `httpRequestsAdaptiveGroups` GraphQL API node to access the same data (`count`, `sum(edgeResponseBytes)`, and `visits`).\n\n**Request**",
+      "language": "unknown"
+    },
+    {
+      "code": "[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBAsgSwOYQIYBcEHsB2BlVAWwAcAbMACgBIAvXMAFVSQC4YBndCBHJAGhhVOqCOjYMEhMAKpgcAE3GSwAShgBvAFAwYANwRgA7pA3adMOjjDsKAMwSl0kNuov0mrQZcbMYAXzUtc3N2SAN2NgALdHRiACUwUGt0dgBBeVRiTF0wAHEILBBiGzNgnVJJBDEYAFZSsqwIeUgAISg2AG0AY0KcdAB9ABEAUTwAYQBdeuD7R2dTMrKMp0wpfqREtiF0EXRppYwwVbB+xy25eX3giETwTjxCiC6wNgAiMCgwACNUUlJXq7+faBQE9EB9QGoXRIBaLEJEMhgACSfUgul+gL8gPYIEIsLhegQ7Cq7EBOjA8g2CXYxFwoTaTlJBKxBPkyhwxLp+LhPVIWDGWGamP2LPMoqxfiAA\\&variables=N4IgXg9gdgpgKgQwOYgFwgFoHkByBRAfQEkAREAGhAGcAXBAJxrRACYAGFgVgFoBGF7gGY2cFi1TDUbAOwYKIGFAAmzdlz4DBvOGwAsEtlNkgAvkA)\n\nResponse",
+      "language": "unknown"
+    },
+    {
+      "code": "This query says:\n\n* Given the indicated `zones`, `limit`, and `time range`.\n* Fetch the total number of requests (as `count`), the total amount of data transfer (as `edgeResponseBytes` of `sum` object), and the total number of `visits` per data center.\n\nA few points to note:\n\n* Adding the `requestSource` filter for `eyeball` returns request, data transfer, and visit data about only the end users of your website.\n* Instead of `requests`, the `httpRequestsAdaptiveGroups` node reports `count`, which indicates the number of requests per data center.\n* To measure data transfer, use `sum(edgeResponseBytes)`. Note that in the old API this was called `bandwidth` even though it actually measured data transfer.\n* `unique visitors per colocation` is not supported in `httpRequestsAdaptiveGroups`, but the `httpRequestsAdaptiveGroups` API does support `visits`. A visit is defined as a page view that originated from a different website or direct link. Cloudflare checks where the HTTP referer does not match the hostname. One visit can consist of multiple page views.\n\n</page>\n\n<page>\n---\ntitle: Network Analytics v1 to Network Analytics v2 · Cloudflare Analytics docs\ndescription: In early 2020, Cloudflare released the first version of the Network\n  Analytics dashboard and its corresponding API. The second version (Network\n  Analytics v2) was made available on 2021-09-13.\nlastUpdated: 2025-08-20T18:25:25.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/migration-guides/network-analytics-v2/\n  md: https://developers.cloudflare.com/analytics/graphql-api/migration-guides/network-analytics-v2/index.md\n---\n\nIn early 2020, Cloudflare released the first version of the Network Analytics dashboard and its corresponding API. The second version (Network Analytics v2) was made available on 2021-09-13.\n\nWarning\n\n**Network Analytics v1 (NAv1) is now deprecated.** For more information on Network Analytics v2 (NAv2), refer to [Cloudflare Network Analytics](https://developers.cloudflare.com/analytics/network-analytics/).\n\n## Before you start\n\nLearn more about the [concepts introduced in Network Analytics v2](https://developers.cloudflare.com/analytics/network-analytics/understand/concepts/).\n\n## Feature comparison\n\nThe following table compares the features of NAv1 and NAv2:\n\n| Feature | NAv1 | NAv2 |\n| - | - | - |\n| Sampling rate | 1/8,192 packets | Varies between 1/100 and 1/1,000,000 packets, depending on the mitigation service. |\n| Sampling method | Core Sample Enrichment | Edge Sample Enrichment |\n| Historical data retention method | Aggregated roll-ups | Adaptive Bit Rate |\n| Retention period | 1-min roll-ups: 30 days 1-hour roll-ups: 6 months 1-day roll-ups: 1 year Attack roll-ups: 1 year | All nodes: 16 weeks |\n| Attack mitigation systems | `dosd` | `dosd`, `flowtrackd`\\*, and Magic Firewall\\* |\n| Examples of new fields | n/a | Rule ID GRE tunnel ID Packet size |\n\n\\* *Applicable only for Magic Transit customers.*\n\nFor more information on the differences in terms of sampling method and historical data retention, refer to [Main differences between Network Analytics v1 and v2](https://developers.cloudflare.com/analytics/graphql-api/migration-guides/network-analytics-v2/differences/).\n\nNote\n\nThe `attackId` field value may be different between NAv1 and NAv2 for the same attack.\n\n## Node comparison\n\nNAv2 uses the same API endpoint but makes use of new nodes. While NAv1 has three nodes for aggregated roll-ups for all traffic and attacks, and one node for attacks, NAv2 has one node for all traffic and attacks, and four separate nodes for attacks that vary based on the mitigation system.\n\n| Node type | NAv1 | NAv2 for Magic Transit | NAv2 for Spectrum |\n| - | - | - | - |\n| Main node(s) | `ipFlows1mGroups` `ipFlows1hGroups` `ipFlows1dGroups` | `magicTransitNetworkAnalyticsAdaptiveGroups` | `spectrumNetworkAnalyticsAdaptiveGroups` |\n| Attack node(s) | `ipFlows1mAttacksGroups` | `dosdNetworkAnalyticsAdaptiveGroups` `dosdAttackAnalyticsGroups` `flowtrackdNetworkAnalyticsAdaptiveGroups` `magicFirewallNetworkAnalyticsAdaptiveGroups` | `dosdNetworkAnalyticsAdaptiveGroups` `dosdAttackAnalyticsGroups` |\n\nEach row represents one packet sample. The data is sampled at Cloudflare’s edge at [various rates](https://developers.cloudflare.com/analytics/graphql-api/migration-guides/network-analytics-v2/node-reference/). You can also query the sample rate from the nodes using the `sample_interval` field.\n\nFor reference information on NAv2 nodes, refer to the [NAv2 node reference](https://developers.cloudflare.com/analytics/graphql-api/migration-guides/network-analytics-v2/node-reference/).\n\nObtaining data for ingress traffic only\n\nAll the NAv2 `*AnalyticsAdaptiveGroups` nodes include data for ingress and egress traffic. To obtain data about ingress traffic only, include `direction: \"ingress\"` in your [GraphQL query filter](https://developers.cloudflare.com/analytics/graphql-api/features/filtering/).\n\n## Schema comparison\n\nRefer to [NAv1 to NAv2 schema map](https://developers.cloudflare.com/analytics/graphql-api/migration-guides/network-analytics-v2/schema-map/) for a mapping of schema fields from NAv1 nodes to NAv2 nodes. Follow this recommended mapping when migrating to NAv2.\n\n## Example\n\nThe following example queries the top 20 logs of traffic dropped by mitigation systems different from Magic Firewall within a given time range, ordered by destination IP address.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Final remarks\n\nThe `mitigationSystem` field can take one the following values:\n\n* `dosd` for [DDoS managed rulesets](https://developers.cloudflare.com/ddos-protection/managed-rulesets/) (Network-layer DDoS Attack Protection or HTTP DDoS Attack Protection).\n* `flowtrackd` for [Advanced TCP Protection](https://developers.cloudflare.com/ddos-protection/advanced-ddos-systems/overview/advanced-tcp-protection/).\n* `magic-firewall` for [Magic Firewall](https://developers.cloudflare.com/magic-firewall/).\n* Empty string for unmitigated traffic.\n\n</page>\n\n<page>\n---\ntitle: Zone Analytics to GraphQL Analytics · Cloudflare Analytics docs\ndescription: The Zone Analytics API allows you to get request data by zone. It\n  offers optional since and until parameters to specify the request time period\n  and a continuous parameter to indicate whether the time period should be moved\n  backward to find a period with completely aggregated data.\nlastUpdated: 2025-05-14T00:02:06.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/migration-guides/zone-analytics/\n  md: https://developers.cloudflare.com/analytics/graphql-api/migration-guides/zone-analytics/index.md\n---\n\nThe Zone Analytics API allows you to get request data by zone. It offers optional `since` and `until` parameters to specify the request time period and a `continuous` parameter to indicate whether the time period should be moved backward to find a period with completely aggregated data.\n\nFor example, here is a sample curl call to get data for a two minute period:",
+      "language": "unknown"
+    },
+    {
+      "code": "Response",
+      "language": "unknown"
+    },
+    {
+      "code": "As you can see from the response, Zone Analytics returns metrics along many dimensions and does not give you the option to control what you receive. With GraphQL Analytics, you can ask for only the data that you need. However, if you wanted to get exactly the same metrics and dimensions as you would from Zone Analytics, here is the query you would make:",
+      "language": "unknown"
+    },
+    {
+      "code": "[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBAWgewHZgIJIIYBsoBcCWAxgM4Cy+A5hBgcgMoYC2ADlmABQAkAXsmACoYKALhjFcEfEgoAaGJ3EYIuUf3yMwczmCQATVerABKGAG8AUDBgA3fGADukM5asxeKYuwBm+LLkiipm58giLy7gJCMAC+JhaurgAWuLjMAEpgoGDixACMjADiEAggzJ4uCVYIELqQAEJQogDaujRgBBoAYvjWYORIIP7EAPqodADCALoVlVjq+CowuQAMyzMJPn4BZjCt-h1gwxSZogq4Srhye+2Gw36nOrox6zBxL1a6hkjE+MjEzpVKtcDt1ev1Btl3s9AVZiCBGACYVYAEbFezESCkDDMRFIqzMIRgABqdnRUISIAwdTRGIgnSYvig5OheOReEheJghAwhESYF0DSGzO5vP5GSyOWFyH8SFw-CgzD62NxrPZxGZVggmXAks5Vn5xwyxGYfzA42lOjlCrAADkmGBmdFhXNLXQ6AAZLE4+J6rUS3DqvVcl2yt3ugAKxVwCEICCwjqlIFl0C9KqRbKFQb9OoDGpguESWpogb1hBDuHNSYkUDtGgTnJ0hGgzH8ArVzMbzdb4pzJaR+GY4ywGGIZGVPs52eyuaDA-livreIJxxJDj7MKnurxWuNpro51wIDH3rzm5neoNYCNJu+YH3NCPi6RBaL5+fhbANHDNESUgoqYnbdtWndd31fb8Cz-WsHU5J0kTgmEk3wYA00qJCJShBCEiwlknWiIA\\&variables=N4IgXg9gdgpgKgQwOYgFwgFoHkByBRAfQEkAREAGhAGcAXBAJxrRACYAGFgVgFoBGF7gGY2cFi1TDUbAOwYKIGFAAmzdlz4DBvOGwAsEtlNkgAvkA)\n\nResponse",
+      "language": "unknown"
+    },
+    {
+      "code": "Notice that you can specify the request time period using a dataset filter (refer to [Filtering](https://developers.cloudflare.com/analytics/graphql-api/features/filtering/)). The `continuous` parameter is no longer needed because GraphQL Analytics is designed to provide data as soon as it is available.\n\nAlso, if you want to get the totals for a particular period, rather than a breakdown by time period, simply remove the `datetimeFiveMinutes` field under `dimensions`.\n\n</page>\n\n<page>\n---\ntitle: Zone Analytics Colos Endpoint to GraphQL Analytics · Cloudflare Analytics docs\ndescription: This guide shows how you might migrate from the deprecated (and\n  soon to be sunset) zone analytics API to the GraphQL API. It provides an\n  example for a plausible use-case of the colos endpoint, then shows how that\n  use-case is translated to the GraphQL API. It also explores features of the\n  GraphQL API that make it more powerful than the API it replaces.\nlastUpdated: 2025-02-06T11:57:10.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/migration-guides/zone-analytics-colos/\n  md: https://developers.cloudflare.com/analytics/graphql-api/migration-guides/zone-analytics-colos/index.md\n---\n\nThis guide shows how you might migrate from the deprecated (and soon to be sunset) zone analytics API to the GraphQL API. It provides an example for a plausible use-case of the colos endpoint, then shows how that use-case is translated to the GraphQL API. It also explores features of the GraphQL API that make it more powerful than the API it replaces.\n\nIn this example, we want to calculate the number of requests for a particular colo, broken down by the hour in which the requests occurred. Referring to the zone analytics colos endpoint, we can construct a curl which retrieves the data from the API.",
+      "language": "unknown"
+    },
+    {
+      "code": "This query says:\n\n* Given an `API_TOKEN` which has Analytics Read access to `ZONE_ID`.\n* Fetch colos analytics for `ZONE_ID` with a time range that starts on `2020-12-10T00:00:00Z` (`since` parameter) to now.\n\nThe question that we want to answer is: \"What is the number of requests for ZHR per hour?\" Using the colos endpoint response data and some wrangling by jq we can answer that question with this command:",
+      "language": "unknown"
+    },
+    {
+      "code": "This jq command is complex, so we can break it down:",
+      "language": "unknown"
+    },
+    {
+      "code": "This means that the result array is split into individual json lines.",
+      "language": "unknown"
+    },
+    {
+      "code": "This breaks each json line into multiple json lines. Each resulting line contains a `colo_id` and one element of the `timeseries` array.",
+      "language": "unknown"
+    },
+    {
+      "code": "This flattens out the data we are interested in that is inside the timeseries object of each line.",
+      "language": "unknown"
+    },
+    {
+      "code": "This selects only lines that contain more than 0 requests and the `colo_id` is ZRH.\n\nThe final data we get looks like the following response:\n\nResponse",
+      "language": "unknown"
+    },
+    {
+      "code": "How do we get the same result using the GraphQL API?\n\nThe GraphQL API allows us to be much more specific about the data that we want to retrieve. While the colos endpoint forces us to retrieve all the information about the breakdown of requests and bandwidth per colo, using the GraphQL API allows us to fetch only the information we are interested in.\n\nThe data we want is about HTTP requests. Hence, we use the canonical source for HTTP request data, also known as `httpRequestsAdaptiveGroups`. This node in GraphQL API allows you to filter and group by almost any dimension of an HTTP request imaginable. It is [Adaptive](https://developers.cloudflare.com/analytics/network-analytics/understand/concepts/#adaptive-bit-rate-sampling) so responses will be fast since it is driven by our [ABR technology](https://blog.cloudflare.com/explaining-cloudflares-abr-analytics/).\n\nThe following is a GraphQL API query to retrieve the data we need to answer the question: \"What is the number of requests for ZHR per hour?\"",
+      "language": "unknown"
+    },
+    {
+      "code": "Then we can run it with curl:",
+      "language": "unknown"
+    },
+    {
+      "code": "We can answer our question in the same way as before using jq:",
+      "language": "unknown"
+    },
+    {
+      "code": "This command is much simpler than what we had before, because the data returned by the GraphQL API is more specific than what is returned by the colos endpoint.\n\nStill, it is worth explaining the command since it will help to understand some of the concepts underlying the GraphQL API.",
+      "language": "unknown"
+    },
+    {
+      "code": "The format of a GraphQL response is very similar to the query. A successful response always contains a `data` object which wraps the data in the response. A query will always have a `viewer` object which represents your user. Then, we unwrap the zones objects, one per line. Our query only has one zone (since this is how we chose to do it). But a query could have multiple zones as well.",
+      "language": "unknown"
+    },
+    {
+      "code": "The `httpRequestsAdaptiveGroups` field is a list, where each datapoint in the list represents a combination of the dimensions that were selected, along with the aggregation that was selected for that combination of the dimensions. Here, we unwrap each of the datapoints, one per row.",
+      "language": "unknown"
+    },
+    {
+      "code": "This is straightforward: it just selects the attributes of each datapoint that we are interested in, in the format which we used previously in the colos endpoint.\n\nThe GraphQL API is a very powerful tool, as you can filter and group the data by many dimensions. This feature is totally absent from the colos endpoint in the Zone Analytics API.\n\n</page>\n\n<page>\n---\ntitle: Adjust the data displayed in Network Analytics · Cloudflare Analytics docs\ndescription: To perform a broad analysis of layer 3/4 traffic and DDoS attacks,\n  use the All traffic tab.\nlastUpdated: 2025-09-04T10:57:42.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/network-analytics/configure/displayed-data/\n  md: https://developers.cloudflare.com/analytics/network-analytics/configure/displayed-data/index.md\n---\n\n## Select the appropriate tab\n\nTo perform a broad analysis of layer 3/4 traffic and DDoS attacks, use the **All traffic** tab.\n\nTo focus on a specific mitigation system, select one of the [other available tabs](https://developers.cloudflare.com/analytics/network-analytics/understand/main-dashboard/#available-tabs). The tabs displayed in the dashboard depend on your Cloudflare services.\n\n## Select high-level metric\n\nTo toggle your view of the data, select the **Total packets** or **Total bytes** side panels.\n\n![Network Analytics side panels allowing you to use packets or bits/bytes as the base unit for the dashboard.](https://developers.cloudflare.com/_astro/high-level-metrics.DFUDKbKH_ZGuaXj.webp)\n\nThe selected metric will determine the base units (packets or bits/bytes) used in the several dashboard analytics panels.\n\n## Select a dimension\n\nUnder **Packets summary** or **Bits summary**, select one of the [available dimensions](https://developers.cloudflare.com/analytics/network-analytics/understand/main-dashboard/#available-dimensions) to view the data along that dimension. The default dimension is **Action**.\n\n## Apply filters\n\nYou can apply multiple filters and exclusions to adjust the scope of the data displayed in Network Analytics. Filters affect all the data displayed in the dashboard.\n\nThere are two ways to filter Network Analytics data: select **Add filter** or select one of the stat filters.\n\n### Select Add filter\n\nSelect **Add filter** to open the **New filter** popover. Specify a field, an operator, and a value to complete your filter expression. Select **Apply** to update the view.\n\nNotes about filtering\n\nWhen applying filters, observe these guidelines:\n\n* Wildcards are not supported.\n* You do not need to wrap values in quotes.\n* When specifying an ASN number, leave out the `AS` prefix. For example, enter `1423` instead of `AS1423`.\n\n### Select a stat filter\n\nTo filter based on the type of data associated with one of the Network Analytics stats, use the **Filter** and **Exclude** buttons that display when you hover over the stat.\n\n## Create a Magic Firewall rule from the applied filters\n\nNote\n\nThis feature is only available to Magic Transit and Magic WAN users.\n\nSelect **Create Magic Firewall rule** to create a [Magic Firewall](https://developers.cloudflare.com/magic-firewall/) rule that will block all traffic matching the selected filters in Network Analytics.\n\nNote that some filters will not be added to the new Magic Firewall rule definition. However, you can further configure the rule in Magic Firewall.\n\n## Show IP prefix events\n\nEnable the **Show annotations** toggle to show or hide annotations for advertised/withdrawn IP prefix events in the **Network Analytics** view. Select each annotation to get more details.\n\n![Network Analytics chart displaying IP prefix-related annotations.](https://developers.cloudflare.com/_astro/view-annotations.D18njKAr_1inJEg.webp)\n\n## View logged or monitored traffic\n\n[Network DDoS managed rules](https://developers.cloudflare.com/ddos-protection/managed-rulesets/network/) and [Advanced DDoS Protection systems](https://developers.cloudflare.com/ddos-protection/advanced-ddos-systems/overview/) provide a `log` or `monitoring` mode that does not drop traffic. These `log` and `monitoring` mode events are based on **Verdict** and **Outcome**/**Action** fields.\n\nTo filter for these traffic events:\n\n1. In the Cloudflare dashboard, go to the **Network Analytics** page.\n\n   [Go to **Network analytics**](https://dash.cloudflare.com/?to=/:account/network-analytics)\n\n2. Go to **DDoS managed rules** tab.\n\n3. Select **Add filter**.\n\n   * Set `Verdict equals drop`.\n   * Set `Action equals pass`.\n\n4. Select **Apply**.\n\nBy setting `verdict` to `drop` and `outcome` as `pass`, we are filtering for traffic that was marked as a detection (that is, verdict was `drop`) but was not dropped (for example, outcome was `pass`).\n\n</page>\n\n<page>\n---\ntitle: Share and export Network Analytics data · Cloudflare Analytics docs\ndescription: When you add filters and specify a time range in Network Analytics,\n  the URL changes to reflect those parameters.\nlastUpdated: 2024-08-13T19:56:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/network-analytics/configure/share-export/\n  md: https://developers.cloudflare.com/analytics/network-analytics/configure/share-export/index.md\n---\n\n## Share Network Analytics filters\n\nWhen you add filters and specify a time range in Network Analytics, the URL changes to reflect those parameters.\n\nTo share your view of the data, copy the URL and send it to other users so that they can work with the same view.\n\n## Export sample log data\n\nYou can export up to 100 raw events from the **Packet sample log** at a time. This option is useful when you need to combine and analyze Cloudflare data with data stored in a separate system or database, such as a SIEM system.\n\nTo export log data:\n\n1. Select **Export**.\n2. Choose either CSV or JSON format for rendering exported data. The downloaded file name will reflect the selected time range, using this pattern:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Export a Network Analytics report\n\nTo print or download a snapshot report from Network Analytics, select **Print report**. Your web browser's print interface displays options for printing or saving as a PDF.\n\n</page>\n\n<page>\n---\ntitle: Adjust the time range in Network Analytics · Cloudflare Analytics docs\ndescription: Use the timeframe drop-down list to change the time range over\n  which Network Analytics displays data. When you select a timeframe, the entire\n  view is updated to reflect your choice.\nlastUpdated: 2025-05-26T09:01:55.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/network-analytics/configure/time-range/\n  md: https://developers.cloudflare.com/analytics/network-analytics/configure/time-range/index.md\n---\n\n## Using the timeframe drop-down list\n\nUse the timeframe drop-down list to change the time range over which Network Analytics displays data. When you select a timeframe, the entire view is updated to reflect your choice.\n\nIn the Network Analytics dashboard, the range of historical data you can query is 112 days.\n\nWhen you select *Previous 30 minutes*, the **Network Analytics** card will show the data from the last 30 minutes, refreshing every 20 seconds. A *Live* notification appears next to the statistic drop-down list to let you know that the view keeps updating automatically:\n\n![Timeframe drop-down with Previous 30 minutes selected.](https://developers.cloudflare.com/_astro/timeframe-selector.CKN2F0gt_Z2hR6NE.webp)\n\n## Zooming in the chart\n\nTo zoom in a specific period, select and drag to define a region in the **Packets summary** (or **Bits summary**) chart. To zoom out, select **X** in the time range selector.\n\n![User zooming in a given period in the Network Analytics traffic chart.](https://developers.cloudflare.com/images/analytics/network-analytics/chart-zoom-in.gif)\n\nThe effective resolution goes up when you zoom in and goes down when you zoom out, due to the [Adaptive Bit Rate](https://developers.cloudflare.com/analytics/network-analytics/understand/concepts/#adaptive-bit-rate-sampling). This means that a big packet burst that lasted a few seconds may look less impactful when analyzing a chart displaying data for 24 hours or more.\n\n</page>\n\n<page>\n---\ntitle: Capture GraphQL queries with Chrome DevTools · Cloudflare Analytics docs\ndescription: Using Chrome DevTools, you can capture the queries running behind\n  the Cloudflare Dashboard analytics. In this example, we will focus on the\n  Network Analytics dataset, but the same process can be applied to any other\n  analytics available in your dashboard.\nlastUpdated: 2025-09-04T10:57:42.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/tutorials/capture-graphql-queries-from-dashboard/\n  md: https://developers.cloudflare.com/analytics/graphql-api/tutorials/capture-graphql-queries-from-dashboard/index.md\n---\n\nUsing [Chrome DevTools](https://developer.chrome.com/docs/devtools), you can capture the queries running behind the Cloudflare Dashboard analytics. In this example, we will focus on the Network Analytics dataset, but the same process can be applied to any other analytics available in your dashboard.\n\n1. In the Cloudflare dashboard, go to the **Network Analytics** page or any other analytics dashboard you are interested in seeing the GraphQL queries in.\n\n   [Go to **Network analytics**](https://dash.cloudflare.com/?to=/:account/network-analytics)\n\n![Analytics tab](https://developers.cloudflare.com/_astro/analytics-tab.sJIMwybT_Z15iHxn.webp)\n\n1. Open the [Chrome Developer Tools](https://developer.chrome.com/docs/devtools) and select **Inspect**.\n\n![Chrome developer tools](https://developers.cloudflare.com/_astro/chrome-developer-tools.D4a36rnA_gEdsH.webp)\n\n1. Select the **Network** tab in the Developer Tools panel.\n2. In the filter bar, type `graphql` to filter out the GraphQL requests. If no requests appear, try reloading the page. As the page reloads, several network requests will populate the **Network** tab. Look for requests that contain `graphql` in the name.\n\n![Type graphql in the search field](https://developers.cloudflare.com/_astro/search-field.BxHnt1F0_Z138uai.webp)\n\n1. Select one of the GraphQL requests to open its details and go to the **Payload** tab. There you will find the GraphQL query. Select the query line and then **Copy value** to capture the query.\n\n![Copy query value](https://developers.cloudflare.com/_astro/copy-value.BZMZMU5__ZUUUgm.webp)\n\n1. If you want to capture a new query, adjust the filters in the **Network analytics** dashboard and a new query will appear in the GraphQL requests.\n\n![Create a new query](https://developers.cloudflare.com/_astro/new-query.TN7tG2lX_Z3Eqki.webp)\n\nYou can now use this query as the basis for your API call. Refer to the [Get started](https://developers.cloudflare.com/analytics/graphql-api/getting-started/) section for more information.\n\n</page>\n\n<page>\n---\ntitle: Querying HTTP events by hostname with GraphQL · Cloudflare Analytics docs\ndescription: In this example, we are going to use the GraphQL Analytics API to\n  query aggregated metrics about HTTP events by hostname over a specific period\n  of time.\nlastUpdated: 2024-11-07T14:42:44.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/tutorials/end-customer-analytics/\n  md: https://developers.cloudflare.com/analytics/graphql-api/tutorials/end-customer-analytics/index.md\n---\n\n## Aggregated HTTP metrics by hostname over time\n\nIn this example, we are going to use the GraphQL Analytics API to query aggregated metrics about HTTP events by hostname over a specific period of time.\n\nThe following API call will request the number of visits and edge response bytes for the custom hostname `hostname.example.com` over a four day period. Be sure to replace `CLOUDFLARE_ZONE_TAG` and `API_TOKEN`[1](#user-content-fn-1) with your zone ID and API credentials, and adjust the `datetime_geq` and `datetime_leq` values as needed.\n\n### API Call",
+      "language": "unknown"
+    },
+    {
+      "code": "The returned results will be in JSON format (as requested), so piping the output to `jq` will make them easier to read, like in the following example:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Top 10 consuming URLs in a zone\n\nWe are going to use the GraphQL Analytics API to query the top 10 consuming URLs from a zone, helping you identify the URLs with the highest resource usage. Here are some configuration instructions:\n\n* To filter on a specific hostname, add the line `\"clientRequestHTTPHost\": \"'$2'\"` below `\"requestSource\"`.\"\n\n* Replace `API_TOKEN` with your generated API token using the `Read all resources` permissions. The script will only access zones available to the token's creator.\n\n* Pass the zone ID (`zoneTag`) as a parameter `ARG=$1`.\n\n* To calculate the current date and the date from 30 days ago, use `gdate` on Mac:\n\n  * `CURRENTDATE=$(gdate -u +'%FT%TZ')`\n  * `OLDDATE=$(gdate -d '-30 days' -u +'%FT%TZ')`.\n\n* For specific dates within the last 30 days, set `CURRENTDATE` and `OLDDATE` variables in the format `\"YYYY-MM-DDTHH:MM:SSZ\"`.\n\n### API call",
+      "language": "unknown"
+    },
+    {
+      "code": "## Footnotes\n\n1. Refer to [Configure an Analytics API token](https://developers.cloudflare.com/analytics/graphql-api/getting-started/authentication/api-token-auth/) for more information on configuration and permissions. [↩](#user-content-fnref-1)\n\n</page>\n\n<page>\n---\ntitle: Querying Access login events with GraphQL · Cloudflare Analytics docs\ndescription: In this example, we are going to use the GraphQL Analytics API to\n  retrieve logs for an Access login event. These logs are particularly useful\n  for determining why a user received a 403 Forbidden error, since they surface\n  additional data beyond what is shown in the dashboard Access logs.\nlastUpdated: 2024-11-07T14:42:44.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/tutorials/querying-access-login-events/\n  md: https://developers.cloudflare.com/analytics/graphql-api/tutorials/querying-access-login-events/index.md\n---\n\nIn this example, we are going to use the GraphQL Analytics API to retrieve logs for an Access login event. These logs are particularly useful for determining why a user received a `403` Forbidden error, since they surface additional data beyond what is shown in the dashboard Access logs.\n\nThe following API call will request logs for a single Access login event and output the requested fields. The authentication request is identified by its **Ray ID**, which you can obtain from the `403` Forbidden page shown to the user.\n\nYou will need to insert your `<CLOUDFLARE_ACCOUNT_TAG>`, your API credentials in `<API_TOKEN>`[1](#user-content-fn-1), and substitute your own values for the following variables:\n\n* `rayID`: A unique identifier assigned to the authentication request.\n* `datetimeStart`: The earliest event time to query (no earlier than September 16, 2022).\n* `datetimeEnd`: The latest event time to query. Be sure to specify a time range that includes the login event you are querying.\n\n## API Call",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nRather than filter by `cfRayId`, you may also [filter](https://developers.cloudflare.com/analytics/graphql-api/features/filtering/) by any other field in the query such as `userUuid` or `deviceId`.\n\n## Response",
+      "language": "unknown"
+    },
+    {
+      "code": "You can compare the query results to your Access policies to understand why a user was blocked. For example, if your application requires a valid mTLS certificate, Access blocked the request shown above because `mtlsStatus`, `mtlsCommonName`, and `mtlsCertSerialId` are empty.\n\n## Footnotes\n\n1. Refer to [Configure an Analytics API token](https://developers.cloudflare.com/analytics/graphql-api/getting-started/authentication/api-token-auth/) for more information on configuration and permissions. [↩](#user-content-fnref-1)\n\n</page>\n\n<page>\n---\ntitle: Querying Firewall Events with GraphQL · Cloudflare Analytics docs\ndescription: In this example, we are going to use the GraphQL Analytics API to\n  query for Firewall Events over a specified time period.\nlastUpdated: 2024-11-07T14:42:44.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/tutorials/querying-firewall-events/\n  md: https://developers.cloudflare.com/analytics/graphql-api/tutorials/querying-firewall-events/index.md\n---\n\nIn this example, we are going to use the GraphQL Analytics API to query for Firewall Events over a specified time period.\n\nThe following API call will request Firewall Events over a one hour period, and output the requested fields. Be sure to replace `<CLOUDFLARE_ZONE_TAG>`, `<EMAIL>`, and `<API_TOKEN>`[1](#user-content-fn-1) with your zone tag and API credentials, and adjust the `datetime_geg` and `datetime_leq` values to your liking.\n\n## API Call",
+      "language": "unknown"
+    },
+    {
+      "code": "The results returned will be in JSON (as requested), so piping the output to `jq` will make them easier to read, for example:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Footnotes\n\n1. Refer to [Configure an Analytics API token](https://developers.cloudflare.com/analytics/graphql-api/getting-started/authentication/api-token-auth/) for more information on configuration and permissions. [↩](#user-content-fnref-1)\n\n</page>\n\n<page>\n---\ntitle: Querying Magic Firewall Intrusion Detection System (IDS) samples with\n  GraphQL · Cloudflare Analytics docs\ndescription: In this example, we are going to use the GraphQL Analytics API to\n  query for IDS samples over a specified time period.\nlastUpdated: 2024-11-07T14:42:44.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/tutorials/querying-magic-firewall-ids-samples/\n  md: https://developers.cloudflare.com/analytics/graphql-api/tutorials/querying-magic-firewall-ids-samples/index.md\n---\n\nIn this example, we are going to use the GraphQL Analytics API to query for IDS samples over a specified time period.\n\nThe following API call will request IDS samples over a one hour period, and output the requested fields. Be sure to replace `<CLOUDFLARE_ACCOUNT_TAG>` and `<API_TOKEN>`[1](#user-content-fn-1) with your account tag and API credentials, and adjust the `datetime_geg` and `datetime_leq` values to your liking.\n\n## API Call",
+      "language": "unknown"
+    },
+    {
+      "code": "The returned values represent the total number of packets and bits that matched IDS rules during the five minute interval. The result will be in JSON (as requested), so piping the output to `jq` will make it easier to read, like in the following example:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Footnotes\n\n1. Refer to [Configure an Analytics API token](https://developers.cloudflare.com/analytics/graphql-api/getting-started/authentication/api-token-auth/) for more information on configuration and permissions. [↩](#user-content-fnref-1)\n\n</page>\n\n<page>\n---\ntitle: Querying Magic Firewall Samples with GraphQL · Cloudflare Analytics docs\ndescription: In this example, we are going to use the GraphQL Analytics API to\n  query for Magic Firewall Samples over a specified time period.\nlastUpdated: 2024-11-07T14:42:44.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/tutorials/querying-magic-firewall-samples/\n  md: https://developers.cloudflare.com/analytics/graphql-api/tutorials/querying-magic-firewall-samples/index.md\n---\n\nIn this example, we are going to use the GraphQL Analytics API to query for Magic Firewall Samples over a specified time period.\n\nThe following API call will request Magic Firewall Samples over a one hour period, and output the requested fields. Be sure to replace `<CLOUDFLARE_ACCOUNT_TAG>` and `<API_TOKEN>`[1](#user-content-fn-1) with your zone tag and API credentials, and adjust the `datetime_geg` and `datetime_leq` values to your liking.\n\n## API Call",
+      "language": "unknown"
+    },
+    {
+      "code": "The returned values represent the total number of packets and bits received during the five minute interval for a particular rule. The result will be in JSON (as requested), so piping the output to `jq` will make it easier to read, like in the following example:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Footnotes\n\n1. Refer to [Configure an Analytics API token](https://developers.cloudflare.com/analytics/graphql-api/getting-started/authentication/api-token-auth/) for more information on configuration and permissions. [↩](#user-content-fnref-1)\n\n</page>\n\n<page>\n---\ntitle: Querying Magic Transit and Magic WAN tunnel bandwidth analytics with\n  GraphQL · Cloudflare Analytics docs\ndescription: This example uses the GraphQL Analytics API to query Magic Transit\n  or Magic WAN ingress tunnel traffic over a specified time period.\nlastUpdated: 2025-03-27T12:39:57.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/graphql-api/tutorials/querying-magic-transit-tunnel-bandwidth-analytics/\n  md: https://developers.cloudflare.com/analytics/graphql-api/tutorials/querying-magic-transit-tunnel-bandwidth-analytics/index.md\n---\n\nThis example uses the GraphQL Analytics API to query Magic Transit or Magic WAN ingress tunnel traffic over a specified time period.\n\nThe following API call requests Magic Transit or Magic WAN ingress tunnel traffic over a one-hour period and outputs the requested fields. Replace `<CLOUDFLARE_ACCOUNT_TAG>` with your account ID, `<EMAIL>`, `<API_KEY>`[1](#user-content-fn-1) (legacy), or `<API_TOKEN>`[2](#user-content-fn-2) (preferred) with your API credentials, and adjust the `datetime_geq` and `datetime_leq` values as needed.\n\nThe example queries for ingress traffic. To query for egress traffic, change the value in the `direction` filter.\n\n## API Call",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Filter Structure",
+      "id": "filter-structure"
+    },
+    {
+      "level": "h3",
+      "text": "Zone filter",
+      "id": "zone-filter"
+    },
+    {
+      "level": "h3",
+      "text": "Account filter",
+      "id": "account-filter"
+    },
+    {
+      "level": "h3",
+      "text": "Table (dataset) filter",
+      "id": "table-(dataset)-filter"
+    },
+    {
+      "level": "h3",
+      "text": "Operators",
+      "id": "operators"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h3",
+      "text": "General example",
+      "id": "general-example"
+    },
+    {
+      "level": "h3",
+      "text": "Filter on a specific node",
+      "id": "filter-on-a-specific-node"
+    },
+    {
+      "level": "h3",
+      "text": "Filter on multiple fields",
+      "id": "filter-on-multiple-fields"
+    },
+    {
+      "level": "h3",
+      "text": "Filter using the `OR` operator",
+      "id": "filter-using-the-`or`-operator"
+    },
+    {
+      "level": "h3",
+      "text": "Filter an array by one value",
+      "id": "filter-an-array-by-one-value"
+    },
+    {
+      "level": "h3",
+      "text": "Filter an array by multiple values",
+      "id": "filter-an-array-by-multiple-values"
+    },
+    {
+      "level": "h3",
+      "text": "Filter end users",
+      "id": "filter-end-users"
+    },
+    {
+      "level": "h2",
+      "text": "Subqueries (advanced filters)",
+      "id": "subqueries-(advanced-filters)"
+    },
+    {
+      "level": "h2",
+      "text": "Query pages without cursors",
+      "id": "query-pages-without-cursors"
+    },
+    {
+      "level": "h3",
+      "text": "Get the first *n* results of a query",
+      "id": "get-the-first-*n*-results-of-a-query"
+    },
+    {
+      "level": "h3",
+      "text": "Query for the next page using filters",
+      "id": "query-for-the-next-page-using-filters"
+    },
+    {
+      "level": "h3",
+      "text": "Query the previous page",
+      "id": "query-the-previous-page"
+    },
+    {
+      "level": "h2",
+      "text": "Arrays",
+      "id": "arrays"
+    },
+    {
+      "level": "h2",
+      "text": "Maps",
+      "id": "maps"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h3",
+      "text": "Raw data sorting",
+      "id": "raw-data-sorting"
+    },
+    {
+      "level": "h3",
+      "text": "Raw data sorting using multiple fields",
+      "id": "raw-data-sorting-using-multiple-fields"
+    },
+    {
+      "level": "h3",
+      "text": "Group sorting by aggregation function",
+      "id": "group-sorting-by-aggregation-function"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Set up a query and choose a dataset",
+      "id": "set-up-a-query-and-choose-a-dataset"
+    },
+    {
+      "level": "h2",
+      "text": "Supply required parameters",
+      "id": "supply-required-parameters"
+    },
+    {
+      "level": "h2",
+      "text": "Define the fields used by your query",
+      "id": "define-the-fields-used-by-your-query"
+    },
+    {
+      "level": "h2",
+      "text": "Variable substitution",
+      "id": "variable-substitution"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Open the Documentation Explorer",
+      "id": "open-the-documentation-explorer"
+    },
+    {
+      "level": "h2",
+      "text": "Find the type definition of an object",
+      "id": "find-the-type-definition-of-an-object"
+    },
+    {
+      "level": "h2",
+      "text": "Find the fields available for a type definition",
+      "id": "find-the-fields-available-for-a-type-definition"
+    },
+    {
+      "level": "h2",
+      "text": "Find the arguments associated with a field",
+      "id": "find-the-arguments-associated-with-a-field"
+    },
+    {
+      "level": "h2",
+      "text": "Find the datasets available for a zone",
+      "id": "find-the-datasets-available-for-a-zone"
+    },
+    {
+      "level": "h2",
+      "text": "Find the fields available for a dataset",
+      "id": "find-the-fields-available-for-a-dataset"
+    },
+    {
+      "level": "h2",
+      "text": "Structure of a GraphQL query",
+      "id": "structure-of-a-graphql-query"
+    },
+    {
+      "level": "h2",
+      "text": "Cloudflare GraphQL schema",
+      "id": "cloudflare-graphql-schema"
+    },
+    {
+      "level": "h2",
+      "text": "A single dataset example",
+      "id": "a-single-dataset-example"
+    },
+    {
+      "level": "h2",
+      "text": "Query multiple datasets in a single GraphQL API request",
+      "id": "query-multiple-datasets-in-a-single-graphql-api-request"
+    },
+    {
+      "level": "h2",
+      "text": "Helpful Resources",
+      "id": "helpful-resources"
+    },
+    {
+      "level": "h3",
+      "text": "Cloudflare specific",
+      "id": "cloudflare-specific"
+    },
+    {
+      "level": "h3",
+      "text": "General info on the GraphQL framework",
+      "id": "general-info-on-the-graphql-framework"
+    },
+    {
+      "level": "h2",
+      "text": "`httpRequestsAdaptiveGroups` GraphQL API node",
+      "id": "`httprequestsadaptivegroups`-graphql-api-node"
+    },
+    {
+      "level": "h2",
+      "text": "Before you start",
+      "id": "before-you-start"
+    },
+    {
+      "level": "h2",
+      "text": "Feature comparison",
+      "id": "feature-comparison"
+    },
+    {
+      "level": "h2",
+      "text": "Node comparison",
+      "id": "node-comparison"
+    },
+    {
+      "level": "h2",
+      "text": "Schema comparison",
+      "id": "schema-comparison"
+    },
+    {
+      "level": "h2",
+      "text": "Example",
+      "id": "example"
+    },
+    {
+      "level": "h2",
+      "text": "Final remarks",
+      "id": "final-remarks"
+    },
+    {
+      "level": "h2",
+      "text": "Select the appropriate tab",
+      "id": "select-the-appropriate-tab"
+    },
+    {
+      "level": "h2",
+      "text": "Select high-level metric",
+      "id": "select-high-level-metric"
+    },
+    {
+      "level": "h2",
+      "text": "Select a dimension",
+      "id": "select-a-dimension"
+    },
+    {
+      "level": "h2",
+      "text": "Apply filters",
+      "id": "apply-filters"
+    },
+    {
+      "level": "h3",
+      "text": "Select Add filter",
+      "id": "select-add-filter"
+    },
+    {
+      "level": "h3",
+      "text": "Select a stat filter",
+      "id": "select-a-stat-filter"
+    },
+    {
+      "level": "h2",
+      "text": "Create a Magic Firewall rule from the applied filters",
+      "id": "create-a-magic-firewall-rule-from-the-applied-filters"
+    },
+    {
+      "level": "h2",
+      "text": "Show IP prefix events",
+      "id": "show-ip-prefix-events"
+    },
+    {
+      "level": "h2",
+      "text": "View logged or monitored traffic",
+      "id": "view-logged-or-monitored-traffic"
+    },
+    {
+      "level": "h2",
+      "text": "Share Network Analytics filters",
+      "id": "share-network-analytics-filters"
+    },
+    {
+      "level": "h2",
+      "text": "Export sample log data",
+      "id": "export-sample-log-data"
+    },
+    {
+      "level": "h2",
+      "text": "Export a Network Analytics report",
+      "id": "export-a-network-analytics-report"
+    },
+    {
+      "level": "h2",
+      "text": "Using the timeframe drop-down list",
+      "id": "using-the-timeframe-drop-down-list"
+    },
+    {
+      "level": "h2",
+      "text": "Zooming in the chart",
+      "id": "zooming-in-the-chart"
+    },
+    {
+      "level": "h2",
+      "text": "Aggregated HTTP metrics by hostname over time",
+      "id": "aggregated-http-metrics-by-hostname-over-time"
+    },
+    {
+      "level": "h3",
+      "text": "API Call",
+      "id": "api-call"
+    },
+    {
+      "level": "h2",
+      "text": "Top 10 consuming URLs in a zone",
+      "id": "top-10-consuming-urls-in-a-zone"
+    },
+    {
+      "level": "h3",
+      "text": "API call",
+      "id": "api-call"
+    },
+    {
+      "level": "h2",
+      "text": "Footnotes",
+      "id": "footnotes"
+    },
+    {
+      "level": "h2",
+      "text": "API Call",
+      "id": "api-call"
+    },
+    {
+      "level": "h2",
+      "text": "Response",
+      "id": "response"
+    },
+    {
+      "level": "h2",
+      "text": "Footnotes",
+      "id": "footnotes"
+    },
+    {
+      "level": "h2",
+      "text": "API Call",
+      "id": "api-call"
+    },
+    {
+      "level": "h2",
+      "text": "Footnotes",
+      "id": "footnotes"
+    },
+    {
+      "level": "h2",
+      "text": "API Call",
+      "id": "api-call"
+    },
+    {
+      "level": "h2",
+      "text": "Footnotes",
+      "id": "footnotes"
+    },
+    {
+      "level": "h2",
+      "text": "API Call",
+      "id": "api-call"
+    },
+    {
+      "level": "h2",
+      "text": "Footnotes",
+      "id": "footnotes"
+    },
+    {
+      "level": "h2",
+      "text": "API Call",
+      "id": "api-call"
+    }
+  ],
+  "url": "llms-txt#an-array-of-request-is-the-result-of-httprequests-query.",
+  "links": []
+}

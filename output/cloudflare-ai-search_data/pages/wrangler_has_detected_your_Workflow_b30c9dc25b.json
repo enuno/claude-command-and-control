@@ -1,0 +1,31 @@
+{
+  "title": "wrangler has detected your Workflow",
+  "content": "Your worker has access to the following bindings:\n- Workflows:\n  - MY_WORKFLOW: MyWorkflow (defined in workflows-starter)\nUploaded workflows-starter (2.53 sec)\nDeployed workflows-starter triggers (1.12 sec)\n  https://workflows-starter.YOUR_WORKERS_SUBDOMAIN.workers.dev\n  workflow: workflows-starter\nsh\nnpx wrangler workflows list\nsh\nShowing last 1 workflow:\n┌───────────────────┬───────────────────┬────────────┬─────────────────────────┬─────────────────────────┐\n│ Name              │ Script name       │ Class name │ Created                 │ Modified                │\n├───────────────────┼───────────────────┼────────────┼─────────────────────────┼─────────────────────────┤\n│ workflows-starter │ workflows-starter │ MyWorkflow │ 10/23/2024, 11:33:58 AM │ 10/23/2024, 11:33:58 AM │\n└───────────────────┴───────────────────┴────────────┴─────────────────────────┴─────────────────────────┘\nsh\nnpx wrangler workflows trigger workflows-starter '{\"hello\":\"world\"}'\nsh",
+  "code_samples": [
+    {
+      "code": "A Worker with a valid Workflow definition will be automatically registered by Workflows. You can list your current Workflows using Wrangler:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nWorkflows cannot be deployed to Workers for Platforms namespaces, as Workflows do not support Workers for Platforms.\n\n## 6. Run and observe your Workflow\n\nWith your Workflow deployed, you can now run it.\n\n1. A Workflow can run in parallel: each unique invocation of a Workflow is an *instance* of that Workflow.\n2. An instance will run to completion (success or failure).\n3. Deploying newer versions of a Workflow will cause all instances after that point to run the newest Workflow code.\n\nNote\n\nBecause Workflows can be long running, it is possible to have running instances that represent different versions of your Workflow code over time.\n\nTo trigger our Workflow, we will use the `wrangler` CLI and pass in an optional `--payload`. The `payload` will be passed to your Workflow's `run` method handler as an `Event`.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "6. Run and observe your Workflow",
+      "id": "6.-run-and-observe-your-workflow"
+    }
+  ],
+  "url": "llms-txt#wrangler-has-detected-your-workflow",
+  "links": []
+}

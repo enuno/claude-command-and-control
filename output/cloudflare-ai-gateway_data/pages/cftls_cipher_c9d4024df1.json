@@ -1,0 +1,13 @@
+{
+  "title": "cf.tls\\_cipher",
+  "content": "`cf.tls_cipher` String\n\nThe cipher for the connection to Cloudflare.\n\n<page>\n---\ntitle: cf.tls_ciphers_sha1 · Cloudflare Ruleset Engine docs\ndescription: The SHA-1 fingerprint of the client TLS cipher list in received\n  order, encoded in Base64 using big-endian format.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_ciphers_sha1/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_ciphers_sha1/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"AES128-SHA256\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#cf.tls\\_cipher",
+  "links": []
+}

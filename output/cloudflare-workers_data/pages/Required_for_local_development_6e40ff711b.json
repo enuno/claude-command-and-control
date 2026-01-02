@@ -1,0 +1,195 @@
+{
+  "title": "Required for local development",
+  "content": "EXPOSE 8080\njs\n  import { getSandbox, parseSSEStream } from \"@cloudflare/sandbox\";\n\nconst sandbox = getSandbox(env.Sandbox, \"my-sandbox\");\n\nconst stream = await sandbox.execStream(\"npm run build\");\n\nfor await (const event of parseSSEStream(stream)) {\n    switch (event.type) {\n      case \"stdout\":\n        console.log(event.data);\n        break;\n\ncase \"stderr\":\n        console.error(event.data);\n        break;\n\ncase \"complete\":\n        console.log(\"Exit code:\", event.exitCode);\n        break;\n\ncase \"error\":\n        console.error(\"Failed:\", event.error);\n        break;\n    }\n  }\n  ts\n  import { getSandbox, parseSSEStream, type ExecEvent } from '@cloudflare/sandbox';\n\nconst sandbox = getSandbox(env.Sandbox, 'my-sandbox');\n\nconst stream = await sandbox.execStream('npm run build');\n\nfor await (const event of parseSSEStream<ExecEvent>(stream)) {\n    switch (event.type) {\n      case 'stdout':\n        console.log(event.data);\n        break;\n\ncase 'stderr':\n        console.error(event.data);\n        break;\n\ncase 'complete':\n        console.log('Exit code:', event.exitCode);\n        break;\n\ncase 'error':\n        console.error('Failed:', event.error);\n        break;\n    }\n  }\n  js\n  import { getSandbox } from \"@cloudflare/sandbox\";\n\nexport { Sandbox } from \"@cloudflare/sandbox\";\n\nexport default {\n    async fetch(request, env) {\n      const sandbox = getSandbox(env.Sandbox, \"builder\");\n\nconst stream = await sandbox.execStream(\"npm run build\");\n\nreturn new Response(stream, {\n        headers: {\n          \"Content-Type\": \"text/event-stream\",\n          \"Cache-Control\": \"no-cache\",\n        },\n      });\n    },\n  };\n  ts\n  import { getSandbox } from '@cloudflare/sandbox';\n\nexport { Sandbox } from '@cloudflare/sandbox';\n\nexport default {\n    async fetch(request: Request, env: Env): Promise<Response> {\n      const sandbox = getSandbox(env.Sandbox, 'builder');\n\nconst stream = await sandbox.execStream('npm run build');\n\nreturn new Response(stream, {\n        headers: {\n          'Content-Type': 'text/event-stream',\n          'Cache-Control': 'no-cache'\n        }\n      });\n    }\n  };\n  js\n  // Browser JavaScript\n  const eventSource = new EventSource(\"/build\");\n\neventSource.addEventListener(\"stdout\", (event) => {\n    const data = JSON.parse(event.data);\n    console.log(data.data);\n  });\n\neventSource.addEventListener(\"complete\", (event) => {\n    const data = JSON.parse(event.data);\n    console.log(\"Exit code:\", data.exitCode);\n    eventSource.close();\n  });\n  ts\n  // Browser JavaScript\n  const eventSource = new EventSource('/build');\n\neventSource.addEventListener('stdout', (event) => {\n    const data = JSON.parse(event.data);\n    console.log(data.data);\n  });\n\neventSource.addEventListener('complete', (event) => {\n    const data = JSON.parse(event.data);\n    console.log('Exit code:', data.exitCode);\n    eventSource.close();\n  });\n  js\n  import { parseSSEStream } from \"@cloudflare/sandbox\";\n\nconst process = await sandbox.startProcess(\"node server.js\");\n\nconst logStream = await sandbox.streamProcessLogs(process.id);\n\nfor await (const log of parseSSEStream(logStream)) {\n    console.log(log.data);\n\nif (log.data.includes(\"Server listening\")) {\n      console.log(\"Server is ready\");\n      break;\n    }\n  }\n  ts\n  import { parseSSEStream, type LogEvent } from '@cloudflare/sandbox';\n\nconst process = await sandbox.startProcess('node server.js');\n\nconst logStream = await sandbox.streamProcessLogs(process.id);\n\nfor await (const log of parseSSEStream<LogEvent>(logStream)) {\n    console.log(log.data);\n\nif (log.data.includes('Server listening')) {\n      console.log('Server is ready');\n      break;\n    }\n  }\n  js\n  const stream = await sandbox.execStream(\"npm run build\");\n\nfor await (const event of parseSSEStream(stream)) {\n    switch (event.type) {\n      case \"stdout\":\n        console.log(event.data);\n        break;\n\ncase \"error\":\n        throw new Error(`Build failed: ${event.error}`);\n\ncase \"complete\":\n        if (event.exitCode !== 0) {\n          throw new Error(`Build failed with exit code ${event.exitCode}`);\n        }\n        break;\n    }\n  }\n  ts\n  const stream = await sandbox.execStream('npm run build');\n\nfor await (const event of parseSSEStream<ExecEvent>(stream)) {\n    switch (event.type) {\n      case 'stdout':\n        console.log(event.data);\n        break;\n\ncase 'error':\n        throw new Error(`Build failed: ${event.error}`);\n\ncase 'complete':\n        if (event.exitCode !== 0) {\n          throw new Error(`Build failed with exit code ${event.exitCode}`);\n        }\n        break;\n    }\n  }\n  sh\n  npm create cloudflare@latest -- ai-code-executor --template=cloudflare/sandbox-sdk/examples/minimal\n  sh\n  yarn create cloudflare ai-code-executor --template=cloudflare/sandbox-sdk/examples/minimal\n  sh\n  pnpm create cloudflare@latest ai-code-executor --template=cloudflare/sandbox-sdk/examples/minimal\n  sh\ncd ai-code-executor\nsh\n  npm i @anthropic-ai/sdk\n  sh\n  yarn add @anthropic-ai/sdk\n  sh\n  pnpm add @anthropic-ai/sdk\n  `typescript\nimport { getSandbox, type Sandbox } from '@cloudflare/sandbox';\nimport Anthropic from '@anthropic-ai/sdk';\n\nexport { Sandbox } from '@cloudflare/sandbox';\n\ninterface Env {\n  Sandbox: DurableObjectNamespace<Sandbox>;\n  ANTHROPIC_API_KEY: string;\n}\n\nexport default {\n  async fetch(request: Request, env: Env): Promise<Response> {\n    if (request.method !== 'POST' || new URL(request.url).pathname !== '/execute') {\n      return new Response('POST /execute with { \"question\": \"your question\" }');\n    }\n\ntry {\n      const { question } = await request.json();\n\nif (!question) {\n        return Response.json({ error: 'Question is required' }, { status: 400 });\n      }\n\n// Use Claude to generate Python code\n      const anthropic = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });\n      const codeGeneration = await anthropic.messages.create({\n        model: 'claude-sonnet-4-5',\n        max_tokens: 1024,\n        messages: [{\n          role: 'user',\n          content: `Generate Python code to answer: \"${question}\"\n\nRequirements:\n- Use only Python standard library\n- Print the result using print()\n- Keep code simple and safe\n\nReturn ONLY the code, no explanations.`\n        }],\n      });\n\nconst generatedCode = codeGeneration.content[0]?.type === 'text'\n        ? codeGeneration.content[0].text\n        : '';\n\nif (!generatedCode) {\n        return Response.json({ error: 'Failed to generate code' }, { status: 500 });\n      }\n\n// Strip markdown code fences if present\n      const cleanCode = generatedCode\n        .replace(/^\\s*$/, '')\n        .trim();\n\n// Execute the code in a sandbox\n      const sandbox = getSandbox(env.Sandbox, 'demo-user');\n      await sandbox.writeFile('/tmp/code.py', cleanCode);\n      const result = await sandbox.exec('python /tmp/code.py');\n\nreturn Response.json({\n        success: result.success,\n        question,\n        code: generatedCode,\n        output: result.stdout,\n        error: result.stderr\n      });\n\n} catch (error: any) {\n      return Response.json(\n        { error: 'Internal server error', message: error.message },\n        { status: 500 }\n      );\n    }\n  },\n};\nsh\necho \"ANTHROPIC_API_KEY=your_api_key_here\" > .dev.vars\nsh\nnpm run dev\nsh\ncurl -X POST http://localhost:8787/execute \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"question\": \"What is the 10th Fibonacci number?\"}'\njson\n{\n  \"success\": true,\n  \"question\": \"What is the 10th Fibonacci number?\",\n  \"code\": \"def fibonacci(n):\\n    if n <= 1:\\n        return n\\n    return fibonacci(n-1) + fibonacci(n-2)\\n\\nprint(fibonacci(10))\",\n  \"output\": \"55\\n\",\n  \"error\": \"\"\n}\nsh\nnpx wrangler deploy\nsh\nnpx wrangler secret put ANTHROPIC_API_KEY\nsh",
+  "code_samples": [
+    {
+      "code": "Note\n\nPort exposure in Dockerfile is only required for local development. In production, all ports are automatically accessible.\n\n## Related resources\n\n* [Ports API reference](https://developers.cloudflare.com/sandbox/api/ports/) - Complete API documentation\n* [Preview URLs concept](https://developers.cloudflare.com/sandbox/concepts/preview-urls/) - How preview URLs work\n* [Background processes guide](https://developers.cloudflare.com/sandbox/guides/background-processes/) - Managing long-running services\n\n</page>\n\n<page>\n---\ntitle: Stream output · Cloudflare Sandbox SDK docs\ndescription: Handle real-time output from commands and processes.\nlastUpdated: 2025-11-08T10:22:38.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/sandbox/guides/streaming-output/\n  md: https://developers.cloudflare.com/sandbox/guides/streaming-output/index.md\n---\n\nThis guide shows you how to handle real-time output from commands, processes, and code execution.\n\n## When to use streaming\n\nUse streaming when you need:\n\n* **Real-time feedback** - Show progress as it happens\n* **Long-running operations** - Builds, tests, installations that take time\n* **Interactive applications** - Chat bots, code execution, live demos\n* **Large output** - Process output incrementally instead of all at once\n* **User experience** - Prevent users from waiting with no feedback\n\nUse non-streaming (`exec()`) for:\n\n* **Quick operations** - Commands that complete in seconds\n* **Small output** - When output fits easily in memory\n* **Post-processing** - When you need complete output before processing\n\n## Stream command execution\n\nUse `execStream()` to get real-time output:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Stream to client\n\nReturn streaming output to users via Server-Sent Events:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "Client-side consumption:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Stream process logs\n\nMonitor background process output:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Handle errors\n\nCheck exit codes and handle stream errors:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Best practices\n\n* **Always consume streams** - Don't let streams hang unconsumed\n* **Handle all event types** - Process stdout, stderr, complete, and error events\n* **Check exit codes** - Non-zero exit codes indicate failure\n* **Provide feedback** - Show progress to users for long operations\n\n## Related resources\n\n* [Commands API reference](https://developers.cloudflare.com/sandbox/api/commands/) - Complete streaming API\n* [Execute commands guide](https://developers.cloudflare.com/sandbox/guides/execute-commands/) - Command execution patterns\n* [Background processes guide](https://developers.cloudflare.com/sandbox/guides/background-processes/) - Process log streaming\n* [Code Interpreter guide](https://developers.cloudflare.com/sandbox/guides/code-execution/) - Stream code execution output\n\n</page>\n\n<page>\n---\ntitle: Build an AI code executor · Cloudflare Sandbox SDK docs\ndescription: Use Claude to generate Python code from natural language and\n  execute it securely in sandboxes.\nlastUpdated: 2025-10-21T14:02:11.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/sandbox/tutorials/ai-code-executor/\n  md: https://developers.cloudflare.com/sandbox/tutorials/ai-code-executor/index.md\n---\n\nBuild an AI-powered code execution system using Sandbox SDK and Claude. Turn natural language questions into Python code, execute it securely, and return results.\n\n**Time to complete:** 20 minutes\n\n## What you'll build\n\nAn API that accepts questions like \"What's the 100th Fibonacci number?\", uses Claude to generate Python code, executes it in an isolated sandbox, and returns the results.\n\n## Prerequisites\n\n1. Sign up for a [Cloudflare account](https://dash.cloudflare.com/sign-up/workers-and-pages).\n2. Install [`Node.js`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).\n\nNode.js version manager\n\nUse a Node version manager like [Volta](https://volta.sh/) or [nvm](https://github.com/nvm-sh/nvm) to avoid permission issues and change Node.js versions. [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/), discussed later in this guide, requires a Node version of `16.17.0` or later.\n\nYou'll also need:\n\n* An [Anthropic API key](https://console.anthropic.com/) for Claude\n* [Docker](https://www.docker.com/) running locally\n\n## 1. Create your project\n\nCreate a new Sandbox SDK project:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## 2. Install dependencies\n\nInstall the Anthropic SDK:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Build your code executor\n\nReplace the contents of `src/index.ts`:",
+      "language": "unknown"
+    },
+    {
+      "code": "**How it works:**\n\n1. Receives a question via POST to `/execute`\n2. Uses Claude to generate Python code\n3. Writes code to `/tmp/code.py` in the sandbox\n4. Executes with `sandbox.exec('python /tmp/code.py')`\n5. Returns both the code and execution results\n\n## 4. Set up local environment variables\n\nCreate a `.dev.vars` file in your project root for local development:",
+      "language": "unknown"
+    },
+    {
+      "code": "Replace `your_api_key_here` with your actual API key from the [Anthropic Console](https://console.anthropic.com/).\n\nNote\n\nThe `.dev.vars` file is automatically gitignored and only used during local development with `npm run dev`.\n\n## 5. Test locally\n\nStart the development server:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nFirst run builds the Docker container (2-3 minutes). Subsequent runs are much faster.\n\nTest with curl:",
+      "language": "unknown"
+    },
+    {
+      "code": "Response:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 6. Deploy\n\nDeploy your Worker:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then set your Anthropic API key as a production secret:",
+      "language": "unknown"
+    },
+    {
+      "code": "Paste your API key from the [Anthropic Console](https://console.anthropic.com/) when prompted.\n\nWarning\n\nAfter first deployment, wait 2-3 minutes for container provisioning. Check status with `npx wrangler containers list`.\n\n## 7. Test your deployment\n\nTry different questions:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "When to use streaming",
+      "id": "when-to-use-streaming"
+    },
+    {
+      "level": "h2",
+      "text": "Stream command execution",
+      "id": "stream-command-execution"
+    },
+    {
+      "level": "h2",
+      "text": "Stream to client",
+      "id": "stream-to-client"
+    },
+    {
+      "level": "h2",
+      "text": "Stream process logs",
+      "id": "stream-process-logs"
+    },
+    {
+      "level": "h2",
+      "text": "Handle errors",
+      "id": "handle-errors"
+    },
+    {
+      "level": "h2",
+      "text": "Best practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "What you'll build",
+      "id": "what-you'll-build"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "1. Create your project",
+      "id": "1.-create-your-project"
+    },
+    {
+      "level": "h2",
+      "text": "2. Install dependencies",
+      "id": "2.-install-dependencies"
+    },
+    {
+      "level": "h2",
+      "text": "3. Build your code executor",
+      "id": "3.-build-your-code-executor"
+    },
+    {
+      "level": "h2",
+      "text": "4. Set up local environment variables",
+      "id": "4.-set-up-local-environment-variables"
+    },
+    {
+      "level": "h2",
+      "text": "5. Test locally",
+      "id": "5.-test-locally"
+    },
+    {
+      "level": "h2",
+      "text": "6. Deploy",
+      "id": "6.-deploy"
+    },
+    {
+      "level": "h2",
+      "text": "7. Test your deployment",
+      "id": "7.-test-your-deployment"
+    }
+  ],
+  "url": "llms-txt#required-for-local-development",
+  "links": []
+}

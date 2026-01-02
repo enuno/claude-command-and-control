@@ -1,0 +1,13 @@
+{
+  "title": "cf.tls\\_client\\_auth.cert\\_issuer\\_dn\\_legacy",
+  "content": "`cf.tls_client_auth.cert_issuer_dn_legacy` String\n\nThe Distinguished Name (DN) of the Certificate Authority (CA) that issued the certificate in the request in a legacy format.\n\nThis field is only filled in if the request includes a client certificate for [mTLS authentication](https://developers.cloudflare.com/ssl/client-certificates/enable-mtls/).\n\n<page>\n---\ntitle: cf.tls_client_auth.cert_issuer_dn_rfc2253 · Cloudflare Ruleset Engine docs\ndescription: The Distinguished Name (DN) of the Certificate Authority (CA) that\n  issued the certificate in the request in [RFC\n  2253](https://datatracker.ietf.org/doc/html/rfc2253) format.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_client_auth.cert_issuer_dn_rfc2253/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_client_auth.cert_issuer_dn_rfc2253/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"/C=US/ST=Texas/L=Austin/O=Access Testing/OU=TX/CN=Access Testing CA\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_issuer\\_dn\\_legacy",
+  "links": []
+}

@@ -1,0 +1,193 @@
+{
+  "title": "https://<ACCOUNT_ID>.r2.cloudflarestorage.com/my-bucket/ferriswasm.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<credential>&X-Amz-Date=<timestamp>&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=<signature>",
+  "content": "import (\n  \"context\"\n  \"encoding/json\"\n  \"fmt\"\n  \"github.com/aws/aws-sdk-go-v2/aws\"\n  \"github.com/aws/aws-sdk-go-v2/config\"\n  \"github.com/aws/aws-sdk-go-v2/credentials\"\n  \"github.com/aws/aws-sdk-go-v2/service/s3\"\n  \"log\"\n)\n\nfunc main() {\n  var bucketName = \"sdk-example\"\n  // Provide your Cloudflare account ID\n  var accountId = \"<ACCOUNT_ID>\"\n  // Retrieve your S3 API credentials for your R2 bucket via API tokens\n  // (see: https://developers.cloudflare.com/r2/api/tokens)\n  var accessKeyId = \"<ACCESS_KEY_ID>\"\n  var accessKeySecret = \"<SECRET_ACCESS_KEY>\"\n\ncfg, err := config.LoadDefaultConfig(context.TODO(),\n    config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(accessKeyId, accessKeySecret, \"\")),\n    config.WithRegion(\"auto\"), // Required by SDK but not used by R2\n  )\n  if err != nil {\n    log.Fatal(err)\n  }\n\nclient := s3.NewFromConfig(cfg, func(o *s3.Options) {\n      o.BaseEndpoint = aws.String(fmt.Sprintf(\"https://%s.r2.cloudflarestorage.com\", accountId))\n  })\n\nlistObjectsOutput, err := client.ListObjectsV2(context.TODO(), &s3.ListObjectsV2Input{\n    Bucket: &bucketName,\n  })\n  if err != nil {\n    log.Fatal(err)\n  }\n\nfor _, object := range listObjectsOutput.Contents {\n    obj, _ := json.MarshalIndent(object, \"\", \"\\t\")\n    fmt.Println(string(obj))\n  }\n\n//  {\n  //    \"ChecksumAlgorithm\": null,\n  //    \"ETag\": \"\\\"eb2b891dc67b81755d2b726d9110af16\\\"\",\n  //    \"Key\": \"ferriswasm.png\",\n  //    \"LastModified\": \"2022-05-18T17:20:21.67Z\",\n  //    \"Owner\": null,\n  //    \"Size\": 87671,\n  //    \"StorageClass\": \"STANDARD\"\n  //  }\n\nlistBucketsOutput, err := client.ListBuckets(context.TODO(), &s3.ListBucketsInput{})\n  if err != nil {\n    log.Fatal(err)\n  }\n\nfor _, object := range listBucketsOutput.Buckets {\n    obj, _ := json.MarshalIndent(object, \"\", \"\\t\")\n    fmt.Println(string(obj))\n  }\n\n// {\n  //     \"CreationDate\": \"2022-05-18T17:19:59.645Z\",\n  //     \"Name\": \"sdk-example\"\n  // }\n}\ngo\npresignClient := s3.NewPresignClient(client)\n\npresignResult, err := presignClient.PresignPutObject(context.TODO(), &s3.PutObjectInput{\n    Bucket: aws.String(bucketName),\n    Key:    aws.String(\"example.txt\"),\n  })\n\nif err != nil {\n    panic(\"Couldn't get presigned URL for PutObject\")\n  }\n\nfmt.Printf(\"Presigned URL For object: %s\\n\", presignResult.URL)\njava\nimport software.amazon.awssdk.auth.credentials.AwsBasicCredentials;\nimport software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;\nimport software.amazon.awssdk.regions.Region;\nimport software.amazon.awssdk.services.s3.S3Client;\nimport software.amazon.awssdk.services.s3.model.*;\nimport software.amazon.awssdk.services.s3.S3Configuration;\nimport java.net.URI;\nimport java.util.List;\n\n/**\n * Client for interacting with Cloudflare R2 Storage using AWS SDK S3 compatibility\n */\npublic class CloudflareR2Client {\n    private final S3Client s3Client;\n\n/**\n     * Creates a new CloudflareR2Client with the provided configuration\n     */\n    public CloudflareR2Client(S3Config config) {\n        this.s3Client = buildS3Client(config);\n    }\n\n/**\n     * Configuration class for R2 credentials and endpoint\n     * - accountId: Your Cloudflare account ID\n     * - accessKey: Your R2 Access Key ID (see: https://developers.cloudflare.com/r2/api/tokens)\n     * - secretKey: Your R2 Secret Access Key (see: https://developers.cloudflare.com/r2/api/tokens)\n     */\n    public static class S3Config {\n        private final String accountId;\n        private final String accessKey;\n        private final String secretKey;\n        private final String endpoint;\n\npublic S3Config(String accountId, String accessKey, String secretKey) {\n            this.accountId = accountId;\n            this.accessKey = accessKey;\n            this.secretKey = secretKey;\n            this.endpoint = String.format(\"https://%s.r2.cloudflarestorage.com\", accountId);\n        }\n\npublic String getAccessKey() { return accessKey; }\n        public String getSecretKey() { return secretKey; }\n        public String getEndpoint() { return endpoint; }\n    }\n\n/**\n     * Builds and configures the S3 client with R2-specific settings\n     */\n    private static S3Client buildS3Client(S3Config config) {\n        AwsBasicCredentials credentials = AwsBasicCredentials.create(\n            config.getAccessKey(),\n            config.getSecretKey()\n        );\n\nS3Configuration serviceConfiguration = S3Configuration.builder()\n            .pathStyleAccessEnabled(true)\n            .build();\n\nreturn S3Client.builder()\n            .endpointOverride(URI.create(config.getEndpoint()))\n            .credentialsProvider(StaticCredentialsProvider.create(credentials))\n            .region(Region.of(\"auto\")) // Required by SDK but not used by R2\n            .serviceConfiguration(serviceConfiguration)\n            .build();\n    }\n\n/**\n     * Lists all buckets in the R2 storage\n     */\n    public List<Bucket> listBuckets() {\n        try {\n            return s3Client.listBuckets().buckets();\n        } catch (S3Exception e) {\n            throw new RuntimeException(\"Failed to list buckets: \" + e.getMessage(), e);\n        }\n    }\n\n/**\n     * Lists all objects in the specified bucket\n     */\n    public List<S3Object> listObjects(String bucketName) {\n        try {\n            ListObjectsV2Request request = ListObjectsV2Request.builder()\n                .bucket(bucketName)\n                .build();\n\nreturn s3Client.listObjectsV2(request).contents();\n        } catch (S3Exception e) {\n            throw new RuntimeException(\"Failed to list objects in bucket \" + bucketName + \": \" + e.getMessage(), e);\n        }\n    }\n\npublic static void main(String[] args) {\n        S3Config config = new S3Config(\n            \"<ACCOUNT_ID>\",\n            \"<ACCESS_KEY_ID>\",\n            \"<SECRET_ACCESS_KEY>\"\n        );\n\nCloudflareR2Client r2Client = new CloudflareR2Client(config);\n\n// List buckets\n        System.out.println(\"Available buckets:\");\n        r2Client.listBuckets().forEach(bucket ->\n            System.out.println(\"* \" + bucket.name())\n        );\n\n// List objects in a specific bucket\n        String bucketName = \"demos\";\n        System.out.println(\"\\nObjects in bucket '\" + bucketName + \"':\");\n        r2Client.listObjects(bucketName).forEach(object ->\n            System.out.printf(\"* %s (size: %d bytes, modified: %s)%n\",\n                object.key(),\n                object.size(),\n                object.lastModified())\n        );\n    }\n}\njava\n// import required packages for presigning\n// Rest of the packages are same as above\nimport software.amazon.awssdk.services.s3.presigner.S3Presigner;\nimport software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;\nimport software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;\nimport java.time.Duration;\n\npublic class CloudflareR2Client {\n  private final S3Client s3Client;\n  private final S3Presigner presigner;\n\n/**\n     * Creates a new CloudflareR2Client with the provided configuration\n     */\n    public CloudflareR2Client(S3Config config) {\n        this.s3Client = buildS3Client(config);\n        this.presigner = buildS3Presigner(config);\n    }\n\n/**\n     * Builds and configures the S3 presigner with R2-specific settings\n     */\n    private static S3Presigner buildS3Presigner(S3Config config) {\n        AwsBasicCredentials credentials = AwsBasicCredentials.create(\n            config.getAccessKey(),\n            config.getSecretKey()\n        );\n\nreturn S3Presigner.builder()\n            .endpointOverride(URI.create(config.getEndpoint()))\n            .credentialsProvider(StaticCredentialsProvider.create(credentials))\n            .region(Region.of(\"auto\")) // Required by SDK but not used by R2\n            .serviceConfiguration(S3Configuration.builder()\n                .pathStyleAccessEnabled(true)\n                .build())\n            .build();\n    }\n\npublic String generatePresignedUploadUrl(String bucketName, String objectKey, Duration expiration) {\n        PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()\n            .signatureDuration(expiration)\n            .putObjectRequest(builder -> builder\n                .bucket(bucketName)\n                .key(objectKey)\n                .build())\n            .build();\n\nPresignedPutObjectRequest presignedRequest = presigner.presignPutObject(presignRequest);\n        return presignedRequest.url().toString();\n    }\n\n// Rest of the methods remains the same\n\npublic static void main(String[] args) {\n      // config the client as before\n\n// Generate a pre-signed upload URL valid for 15 minutes\n        String uploadUrl = r2Client.generatePresignedUploadUrl(\n            \"demos\",\n            \"README.md\",\n            Duration.ofMinutes(15)\n        );\n        System.out.println(\"Pre-signed Upload URL (valid for 15 minutes):\");\n        System.out.println(uploadUrl);\n    }\n\n}\nts\nimport S3 from \"aws-sdk/clients/s3.js\";\n\nconst s3 = new S3({\n  // Provide your Cloudflare account ID\n  endpoint: `https://${ACCOUNT_ID}.r2.cloudflarestorage.com`,\n  // Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n  accessKeyId: `${ACCESS_KEY_ID}`,\n  secretAccessKey: `${SECRET_ACCESS_KEY}`,\n  signatureVersion: \"v4\",\n});\n\nconsole.log(await s3.listBuckets().promise());\n//=> {\n//=>   Buckets: [\n//=>     { Name: 'user-uploads', CreationDate: 2022-04-13T21:23:47.102Z },\n//=>     { Name: 'my-bucket', CreationDate: 2022-05-07T02:46:49.218Z }\n//=>   ],\n//=>   Owner: {\n//=>     DisplayName: '...',\n//=>     ID: '...'\n//=>   }\n//=> }\n\nconsole.log(await s3.listObjects({ Bucket: \"my-bucket\" }).promise());\n//=> {\n//=>   IsTruncated: false,\n//=>   Name: 'my-bucket',\n//=>   CommonPrefixes: [],\n//=>   MaxKeys: 1000,\n//=>   Contents: [\n//=>     {\n//=>       Key: 'cat.png',\n//=>       LastModified: 2022-05-07T02:50:45.616Z,\n//=>       ETag: '\"c4da329b38467509049e615c11b0c48a\"',\n//=>       ChecksumAlgorithm: [],\n//=>       Size: 751832,\n//=>       Owner: [Object]\n//=>     },\n//=>     {\n//=>       Key: 'todos.txt',\n//=>       LastModified: 2022-05-07T21:37:17.150Z,\n//=>       ETag: '\"29d911f495d1ba7cb3a4d7d15e63236a\"',\n//=>       ChecksumAlgorithm: [],\n//=>       Size: 279,\n//=>       Owner: [Object]\n//=>     }\n//=>   ]\n//=> }\nts\n// Use the expires property to determine how long the presigned link is valid.\nconsole.log(\nawait s3.getSignedUrlPromise(\"getObject\", {\n  Bucket: \"my-bucket\",\n  Key: \"dog.png\",\n  Expires: 3600,\n}),\n);\n// You can also create links for operations such as putObject to allow temporary write access to a specific key.\n// Specify ContentType to restrict uploads to a specific file type.\nconsole.log(\n  await s3.getSignedUrlPromise(\"putObject\", {\n    Bucket: \"my-bucket\",\n    Key: \"dog.png\",\n    Expires: 3600,\n    ContentType: \"image/png\",\n  }),\n);\nsh\nhttps://my-bucket.<ACCOUNT_ID>.r2.cloudflarestorage.com/dog.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<credential>&X-Amz-Date=<timestamp>&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=<signature>\nhttps://my-bucket.<ACCOUNT_ID>.r2.cloudflarestorage.com/dog.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<credential>&X-Amz-Date=<timestamp>&X-Amz-Expires=3600&X-Amz-SignedHeaders=content-type%3Bhost&X-Amz-Signature=<signature>\nsh\ncurl -X PUT \"https://my-bucket.<ACCOUNT_ID>.r2.cloudflarestorage.com/dog.png?X-Amz-Algorithm=...\" \\\n  -H \"Content-Type: image/png\" \\\n  --data-binary @dog.png\njson\n[\n  {\n    \"AllowedOrigins\": [\"https://example.com\"],\n    \"AllowedMethods\": [\"PUT\"],\n    \"AllowedHeaders\": [\"Content-Type\"],\n    \"ExposeHeaders\": [\"ETag\"],\n    \"MaxAgeSeconds\": 3600\n  }\n]\nts\nconst putUrl = await s3.getSignedUrlPromise(\"putObject\", {\n  Bucket: \"my-bucket\",\n  Key: \"user-upload.png\",\n  Expires: 3600,\n  ContentType: \"image/png\",\n});\nts\nimport {\n  S3Client,\n  ListBucketsCommand,\n  ListObjectsV2Command,\n  GetObjectCommand,\n  PutObjectCommand,\n} from \"@aws-sdk/client-s3\";\n\nconst S3 = new S3Client({\n  region: \"auto\", // Required by SDK but not used by R2\n  // Provide your Cloudflare account ID\n  endpoint: `https://${ACCOUNT_ID}.r2.cloudflarestorage.com`,\n  // Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n  credentials: {\n    accessKeyId: ACCESS_KEY_ID,\n    secretAccessKey: SECRET_ACCESS_KEY,\n  },\n});\n\nconsole.log(await S3.send(new ListBucketsCommand({})));\n// {\n//     '$metadata': {\n//     httpStatusCode: 200,\n//         requestId: undefined,\n//         extendedRequestId: undefined,\n//         cfId: undefined,\n//         attempts: 1,\n//         totalRetryDelay: 0\n// },\n//     Buckets: [\n//     { Name: 'user-uploads', CreationDate: 2022-04-13T21:23:47.102Z },\n//     { Name: 'my-bucket', CreationDate: 2022-05-07T02:46:49.218Z }\n//     ],\n//     Owner: {\n//         DisplayName: '...',\n//         ID: '...'\n//     }\n// }\n\nconsole.log(\n  await S3.send(new ListObjectsV2Command({ Bucket: \"my-bucket\" })),\n);\n// {\n//     '$metadata': {\n//       httpStatusCode: 200,\n//       requestId: undefined,\n//       extendedRequestId: undefined,\n//       cfId: undefined,\n//       attempts: 1,\n//       totalRetryDelay: 0\n//     },\n//     CommonPrefixes: undefined,\n//     Contents: [\n//       {\n//         Key: 'cat.png',\n//         LastModified: 2022-05-07T02:50:45.616Z,\n//         ETag: '\"c4da329b38467509049e615c11b0c48a\"',\n//         ChecksumAlgorithm: undefined,\n//         Size: 751832,\n//         StorageClass: 'STANDARD',\n//         Owner: undefined\n//       },\n//       {\n//         Key: 'todos.txt',\n//         LastModified: 2022-05-07T21:37:17.150Z,\n//         ETag: '\"29d911f495d1ba7cb3a4d7d15e63236a\"',\n//         ChecksumAlgorithm: undefined,\n//         Size: 279,\n//         StorageClass: 'STANDARD',\n//         Owner: undefined\n//       }\n//     ],\n//     ContinuationToken: undefined,\n//     Delimiter: undefined,\n//     EncodingType: undefined,\n//     IsTruncated: false,\n//     KeyCount: 8,\n//     MaxKeys: 1000,\n//     Name: 'my-bucket',\n//     NextContinuationToken: undefined,\n//     Prefix: undefined,\n//     StartAfter: undefined\n//   }\nts\nimport { getSignedUrl } from \"@aws-sdk/s3-request-presigner\";\n\n// Use the expiresIn property to determine how long the presigned link is valid.\nconsole.log(\n  await getSignedUrl(\n    S3,\n    new GetObjectCommand({ Bucket: \"my-bucket\", Key: \"dog.png\" }),\n    { expiresIn: 3600 },\n  ),\n);\n// You can also create links for operations such as PutObject to allow temporary write access to a specific key.\n// Specify ContentType to restrict uploads to a specific file type.\nconsole.log(\n  await getSignedUrl(\n    S3,\n    new PutObjectCommand({\n      Bucket: \"my-bucket\",\n      Key: \"dog.png\",\n      ContentType: \"image/png\",\n    }),\n    { expiresIn: 3600 },\n  ),\n);\nsh\nhttps://my-bucket.<ACCOUNT_ID>.r2.cloudflarestorage.com/dog.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=<credential>&X-Amz-Date=<timestamp>&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=<signature>&x-id=GetObject\nhttps://my-bucket.<ACCOUNT_ID>.r2.cloudflarestorage.com/dog.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=<credential>&X-Amz-Date=<timestamp>&X-Amz-Expires=3600&X-Amz-SignedHeaders=content-type%3Bhost&X-Amz-Signature=<signature>&x-id=PutObject\nsh\ncurl -X PUT \"https://my-bucket.<ACCOUNT_ID>.r2.cloudflarestorage.com/dog.png?X-Amz-Algorithm=...\" \\\n  -H \"Content-Type: image/png\" \\\n  --data-binary @dog.png\njson\n[\n  {\n    \"AllowedOrigins\": [\"https://example.com\"],\n    \"AllowedMethods\": [\"PUT\"],\n    \"AllowedHeaders\": [\"Content-Type\"],\n    \"ExposeHeaders\": [\"ETag\"],\n    \"MaxAgeSeconds\": 3600\n  }\n]\nts\nconst putUrl = await getSignedUrl(\n  S3,\n  new PutObjectCommand({\n    Bucket: \"my-bucket\",\n    Key: \"dog.png\",\n    ContentType: \"image/png\",\n  }),\n  { expiresIn: 3600 },\n);\ncsharp\nprivate static IAmazonS3 s3Client;\n\npublic static void Main(string[] args)\n{\n  // Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n  var accessKey = \"<ACCESS_KEY_ID>\";\n  var secretKey = \"<SECRET_ACCESS_KEY>\";\n  var credentials = new BasicAWSCredentials(accessKey, secretKey);\n  s3Client = new AmazonS3Client(credentials, new AmazonS3Config\n    {\n      // Provide your Cloudflare account ID\n      ServiceURL = \"https://<ACCOUNT_ID>.r2.cloudflarestorage.com\",\n    });\n}\ncsharp\nstatic async Task ListBuckets()\n{\n  var response = await s3Client.ListBucketsAsync();\n\nforeach (var s3Bucket in response.Buckets)\n  {\n    Console.WriteLine(\"{0}\", s3Bucket.BucketName);\n  }\n}\nsh\nsdk-example\nmy-bucket\ncsharp\nstatic async Task ListObjectsV2()\n{\n  var request = new ListObjectsV2Request\n  {\n    BucketName = \"my-bucket\"\n  };\n\nvar response = await s3Client.ListObjectsV2Async(request);\n\nforeach (var s3Object in response.S3Objects)\n  {\n    Console.WriteLine(\"{0}\", s3Object.Key);\n  }\n}\nsh\ndog.png\ncat.png\ncsharp\nstatic async Task PutObject()\n{\n  var request = new PutObjectRequest\n  {\n    FilePath = @\"/path/file.txt\",\n    BucketName = \"my-bucket\",\n    DisablePayloadSigning = true,\n    DisableDefaultChecksumValidation = true\n  };\n\nvar response = await s3Client.PutObjectAsync(request);\n\nConsole.WriteLine(\"ETag: {0}\", response.ETag);\n}\nsh\nETag: \"186a71ee365d9686c3b98b6976e1f196\"\ncsharp\nstatic async Task GetObject()\n{\n  var bucket = \"my-bucket\";\n  var key = \"file.txt\";\n\nvar response = await s3Client.GetObjectAsync(bucket, key);\n\nConsole.WriteLine(\"ETag: {0}\", response.ETag);\n}\nsh\nETag: \"186a71ee365d9686c3b98b6976e1f196\"\ncsharp\nstatic string? GeneratePresignedUrl()\n{\n  AWSConfigsS3.UseSignatureVersion4 = true;\n  var presign = new GetPreSignedUrlRequest\n  {\n    BucketName = \"my-bucket\",\n    Key = \"file.txt\",\n    Verb = HttpVerb.GET,\n    Expires = DateTime.Now.AddDays(7),\n  };\n\nvar presignedUrl = s3Client.GetPreSignedURL(presign);\n\nConsole.WriteLine(presignedUrl);\n\nreturn presignedUrl;\n}\nsh\nhttps://<ACCOUNT_ID>.r2.cloudflarestorage.com/my-bucket/file.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<credential>&X-Amz-Date=<timestamp>&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=<signature>\nphp\n<?php\nrequire 'vendor/aws/aws-autoloader.php';\n\n$bucket_name = \"my_bucket\";\n// Provide your Cloudflare account ID\n$account_id = \"<ACCOUNT_ID>\";\n// Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n$access_key_id = \"<ACCESS_KEY_ID>\";\n$access_key_secret = \"<SECRET_ACCESS_KEY>\";\n\n$credentials = new Aws\\Credentials\\Credentials($access_key_id, $access_key_secret);\n\n$options = [\n    'region' => 'auto', // Required by SDK but not used by R2\n    'endpoint' => \"https://$account_id.r2.cloudflarestorage.com\",\n    'version' => 'latest',\n    'credentials' => $credentials\n];\n\n$s3_client = new Aws\\S3\\S3Client($options);\n\n$contents = $s3_client->listObjectsV2([\n    'Bucket' => $bucket_name\n]);\n\nvar_dump($contents['Contents']);\n\n// array(1) {\n//   [0]=>\n//   array(5) {\n//     [\"Key\"]=>\n//     string(14) \"ferriswasm.png\"\n//     [\"LastModified\"]=>\n//     object(Aws\\Api\\DateTimeResult)#187 (3) {\n//       [\"date\"]=>\n//       string(26) \"2022-05-18 17:20:21.670000\"\n//       [\"timezone_type\"]=>\n//       int(2)\n//       [\"timezone\"]=>\n//       string(1) \"Z\"\n//     }\n//     [\"ETag\"]=>\n//     string(34) \"\"eb2b891dc67b81755d2b726d9110af16\"\"\n//     [\"Size\"]=>\n//     string(5) \"87671\"\n//     [\"StorageClass\"]=>\n//     string(8) \"STANDARD\"\n//   }\n// }\n\n$buckets = $s3_client->listBuckets();\n\nvar_dump($buckets['Buckets']);\n\n// array(1) {\n//   [0]=>\n//   array(2) {\n//     [\"Name\"]=>\n//     string(11) \"my-bucket\"\n//     [\"CreationDate\"]=>\n//     object(Aws\\Api\\DateTimeResult)#212 (3) {\n//       [\"date\"]=>\n//       string(26) \"2022-05-18 17:19:59.645000\"\n//       [\"timezone_type\"]=>\n//       int(2)\n//       [\"timezone\"]=>\n//       string(1) \"Z\"\n//     }\n//   }\n// }\n\n?>\nphp\n$cmd = $s3_client->getCommand('GetObject', [\n    'Bucket' => $bucket_name,\n    'Key' => 'ferriswasm.png'\n]);\n\n// The second parameter allows you to determine how long the presigned link is valid.\n$request = $s3_client->createPresignedRequest($cmd, '+1 hour');\n\nprint_r((string)$request->getUri())\n// https://my-bucket.<ACCOUNT_ID>.r2.cloudflarestorage.com/ferriswasm.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<credential>&X-Amz-Date=<timestamp>&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=<signature>\n\n// You can also create links for operations such as putObject to allow temporary write access to a specific key.\n$cmd = $s3_client->getCommand('PutObject', [\n    'Bucket' => $bucket_name,\n    'Key' => 'ferriswasm.png'\n]);\n\n$request = $s3_client->createPresignedRequest($cmd, '+1 hour');\n\nprint_r((string)$request->getUri())\nsh\ncurl -X PUT https://my-bucket.<ACCOUNT_ID>.r2.cloudflarestorage.com/ferriswasm.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<credential>&X-Amz-Date=<timestamp>&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=<signature> --data-binary @ferriswasm.png\nruby\ngem \"aws-sdk-s3\"\nruby\nrequire \"aws-sdk-s3\"\n\n@r2 = Aws::S3::Client.new(\n  # Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n  access_key_id: \"#{ACCESS_KEY_ID}\",\n  secret_access_key: \"#{SECRET_ACCESS_KEY}\",\n  # Provide your Cloudflare account ID\n  endpoint: \"https://#{ACCOUNT_ID}.r2.cloudflarestorage.com\",\n  region: \"auto\", # Required by SDK but not used by R2\n)",
+  "code_samples": [
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: aws-sdk-go · Cloudflare R2 docs\ndescription: You must generate an Access Key before getting started. All\n  examples will utilize access_key_id and access_key_secret variables which\n  represent the Access Key ID and Secret Access Key values you generated.\nlastUpdated: 2025-12-02T15:31:53.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-go/\n  md: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-go/index.md\n---\n\nYou must [generate an Access Key](https://developers.cloudflare.com/r2/api/tokens/) before getting started. All examples will utilize `access_key_id` and `access_key_secret` variables which represent the **Access Key ID** and **Secret Access Key** values you generated.\n\n\n\nThis example uses version 2 of the [aws-sdk-go](https://github.com/aws/aws-sdk-go-v2) package. You must pass in the R2 configuration credentials when instantiating your `S3` service client:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Generate presigned URLs\n\nYou can also generate presigned links that can be used to temporarily share public write access to a bucket.",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: aws-sdk-java · Cloudflare R2 docs\ndescription: You must generate an Access Key before getting started. All\n  examples will utilize access_key_id and access_key_secret variables which\n  represent the Access Key ID and Secret Access Key values you generated.\nlastUpdated: 2025-12-02T15:31:53.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-java/\n  md: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-java/index.md\n---\n\nYou must [generate an Access Key](https://developers.cloudflare.com/r2/api/tokens/) before getting started. All examples will utilize `access_key_id` and `access_key_secret` variables which represent the **Access Key ID** and **Secret Access Key** values you generated.\n\n\n\nThis example uses version 2 of the [aws-sdk-java](https://github.com/aws/aws-sdk-java-v2/#using-the-sdk) package. You must pass in the R2 configuration credentials when instantiating your `S3` service client:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Generate presigned URLs\n\nYou can also generate presigned links that can be used to temporarily share public write access to a bucket.",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: aws-sdk-js · Cloudflare R2 docs\ndescription: You must generate an Access Key before getting started. All\n  examples will utilize access_key_id and access_key_secret variables which\n  represent the Access Key ID and Secret Access Key values you generated.\nlastUpdated: 2025-12-02T15:31:53.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-js/\n  md: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-js/index.md\n---\n\nYou must [generate an Access Key](https://developers.cloudflare.com/r2/api/tokens/) before getting started. All examples will utilize `access_key_id` and `access_key_secret` variables which represent the **Access Key ID** and **Secret Access Key** values you generated.\n\n\n\nIf you are interested in the newer version of the AWS JavaScript SDK visit this [dedicated aws-sdk-js-v3 example page](https://developers.cloudflare.com/r2/examples/aws/aws-sdk-js-v3/).\n\nJavaScript or TypeScript users may continue to use the [`aws-sdk`](https://www.npmjs.com/package/aws-sdk) npm package as per normal. You must pass in the R2 configuration credentials when instantiating your `S3` service client:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Generate presigned URLs\n\nYou can also generate presigned links that can be used to share public read or write access to a bucket temporarily.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "You can use the link generated by the `putObject` example to upload to the specified bucket and key, until the presigned link expires. When using a presigned URL with `ContentType`, the client must include a matching `Content-Type` header in the request.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Restrict uploads with CORS and Content-Type\n\nWhen generating presigned URLs for uploads, you can limit abuse and misuse by:\n\n1. **Restricting Content-Type**: Specify the allowed content type in the presigned URL parameters. The upload will fail if the client sends a different `Content-Type` header.\n\n2. **Configuring CORS**: Set up [CORS rules](https://developers.cloudflare.com/r2/buckets/cors/#add-cors-policies-from-the-dashboard) on your bucket to control which origins can upload files. Configure CORS via the [Cloudflare dashboard](https://dash.cloudflare.com/?to=/:account/r2/overview) by adding a JSON policy to your bucket settings:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then generate a presigned URL with a Content-Type restriction:",
+      "language": "unknown"
+    },
+    {
+      "code": "When a client uses this presigned URL, they must:\n\n* Make the request from an allowed origin (enforced by CORS)\n* Include the `Content-Type: image/png` header (enforced by the signature)\n\n</page>\n\n<page>\n---\ntitle: aws-sdk-js-v3 · Cloudflare R2 docs\ndescription: You must generate an Access Key before getting started. All\n  examples will utilize access_key_id and access_key_secret variables which\n  represent the Access Key ID and Secret Access Key values you generated.\nlastUpdated: 2025-12-02T15:31:53.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-js-v3/\n  md: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-js-v3/index.md\n---\n\nYou must [generate an Access Key](https://developers.cloudflare.com/r2/api/tokens/) before getting started. All examples will utilize `access_key_id` and `access_key_secret` variables which represent the **Access Key ID** and **Secret Access Key** values you generated.\n\n\n\nJavaScript or TypeScript users may continue to use the [`@aws-sdk/client-s3`](https://www.npmjs.com/package/@aws-sdk/client-s3) npm package as per normal. You must pass in the R2 configuration credentials when instantiating your `S3` service client.\n\nNote\n\nCurrently, you cannot use AWS S3-compatible API while developing locally via `wrangler dev`.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Generate presigned URLs\n\nYou can also generate presigned links that can be used to share public read or write access to a bucket temporarily.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "You can use the link generated by the `PutObject` example to upload to the specified bucket and key, until the presigned link expires. When using a presigned URL with `ContentType`, the client must include a matching `Content-Type` header in the request.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Restrict uploads with CORS and Content-Type\n\nWhen generating presigned URLs for uploads, you can limit abuse and misuse by:\n\n1. **Restricting Content-Type**: Specify the allowed content type in the `PutObjectCommand`. The upload will fail if the client sends a different `Content-Type` header.\n\n2. **Configuring CORS**: Set up [CORS rules](https://developers.cloudflare.com/r2/buckets/cors/#add-cors-policies-from-the-dashboard) on your bucket to control which origins can upload files. Configure CORS via the [Cloudflare dashboard](https://dash.cloudflare.com/?to=/:account/r2/overview) by adding a JSON policy to your bucket settings:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then generate a presigned URL with a Content-Type restriction:",
+      "language": "unknown"
+    },
+    {
+      "code": "When a client uses this presigned URL, they must:\n\n* Make the request from an allowed origin (enforced by CORS)\n* Include the `Content-Type: image/png` header (enforced by the signature)\n\n</page>\n\n<page>\n---\ntitle: aws-sdk-net · Cloudflare R2 docs\ndescription: You must generate an Access Key before getting started. All\n  examples will utilize access_key_id and access_key_secret variables which\n  represent the Access Key ID and Secret Access Key values you generated.\nlastUpdated: 2025-12-02T15:31:53.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-net/\n  md: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-net/index.md\n---\n\nYou must [generate an Access Key](https://developers.cloudflare.com/r2/api/tokens/) before getting started. All examples will utilize `access_key_id` and `access_key_secret` variables which represent the **Access Key ID** and **Secret Access Key** values you generated.\n\n\n\nThis example uses version 3 of the [aws-sdk-net](https://www.nuget.org/packages/AWSSDK.S3) package. You must pass in the R2 configuration credentials when instantiating your `S3` service client:\n\n## Client setup\n\nIn this example, you will pass credentials explicitly to the `IAmazonS3` initialization. If you wish, use a shared AWS credentials file or the SDK store in-line with other AWS SDKs. Refer to [Configure AWS credentials](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-config-creds.html) for more details.",
+      "language": "unknown"
+    },
+    {
+      "code": "## List buckets and objects\n\nThe [ListBucketsAsync](https://docs.aws.amazon.com/sdkfornet/v3/apidocs/items/S3/MIS3ListBucketsAsyncListBucketsRequestCancellationToken.html) and [ListObjectsAsync](https://docs.aws.amazon.com/sdkfornet/v3/apidocs/items/S3/MIS3ListObjectsV2AsyncListObjectsV2RequestCancellationToken.html) methods can be used to list buckets under your account and the contents of those buckets respectively.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## Upload and retrieve objects\n\nThe [PutObjectAsync](https://docs.aws.amazon.com/sdkfornet/v3/apidocs/items/S3/MIS3PutObjectAsyncPutObjectRequestCancellationToken.html) and [GetObjectAsync](https://docs.aws.amazon.com/sdkfornet/v3/apidocs/items/S3/MIS3GetObjectAsyncStringStringCancellationToken.html) methods can be used to upload objects and download objects from an R2 bucket respectively.\n\nWarning\n\n`DisablePayloadSigning = true` and `DisableDefaultChecksumValidation = true` must be passed as Cloudflare R2 does not currently support the Streaming SigV4 implementation used by AWSSDK.S3.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## Generate presigned URLs\n\nThe [GetPreSignedURL](https://docs.aws.amazon.com/sdkfornet/v3/apidocs/items/S3/MIS3GetPreSignedURLGetPreSignedUrlRequest.html) method allows you to sign ahead of time, giving temporary access to a specific operation. In this case, presigning a `PutObject` request for `sdk-example/file.txt`.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: aws-sdk-php · Cloudflare R2 docs\ndescription: Example of how to configure `aws-sdk-php` to use R2.\nlastUpdated: 2025-12-02T15:31:53.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-php/\n  md: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-php/index.md\n---\n\nYou must [generate an Access Key](https://developers.cloudflare.com/r2/api/tokens/) before getting started. All examples will utilize `access_key_id` and `access_key_secret` variables which represent the **Access Key ID** and **Secret Access Key** values you generated.\n\n\n\nThis example uses version 3 of the [aws-sdk-php](https://packagist.org/packages/aws/aws-sdk-php) package. You must pass in the R2 configuration credentials when instantiating your `S3` service client:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Generate presigned URLs\n\nYou can also generate presigned links that can be used to share public read or write access to a bucket temporarily.",
+      "language": "unknown"
+    },
+    {
+      "code": "You can use the link generated by the `putObject` example to upload to the specified bucket and key, until the presigned link expires.",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: aws-sdk-ruby · Cloudflare R2 docs\ndescription: You must generate an Access Key before getting started. All\n  examples will utilize access_key_id and access_key_secret variables which\n  represent the Access Key ID and Secret Access Key values you generated.\nlastUpdated: 2025-12-02T15:31:53.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-ruby/\n  md: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-ruby/index.md\n---\n\nYou must [generate an Access Key](https://developers.cloudflare.com/r2/api/tokens/) before getting started. All examples will utilize `access_key_id` and `access_key_secret` variables which represent the **Access Key ID** and **Secret Access Key** values you generated.\n\n\n\nMany Ruby projects also store these credentials in environment variables instead.\n\nAdd the following dependency to your `Gemfile`:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then you can use Ruby to operate on R2 buckets:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Generate presigned URLs",
+      "id": "generate-presigned-urls"
+    },
+    {
+      "level": "h2",
+      "text": "Generate presigned URLs",
+      "id": "generate-presigned-urls"
+    },
+    {
+      "level": "h2",
+      "text": "Generate presigned URLs",
+      "id": "generate-presigned-urls"
+    },
+    {
+      "level": "h2",
+      "text": "Restrict uploads with CORS and Content-Type",
+      "id": "restrict-uploads-with-cors-and-content-type"
+    },
+    {
+      "level": "h2",
+      "text": "Generate presigned URLs",
+      "id": "generate-presigned-urls"
+    },
+    {
+      "level": "h2",
+      "text": "Restrict uploads with CORS and Content-Type",
+      "id": "restrict-uploads-with-cors-and-content-type"
+    },
+    {
+      "level": "h2",
+      "text": "Client setup",
+      "id": "client-setup"
+    },
+    {
+      "level": "h2",
+      "text": "List buckets and objects",
+      "id": "list-buckets-and-objects"
+    },
+    {
+      "level": "h2",
+      "text": "Upload and retrieve objects",
+      "id": "upload-and-retrieve-objects"
+    },
+    {
+      "level": "h2",
+      "text": "Generate presigned URLs",
+      "id": "generate-presigned-urls"
+    },
+    {
+      "level": "h2",
+      "text": "Generate presigned URLs",
+      "id": "generate-presigned-urls"
+    }
+  ],
+  "url": "llms-txt#https://<account_id>.r2.cloudflarestorage.com/my-bucket/ferriswasm.png?x-amz-algorithm=aws4-hmac-sha256&x-amz-credential=<credential>&x-amz-date=<timestamp>&x-amz-expires=3600&x-amz-signedheaders=host&x-amz-signature=<signature>",
+  "links": []
+}

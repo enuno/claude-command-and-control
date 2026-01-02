@@ -1,0 +1,8 @@
+{
+  "title": "Unbound TLS Config",
+  "content": "tls-cert-bundle: \"/etc/ssl/cert.pem\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#unbound-tls-config",
+  "links": []
+}

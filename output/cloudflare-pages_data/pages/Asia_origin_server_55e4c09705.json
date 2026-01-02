@@ -1,0 +1,17 @@
+{
+  "title": "Asia origin server",
+  "content": "resource \"cloudflare_dns_record\" \"www_asia\" {\n  zone_id = var.zone_id\n  name    = \"www\"\n  content = \"198.51.100.15\"\n  type    = \"A\"\n  ttl     = 300\n  proxied = true\n  comment = \"Asia origin server\"\n}\nbash\nterraform plan\nterraform apply\nbash",
+  "code_samples": [
+    {
+      "code": "Note\n\nNote that while the name of the `resource` is different because Terraform resources of the same type must be uniquely named, the DNS name, or what your customers will type in their browser, is the same: `www`.\n\nApply this change to see basic round-robin behavior:",
+      "language": "unknown"
+    },
+    {
+      "code": "Test the basic load distribution:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#asia-origin-server",
+  "links": []
+}

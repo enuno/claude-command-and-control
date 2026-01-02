@@ -1,0 +1,580 @@
+{
+  "title": "and deploy it",
+  "content": "npx wrangler@latest deploy\nsh\nnpm i agents\njs\n  import { Agent, AgentNamespace } from \"agents\";\n\nexport class MyAgent extends Agent {\n    // Define methods on the Agent:\n    // https://developers.cloudflare.com/agents/api-reference/agents-api/\n    //\n    // Every Agent has built in state via this.setState and this.sql\n    // Built-in scheduling via this.schedule\n    // Agents support WebSockets, HTTP requests, state synchronization and\n    // can run for seconds, minutes or hours: as long as the tasks need.\n  }\n  ts\n  import { Agent, AgentNamespace } from \"agents\";\n\nexport class MyAgent extends Agent {\n    // Define methods on the Agent:\n    // https://developers.cloudflare.com/agents/api-reference/agents-api/\n    //\n    // Every Agent has built in state via this.setState and this.sql\n    // Built-in scheduling via this.schedule\n    // Agents support WebSockets, HTTP requests, state synchronization and\n    // can run for seconds, minutes or hours: as long as the tasks need.\n  }\n  jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"durable_objects\": {\n      \"bindings\": [\n        {\n          \"name\": \"MyAgent\",\n          \"class_name\": \"MyAgent\"\n        }\n      ]\n    },\n    \"migrations\": [\n      {\n        \"tag\": \"v1\",\n        \"new_sqlite_classes\": [\n          \"MyAgent\"\n        ]\n      }\n    ]\n  }\n  toml\n  [[durable_objects.bindings]]\n  name = \"MyAgent\"\n  class_name = \"MyAgent\"\n\n[[migrations]]\n  tag = \"v1\"\n  new_sqlite_classes = [\"MyAgent\"]\n  js\n  import { Container, getContainer } from \"@cloudflare/containers\";\n\nexport class MyContainer extends Container {\n    defaultPort = 4000; // Port the container is listening on\n    sleepAfter = \"10m\"; // Stop the instance if requests not sent for 10 minutes\n  }\n\nexport default {\n    async fetch(request, env) {\n      const { \"session-id\": sessionId } = await request.json();\n      // Get the container instance for the given session ID\n      const containerInstance = getContainer(env.MY_CONTAINER, sessionId);\n      // Pass the request to the container instance on its default port\n      return containerInstance.fetch(request);\n    },\n  };\n  jsonc\n    {\n      \"name\": \"container-starter\",\n      \"main\": \"src/index.js\",\n      \"compatibility_date\": \"2025-12-31\",\n      \"containers\": [\n        {\n          \"class_name\": \"MyContainer\",\n          \"image\": \"./Dockerfile\",\n          \"max_instances\": 5\n        }\n      ],\n      \"durable_objects\": {\n        \"bindings\": [\n          {\n            \"class_name\": \"MyContainer\",\n            \"name\": \"MY_CONTAINER\"\n          }\n        ]\n      },\n      \"migrations\": [\n        {\n          \"new_sqlite_classes\": [\"MyContainer\"],\n          \"tag\": \"v1\"\n        }\n      ]\n    }\n    toml\n    name = \"container-starter\"\n    main = \"src/index.js\"\n    compatibility_date = \"2025-12-31\"\n\n[[containers]]\n    class_name = \"MyContainer\"\n    image = \"./Dockerfile\"\n    max_instances = 5\n\n[[durable_objects.bindings]]\n    class_name = \"MyContainer\"\n    name = \"MY_CONTAINER\"\n\n[[migrations]]\n    new_sqlite_classes = [ \"MyContainer\" ]\n    tag = \"v1\"\n    jsonc\n  {\n    \"name\": \"container-starter\",\n    \"main\": \"src/index.js\",\n    \"compatibility_date\": \"2025-12-31\",\n    \"containers\": [\n      {\n        \"class_name\": \"MyContainer\",\n        \"image\": \"./Dockerfile\",\n        \"max_instances\": 5\n      }\n    ],\n    \"durable_objects\": {\n      \"bindings\": [\n        {\n          \"class_name\": \"MyContainer\",\n          \"name\": \"MY_CONTAINER\"\n        }\n      ]\n    },\n    \"migrations\": [\n      {\n        \"new_sqlite_classes\": [\"MyContainer\"],\n        \"tag\": \"v1\"\n      }\n    ]\n  }\n  toml\n  name = \"container-starter\"\n  main = \"src/index.js\"\n  compatibility_date = \"2025-12-31\"\n\n[[containers]]\n  class_name = \"MyContainer\"\n  image = \"./Dockerfile\"\n  max_instances = 5\n\n[[durable_objects.bindings]]\n  class_name = \"MyContainer\"\n  name = \"MY_CONTAINER\"\n\n[[migrations]]\n  new_sqlite_classes = [ \"MyContainer\" ]\n  tag = \"v1\"\n  ```\n\n[Get started](https://developers.cloudflare.com/containers/get-started/)\n\n[Containers dashboard](https://dash.cloudflare.com/?to=/:account/workers/containers)\n\n### Deploy your first Container\n\nBuild and push an image, call a Container from a Worker, and understand scaling and routing.\n\n[Deploy a Container](https://developers.cloudflare.com/containers/get-started/)\n\n### Container Examples\n\nSee examples of how to use a Container with a Worker, including stateless and stateful routing, regional placement, Workflow and Queue integrations, AI-generated code execution, and short-lived workloads.\n\n[See Examples](https://developers.cloudflare.com/containers/examples/)\n\n[Beta Information](https://developers.cloudflare.com/containers/beta-info/)\n\nLearn about the Containers Beta and upcoming features.\n\n[Wrangler](https://developers.cloudflare.com/workers/wrangler/commands/#containers)\n\nLearn more about the commands to develop, build and push images, and deploy containers with Wrangler.\n\n[Limits](https://developers.cloudflare.com/containers/platform-details/#limits)\n\nLearn about what limits Containers have and how to work within them.\n\n[Containers Discord](https://discord.cloudflare.com)\n\nConnect with other users of Containers on Discord. Ask questions, show what you are building, and discuss the platform with other developers.\n\n<page>\n---\ntitle: Overview · Cloudflare D1 docs\ndescription: D1 is Cloudflare's managed, serverless database with SQLite's SQL\n  semantics, built-in disaster recovery, and Worker and HTTP API access.\nlastUpdated: 2025-08-18T14:27:42.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/d1/\n  md: https://developers.cloudflare.com/d1/index.md\n---\n\nCreate new serverless SQL databases to query from your Workers and Pages projects.\n\nAvailable on Free and Paid plans\n\nD1 is Cloudflare's managed, serverless database with SQLite's SQL semantics, built-in disaster recovery, and Worker and HTTP API access.\n\nD1 is designed for horizontal scale out across multiple, smaller (10 GB) databases, such as per-user, per-tenant or per-entity databases. D1 allows you to build applications with thousands of databases at no extra cost for isolating with multiple databases. D1 pricing is based only on query and storage costs.\n\nCreate your first D1 database by [following the Get started guide](https://developers.cloudflare.com/d1/get-started/), learn how to [import data into a database](https://developers.cloudflare.com/d1/best-practices/import-export-data/), and how to [interact with your database](https://developers.cloudflare.com/d1/worker-api/) directly from [Workers](https://developers.cloudflare.com/workers/) or [Pages](https://developers.cloudflare.com/pages/functions/bindings/#d1-databases).\n\n### Create your first D1 database\n\nCreate your first D1 database, establish a schema, import data and query D1 directly from an application [built with Workers](https://developers.cloudflare.com/workers/).\n\n[Create your D1 database](https://developers.cloudflare.com/d1/get-started/)\n\nExecute SQL with SQLite's SQL compatibility and D1 Client API.\n\n[Execute SQL queries](https://developers.cloudflare.com/d1/sql-api/sql-statements/)\n\nTime Travel is D1’s approach to backups and point-in-time-recovery, and allows you to restore a database to any minute within the last 30 days.\n\n[Learn about Time Travel](https://developers.cloudflare.com/d1/reference/time-travel/)\n\n**[Workers](https://developers.cloudflare.com/workers/)**\n\nBuild serverless applications and deploy instantly across the globe for exceptional performance, reliability, and scale.\n\n**[Pages](https://developers.cloudflare.com/pages/)**\n\nDeploy dynamic front-end applications in record time.\n\n[Pricing](https://developers.cloudflare.com/d1/platform/pricing/)\n\nLearn about D1's pricing and how to estimate your usage.\n\n[Limits](https://developers.cloudflare.com/d1/platform/limits/)\n\nLearn about what limits D1 has and how to work within them.\n\n[Community projects](https://developers.cloudflare.com/d1/reference/community-projects/)\n\nBrowse what developers are building with D1.\n\n[Storage options](https://developers.cloudflare.com/workers/platform/storage-options/)\n\nLearn more about the storage and database options you can build on with Workers.\n\n[Developer Discord](https://discord.cloudflare.com)\n\nConnect with the Workers community on Discord to ask questions, show what you are building, and discuss the platform with other developers.\n\n[@CloudflareDev](https://x.com/cloudflaredev)\n\nFollow @CloudflareDev on Twitter to learn about product announcements, and what is new in Cloudflare Developer Platform.\n\n<page>\n---\ntitle: Data Localization Suite · Cloudflare Data Localization Suite docs\ndescription: The Data Localization Suite (DLS) is a collection of tools that\n  enable customers to choose the location where Cloudflare inspects and stores\n  data, while maintaining the security and performance benefits of our global\n  network.\nlastUpdated: 2025-02-07T17:34:35.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/data-localization/\n  md: https://developers.cloudflare.com/data-localization/index.md\n---\n\nEnterprise-only paid add-on\n\nThe Data Localization Suite (DLS) is a collection of tools that enable customers to choose the location where Cloudflare inspects and stores data, while maintaining the security and performance benefits of our global network.\n\nKeep your keys within a specified region, ensuring compliance and data sovereignty.\n\n[Use Geo Key Manager](https://developers.cloudflare.com/data-localization/geo-key-manager/)\n\n### Customer Metadata Boundary\n\nEnsure that any traffic metadata that can identify your end user stays in the region you selected.\n\n[Use Customer Metadata Boundary](https://developers.cloudflare.com/data-localization/metadata-boundary/)\n\n### Regional Services\n\nComply with regional restrictions by choosing which subset of data centers decrypts and services your HTTPS traffic.\n\n[Use Regional Services](https://developers.cloudflare.com/data-localization/regional-services/)\n\n**[SSL/TLS](https://developers.cloudflare.com/ssl/)**\n\nCloudflare SSL/TLS encrypts your web traffic to prevent data theft and other tampering.\n\n**[DNS](https://developers.cloudflare.com/dns/)**\n\nCloudflare's global DNS platform provides speed and resilience. DNS customers also benefit from free DNSSEC, and protection against route leaks and hijacking.\n\n[Resource hub](https://www.cloudflare.com/resource-hub/?topic=Privacy)\n\nRefer to our latest resources to learn more about privacy.\n\n[Cloudflare blog](https://blog.cloudflare.com/tag/data-localization-suite)\n\nRead articles about the latest updates to the Data Localization Suite.\n\n<page>\n---\ntitle: Docs directory | Cloudflare Docs\ndescription: Explore the different areas of our documentation site.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/directory/\n  md: https://developers.cloudflare.com/directory/index.md\n---\n\n[1](https://developers.cloudflare.com/1.1.1.1/)\n\n[1.1.1.1](https://developers.cloudflare.com/1.1.1.1/)\n\n[A blazing fast DNS resolver built for private browsing](https://developers.cloudflare.com/1.1.1.1/)\n\n[Access](https://developers.cloudflare.com/cloudflare-one/access-controls/policies/)\n\n[Determine who can reach your application using policies](https://developers.cloudflare.com/cloudflare-one/access-controls/policies/)\n\n[A](https://developers.cloudflare.com/fundamentals/account/)\n\n[Account](https://developers.cloudflare.com/fundamentals/account/)\n\n[Manage your Cloudflare account and contacts](https://developers.cloudflare.com/fundamentals/account/)\n\n[Agents](https://developers.cloudflare.com/agents/)\n\n[Build AI-powered agents to perform tasks, persist state, browse the web, and communicate in real-time](https://developers.cloudflare.com/agents/)\n\n[AI Crawl Control](https://developers.cloudflare.com/ai-crawl-control/)\n\n[Analyze and control third-party AI crawlers in your website](https://developers.cloudflare.com/ai-crawl-control/)\n\n[AI Gateway](https://developers.cloudflare.com/ai-gateway/)\n\n[Observe and control your AI applications](https://developers.cloudflare.com/ai-gateway/)\n\n[AI Search](https://developers.cloudflare.com/ai-search/)\n\n[Create fully managed RAG pipelines for your AI applications](https://developers.cloudflare.com/ai-search/)\n\n[Analytics](https://developers.cloudflare.com/analytics/)\n\n[Visualize the performance, security, and reliability data collected by Cloudflare products](https://developers.cloudflare.com/analytics/)\n\n[API documentation](https://developers.cloudflare.com/api/)\n\n[Cloudflare's API tokens allow you to make calls to our API to alter different settings](https://developers.cloudflare.com/api/)\n\n[API Shield](https://developers.cloudflare.com/api-shield/)\n\n[Identify and address your API vulnerabilities](https://developers.cloudflare.com/api-shield/)\n\n[Argo Smart Routing](https://developers.cloudflare.com/argo-smart-routing/)\n\n[Route web traffic across the fastest, most reliable network paths](https://developers.cloudflare.com/argo-smart-routing/)\n\n[Automatic Platform Optimization](https://developers.cloudflare.com/automatic-platform-optimization/)\n\n[Improve WordPress site performance by serving it from Cloudflare's global network](https://developers.cloudflare.com/automatic-platform-optimization/)\n\n[Billing](https://developers.cloudflare.com/billing/)\n\n[Manage billing, plans, and subscriptions for your account](https://developers.cloudflare.com/billing/)\n\n[Bots](https://developers.cloudflare.com/bots/)\n\n[Protect your domain from bad bot traffic](https://developers.cloudflare.com/bots/)\n\n[Browser Isolation](https://developers.cloudflare.com/cloudflare-one/remote-browser-isolation/)\n\n[Execute active webpage content in a secure, isolated browser](https://developers.cloudflare.com/cloudflare-one/remote-browser-isolation/)\n\n[Browser Rendering](https://developers.cloudflare.com/browser-rendering/)\n\n[Control and interact with headless browser instances programmatically](https://developers.cloudflare.com/browser-rendering/)\n\n[BYOIP](https://developers.cloudflare.com/byoip/)\n\n[Get Cloudflare's security and performance while using your own IPs](https://developers.cloudflare.com/byoip/)\n\n[Cache](https://developers.cloudflare.com/cache/)\n\n[Make websites faster by caching content across our global server network](https://developers.cloudflare.com/cache/)\n\n[C](https://developers.cloudflare.com/cache/advanced-configuration/cache-reserve/)\n\n[Cache Reserve](https://developers.cloudflare.com/cache/advanced-configuration/cache-reserve/)\n\n[Cache your website content on a persistent data store](https://developers.cloudflare.com/cache/advanced-configuration/cache-reserve/)\n\n[CASB](https://developers.cloudflare.com/cloudflare-one/integrations/cloud-and-saas/)\n\n[Scan SaaS applications and cloud environments for data security issues](https://developers.cloudflare.com/cloudflare-one/integrations/cloud-and-saas/)\n\n[China Network](https://developers.cloudflare.com/china-network/)\n\n[Fast, global network serving visitors inside and outside of China](https://developers.cloudflare.com/china-network/)\n\n[Challenges](https://developers.cloudflare.com/cloudflare-challenges/)\n\n[Verify visitors are not bots with lightweight challenges](https://developers.cloudflare.com/cloudflare-challenges/)\n\n[Cloudflare for Platforms](https://developers.cloudflare.com/cloudflare-for-platforms/)\n\n[Build your own multi-tenant platform using Cloudflare as infrastructure](https://developers.cloudflare.com/cloudflare-for-platforms/)\n\n[C](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/)\n\n[Cloudflare for SaaS](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/)\n\n[Extend Cloudflare's security and performance to your customers](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/)\n\n[Cloudflare One](https://developers.cloudflare.com/cloudflare-one/)\n\n[Replace legacy security perimeters with Cloudflare's network to protect your organization](https://developers.cloudflare.com/cloudflare-one/)\n\n[C](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/)\n\n[Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/)\n\n[Securely connect resources to Cloudflare without a publicly routable IP address](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/)\n\n[Containers](https://developers.cloudflare.com/containers/)\n\n[Enhance your Workers with serverless containers](https://developers.cloudflare.com/containers/)\n\n[D1](https://developers.cloudflare.com/d1/)\n\n[Create managed, serverless databases with SQL semantics](https://developers.cloudflare.com/d1/)\n\n[Data Localization Suite](https://developers.cloudflare.com/data-localization/)\n\n[Control where Cloudflare stores and inspects data](https://developers.cloudflare.com/data-localization/)\n\n[DDoS Protection](https://developers.cloudflare.com/ddos-protection/)\n\n[Protect against DDoS attacks automatically with uncompromised performance](https://developers.cloudflare.com/ddos-protection/)\n\n[Digital Experience Monitoring](https://developers.cloudflare.com/cloudflare-one/insights/dex/)\n\n[Monitor device, network, and application health across your Zero Trust organization](https://developers.cloudflare.com/cloudflare-one/insights/dex/)\n\n[D](https://developers.cloudflare.com/cloudflare-one/data-loss-prevention/)\n\n[Data Loss Prevention](https://developers.cloudflare.com/cloudflare-one/data-loss-prevention/)\n\n[Scan your web traffic and SaaS applications for sensitive data](https://developers.cloudflare.com/cloudflare-one/data-loss-prevention/)\n\n[DMARC Management](https://developers.cloudflare.com/dmarc-management/)\n\n[Protect your email domain and stop brand impersonation](https://developers.cloudflare.com/dmarc-management/)\n\n[DNS](https://developers.cloudflare.com/dns/)\n\n[Deliver excellent performance and reliability to your domain](https://developers.cloudflare.com/dns/)\n\n[D](https://developers.cloudflare.com/dns/dns-firewall/)\n\n[DNS Firewall](https://developers.cloudflare.com/dns/dns-firewall/)\n\n[Speed up and protect entire authoritative nameservers](https://developers.cloudflare.com/dns/dns-firewall/)\n\n[Durable Objects](https://developers.cloudflare.com/durable-objects/)\n\n[A special kind of Cloudflare Worker combining compute with storage](https://developers.cloudflare.com/durable-objects/)\n\n[Email Routing](https://developers.cloudflare.com/email-routing/)\n\n[Create and manage email addresses and route to your preferred inbox](https://developers.cloudflare.com/email-routing/)\n\n[E](https://developers.cloudflare.com/cloudflare-one/email-security/)\n\n[Email security](https://developers.cloudflare.com/cloudflare-one/email-security/)\n\n[Protect your email, web, and network from phishing and malware attacks](https://developers.cloudflare.com/cloudflare-one/email-security/)\n\n[F](https://developers.cloudflare.com/bots/additional-configurations/sequence-rules/)\n\n[Fraud Detection](https://developers.cloudflare.com/bots/additional-configurations/sequence-rules/)\n\n[Sequence rules use cookies to track the order and timing of requests](https://developers.cloudflare.com/bots/additional-configurations/sequence-rules/)\n\n[Cloudflare Fundamentals](https://developers.cloudflare.com/fundamentals/)\n\n[Learn about using Cloudflare and features that span across Cloudflare products](https://developers.cloudflare.com/fundamentals/)\n\n[Gateway](https://developers.cloudflare.com/cloudflare-one/traffic-policies/)\n\n[Set up policies to inspect DNS, Network, HTTP, and Egress traffic](https://developers.cloudflare.com/cloudflare-one/traffic-policies/)\n\n[G](https://developers.cloudflare.com/ssl/edge-certificates/geokey-manager/)\n\n[Geo Key Manager](https://developers.cloudflare.com/ssl/edge-certificates/geokey-manager/)\n\n[Control SSL/TLS key storage for compliance and security](https://developers.cloudflare.com/ssl/edge-certificates/geokey-manager/)\n\n[Google tag gateway for advertisers](https://developers.cloudflare.com/google-tag-gateway/)\n\n[Add a layer of data security and privacy controls when using Google Tag Manager](https://developers.cloudflare.com/google-tag-gateway/)\n\n[G](https://developers.cloudflare.com/analytics/graphql-api/)\n\n[GraphQL Analytics API](https://developers.cloudflare.com/analytics/graphql-api/)\n\n[Access data on HTTP requests and Cloudflare products](https://developers.cloudflare.com/analytics/graphql-api/)\n\n[Health Checks](https://developers.cloudflare.com/health-checks/)\n\n[Monitor IPs or hostnames and get notified of issues](https://developers.cloudflare.com/health-checks/)\n\n[Hyperdrive](https://developers.cloudflare.com/hyperdrive/)\n\n[Accelerate database queries to make databases fast globally](https://developers.cloudflare.com/hyperdrive/)\n\n[Cloudflare Images](https://developers.cloudflare.com/images/)\n\n[Store, transform, optimize, and deliver images at scale](https://developers.cloudflare.com/images/)\n\n[I](https://developers.cloudflare.com/dns/internal-dns/)\n\n[Internal DNS](https://developers.cloudflare.com/dns/internal-dns/)\n\n[Simplify private network management with Cloudflare DNS for internal resources](https://developers.cloudflare.com/dns/internal-dns/)\n\n[Key Transparency Auditor](https://developers.cloudflare.com/key-transparency/)\n\n[Secure the distribution of public keys in E2EE messaging systems](https://developers.cloudflare.com/key-transparency/)\n\n[K](https://developers.cloudflare.com/ssl/keyless-ssl/)\n\n[Keyless SSL](https://developers.cloudflare.com/ssl/keyless-ssl/)\n\n[Use Cloudflare SSL while keeping exclusive access to your private keys](https://developers.cloudflare.com/ssl/keyless-ssl/)\n\n[KV](https://developers.cloudflare.com/kv/)\n\n[Global, low-latency, key-value data storage](https://developers.cloudflare.com/kv/)\n\n[L](https://developers.cloudflare.com/waf/detections/leaked-credentials/)\n\n[Leaked credentials detection](https://developers.cloudflare.com/waf/detections/leaked-credentials/)\n\n[Detect previously leaked credentials in incoming requests](https://developers.cloudflare.com/waf/detections/leaked-credentials/)\n\n[Learning Paths](https://developers.cloudflare.com/learning-paths/)\n\n[Guided modules and projects to help you get started with Cloudflare](https://developers.cloudflare.com/learning-paths/)\n\n[Load Balancing](https://developers.cloudflare.com/load-balancing/)\n\n[Maximize application performance and availability](https://developers.cloudflare.com/load-balancing/)\n\n[Log Explorer](https://developers.cloudflare.com/log-explorer/)\n\n[Store and explore your logs in the Cloudflare dashboard or API](https://developers.cloudflare.com/log-explorer/)\n\n[Logs](https://developers.cloudflare.com/logs/)\n\n[Access detailed logs with metadata from Cloudflare products](https://developers.cloudflare.com/logs/)\n\n[Magic Cloud Networking](https://developers.cloudflare.com/magic-cloud-networking/)\n\n[Automate resource discovery and simplify managing your public cloud infrastructure](https://developers.cloudflare.com/magic-cloud-networking/)\n\n[Magic Firewall](https://developers.cloudflare.com/magic-firewall/)\n\n[Protect your enterprise network with advanced firewall-as-a-service protection](https://developers.cloudflare.com/magic-firewall/)\n\n[Magic Network Monitoring](https://developers.cloudflare.com/magic-network-monitoring/)\n\n[Visibility into your network and cloud traffic by analyzing network flow data](https://developers.cloudflare.com/magic-network-monitoring/)\n\n[Magic Transit](https://developers.cloudflare.com/magic-transit/)\n\n[Network functions at Cloudflare scale for on-premise, cloud-hosted, and hybrid networks](https://developers.cloudflare.com/magic-transit/)\n\n[Magic WAN](https://developers.cloudflare.com/magic-wan/)\n\n[Replace legacy WAN and securely connect any traffic source to Cloudflare's network](https://developers.cloudflare.com/magic-wan/)\n\n[MoQ](https://developers.cloudflare.com/moq/)\n\n[Protocol for live media](https://developers.cloudflare.com/moq/)\n\n[Network](https://developers.cloudflare.com/network/)\n\n[Manage Cloudflare network settings for your website](https://developers.cloudflare.com/network/)\n\n[Network Error Logging](https://developers.cloudflare.com/network-error-logging/)\n\n[Review connectivity issues to learn when and where an incident is happening and its impact](https://developers.cloudflare.com/network-error-logging/)\n\n[Network Interconnect](https://developers.cloudflare.com/network-interconnect/)\n\n[Faster, more reliable, and more secure than connecting over the Internet](https://developers.cloudflare.com/network-interconnect/)\n\n[Notifications](https://developers.cloudflare.com/notifications/)\n\n[Define what you want to be notified about and how](https://developers.cloudflare.com/notifications/)\n\n[Page Shield](https://developers.cloudflare.com/page-shield/)\n\n[Provide client-side protection for your website visitors](https://developers.cloudflare.com/page-shield/)\n\n[Pages](https://developers.cloudflare.com/pages/)\n\n[Build full-stack, serverless applications globally with minimal configuration](https://developers.cloudflare.com/pages/)\n\n[Pipelines](https://developers.cloudflare.com/pipelines/)\n\n[Ingest real time data streams and load into R2](https://developers.cloudflare.com/pipelines/)\n\n[Privacy Gateway](https://developers.cloudflare.com/privacy-gateway/)\n\n[Implement the Oblivious HTTP IETF standard to improve client privacy](https://developers.cloudflare.com/privacy-gateway/)\n\n[Pulumi](https://developers.cloudflare.com/pulumi/)\n\n[Create, deploy, and manage Cloudflare resources in various programming languages](https://developers.cloudflare.com/pulumi/)\n\n[Queues](https://developers.cloudflare.com/queues/)\n\n[Reliably send and receive messages without the egress fees](https://developers.cloudflare.com/queues/)\n\n[R2](https://developers.cloudflare.com/r2/)\n\n[Store large amounts of unstructured data without egress fees](https://developers.cloudflare.com/r2/)\n\n[R2 Data Catalog](https://developers.cloudflare.com/r2/data-catalog/)\n\n[Create, manage, and query Iceberg tables stored in R2](https://developers.cloudflare.com/r2/data-catalog/)\n\n[R2 SQL](https://developers.cloudflare.com/r2-sql/)\n\n[Cloudflare's serverless, distributed query engine for data stored in R2 Data Catalog](https://developers.cloudflare.com/r2-sql/)\n\n[Radar](https://developers.cloudflare.com/radar/)\n\n[Investigate Internet usage around the world using Cloudflare's data](https://developers.cloudflare.com/radar/)\n\n[Randomness Beacon](https://developers.cloudflare.com/randomness-beacon/)\n\n[Explore drand, a distributed service providing randomness to applications](https://developers.cloudflare.com/randomness-beacon/)\n\n[R](https://developers.cloudflare.com/waf/rate-limiting-rules/)\n\n[Rate limiting](https://developers.cloudflare.com/waf/rate-limiting-rules/)\n\n[Control the rate of incoming requests matching an expression](https://developers.cloudflare.com/waf/rate-limiting-rules/)\n\n[Realtime](https://developers.cloudflare.com/realtime/)\n\n[RealtimeKit, SFU and TURN](https://developers.cloudflare.com/realtime/)\n\n[RealtimeKit](https://developers.cloudflare.com/realtime/realtimekit/)\n\n[SDKs and APIs to build real-time applications with lowest latency at any scale](https://developers.cloudflare.com/realtime/realtimekit/)\n\n[Realtime SFU](https://developers.cloudflare.com/realtime/sfu/)\n\n[Infrastructure for real-time serverless video, audio, and data applications](https://developers.cloudflare.com/realtime/sfu/)\n\n[TURN Service](https://developers.cloudflare.com/realtime/turn/)\n\n[Ensure connectivity with a relay point for traffic between WebRTC clients](https://developers.cloudflare.com/realtime/turn/)\n\n[Reference Architecture](https://developers.cloudflare.com/reference-architecture/)\n\n[Guides and diagrams explain Cloudflare products and how to integrate with IT architectures](https://developers.cloudflare.com/reference-architecture/)\n\n[Registrar](https://developers.cloudflare.com/registrar/)\n\n[Buy and renew your domain at cost, add another layer of security to your DNS records for free](https://developers.cloudflare.com/registrar/)\n\n[Rules](https://developers.cloudflare.com/rules/)\n\n[Modify incoming requests, change Cloudflare settings, or trigger actions](https://developers.cloudflare.com/rules/)\n\n[Ruleset Engine](https://developers.cloudflare.com/ruleset-engine/)\n\n[Create rulesets and rules for different Cloudflare products](https://developers.cloudflare.com/ruleset-engine/)\n\n[Sandbox SDK](https://developers.cloudflare.com/sandbox/)\n\n[Build secure, isolated code execution environments](https://developers.cloudflare.com/sandbox/)\n\n[Secrets Store](https://developers.cloudflare.com/secrets-store/)\n\n[Encrypt and store sensitive information as secrets that are securely reusable across an account](https://developers.cloudflare.com/secrets-store/)\n\n[Security Center](https://developers.cloudflare.com/security-center/)\n\n[Enhance your security posture with a range of security products and one-click solutions](https://developers.cloudflare.com/security-center/)\n\n[Smart Shield](https://developers.cloudflare.com/smart-shield/)\n\n[Safeguard your origin with just a few clicks.](https://developers.cloudflare.com/smart-shield/)\n\n[Spectrum](https://developers.cloudflare.com/spectrum/)\n\n[Secure and accelerate any TCP or UDP-based application](https://developers.cloudflare.com/spectrum/)\n\n[Speed](https://developers.cloudflare.com/speed/)\n\n[Improve the performance of your website or web application](https://developers.cloudflare.com/speed/)\n\n[SSL/TLS](https://developers.cloudflare.com/ssl/)\n\n[Encrypt your web traffic to prevent data theft and other tampering](https://developers.cloudflare.com/ssl/)\n\n[Stream](https://developers.cloudflare.com/stream/)\n\n[Store, encode, deliver, and play videos on sites and applications](https://developers.cloudflare.com/stream/)\n\n[Support](https://developers.cloudflare.com/support/)\n\n[Cloudflare Support-focused documentation](https://developers.cloudflare.com/support/)\n\n[Tenant](https://developers.cloudflare.com/tenant/)\n\n[Provision and manage Cloudflare accounts and services for your team or customers](https://developers.cloudflare.com/tenant/)\n\n[Terraform](https://developers.cloudflare.com/terraform/)\n\n[Define and store Cloudflare configurations in source code repositories like GitHub](https://developers.cloudflare.com/terraform/)\n\n[Time Services](https://developers.cloudflare.com/time-services/)\n\n[Cloudflare's suite of time services: NTP, NTS, and Roughtime](https://developers.cloudflare.com/time-services/)\n\n[Turnstile](https://developers.cloudflare.com/turnstile/)\n\n[Turnstile is Cloudflare's smart CAPTCHA alternative](https://developers.cloudflare.com/turnstile/)\n\n[Vectorize](https://developers.cloudflare.com/vectorize/)\n\n[Store, query, and manage high-dimensional vector databases](https://developers.cloudflare.com/vectorize/)\n\n[Version Management](https://developers.cloudflare.com/version-management/)\n\n[Safely manage configurations on Cloudflare's global network with versioning, staging, and rollbacks](https://developers.cloudflare.com/version-management/)\n\n[WAF](https://developers.cloudflare.com/waf/)\n\n[Filter incoming traffic and protect against web app vulnerabilities](https://developers.cloudflare.com/waf/)\n\n[Waiting Room](https://developers.cloudflare.com/waiting-room/)\n\n[Create a virtual waiting room to manage peak traffic](https://developers.cloudflare.com/waiting-room/)\n\n[WARP Client](https://developers.cloudflare.com/warp-client/)\n\n[Allows individuals or organizations to have a faster, more secure connection to the Internet](https://developers.cloudflare.com/warp-client/)\n\n[Cloudflare Web Analytics](https://developers.cloudflare.com/web-analytics/)\n\n[Get vital web analytics for your website](https://developers.cloudflare.com/web-analytics/)\n\n[Web3](https://developers.cloudflare.com/web3/)\n\n[Gateways to networks to help you develop applications without worrying about running infrastructure](https://developers.cloudflare.com/web3/)\n\n[Workers](https://developers.cloudflare.com/workers/)\n\n[Build, deploy, and scale serverless applications globally with low latency and minimal configuration](https://developers.cloudflare.com/workers/)\n\n[Workers AI](https://developers.cloudflare.com/workers-ai/)\n\n[Run AI models in Workers, Pages, or via API](https://developers.cloudflare.com/workers-ai/)\n\n[W](https://developers.cloudflare.com/analytics/analytics-engine/)\n\n[Workers Analytics Engine](https://developers.cloudflare.com/analytics/analytics-engine/)\n\n[Unlimited-cardinality analytics at scale via an API to write data from Workers and a SQL API to query that data](https://developers.cloudflare.com/analytics/analytics-engine/)\n\n[W](https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/)\n\n[Workers for Platforms](https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/)\n\n[Deploy custom code for your users or let them directly deploy code to your platform](https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/)\n\n[Workers VPC](https://developers.cloudflare.com/workers-vpc/)\n\n[Connect Cloudflare Worker's Virtual Private Cloud to your private clouds to build cross-cloud apps.](https://developers.cloudflare.com/workers-vpc/)\n\n[Workflows](https://developers.cloudflare.com/workflows/)\n\n[Build durable, multi-step applications using the Workers platform](https://developers.cloudflare.com/workflows/)\n\n[Zaraz](https://developers.cloudflare.com/zaraz/)\n\n[Run third-party tools and services on the cloud for improved speed and security](https://developers.cloudflare.com/zaraz/)\n\n[Z](https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/warp/)\n\n[Zero Trust WARP Client](https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/warp/)\n\n[Connect corporate devices to your Zero Trust organization](https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/warp/)\n\n<page>\n---\ntitle: Overview · Cloudflare DDoS Protection docs\ndescription: Cloudflare automatically detects and mitigates distributed\n  denial-of-service (DDoS) attacks via our autonomous DDoS systems.\nlastUpdated: 2025-09-22T16:52:07.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ddos-protection/\n  md: https://developers.cloudflare.com/ddos-protection/index.md\n---\n\nDetect and mitigate distributed denial-of-service (DDoS) attacks automatically.\n\nAvailable on all plans\n\nCloudflare automatically detects and mitigates [distributed denial-of-service (DDoS) attacks](https://www.cloudflare.com/learning/ddos/what-is-a-ddos-attack/) via our autonomous DDoS systems.\n\nThese systems include multiple dynamic mitigation rules exposed as [DDoS attack protection managed rulesets](https://developers.cloudflare.com/ddos-protection/managed-rulesets/). You can customize the mitigation rules included in these rulesets to optimize and tailor the protection to your needs.\n\nProtect against a variety of DDoS attacks across layers 3/4 (network layer) and layer 7 (application layer) of the OSI model.\n\n[Use Managed rulesets](https://developers.cloudflare.com/ddos-protection/managed-rulesets/)\n\n### Adaptive DDoS protection\n\nGet increased protection against sophisticated DDoS attacks on layer 7 and layers 3/4.\n\n[Use Adaptive DDoS protection](https://developers.cloudflare.com/ddos-protection/managed-rulesets/adaptive-protection/)\n\n### Advanced TCP protection\n\nDetect and mitigate sophisticated out-of-state TCP attacks such as randomized and spoofed ACK floods, or SYN and SYN-ACK floods.\n\n[Use Advanced TCP protection](https://developers.cloudflare.com/ddos-protection/advanced-ddos-systems/overview/advanced-tcp-protection/)\n\n### Advanced DNS protection\n\nProtect against DNS-based DDoS attacks, specifically sophisticated and fully randomized DNS attacks such as random prefix attacks.\n\n[Use Advanced DNS protection](https://developers.cloudflare.com/ddos-protection/advanced-ddos-systems/overview/advanced-dns-protection/)\n\n| | Free | Pro | Business | Enterprise | Enterprise with Advanced DDoS Protection add-on |\n| - | - | - | - | - | - |\n| Availability | Yes | Yes | Yes | Yes | Yes |\n| Standard, unmetered DDoS protection (layers 3-7) | Yes | Yes | Yes | Yes | Yes |\n| HTTP DDoS attack protection | Yes | Yes | Yes | Yes | Yes |\n| Network-layer (L3/4) DDoS attack protection | Yes | Yes | Yes | Yes | Yes |\n| Managed rules customization | Yes | Yes | Yes | Yes, with Log action | Expression fields & multi-rule support |\n| Proactive false positive detection for new rules | No | No | No | Yes | Yes |\n| Adaptive DDoS protection | Only error adaptive rules | Only error adaptive rules | Only error adaptive rules | Only error adaptive rules | All adaptive rules |\n| Traffic profiling signals for adaptive DDoS protection | Error rates only | Error rates only | Error rates & historical trends | Error rates & historical trends | Error rates & historical trends, client country, user agent, query string, ML-scores |\n| Advanced TCP Protection | Available to [Magic Transit](https://developers.cloudflare.com/magic-transit/) customers | Available to [Magic Transit](https://developers.cloudflare.com/magic-transit/) customers | Available to [Magic Transit](https://developers.cloudflare.com/magic-transit/) customers | Available to [Magic Transit](https://developers.cloudflare.com/magic-transit/) customers | Available to [Magic Transit](https://developers.cloudflare.com/magic-transit/) customers |\n| Advanced DNS Protection | Available to [Magic Transit](https://developers.cloudflare.com/magic-transit/) customers | Available to [Magic Transit](https://developers.cloudflare.com/magic-transit/) customers | Available to [Magic Transit](https://developers.cloudflare.com/magic-transit/) customers | Available to [Magic Transit](https://developers.cloudflare.com/magic-transit/) customers | Available to [Magic Transit](https://developers.cloudflare.com/magic-transit/) customers |\n| Number of ruleset overrides allowed | 1 | 1 | 1 | 1 | 10 |\n| Alerts | Yes | Yes | Yes | Yes | Advanced alerts with filtering |\n\n**[Spectrum](https://developers.cloudflare.com/spectrum/)**\n\nProvides security and acceleration for any TCP or UDP based application.\n\n**[Magic Transit](https://developers.cloudflare.com/magic-transit/)**\n\nA network security and performance solution that offers DDoS protection, traffic acceleration, and more for on-premise, cloud-hosted, and hybrid networks.\n\n**[Web Application Firewall (WAF)](https://developers.cloudflare.com/waf/)**\n\nGet automatic protection from vulnerabilities and the flexibility to create custom rules.\n\n<page>\n---\ntitle: Overview · Cloudflare DMARC Management docs\ndescription: Stop brand impersonation.\nlastUpdated: 2025-10-27T15:00:52.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/dmarc-management/\n  md: https://developers.cloudflare.com/dmarc-management/index.md\n---\n\nStop brand impersonation.\n\nAvailable on all plans\n\nCloudflare DMARC Management helps you track every source that is sending emails from your domain and review [Domain-based Message Authentication Reporting and Conformance (DMARC)](https://www.cloudflare.com/learning/dns/dns-records/dns-dmarc-record/) reports for each source. DMARC reports will help you understand if messages sent from your domain are passing DMARC authentication, [DomainKeys Identified Mail (DKIM)](https://www.cloudflare.com/learning/dns/dns-records/dns-dkim-record/) authentication, and [Sender Policy Framework (SPF)](https://www.cloudflare.com/learning/dns/dns-records/dns-spf-record/) policies.\n\nDMARC Management is available to all Cloudflare customers with [Cloudflare DNS](https://developers.cloudflare.com/dns/).\n\n**[Email security](https://developers.cloudflare.com/cloudflare-one/email-security/)**\n\nProtect your email inbox with Email security.\n\n**[Cloudflare DNS](https://developers.cloudflare.com/dns/)**\n\nFast, resilient and easy-to-manage DNS service.\n\n<page>\n---\ntitle: Changelogs | Cloudflare Docs\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/changelog/\n  md: https://developers.cloudflare.com/changelog/index.md\n---",
+  "code_samples": [
+    {
+      "code": "Head to the guide on [building a chat agent](https://developers.cloudflare.com/agents/getting-started/build-a-chat-agent) to learn how the starter project is built and how to use it as a foundation for your own agents.\n\nIf you're already building on [Workers](https://developers.cloudflare.com/workers/), you can install the `agents` package directly into an existing project:",
+      "language": "unknown"
+    },
+    {
+      "code": "And then define your first Agent by creating a class that extends the `Agent` class:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "Lastly, add the [Durable Objects](https://developers.cloudflare.com/durable-objects/) binding to your wrangler file:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Dive into the [Agent SDK reference](https://developers.cloudflare.com/agents/api-reference/agents-api/) to learn more about how to use the Agents SDK package and defining an `Agent`.\n\n### Why build agents on Cloudflare?\n\nWe built the Agents SDK with a few things in mind:\n\n* **Batteries (state) included**: Agents come with [built-in state management](https://developers.cloudflare.com/agents/api-reference/store-and-sync-state/), with the ability to automatically sync state between an Agent and clients, trigger events on state changes, and read+write to each Agent's SQL database.\n* **Communicative**: You can connect to an Agent via [WebSockets](https://developers.cloudflare.com/agents/api-reference/websockets/) and stream updates back to client in real-time. Handle a long-running response from a reasoning model, the results of an [asynchronous workflow](https://developers.cloudflare.com/agents/api-reference/run-workflows/), or build a chat app that builds on the `useAgent` hook included in the Agents SDK.\n* **Extensible**: Agents are code. Use the [AI models](https://developers.cloudflare.com/agents/api-reference/using-ai-models/) you want, bring-your-own headless browser service, pull data from your database hosted in another cloud, add your own methods to your Agent and call them.\n\nAgents built with Agents SDK can be deployed directly to Cloudflare and run on top of [Durable Objects](https://developers.cloudflare.com/durable-objects/) — which you can think of as stateful micro-servers that can scale to tens of millions — and are able to run wherever they need to. Run your Agents close to a user for low-latency interactivity, close to your data for throughput, and/or anywhere in between.\n\n***\n\n### Build on the Cloudflare Platform\n\n**[Workers](https://developers.cloudflare.com/workers/)**\n\nBuild serverless applications and deploy instantly across the globe for exceptional performance, reliability, and scale.\n\n**[AI Gateway](https://developers.cloudflare.com/ai-gateway/)**\n\nObserve and control your AI applications with caching, rate limiting, request retries, model fallback, and more.\n\n**[Vectorize](https://developers.cloudflare.com/vectorize/)**\n\nBuild full-stack AI applications with Vectorize, Cloudflare’s vector database. Adding Vectorize enables you to perform tasks such as semantic search, recommendations, anomaly detection or can be used to provide context and memory to an LLM.\n\n**[Workers AI](https://developers.cloudflare.com/workers-ai/)**\n\nRun machine learning models, powered by serverless GPUs, on Cloudflare's global network.\n\n**[Workflows](https://developers.cloudflare.com/workflows/)**\n\nBuild stateful agents that guarantee executions, including automatic retries, persistent state that runs for minutes, hours, days, or weeks.\n\n</page>\n\n<page>\n---\ntitle: Overview · Cloudflare AI Crawl Control docs\ndescription: Monitor and control how AI services access your website content.\nlastUpdated: 2025-11-14T15:41:09.000Z\nchatbotDeprioritize: false\ntags: AI\nsource_url:\n  html: https://developers.cloudflare.com/ai-crawl-control/\n  md: https://developers.cloudflare.com/ai-crawl-control/index.md\n---\n\nAvailable on all plans\n\nMonitor and control how AI services access your website content.\n\nAI companies use web content to train their models and power AI applications. AI Crawl Control (formerly AI Audit) gives you visibility into which AI services are accessing your content, and provides tools to manage access according to your preferences.\n\nWith AI Crawl Control, you can:\n\n* **See which AI services access your content** - Monitor the dashboard to see crawler activity and request patterns\n* **Control access with granular policies** - Set allow or block rules for individual crawlers\n* **Monitor robots.txt compliance** - Track which crawlers follow your directives and create enforcement rules\n* **Explore monetization options** - Set up pay per crawl pricing for content access [(private beta)](https://developers.cloudflare.com/ai-crawl-control/features/pay-per-crawl/what-is-pay-per-crawl/)\n* **Deploy with zero configuration** - Works automatically on all Cloudflare plans\n\n[Get started](https://developers.cloudflare.com/ai-crawl-control/get-started/)\n\n***\n\n## Features\n\n### Manage AI crawlers\n\nControl how AI crawlers interact with your domain.\n\n[Manage AI crawlers](https://developers.cloudflare.com/ai-crawl-control/features/manage-ai-crawlers/)\n\n### Analyze AI traffic\n\nGain insight into how AI crawlers are interacting with your pages.\n\n[Analyze AI traffic](https://developers.cloudflare.com/ai-crawl-control/features/analyze-ai-traffic/)\n\n### Track robots.txt\n\nTrack the health of `robots.txt` files and identify which crawlers are violating your directives.\n\n[Track robots.txt](https://developers.cloudflare.com/ai-crawl-control/features/track-robots-txt/)\n\n### Pay Per Crawl\n\nAllow AI crawlers to access content by paying per crawl.\n\n[Pay per crawl](https://developers.cloudflare.com/ai-crawl-control/features/pay-per-crawl/what-is-pay-per-crawl/)\n\n***\n\n## Use cases\n\nPublishers and content creators\n\nPublishers and content creators can monitor which AI crawlers are accessing their articles and educational content. Set policies to allow beneficial crawlers while blocking others.\n\nE-commerce and business sites\n\nE-commerce and business sites can identify AI crawler activity on product pages and business information. Control access to sensitive data like pricing and inventory.\n\nDocumentation sites\n\nDocumentation sites can track how AI crawlers are accessing their technical documentation. Gain insight into how AI crawlers are engaging with your site.\n\n***\n\n## Related Products\n\n**[Bots](https://developers.cloudflare.com/bots/)**\n\nIdentify and mitigate automated traffic to protect your domain from bad bots.\n\n**[Web Application Firewall](https://developers.cloudflare.com/waf/)**\n\nGet automatic protection from vulnerabilities and the flexibility to create custom rules.\n\n**[Analytics](https://developers.cloudflare.com/analytics/)**\n\nView and analyze traffic on your domain.\n\n</page>\n\n<page>\n---\ntitle: Overview · Cloudflare AI Gateway docs\ndescription: Cloudflare's AI Gateway allows you to gain visibility and control\n  over your AI apps. By connecting your apps to AI Gateway, you can gather\n  insights on how people are using your application with analytics and logging\n  and then control how your application scales with features such as caching,\n  rate limiting, as well as request retries, model fallback, and more. Better\n  yet - it only takes one line of code to get started.\nlastUpdated: 2025-08-19T11:42:14.000Z\nchatbotDeprioritize: false\ntags: AI\nsource_url:\n  html: https://developers.cloudflare.com/ai-gateway/\n  md: https://developers.cloudflare.com/ai-gateway/index.md\n---\n\nObserve and control your AI applications.\n\nAvailable on all plans\n\nCloudflare's AI Gateway allows you to gain visibility and control over your AI apps. By connecting your apps to AI Gateway, you can gather insights on how people are using your application with analytics and logging and then control how your application scales with features such as caching, rate limiting, as well as request retries, model fallback, and more. Better yet - it only takes one line of code to get started.\n\nCheck out the [Get started guide](https://developers.cloudflare.com/ai-gateway/get-started/) to learn how to configure your applications with AI Gateway.\n\n## Features\n\n### Analytics\n\nView metrics such as the number of requests, tokens, and the cost it takes to run your application.\n\n[View Analytics](https://developers.cloudflare.com/ai-gateway/observability/analytics/)\n\n### Logging\n\nGain insight on requests and errors.\n\n[View Logging](https://developers.cloudflare.com/ai-gateway/observability/logging/)\n\n### Caching\n\nServe requests directly from Cloudflare's cache instead of the original model provider for faster requests and cost savings.\n\n[Use Caching](https://developers.cloudflare.com/ai-gateway/features/caching/)\n\n### Rate limiting\n\nControl how your application scales by limiting the number of requests your application receives.\n\n[Use Rate limiting](https://developers.cloudflare.com/ai-gateway/features/rate-limiting/)\n\n### Request retry and fallback\n\nImprove resilience by defining request retry and model fallbacks in case of an error.\n\n[Use Request retry and fallback](https://developers.cloudflare.com/ai-gateway/features/dynamic-routing/)\n\n### Your favorite providers\n\nWorkers AI, OpenAI, Azure OpenAI, HuggingFace, Replicate, and more work with AI Gateway.\n\n[Use Your favorite providers](https://developers.cloudflare.com/ai-gateway/usage/providers/)\n\n***\n\n## Related products\n\n**[Workers AI](https://developers.cloudflare.com/workers-ai/)**\n\nRun machine learning models, powered by serverless GPUs, on Cloudflare’s global network.\n\n**[Vectorize](https://developers.cloudflare.com/vectorize/)**\n\nBuild full-stack AI applications with Vectorize, Cloudflare's vector database. Adding Vectorize enables you to perform tasks such as semantic search, recommendations, anomaly detection or can be used to provide context and memory to an LLM.\n\n## More resources\n\n[Developer Discord](https://discord.cloudflare.com)\n\nConnect with the Workers community on Discord to ask questions, show what you are building, and discuss the platform with other developers.\n\n[Use cases](https://developers.cloudflare.com/use-cases/ai/)\n\nLearn how you can build and deploy ambitious AI applications to Cloudflare's global network.\n\n[@CloudflareDev](https://x.com/cloudflaredev)\n\nFollow @CloudflareDev on Twitter to learn about product announcements, and what is new in Cloudflare Workers.\n\n</page>\n\n<page>\n---\ntitle: Cloudflare AI Search · Cloudflare AI Search docs\ndescription: Build scalable, fully-managed RAG applications with Cloudflare AI\n  Search. Create retrieval-augmented generation pipelines to deliver accurate,\n  context-aware AI without managing infrastructure.\nlastUpdated: 2025-09-24T17:03:07.000Z\nchatbotDeprioritize: false\ntags: AI\nsource_url:\n  html: https://developers.cloudflare.com/ai-search/\n  md: https://developers.cloudflare.com/ai-search/index.md\n---\n\nCreate AI-powered search for your data\n\nAvailable on all plans\n\nAI Search (formerly AutoRAG) is Cloudflare’s managed search service. You can connect your data such as websites or unstructured content, and it automatically creates a continuously updating index that you can query with natural language in your applications or AI agents. It natively integrates with Cloudflare’s developer platform tools like Vectorize, AI Gateway, R2, and Workers AI, while also supporting third-party providers and open standards.\n\nIt supports retrieval-augmented generation (RAG) patterns, enabling you to build enterprise search, natural language search, and AI-powered chat without managing infrastructure.\n\n[Get started](https://developers.cloudflare.com/ai-search/get-started)\n\n[Watch AI Search demo](https://www.youtube.com/watch?v=JUFdbkiDN2U)\n\n***\n\n## Features\n\n### Automated indexing\n\nAutomatically and continuously index your data source, keeping your content fresh without manual reprocessing.\n\n[View indexing](https://developers.cloudflare.com/ai-search/configuration/indexing/)\n\n### Multitenancy support\n\nCreate multitenancy by scoping search to each tenant’s data using folder-based metadata filters.\n\n[Add filters](https://developers.cloudflare.com/ai-search/how-to/multitenancy/)\n\n### Workers Binding\n\nCall your AI Search instance for search or AI Search directly from a Cloudflare Worker using the native binding integration.\n\n[Add to Worker](https://developers.cloudflare.com/ai-search/usage/workers-binding/)\n\n### Similarity caching\n\nCache repeated queries and results to improve latency and reduce compute on repeated requests.\n\n[Use caching](https://developers.cloudflare.com/ai-search/configuration/cache/)\n\n***\n\n## Related products\n\n**[Workers AI](https://developers.cloudflare.com/workers-ai/)**\n\nRun machine learning models, powered by serverless GPUs, on Cloudflare’s global network.\n\n**[AI Gateway](https://developers.cloudflare.com/ai-gateway/)**\n\nObserve and control your AI applications with caching, rate limiting, request retries, model fallback, and more.\n\n**[Vectorize](https://developers.cloudflare.com/vectorize/)**\n\nBuild full-stack AI applications with Vectorize, Cloudflare’s vector database.\n\n**[Workers](https://developers.cloudflare.com/workers/)**\n\nBuild serverless applications and deploy instantly across the globe for exceptional performance, reliability, and scale.\n\n**[R2](https://developers.cloudflare.com/r2/)**\n\nStore large amounts of unstructured data without the costly egress bandwidth fees associated with typical cloud storage services.\n\n***\n\n## More resources\n\n[Get started](https://developers.cloudflare.com/workers-ai/get-started/workers-wrangler/)\n\nBuild and deploy your first Workers AI application.\n\n[Developer Discord](https://discord.cloudflare.com)\n\nConnect with the Workers community on Discord to ask questions, share what you are building, and discuss the platform with other developers.\n\n[@CloudflareDev](https://x.com/cloudflaredev)\n\nFollow @CloudflareDev on Twitter to learn about product announcements, and what is new in Cloudflare Workers.\n\n</page>\n\n<page>\n---\ntitle: Analytics · Cloudflare Analytics docs\ndescription: Cloudflare visualizes the metadata collected by our products in the\n  Cloudflare dashboard. Refer to Types of analytics for more information about\n  the various types of analytics and where they exist in the dashboard.\nlastUpdated: 2024-09-20T15:57:29.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/analytics/\n  md: https://developers.cloudflare.com/analytics/index.md\n---\n\nCloudflare visualizes the metadata collected by our products in the Cloudflare dashboard. Refer to [Types of analytics](https://developers.cloudflare.com/analytics/types-of-analytics/) for more information about the various types of analytics and where they exist in the dashboard.\n\n***\n\n## Features\n\n### Workers Analytics Engine\n\nSend unlimited-cardinality data from your Worker to a time-series database. Query it with SQL.\n\n[Use Workers Analytics Engine](https://developers.cloudflare.com/analytics/analytics-engine/)\n\n### Account and zone analytics\n\nProvides details about the requests and traffic related to your Cloudflare accounts and zones.\n\n[Use Account and zone analytics](https://developers.cloudflare.com/analytics/account-and-zone-analytics/)\n\n### Cloudflare Network Analytics\n\nProvides near real-time visibility into network and transport-layer traffic patterns and DDoS attacks.\n\n[Use Cloudflare Network Analytics](https://developers.cloudflare.com/analytics/network-analytics/)\n\n### GraphQL Analytics API\n\nProvides all of your performance, security, and reliability data from one endpoint. Select exactly what you need, from one metric for a domain to multiple metrics aggregated for your account.\n\n[Use GraphQL Analytics API](https://developers.cloudflare.com/analytics/graphql-api/)\n\n***\n\n## Related products\n\n**[Workers](https://developers.cloudflare.com/workers/)**\n\nCloudflare Workers allows developers to build serverless applications and deploy instantly across the globe for exceptional performance, reliability, and scale.\n\n**[Logs](https://developers.cloudflare.com/logs/)**\n\nDetailed logs that contain metadata generated by Cloudflare products helpful for debugging, identifying configuration adjustments, and creating analytics.\n\n</page>\n\n<page>\n---\ntitle: Overview · Cloudflare API Shield docs\ndescription: APIs have become the backbone of popular web services, helping the\n  Internet become more accessible and useful.\nlastUpdated: 2025-10-08T15:21:13.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/api-shield/\n  md: https://developers.cloudflare.com/api-shield/index.md\n---\n\nIdentify and address your API vulnerabilities.\n\nEnterprise-only paid add-on\n\nNote\n\nEnterprise customers can preview this product as a [non-contract service](https://developers.cloudflare.com/billing/preview-services/), which provides full access, free of metered usage fees, limits, and certain other restrictions.\n\n## Why care about API security?\n\nAPIs have become the [backbone of popular web services](https://blog.postman.com/intro-to-apis-history-of-apis/), helping the Internet become more accessible and useful.\n\nAs APIs have become more prevalent, however, so have their problems:\n\n* Many companies have [thousands of APIs](https://developers.cloudflare.com/api-shield/security/api-discovery/), including ones they do not even know about.\n* To support a large base of users, many APIs are protected by a negative security model that makes them vulnerable to credential-stuffing attacks and automated scanning tools.\n* With so many endpoints and users, it’s difficult to recognize brute-force attacks against [specific endpoints](https://developers.cloudflare.com/api-shield/security/volumetric-abuse-detection/).\n* Sophisticated attacks are even harder to recognize, often because even development teams are unaware of common and uncommon [usage patterns](https://developers.cloudflare.com/api-shield/security/sequence-analytics/).\n\nRefer to the [Get started](https://developers.cloudflare.com/api-shield/get-started/) guide to set up API Shield.\n\n## Features\n\n### Security features\n\nSecure your APIs using API Shield's security features.\n\n[Use Security features](https://developers.cloudflare.com/api-shield/security/)\n\n### Management, monitoring, and more\n\nMonitor the health of your API endpoints.\n\n[Use Management, monitoring, and more](https://developers.cloudflare.com/api-shield/management-and-monitoring/)\n\n## Availability\n\nCloudflare API Security products are available to Enterprise customers only, though anyone can set up [Mutual TLS](https://developers.cloudflare.com/api-shield/security/mtls/) with a Cloudflare-managed certificate authority.\n\nThe full API Shield security suite is available as an Enterprise-only paid add-on, but all customers can access [Endpoint Management](https://developers.cloudflare.com/api-shield/management-and-monitoring/) and [Schema validation](https://developers.cloudflare.com/api-shield/security/schema-validation/) functionalities.\n\nNote\n\nAPI Shield currently does not work for JDCloud customers.\n\n## Related products\n\n**[DDoS Protection](https://developers.cloudflare.com/ddos-protection/)**\n\nCloudflare DDoS protection secures websites, applications, and entire networks while ensuring the performance of legitimate traffic is not compromised.\n\n</page>\n\n<page>\n---\ntitle: Overview · Cloudflare Argo Smart Routing docs\ndescription: Argo Smart Routing detects real-time network issues and routes your\n  web traffic across the most efficient network path, avoiding congestion.\nlastUpdated: 2025-10-02T15:01:07.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/argo-smart-routing/\n  md: https://developers.cloudflare.com/argo-smart-routing/index.md\n---\n\nSpeed up your global traffic with a single click\n\nPaid add-on\n\nSmart Shield\n\nThis functionality is now offered as part of Cloudflare's origin server safeguard, Smart Shield. [Learn more](https://developers.cloudflare.com/smart-shield/).\n\nArgo Smart Routing detects real-time network issues and routes your web traffic across the most efficient network path, avoiding congestion.\n\nThis results in faster loading times, increased reliability, and reduced costs. These benefits are most apparent for users farthest from your origin server.\n\nLearn more about the [benefits of Argo Smart Routing](https://www.cloudflare.com/application-services/products/argo-smart-routing/).\n\nNote\n\nEnterprise customers can preview this product as a [non-contract service](https://developers.cloudflare.com/billing/preview-services/), which provides full access, free of metered usage fees, limits, and certain other restrictions.\n\n***\n\n## Features\n\n### Analytics\n\nArgo Smart Routing includes comprehensive analytics to compare performance improvements with and without Argo enabled.\n\n[Use Analytics](https://developers.cloudflare.com/argo-smart-routing/analytics/)\n\n***\n\n## Related products\n\n**[Tiered Cache](https://developers.cloudflare.com/cache/how-to/tiered-cache/)**\n\nIncrease cache hit ratios to reduce requests to your origin server.\n\n**[China Network](https://developers.cloudflare.com/china-network/)**\n\nImprove security and performance within mainland China.\n\n**[Magic Transit](https://developers.cloudflare.com/magic-transit/)**\n\nReduce latency and protect from DDoS attacks using the Cloudflare network.\n\n***\n\n## More resources\n\n[Plans](https://www.cloudflare.com/plans/#overview)\n\nCompare available Cloudflare plans\n\n[Pricing](https://dash.cloudflare.com/?to=/:account/:zone/traffic/)\n\nExplore pricing options for Argo in the dashboard\n\n</page>\n\n<page>\n---\ntitle: Overview · Cloudflare Automatic Platform Optimization docs\ndescription: Take your WordPress site’s performance to the next level with\n  Automatic Platform Optimizations (APO). APO allows Cloudflare to serve your\n  entire WordPress site from its edge network ensuring consistent, fast\n  performance for visitors no matter where they are.\nlastUpdated: 2025-11-17T22:48:26.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/automatic-platform-optimization/\n  md: https://developers.cloudflare.com/automatic-platform-optimization/index.md\n---\n\nTake your WordPress site’s performance to the next level with Automatic Platform Optimizations (APO). APO allows Cloudflare to serve your entire WordPress site from its edge network ensuring consistent, fast performance for visitors no matter where they are.\n\nAutomatic Platform Optimization is the result of using the power of [Cloudflare Workers](https://developers.cloudflare.com/workers/) to intelligently cache dynamic content. By caching dynamic content, Cloudflare can serve the entire website from our edge network to make a site's time to first byte (TTFB) both fast and consistent.\n\nTo read more about the benefits of using APO with your site, see [The Benefits of Automatic Platform Optimization blog](https://blog.cloudflare.com/automatic-platform-optimizations-starting-with-wordpress/#the-benefits-of-automatic-platform-optimization). You must use the Cloudflare for WordPress plugin to begin using APO.\n\n</page>\n\n<page>\n---\ntitle: Overview · Cloudflare Billing docs\ndescription: Manage billing and subscriptions for your account.\nlastUpdated: 2025-09-03T15:11:54.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/billing/\n  md: https://developers.cloudflare.com/billing/index.md\n---\n\nWelcome to the Cloudflare Billing and Payment Help Center! Here you will find answers to some of the most common and impactful issues facing our customers today. Most current issues revolve around:\n\n* Payment failures\n* Outstanding balances\n* Subscription renewals\n* Cancellation requests\n* Updating payment methods\n* Understanding billing cycles\n\nAn overview of these issues can be found below:\n\n## Failed Plan Modifications\n\nYou may receive an error when attempting to purchase a product, pay a balance or change a paid plan. Review the following guides for possible solutions:\n\n* [Resolve a payment failure](https://developers.cloudflare.com/billing/troubleshoot-failed-payments/)\n* [Resolve the zone cannot be upgraded error](https://developers.cloudflare.com/billing/resolve-zone-cannot-be-ugpraded/)\n* [Resolve \"You cannot modify this subscription\"](https://developers.cloudflare.com/billing/resolve-you-cannot-modify-this-subscription/)\n\nIf the problems above do not apply to you, there are intermittent issues with subscription upgrades, downgrades, and cancellations. This may result in billing charges being applied without the subscription level being updated. In these instances, you should [contact support](https://developers.cloudflare.com/support/contacting-cloudflare-support/).\n\n## Cannot update or remove payment methods\n\nYou should be able to add, update, and remove payment methods in your account. If you are seeing difficulties doing this, refer to the following guides for possible solutions:\n\n* [Update billing information](https://developers.cloudflare.com/billing/update-billing-info/)\n* [Resolve \"Cannot remove payment method\"](https://developers.cloudflare.com/billing/resolve-cannot-remove-payment-method/)\n\nIf the solutions above do not apply to you, we have observed reports of being unable to update or add payment methods within the dashboard. In these instances, you should [contact support](https://developers.cloudflare.com/support/contacting-cloudflare-support/).\n\n## Cancellations\n\nCancellations are not processed until the end of the billing period. To understand more, refer to [Cancel Cloudflare subscriptions](https://developers.cloudflare.com/billing/cancel-subscription/).\n\n## Non-refundable occurrences\n\nIn accordance with the Cloudflare Billing Policy, be aware that some [Non-Refundable occurrences](https://developers.cloudflare.com/billing/billing-policy/#non-refundable-occurrences) cannot be refunded and you should not contact support to request refunds for these.\n\n</page>\n\n<page>\n---\ntitle: Overview · Cloudflare bot solutions docs\ndescription: While Cloudflare offers several products that relate to bot\n  traffic, this section reviews our bot-specific products, Bot Fight Mode, Super\n  Bot Fight Mode, and Bot Management for Enterprise.\nlastUpdated: 2025-09-22T16:52:07.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/bots/\n  md: https://developers.cloudflare.com/bots/index.md\n---\n\nIdentify and mitigate automated traffic to protect your domain from bad bots.\n\nAvailable on all plans\n\nWhile Cloudflare offers several products that relate to bot traffic, this section reviews our bot-specific products, Bot Fight Mode, Super Bot Fight Mode, and Bot Management for Enterprise.\n\nNote\n\nEnterprise customers can preview this product as a [non-contract service](https://developers.cloudflare.com/billing/preview-services/), which provides full access, free of metered usage fees, limits, and certain other restrictions.\n\n## Which bot solution do I need?\n\nIf you have a smaller domain and have identified a bot problem, we recommend Bot Fight Mode or Super Bot Fight Mode, which are included with your plan subscription. You can enable either from your dashboard, but these solutions offer limited configuration options.\n\nIf you have a large domain with a lot of traffic, we recommend Bot Management for Enterprise, especially for customers in ecommerce, banking, and security. To enable Bot Management for Enterprise and write rules to customize your bot protection, contact your account team.\n\nTo see the differences in features and functionality, visit [Plans](https://developers.cloudflare.com/bots/plans/).\n\n## Features\n\n### Bot Fight Mode\n\nDetect and mitigate bot traffic on your domain.\n\n[Use Bot Fight Mode](https://developers.cloudflare.com/bots/get-started/bot-fight-mode/)\n\n### Super Bot Fight Mode\n\nIdentify traffic matching patterns of known bots, challenge or block bots, protect static resources, and view analytics to help you understand bot traffic using Super Bot Fight Mode.\n\n[Use Super Bot Fight Mode](https://developers.cloudflare.com/bots/get-started/super-bot-fight-mode/)\n\n### Bot Analytics\n\nUse Bot Analytics to dynamically examine bot traffic.\n\n[Use Bot Analytics](https://developers.cloudflare.com/bots/bot-analytics/)\n\n### Firewall variables\n\nAccess several new variables within the Firewall expression builder.\n\n[Use Firewall variables](https://developers.cloudflare.com/bots/reference/bot-management-variables/)\n\n## Related products\n\n**[API Shield](https://developers.cloudflare.com/api-shield/)**\n\nIdentify and address API vulnerabilities using API Shield.\n\n**[DDoS Protection](https://developers.cloudflare.com/ddos-protection/)**\n\nDetect and mitigate Distributed Denial of Service (DDoS) attacks using Cloudflare's Autonomous Edge.\n\n**[Turnstile](https://developers.cloudflare.com/turnstile/)**\n\nUse Cloudflare's smart CAPTCHA alternative to run less intrusive challenges.\n\n**[WAF](https://developers.cloudflare.com/waf/)**\n\nGet automatic protection from vulnerabilities and the flexibility to create custom rules.\n\n## More resources\n\n[Plans](https://www.cloudflare.com/plans/#overview)\n\nCompare available Cloudflare plans\n\n</page>\n\n<page>\n---\ntitle: Browser Rendering · Cloudflare Browser Rendering docs\ndescription: Control headless browsers with Cloudflare's Workers Browser\n  Rendering API. Automate tasks, take screenshots, convert pages to PDFs, and\n  test web apps.\nlastUpdated: 2025-11-06T19:11:47.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/browser-rendering/\n  md: https://developers.cloudflare.com/browser-rendering/index.md\n---\n\nRun headless Chrome on [Cloudflare's global network](https://developers.cloudflare.com/workers/) for browser automation, web scraping, testing, and content generation.\n\nAvailable on Free and Paid plans\n\nBrowser Rendering enables developers to programmatically control and interact with headless browser instances running on Cloudflare’s global network.\n\n## Use Cases\n\nBrowser Rendering supports a wide range of use cases, including:\n\n* Extract rendered HTML or convert webpages to Markdown using the [content endpoint](https://developers.cloudflare.com/browser-rendering/rest-api/content-endpoint/) and [markdown endpoint](https://developers.cloudflare.com/browser-rendering/rest-api/markdown-endpoint/)\n* Create website thumbnails and social previews using the [screenshot endpoint](https://developers.cloudflare.com/browser-rendering/rest-api/screenshot-endpoint/)\n* Generate PDFs from webpages and HTML content using the [pdf endpoint](https://developers.cloudflare.com/browser-rendering/rest-api/pdf-endpoint/)\n* Archive complete webpage states with the [snapshot endpoint](https://developers.cloudflare.com/browser-rendering/rest-api/snapshot/) that captures both HTML and screenshots\n* Build web scrapers that target specific elements or extract all links using the [scrape endpoint](https://developers.cloudflare.com/browser-rendering/rest-api/scrape-endpoint/) and [links endpoint](https://developers.cloudflare.com/browser-rendering/rest-api/links-endpoint/)\n* Parse and structure webpage data into JSON format using the [json endpoint](https://developers.cloudflare.com/browser-rendering/rest-api/json-endpoint/)\n\nBrowser Rendering is also ideal for agentic workflows. Use [Puppeteer](https://developers.cloudflare.com/browser-rendering/puppeteer/), [Playwright](https://developers.cloudflare.com/browser-rendering/playwright/), [Playwright MCP](https://developers.cloudflare.com/browser-rendering/playwright/playwright-mcp/), or [Stagehand](https://developers.cloudflare.com/browser-rendering/stagehand/) to power AI agents that interact with web pages and extract data where APIs do not exist.\n\n## Key features\n\n* **Scale to thousands of browsers**: Instant access to a global pool of browsers with low cold-start time, ideal for high-volume screenshot generation, data extraction, or automation at scale\n* **Global by default**: Browser sessions run on Cloudflare's edge network, opening close to your users for better speed and availability worldwide\n* **Easy to integrate**: [REST APIs](https://developers.cloudflare.com/browser-rendering/rest-api/) for common actions, while [Puppeteer](https://developers.cloudflare.com/browser-rendering/puppeteer/) and [Playwright](https://developers.cloudflare.com/browser-rendering/playwright/) provide familiar automation libraries for complex workflows\n* **Session management**: [Reuse browser sessions](https://developers.cloudflare.com/browser-rendering/workers-bindings/reuse-sessions/) across requests to improve performance and reduce cold-start overhead\n* **Flexible pricing**: Pay only for browser time used with generous free tier ([view pricing](https://developers.cloudflare.com/browser-rendering/pricing/))\n\n## Integration Methods\n\nYou can integrate Browser Rendering into your applications using one of the following methods:\n\n* **[REST API](https://developers.cloudflare.com/browser-rendering/rest-api/)**: Ideal for simple, stateless tasks like capturing screenshots, generating PDFs, extracting HTML content, and more.\n* **[Workers Bindings](https://developers.cloudflare.com/browser-rendering/workers-bindings/)**: Suitable for advanced browser automation within [Cloudflare Workers](https://developers.cloudflare.com/workers/). This method provides greater control, enabling more complex workflows and persistent sessions.\n\nChoose the method that best fits your use case. For example, use the [REST API endpoints](https://developers.cloudflare.com/browser-rendering/rest-api/) for straightforward tasks from external applications and use [Workers Bindings](https://developers.cloudflare.com/browser-rendering/workers-bindings/) for complex automation within the Cloudflare ecosystem.\n\n## Related products\n\n**[Workers](https://developers.cloudflare.com/workers/)**\n\nBuild serverless applications and deploy instantly across the globe for exceptional performance, reliability, and scale.\n\n**[Durable Objects](https://developers.cloudflare.com/durable-objects/)**\n\nA globally distributed coordination API with strongly consistent storage. Using Durable Objects to [persist browser sessions](https://developers.cloudflare.com/browser-rendering/workers-bindings/browser-rendering-with-do/) improves performance by eliminating the time that it takes to spin up a new browser session.\n\n**[Agents](https://developers.cloudflare.com/agents/)**\n\nBuild AI-powered agents that autonomously navigate websites and perform tasks using [Playwright MCP](https://developers.cloudflare.com/browser-rendering/playwright/playwright-mcp/) or [Stagehand](https://developers.cloudflare.com/browser-rendering/stagehand/).\n\n## More resources\n\n[Get started](https://developers.cloudflare.com/browser-rendering/get-started/)\n\nChoose between REST API and Workers Bindings, then deploy your first project.\n\n[Limits](https://developers.cloudflare.com/browser-rendering/limits/)\n\nLearn about Browser Rendering limits.\n\n[Pricing](https://developers.cloudflare.com/browser-rendering/pricing/)\n\nLearn about Browser Rendering pricing.\n\n[Playwright API](https://developers.cloudflare.com/browser-rendering/playwright/)\n\nUse Cloudflare's fork of Playwright for testing and automation.\n\n[Developer Discord](https://discord.cloudflare.com)\n\nConnect with the Workers community on Discord to ask questions, show what you are building, and discuss the platform with other developers.\n\n[@CloudflareDev](https://x.com/cloudflaredev)\n\nFollow @CloudflareDev on Twitter to learn about product announcements, and what is new in Cloudflare Workers.\n\n</page>\n\n<page>\n---\ntitle: Bringing Your Own IPs to Cloudflare · Cloudflare BYOIP docs\ndescription: Get Cloudflare's security and performance while using your own IPs.\nlastUpdated: 2025-11-21T18:29:21.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/byoip/\n  md: https://developers.cloudflare.com/byoip/index.md\n---\n\nGet Cloudflare's security and performance while using your own IPs.\n\nEnterprise-only\n\nConsidering [how Cloudflare works as a reverse proxy](https://developers.cloudflare.com/fundamentals/concepts/how-cloudflare-works/), for some customers it may be important to maintain this functionality while also keeping their website or application associated with their own public IP space (instead of Cloudflare's[1](#user-content-fn-1)).\n\nWith Bring Your Own IP (BYOIP), Cloudflare announces your IPs in all our locations. Use your IPs with [Magic Transit](https://developers.cloudflare.com/magic-transit/), [Spectrum](https://developers.cloudflare.com/spectrum/), [CDN services](https://developers.cloudflare.com/cache/), or Gateway [DNS locations](https://developers.cloudflare.com/cloudflare-one/networks/resolvers-and-proxies/dns/locations/) and [dedicated egress IPs](https://developers.cloudflare.com/cloudflare-one/traffic-policies/egress-policies/dedicated-egress-ips/).\n\nLearn how to [get started](https://developers.cloudflare.com/byoip/get-started/).\n\n***\n\n## Features\n\n### Service bindings\n\nControl whether traffic destined for a given IP address is routed to Magic Transit, CDN, or Spectrum.\n\n[Use Service bindings](https://developers.cloudflare.com/byoip/service-bindings/)\n\n### Address maps\n\nSpecify which IP addresses should be mapped to DNS records when they are proxied through Cloudflare.\n\n[Use Address maps](https://developers.cloudflare.com/byoip/address-maps/)\n\n***\n\n## More resources\n\n[RPKI blog post](https://blog.cloudflare.com/rpki/)\n\nAn overview of BGP, RPKI, and other important aspects of Internet routing.\n\n[Reference Architectures](https://developers.cloudflare.com/reference-architecture/)\n\nExplore how you can leverage Cloudflare's platform to create solutions based on your business needs.\n\n## Footnotes\n\n1. Without BYOIP, when your domain's records are `proxied`, Cloudflare responds with a Cloudflare-owned [anycast IP address](https://developers.cloudflare.com/fundamentals/concepts/cloudflare-ip-addresses/). [↩](#user-content-fnref-1)\n\n</page>\n\n<page>\n---\ntitle: Cloudflare Cache · Cloudflare Cache (CDN) docs\ndescription: Cache stores copies of frequently accessed content (such as images,\n  videos, or webpages) in geographically distributed data centers that are\n  located closer to end users than origin servers, reducing server load and\n  improving website performance.\nlastUpdated: 2025-11-19T12:11:06.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/cache/\n  md: https://developers.cloudflare.com/cache/index.md\n---\n\nCache content across Cloudflare's global server network.\n\nAvailable on all plans\n\nCache stores copies of frequently accessed content (such as images, videos, or webpages) in geographically distributed data centers that are located closer to end users than origin servers, reducing server load and improving website performance.\n\n## Features\n\n### Default cache behavior\n\nLearn about default cache behavior, default cached file extensions and cache responses.\n\n[Use Default cache behavior](https://developers.cloudflare.com/cache/concepts/default-cache-behavior/)\n\n### Cache Rules\n\nConfigure Cache Rules to optimize your website by specifying which resources should be cached and for how long.\n\n[Use Cache Rules](https://developers.cloudflare.com/cache/how-to/cache-rules/)\n\n### Tiered Cache\n\nEnable Tiered Cache to optimize content delivery by caching frequently accessed content in multiple locations for faster delivery and reduced origin traffic.\n\n[Use Tiered Cache](https://developers.cloudflare.com/cache/how-to/tiered-cache/)\n\n### Cache Reserve\n\nUse Cloudflare's persistent storage to increase cache times.\n\n[Use Cache Reserve](https://developers.cloudflare.com/cache/advanced-configuration/cache-reserve/)\n\n### Purge\n\nInstantly purge cached files to force Cloudflare to fetch fresh versions from your web server files. You can purge specific files or all at once.\n\n[Use Purge](https://developers.cloudflare.com/cache/how-to/purge-cache/)\n\n***\n\n## Related products\n\n**[Load Balancing](https://developers.cloudflare.com/load-balancing/)**\n\nCloudflare Load Balancing distributes traffic across your endpoints, reducing endpoint strain and latency and improving the end users experience.\n\n**[Images](https://developers.cloudflare.com/images/)**\n\nA suite of products tailored to your image-processing needs.\n\n**[Workers](https://developers.cloudflare.com/workers/)**\n\nCloudflare Workers allows developers to build serverless applications and deploy instantly across the globe for exceptional performance, reliability, and scale.\n\n**[Rules](https://developers.cloudflare.com/rules/)**\n\nCloudflare Rules allows you to make adjustments to requests and responses, configure Cloudflare settings, and trigger specific actions for matching requests.\n\n**[Cloudflare Network Interconnect](https://developers.cloudflare.com/network-interconnect/)**\n\nCloudflare Network Interconnect (CNI) allows you to connect your network infrastructure directly with Cloudflare – rather than using the public Internet – for a more reliable and secure experience.\n\n**[R2](https://developers.cloudflare.com/r2/)**\n\nCloudflare R2 Storage allows developers to store large amounts of unstructured data without the costly egress bandwidth fees associated with typical cloud storage services.\n\n**[Dedicated CDN Egress IPs](https://developers.cloudflare.com/smart-shield/configuration/dedicated-egress-ips/)**\n\nSmart Shield Advanced provides dedicated egress IPs (from Cloudflare to your origin) for your layer 7 WAF and CDN services, as well as Spectrum.\n\n***\n\n## More resources\n\n[Plans](https://www.cloudflare.com/cdn/)\n\nCompare available Cloudflare plans\n\n[Pricing](https://www.cloudflare.com/plans/#overview)\n\nExplore pricing options for Cache\n\n</page>\n\n<page>\n---\ntitle: Overview · Cloudflare China Network docs\ndescription: The Cloudflare China Network is a package of selected Cloudflare's\n  performance and security products running on data centers located in Mainland\n  China and operated by Cloudflare's partner JD Cloud.\nlastUpdated: 2025-11-12T19:57:27.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/china-network/\n  md: https://developers.cloudflare.com/china-network/index.md\n---\n\nThe [Cloudflare China Network](https://www.cloudflare.com/application-services/products/china-network/) is a package of selected Cloudflare's performance and security products running on data centers located in Mainland China and operated by Cloudflare's partner JD Cloud.\n\nThe data centers cover most populated regions in China. Combining Cloudflare's technological leadership and JD Cloud's local operations expertise, the Cloudflare China Network is designed to meet the needs for secure, reliable, and fast-performing content delivery in China. You can use the same configurations that you use with Cloudflare everywhere else in the world and with the same dashboard experience.\n\n## Main features\n\nThe Cloudflare China Network provides:\n\n* A single solution for both performance improvement and security services such as [WAF](https://developers.cloudflare.com/waf/), [DDoS](https://developers.cloudflare.com/ddos-protection/), and [bot management](https://developers.cloudflare.com/bots/).\n* An unified experience for managing network traffic and security posture. You can manage all configurations on the same dashboard.\n* The same customer support capabilities as Cloudflare's global network. You may also have access to premium service and local language support.\n* [In-China Authoritative DNS and in-China nameservers](https://developers.cloudflare.com/china-network/concepts/china-dns/) to improve the Time to First Byte (TTFB) performance.\n* [Global Acceleration](https://developers.cloudflare.com/china-network/concepts/global-acceleration/) is a suite of connectivity and performance offerings designed to simplify your global assets' deployment in China.\n\n## Availability\n\nThe Cloudflare China Network is available as a separate subscription for customers on an [Enterprise plan](https://www.cloudflare.com/plans/enterprise/).\n\n## Important notes\n\n* Not all Cloudflare products are available in the Cloudflare China Network. Refer to [Available products and features](https://developers.cloudflare.com/china-network/reference/available-products/) for details.\n* IPv6 support is mandatory for all Internet entities operating in Mainland China. The Cloudflare China Network feature automatically enables IPv6 for domains to fulfill this requirement.\n* All the content inside of Mainland China is monitored by local authorities and must comply with local regulations.\n* You must have a valid [ICP (Internet Content Provider) filing or license](https://developers.cloudflare.com/china-network/concepts/icp/) for each apex domain you wish to onboard to Cloudflare.\n\n</page>\n\n<page>\n---\ntitle: Client IP Geolocation · Cloudflare Client IP Geolocation docs\ndescription: Cloudflare designed Cloudflare WARP and 1.1.1.1 to make Internet\n  browsing more private and secure. These applications encrypt last-mile\n  connections and make it more difficult for others to use client IP addresses\n  in user fingerprinting.\nlastUpdated: 2024-08-13T19:56:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/client-ip-geolocation/\n  md: https://developers.cloudflare.com/client-ip-geolocation/index.md\n---\n\nNote\n\nClient IP Geolocation is currently in closed Beta testing.\n\nCloudflare designed [Cloudflare WARP](https://developers.cloudflare.com/warp-client/) and [1.1.1.1](https://developers.cloudflare.com/1.1.1.1/) to make Internet browsing more private and secure. These applications encrypt last-mile connections and make it more difficult for others to use client IP addresses in user fingerprinting.\n\nHowever, unlike legacy VPN applications, we never designed WARP or 1.1.1.1 to hide user locations or allow users to misrepresent their true geographic location. As a web property operator, you can use **Client IP Geolocation** to map Cloudflare egress IP addresses to specific geolocations.\n\n[Get started ](https://developers.cloudflare.com/client-ip-geolocation/get-started/)[Learn more](https://developers.cloudflare.com/client-ip-geolocation/about/)\n\nNote\n\nClient IP Geolocation is different from the [Cloudflare IP Geolocation setting](https://developers.cloudflare.com/network/ip-geolocation/), which helps you capture country codes for visitors.\n\n</page>\n\n<page>\n---\ntitle: Challenges · Cloudflare challenges docs\ndescription: When a Challenge is issued, Cloudflare asks the browser to perform\n  a series of checks that help confirm the visitor's legitimacy. This process\n  involves evaluating client-side signals or asking a visitor to take minimal\n  action such as checking a box or selecting a button.\nlastUpdated: 2025-06-24T17:41:46.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/cloudflare-challenges/\n  md: https://developers.cloudflare.com/cloudflare-challenges/index.md\n---\n\nChallenges are security mechanisms used by Cloudflare to verify whether a visitor to your site is a real human and not a bot or automated script.\n\nWhen a Challenge is issued, Cloudflare asks the browser to perform a series of checks that help confirm the visitor's legitimacy. This process involves evaluating client-side signals or asking a visitor to take minimal action such as checking a box or selecting a button.\n\nChallenges are designed to protect your application without introducing unnecessary friction. Most visitors will pass Challenges automatically without interaction.\n\nCloudflare does not use CAPTCHA puzzles or visual tests like selecting objects or typing distorted characters. All challenge types are lightweight, privacy-preserving, and optimized for real-world traffic.\n\n***\n\n## Related products\n\n**[Turnstile](https://developers.cloudflare.com/turnstile/)**\n\nUse Cloudflare's smart CAPTCHA alternative to run less intrusive Challenges.\n\n**[Bots](https://developers.cloudflare.com/bots/)**\n\nCloudflare bot solutions identify and mitigate automated traffic to protect your domain from bad bots.\n\n**[WAF](https://developers.cloudflare.com/waf/)**\n\nGet automatic protection from vulnerabilities and the flexibility to create custom rules.\n\n**[DDoS Protection](https://developers.cloudflare.com/ddos-protection/)**\n\nDetect and mitigate Distributed Denial of Service (DDoS) attacks using Cloudflare's Autonomous Edge.\n\n</page>\n\n<page>\n---\ntitle: Cloudflare for Platforms · Cloudflare for Platforms docs\ndescription: \"Cloudflare for Platforms is used by leading platforms big and small to:\"\nlastUpdated: 2025-12-29T17:29:32.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/cloudflare-for-platforms/\n  md: https://developers.cloudflare.com/cloudflare-for-platforms/index.md\n---\n\nBuild a platform where your customers can deploy code, each with their own subdomain or custom domain.\n\nCloudflare for Platforms is used by leading platforms big and small to:\n\n* Build application development platforms tailored to specific domains, like ecommerce storefronts or mobile apps\n* Power AI coding platforms that let anyone build and deploy software\n* Customize product behavior by allowing any user to write a short code snippet\n* Offer every customer their own isolated database\n* Provide each customer with their own subdomain\n\n***\n\n## Deploy your own platform\n\nGet a working platform running in minutes. Choose a template based on what you are building:\n\n### Platform Starter Kit\n\n[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/worker-publisher-template)\n\nAn example of a platform where users can deploy code at scale. Each snippet becomes its own isolated Worker, served at `example.com/{app-name}`. Deploying this starter kit automatically configures Workers for Platforms with routing handled for you.\n\n[View demo](https://worker-publisher-template.templates.workers.dev/)\n\n[View on GitHub](https://github.com/cloudflare/templates/tree/main/worker-publisher-template)\n\n### AI vibe coding platform\n\n[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/vibesdk)\n\nBuild an [AI vibe coding platform](https://developers.cloudflare.com/reference-architecture/diagrams/ai/ai-vibe-coding-platform/) where users describe what they want and AI generates and deploys working applications. Best for: AI-powered app builders, code generation tools, or internal platforms that empower teams to build applications & prototypes.\n\n[VibeSDK](https://github.com/cloudflare/vibesdk) handles AI code generation, code execution in secure sandboxes, live previews, and deployment at scale.\n\n[View demo](https://build.cloudflare.dev/)\n\n[View on GitHub](https://github.com/cloudflare/vibesdk)\n\n***\n\n## Features\n\n* **Isolation and multitenancy** — Each of your customers runs code in their own Worker, a [secure and isolated sandbox](https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/reference/worker-isolation/).\n* **Programmable routing, ingress, egress, and limits** — You write code that dispatches requests to your customers' code, and can control [ingress](https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/configuration/dynamic-dispatch/), [egress](https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/configuration/outbound-workers/), and set [per-customer limits](https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/configuration/custom-limits/).\n* **Databases and storage** — You can provide [databases, object storage, and more](https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/configuration/bindings/) to your customers as APIs they can call directly, without API tokens, keys, or external dependencies.\n* **Custom domains and subdomains** — You [call an API](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/domain-support/) to create custom subdomains or configure custom domains for each of your customers.\n\nTo learn how these components work together, refer to [How Workers for Platforms works](https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/how-workers-for-platforms-works/).\n\n</page>\n\n<page>\n---\ntitle: Constellation · Constellation docs\ndescription: Constellation allows you to run fast, low-latency inference tasks\n  on pre-trained machine learning models natively on Cloudflare Workers. It\n  supports some of the most popular machine learning (ML) and AI runtimes and\n  multiple classes of models.\nlastUpdated: 2024-08-15T18:30:43.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/constellation/\n  md: https://developers.cloudflare.com/constellation/index.md\n---\n\nRun machine learning models with Cloudflare Workers.\n\nConstellation allows you to run fast, low-latency inference tasks on pre-trained machine learning models natively on Cloudflare Workers. It supports some of the most popular machine learning (ML) and AI runtimes and multiple classes of models.\n\nCloudflare provides a curated list of verified models, or you can train and upload your own.\n\nFunctionality you can deploy to your application with Constellation:\n\n* Content generation, summarization, or similarity analysis\n* Question answering\n* Audio transcription\n* Image or audio classification\n* Object detection\n* Anomaly detection\n* Sentiment analysis\n\n***\n\n## More resources\n\n[Developer Discord](https://discord.cloudflare.com)\n\nConnect with the Workers community on Discord to ask questions, show what you are building, and discuss the platform with other developers.\n\n[@CloudflareDev](https://x.com/cloudflaredev)\n\nFollow @CloudflareDev on Twitter to learn about product announcements, and what is new in Cloudflare Workers.\n\n</page>\n\n<page>\n---\ntitle: Overview · Cloudflare One docs\ndescription: Learn how to secure self-hosted and SaaS applications with\n  Cloudflare One. Configure a unified dashboard for seamless access and\n  security.\nlastUpdated: 2025-10-30T21:17:22.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/cloudflare-one/\n  md: https://developers.cloudflare.com/cloudflare-one/index.md\n---\n\nSecure your organization with Cloudflare One — a cloud security platform that replaces legacy perimeters with Cloudflare's global network.\n\nAvailable on all plans\n\nCloudflare One is a Secure Access Service Edge (SASE) platform that combines Zero Trust security and enterprise networking services.\n\nBy progressively adopting Cloudflare One, organizations can move away from a patchwork of hardware appliances and point solutions, and instead consolidate security and networking through a unified control plane that includes products like [Cloudflare Access](https://developers.cloudflare.com/cloudflare-one/access-controls/policies/), [Secure Web Gateway (SWG)](https://developers.cloudflare.com/cloudflare-one/traffic-policies/), [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/), [Data Loss Prevention (DLP)](https://developers.cloudflare.com/cloudflare-one/data-loss-prevention/), [Remote Browser Isolation (RBI)](https://developers.cloudflare.com/cloudflare-one/remote-browser-isolation/), [Cloud Access Security Broker (CASB)](https://developers.cloudflare.com/cloudflare-one/integrations/cloud-and-saas/), and [Email security](https://developers.cloudflare.com/cloudflare-one/email-security/).\n\nRefer to our [SASE reference architecture](https://developers.cloudflare.com/reference-architecture/architectures/sase/) to learn how to plan, deploy, and manage SASE architecture with Cloudflare.\n\n[Get started](https://developers.cloudflare.com/cloudflare-one/setup/)\n\n[Cloudflare One dashboard](https://one.dash.cloudflare.com/)\n\n[Implementation guides](https://developers.cloudflare.com/cloudflare-one/implementation-guides/)\n\n## Products\n\n**[Access](https://developers.cloudflare.com/cloudflare-one/access-controls/policies/)**\n\nAuthenticate users accessing your applications, seamlessly onboard third-party users, and log every event and request.\n\n**[Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/)**\n\nSecurely connect your resources to Cloudflare without exposing a public IP by using Cloudflare Tunnel, which establishes outbound-only connections from your infrastructure to Cloudflare's global network via the lightweight `cloudflared` daemon.\n\n**[Secure Web Gateway (SWG)](https://developers.cloudflare.com/cloudflare-one/traffic-policies/)**\n\nInspect and filter DNS, network, HTTP, and egress traffic to enforce your company's Acceptable Use Policy (UAP), block risky sites with custom blocklists and threat intelligence, and enhance visibility and protection across SaaS applications.\n\n**[WARP](https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/warp/)**\n\nProtect corporate devices by privately sending traffic from those devices to Cloudflare's global network, build device posture rules, and enforce security policies anywhere.\n\n**[Browser Isolation (RBI)](https://developers.cloudflare.com/cloudflare-one/remote-browser-isolation/)**\n\nMitigate the impact of attacks by executing all browser code in the cloud and securely browse high-risk or sensitive websites in a remote browser.\n\n**[Cloud Access Security Broker (CASB)](https://developers.cloudflare.com/cloudflare-one/integrations/cloud-and-saas/)**\n\nProtect users and sensitive data at rest in SaaS applications and cloud environments, scan for misconfigurations, and detect insider threats as well as unsanctioned application usage to prevent data leaks and compliance violations.\n\n**[Data Loss Prevention (DLP)](https://developers.cloudflare.com/cloudflare-one/data-loss-prevention/)**\n\nScan your web traffic and SaaS applications for the presence of sensitive data such as social security numbers, financial information, secret keys, and source code.\n\n**[Email security](https://developers.cloudflare.com/cloudflare-one/email-security/)**\n\nConfigure policies to manage your inbox, automatically move emails based on disposition, and use screen criteria to investigate messages.\n\n**[Digital Experience Monitoring (DEX)](https://developers.cloudflare.com/cloudflare-one/insights/dex/)**\n\nMonitor device, network, and application performance across your Zero Trust organization.\n\n***\n\n## More resources\n\n[SASE video series](https://developers.cloudflare.com/learning-paths/sase-overview-course/series/evolution-corporate-networks-1/)\n\nNew to Zero Trust and SASE? Get started with our introductory SASE video series.\n\n[Reference architecture](https://developers.cloudflare.com/reference-architecture/architectures/sase/)\n\nExplore our reference architecture to learn how to evolve your network and security architecture to Cloudflare One, our SASE platform.\n\n[Plans](https://www.cloudflare.com/plans/zero-trust-services/)\n\nCloudflare Zero Trust offers both Free and Paid plans. Access to certain features depends on a customer's plan type.\n\n[Limits](https://developers.cloudflare.com/cloudflare-one/account-limits/)\n\nLearn about account limits. These limits may be increased on Enterprise accounts.\n\n[Support](https://developers.cloudflare.com/support/contacting-cloudflare-support/)\n\nFind answers to common questions or open a ticket with Cloudflare Support.\n\n[Community](https://community.cloudflare.com/)\n\nAsk questions, get answers, and share tips.\n\nNote\n\nEnterprise customers can preview this product as a [non-contract service](https://developers.cloudflare.com/billing/preview-services/), which provides full access, free of metered usage fees, limits, and certain other restrictions.\n\n</page>\n\n<page>\n---\ntitle: Overview · Cloudflare Containers docs\ndescription: Run code written in any programming language, built for any\n  runtime, as part of apps built on Workers.\nlastUpdated: 2025-09-22T15:52:17.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/containers/\n  md: https://developers.cloudflare.com/containers/index.md\n---\n\nEnhance your Workers with serverless containers\n\nAvailable on Workers Paid plan\n\nRun code written in any programming language, built for any runtime, as part of apps built on [Workers](https://developers.cloudflare.com/workers).\n\nDeploy your container image to Region:Earth without worrying about managing infrastructure - just define your Worker and `wrangler deploy`.\n\nWith Containers you can run:\n\n* Resource-intensive applications that require CPU cores running in parallel, large amounts of memory or disk space\n* Applications and libraries that require a full filesystem, specific runtime, or Linux-like environment\n* Existing applications and tools that have been distributed as container images\n\nContainer instances are spun up on-demand and controlled by code you write in your [Worker](https://developers.cloudflare.com/workers). Instead of chaining together API calls or writing Kubernetes operators, you just write JavaScript:\n\n* Worker Code",
+      "language": "unknown"
+    },
+    {
+      "code": "* Worker Config\n\n  * wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Why build agents on Cloudflare?",
+      "id": "why-build-agents-on-cloudflare?"
+    },
+    {
+      "level": "h3",
+      "text": "Build on the Cloudflare Platform",
+      "id": "build-on-the-cloudflare-platform"
+    },
+    {
+      "level": "h2",
+      "text": "Features",
+      "id": "features"
+    },
+    {
+      "level": "h3",
+      "text": "Manage AI crawlers",
+      "id": "manage-ai-crawlers"
+    },
+    {
+      "level": "h3",
+      "text": "Analyze AI traffic",
+      "id": "analyze-ai-traffic"
+    },
+    {
+      "level": "h3",
+      "text": "Track robots.txt",
+      "id": "track-robots.txt"
+    },
+    {
+      "level": "h3",
+      "text": "Pay Per Crawl",
+      "id": "pay-per-crawl"
+    },
+    {
+      "level": "h2",
+      "text": "Use cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h2",
+      "text": "Related Products",
+      "id": "related-products"
+    },
+    {
+      "level": "h2",
+      "text": "Features",
+      "id": "features"
+    },
+    {
+      "level": "h3",
+      "text": "Analytics",
+      "id": "analytics"
+    },
+    {
+      "level": "h3",
+      "text": "Logging",
+      "id": "logging"
+    },
+    {
+      "level": "h3",
+      "text": "Caching",
+      "id": "caching"
+    },
+    {
+      "level": "h3",
+      "text": "Rate limiting",
+      "id": "rate-limiting"
+    },
+    {
+      "level": "h3",
+      "text": "Request retry and fallback",
+      "id": "request-retry-and-fallback"
+    },
+    {
+      "level": "h3",
+      "text": "Your favorite providers",
+      "id": "your-favorite-providers"
+    },
+    {
+      "level": "h2",
+      "text": "Related products",
+      "id": "related-products"
+    },
+    {
+      "level": "h2",
+      "text": "More resources",
+      "id": "more-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Features",
+      "id": "features"
+    },
+    {
+      "level": "h3",
+      "text": "Automated indexing",
+      "id": "automated-indexing"
+    },
+    {
+      "level": "h3",
+      "text": "Multitenancy support",
+      "id": "multitenancy-support"
+    },
+    {
+      "level": "h3",
+      "text": "Workers Binding",
+      "id": "workers-binding"
+    },
+    {
+      "level": "h3",
+      "text": "Similarity caching",
+      "id": "similarity-caching"
+    },
+    {
+      "level": "h2",
+      "text": "Related products",
+      "id": "related-products"
+    },
+    {
+      "level": "h2",
+      "text": "More resources",
+      "id": "more-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Features",
+      "id": "features"
+    },
+    {
+      "level": "h3",
+      "text": "Workers Analytics Engine",
+      "id": "workers-analytics-engine"
+    },
+    {
+      "level": "h3",
+      "text": "Account and zone analytics",
+      "id": "account-and-zone-analytics"
+    },
+    {
+      "level": "h3",
+      "text": "Cloudflare Network Analytics",
+      "id": "cloudflare-network-analytics"
+    },
+    {
+      "level": "h3",
+      "text": "GraphQL Analytics API",
+      "id": "graphql-analytics-api"
+    },
+    {
+      "level": "h2",
+      "text": "Related products",
+      "id": "related-products"
+    },
+    {
+      "level": "h2",
+      "text": "Why care about API security?",
+      "id": "why-care-about-api-security?"
+    },
+    {
+      "level": "h2",
+      "text": "Features",
+      "id": "features"
+    },
+    {
+      "level": "h3",
+      "text": "Security features",
+      "id": "security-features"
+    },
+    {
+      "level": "h3",
+      "text": "Management, monitoring, and more",
+      "id": "management,-monitoring,-and-more"
+    },
+    {
+      "level": "h2",
+      "text": "Availability",
+      "id": "availability"
+    },
+    {
+      "level": "h2",
+      "text": "Related products",
+      "id": "related-products"
+    },
+    {
+      "level": "h2",
+      "text": "Features",
+      "id": "features"
+    },
+    {
+      "level": "h3",
+      "text": "Analytics",
+      "id": "analytics"
+    },
+    {
+      "level": "h2",
+      "text": "Related products",
+      "id": "related-products"
+    },
+    {
+      "level": "h2",
+      "text": "More resources",
+      "id": "more-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Failed Plan Modifications",
+      "id": "failed-plan-modifications"
+    },
+    {
+      "level": "h2",
+      "text": "Cannot update or remove payment methods",
+      "id": "cannot-update-or-remove-payment-methods"
+    },
+    {
+      "level": "h2",
+      "text": "Cancellations",
+      "id": "cancellations"
+    },
+    {
+      "level": "h2",
+      "text": "Non-refundable occurrences",
+      "id": "non-refundable-occurrences"
+    },
+    {
+      "level": "h2",
+      "text": "Which bot solution do I need?",
+      "id": "which-bot-solution-do-i-need?"
+    },
+    {
+      "level": "h2",
+      "text": "Features",
+      "id": "features"
+    },
+    {
+      "level": "h3",
+      "text": "Bot Fight Mode",
+      "id": "bot-fight-mode"
+    },
+    {
+      "level": "h3",
+      "text": "Super Bot Fight Mode",
+      "id": "super-bot-fight-mode"
+    },
+    {
+      "level": "h3",
+      "text": "Bot Analytics",
+      "id": "bot-analytics"
+    },
+    {
+      "level": "h3",
+      "text": "Firewall variables",
+      "id": "firewall-variables"
+    },
+    {
+      "level": "h2",
+      "text": "Related products",
+      "id": "related-products"
+    },
+    {
+      "level": "h2",
+      "text": "More resources",
+      "id": "more-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Use Cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h2",
+      "text": "Key features",
+      "id": "key-features"
+    },
+    {
+      "level": "h2",
+      "text": "Integration Methods",
+      "id": "integration-methods"
+    },
+    {
+      "level": "h2",
+      "text": "Related products",
+      "id": "related-products"
+    },
+    {
+      "level": "h2",
+      "text": "More resources",
+      "id": "more-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Features",
+      "id": "features"
+    },
+    {
+      "level": "h3",
+      "text": "Service bindings",
+      "id": "service-bindings"
+    },
+    {
+      "level": "h3",
+      "text": "Address maps",
+      "id": "address-maps"
+    },
+    {
+      "level": "h2",
+      "text": "More resources",
+      "id": "more-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Footnotes",
+      "id": "footnotes"
+    },
+    {
+      "level": "h2",
+      "text": "Features",
+      "id": "features"
+    },
+    {
+      "level": "h3",
+      "text": "Default cache behavior",
+      "id": "default-cache-behavior"
+    },
+    {
+      "level": "h3",
+      "text": "Cache Rules",
+      "id": "cache-rules"
+    },
+    {
+      "level": "h3",
+      "text": "Tiered Cache",
+      "id": "tiered-cache"
+    },
+    {
+      "level": "h3",
+      "text": "Cache Reserve",
+      "id": "cache-reserve"
+    },
+    {
+      "level": "h3",
+      "text": "Purge",
+      "id": "purge"
+    },
+    {
+      "level": "h2",
+      "text": "Related products",
+      "id": "related-products"
+    },
+    {
+      "level": "h2",
+      "text": "More resources",
+      "id": "more-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Main features",
+      "id": "main-features"
+    },
+    {
+      "level": "h2",
+      "text": "Availability",
+      "id": "availability"
+    },
+    {
+      "level": "h2",
+      "text": "Important notes",
+      "id": "important-notes"
+    },
+    {
+      "level": "h2",
+      "text": "Related products",
+      "id": "related-products"
+    },
+    {
+      "level": "h2",
+      "text": "Deploy your own platform",
+      "id": "deploy-your-own-platform"
+    },
+    {
+      "level": "h3",
+      "text": "Platform Starter Kit",
+      "id": "platform-starter-kit"
+    },
+    {
+      "level": "h3",
+      "text": "AI vibe coding platform",
+      "id": "ai-vibe-coding-platform"
+    },
+    {
+      "level": "h2",
+      "text": "Features",
+      "id": "features"
+    },
+    {
+      "level": "h2",
+      "text": "More resources",
+      "id": "more-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Products",
+      "id": "products"
+    },
+    {
+      "level": "h2",
+      "text": "More resources",
+      "id": "more-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h3",
+      "text": "Deploy your first Container",
+      "id": "deploy-your-first-container"
+    },
+    {
+      "level": "h3",
+      "text": "Container Examples",
+      "id": "container-examples"
+    },
+    {
+      "level": "h2",
+      "text": "More resources",
+      "id": "more-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Features",
+      "id": "features"
+    },
+    {
+      "level": "h3",
+      "text": "Create your first D1 database",
+      "id": "create-your-first-d1-database"
+    },
+    {
+      "level": "h3",
+      "text": "SQLite",
+      "id": "sqlite"
+    },
+    {
+      "level": "h3",
+      "text": "Time Travel",
+      "id": "time-travel"
+    },
+    {
+      "level": "h2",
+      "text": "Related products",
+      "id": "related-products"
+    },
+    {
+      "level": "h2",
+      "text": "More resources",
+      "id": "more-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Features",
+      "id": "features"
+    },
+    {
+      "level": "h3",
+      "text": "Geo Key Manager",
+      "id": "geo-key-manager"
+    },
+    {
+      "level": "h3",
+      "text": "Customer Metadata Boundary",
+      "id": "customer-metadata-boundary"
+    },
+    {
+      "level": "h3",
+      "text": "Regional Services",
+      "id": "regional-services"
+    },
+    {
+      "level": "h2",
+      "text": "Related products",
+      "id": "related-products"
+    },
+    {
+      "level": "h2",
+      "text": "More resources",
+      "id": "more-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Features",
+      "id": "features"
+    },
+    {
+      "level": "h3",
+      "text": "Managed rulesets",
+      "id": "managed-rulesets"
+    },
+    {
+      "level": "h3",
+      "text": "Adaptive DDoS protection",
+      "id": "adaptive-ddos-protection"
+    },
+    {
+      "level": "h3",
+      "text": "Advanced TCP protection",
+      "id": "advanced-tcp-protection"
+    },
+    {
+      "level": "h3",
+      "text": "Advanced DNS protection",
+      "id": "advanced-dns-protection"
+    },
+    {
+      "level": "h2",
+      "text": "Availability",
+      "id": "availability"
+    },
+    {
+      "level": "h2",
+      "text": "Related products",
+      "id": "related-products"
+    },
+    {
+      "level": "h2",
+      "text": "Related products",
+      "id": "related-products"
+    }
+  ],
+  "url": "llms-txt#and-deploy-it",
+  "links": []
+}

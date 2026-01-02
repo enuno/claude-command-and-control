@@ -1,0 +1,6645 @@
+{
+  "name": "cloudflare-kv",
+  "total_pages": 1659,
+  "base_url": "https://developers.cloudflare.com/kv/",
+  "llms_txt_detected": true,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "<page>",
+      "url": "llms-txt#<page>"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "install it",
+      "url": "llms-txt#install-it"
+    },
+    {
+      "title": "and deploy it",
+      "url": "llms-txt#and-deploy-it"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "Test DNS resolution",
+      "url": "llms-txt#test-dns-resolution"
+    },
+    {
+      "title": "Check connected nameserver",
+      "url": "llms-txt#check-connected-nameserver"
+    },
+    {
+      "title": "Optional: Network information",
+      "url": "llms-txt#optional:-network-information"
+    },
+    {
+      "title": "Test DNS resolution",
+      "url": "llms-txt#test-dns-resolution"
+    },
+    {
+      "title": "Check connected nameserver",
+      "url": "llms-txt#check-connected-nameserver"
+    },
+    {
+      "title": "Optional: Network information",
+      "url": "llms-txt#optional:-network-information"
+    },
+    {
+      "title": "Basic connectivity tests",
+      "url": "llms-txt#basic-connectivity-tests"
+    },
+    {
+      "title": "If reachable, check nameserver identity",
+      "url": "llms-txt#if-reachable,-check-nameserver-identity"
+    },
+    {
+      "title": "TCP connection tests",
+      "url": "llms-txt#tcp-connection-tests"
+    },
+    {
+      "title": "Basic connectivity tests",
+      "url": "llms-txt#basic-connectivity-tests"
+    },
+    {
+      "title": "If reachable, check nameserver identity",
+      "url": "llms-txt#if-reachable,-check-nameserver-identity"
+    },
+    {
+      "title": "TCP connection tests",
+      "url": "llms-txt#tcp-connection-tests"
+    },
+    {
+      "title": "Test TLS connectivity",
+      "url": "llms-txt#test-tls-connectivity"
+    },
+    {
+      "title": "Test DNS resolution over TLS",
+      "url": "llms-txt#test-dns-resolution-over-tls"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "Example: Get ONLY deleted Tunnels",
+      "url": "llms-txt#example:-get-only-deleted-tunnels"
+    },
+    {
+      "title": "Example: Get ONLY deleted Virtual Networks",
+      "url": "llms-txt#example:-get-only-deleted-virtual-networks"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "open up README.md and follow the instructions",
+      "url": "llms-txt#open-up-readme.md-and-follow-the-instructions"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Install the new package",
+      "url": "llms-txt#install-the-new-package"
+    },
+    {
+      "title": "Remove the old (deprecated) package",
+      "url": "llms-txt#remove-the-old-(deprecated)-package"
+    },
+    {
+      "title": "Find instances of the old package name in your codebase",
+      "url": "llms-txt#find-instances-of-the-old-package-name-in-your-codebase"
+    },
+    {
+      "title": "Replace instances of the old package name with the new one",
+      "url": "llms-txt#replace-instances-of-the-old-package-name-with-the-new-one"
+    },
+    {
+      "title": "(or use find-replace in your editor)",
+      "url": "llms-txt#(or-use-find-replace-in-your-editor)"
+    },
+    {
+      "title": "Install it",
+      "url": "llms-txt#install-it"
+    },
+    {
+      "title": "Run it",
+      "url": "llms-txt#run-it"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Create CA certificate bundle",
+      "url": "llms-txt#create-ca-certificate-bundle"
+    },
+    {
+      "title": "Create client certificate pair",
+      "url": "llms-txt#create-client-certificate-pair"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Terminal 1",
+      "url": "llms-txt#terminal-1"
+    },
+    {
+      "title": "Terminal 2",
+      "url": "llms-txt#terminal-2"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Example: Get ONLY deleted Tunnels",
+      "url": "llms-txt#example:-get-only-deleted-tunnels"
+    },
+    {
+      "title": "Example: Get ONLY deleted Virtual Networks",
+      "url": "llms-txt#example:-get-only-deleted-virtual-networks"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Manage Versions and Deployments here or outside of Terraform",
+      "url": "llms-txt#manage-versions-and-deployments-here-or-outside-of-terraform"
+    },
+    {
+      "title": "resource \"cloudflare_worker_version\" \"my_worker_version\" {}",
+      "url": "llms-txt#resource-\"cloudflare_worker_version\"-\"my_worker_version\"-{}"
+    },
+    {
+      "title": "resource \"cloudflare_workers_deployment\" \"my_worker_deployment\" {}",
+      "url": "llms-txt#resource-\"cloudflare_workers_deployment\"-\"my_worker_deployment\"-{}"
+    },
+    {
+      "title": "Step 1: Create a new version with updated settings (doesn't affect live traffic)",
+      "url": "llms-txt#step-1:-create-a-new-version-with-updated-settings-(doesn't-affect-live-traffic)"
+    },
+    {
+      "title": "Step 2: Explicitly deploy when ready (now affects live traffic)",
+      "url": "llms-txt#step-2:-explicitly-deploy-when-ready-(now-affects-live-traffic)"
+    },
+    {
+      "title": "Worker settings (the parent resource)",
+      "url": "llms-txt#worker-settings-(the-parent-resource)"
+    },
+    {
+      "title": "Version settings (the \"code\")",
+      "url": "llms-txt#version-settings-(the-\"code\")"
+    },
+    {
+      "title": "Both work for the same Worker",
+      "url": "llms-txt#both-work-for-the-same-worker"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Interactive prompts handle the rest as shown in the example flow below",
+      "url": "llms-txt#interactive-prompts-handle-the-rest-as-shown-in-the-example-flow-below"
+    },
+    {
+      "title": "Deploy your built static site",
+      "url": "llms-txt#deploy-your-built-static-site"
+    },
+    {
+      "title": "Wrangler will prompt:",
+      "url": "llms-txt#wrangler-will-prompt:"
+    },
+    {
+      "title": "Automatically generates a wrangler.jsonc file and adds it to your project:",
+      "url": "llms-txt#automatically-generates-a-wrangler.jsonc-file-and-adds-it-to-your-project:"
+    },
+    {
+      "title": "Next time you run wrangler deploy, this will use the configuration in your newly generated wrangler.jsonc file",
+      "url": "llms-txt#next-time-you-run-wrangler-deploy,-this-will-use-the-configuration-in-your-newly-generated-wrangler.jsonc-file"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Terminal 1: Run your application that includes both Web and API workers",
+      "url": "llms-txt#terminal-1:-run-your-application-that-includes-both-web-and-api-workers"
+    },
+    {
+      "title": "Terminal 2: Run your auth worker separately",
+      "url": "llms-txt#terminal-2:-run-your-auth-worker-separately"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Enable compaction for a specific table (no token required)",
+      "url": "llms-txt#enable-compaction-for-a-specific-table-(no-token-required)"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "This tracks the existence of your Worker, so that you",
+      "url": "llms-txt#this-tracks-the-existence-of-your-worker,-so-that-you"
+    },
+    {
+      "title": "can upload code and assets separately from tracking Worker state.",
+      "url": "llms-txt#can-upload-code-and-assets-separately-from-tracking-worker-state."
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Deploy to the production environment using CLOUDFLARE_ENV",
+      "url": "llms-txt#deploy-to-the-production-environment-using-cloudflare_env"
+    },
+    {
+      "title": "Upload a version to the staging environment",
+      "url": "llms-txt#upload-a-version-to-the-staging-environment"
+    },
+    {
+      "title": "The --env flag takes precedence over CLOUDFLARE_ENV",
+      "url": "llms-txt#the---env-flag-takes-precedence-over-cloudflare_env"
+    },
+    {
+      "title": "This will deploy to production, not dev",
+      "url": "llms-txt#this-will-deploy-to-production,-not-dev"
+    },
+    {
+      "title": "Set the environment for both build and deploy",
+      "url": "llms-txt#set-the-environment-for-both-build-and-deploy"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Install FUSE and dependencies",
+      "url": "llms-txt#install-fuse-and-dependencies"
+    },
+    {
+      "title": "Install tigrisfs",
+      "url": "llms-txt#install-tigrisfs"
+    },
+    {
+      "title": "Create startup script that mounts bucket",
+      "url": "llms-txt#create-startup-script-that-mounts-bucket"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Enable catalog-level snapshot expiration",
+      "url": "llms-txt#enable-catalog-level-snapshot-expiration"
+    },
+    {
+      "title": "Expire snapshots older than 7 days, always retain at least 10 recent snapshots",
+      "url": "llms-txt#expire-snapshots-older-than-7-days,-always-retain-at-least-10-recent-snapshots"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "Changelog",
+      "url": "llms-txt#changelog"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "Outputs: https://hyperdrive-tutorial.<YOUR_SUBDOMAIN>.workers.dev",
+      "url": "llms-txt#outputs:-https://hyperdrive-tutorial.<your_subdomain>.workers.dev"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "Filter when client IP country is not Canada:",
+      "url": "llms-txt#filter-when-client-ip-country-is-not-canada:"
+    },
+    {
+      "title": "Filter when the status code returned from Cloudflare is either 200 or 201:",
+      "url": "llms-txt#filter-when-the-status-code-returned-from-cloudflare-is-either-200-or-201:"
+    },
+    {
+      "title": "Filter when the request path contains \"/static\" and the request hostname is \"example.com\":",
+      "url": "llms-txt#filter-when-the-request-path-contains-\"/static\"-and-the-request-hostname-is-\"example.com\":"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "If you expect to have multiple sandbox instances, you can increase `max_instances`.",
+      "url": "llms-txt#if-you-expect-to-have-multiple-sandbox-instances,-you-can-increase-`max_instances`."
+    },
+    {
+      "title": "Execute Python code",
+      "url": "llms-txt#execute-python-code"
+    },
+    {
+      "title": "File operations",
+      "url": "llms-txt#file-operations"
+    },
+    {
+      "title": "Replace with your actual URL",
+      "url": "llms-txt#replace-with-your-actual-url"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "Example response:",
+      "url": "llms-txt#example-response:"
+    },
+    {
+      "title": "Example response:",
+      "url": "llms-txt#example-response:"
+    },
+    {
+      "title": "Example response:",
+      "url": "llms-txt#example-response:"
+    },
+    {
+      "title": "Example response:",
+      "url": "llms-txt#example-response:"
+    },
+    {
+      "title": "Example response:",
+      "url": "llms-txt#example-response:"
+    },
+    {
+      "title": "Example response:",
+      "url": "llms-txt#example-response:"
+    },
+    {
+      "title": "Example response:",
+      "url": "llms-txt#example-response:"
+    },
+    {
+      "title": "Example response:",
+      "url": "llms-txt#example-response:"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "Meet your AI assistant, CursorAI Preview",
+      "url": "llms-txt#meet-your-ai-assistant,-cursorai-preview"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "404",
+      "url": "llms-txt#404"
+    },
+    {
+      "title": "or run vitest directly",
+      "url": "llms-txt#or-run-vitest-directly"
+    },
+    {
+      "title": "Schema that should be used for Schema validation",
+      "url": "llms-txt#schema-that-should-be-used-for-schema-validation"
+    },
+    {
+      "title": "Block all requests that violate schema by default",
+      "url": "llms-txt#block-all-requests-that-violate-schema-by-default"
+    },
+    {
+      "title": "For endpoint post_image - only log requests that violate schema",
+      "url": "llms-txt#for-endpoint-post_image---only-log-requests-that-violate-schema"
+    },
+    {
+      "title": "Setting up JWT validation with specific keying material and location of the token",
+      "url": "llms-txt#setting-up-jwt-validation-with-specific-keying-material-and-location-of-the-token"
+    },
+    {
+      "title": "Setting up JWT rules for all configured endpoints on `example.com` except for `get_image`",
+      "url": "llms-txt#setting-up-jwt-rules-for-all-configured-endpoints-on-`example.com`-except-for-`get_image`"
+    },
+    {
+      "title": "With JWT validation, we can also refine session identifiers to use claims from the JWT",
+      "url": "llms-txt#with-jwt-validation,-we-can-also-refine-session-identifiers-to-use-claims-from-the-jwt"
+    },
+    {
+      "title": "As a condition of accessing this website, you agree to abide by the",
+      "url": "llms-txt#as-a-condition-of-accessing-this-website,-you-agree-to-abide-by-the"
+    },
+    {
+      "title": "following content signals:",
+      "url": "llms-txt#following-content-signals:"
+    },
+    {
+      "title": "(a)  If a content-signal = yes, you may collect content for the",
+      "url": "llms-txt#(a)--if-a-content-signal-=-yes,-you-may-collect-content-for-the"
+    },
+    {
+      "title": "corresponding use.",
+      "url": "llms-txt#corresponding-use."
+    },
+    {
+      "title": "(b)  If a content-signal = no, you may not collect content for the",
+      "url": "llms-txt#(b)--if-a-content-signal-=-no,-you-may-not-collect-content-for-the"
+    },
+    {
+      "title": "corresponding use.",
+      "url": "llms-txt#corresponding-use."
+    },
+    {
+      "title": "(c)  If the website operator does not include a content signal for a",
+      "url": "llms-txt#(c)--if-the-website-operator-does-not-include-a-content-signal-for-a"
+    },
+    {
+      "title": "corresponding use, the website operator neither grants nor restricts",
+      "url": "llms-txt#corresponding-use,-the-website-operator-neither-grants-nor-restricts"
+    },
+    {
+      "title": "permission via content signal with respect to the corresponding use.",
+      "url": "llms-txt#permission-via-content-signal-with-respect-to-the-corresponding-use."
+    },
+    {
+      "title": "The content signals and their meanings are:",
+      "url": "llms-txt#the-content-signals-and-their-meanings-are:"
+    },
+    {
+      "title": "search: building a search index and providing search results (e.g., returning",
+      "url": "llms-txt#search:-building-a-search-index-and-providing-search-results-(e.g.,-returning"
+    },
+    {
+      "title": "hyperlinks and short excerpts from your website's contents). Search",
+      "url": "llms-txt#hyperlinks-and-short-excerpts-from-your-website's-contents).-search"
+    },
+    {
+      "title": "does not include providing AI-generated search summaries.",
+      "url": "llms-txt#does-not-include-providing-ai-generated-search-summaries."
+    },
+    {
+      "title": "ai-input: inputting content into one or more AI models (e.g., retrieval",
+      "url": "llms-txt#ai-input:-inputting-content-into-one-or-more-ai-models-(e.g.,-retrieval"
+    },
+    {
+      "title": "augmented generation, grounding, or other real-time taking of",
+      "url": "llms-txt#augmented-generation,-grounding,-or-other-real-time-taking-of"
+    },
+    {
+      "title": "content for generative AI search answers).",
+      "url": "llms-txt#content-for-generative-ai-search-answers)."
+    },
+    {
+      "title": "ai-train: training or fine-tuning AI models.",
+      "url": "llms-txt#ai-train:-training-or-fine-tuning-ai-models."
+    },
+    {
+      "title": "ANY RESTRICTIONS EXPRESSED VIA CONTENT SIGNALS ARE EXPRESS RESERVATIONS OF",
+      "url": "llms-txt#any-restrictions-expressed-via-content-signals-are-express-reservations-of"
+    },
+    {
+      "title": "RIGHTS UNDER ARTICLE 4 OF THE EUROPEAN UNION DIRECTIVE 2019/790 ON COPYRIGHT",
+      "url": "llms-txt#rights-under-article-4-of-the-european-union-directive-2019/790-on-copyright"
+    },
+    {
+      "title": "AND RELATED RIGHTS IN THE DIGITAL SINGLE MARKET.",
+      "url": "llms-txt#and-related-rights-in-the-digital-single-market."
+    },
+    {
+      "title": "BEGIN Cloudflare Managed content",
+      "url": "llms-txt#begin-cloudflare-managed-content"
+    },
+    {
+      "title": "END Cloudflare Managed Content",
+      "url": "llms-txt#end-cloudflare-managed-content"
+    },
+    {
+      "title": "As a condition of accessing this website, you agree to abide by the",
+      "url": "llms-txt#as-a-condition-of-accessing-this-website,-you-agree-to-abide-by-the"
+    },
+    {
+      "title": "following content signals:",
+      "url": "llms-txt#following-content-signals:"
+    },
+    {
+      "title": "(a)  If a content-signal = yes, you may collect content for the",
+      "url": "llms-txt#(a)--if-a-content-signal-=-yes,-you-may-collect-content-for-the"
+    },
+    {
+      "title": "corresponding use.",
+      "url": "llms-txt#corresponding-use."
+    },
+    {
+      "title": "(b)  If a content-signal = no, you may not collect content for the",
+      "url": "llms-txt#(b)--if-a-content-signal-=-no,-you-may-not-collect-content-for-the"
+    },
+    {
+      "title": "corresponding use.",
+      "url": "llms-txt#corresponding-use."
+    },
+    {
+      "title": "(c)  If the website operator does not include a content signal for a",
+      "url": "llms-txt#(c)--if-the-website-operator-does-not-include-a-content-signal-for-a"
+    },
+    {
+      "title": "corresponding use, the website operator neither grants nor restricts",
+      "url": "llms-txt#corresponding-use,-the-website-operator-neither-grants-nor-restricts"
+    },
+    {
+      "title": "permission via content signal with respect to the corresponding use.",
+      "url": "llms-txt#permission-via-content-signal-with-respect-to-the-corresponding-use."
+    },
+    {
+      "title": "The content signals and their meanings are:",
+      "url": "llms-txt#the-content-signals-and-their-meanings-are:"
+    },
+    {
+      "title": "search: building a search index and providing search results (e.g., returning",
+      "url": "llms-txt#search:-building-a-search-index-and-providing-search-results-(e.g.,-returning"
+    },
+    {
+      "title": "hyperlinks and short excerpts from your website's contents). Search",
+      "url": "llms-txt#hyperlinks-and-short-excerpts-from-your-website's-contents).-search"
+    },
+    {
+      "title": "does not include providing AI-generated search summaries.",
+      "url": "llms-txt#does-not-include-providing-ai-generated-search-summaries."
+    },
+    {
+      "title": "ai-input: inputting content into one or more AI models (e.g., retrieval",
+      "url": "llms-txt#ai-input:-inputting-content-into-one-or-more-ai-models-(e.g.,-retrieval"
+    },
+    {
+      "title": "augmented generation, grounding, or other real-time taking of",
+      "url": "llms-txt#augmented-generation,-grounding,-or-other-real-time-taking-of"
+    },
+    {
+      "title": "content for generative AI search answers).",
+      "url": "llms-txt#content-for-generative-ai-search-answers)."
+    },
+    {
+      "title": "ai-train: training or fine-tuning AI models.",
+      "url": "llms-txt#ai-train:-training-or-fine-tuning-ai-models."
+    },
+    {
+      "title": "ANY RESTRICTIONS EXPRESSED VIA CONTENT SIGNALS ARE EXPRESS RESERVATIONS OF",
+      "url": "llms-txt#any-restrictions-expressed-via-content-signals-are-express-reservations-of"
+    },
+    {
+      "title": "RIGHTS UNDER ARTICLE 4 OF THE EUROPEAN UNION DIRECTIVE 2019/790 ON COPYRIGHT",
+      "url": "llms-txt#rights-under-article-4-of-the-european-union-directive-2019/790-on-copyright"
+    },
+    {
+      "title": "AND RELATED RIGHTS IN THE DIGITAL SINGLE MARKET.",
+      "url": "llms-txt#and-related-rights-in-the-digital-single-market."
+    },
+    {
+      "title": "Example: Get ONLY deleted Tunnels",
+      "url": "llms-txt#example:-get-only-deleted-tunnels"
+    },
+    {
+      "title": "Example: Get ONLY deleted Virtual Networks",
+      "url": "llms-txt#example:-get-only-deleted-virtual-networks"
+    },
+    {
+      "title": "The Application Audience (AUD) tag for your application",
+      "url": "llms-txt#the-application-audience-(aud)-tag-for-your-application"
+    },
+    {
+      "title": "Your CF Access team domain",
+      "url": "llms-txt#your-cf-access-team-domain"
+    },
+    {
+      "title": "Use Cloudflare Tunnels with Kubernetes client-go credential plugins",
+      "url": "llms-txt#use-cloudflare-tunnels-with-kubernetes-client-go-credential-plugins"
+    },
+    {
+      "title": "Install FUSE and dependencies",
+      "url": "llms-txt#install-fuse-and-dependencies"
+    },
+    {
+      "title": "Install tigrisfs",
+      "url": "llms-txt#install-tigrisfs"
+    },
+    {
+      "title": "Create startup script that mounts bucket and runs a command",
+      "url": "llms-txt#create-startup-script-that-mounts-bucket-and-runs-a-command"
+    },
+    {
+      "title": "┌───────────────────┬──────────────────────────────────────┐",
+      "url": "llms-txt#┌───────────────────┬──────────────────────────────────────┐"
+    },
+    {
+      "title": "│                   │ c89db32e-83f4-4e62-8cd7-7c8f97659029 │",
+      "url": "llms-txt#│-------------------│-c89db32e-83f4-4e62-8cd7-7c8f97659029-│"
+    },
+    {
+      "title": "├───────────────────┼──────────────────────────────────────┤",
+      "url": "llms-txt#├───────────────────┼──────────────────────────────────────┤"
+    },
+    {
+      "title": "│ name              │ db-enam                              │",
+      "url": "llms-txt#│-name--------------│-db-enam------------------------------│"
+    },
+    {
+      "title": "├───────────────────┼──────────────────────────────────────┤",
+      "url": "llms-txt#├───────────────────┼──────────────────────────────────────┤"
+    },
+    {
+      "title": "│ created_at        │ 2023-06-12T16:52:03.071Z             │",
+      "url": "llms-txt#│-created_at--------│-2023-06-12t16:52:03.071z-------------│"
+    },
+    {
+      "title": "└───────────────────┴──────────────────────────────────────┘",
+      "url": "llms-txt#└───────────────────┴──────────────────────────────────────┘"
+    },
+    {
+      "title": "Example output",
+      "url": "llms-txt#example-output"
+    },
+    {
+      "title": "Your worker has access to the following bindings:",
+      "url": "llms-txt#your-worker-has-access-to-the-following-bindings:"
+    },
+    {
+      "title": "- D1 Databases:",
+      "url": "llms-txt#--d1-databases:"
+    },
+    {
+      "title": "- DB: db-enam (c89db32e-83f4-4e62-8cd7-7c8f97659029)",
+      "url": "llms-txt#--db:-db-enam-(c89db32e-83f4-4e62-8cd7-7c8f97659029)"
+    },
+    {
+      "title": "Total Upload: 0.18 KiB / gzip: 0.17 KiB",
+      "url": "llms-txt#total-upload:-0.18-kib-/-gzip:-0.17-kib"
+    },
+    {
+      "title": "Uploaded python-and-d1 (4.93 sec)",
+      "url": "llms-txt#uploaded-python-and-d1-(4.93-sec)"
+    },
+    {
+      "title": "Published python-and-d1 (0.51 sec)",
+      "url": "llms-txt#published-python-and-d1-(0.51-sec)"
+    },
+    {
+      "title": "https://python-and-d1.YOUR_SUBDOMAIN.workers.dev",
+      "url": "llms-txt#https://python-and-d1.your_subdomain.workers.dev"
+    },
+    {
+      "title": "Current Deployment ID: 80b72e19-da82-4465-83a2-c12fb11ccc72",
+      "url": "llms-txt#current-deployment-id:-80b72e19-da82-4465-83a2-c12fb11ccc72"
+    },
+    {
+      "title": "Note: Your workers.dev deployment URL may be different",
+      "url": "llms-txt#note:-your-workers.dev-deployment-url-may-be-different"
+    },
+    {
+      "title": "For the local database",
+      "url": "llms-txt#for-the-local-database"
+    },
+    {
+      "title": "For the remote database",
+      "url": "llms-txt#for-the-remote-database"
+    },
+    {
+      "title": "For the local database",
+      "url": "llms-txt#for-the-local-database"
+    },
+    {
+      "title": "For the remote database",
+      "url": "llms-txt#for-the-remote-database"
+    },
+    {
+      "title": "Escape with ` instead of \\",
+      "url": "llms-txt#escape-with-`-instead-of-\\"
+    },
+    {
+      "title": "For IPv4 addresses",
+      "url": "llms-txt#for-ipv4-addresses"
+    },
+    {
+      "title": "For IPv6 addresses",
+      "url": "llms-txt#for-ipv6-addresses"
+    },
+    {
+      "title": "For IPv4 addresses",
+      "url": "llms-txt#for-ipv4-addresses"
+    },
+    {
+      "title": "For IPv6 addresses",
+      "url": "llms-txt#for-ipv6-addresses"
+    },
+    {
+      "title": "wrangler v3.11 and above required",
+      "url": "llms-txt#wrangler-v3.11-and-above-required"
+    },
+    {
+      "title": "Your configured Hyperdrive binding is \"HYPERDRIVE\"",
+      "url": "llms-txt#your-configured-hyperdrive-binding-is-\"hyperdrive\""
+    },
+    {
+      "title": "wrangler v3.11 and above required",
+      "url": "llms-txt#wrangler-v3.11-and-above-required"
+    },
+    {
+      "title": "wrangler v3.11 and above required",
+      "url": "llms-txt#wrangler-v3.11-and-above-required"
+    },
+    {
+      "title": "requires Wrangler 4.9.0 or greater",
+      "url": "llms-txt#requires-wrangler-4.9.0-or-greater"
+    },
+    {
+      "title": "requires Wrangler 4.9.0 or greater",
+      "url": "llms-txt#requires-wrangler-4.9.0-or-greater"
+    },
+    {
+      "title": "wrangler v3.11 and above required",
+      "url": "llms-txt#wrangler-v3.11-and-above-required"
+    },
+    {
+      "title": "wrangler v3.11 and above required",
+      "url": "llms-txt#wrangler-v3.11-and-above-required"
+    },
+    {
+      "title": "Response:",
+      "url": "llms-txt#response:"
+    },
+    {
+      "title": "curl with Legacy API Key",
+      "url": "llms-txt#curl-with-legacy-api-key"
+    },
+    {
+      "title": "curl with API Token",
+      "url": "llms-txt#curl-with-api-token"
+    },
+    {
+      "title": "No change to base priority.",
+      "url": "llms-txt#no-change-to-base-priority."
+    },
+    {
+      "title": "Add 10 to base priority for 1 prepend of 65000",
+      "url": "llms-txt#add-10-to-base-priority-for-1-prepend-of-65000"
+    },
+    {
+      "title": "Add 20 to base priority for 2 prepend of 65000",
+      "url": "llms-txt#add-20-to-base-priority-for-2-prepend-of-65000"
+    },
+    {
+      "title": "curl with Legacy API Key",
+      "url": "llms-txt#curl-with-legacy-api-key"
+    },
+    {
+      "title": "curl with API Token",
+      "url": "llms-txt#curl-with-api-token"
+    },
+    {
+      "title": "systemd Project Licensing",
+      "url": "llms-txt#systemd-project-licensing"
+    },
+    {
+      "title": "systemd Project Licensing",
+      "url": "llms-txt#systemd-project-licensing"
+    },
+    {
+      "title": "systemd Project Licensing",
+      "url": "llms-txt#systemd-project-licensing"
+    },
+    {
+      "title": "systemd Project Licensing",
+      "url": "llms-txt#systemd-project-licensing"
+    },
+    {
+      "title": "No change to base priority.",
+      "url": "llms-txt#no-change-to-base-priority."
+    },
+    {
+      "title": "Add 10 to base priority for 1 prepend of 65000",
+      "url": "llms-txt#add-10-to-base-priority-for-1-prepend-of-65000"
+    },
+    {
+      "title": "Add 20 to base priority for 2 prepend of 65000",
+      "url": "llms-txt#add-20-to-base-priority-for-2-prepend-of-65000"
+    },
+    {
+      "title": "This is a comment",
+      "url": "llms-txt#this-is-a-comment"
+    },
+    {
+      "title": "or",
+      "url": "llms-txt#or"
+    },
+    {
+      "title": "Skip the following three commands if you have built your application",
+      "url": "llms-txt#skip-the-following-three-commands-if-you-have-built-your-application"
+    },
+    {
+      "title": "The URL the site will be built for",
+      "url": "llms-txt#the-url-the-site-will-be-built-for"
+    },
+    {
+      "title": "Skip the following three commands if you have built your application",
+      "url": "llms-txt#skip-the-following-three-commands-if-you-have-built-your-application"
+    },
+    {
+      "title": "using C3 or already committed your changes",
+      "url": "llms-txt#using-c3-or-already-committed-your-changes"
+    },
+    {
+      "title": "Skip the following three commands if you have built your application",
+      "url": "llms-txt#skip-the-following-three-commands-if-you-have-built-your-application"
+    },
+    {
+      "title": "!/bin/bash",
+      "url": "llms-txt#!/bin/bash"
+    },
+    {
+      "title": "Verify the current npm user is correct",
+      "url": "llms-txt#verify-the-current-npm-user-is-correct"
+    },
+    {
+      "title": "Create a readonly token",
+      "url": "llms-txt#create-a-readonly-token"
+    },
+    {
+      "title": "Publish created project",
+      "url": "llms-txt#publish-created-project"
+    },
+    {
+      "title": "frozen_string_literal: true",
+      "url": "llms-txt#frozen_string_literal:-true"
+    },
+    {
+      "title": "gem \"rails\"",
+      "url": "llms-txt#gem-\"rails\""
+    },
+    {
+      "title": "Bundler will show a lot of output as it fetches the dependencies",
+      "url": "llms-txt#bundler-will-show-a-lot-of-output-as-it-fetches-the-dependencies"
+    },
+    {
+      "title": "create new project with create-react-app",
+      "url": "llms-txt#create-new-project-with-create-react-app"
+    },
+    {
+      "title": "enter new directory",
+      "url": "llms-txt#enter-new-directory"
+    },
+    {
+      "title": "attach git remote",
+      "url": "llms-txt#attach-git-remote"
+    },
+    {
+      "title": "change default branch name",
+      "url": "llms-txt#change-default-branch-name"
+    },
+    {
+      "title": "Add all files",
+      "url": "llms-txt#add-all-files"
+    },
+    {
+      "title": "Commit w/ message",
+      "url": "llms-txt#commit-w/-message"
+    },
+    {
+      "title": "Push commit(s) to remote",
+      "url": "llms-txt#push-commit(s)-to-remote"
+    },
+    {
+      "title": "create new directory",
+      "url": "llms-txt#create-new-directory"
+    },
+    {
+      "title": "enter new directory",
+      "url": "llms-txt#enter-new-directory"
+    },
+    {
+      "title": "initialize git",
+      "url": "llms-txt#initialize-git"
+    },
+    {
+      "title": "attach remote",
+      "url": "llms-txt#attach-remote"
+    },
+    {
+      "title": "change default branch name",
+      "url": "llms-txt#change-default-branch-name"
+    },
+    {
+      "title": "Add all files",
+      "url": "llms-txt#add-all-files"
+    },
+    {
+      "title": "Commit w/ message",
+      "url": "llms-txt#commit-w/-message"
+    },
+    {
+      "title": "Push commit(s) to remote",
+      "url": "llms-txt#push-commit(s)-to-remote"
+    },
+    {
+      "title": "create new directory",
+      "url": "llms-txt#create-new-directory"
+    },
+    {
+      "title": "enter new directory",
+      "url": "llms-txt#enter-new-directory"
+    },
+    {
+      "title": "initialize git",
+      "url": "llms-txt#initialize-git"
+    },
+    {
+      "title": "attach remote",
+      "url": "llms-txt#attach-remote"
+    },
+    {
+      "title": "change default branch name",
+      "url": "llms-txt#change-default-branch-name"
+    },
+    {
+      "title": "Add all files",
+      "url": "llms-txt#add-all-files"
+    },
+    {
+      "title": "Commit w/ message",
+      "url": "llms-txt#commit-w/-message"
+    },
+    {
+      "title": "Push commit(s) to remote",
+      "url": "llms-txt#push-commit(s)-to-remote"
+    },
+    {
+      "title": "i.e",
+      "url": "llms-txt#i.e"
+    },
+    {
+      "title": "npx wrangler r2 bucket create cat-media",
+      "url": "llms-txt#npx-wrangler-r2-bucket-create-cat-media"
+    },
+    {
+      "title": "i.e",
+      "url": "llms-txt#i.e"
+    },
+    {
+      "title": "npx wrangler r2 object put cat-media/videos/video1.mp4 -f ~/Downloads/videos/video1.mp4",
+      "url": "llms-txt#npx-wrangler-r2-object-put-cat-media/videos/video1.mp4--f-~/downloads/videos/video1.mp4"
+    },
+    {
+      "title": "wait a few seconds for the stack to be instantiated.",
+      "url": "llms-txt#wait-a-few-seconds-for-the-stack-to-be-instantiated."
+    },
+    {
+      "title": "Define an ESC Environment name",
+      "url": "llms-txt#define-an-esc-environment-name"
+    },
+    {
+      "title": "Create a new Pulumi ESC Environment",
+      "url": "llms-txt#create-a-new-pulumi-esc-environment"
+    },
+    {
+      "title": "Replace abc123 with your Cloudflare Account ID",
+      "url": "llms-txt#replace-abc123-with-your-cloudflare-account-id"
+    },
+    {
+      "title": "Replace API_TOKEN with your Cloudflare API Token",
+      "url": "llms-txt#replace-api_token-with-your-cloudflare-api-token"
+    },
+    {
+      "title": "Replace example.com with your registered domain, or leave as is",
+      "url": "llms-txt#replace-example.com-with-your-registered-domain,-or-leave-as-is"
+    },
+    {
+      "title": "wait a few seconds for the stack to be instantiated.",
+      "url": "llms-txt#wait-a-few-seconds-for-the-stack-to-be-instantiated."
+    },
+    {
+      "title": "Give your new ESC Environment a name",
+      "url": "llms-txt#give-your-new-esc-environment-a-name"
+    },
+    {
+      "title": "Initialize the new ESC Environment",
+      "url": "llms-txt#initialize-the-new-esc-environment"
+    },
+    {
+      "title": "Replace abc123 with your Cloudflare account ID",
+      "url": "llms-txt#replace-abc123-with-your-cloudflare-account-id"
+    },
+    {
+      "title": "Replace API_TOKEN with your Cloudflare API token",
+      "url": "llms-txt#replace-api_token-with-your-cloudflare-api-token"
+    },
+    {
+      "title": "Replace example.com with your domain",
+      "url": "llms-txt#replace-example.com-with-your-domain"
+    },
+    {
+      "title": "Delay all messages by 5 minutes as a default",
+      "url": "llms-txt#delay-all-messages-by-5-minutes-as-a-default"
+    },
+    {
+      "title": "Push-based consumers",
+      "url": "llms-txt#push-based-consumers"
+    },
+    {
+      "title": "Delay any messages that are retried by 60 seconds (1 minute) by default.",
+      "url": "llms-txt#delay-any-messages-that-are-retried-by-60-seconds-(1-minute)-by-default."
+    },
+    {
+      "title": "Pull-based consumers",
+      "url": "llms-txt#pull-based-consumers"
+    },
+    {
+      "title": "Delay any messages that are retried by 60 seconds (1 minute) by default.",
+      "url": "llms-txt#delay-any-messages-that-are-retried-by-60-seconds-(1-minute)-by-default."
+    },
+    {
+      "title": "Make sure to replace the placeholder with your shared secret",
+      "url": "llms-txt#make-sure-to-replace-the-placeholder-with-your-shared-secret"
+    },
+    {
+      "title": "Make sure to replace the placeholder with your shared secret",
+      "url": "llms-txt#make-sure-to-replace-the-placeholder-with-your-shared-secret"
+    },
+    {
+      "title": "Filter using prefix",
+      "url": "llms-txt#filter-using-prefix"
+    },
+    {
+      "title": "Filter using suffix",
+      "url": "llms-txt#filter-using-suffix"
+    },
+    {
+      "title": "Filter using prefix and suffix. Both the conditions will be used for filtering",
+      "url": "llms-txt#filter-using-prefix-and-suffix.-both-the-conditions-will-be-used-for-filtering"
+    },
+    {
+      "title": "Enable automatic snapshot expiration for entire catalog",
+      "url": "llms-txt#enable-automatic-snapshot-expiration-for-entire-catalog"
+    },
+    {
+      "title": "Enable automatic compaction for entire catalog",
+      "url": "llms-txt#enable-automatic-compaction-for-entire-catalog"
+    },
+    {
+      "title": "Creates new snapshots and marks old files for cleanup",
+      "url": "llms-txt#creates-new-snapshots-and-marks-old-files-for-cleanup"
+    },
+    {
+      "title": "The following is effectively a TRUNCATE operation",
+      "url": "llms-txt#the-following-is-effectively-a-truncate-operation"
+    },
+    {
+      "title": "For large deletes, use partitioned tables and delete entire partitions for faster performance:",
+      "url": "llms-txt#for-large-deletes,-use-partitioned-tables-and-delete-entire-partitions-for-faster-performance:"
+    },
+    {
+      "title": "Removes table from catalog but keeps data files in R2 storage",
+      "url": "llms-txt#removes-table-from-catalog-but-keeps-data-files-in-r2-storage"
+    },
+    {
+      "title": "⚠️  DANGER: Permanently deletes all data files from R2",
+      "url": "llms-txt#⚠️--danger:-permanently-deletes-all-data-files-from-r2"
+    },
+    {
+      "title": "This operation cannot be undone",
+      "url": "llms-txt#this-operation-cannot-be-undone"
+    },
+    {
+      "title": "Use CASCADE to drop all tables within the namespace",
+      "url": "llms-txt#use-cascade-to-drop-all-tables-within-the-namespace"
+    },
+    {
+      "title": "You will need to PURGE the tables before running CASCADE to permanently delete data files",
+      "url": "llms-txt#you-will-need-to-purge-the-tables-before-running-cascade-to-permanently-delete-data-files"
+    },
+    {
+      "title": "This can be done with a loop over all tables in the namespace",
+      "url": "llms-txt#this-can-be-done-with-a-loop-over-all-tables-in-the-namespace"
+    },
+    {
+      "title": "Remove old metadata and data files marked for deletion",
+      "url": "llms-txt#remove-old-metadata-and-data-files-marked-for-deletion"
+    },
+    {
+      "title": "The following retains the last 5 snapshots and deletes files older than Nov 28, 2024",
+      "url": "llms-txt#the-following-retains-the-last-5-snapshots-and-deletes-files-older-than-nov-28,-2024"
+    },
+    {
+      "title": "Removes unreferenced data files from R2 storage (orphan files)",
+      "url": "llms-txt#removes-unreferenced-data-files-from-r2-storage-(orphan-files)"
+    },
+    {
+      "title": "Rewrite data files with a target file size (e.g., 512 MB)",
+      "url": "llms-txt#rewrite-data-files-with-a-target-file-size-(e.g.,-512-mb)"
+    },
+    {
+      "title": "Enable catalog-level snapshot expiration (all tables)",
+      "url": "llms-txt#enable-catalog-level-snapshot-expiration-(all-tables)"
+    },
+    {
+      "title": "Enable snapshot expiration for a specific table",
+      "url": "llms-txt#enable-snapshot-expiration-for-a-specific-table"
+    },
+    {
+      "title": "Disable catalog-level snapshot expiration (all tables)",
+      "url": "llms-txt#disable-catalog-level-snapshot-expiration-(all-tables)"
+    },
+    {
+      "title": "Disable snapshot expiration for a specific table",
+      "url": "llms-txt#disable-snapshot-expiration-for-a-specific-table"
+    },
+    {
+      "title": "Enable catalog-level compaction (all tables)",
+      "url": "llms-txt#enable-catalog-level-compaction-(all-tables)"
+    },
+    {
+      "title": "Enable compaction for a specific table",
+      "url": "llms-txt#enable-compaction-for-a-specific-table"
+    },
+    {
+      "title": "Disable catalog-level compaction",
+      "url": "llms-txt#disable-catalog-level-compaction"
+    },
+    {
+      "title": "Disable compaction for a specific table",
+      "url": "llms-txt#disable-compaction-for-a-specific-table"
+    },
+    {
+      "title": "Enable snapshot expiration for entire catalog",
+      "url": "llms-txt#enable-snapshot-expiration-for-entire-catalog"
+    },
+    {
+      "title": "Keep minimum 10 snapshots, expire those older than 7 days",
+      "url": "llms-txt#keep-minimum-10-snapshots,-expire-those-older-than-7-days"
+    },
+    {
+      "title": "Enable for specific table",
+      "url": "llms-txt#enable-for-specific-table"
+    },
+    {
+      "title": "Keep minimum 5 snapshots, expire those older than 2 days",
+      "url": "llms-txt#keep-minimum-5-snapshots,-expire-those-older-than-2-days"
+    },
+    {
+      "title": "Disable snapshot expiration for a catalog",
+      "url": "llms-txt#disable-snapshot-expiration-for-a-catalog"
+    },
+    {
+      "title": "Configuration file is stored at:",
+      "url": "llms-txt#configuration-file-is-stored-at:"
+    },
+    {
+      "title": "~/.config/rclone/rclone.conf",
+      "url": "llms-txt#~/.config/rclone/rclone.conf"
+    },
+    {
+      "title": "/",
+      "url": "llms-txt#/"
+    },
+    {
+      "title": "├── user-uploads",
+      "url": "llms-txt#├──-user-uploads"
+    },
+    {
+      "title": "│   └── foobar.png",
+      "url": "llms-txt#│---└──-foobar.png"
+    },
+    {
+      "title": "└── my-bucket-name",
+      "url": "llms-txt#└──-my-bucket-name"
+    },
+    {
+      "title": "├── cat.png",
+      "url": "llms-txt#├──-cat.png"
+    },
+    {
+      "title": "└── todos.txt",
+      "url": "llms-txt#└──-todos.txt"
+    },
+    {
+      "title": "/",
+      "url": "llms-txt#/"
+    },
+    {
+      "title": "├── cat.png",
+      "url": "llms-txt#├──-cat.png"
+    },
+    {
+      "title": "└── todos.txt",
+      "url": "llms-txt#└──-todos.txt"
+    },
+    {
+      "title": "Upload dog.txt to the user-uploads bucket",
+      "url": "llms-txt#upload-dog.txt-to-the-user-uploads-bucket"
+    },
+    {
+      "title": "/",
+      "url": "llms-txt#/"
+    },
+    {
+      "title": "├── foobar.png",
+      "url": "llms-txt#├──-foobar.png"
+    },
+    {
+      "title": "└── dog.txt",
+      "url": "llms-txt#└──-dog.txt"
+    },
+    {
+      "title": "Download dog.txt from the user-uploads bucket",
+      "url": "llms-txt#download-dog.txt-from-the-user-uploads-bucket"
+    },
+    {
+      "title": "You can pass the --expire flag to determine how long the presigned link is valid. The --unlink flag isn't supported by R2.",
+      "url": "llms-txt#you-can-pass-the---expire-flag-to-determine-how-long-the-presigned-link-is-valid.-the---unlink-flag-isn't-supported-by-r2."
+    },
+    {
+      "title": "https://<accountid>.r2.cloudflarestorage.com/my-bucket-name/cat.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<credential>&X-Amz-Date=<timestamp>&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=<signature>",
+      "url": "llms-txt#https://<accountid>.r2.cloudflarestorage.com/my-bucket-name/cat.png?x-amz-algorithm=aws4-hmac-sha256&x-amz-credential=<credential>&x-amz-date=<timestamp>&x-amz-expires=3600&x-amz-signedheaders=host&x-amz-signature=<signature>"
+    },
+    {
+      "title": "Upload a single file",
+      "url": "llms-txt#upload-a-single-file"
+    },
+    {
+      "title": "Upload everything in a directory",
+      "url": "llms-txt#upload-everything-in-a-directory"
+    },
+    {
+      "title": "Enable catalog-level compaction (requires token)",
+      "url": "llms-txt#enable-catalog-level-compaction-(requires-token)"
+    },
+    {
+      "title": "Enable table-level compaction",
+      "url": "llms-txt#enable-table-level-compaction"
+    },
+    {
+      "title": "Disable catalog-level compaction",
+      "url": "llms-txt#disable-catalog-level-compaction"
+    },
+    {
+      "title": "Disable table-level compaction",
+      "url": "llms-txt#disable-table-level-compaction"
+    },
+    {
+      "title": "Configuration - exported from the prior steps",
+      "url": "llms-txt#configuration---exported-from-the-prior-steps"
+    },
+    {
+      "title": "Customize your customers Cloudflare experience",
+      "url": "llms-txt#customize-your-customers-cloudflare-experience"
+    },
+    {
+      "title": "Joins all HTTP request header names into a single string, with names separated by commas",
+      "url": "llms-txt#joins-all-http-request-header-names-into-a-single-string,-with-names-separated-by-commas"
+    },
+    {
+      "title": "Check if an HTTP request header exists:",
+      "url": "llms-txt#check-if-an-http-request-header-exists:"
+    },
+    {
+      "title": "Check if a request header exists based on the name of the first query argument:",
+      "url": "llms-txt#check-if-a-request-header-exists-based-on-the-name-of-the-first-query-argument:"
+    },
+    {
+      "title": "Check if there is an HTTP request header with the exact name 'X-My-Header'",
+      "url": "llms-txt#check-if-there-is-an-http-request-header-with-the-exact-name-'x-my-header'"
+    },
+    {
+      "title": "Check if there is a request header with the exact name provided as the first query argument:",
+      "url": "llms-txt#check-if-there-is-a-request-header-with-the-exact-name-provided-as-the-first-query-argument:"
+    },
+    {
+      "title": "Split a comma-separated list of categories obtained from an HTTP request header.",
+      "url": "llms-txt#split-a-comma-separated-list-of-categories-obtained-from-an-http-request-header."
+    },
+    {
+      "title": "A) Consider the following HTTP request header:",
+      "url": "llms-txt#a)-consider-the-following-http-request-header:"
+    },
+    {
+      "title": "B) Consider the following HTTP request header:",
+      "url": "llms-txt#b)-consider-the-following-http-request-header:"
+    },
+    {
+      "title": "Valid function call",
+      "url": "llms-txt#valid-function-call"
+    },
+    {
+      "title": "Invalid use of ends_with function",
+      "url": "llms-txt#invalid-use-of-ends_with-function"
+    },
+    {
+      "title": "The following expression:",
+      "url": "llms-txt#the-following-expression:"
+    },
+    {
+      "title": "Would match the following URIs:",
+      "url": "llms-txt#would-match-the-following-uris:"
+    },
+    {
+      "title": "- https://example.com/a/           (the '*' matches zero characters)",
+      "url": "llms-txt#--https://example.com/a/-----------(the-'*'-matches-zero-characters)"
+    },
+    {
+      "title": "- http://example.com/a/",
+      "url": "llms-txt#--http://example.com/a/"
+    },
+    {
+      "title": "- https://example.com/a/page.html",
+      "url": "llms-txt#--https://example.com/a/page.html"
+    },
+    {
+      "title": "- https://example.com/a/sub/folder/?name=value",
+      "url": "llms-txt#--https://example.com/a/sub/folder/?name=value"
+    },
+    {
+      "title": "Would NOT match the following URIs:",
+      "url": "llms-txt#would-not-match-the-following-uris:"
+    },
+    {
+      "title": "- https://example.com/ab/",
+      "url": "llms-txt#--https://example.com/ab/"
+    },
+    {
+      "title": "- https://example.com/b/page.html",
+      "url": "llms-txt#--https://example.com/b/page.html"
+    },
+    {
+      "title": "- https://sub.example.com/a/",
+      "url": "llms-txt#--https://sub.example.com/a/"
+    },
+    {
+      "title": "The following expression:",
+      "url": "llms-txt#the-following-expression:"
+    },
+    {
+      "title": "Would match the following URIs:",
+      "url": "llms-txt#would-match-the-following-uris:"
+    },
+    {
+      "title": "- http://sub.example.com/folder/page.html",
+      "url": "llms-txt#--http://sub.example.com/folder/page.html"
+    },
+    {
+      "title": "- https://admin.example.com/team/page.html",
+      "url": "llms-txt#--https://admin.example.com/team/page.html"
+    },
+    {
+      "title": "- https://admin.example.com/team/subteam/page.html",
+      "url": "llms-txt#--https://admin.example.com/team/subteam/page.html"
+    },
+    {
+      "title": "Would NOT match the following URIs:",
+      "url": "llms-txt#would-not-match-the-following-uris:"
+    },
+    {
+      "title": "- https://example.com/ab/page.html                   ('*.example.com' matches only subdomains)",
+      "url": "llms-txt#--https://example.com/ab/page.html-------------------('*.example.com'-matches-only-subdomains)"
+    },
+    {
+      "title": "- https://sub.example.com/folder2/page.html?s=value  (http.request.full_uri includes the query string and its full value does not match)",
+      "url": "llms-txt#--https://sub.example.com/folder2/page.html?s=value--(http.request.full_uri-includes-the-query-string-and-its-full-value-does-not-match)"
+    },
+    {
+      "title": "- https://sub.example.com/a/                         ('page.html' is missing)",
+      "url": "llms-txt#--https://sub.example.com/a/-------------------------('page.html'-is-missing)"
+    },
+    {
+      "title": "The following expression:",
+      "url": "llms-txt#the-following-expression:"
+    },
+    {
+      "title": "Would match the following URIs:",
+      "url": "llms-txt#would-match-the-following-uris:"
+    },
+    {
+      "title": "- https://example.com/folder/list.htm",
+      "url": "llms-txt#--https://example.com/folder/list.htm"
+    },
+    {
+      "title": "- https://admin.example.com/folder/team/app1/",
+      "url": "llms-txt#--https://admin.example.com/folder/team/app1/"
+    },
+    {
+      "title": "- https://admin.example.com/folder/team/app1/?s=foobar",
+      "url": "llms-txt#--https://admin.example.com/folder/team/app1/?s=foobar"
+    },
+    {
+      "title": "Test if URI path contains 'a\"b'",
+      "url": "llms-txt#test-if-uri-path-contains-'a\"b'"
+    },
+    {
+      "title": "Test if URI path contains 'a\"#b'",
+      "url": "llms-txt#test-if-uri-path-contains-'a\"#b'"
+    },
+    {
+      "title": "Replace 'a' with '\\' (backslash)",
+      "url": "llms-txt#replace-'a'-with-'\\'-(backslash)"
+    },
+    {
+      "title": "Test if URI path contains 'a\"b'",
+      "url": "llms-txt#test-if-uri-path-contains-'a\"b'"
+    },
+    {
+      "title": "Test if URI path contains 'a\"#b'",
+      "url": "llms-txt#test-if-uri-path-contains-'a\"#b'"
+    },
+    {
+      "title": "Replace '\\' (backslash) with 'a'",
+      "url": "llms-txt#replace-'\\'-(backslash)-with-'a'"
+    },
+    {
+      "title": "You must still escape the '\\' character in the following raw string because it has a special meaning in regular expressions",
+      "url": "llms-txt#you-must-still-escape-the-'\\'-character-in-the-following-raw-string-because-it-has-a-special-meaning-in-regular-expressions"
+    },
+    {
+      "title": "Test if URI path ends with '/api/login.aspx'",
+      "url": "llms-txt#test-if-uri-path-ends-with-'/api/login.aspx'"
+    },
+    {
+      "title": "You must still escape the '.' character in the following raw string because it has a special meaning in regular expressions (\"any character\")",
+      "url": "llms-txt#you-must-still-escape-the-'.'-character-in-the-following-raw-string-because-it-has-a-special-meaning-in-regular-expressions-(\"any-character\")"
+    },
+    {
+      "title": "Example request URL:",
+      "url": "llms-txt#example-request-url:"
+    },
+    {
+      "title": "https://example.com/?filter=waf&filter=botm&filter=cdn",
+      "url": "llms-txt#https://example.com/?filter=waf&filter=botm&filter=cdn"
+    },
+    {
+      "title": "Check if the length of all 'filter' values is always 3 or 4",
+      "url": "llms-txt#check-if-the-length-of-all-'filter'-values-is-always-3-or-4"
+    },
+    {
+      "title": "Check if the length of 'filter' values (if any) is never 3 or 4",
+      "url": "llms-txt#check-if-the-length-of-'filter'-values-(if-any)-is-never-3-or-4"
+    },
+    {
+      "title": "Check if the http.request.uri.args map contains a \"filter\" key",
+      "url": "llms-txt#check-if-the-http.request.uri.args-map-contains-a-\"filter\"-key"
+    },
+    {
+      "title": "Check if the http.request.uri.args map does not contain an \"order\" key",
+      "url": "llms-txt#check-if-the-http.request.uri.args-map-does-not-contain-an-\"order\"-key"
+    },
+    {
+      "title": "Python packages",
+      "url": "llms-txt#python-packages"
+    },
+    {
+      "title": "Node.js packages",
+      "url": "llms-txt#node.js-packages"
+    },
+    {
+      "title": "System packages (requires apt-get update first)",
+      "url": "llms-txt#system-packages-(requires-apt-get-update-first)"
+    },
+    {
+      "title": "Required for local development",
+      "url": "llms-txt#required-for-local-development"
+    },
+    {
+      "title": "Install additional Python packages",
+      "url": "llms-txt#install-additional-python-packages"
+    },
+    {
+      "title": "Install Node.js packages globally",
+      "url": "llms-txt#install-node.js-packages-globally"
+    },
+    {
+      "title": "Install system packages",
+      "url": "llms-txt#install-system-packages"
+    },
+    {
+      "title": "Start your services in the background",
+      "url": "llms-txt#start-your-services-in-the-background"
+    },
+    {
+      "title": "Must end with this command",
+      "url": "llms-txt#must-end-with-this-command"
+    },
+    {
+      "title": "Paste your R2 Access Key ID",
+      "url": "llms-txt#paste-your-r2-access-key-id"
+    },
+    {
+      "title": "Paste your R2 Secret Access Key",
+      "url": "llms-txt#paste-your-r2-secret-access-key"
+    },
+    {
+      "title": "Expose ports you plan to use",
+      "url": "llms-txt#expose-ports-you-plan-to-use"
+    },
+    {
+      "title": "Copy echo server into the container",
+      "url": "llms-txt#copy-echo-server-into-the-container"
+    },
+    {
+      "title": "Create custom startup script",
+      "url": "llms-txt#create-custom-startup-script"
+    },
+    {
+      "title": "Start your WebSocket server in the background",
+      "url": "llms-txt#start-your-websocket-server-in-the-background"
+    },
+    {
+      "title": "Start SDK's control plane (needed for the SDK to work)",
+      "url": "llms-txt#start-sdk's-control-plane-(needed-for-the-sdk-to-work)"
+    },
+    {
+      "title": "Required for local development",
+      "url": "llms-txt#required-for-local-development"
+    },
+    {
+      "title": "Factorial",
+      "url": "llms-txt#factorial"
+    },
+    {
+      "title": "Statistics",
+      "url": "llms-txt#statistics"
+    },
+    {
+      "title": "String manipulation",
+      "url": "llms-txt#string-manipulation"
+    },
+    {
+      "title": "Create a test CSV",
+      "url": "llms-txt#create-a-test-csv"
+    },
+    {
+      "title": "GitHub token (needs repo permissions)",
+      "url": "llms-txt#github-token-(needs-repo-permissions)"
+    },
+    {
+      "title": "Anthropic API key",
+      "url": "llms-txt#anthropic-api-key"
+    },
+    {
+      "title": "Webhook secret (use the same value from .dev.vars)",
+      "url": "llms-txt#webhook-secret-(use-the-same-value-from-.dev.vars)"
+    },
+    {
+      "title": "Paste your R2 Access Key ID",
+      "url": "llms-txt#paste-your-r2-access-key-id"
+    },
+    {
+      "title": "Paste your R2 Secret Access Key",
+      "url": "llms-txt#paste-your-r2-secret-access-key"
+    },
+    {
+      "title": "1. Process data (saves to R2)",
+      "url": "llms-txt#1.-process-data-(saves-to-r2)"
+    },
+    {
+      "title": "Returns: { \"message\": \"Data processed...\", \"result\": { \"total\": 144, \"average\": 48, ... } }",
+      "url": "llms-txt#returns:-{-\"message\":-\"data-processed...\",-\"result\":-{-\"total\":-144,-\"average\":-48,-...-}-}"
+    },
+    {
+      "title": "2. Verify data is accessible",
+      "url": "llms-txt#2.-verify-data-is-accessible"
+    },
+    {
+      "title": "Returns the same results from R2",
+      "url": "llms-txt#returns-the-same-results-from-r2"
+    },
+    {
+      "title": "3. Destroy the sandbox",
+      "url": "llms-txt#3.-destroy-the-sandbox"
+    },
+    {
+      "title": "Returns: { \"message\": \"Sandbox destroyed. Data persists in R2!\" }",
+      "url": "llms-txt#returns:-{-\"message\":-\"sandbox-destroyed.-data-persists-in-r2!\"-}"
+    },
+    {
+      "title": "4. Access results again (from new sandbox)",
+      "url": "llms-txt#4.-access-results-again-(from-new-sandbox)"
+    },
+    {
+      "title": "Still works! Data persisted across sandbox lifecycle",
+      "url": "llms-txt#still-works!-data-persisted-across-sandbox-lifecycle"
+    },
+    {
+      "title": "Generate a private key and CSR for the iOS device.",
+      "url": "llms-txt#generate-a-private-key-and-csr-for-the-ios-device."
+    },
+    {
+      "title": "Do the same for the IoT sensor.",
+      "url": "llms-txt#do-the-same-for-the-iot-sensor."
+    },
+    {
+      "title": "now ask that these CSRs be signed by the private CA issued for your zone",
+      "url": "llms-txt#now-ask-that-these-csrs-be-signed-by-the-private-ca-issued-for-your-zone"
+    },
+    {
+      "title": "we need to replace actual newlines in the CSR with ‘\\n’ before POST’ing",
+      "url": "llms-txt#we-need-to-replace-actual-newlines-in-the-csr-with-‘\\n’-before-post’ing"
+    },
+    {
+      "title": "save the response so we can view it and then extra the certificate",
+      "url": "llms-txt#save-the-response-so-we-can-view-it-and-then-extra-the-certificate"
+    },
+    {
+      "title": "Now ask that the second client certificate signing request be signed.",
+      "url": "llms-txt#now-ask-that-the-second-client-certificate-signing-request-be-signed."
+    },
+    {
+      "title": "CAA records added by Google Trust Services",
+      "url": "llms-txt#caa-records-added-by-google-trust-services"
+    },
+    {
+      "title": "CAA records added by Let's Encrypt",
+      "url": "llms-txt#caa-records-added-by-let's-encrypt"
+    },
+    {
+      "title": "CAA records added by SSL.com",
+      "url": "llms-txt#caa-records-added-by-ssl.com"
+    },
+    {
+      "title": "CAA records added by Sectigo",
+      "url": "llms-txt#caa-records-added-by-sectigo"
+    },
+    {
+      "title": "Response:",
+      "url": "llms-txt#response:"
+    },
+    {
+      "title": "Account-level entry point ruleset for the 'http_ratelimit' phase",
+      "url": "llms-txt#account-level-entry-point-ruleset-for-the-'http_ratelimit'-phase"
+    },
+    {
+      "title": "Configure a ruleset at the zone level for the \"http_request_firewall_managed\" phase",
+      "url": "llms-txt#configure-a-ruleset-at-the-zone-level-for-the-\"http_request_firewall_managed\"-phase"
+    },
+    {
+      "title": "Remove requests-per-second (RPS) limit for API calls performed by Terraform (default: 4).",
+      "url": "llms-txt#remove-requests-per-second-(rps)-limit-for-api-calls-performed-by-terraform-(default:-4)."
+    },
+    {
+      "title": "Print logs from the API client using the default log library logger (default: false).",
+      "url": "llms-txt#print-logs-from-the-api-client-using-the-default-log-library-logger-(default:-false)."
+    },
+    {
+      "title": "Maximum backoff period in seconds after failed API calls (default: 30).",
+      "url": "llms-txt#maximum-backoff-period-in-seconds-after-failed-api-calls-(default:-30)."
+    },
+    {
+      "title": "Increase security for expensive database operations",
+      "url": "llms-txt#increase-security-for-expensive-database-operations"
+    },
+    {
+      "title": "Redirect old URLs to new location",
+      "url": "llms-txt#redirect-old-urls-to-new-location"
+    },
+    {
+      "title": "Enable TLS 1.3",
+      "url": "llms-txt#enable-tls-1.3"
+    },
+    {
+      "title": "Enable automatic HTTPS rewrites",
+      "url": "llms-txt#enable-automatic-https-rewrites"
+    },
+    {
+      "title": "Set SSL mode to strict",
+      "url": "llms-txt#set-ssl-mode-to-strict"
+    },
+    {
+      "title": "This should now return 404 (no redirect)",
+      "url": "llms-txt#this-should-now-return-404-(no-redirect)"
+    },
+    {
+      "title": "This should return normal response (no Under Attack mode)",
+      "url": "llms-txt#this-should-return-normal-response-(no-under-attack-mode)"
+    },
+    {
+      "title": "cloudflare_dns_record.www will be updated in-place",
+      "url": "llms-txt#cloudflare_dns_record.www-will-be-updated-in-place"
+    },
+    {
+      "title": "Asia origin server",
+      "url": "llms-txt#asia-origin-server"
+    },
+    {
+      "title": "Make several requests to see both origins",
+      "url": "llms-txt#make-several-requests-to-see-both-origins"
+    },
+    {
+      "title": "Health check monitor",
+      "url": "llms-txt#health-check-monitor"
+    },
+    {
+      "title": "Origin pool",
+      "url": "llms-txt#origin-pool"
+    },
+    {
+      "title": "Load balancer",
+      "url": "llms-txt#load-balancer"
+    },
+    {
+      "title": "Test load distribution with health monitoring",
+      "url": "llms-txt#test-load-distribution-with-health-monitoring"
+    },
+    {
+      "title": ".env.development",
+      "url": "llms-txt#.env.development"
+    },
+    {
+      "title": ".env.test",
+      "url": "llms-txt#.env.test"
+    },
+    {
+      "title": ".env.production",
+      "url": "llms-txt#.env.production"
+    },
+    {
+      "title": "Start iteration",
+      "url": "llms-txt#start-iteration"
+    },
+    {
+      "title": "Continue with cursor from response",
+      "url": "llms-txt#continue-with-cursor-from-response"
+    },
+    {
+      "title": "Repeat until no more results",
+      "url": "llms-txt#repeat-until-no-more-results"
+    },
+    {
+      "title": "Overview",
+      "url": "llms-txt#overview"
+    },
+    {
+      "title": "When to use Wrangler vs Vite",
+      "url": "llms-txt#when-to-use-wrangler-vs-vite"
+    },
+    {
+      "title": "clone you repository locally",
+      "url": "llms-txt#clone-you-repository-locally"
+    },
+    {
+      "title": "be sure you are in the root directory",
+      "url": "llms-txt#be-sure-you-are-in-the-root-directory"
+    },
+    {
+      "title": "adds the files to git tracking",
+      "url": "llms-txt#adds-the-files-to-git-tracking"
+    },
+    {
+      "title": "commits the changes",
+      "url": "llms-txt#commits-the-changes"
+    },
+    {
+      "title": "push the changes to your Git provider",
+      "url": "llms-txt#push-the-changes-to-your-git-provider"
+    },
+    {
+      "title": "Output will resemble the below:",
+      "url": "llms-txt#output-will-resemble-the-below:"
+    },
+    {
+      "title": "This is a comment",
+      "url": "llms-txt#this-is-a-comment"
+    },
+    {
+      "title": "On macOS or Linux with Homebrew",
+      "url": "llms-txt#on-macos-or-linux-with-homebrew"
+    },
+    {
+      "title": "Manual scripted installation",
+      "url": "llms-txt#manual-scripted-installation"
+    },
+    {
+      "title": "This should output your current Turso CLI version (your installed version may be higher):",
+      "url": "llms-txt#this-should-output-your-current-turso-cli-version-(your-installed-version-may-be-higher):"
+    },
+    {
+      "title": "Example:",
+      "url": "llms-txt#example:"
+    },
+    {
+      "title": "Once succeeded:",
+      "url": "llms-txt#once-succeeded:"
+    },
+    {
+      "title": "Will output a long text string (an encoded JSON Web Token)",
+      "url": "llms-txt#will-output-a-long-text-string-(an-encoded-json-web-token)"
+    },
+    {
+      "title": "Ensure you specify the secret name exactly: your Worker will need to reference it later.",
+      "url": "llms-txt#ensure-you-specify-the-secret-name-exactly:-your-worker-will-need-to-reference-it-later."
+    },
+    {
+      "title": "Enable catalog-level compaction (requires token)",
+      "url": "llms-txt#enable-catalog-level-compaction-(requires-token)"
+    },
+    {
+      "title": "Enable table-level compaction",
+      "url": "llms-txt#enable-table-level-compaction"
+    },
+    {
+      "title": "Disable catalog-level compaction",
+      "url": "llms-txt#disable-catalog-level-compaction"
+    },
+    {
+      "title": "Disable table-level compaction",
+      "url": "llms-txt#disable-table-level-compaction"
+    },
+    {
+      "title": "aura-1",
+      "url": "llms-txt#aura-1"
+    },
+    {
+      "title": "aura-2-en",
+      "url": "llms-txt#aura-2-en"
+    },
+    {
+      "title": "aura-2-es",
+      "url": "llms-txt#aura-2-es"
+    },
+    {
+      "title": "bart-large-cnn Beta",
+      "url": "llms-txt#bart-large-cnn-beta"
+    },
+    {
+      "title": "bge-base-en-v1.5",
+      "url": "llms-txt#bge-base-en-v1.5"
+    },
+    {
+      "title": "bge-large-en-v1.5",
+      "url": "llms-txt#bge-large-en-v1.5"
+    },
+    {
+      "title": "bge-m3",
+      "url": "llms-txt#bge-m3"
+    },
+    {
+      "title": "bge-reranker-base",
+      "url": "llms-txt#bge-reranker-base"
+    },
+    {
+      "title": "bge-small-en-v1.5",
+      "url": "llms-txt#bge-small-en-v1.5"
+    },
+    {
+      "title": "deepseek-coder-6.7b-base-awq Beta",
+      "url": "llms-txt#deepseek-coder-6.7b-base-awq-beta"
+    },
+    {
+      "title": "deepseek-coder-6.7b-instruct-awq Beta",
+      "url": "llms-txt#deepseek-coder-6.7b-instruct-awq-beta"
+    },
+    {
+      "title": "deepseek-math-7b-instruct Beta",
+      "url": "llms-txt#deepseek-math-7b-instruct-beta"
+    },
+    {
+      "title": "deepseek-r1-distill-qwen-32b",
+      "url": "llms-txt#deepseek-r1-distill-qwen-32b"
+    },
+    {
+      "title": "detr-resnet-50 Beta",
+      "url": "llms-txt#detr-resnet-50-beta"
+    },
+    {
+      "title": "discolm-german-7b-v1-awq Beta",
+      "url": "llms-txt#discolm-german-7b-v1-awq-beta"
+    },
+    {
+      "title": "distilbert-sst-2-int8",
+      "url": "llms-txt#distilbert-sst-2-int8"
+    },
+    {
+      "title": "dreamshaper-8-lcm",
+      "url": "llms-txt#dreamshaper-8-lcm"
+    },
+    {
+      "title": "embeddinggemma-300m",
+      "url": "llms-txt#embeddinggemma-300m"
+    },
+    {
+      "title": "falcon-7b-instruct Beta",
+      "url": "llms-txt#falcon-7b-instruct-beta"
+    },
+    {
+      "title": "flux",
+      "url": "llms-txt#flux"
+    },
+    {
+      "title": "flux-1-schnell",
+      "url": "llms-txt#flux-1-schnell"
+    },
+    {
+      "title": "flux-2-dev",
+      "url": "llms-txt#flux-2-dev"
+    },
+    {
+      "title": "gemma-2b-it-lora Beta",
+      "url": "llms-txt#gemma-2b-it-lora-beta"
+    },
+    {
+      "title": "gemma-3-12b-it",
+      "url": "llms-txt#gemma-3-12b-it"
+    },
+    {
+      "title": "gemma-7b-it Beta",
+      "url": "llms-txt#gemma-7b-it-beta"
+    },
+    {
+      "title": "gemma-7b-it-lora Beta",
+      "url": "llms-txt#gemma-7b-it-lora-beta"
+    },
+    {
+      "title": "gemma-sea-lion-v4-27b-it",
+      "url": "llms-txt#gemma-sea-lion-v4-27b-it"
+    },
+    {
+      "title": "gpt-oss-120b",
+      "url": "llms-txt#gpt-oss-120b"
+    },
+    {
+      "title": "gpt-oss-20b",
+      "url": "llms-txt#gpt-oss-20b"
+    },
+    {
+      "title": "granite-4.0-h-micro",
+      "url": "llms-txt#granite-4.0-h-micro"
+    },
+    {
+      "title": "hermes-2-pro-mistral-7b Beta",
+      "url": "llms-txt#hermes-2-pro-mistral-7b-beta"
+    },
+    {
+      "title": "indictrans2-en-indic-1B",
+      "url": "llms-txt#indictrans2-en-indic-1b"
+    },
+    {
+      "title": "llama-2-13b-chat-awq Beta",
+      "url": "llms-txt#llama-2-13b-chat-awq-beta"
+    },
+    {
+      "title": "llama-2-7b-chat-fp16",
+      "url": "llms-txt#llama-2-7b-chat-fp16"
+    },
+    {
+      "title": "llama-2-7b-chat-hf-lora Beta",
+      "url": "llms-txt#llama-2-7b-chat-hf-lora-beta"
+    },
+    {
+      "title": "llama-2-7b-chat-int8",
+      "url": "llms-txt#llama-2-7b-chat-int8"
+    },
+    {
+      "title": "llama-3-8b-instruct",
+      "url": "llms-txt#llama-3-8b-instruct"
+    },
+    {
+      "title": "llama-3-8b-instruct-awq",
+      "url": "llms-txt#llama-3-8b-instruct-awq"
+    },
+    {
+      "title": "llama-3.1-70b-instruct",
+      "url": "llms-txt#llama-3.1-70b-instruct"
+    },
+    {
+      "title": "llama-3.1-8b-instruct",
+      "url": "llms-txt#llama-3.1-8b-instruct"
+    },
+    {
+      "title": "llama-3.1-8b-instruct-awq",
+      "url": "llms-txt#llama-3.1-8b-instruct-awq"
+    },
+    {
+      "title": "llama-3.1-8b-instruct-fast",
+      "url": "llms-txt#llama-3.1-8b-instruct-fast"
+    },
+    {
+      "title": "llama-3.1-8b-instruct-fp8",
+      "url": "llms-txt#llama-3.1-8b-instruct-fp8"
+    },
+    {
+      "title": "llama-3.2-11b-vision-instruct",
+      "url": "llms-txt#llama-3.2-11b-vision-instruct"
+    },
+    {
+      "title": "llama-3.2-1b-instruct",
+      "url": "llms-txt#llama-3.2-1b-instruct"
+    },
+    {
+      "title": "llama-3.2-3b-instruct",
+      "url": "llms-txt#llama-3.2-3b-instruct"
+    },
+    {
+      "title": "llama-3.3-70b-instruct-fp8-fast",
+      "url": "llms-txt#llama-3.3-70b-instruct-fp8-fast"
+    },
+    {
+      "title": "llama-4-scout-17b-16e-instruct",
+      "url": "llms-txt#llama-4-scout-17b-16e-instruct"
+    },
+    {
+      "title": "llama-guard-3-8b",
+      "url": "llms-txt#llama-guard-3-8b"
+    },
+    {
+      "title": "llamaguard-7b-awq Beta",
+      "url": "llms-txt#llamaguard-7b-awq-beta"
+    },
+    {
+      "title": "llava-1.5-7b-hf Beta",
+      "url": "llms-txt#llava-1.5-7b-hf-beta"
+    },
+    {
+      "title": "lucid-origin",
+      "url": "llms-txt#lucid-origin"
+    },
+    {
+      "title": "m2m100-1.2b",
+      "url": "llms-txt#m2m100-1.2b"
+    },
+    {
+      "title": "melotts",
+      "url": "llms-txt#melotts"
+    },
+    {
+      "title": "meta-llama-3-8b-instruct",
+      "url": "llms-txt#meta-llama-3-8b-instruct"
+    },
+    {
+      "title": "mistral-7b-instruct-v0.1",
+      "url": "llms-txt#mistral-7b-instruct-v0.1"
+    },
+    {
+      "title": "mistral-7b-instruct-v0.1-awq Beta",
+      "url": "llms-txt#mistral-7b-instruct-v0.1-awq-beta"
+    },
+    {
+      "title": "mistral-7b-instruct-v0.2 Beta",
+      "url": "llms-txt#mistral-7b-instruct-v0.2-beta"
+    },
+    {
+      "title": "mistral-7b-instruct-v0.2-lora Beta",
+      "url": "llms-txt#mistral-7b-instruct-v0.2-lora-beta"
+    },
+    {
+      "title": "mistral-small-3.1-24b-instruct",
+      "url": "llms-txt#mistral-small-3.1-24b-instruct"
+    },
+    {
+      "title": "neural-chat-7b-v3-1-awq Beta",
+      "url": "llms-txt#neural-chat-7b-v3-1-awq-beta"
+    },
+    {
+      "title": "nova-3",
+      "url": "llms-txt#nova-3"
+    },
+    {
+      "title": "openchat-3.5-0106 Beta",
+      "url": "llms-txt#openchat-3.5-0106-beta"
+    },
+    {
+      "title": "openhermes-2.5-mistral-7b-awq Beta",
+      "url": "llms-txt#openhermes-2.5-mistral-7b-awq-beta"
+    },
+    {
+      "title": "phi-2 Beta",
+      "url": "llms-txt#phi-2-beta"
+    },
+    {
+      "title": "phoenix-1.0",
+      "url": "llms-txt#phoenix-1.0"
+    },
+    {
+      "title": "plamo-embedding-1b",
+      "url": "llms-txt#plamo-embedding-1b"
+    },
+    {
+      "title": "qwen1.5-0.5b-chat Beta",
+      "url": "llms-txt#qwen1.5-0.5b-chat-beta"
+    },
+    {
+      "title": "qwen1.5-1.8b-chat Beta",
+      "url": "llms-txt#qwen1.5-1.8b-chat-beta"
+    },
+    {
+      "title": "qwen1.5-14b-chat-awq Beta",
+      "url": "llms-txt#qwen1.5-14b-chat-awq-beta"
+    },
+    {
+      "title": "qwen1.5-7b-chat-awq Beta",
+      "url": "llms-txt#qwen1.5-7b-chat-awq-beta"
+    },
+    {
+      "title": "qwen2.5-coder-32b-instruct",
+      "url": "llms-txt#qwen2.5-coder-32b-instruct"
+    },
+    {
+      "title": "qwen3-30b-a3b-fp8",
+      "url": "llms-txt#qwen3-30b-a3b-fp8"
+    },
+    {
+      "title": "qwen3-embedding-0.6b",
+      "url": "llms-txt#qwen3-embedding-0.6b"
+    },
+    {
+      "title": "qwq-32b",
+      "url": "llms-txt#qwq-32b"
+    },
+    {
+      "title": "resnet-50",
+      "url": "llms-txt#resnet-50"
+    },
+    {
+      "title": "smart-turn-v2",
+      "url": "llms-txt#smart-turn-v2"
+    },
+    {
+      "title": "sqlcoder-7b-2 Beta",
+      "url": "llms-txt#sqlcoder-7b-2-beta"
+    },
+    {
+      "title": "stable-diffusion-v1-5-img2img Beta",
+      "url": "llms-txt#stable-diffusion-v1-5-img2img-beta"
+    },
+    {
+      "title": "stable-diffusion-v1-5-inpainting Beta",
+      "url": "llms-txt#stable-diffusion-v1-5-inpainting-beta"
+    },
+    {
+      "title": "stable-diffusion-xl-base-1.0 Beta",
+      "url": "llms-txt#stable-diffusion-xl-base-1.0-beta"
+    },
+    {
+      "title": "stable-diffusion-xl-lightning Beta",
+      "url": "llms-txt#stable-diffusion-xl-lightning-beta"
+    },
+    {
+      "title": "starling-lm-7b-beta Beta",
+      "url": "llms-txt#starling-lm-7b-beta-beta"
+    },
+    {
+      "title": "tinyllama-1.1b-chat-v1.0 Beta",
+      "url": "llms-txt#tinyllama-1.1b-chat-v1.0-beta"
+    },
+    {
+      "title": "uform-gen2-qwen-500m Beta",
+      "url": "llms-txt#uform-gen2-qwen-500m-beta"
+    },
+    {
+      "title": "una-cybertron-7b-v2-bf16 Beta",
+      "url": "llms-txt#una-cybertron-7b-v2-bf16-beta"
+    },
+    {
+      "title": "whisper",
+      "url": "llms-txt#whisper"
+    },
+    {
+      "title": "whisper-large-v3-turbo",
+      "url": "llms-txt#whisper-large-v3-turbo"
+    },
+    {
+      "title": "whisper-tiny-en Beta",
+      "url": "llms-txt#whisper-tiny-en-beta"
+    },
+    {
+      "title": "zephyr-7b-beta-awq Beta",
+      "url": "llms-txt#zephyr-7b-beta-awq-beta"
+    },
+    {
+      "title": "Test GET request",
+      "url": "llms-txt#test-get-request"
+    },
+    {
+      "title": "Test listing bucket contents",
+      "url": "llms-txt#test-listing-bucket-contents"
+    },
+    {
+      "title": "Test downloading a specific file",
+      "url": "llms-txt#test-downloading-a-specific-file"
+    },
+    {
+      "title": "Test GET request",
+      "url": "llms-txt#test-get-request"
+    },
+    {
+      "title": "Create user service",
+      "url": "llms-txt#create-user-service"
+    },
+    {
+      "title": "Create orders service",
+      "url": "llms-txt#create-orders-service"
+    },
+    {
+      "title": "Test user service requests",
+      "url": "llms-txt#test-user-service-requests"
+    },
+    {
+      "title": "Test orders service requests",
+      "url": "llms-txt#test-orders-service-requests"
+    },
+    {
+      "title": "Confirm we are using wrangler v3.89.0+",
+      "url": "llms-txt#confirm-we-are-using-wrangler-v3.89.0+"
+    },
+    {
+      "title": "Start a local dev session:",
+      "url": "llms-txt#start-a-local-dev-session:"
+    },
+    {
+      "title": "Trigger a Workflow from the CLI, and pass (optional) parameters as an event to the Workflow.",
+      "url": "llms-txt#trigger-a-workflow-from-the-cli,-and-pass-(optional)-parameters-as-an-event-to-the-workflow."
+    },
+    {
+      "title": "Or by ID:",
+      "url": "llms-txt#or-by-id:"
+    },
+    {
+      "title": "npx wrangler@latest workflows instances describe workflows-starter 12dc179f-9f77-4a37-b973-709dca4189ba",
+      "url": "llms-txt#npx-wrangler@latest-workflows-instances-describe-workflows-starter-12dc179f-9f77-4a37-b973-709dca4189ba"
+    },
+    {
+      "title": "Note the \"Workflows\" binding mentioned here, showing that",
+      "url": "llms-txt#note-the-\"workflows\"-binding-mentioned-here,-showing-that"
+    },
+    {
+      "title": "wrangler has detected your Workflow",
+      "url": "llms-txt#wrangler-has-detected-your-workflow"
+    },
+    {
+      "title": "Workflow instance \"12dc179f-9f77-4a37-b973-709dca4189ba\" has been queued successfully",
+      "url": "llms-txt#workflow-instance-\"12dc179f-9f77-4a37-b973-709dca4189ba\"-has-been-queued-successfully"
+    },
+    {
+      "title": "Or by ID:",
+      "url": "llms-txt#or-by-id:"
+    },
+    {
+      "title": "npx wrangler@latest workflows instances describe workflows-starter 12dc179f-9f77-4a37-b973-709dca4189ba",
+      "url": "llms-txt#npx-wrangler@latest-workflows-instances-describe-workflows-starter-12dc179f-9f77-4a37-b973-709dca4189ba"
+    },
+    {
+      "title": "This must match the URL provided in step 6",
+      "url": "llms-txt#this-must-match-the-url-provided-in-step-6"
+    },
+    {
+      "title": "Create a new batch of 3 Workflow instances, each with its own ID and pass params to the Workflow instances",
+      "url": "llms-txt#create-a-new-batch-of-3-workflow-instances,-each-with-its-own-id-and-pass-params-to-the-workflow-instances"
+    },
+    {
+      "title": "FFI methods available for WorkflowInstance",
+      "url": "llms-txt#ffi-methods-available-for-workflowinstance"
+    },
+    {
+      "title": "An array of httpRequestsGroup is the result of httpRequests1hGroups or",
+      "url": "llms-txt#an-array-of-httprequestsgroup-is-the-result-of-httprequests1hgroups-or"
+    },
+    {
+      "title": "httpRequests1mGroups query.",
+      "url": "llms-txt#httprequests1mgroups-query."
+    },
+    {
+      "title": "An array of Request is the result of httpRequests query.",
+      "url": "llms-txt#an-array-of-request-is-the-result-of-httprequests-query."
+    },
+    {
+      "title": "curl with Legacy API Key",
+      "url": "llms-txt#curl-with-legacy-api-key"
+    },
+    {
+      "title": "curl with API Token",
+      "url": "llms-txt#curl-with-api-token"
+    },
+    {
+      "title": "Cache rule configuring cache settings and defining custom cache keys",
+      "url": "llms-txt#cache-rule-configuring-cache-settings-and-defining-custom-cache-keys"
+    },
+    {
+      "title": "Replace ns0123 with your actual Cloudflare nameservers",
+      "url": "llms-txt#replace-ns0123-with-your-actual-cloudflare-nameservers"
+    },
+    {
+      "title": "Create job",
+      "url": "llms-txt#create-job"
+    },
+    {
+      "title": "Keep id of the new job",
+      "url": "llms-txt#keep-id-of-the-new-job"
+    },
+    {
+      "title": "Get job",
+      "url": "llms-txt#get-job"
+    },
+    {
+      "title": "Get all jobs for a zone",
+      "url": "llms-txt#get-all-jobs-for-a-zone"
+    },
+    {
+      "title": "Update job",
+      "url": "llms-txt#update-job"
+    },
+    {
+      "title": "Delete job",
+      "url": "llms-txt#delete-job"
+    },
+    {
+      "title": "Download using a GET presigned URL",
+      "url": "llms-txt#download-using-a-get-presigned-url"
+    },
+    {
+      "title": "Upload using a PUT presigned URL",
+      "url": "llms-txt#upload-using-a-put-presigned-url"
+    },
+    {
+      "title": "Attempt to write an object without providing the \"X-Custom-Auth-Key\" header",
+      "url": "llms-txt#attempt-to-write-an-object-without-providing-the-\"x-custom-auth-key\"-header"
+    },
+    {
+      "title": "Expected because header was missing",
+      "url": "llms-txt#expected-because-header-was-missing"
+    },
+    {
+      "title": "Attempt to write an object with the wrong \"X-Custom-Auth-Key\" header value",
+      "url": "llms-txt#attempt-to-write-an-object-with-the-wrong-\"x-custom-auth-key\"-header-value"
+    },
+    {
+      "title": "Expected because header value did not match the AUTH_KEY_SECRET value",
+      "url": "llms-txt#expected-because-header-value-did-not-match-the-auth_key_secret-value"
+    },
+    {
+      "title": "Attempt to write an object with the correct \"X-Custom-Auth-Key\" header value",
+      "url": "llms-txt#attempt-to-write-an-object-with-the-correct-\"x-custom-auth-key\"-header-value"
+    },
+    {
+      "title": "Note: Assume that \"*********\" is the value of your AUTH_KEY_SECRET Wrangler secret",
+      "url": "llms-txt#note:-assume-that-\"*********\"-is-the-value-of-your-auth_key_secret-wrangler-secret"
+    },
+    {
+      "title": "Attempt to read object called \"foo\"",
+      "url": "llms-txt#attempt-to-read-object-called-\"foo\""
+    },
+    {
+      "title": "Expected because \"foo\" is not in the ALLOW_LIST",
+      "url": "llms-txt#expected-because-\"foo\"-is-not-in-the-allow_list"
+    },
+    {
+      "title": "Attempt to read an object called \"cat-pic.jpg\"",
+      "url": "llms-txt#attempt-to-read-an-object-called-\"cat-pic.jpg\""
+    },
+    {
+      "title": "Note: This is the value that was successfully PUT above",
+      "url": "llms-txt#note:-this-is-the-value-that-was-successfully-put-above"
+    },
+    {
+      "title": "Take the file to upload as an argument",
+      "url": "llms-txt#take-the-file-to-upload-as-an-argument"
+    },
+    {
+      "title": "The endpoint for our worker, change this to wherever you deploy your worker",
+      "url": "llms-txt#the-endpoint-for-our-worker,-change-this-to-wherever-you-deploy-your-worker"
+    },
+    {
+      "title": "Configure the part size to be 10MB. 5MB is the minimum part size, except for the last part",
+      "url": "llms-txt#configure-the-part-size-to-be-10mb.-5mb-is-the-minimum-part-size,-except-for-the-last-part"
+    },
+    {
+      "title": "Define catalog connection details (replace variables)",
+      "url": "llms-txt#define-catalog-connection-details-(replace-variables)"
+    },
+    {
+      "title": "Connect to R2 Data Catalog",
+      "url": "llms-txt#connect-to-r2-data-catalog"
+    },
+    {
+      "title": "Create default namespace",
+      "url": "llms-txt#create-default-namespace"
+    },
+    {
+      "title": "Create simple PyArrow table",
+      "url": "llms-txt#create-simple-pyarrow-table"
+    },
+    {
+      "title": "Create an Iceberg table",
+      "url": "llms-txt#create-an-iceberg-table"
+    },
+    {
+      "title": "Define catalog connection details (replace variables)",
+      "url": "llms-txt#define-catalog-connection-details-(replace-variables)"
+    },
+    {
+      "title": "Build Spark session with Iceberg configurations",
+      "url": "llms-txt#build-spark-session-with-iceberg-configurations"
+    },
+    {
+      "title": "Create namespace if it does not exist",
+      "url": "llms-txt#create-namespace-if-it-does-not-exist"
+    },
+    {
+      "title": "Create a table in the namespace using Iceberg",
+      "url": "llms-txt#create-a-table-in-the-namespace-using-iceberg"
+    },
+    {
+      "title": "Create a simple DataFrame",
+      "url": "llms-txt#create-a-simple-dataframe"
+    },
+    {
+      "title": "Write the DataFrame to the Iceberg table",
+      "url": "llms-txt#write-the-dataframe-to-the-iceberg-table"
+    },
+    {
+      "title": "Read the data back from the Iceberg table",
+      "url": "llms-txt#read-the-data-back-from-the-iceberg-table"
+    },
+    {
+      "title": "We need to set these \"--add-opens\" so that Spark can run on Java 17 (it needs access to",
+      "url": "llms-txt#we-need-to-set-these-\"--add-opens\"-so-that-spark-can-run-on-java-17-(it-needs-access-to"
+    },
+    {
+      "title": "parts of the JVM which have been modularized and made internal).",
+      "url": "llms-txt#parts-of-the-jvm-which-have-been-modularized-and-made-internal)."
+    },
+    {
+      "title": "r2.properties",
+      "url": "llms-txt#r2.properties"
+    },
+    {
+      "title": "R2 Configuration",
+      "url": "llms-txt#r2-configuration"
+    },
+    {
+      "title": "R2 Data Catalog Configuration",
+      "url": "llms-txt#r2-data-catalog-configuration"
+    },
+    {
+      "title": "Provide your Cloudflare account ID",
+      "url": "llms-txt#provide-your-cloudflare-account-id"
+    },
+    {
+      "title": "{",
+      "url": "llms-txt#{"
+    },
+    {
+      "title": "\"Buckets\": [",
+      "url": "llms-txt#\"buckets\":-["
+    },
+    {
+      "title": "{",
+      "url": "llms-txt#{"
+    },
+    {
+      "title": "\"Name\": \"my-bucket\",",
+      "url": "llms-txt#\"name\":-\"my-bucket\","
+    },
+    {
+      "title": "\"CreationDate\": \"2022-05-18T17:19:59.645000+00:00\"",
+      "url": "llms-txt#\"creationdate\":-\"2022-05-18t17:19:59.645000+00:00\""
+    },
+    {
+      "title": "}",
+      "url": "llms-txt#}"
+    },
+    {
+      "title": "],",
+      "url": "llms-txt#],"
+    },
+    {
+      "title": "\"Owner\": {",
+      "url": "llms-txt#\"owner\":-{"
+    },
+    {
+      "title": "\"DisplayName\": \"134a5a2c0ba47b38eada4b9c8ead10b6\",",
+      "url": "llms-txt#\"displayname\":-\"134a5a2c0ba47b38eada4b9c8ead10b6\","
+    },
+    {
+      "title": "\"ID\": \"134a5a2c0ba47b38eada4b9c8ead10b6\"",
+      "url": "llms-txt#\"id\":-\"134a5a2c0ba47b38eada4b9c8ead10b6\""
+    },
+    {
+      "title": "}",
+      "url": "llms-txt#}"
+    },
+    {
+      "title": "}",
+      "url": "llms-txt#}"
+    },
+    {
+      "title": "{",
+      "url": "llms-txt#{"
+    },
+    {
+      "title": "\"Contents\": [",
+      "url": "llms-txt#\"contents\":-["
+    },
+    {
+      "title": "{",
+      "url": "llms-txt#{"
+    },
+    {
+      "title": "\"Key\": \"ferriswasm.png\",",
+      "url": "llms-txt#\"key\":-\"ferriswasm.png\","
+    },
+    {
+      "title": "\"LastModified\": \"2022-05-18T17:20:21.670000+00:00\",",
+      "url": "llms-txt#\"lastmodified\":-\"2022-05-18t17:20:21.670000+00:00\","
+    },
+    {
+      "title": "\"ETag\": \"\\\"eb2b891dc67b81755d2b726d9110af16\\\"\",",
+      "url": "llms-txt#\"etag\":-\"\\\"eb2b891dc67b81755d2b726d9110af16\\\"\","
+    },
+    {
+      "title": "\"Size\": 87671,",
+      "url": "llms-txt#\"size\":-87671,"
+    },
+    {
+      "title": "\"StorageClass\": \"STANDARD\"",
+      "url": "llms-txt#\"storageclass\":-\"standard\""
+    },
+    {
+      "title": "}",
+      "url": "llms-txt#}"
+    },
+    {
+      "title": "]",
+      "url": "llms-txt#]"
+    },
+    {
+      "title": "}",
+      "url": "llms-txt#}"
+    },
+    {
+      "title": "You can pass the --expires-in flag to determine how long the presigned link is valid.",
+      "url": "llms-txt#you-can-pass-the---expires-in-flag-to-determine-how-long-the-presigned-link-is-valid."
+    },
+    {
+      "title": "https://<ACCOUNT_ID>.r2.cloudflarestorage.com/my-bucket/ferriswasm.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<credential>&X-Amz-Date=<timestamp>&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=<signature>",
+      "url": "llms-txt#https://<account_id>.r2.cloudflarestorage.com/my-bucket/ferriswasm.png?x-amz-algorithm=aws4-hmac-sha256&x-amz-credential=<credential>&x-amz-date=<timestamp>&x-amz-expires=3600&x-amz-signedheaders=host&x-amz-signature=<signature>"
+    },
+    {
+      "title": "List all buckets on your account",
+      "url": "llms-txt#list-all-buckets-on-your-account"
+    },
+    {
+      "title": "List the first 20 items in a bucket",
+      "url": "llms-txt#list-the-first-20-items-in-a-bucket"
+    },
+    {
+      "title": "Get object information",
+      "url": "llms-txt#get-object-information"
+    },
+    {
+      "title": "Upload/Update single file",
+      "url": "llms-txt#upload/update-single-file"
+    },
+    {
+      "title": "Delete object",
+      "url": "llms-txt#delete-object"
+    },
+    {
+      "title": "Generate presigned URL for reading (GET)",
+      "url": "llms-txt#generate-presigned-url-for-reading-(get)"
+    },
+    {
+      "title": "The ExpiresIn parameter determines how long the presigned link is valid (in seconds)",
+      "url": "llms-txt#the-expiresin-parameter-determines-how-long-the-presigned-link-is-valid-(in-seconds)"
+    },
+    {
+      "title": "Generate presigned URL for writing (PUT)",
+      "url": "llms-txt#generate-presigned-url-for-writing-(put)"
+    },
+    {
+      "title": "Specify ContentType to restrict uploads to a specific file type",
+      "url": "llms-txt#specify-contenttype-to-restrict-uploads-to-a-specific-file-type"
+    },
+    {
+      "title": "Generate a presigned URL with Content-Type restriction",
+      "url": "llms-txt#generate-a-presigned-url-with-content-type-restriction"
+    },
+    {
+      "title": "The upload will only succeed if the client sends Content-Type: image/png",
+      "url": "llms-txt#the-upload-will-only-succeed-if-the-client-sends-content-type:-image/png"
+    },
+    {
+      "title": "Define function responsible for adding the header",
+      "url": "llms-txt#define-function-responsible-for-adding-the-header"
+    },
+    {
+      "title": "Moves the custom headers from the parameters to the request context",
+      "url": "llms-txt#moves-the-custom-headers-from-the-parameters-to-the-request-context"
+    },
+    {
+      "title": "Here we extract the headers from the request context and actually set them",
+      "url": "llms-txt#here-we-extract-the-headers-from-the-request-context-and-actually-set-them"
+    },
+    {
+      "title": "Note that boto3 will throw an exception if the precondition failed. Catch this exception if necessary",
+      "url": "llms-txt#note-that-boto3-will-throw-an-exception-if-the-precondition-failed.-catch-this-exception-if-necessary"
+    },
+    {
+      "title": "License",
+      "url": "llms-txt#license"
+    },
+    {
+      "title": "timers-browserify",
+      "url": "llms-txt#timers-browserify"
+    },
+    {
+      "title": "lib/node",
+      "url": "llms-txt#lib/node"
+    },
+    {
+      "title": "The BSD 2-Clause License",
+      "url": "llms-txt#the-bsd-2-clause-license"
+    },
+    {
+      "title": "Unlicense",
+      "url": "llms-txt#unlicense"
+    },
+    {
+      "title": "Apache 2.0 License",
+      "url": "llms-txt#apache-2.0-license"
+    },
+    {
+      "title": "Related Resources",
+      "url": "llms-txt#related-resources"
+    },
+    {
+      "title": "Correctly locate and secure devices by connecting them to the Cloudflare global network",
+      "url": "llms-txt#correctly-locate-and-secure-devices-by-connecting-them-to-the-cloudflare-global-network"
+    },
+    {
+      "title": "Related Resources",
+      "url": "llms-txt#related-resources"
+    },
+    {
+      "title": "Disable a couple of Cloudflare settings for API requests",
+      "url": "llms-txt#disable-a-couple-of-cloudflare-settings-for-api-requests"
+    },
+    {
+      "title": "Change origin for API requests",
+      "url": "llms-txt#change-origin-for-api-requests"
+    },
+    {
+      "title": "Cloudflare account ID",
+      "url": "llms-txt#cloudflare-account-id"
+    },
+    {
+      "title": "Bulk redirect list description",
+      "url": "llms-txt#bulk-redirect-list-description"
+    },
+    {
+      "title": "Bulk redirect list name",
+      "url": "llms-txt#bulk-redirect-list-name"
+    },
+    {
+      "title": "Bulk redirect list item (URL redirect)",
+      "url": "llms-txt#bulk-redirect-list-item-(url-redirect)"
+    },
+    {
+      "title": "Create redirect list",
+      "url": "llms-txt#create-redirect-list"
+    },
+    {
+      "title": "Add redirect item into the redirect list",
+      "url": "llms-txt#add-redirect-item-into-the-redirect-list"
+    },
+    {
+      "title": "Create bulk redirect and attach redirect list",
+      "url": "llms-txt#create-bulk-redirect-and-attach-redirect-list"
+    },
+    {
+      "title": "Single Redirects resource",
+      "url": "llms-txt#single-redirects-resource"
+    },
+    {
+      "title": "Example of an expression with a \" character written using quoted string syntax",
+      "url": "llms-txt#example-of-an-expression-with-a-\"-character-written-using-quoted-string-syntax"
+    },
+    {
+      "title": "Example of an expression with a \" character written using the raw string syntax",
+      "url": "llms-txt#example-of-an-expression-with-a-\"-character-written-using-the-raw-string-syntax"
+    },
+    {
+      "title": "CAA records added by Google Trust Services",
+      "url": "llms-txt#caa-records-added-by-google-trust-services"
+    },
+    {
+      "title": "CAA records added by Let's Encrypt",
+      "url": "llms-txt#caa-records-added-by-let's-encrypt"
+    },
+    {
+      "title": "CAA records added by SSL.com",
+      "url": "llms-txt#caa-records-added-by-ssl.com"
+    },
+    {
+      "title": "CAA records added by Sectigo",
+      "url": "llms-txt#caa-records-added-by-sectigo"
+    },
+    {
+      "title": "Add this repo to your apt repositories",
+      "url": "llms-txt#add-this-repo-to-your-apt-repositories"
+    },
+    {
+      "title": "install gokeyless",
+      "url": "llms-txt#install-gokeyless"
+    },
+    {
+      "title": "Add this repo to your apt repositories",
+      "url": "llms-txt#add-this-repo-to-your-apt-repositories"
+    },
+    {
+      "title": "install gokeyless",
+      "url": "llms-txt#install-gokeyless"
+    },
+    {
+      "title": "cmu generatekeypair -keyType=RSA -modulusBits=2048 -publicExponent=65537 -sign=1 -verify=1 -labelpublic=myrsakey -labelprivate=myrsakey -keygenmech=1",
+      "url": "llms-txt#cmu-generatekeypair--keytype=rsa--modulusbits=2048--publicexponent=65537--sign=1--verify=1--labelpublic=myrsakey--labelprivate=myrsakey--keygenmech=1"
+    },
+    {
+      "title": "cmu list",
+      "url": "llms-txt#cmu-list"
+    },
+    {
+      "title": "cmu requestCertificate -c=\"US\" -o=\"Example, Inc.\" -cn=\"azure-dedicatedhsm.example.com\" -s=\"California\" -l=\"San Francisco\" -publichandle=48 -privatehandle=51 -outputfile=\"rsa.csr\" -sha256withrsa",
+      "url": "llms-txt#cmu-requestcertificate--c=\"us\"--o=\"example,-inc.\"--cn=\"azure-dedicatedhsm.example.com\"--s=\"california\"--l=\"san-francisco\"--publichandle=48--privatehandle=51--outputfile=\"rsa.csr\"--sha256withrsa"
+    },
+    {
+      "title": "cmu generatekeypair -keyType=ECDSA -curvetype=3 -sign=1 -verify=1 -labelpublic=myecdsakey -labelprivate=myecdsakey -id=a001",
+      "url": "llms-txt#cmu-generatekeypair--keytype=ecdsa--curvetype=3--sign=1--verify=1--labelpublic=myecdsakey--labelprivate=myecdsakey--id=a001"
+    },
+    {
+      "title": "cmu list",
+      "url": "llms-txt#cmu-list"
+    },
+    {
+      "title": "cmu requestCertificate -c=\"US\" -o=\"Example, Inc.\" -cn=\"ibm-cloudhsm.example.com\" -s=\"California\" -l=\"San Francisco\" -publichandle=45 -privatehandle=48 -outputfile=\"rsa.csr\" -sha256withrsa",
+      "url": "llms-txt#cmu-requestcertificate--c=\"us\"--o=\"example,-inc.\"--cn=\"ibm-cloudhsm.example.com\"--s=\"california\"--l=\"san-francisco\"--publichandle=45--privatehandle=48--outputfile=\"rsa.csr\"--sha256withrsa"
+    },
+    {
+      "title": "cmu requestCertificate -c=\"US\" -o=\"Example, Inc.\" -cn=\"ibm-cloudhsm.example.com\" -s=\"California\" -l=\"San Francisco\" -publichandle=60 -privatehandle=61 -outputfile=\"ecdsa.csr\" -sha256withecdsa",
+      "url": "llms-txt#cmu-requestcertificate--c=\"us\"--o=\"example,-inc.\"--cn=\"ibm-cloudhsm.example.com\"--s=\"california\"--l=\"san-francisco\"--publichandle=60--privatehandle=61--outputfile=\"ecdsa.csr\"--sha256withecdsa"
+    },
+    {
+      "title": "Push the certificate",
+      "url": "llms-txt#push-the-certificate"
+    },
+    {
+      "title": "Second-person imperative verb phrase with 3rd-party name included",
+      "url": "llms-txt#second-person-imperative-verb-phrase-with-3rd-party-name-included"
+    },
+    {
+      "title": "Second-person imperative verb phrase with 3rd-party name included",
+      "url": "llms-txt#second-person-imperative-verb-phrase-with-3rd-party-name-included"
+    },
+    {
+      "title": "About <product> or noun phrase",
+      "url": "llms-txt#about-<product>-or-noun-phrase"
+    },
+    {
+      "title": "Title",
+      "url": "llms-txt#title"
+    },
+    {
+      "title": "Design guide title",
+      "url": "llms-txt#design-guide-title"
+    },
+    {
+      "title": "Get started",
+      "url": "llms-txt#get-started"
+    },
+    {
+      "title": "Second-person imperative verb phrase",
+      "url": "llms-txt#second-person-imperative-verb-phrase"
+    },
+    {
+      "title": "Second-person imperative verb phrase",
+      "url": "llms-txt#second-person-imperative-verb-phrase"
+    },
+    {
+      "title": "Second-person imperative verb phrase",
+      "url": "llms-txt#second-person-imperative-verb-phrase"
+    },
+    {
+      "title": "Name of section",
+      "url": "llms-txt#name-of-section"
+    },
+    {
+      "title": "Cloudflare <product name> (or {{</*beta*/>}}Cloudflare <product name>{{</*/beta*/>}} for products in beta)",
+      "url": "llms-txt#cloudflare-<product-name>-(or-{{</*beta*/>}}cloudflare-<product-name>{{</*/beta*/>}}-for-products-in-beta)"
+    },
+    {
+      "title": "Reference",
+      "url": "llms-txt#reference"
+    },
+    {
+      "title": "Cloudflare Reference Architecture",
+      "url": "llms-txt#cloudflare-reference-architecture"
+    },
+    {
+      "title": "Cloudflare Reference Architecture Diagram",
+      "url": "llms-txt#cloudflare-reference-architecture-diagram"
+    },
+    {
+      "title": "Troubleshooting",
+      "url": "llms-txt#troubleshooting"
+    },
+    {
+      "title": "Output the sitekeys for use in your application",
+      "url": "llms-txt#output-the-sitekeys-for-use-in-your-application"
+    },
+    {
+      "title": "To use the JavaScript console APIs",
+      "url": "llms-txt#to-use-the-javascript-console-apis"
+    },
+    {
+      "title": "To use the native Python logging",
+      "url": "llms-txt#to-use-the-native-python-logging"
+    },
+    {
+      "title": "to_js converts between Python dictionaries and JavaScript Objects",
+      "url": "llms-txt#to_js-converts-between-python-dictionaries-and-javascript-objects"
+    },
+    {
+      "title": "to_js converts between Python dictionaries and JavaScript Objects",
+      "url": "llms-txt#to_js-converts-between-python-dictionaries-and-javascript-objects"
+    },
+    {
+      "title": "no nodejs_compat flags here",
+      "url": "llms-txt#no-nodejs_compat-flags-here"
+    },
+    {
+      "title": "A function that checks if a given word is a palindrome",
+      "url": "llms-txt#a-function-that-checks-if-a-given-word-is-a-palindrome"
+    },
+    {
+      "title": "Test the function",
+      "url": "llms-txt#test-the-function"
+    },
+    {
+      "title": "Welcomes our user",
+      "url": "llms-txt#welcomes-our-user"
+    },
+    {
+      "title": "Learn more at https://json-schema.org/",
+      "url": "llms-txt#learn-more-at-https://json-schema.org/"
+    },
+    {
+      "title": "Initialize client",
+      "url": "llms-txt#initialize-client"
+    },
+    {
+      "title": "**Using Keyboard Shortcuts to Execute Cells in Jupyter Notebooks**",
+      "url": "llms-txt#**using-keyboard-shortcuts-to-execute-cells-in-jupyter-notebooks**"
+    },
+    {
+      "title": "Given a set of models and questions, display in the cell each response to the question, from each model",
+      "url": "llms-txt#given-a-set-of-models-and-questions,-display-in-the-cell-each-response-to-the-question,-from-each-model"
+    },
+    {
+      "title": "Include full completion timing",
+      "url": "llms-txt#include-full-completion-timing"
+    },
+    {
+      "title": "Unbound TLS Config",
+      "url": "llms-txt#unbound-tls-config"
+    },
+    {
+      "title": "Forwarding Config",
+      "url": "llms-txt#forwarding-config"
+    },
+    {
+      "title": "JSON object",
+      "url": "llms-txt#json-object"
+    },
+    {
+      "title": "Using azure-cli",
+      "url": "llms-txt#using-azure-cli"
+    },
+    {
+      "title": "Log in to the database",
+      "url": "llms-txt#log-in-to-the-database"
+    },
+    {
+      "title": "mysql2 v3.13.0 or later is required",
+      "url": "llms-txt#mysql2-v3.13.0-or-later-is-required"
+    },
+    {
+      "title": "Log in to the database",
+      "url": "llms-txt#log-in-to-the-database"
+    },
+    {
+      "title": "If you have any existing authorized networks, ensure you provide those as a comma separated list.",
+      "url": "llms-txt#if-you-have-any-existing-authorized-networks,-ensure-you-provide-those-as-a-comma-separated-list."
+    },
+    {
+      "title": "The gcloud CLI will replace any existing authorized networks with the list you provide here.",
+      "url": "llms-txt#the-gcloud-cli-will-replace-any-existing-authorized-networks-with-the-list-you-provide-here."
+    },
+    {
+      "title": "postgres 3.4.5 or later is recommended",
+      "url": "llms-txt#postgres-3.4.5-or-later-is-recommended"
+    },
+    {
+      "title": "Expected: error code: 1020",
+      "url": "llms-txt#expected:-error-code:-1020"
+    },
+    {
+      "title": "Expected: error code: 1020",
+      "url": "llms-txt#expected:-error-code:-1020"
+    },
+    {
+      "title": "ipsec.conf - strongSwan IPsec configuration file",
+      "url": "llms-txt#ipsec.conf---strongswan-ipsec-configuration-file"
+    },
+    {
+      "title": "Sample VPN connections",
+      "url": "llms-txt#sample-vpn-connections"
+    },
+    {
+      "title": "reserved values",
+      "url": "llms-txt#reserved-values"
+    },
+    {
+      "title": "local",
+      "url": "llms-txt#local"
+    },
+    {
+      "title": "cf.api\\_gateway.auth\\_id\\_present",
+      "url": "llms-txt#cf.api\\_gateway.auth\\_id\\_present"
+    },
+    {
+      "title": "cf.api\\_gateway.fallthrough\\_detected",
+      "url": "llms-txt#cf.api\\_gateway.fallthrough\\_detected"
+    },
+    {
+      "title": "cf.api\\_gateway.request\\_violates\\_schema",
+      "url": "llms-txt#cf.api\\_gateway.request\\_violates\\_schema"
+    },
+    {
+      "title": "cf.bot\\_management.detection\\_ids",
+      "url": "llms-txt#cf.bot\\_management.detection\\_ids"
+    },
+    {
+      "title": "cf.bot\\_management.corporate\\_proxy",
+      "url": "llms-txt#cf.bot\\_management.corporate\\_proxy"
+    },
+    {
+      "title": "cf.bot\\_management.ja4",
+      "url": "llms-txt#cf.bot\\_management.ja4"
+    },
+    {
+      "title": "cf.bot\\_management.ja3\\_hash",
+      "url": "llms-txt#cf.bot\\_management.ja3\\_hash"
+    },
+    {
+      "title": "cf.bot\\_management.score",
+      "url": "llms-txt#cf.bot\\_management.score"
+    },
+    {
+      "title": "cf.bot\\_management.js\\_detection.passed",
+      "url": "llms-txt#cf.bot\\_management.js\\_detection.passed"
+    },
+    {
+      "title": "cf.bot\\_management.static\\_resource",
+      "url": "llms-txt#cf.bot\\_management.static\\_resource"
+    },
+    {
+      "title": "cf.bot\\_management.verified\\_bot",
+      "url": "llms-txt#cf.bot\\_management.verified\\_bot"
+    },
+    {
+      "title": "cf.client.bot",
+      "url": "llms-txt#cf.client.bot"
+    },
+    {
+      "title": "cf.edge.client\\_tcp",
+      "url": "llms-txt#cf.edge.client\\_tcp"
+    },
+    {
+      "title": "cf.edge.server\\_port",
+      "url": "llms-txt#cf.edge.server\\_port"
+    },
+    {
+      "title": "cf.edge.server\\_ip",
+      "url": "llms-txt#cf.edge.server\\_ip"
+    },
+    {
+      "title": "cf.hostname.metadata",
+      "url": "llms-txt#cf.hostname.metadata"
+    },
+    {
+      "title": "cf.llm.prompt.detected",
+      "url": "llms-txt#cf.llm.prompt.detected"
+    },
+    {
+      "title": "cf.llm.prompt.injection\\_score",
+      "url": "llms-txt#cf.llm.prompt.injection\\_score"
+    },
+    {
+      "title": "cf.llm.prompt.pii\\_categories",
+      "url": "llms-txt#cf.llm.prompt.pii\\_categories"
+    },
+    {
+      "title": "Matches requests where PII categorized as \"EMAIL_ADDRESS\" or \"IBAN_CODE\" was detected:",
+      "url": "llms-txt#matches-requests-where-pii-categorized-as-\"email_address\"-or-\"iban_code\"-was-detected:"
+    },
+    {
+      "title": "cf.llm.prompt.pii\\_detected",
+      "url": "llms-txt#cf.llm.prompt.pii\\_detected"
+    },
+    {
+      "title": "cf.llm.prompt.unsafe\\_topic\\_categories",
+      "url": "llms-txt#cf.llm.prompt.unsafe\\_topic\\_categories"
+    },
+    {
+      "title": "Matches requests where an unsafe topic categorized as \"S2\" (Non-Violent Crimes) or \"S10\" (Hate) was detected in the LLM prompt:",
+      "url": "llms-txt#matches-requests-where-an-unsafe-topic-categorized-as-\"s2\"-(non-violent-crimes)-or-\"s10\"-(hate)-was-detected-in-the-llm-prompt:"
+    },
+    {
+      "title": "cf.llm.prompt.unsafe\\_topic\\_detected",
+      "url": "llms-txt#cf.llm.prompt.unsafe\\_topic\\_detected"
+    },
+    {
+      "title": "cf.random\\_seed",
+      "url": "llms-txt#cf.random\\_seed"
+    },
+    {
+      "title": "cf.ray\\_id",
+      "url": "llms-txt#cf.ray\\_id"
+    },
+    {
+      "title": "cf.response.1xxx\\_code",
+      "url": "llms-txt#cf.response.1xxx\\_code"
+    },
+    {
+      "title": "cf.response.error\\_type",
+      "url": "llms-txt#cf.response.error\\_type"
+    },
+    {
+      "title": "cf.threat\\_score",
+      "url": "llms-txt#cf.threat\\_score"
+    },
+    {
+      "title": "cf.timings.client\\_tcp\\_rtt\\_msec",
+      "url": "llms-txt#cf.timings.client\\_tcp\\_rtt\\_msec"
+    },
+    {
+      "title": "cf.tls\\_cipher",
+      "url": "llms-txt#cf.tls\\_cipher"
+    },
+    {
+      "title": "cf.tls\\_ciphers\\_sha1",
+      "url": "llms-txt#cf.tls\\_ciphers\\_sha1"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_fingerprint\\_sha1",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_fingerprint\\_sha1"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_fingerprint\\_sha256",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_fingerprint\\_sha256"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_issuer\\_dn",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_issuer\\_dn"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_issuer\\_dn\\_legacy",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_issuer\\_dn\\_legacy"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_issuer\\_dn\\_rfc2253",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_issuer\\_dn\\_rfc2253"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_issuer\\_serial",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_issuer\\_serial"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_issuer\\_ski",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_issuer\\_ski"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_not\\_after",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_not\\_after"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_not\\_before",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_not\\_before"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_presented",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_presented"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_revoked",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_revoked"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_serial",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_serial"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_subject\\_dn",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_subject\\_dn"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_ski",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_ski"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_subject\\_dn\\_legacy",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_subject\\_dn\\_legacy"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_subject\\_dn\\_rfc2253",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_subject\\_dn\\_rfc2253"
+    },
+    {
+      "title": "cf.tls\\_client\\_auth.cert\\_verified",
+      "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_verified"
+    },
+    {
+      "title": "cf.tls\\_client\\_extensions\\_sha1",
+      "url": "llms-txt#cf.tls\\_client\\_extensions\\_sha1"
+    },
+    {
+      "title": "cf.tls\\_client\\_extensions\\_sha1\\_le",
+      "url": "llms-txt#cf.tls\\_client\\_extensions\\_sha1\\_le"
+    },
+    {
+      "title": "cf.tls\\_client\\_hello\\_length",
+      "url": "llms-txt#cf.tls\\_client\\_hello\\_length"
+    },
+    {
+      "title": "cf.tls\\_client\\_random",
+      "url": "llms-txt#cf.tls\\_client\\_random"
+    },
+    {
+      "title": "cf.tls\\_version",
+      "url": "llms-txt#cf.tls\\_version"
+    },
+    {
+      "title": "cf.verified\\_bot\\_category",
+      "url": "llms-txt#cf.verified\\_bot\\_category"
+    },
+    {
+      "title": "cf.waf.auth\\_detected",
+      "url": "llms-txt#cf.waf.auth\\_detected"
+    },
+    {
+      "title": "cf.waf.content\\_scan.has\\_failed",
+      "url": "llms-txt#cf.waf.content\\_scan.has\\_failed"
+    },
+    {
+      "title": "cf.waf.content\\_scan.has\\_malicious\\_obj",
+      "url": "llms-txt#cf.waf.content\\_scan.has\\_malicious\\_obj"
+    },
+    {
+      "title": "Check if requests to a specific endpoint include any malicious content objects",
+      "url": "llms-txt#check-if-requests-to-a-specific-endpoint-include-any-malicious-content-objects"
+    },
+    {
+      "title": "cf.waf.content\\_scan.has\\_obj",
+      "url": "llms-txt#cf.waf.content\\_scan.has\\_obj"
+    },
+    {
+      "title": "Check if requests to a specific endpoint include any content objects",
+      "url": "llms-txt#check-if-requests-to-a-specific-endpoint-include-any-content-objects"
+    },
+    {
+      "title": "cf.waf.content\\_scan.num\\_malicious\\_obj",
+      "url": "llms-txt#cf.waf.content\\_scan.num\\_malicious\\_obj"
+    },
+    {
+      "title": "Check if requests to a specific endpoint contain more than two malicious content objects",
+      "url": "llms-txt#check-if-requests-to-a-specific-endpoint-contain-more-than-two-malicious-content-objects"
+    },
+    {
+      "title": "cf.waf.content\\_scan.num\\_obj",
+      "url": "llms-txt#cf.waf.content\\_scan.num\\_obj"
+    },
+    {
+      "title": "Check if requests to a specific endpoint contain more than two content objects",
+      "url": "llms-txt#check-if-requests-to-a-specific-endpoint-contain-more-than-two-content-objects"
+    },
+    {
+      "title": "cf.waf.content\\_scan.obj\\_results",
+      "url": "llms-txt#cf.waf.content\\_scan.obj\\_results"
+    },
+    {
+      "title": "Check if requests to a specific endpoint contain any suspicious or infected content objects",
+      "url": "llms-txt#check-if-requests-to-a-specific-endpoint-contain-any-suspicious-or-infected-content-objects"
+    },
+    {
+      "title": "cf.waf.content\\_scan.obj\\_sizes",
+      "url": "llms-txt#cf.waf.content\\_scan.obj\\_sizes"
+    },
+    {
+      "title": "Check if requests to a specific endpoint contain any content objects larger than 500 KB (512,000 bytes)",
+      "url": "llms-txt#check-if-requests-to-a-specific-endpoint-contain-any-content-objects-larger-than-500-kb-(512,000-bytes)"
+    },
+    {
+      "title": "cf.waf.content\\_scan.obj\\_types",
+      "url": "llms-txt#cf.waf.content\\_scan.obj\\_types"
+    },
+    {
+      "title": "Check if requests to a specific endpoint contain content objects other than PDFs",
+      "url": "llms-txt#check-if-requests-to-a-specific-endpoint-contain-content-objects-other-than-pdfs"
+    },
+    {
+      "title": "cf.waf.credential\\_check.password\\_leaked",
+      "url": "llms-txt#cf.waf.credential\\_check.password\\_leaked"
+    },
+    {
+      "title": "cf.waf.credential\\_check.username\\_and\\_password\\_leaked",
+      "url": "llms-txt#cf.waf.credential\\_check.username\\_and\\_password\\_leaked"
+    },
+    {
+      "title": "cf.waf.credential\\_check.username\\_leaked",
+      "url": "llms-txt#cf.waf.credential\\_check.username\\_leaked"
+    },
+    {
+      "title": "cf.waf.credential\\_check.username\\_password\\_similar",
+      "url": "llms-txt#cf.waf.credential\\_check.username\\_password\\_similar"
+    },
+    {
+      "title": "cf.waf.score",
+      "url": "llms-txt#cf.waf.score"
+    },
+    {
+      "title": "cf.waf.score.class",
+      "url": "llms-txt#cf.waf.score.class"
+    },
+    {
+      "title": "cf.waf.score.sqli",
+      "url": "llms-txt#cf.waf.score.sqli"
+    },
+    {
+      "title": "cf.waf.score.rce",
+      "url": "llms-txt#cf.waf.score.rce"
+    },
+    {
+      "title": "cf.waf.score.xss",
+      "url": "llms-txt#cf.waf.score.xss"
+    },
+    {
+      "title": "cf.worker.upstream\\_zone",
+      "url": "llms-txt#cf.worker.upstream\\_zone"
+    },
+    {
+      "title": "http.cookie",
+      "url": "llms-txt#http.cookie"
+    },
+    {
+      "title": "http.host",
+      "url": "llms-txt#http.host"
+    },
+    {
+      "title": "http.referer",
+      "url": "llms-txt#http.referer"
+    },
+    {
+      "title": "http.request.accepted\\_languages",
+      "url": "llms-txt#http.request.accepted\\_languages"
+    },
+    {
+      "title": "Example 1: Request with header \"Accept-Language: fr-CH, fr;q=0.8, en;q=0.9, de;q=0.7, *;q=0.5\".",
+      "url": "llms-txt#example-1:-request-with-header-\"accept-language:-fr-ch,-fr;q=0.8,-en;q=0.9,-de;q=0.7,-*;q=0.5\"."
+    },
+    {
+      "title": "In this case:",
+      "url": "llms-txt#in-this-case:"
+    },
+    {
+      "title": "Example 2: Request without an `Accept-Language` HTTP header and a URI of \"https://www.example.com/my-path\".",
+      "url": "llms-txt#example-2:-request-without-an-`accept-language`-http-header-and-a-uri-of-\"https://www.example.com/my-path\"."
+    },
+    {
+      "title": "In this case:",
+      "url": "llms-txt#in-this-case:"
+    },
+    {
+      "title": "http.request.body.form",
+      "url": "llms-txt#http.request.body.form"
+    },
+    {
+      "title": "http.request.body.form.names",
+      "url": "llms-txt#http.request.body.form.names"
+    },
+    {
+      "title": "http.request.body.mime",
+      "url": "llms-txt#http.request.body.mime"
+    },
+    {
+      "title": "http.request.body.form.values",
+      "url": "llms-txt#http.request.body.form.values"
+    },
+    {
+      "title": "http.request.body.multipart",
+      "url": "llms-txt#http.request.body.multipart"
+    },
+    {
+      "title": "http.request.body.multipart.content\\_dispositions",
+      "url": "llms-txt#http.request.body.multipart.content\\_dispositions"
+    },
+    {
+      "title": "http.request.body.multipart.content\\_transfer\\_encodings",
+      "url": "llms-txt#http.request.body.multipart.content\\_transfer\\_encodings"
+    },
+    {
+      "title": "http.request.body.multipart.filenames",
+      "url": "llms-txt#http.request.body.multipart.filenames"
+    },
+    {
+      "title": "http.request.body.multipart.content\\_types",
+      "url": "llms-txt#http.request.body.multipart.content\\_types"
+    },
+    {
+      "title": "http.request.body.multipart.names",
+      "url": "llms-txt#http.request.body.multipart.names"
+    },
+    {
+      "title": "http.request.body.multipart.values",
+      "url": "llms-txt#http.request.body.multipart.values"
+    },
+    {
+      "title": "http.request.body.raw",
+      "url": "llms-txt#http.request.body.raw"
+    },
+    {
+      "title": "http.request.body.size",
+      "url": "llms-txt#http.request.body.size"
+    },
+    {
+      "title": "http.request.body.truncated",
+      "url": "llms-txt#http.request.body.truncated"
+    },
+    {
+      "title": "http.request.cookies",
+      "url": "llms-txt#http.request.cookies"
+    },
+    {
+      "title": "http.request.full\\_uri",
+      "url": "llms-txt#http.request.full\\_uri"
+    },
+    {
+      "title": "http.request.headers",
+      "url": "llms-txt#http.request.headers"
+    },
+    {
+      "title": "http.request.headers.names",
+      "url": "llms-txt#http.request.headers.names"
+    },
+    {
+      "title": "http.request.headers.truncated",
+      "url": "llms-txt#http.request.headers.truncated"
+    },
+    {
+      "title": "http.request.headers.values",
+      "url": "llms-txt#http.request.headers.values"
+    },
+    {
+      "title": "Example 1: Check for specific header value.",
+      "url": "llms-txt#example-1:-check-for-specific-header-value."
+    },
+    {
+      "title": "Example 2: Match requests according to the specified operator and the length/size entered for the header value.",
+      "url": "llms-txt#example-2:-match-requests-according-to-the-specified-operator-and-the-length/size-entered-for-the-header-value."
+    },
+    {
+      "title": "http.request.jwt.claims.aud",
+      "url": "llms-txt#http.request.jwt.claims.aud"
+    },
+    {
+      "title": "http.request.jwt.claims.aud.names",
+      "url": "llms-txt#http.request.jwt.claims.aud.names"
+    },
+    {
+      "title": "http.request.jwt.claims.aud.values",
+      "url": "llms-txt#http.request.jwt.claims.aud.values"
+    },
+    {
+      "title": "http.request.jwt.claims.iat.sec.names",
+      "url": "llms-txt#http.request.jwt.claims.iat.sec.names"
+    },
+    {
+      "title": "http.request.jwt.claims.iat.sec",
+      "url": "llms-txt#http.request.jwt.claims.iat.sec"
+    },
+    {
+      "title": "http.request.jwt.claims.iat.sec.values",
+      "url": "llms-txt#http.request.jwt.claims.iat.sec.values"
+    },
+    {
+      "title": "http.request.jwt.claims.iss",
+      "url": "llms-txt#http.request.jwt.claims.iss"
+    },
+    {
+      "title": "http.request.jwt.claims.iss.names",
+      "url": "llms-txt#http.request.jwt.claims.iss.names"
+    },
+    {
+      "title": "http.request.jwt.claims.iss.values",
+      "url": "llms-txt#http.request.jwt.claims.iss.values"
+    },
+    {
+      "title": "http.request.jwt.claims.jti",
+      "url": "llms-txt#http.request.jwt.claims.jti"
+    },
+    {
+      "title": "http.request.jwt.claims.jti.names",
+      "url": "llms-txt#http.request.jwt.claims.jti.names"
+    },
+    {
+      "title": "http.request.jwt.claims.jti.values",
+      "url": "llms-txt#http.request.jwt.claims.jti.values"
+    },
+    {
+      "title": "http.request.jwt.claims.nbf.sec",
+      "url": "llms-txt#http.request.jwt.claims.nbf.sec"
+    },
+    {
+      "title": "http.request.jwt.claims.nbf.sec.names",
+      "url": "llms-txt#http.request.jwt.claims.nbf.sec.names"
+    },
+    {
+      "title": "http.request.jwt.claims.nbf.sec.values",
+      "url": "llms-txt#http.request.jwt.claims.nbf.sec.values"
+    },
+    {
+      "title": "http.request.jwt.claims.sub",
+      "url": "llms-txt#http.request.jwt.claims.sub"
+    },
+    {
+      "title": "http.request.jwt.claims.sub.names",
+      "url": "llms-txt#http.request.jwt.claims.sub.names"
+    },
+    {
+      "title": "http.request.jwt.claims.sub.values",
+      "url": "llms-txt#http.request.jwt.claims.sub.values"
+    },
+    {
+      "title": "http.request.method",
+      "url": "llms-txt#http.request.method"
+    },
+    {
+      "title": "http.request.timestamp.sec",
+      "url": "llms-txt#http.request.timestamp.sec"
+    },
+    {
+      "title": "http.request.timestamp.msec",
+      "url": "llms-txt#http.request.timestamp.msec"
+    },
+    {
+      "title": "http.request.uri",
+      "url": "llms-txt#http.request.uri"
+    },
+    {
+      "title": "http.request.uri.args",
+      "url": "llms-txt#http.request.uri.args"
+    },
+    {
+      "title": "http.request.uri.args.names",
+      "url": "llms-txt#http.request.uri.args.names"
+    },
+    {
+      "title": "http.request.uri.args.values",
+      "url": "llms-txt#http.request.uri.args.values"
+    },
+    {
+      "title": "http.request.uri.path",
+      "url": "llms-txt#http.request.uri.path"
+    },
+    {
+      "title": "http.request.uri.path.extension",
+      "url": "llms-txt#http.request.uri.path.extension"
+    },
+    {
+      "title": "http.request.uri.query",
+      "url": "llms-txt#http.request.uri.query"
+    },
+    {
+      "title": "http.request.version",
+      "url": "llms-txt#http.request.version"
+    },
+    {
+      "title": "http.response.code",
+      "url": "llms-txt#http.response.code"
+    },
+    {
+      "title": "http.response.content\\_type.media\\_type",
+      "url": "llms-txt#http.response.content\\_type.media\\_type"
+    },
+    {
+      "title": "http.response.headers",
+      "url": "llms-txt#http.response.headers"
+    },
+    {
+      "title": "http.response.headers.names",
+      "url": "llms-txt#http.response.headers.names"
+    },
+    {
+      "title": "http.response.headers.values",
+      "url": "llms-txt#http.response.headers.values"
+    },
+    {
+      "title": "Example 1: Check for specific header value.",
+      "url": "llms-txt#example-1:-check-for-specific-header-value."
+    },
+    {
+      "title": "Example 2: Match requests according to the specified operator and the length/size entered for the header value.",
+      "url": "llms-txt#example-2:-match-requests-according-to-the-specified-operator-and-the-length/size-entered-for-the-header-value."
+    },
+    {
+      "title": "http.user\\_agent",
+      "url": "llms-txt#http.user\\_agent"
+    },
+    {
+      "title": "http.x\\_forwarded\\_for",
+      "url": "llms-txt#http.x\\_forwarded\\_for"
+    },
+    {
+      "title": "ip.src",
+      "url": "llms-txt#ip.src"
+    },
+    {
+      "title": "ip.src.asnum",
+      "url": "llms-txt#ip.src.asnum"
+    },
+    {
+      "title": "ip.src.city",
+      "url": "llms-txt#ip.src.city"
+    },
+    {
+      "title": "ip.src.continent",
+      "url": "llms-txt#ip.src.continent"
+    },
+    {
+      "title": "ip.src.country",
+      "url": "llms-txt#ip.src.country"
+    },
+    {
+      "title": "ip.src.is\\_in\\_european\\_union",
+      "url": "llms-txt#ip.src.is\\_in\\_european\\_union"
+    },
+    {
+      "title": "ip.src.lat",
+      "url": "llms-txt#ip.src.lat"
+    },
+    {
+      "title": "ip.src.lon",
+      "url": "llms-txt#ip.src.lon"
+    },
+    {
+      "title": "ip.src.metro\\_code",
+      "url": "llms-txt#ip.src.metro\\_code"
+    },
+    {
+      "title": "ip.src.postal\\_code",
+      "url": "llms-txt#ip.src.postal\\_code"
+    },
+    {
+      "title": "ip.src.region",
+      "url": "llms-txt#ip.src.region"
+    },
+    {
+      "title": "ip.src.region\\_code",
+      "url": "llms-txt#ip.src.region\\_code"
+    },
+    {
+      "title": "ip.src.subdivision\\_1\\_iso\\_code",
+      "url": "llms-txt#ip.src.subdivision\\_1\\_iso\\_code"
+    },
+    {
+      "title": "ip.src.subdivision\\_2\\_iso\\_code",
+      "url": "llms-txt#ip.src.subdivision\\_2\\_iso\\_code"
+    },
+    {
+      "title": "ip.src.timezone.name",
+      "url": "llms-txt#ip.src.timezone.name"
+    },
+    {
+      "title": "raw\\.http.request.full\\_uri",
+      "url": "llms-txt#raw\\.http.request.full\\_uri"
+    },
+    {
+      "title": "raw\\.http.request.uri",
+      "url": "llms-txt#raw\\.http.request.uri"
+    },
+    {
+      "title": "raw\\.http.request.uri.args",
+      "url": "llms-txt#raw\\.http.request.uri.args"
+    },
+    {
+      "title": "raw\\.http.request.uri.args.names",
+      "url": "llms-txt#raw\\.http.request.uri.args.names"
+    },
+    {
+      "title": "raw\\.http.request.uri.args.values",
+      "url": "llms-txt#raw\\.http.request.uri.args.values"
+    },
+    {
+      "title": "raw\\.http.request.uri.path",
+      "url": "llms-txt#raw\\.http.request.uri.path"
+    },
+    {
+      "title": "raw\\.http.request.uri.path.extension",
+      "url": "llms-txt#raw\\.http.request.uri.path.extension"
+    },
+    {
+      "title": "raw\\.http.request.uri.query",
+      "url": "llms-txt#raw\\.http.request.uri.query"
+    },
+    {
+      "title": "raw\\.http.response.headers",
+      "url": "llms-txt#raw\\.http.response.headers"
+    },
+    {
+      "title": "raw\\.http.response.headers.names",
+      "url": "llms-txt#raw\\.http.response.headers.names"
+    },
+    {
+      "title": "raw\\.http.response.headers.values",
+      "url": "llms-txt#raw\\.http.response.headers.values"
+    },
+    {
+      "title": "Example 1: Check for specific header value.",
+      "url": "llms-txt#example-1:-check-for-specific-header-value."
+    },
+    {
+      "title": "Example 2: Match requests according to the specified operator and the length/size entered for the header value.",
+      "url": "llms-txt#example-2:-match-requests-according-to-the-specified-operator-and-the-length/size-entered-for-the-header-value."
+    },
+    {
+      "title": "ssl",
+      "url": "llms-txt#ssl"
+    },
+    {
+      "title": "Push the certificate",
+      "url": "llms-txt#push-the-certificate"
+    },
+    {
+      "title": "Test with version affinity - both requests should hit the same version",
+      "url": "llms-txt#test-with-version-affinity---both-requests-should-hit-the-same-version"
+    },
+    {
+      "title": "Dispatches to the \"api\" worker",
+      "url": "llms-txt#dispatches-to-the-\"api\"-worker"
+    },
+    {
+      "title": "Response:",
+      "url": "llms-txt#response:"
+    },
+    {
+      "title": "The Application Audience (AUD) tag for your application",
+      "url": "llms-txt#the-application-audience-(aud)-tag-for-your-application"
+    },
+    {
+      "title": "Your CF Access team domain",
+      "url": "llms-txt#your-cf-access-team-domain"
+    },
+    {
+      "title": "curl with Legacy API Key",
+      "url": "llms-txt#curl-with-legacy-api-key"
+    },
+    {
+      "title": "curl with API Token",
+      "url": "llms-txt#curl-with-api-token"
+    },
+    {
+      "title": "systemd Project Licensing",
+      "url": "llms-txt#systemd-project-licensing"
+    },
+    {
+      "title": "systemd Project Licensing",
+      "url": "llms-txt#systemd-project-licensing"
+    },
+    {
+      "title": "systemd Project Licensing",
+      "url": "llms-txt#systemd-project-licensing"
+    },
+    {
+      "title": "systemd Project Licensing",
+      "url": "llms-txt#systemd-project-licensing"
+    },
+    {
+      "title": "No change to base priority.",
+      "url": "llms-txt#no-change-to-base-priority."
+    },
+    {
+      "title": "Add 10 to base priority for 1 prepend of 65000",
+      "url": "llms-txt#add-10-to-base-priority-for-1-prepend-of-65000"
+    },
+    {
+      "title": "Add 20 to base priority for 2 prepend of 65000",
+      "url": "llms-txt#add-20-to-base-priority-for-2-prepend-of-65000"
+    },
+    {
+      "title": "This host is not resolvable by default",
+      "url": "llms-txt#this-host-is-not-resolvable-by-default"
+    },
+    {
+      "title": "Create a bridge network called demo",
+      "url": "llms-txt#create-a-bridge-network-called-demo"
+    },
+    {
+      "title": "The host is resolvable by running a container under this custom network",
+      "url": "llms-txt#the-host-is-resolvable-by-running-a-container-under-this-custom-network"
+    },
+    {
+      "title": "The host is also resolvable by running a container using a host network",
+      "url": "llms-txt#the-host-is-also-resolvable-by-running-a-container-using-a-host-network"
+    },
+    {
+      "title": "This is the sshd server system-wide configuration file.  See",
+      "url": "llms-txt#this-is-the-sshd-server-system-wide-configuration-file.--see"
+    },
+    {
+      "title": "sshd_config(5) for more information.",
+      "url": "llms-txt#sshd_config(5)-for-more-information."
+    },
+    {
+      "title": "The strategy used for options in the default sshd_config shipped with",
+      "url": "llms-txt#the-strategy-used-for-options-in-the-default-sshd_config-shipped-with"
+    },
+    {
+      "title": "OpenSSH is to specify options with their default value where",
+      "url": "llms-txt#openssh-is-to-specify-options-with-their-default-value-where"
+    },
+    {
+      "title": "possible, but leave them commented.  Uncommented options override the",
+      "url": "llms-txt#possible,-but-leave-them-commented.--uncommented-options-override-the"
+    },
+    {
+      "title": "default value.",
+      "url": "llms-txt#default-value."
+    },
+    {
+      "title": "When systemd socket activation is used (the default), the socket",
+      "url": "llms-txt#when-systemd-socket-activation-is-used-(the-default),-the-socket"
+    },
+    {
+      "title": "configuration must be re-generated after changing Port, AddressFamily, or",
+      "url": "llms-txt#configuration-must-be-re-generated-after-changing-port,-addressfamily,-or"
+    },
+    {
+      "title": "ListenAddress.",
+      "url": "llms-txt#listenaddress."
+    },
+    {
+      "title": "For changes to take effect, run:",
+      "url": "llms-txt#for-changes-to-take-effect,-run:"
+    },
+    {
+      "title": "systemctl daemon-reload",
+      "url": "llms-txt#systemctl-daemon-reload"
+    },
+    {
+      "title": "systemctl restart ssh.socket",
+      "url": "llms-txt#systemctl-restart-ssh.socket"
+    },
+    {
+      "title": "Ciphers and keying",
+      "url": "llms-txt#ciphers-and-keying"
+    },
+    {
+      "title": "Logging",
+      "url": "llms-txt#logging"
+    },
+    {
+      "title": "Authentication:",
+      "url": "llms-txt#authentication:"
+    },
+    {
+      "title": "Expect .ssh/authorized_keys2 to be disregarded by default in future.",
+      "url": "llms-txt#expect-.ssh/authorized_keys2-to-be-disregarded-by-default-in-future."
+    },
+    {
+      "title": "For this to work you will also need host keys in /etc/ssh/ssh_known_hosts",
+      "url": "llms-txt#for-this-to-work-you-will-also-need-host-keys-in-/etc/ssh/ssh_known_hosts"
+    },
+    {
+      "title": "Change to yes if you don't trust ~/.ssh/known_hosts for",
+      "url": "llms-txt#change-to-yes-if-you-don't-trust-~/.ssh/known_hosts-for"
+    },
+    {
+      "title": "HostbasedAuthentication",
+      "url": "llms-txt#hostbasedauthentication"
+    },
+    {
+      "title": "Don't read the user's ~/.rhosts and ~/.shosts files",
+      "url": "llms-txt#don't-read-the-user's-~/.rhosts-and-~/.shosts-files"
+    },
+    {
+      "title": "To disable tunneled clear text passwords, change to no here!",
+      "url": "llms-txt#to-disable-tunneled-clear-text-passwords,-change-to-no-here!"
+    },
+    {
+      "title": "Change to yes to enable challenge-response passwords (beware issues with",
+      "url": "llms-txt#change-to-yes-to-enable-challenge-response-passwords-(beware-issues-with"
+    },
+    {
+      "title": "some PAM modules and threads)",
+      "url": "llms-txt#some-pam-modules-and-threads)"
+    },
+    {
+      "title": "Kerberos options",
+      "url": "llms-txt#kerberos-options"
+    },
+    {
+      "title": "GSSAPI options",
+      "url": "llms-txt#gssapi-options"
+    },
+    {
+      "title": "Set this to 'yes' to enable PAM authentication, account processing,",
+      "url": "llms-txt#set-this-to-'yes'-to-enable-pam-authentication,-account-processing,"
+    },
+    {
+      "title": "and session processing. If this is enabled, PAM authentication will",
+      "url": "llms-txt#and-session-processing.-if-this-is-enabled,-pam-authentication-will"
+    },
+    {
+      "title": "be allowed through the KbdInteractiveAuthentication and",
+      "url": "llms-txt#be-allowed-through-the-kbdinteractiveauthentication-and"
+    },
+    {
+      "title": "PasswordAuthentication.  Depending on your PAM configuration,",
+      "url": "llms-txt#passwordauthentication.--depending-on-your-pam-configuration,"
+    },
+    {
+      "title": "PAM authentication via KbdInteractiveAuthentication may bypass",
+      "url": "llms-txt#pam-authentication-via-kbdinteractiveauthentication-may-bypass"
+    },
+    {
+      "title": "the setting of \"PermitRootLogin yes",
+      "url": "llms-txt#the-setting-of-\"permitrootlogin-yes"
+    },
+    {
+      "title": "If you just want the PAM account and session checks to run without",
+      "url": "llms-txt#if-you-just-want-the-pam-account-and-session-checks-to-run-without"
+    },
+    {
+      "title": "PAM authentication, then enable this but set PasswordAuthentication",
+      "url": "llms-txt#pam-authentication,-then-enable-this-but-set-passwordauthentication"
+    },
+    {
+      "title": "and KbdInteractiveAuthentication to 'no'.",
+      "url": "llms-txt#and-kbdinteractiveauthentication-to-'no'."
+    },
+    {
+      "title": "no default banner path",
+      "url": "llms-txt#no-default-banner-path"
+    },
+    {
+      "title": "Allow client to pass locale environment variables",
+      "url": "llms-txt#allow-client-to-pass-locale-environment-variables"
+    },
+    {
+      "title": "override default of no subsystems",
+      "url": "llms-txt#override-default-of-no-subsystems"
+    },
+    {
+      "title": "Example of overriding settings on a per-user basis",
+      "url": "llms-txt#example-of-overriding-settings-on-a-per-user-basis"
+    },
+    {
+      "title": "X11Forwarding no",
+      "url": "llms-txt#x11forwarding-no"
+    },
+    {
+      "title": "AllowTcpForwarding no",
+      "url": "llms-txt#allowtcpforwarding-no"
+    },
+    {
+      "title": "PermitTTY no",
+      "url": "llms-txt#permittty-no"
+    },
+    {
+      "title": "ForceCommand cvs server",
+      "url": "llms-txt#forcecommand-cvs-server"
+    },
+    {
+      "title": "ipsec.conf - strongSwan IPsec configuration file",
+      "url": "llms-txt#ipsec.conf---strongswan-ipsec-configuration-file"
+    },
+    {
+      "title": "Sample VPN connections",
+      "url": "llms-txt#sample-vpn-connections"
+    },
+    {
+      "title": "reserved values",
+      "url": "llms-txt#reserved-values"
+    },
+    {
+      "title": "local",
+      "url": "llms-txt#local"
+    },
+    {
+      "title": "Write the mdm.xml file",
+      "url": "llms-txt#write-the-mdm.xml-file"
+    },
+    {
+      "title": "Add cloudflare gpg key",
+      "url": "llms-txt#add-cloudflare-gpg-key"
+    },
+    {
+      "title": "Add this repo to your apt repositories",
+      "url": "llms-txt#add-this-repo-to-your-apt-repositories"
+    },
+    {
+      "title": "Install",
+      "url": "llms-txt#install"
+    },
+    {
+      "title": "Created by Matt Wilson | se@kandji.io | Kandji, Inc. | Solutions Engineering",
+      "url": "llms-txt#created-by-matt-wilson-|-se@kandji.io-|-kandji,-inc.-|-solutions-engineering"
+    },
+    {
+      "title": "Created on 07/30/2021",
+      "url": "llms-txt#created-on-07/30/2021"
+    },
+    {
+      "title": "Software Information",
+      "url": "llms-txt#software-information"
+    },
+    {
+      "title": "This script is designed to check if an application is present. If the app is present, the",
+      "url": "llms-txt#this-script-is-designed-to-check-if-an-application-is-present.-if-the-app-is-present,-the"
+    },
+    {
+      "title": "script will check to see if a minimum version is being enforced. If a minimum app version is not",
+      "url": "llms-txt#script-will-check-to-see-if-a-minimum-version-is-being-enforced.-if-a-minimum-app-version-is-not"
+    },
+    {
+      "title": "being enforced, the script will only check to see if the app is installed or not.",
+      "url": "llms-txt#being-enforced,-the-script-will-only-check-to-see-if-the-app-is-installed-or-not."
+    },
+    {
+      "title": "License Information",
+      "url": "llms-txt#license-information"
+    },
+    {
+      "title": "Copyright 2021 Kandji, Inc.",
+      "url": "llms-txt#copyright-2021-kandji,-inc."
+    },
+    {
+      "title": "Permission is hereby granted, free of charge, to any person obtaining a copy of this",
+      "url": "llms-txt#permission-is-hereby-granted,-free-of-charge,-to-any-person-obtaining-a-copy-of-this"
+    },
+    {
+      "title": "software and associated documentation files (the \"Software\"), to deal in the Software",
+      "url": "llms-txt#software-and-associated-documentation-files-(the-\"software\"),-to-deal-in-the-software"
+    },
+    {
+      "title": "without restriction, including without limitation the rights to use, copy, modify, merge,",
+      "url": "llms-txt#without-restriction,-including-without-limitation-the-rights-to-use,-copy,-modify,-merge,"
+    },
+    {
+      "title": "publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons",
+      "url": "llms-txt#publish,-distribute,-sublicense,-and/or-sell-copies-of-the-software,-and-to-permit-persons"
+    },
+    {
+      "title": "to whom the Software is furnished to do so, subject to the following conditions:",
+      "url": "llms-txt#to-whom-the-software-is-furnished-to-do-so,-subject-to-the-following-conditions:"
+    },
+    {
+      "title": "The above copyright notice and this permission notice shall be included in all copies or",
+      "url": "llms-txt#the-above-copyright-notice-and-this-permission-notice-shall-be-included-in-all-copies-or"
+    },
+    {
+      "title": "substantial portions of the Software.",
+      "url": "llms-txt#substantial-portions-of-the-software."
+    },
+    {
+      "title": "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,",
+      "url": "llms-txt#the-software-is-provided-\"as-is\",-without-warranty-of-any-kind,-express-or-implied,"
+    },
+    {
+      "title": "INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR",
+      "url": "llms-txt#including-but-not-limited-to-the-warranties-of-merchantability,-fitness-for-a-particular"
+    },
+    {
+      "title": "PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE",
+      "url": "llms-txt#purpose-and-noninfringement.-in-no-event-shall-the-authors-or-copyright-holders-be-liable"
+    },
+    {
+      "title": "FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR",
+      "url": "llms-txt#for-any-claim,-damages-or-other-liability,-whether-in-an-action-of-contract,-tort-or"
+    },
+    {
+      "title": "OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER",
+      "url": "llms-txt#otherwise,-arising-from,-out-of-or-in-connection-with-the-software-or-the-use-or-other"
+    },
+    {
+      "title": "DEALINGS IN THE SOFTWARE.",
+      "url": "llms-txt#dealings-in-the-software."
+    },
+    {
+      "title": "Script version",
+      "url": "llms-txt#script-version"
+    },
+    {
+      "title": "If you would like to enforce a minimum version, be sure to update the ENFORCED_VERSION variable",
+      "url": "llms-txt#if-you-would-like-to-enforce-a-minimum-version,-be-sure-to-update-the-enforced_version-variable"
+    },
+    {
+      "title": "with the version number that the audit script should enforce. (Example version number",
+      "url": "llms-txt#with-the-version-number-that-the-audit-script-should-enforce.-(example-version-number"
+    },
+    {
+      "title": "1.5.207.0). If ENFORCED_VERSION is left blank, the audit script will not check for a version and",
+      "url": "llms-txt#1.5.207.0).-if-enforced_version-is-left-blank,-the-audit-script-will-not-check-for-a-version-and"
+    },
+    {
+      "title": "will only check for the presence of the Cloudflare WARP app at the defined APP_PATH.",
+      "url": "llms-txt#will-only-check-for-the-presence-of-the-cloudflare-warp-app-at-the-defined-app_path."
+    },
+    {
+      "title": "Make sure that the application matches the name of the app that will be installed.",
+      "url": "llms-txt#make-sure-that-the-application-matches-the-name-of-the-app-that-will-be-installed."
+    },
+    {
+      "title": "This script will dynamically search for the application in the Applications folder. So",
+      "url": "llms-txt#this-script-will-dynamically-search-for-the-application-in-the-applications-folder.-so"
+    },
+    {
+      "title": "there is no need to define an application path. The app must either install in the",
+      "url": "llms-txt#there-is-no-need-to-define-an-application-path.-the-app-must-either-install-in-the"
+    },
+    {
+      "title": "Applications folder or up to 3 sub-directories deep.",
+      "url": "llms-txt#applications-folder-or-up-to-3-sub-directories-deep."
+    },
+    {
+      "title": "For example Applications/<app_folder_name>/<app_name.app>",
+      "url": "llms-txt#for-example-applications/<app_folder_name>/<app_name.app>"
+    },
+    {
+      "title": "Change the PROFILE_PAYLOAD_ID_PREFIX variable to the profile prefix you want to wait on before",
+      "url": "llms-txt#change-the-profile_payload_id_prefix-variable-to-the-profile-prefix-you-want-to-wait-on-before"
+    },
+    {
+      "title": "running the installer. If the profile is not found, this audit and enforce script will exit 00",
+      "url": "llms-txt#running-the-installer.-if-the-profile-is-not-found,-this-audit-and-enforce-script-will-exit-00"
+    },
+    {
+      "title": "and do nothing until the next kandji agent check-in.",
+      "url": "llms-txt#and-do-nothing-until-the-next-kandji-agent-check-in."
+    },
+    {
+      "title": "All of the main logic be here ... modify at your own risk.",
+      "url": "llms-txt#all-of-the-main-logic-be-here-...-modify-at-your-own-risk."
+    },
+    {
+      "title": "The profiles variable will be set to an array of profiles that match the prefix in",
+      "url": "llms-txt#the-profiles-variable-will-be-set-to-an-array-of-profiles-that-match-the-prefix-in"
+    },
+    {
+      "title": "the PROFILE_PAYLOAD_ID_PREFIX variable",
+      "url": "llms-txt#the-profile_payload_id_prefix-variable"
+    },
+    {
+      "title": "If the PROFILE_PAYLOAD_ID_PREFIX is not found, exit 0 to wait for the next agent run.",
+      "url": "llms-txt#if-the-profile_payload_id_prefix-is-not-found,-exit-0-to-wait-for-the-next-agent-run."
+    }
+  ]
+}

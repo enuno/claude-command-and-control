@@ -1,0 +1,27 @@
+{
+  "title": "Install system packages",
+  "content": "RUN apt-get update && apt-get install -y \\\n    postgresql-client \\\n    redis-tools \\\n    && rm -rf /var/lib/apt/lists/*\njsonc\n{\n  \"containers\": [\n    {\n      \"class_name\": \"Sandbox\",\n      \"image\": \"./Dockerfile\",\n    },\n  ],\n}\ndockerfile\nFROM docker.io/cloudflare/sandbox:0.3.3\n\nCOPY my-app.js /workspace/my-app.js\nCOPY startup.sh /workspace/startup.sh\nRUN chmod +x /workspace/startup.sh\nCMD [\"/workspace/startup.sh\"]\nbash\n#!/bin/bash",
+  "code_samples": [
+    {
+      "code": "Update `wrangler.jsonc` to reference your Dockerfile:",
+      "language": "unknown"
+    },
+    {
+      "code": "When you run `wrangler dev` or `wrangler deploy`, Wrangler automatically builds your Docker image and pushes it to Cloudflare's container registry. You don't need to manually build or publish images.\n\n## Custom startup scripts\n\nRun services automatically when the container starts by creating a custom startup script:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Custom startup scripts",
+      "id": "custom-startup-scripts"
+    }
+  ],
+  "url": "llms-txt#install-system-packages",
+  "links": []
+}

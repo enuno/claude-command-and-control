@@ -1,0 +1,28 @@
+{
+  "title": "Invalid use of ends_with function",
+  "content": "http.request.uri.path ends_with \".html\"\ntxt\nlower(http.request.uri.path) contains \"/wp-login.php\"\ntxt",
+  "code_samples": [
+    {
+      "code": "### Comparing string values\n\nString comparison in rule expressions is case-sensitive. To account for possible variations of string capitalization in an expression, you can use the [`lower()`](https://developers.cloudflare.com/ruleset-engine/rules-language/functions/#lower) function and compare the result with a lowercased string, like in the following example:",
+      "language": "unknown"
+    },
+    {
+      "code": "[Wildcard matching](#wildcard-matching) is only supported with the `wildcard` and `strict wildcard` operators, and [regular expression matching](#regular-expression-matching) is only supported with the `matches` operator.\n\n### Wildcard matching\n\nThe `wildcard` operator performs a case-insensitive match between a field value and a literal string containing zero or more `*` metacharacters. Each `*` metacharacter represents zero or more characters. The `strict wildcard` operator performs a similar match, but is case-sensitive.\n\nWhen using the `wildcard`/`strict wildcard` operator, the entire field value must match the literal string with wildcards (the literal after the operator).",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Comparing string values",
+      "id": "comparing-string-values"
+    },
+    {
+      "level": "h3",
+      "text": "Wildcard matching",
+      "id": "wildcard-matching"
+    }
+  ],
+  "url": "llms-txt#invalid-use-of-ends_with-function",
+  "links": []
+}

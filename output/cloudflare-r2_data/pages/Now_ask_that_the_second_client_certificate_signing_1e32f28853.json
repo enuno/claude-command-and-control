@@ -1,0 +1,191 @@
+{
+  "title": "Now ask that the second client certificate signing request be signed.",
+  "content": "$ CSR=$(cat sensor.csr | perl -pe 's/\\n/\\\\n/g')\n$ request_body=$(< <(cat <<EOF\n{\n  \"validity_days\": 3650,\n  \"csr\":\"$CSR\"\n}\nEOF\n))\n\n$ curl https://api.cloudflare.com/client/v4/zones/{zone_id}/client_certificates \\\n--header \"X-Auth-Email: <EMAIL>\" \\\n--header \"X-Auth-Key: <API_KEY>\" \\\n--header \"Content-Type: application/json\" \\\n--data \"$request_body\" | perl -npe 's/\\\\n/\\n/g; s/\"//g' > sensor.pem\nsh\n$ openssl pkcs12 -export -out bootstrap-cert.pfx -inkey ios-key.pem -in ios.pem\nEnter Export Password:\nVerifying - Enter Export Password:\nxml\n<uses-permission android:name=\"android.permission.INTERNET\" />\njava\nprivate OkHttpClient setUpClient() {\n    try {\n        final String SECRET = \"secret\"; // You may also store this String somewhere more secure.\n        CertificateFactory certificateFactory = CertificateFactory.getInstance(\"X.509\");\n\n// Get private key\n        InputStream privateKeyInputStream = getResources().openRawResource(R.raw.key);\n        byte[] privateKeyByteArray = new byte[privateKeyInputStream.available()];\n        privateKeyInputStream.read(privateKeyByteArray);\n\nString privateKeyContent = new String(privateKeyByteArray, Charset.defaultCharset())\n                .replace(\"-----BEGIN PRIVATE KEY-----\", \"\")\n                .replaceAll(System.lineSeparator(), \"\")\n                .replace(\"-----END PRIVATE KEY-----\", \"\");\n\nbyte[] rawPrivateKeyByteArray = Base64.getDecoder().decode(privateKeyContent);\n        KeyFactory keyFactory = KeyFactory.getInstance(\"RSA\");\n        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(rawPrivateKeyByteArray);\n\n// Get certificate\n        InputStream certificateInputStream = getResources().openRawResource(R.raw.cert);\n        Certificate certificate = certificateFactory.generateCertificate(certificateInputStream);\n\n// Set up KeyStore\n        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());\n        keyStore.load(null, SECRET.toCharArray());\n        keyStore.setKeyEntry(\"client\", keyFactory.generatePrivate(keySpec), SECRET.toCharArray(), new Certificate[]{certificate});\n        certificateInputStream.close();\n\n// Set up Trust Managers\n        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());\n        trustManagerFactory.init((KeyStore) null);\n        TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();\n\n// Set up Key Managers\n        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());\n        keyManagerFactory.init(keyStore, SECRET.toCharArray());\n        KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();\n\n// Obtain SSL Socket Factory\n        SSLContext sslContext = SSLContext.getInstance(\"TLS\");\n        sslContext.init(keyManagers, trustManagers, new SecureRandom());\n        SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();\n\n// Finally, return the client, which will then be used to make HTTP calls.\n        OkHttpClient client = new OkHttpClient.Builder()\n                .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustManagers[0])\n                .build();\n\n} catch (CertificateException | IOException | NoSuchAlgorithmException | KeyStoreException | UnrecoverableKeyException | KeyManagementException | InvalidKeySpecException e) {\n        e.printStackTrace();\n        return null;\n    }\n}\npython\nimport requests\nimport json\nfrom datetime import datetime\n\n# Takes a reading from a temperature sensor and store it to temp_measurement\n\ndateTimeObj = datetime.now()\n    timestampStr = dateTimeObj.strftime('%Y-%m-%dT%H:%M:%SZ')\n\nmeasurement = {'temperature':str(temp_measurement),'time':timestampStr}\n    return measurement\n\nprint(\"Cloudflare API Shield [IoT device demonstration]\")\n\ntemperature = readSensor()\n    payload = json.dumps(temperature)\n\nurl = 'https://shield.upinatoms.com/temps'\n    json_headers = {'Content-Type': 'application/json'}\n    cert_file = ('/etc/ssl/certs/sensor.pem', '/etc/ssl/private/sensor-key.pem')\n\nr = requests.post(url, headers = json_headers, data = payload, cert = cert_file)\n\nprint(\"Request body: \", r.request.body)\n    print(\"Response status code: %d\" % r.status_code)\ntxt\nCloudflare API Shield [IoT device demonstration]\nRequest body:  {\"temperature\": \"36.5\", \"time\": \"2020-09-28T15:52:19Z\"}\nResponse status code: 403\ntxt\nCloudflare API Shield [IoT device demonstration]\nRequest body:  {\"temperature\": \"36.5\", \"time\": \"2020-09-28T15:56:45Z\"}\nResponse status code: 201\nsh\n  openssl req -new -newkey rsa:2048 -nodes -keyout client1.key -out client1.csr -subj '/C=GB/ST=London/L=London/O=Organization/CN=CommonName'\n  bash\ncurl \"https://api.cloudflare.com/client/v4/zones/$ZONE_ID/access/certificates/settings\" \\\n  --request PUT \\\n  --header \"X-Auth-Email: $CLOUDFLARE_EMAIL\" \\\n  --header \"X-Auth-Key: $CLOUDFLARE_API_KEY\" \\\n  --json '{\n    \"settings\": [\n        {\n            \"hostname\": \"<HOSTNAME>\",\n            \"china_network\": false,\n            \"client_certificate_forwarding\": true\n        }\n    ]\n  }'\njs\nconst tlsHeaders = {\n    'X-CERT-ISSUER-DN': request.cf.tlsClientAuth.certIssuerDN,\n    'X-CERT-SUBJECT-DN': request.cf.tlsClientAuth.certSubjectDN,\n    'X-CERT-ISSUER-DN-L': request.cf.tlsClientAuth.certIssuerDNLegacy,\n    'X-CERT-SUBJECT-DN-L': request.cf.tlsClientAuth.certSubjectDNLegacy,\n    'X-CERT-SERIAL': request.cf.tlsClientAuth.certSerial,\n    'X-CERT-FINGER': request.cf.tlsClientAuth.certFingerprintSHA1,\n    'X-CERT-VERIFY': request.cf.tlsClientAuth.certVerify,\n    'X-CERT-NOTBE': request.cf.tlsClientAuth.certNotBefore,\n    'X-CERT-NOTAF': request.cf.tlsClientAuth.certNotAfter\n};\nsh\nopenssl req -new -newkey rsa:2048 -nodes -keyout client1.key -out client1.csr\nplaintext\nCountry Name (2 letter code) []:\nState or Province Name (full name) []:\nLocality Name (eg, city) []:\nOrganization Name (eg, company) []:\nOrganizational Unit Name (eg, section) []:\nCommon Name (eg, fully qualified host name) []:\nEmail Address []:\nsh\ncurl --verbose --cert /path/to/certificate.pem --key /path/to/key.pem  https://your-api-endpoint.com\ntxt\n     (http.host in {\"api.trackers.ninja\"} and not cf.tls_client_auth.cert_verified)\n     bash\n➜  ~ dig example.com caa +short",
+  "code_samples": [
+    {
+      "code": "***\n\n## 3. Embed the client certificate in your mobile app\n\nTo configure the mobile app to securely request temperature data submitted by the IoT device, embed the client certificate in the mobile app.\n\nFor simplicity, this example embeds a “bootstrap” certificate and key in the application bundle as a PKCS#12-formatted file:",
+      "language": "unknown"
+    },
+    {
+      "code": "In a real-world deployment, a bootstrap certificate should only be used in conjunction with users' credentials to authenticate with an API endpoint that can return a unique user certificate. Corporate users will want to use mobile device management (MDM) to distribute certificates.\n\n### Embed the client certificate in an Android app\n\nThe following is an example of how you may use a client certificate in an Android app to make HTTP calls. You need to add the following permission in `AndroidManifest.xml` to allow an Internet connection.",
+      "language": "unknown"
+    },
+    {
+      "code": "For demonstration purposes, the certificate in this example is stored in `app/src/main/res/raw/cert.pem` and the private key is stored in `app/src/main/res/raw/key.pem`. You may also store these files in other secure manners.\n\nThe following example uses an `OkHttpClient`, but you may also use other clients such as `HttpURLConnection` in similar ways. The key is to use the `SSLSocketFactory`.",
+      "language": "unknown"
+    },
+    {
+      "code": "The above function returns an `OkHttpClient` embedded with the client certificate. You can now use this client to make HTTP requests to your API endpoint protected with mTLS.\n\n***\n\n## 4. Embed the client certificate on your IoT device\n\nTo prepare the IoT device for secure communication with the API endpoint, embed the certificate on the device and configure the device to use the certificate when making POST requests.\n\nThis example assumes the certificate and the private key are securely copied to `/etc/ssl/private/sensor-key.pem` and `/etc/ssl/certs/sensor.pem`.\n\nThe sample script is modified to point to these files:",
+      "language": "unknown"
+    },
+    {
+      "code": "When the script attempts to connect to `https://shield.upinatoms.com/temps`, Cloudflare requests that a client certificate is sent and the script sends the contents of `/etc/ssl/certs/sensor.pem`. Then, as required to complete the SSL/TLS handshake, the script demonstrates it has possession of `/etc/ssl/private/sensor-key.pem`.\n\nWithout the client certificate, the Cloudflare rejects the request:",
+      "language": "unknown"
+    },
+    {
+      "code": "When the IoT device presents a valid client certificate, the POST request succeeds and the temperature reading is recorded:",
+      "language": "unknown"
+    },
+    {
+      "code": "***\n\n## 5. Enable mTLS\n\nAfter creating Cloudflare-issued certificates, the next step is to [enable mTLS](https://developers.cloudflare.com/ssl/client-certificates/enable-mtls/) for the hosts you want to protect with API Shield.\n\n***\n\n## 6. Configure API Shield to require client certificates\n\nTo configure API Shield to require client certificates, [create a mTLS rule](https://developers.cloudflare.com/api-shield/security/mtls/configure/#create-an-mtls-rule).\n\n</page>\n\n<page>\n---\ntitle: Create a client certificate · Cloudflare SSL/TLS docs\ndescription: \"To create a client certificate on the Cloudflare dashboard:\"\nlastUpdated: 2025-10-28T14:13:10.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/client-certificates/create-a-client-certificate/\n  md: https://developers.cloudflare.com/ssl/client-certificates/create-a-client-certificate/index.md\n---\n\nTo create a client certificate on the Cloudflare dashboard:\n\n1. In the Cloudflare dashboard, go to the **Client Certificates** page.\n\n   [Go to **Client Certificates**](https://dash.cloudflare.com/?to=/:account/:zone/ssl-tls/client-certificates)\n\n2. Select **Create Certificate** and fill in the required fields. You can choose one of the following options:\n\n* Generate a private key and Certificate Signing Request (CSR) with Cloudflare.\n\n* Use your own private key and CSR. This option allows you to also [label client certificates](https://developers.cloudflare.com/ssl/client-certificates/label-client-certificate/).\n\n  Example OpenSSL command\n\n  To generate and use your own CSR, you can run a command like the following:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nClient certificates created on the dashboard are issued by a [Cloudflare-managed CA](https://developers.cloudflare.com/ssl/client-certificates/#how-it-works). If you need to use certificates issued by another CA, use the API to [bring your own CA](https://developers.cloudflare.com/ssl/client-certificates/byo-ca/) instead.\n\n1. Select a value for **Certificate Validity**, and choose **Create**.\n2. Make sure to copy the certificate and private key as they will no longer be displayed after creation.\n3. Select **OK** to confirm.\n\n## Next steps\n\nAfter creating the client certificate, make sure it is installed on the client devices and [enable mTLS](https://developers.cloudflare.com/ssl/client-certificates/enable-mtls/) for each hostname that should require a certificate from clients.\n\nRefer to our [mTLS at Cloudflare learning path](https://developers.cloudflare.com/learning-paths/mtls/concepts/) for further context.\n\n</page>\n\n<page>\n---\ntitle: Enable mTLS · Cloudflare SSL/TLS docs\ndescription: You can enable mutual Transport Layer Security (mTLS) for any hostname.\nlastUpdated: 2025-10-28T14:13:10.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/client-certificates/enable-mtls/\n  md: https://developers.cloudflare.com/ssl/client-certificates/enable-mtls/index.md\n---\n\nYou can enable mutual Transport Layer Security (mTLS) for any hostname.\n\nTo enable mTLS for a host from the Cloudflare dashboard:\n\n1. In the Cloudflare dashboard, go to the **Client Certificates** page.\n\n   [Go to **Client Certificates**](https://dash.cloudflare.com/?to=/:account/:zone/ssl-tls/client-certificates)\n\n2. On the **Hosts** section of the **Client Certificates** card, select **Edit**.\n\n3. Enter the name of a host in your current domain.\n\nNote\n\nThe domain (`example.com`) is automatically appended for you. This means that, if you want to enable mTLS for `abc.example.com`, you only need to type `abc`.\n\n1. Select **Save** to confirm.\n\n## CAs in use\n\nAs explained in the [Client certificates overview](https://developers.cloudflare.com/ssl/client-certificates/#how-it-works), Cloudflare validates client certificates against CAs set at account level. This means that these certificates can be used for validation across multiple zones/domains (`example.com`), as long as the zones are under the same Cloudflare account and you have enabled mTLS for the host.\n\nBring your own CA\n\nIf you need to use your own CA (instead of the Cloudflare Managed CA), refer to [BYOCA](https://developers.cloudflare.com/ssl/client-certificates/byo-ca/). This is an API-only option, available on Enterprise accounts. In this case, certificates and hostname associations are **not** listed on your dashboard.\n\n## Next steps\n\nAfter enabling mTLS for your host, you can:\n\n* Enforce mTLS with a WAF custom rule. Select **Create mTLS Rule** on the dashboard to use a template, or refer to our [mTLS at Cloudflare learning path](https://developers.cloudflare.com/learning-paths/mtls/mtls-app-security/#3-validate-the-client-certificate-in-the-waf) for further guidance.\n* Enforce mTLS with [API Shield](https://developers.cloudflare.com/api-shield/security/mtls/configure/). While API Shield is **not required** to use mTLS, many teams may use mTLS to protect their APIs.\n\n</page>\n\n<page>\n---\ntitle: Forward certificate to server · Cloudflare SSL/TLS docs\ndescription: Customers using Cloudflare Access also have the option to forward\n  client certificates to their origin server.\nlastUpdated: 2025-10-22T21:11:06.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/client-certificates/forward-a-client-certificate/\n  md: https://developers.cloudflare.com/ssl/client-certificates/forward-a-client-certificate/index.md\n---\n\nCustomers using [Cloudflare Access](https://developers.cloudflare.com/cloudflare-one/access-controls/policies/) also have the option to forward client certificates to their origin server.\n\n## Forward a client certificate\n\nIn addition to enforcing mTLS authentication for your host, you can also forward a client certificate to your origin server as an HTTP header. This setup is often helpful for server logging.\n\nTo avoid adding the certificate to every single request, the certificate is only forwarded on the first request of an mTLS connection.\n\nWarning\n\nThis process is only available on accounts with [Cloudflare Access](https://developers.cloudflare.com/cloudflare-one/).\n\n### Cloudflare API\n\nThe most common approach to forwarding a certificate is to use the Cloudflare API to [update an mTLS certificate's hostname settings](https://developers.cloudflare.com/api/resources/zero_trust/subresources/access/subresources/certificates/subresources/settings/methods/update/).\n\nRequired API token permissions\n\nAt least one of the following [token permissions](https://developers.cloudflare.com/fundamentals/api/reference/permissions/) is required:\n\n* `Access: Mutual TLS Certificates Write`",
+      "language": "unknown"
+    },
+    {
+      "code": "Once `client_certificate_forwarding` is set to `true`, every request within an mTLS connection will now include the following headers:\n\n* `Cf-Client-Cert-Der-Base64`\n* `Cf-Client-Cert-Sha256`\n\n### Managed Transforms\n\nYou can also [modify HTTP response headers](https://developers.cloudflare.com/rules/transform/response-header-modification/) using Managed Transforms to pass along **TLS client auth headers**.\n\n### Cloudflare Workers\n\nAdditionally, Workers can provide details around the [client certificate](https://developers.cloudflare.com/workers/runtime-apis/bindings/mtls/).",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Label client certificates · Cloudflare SSL/TLS docs\ndescription: After creating client certificates at Cloudflare, it may be hard to\n  differentiate the generated certificates.\nlastUpdated: 2024-08-20T19:58:51.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/client-certificates/label-client-certificate/\n  md: https://developers.cloudflare.com/ssl/client-certificates/label-client-certificate/index.md\n---\n\nAfter [creating client certificates](https://developers.cloudflare.com/ssl/client-certificates/) at Cloudflare, it may be hard to differentiate the generated certificates.\n\n## Root Cause\n\nThe option to generate private key and CSR with Cloudflare is meant for simpler cases and the certificates will be generated with just \"CN=Cloudflare, C=US\".\n\n## Solution\n\nIf you need to differentiate client certificates for your clients on a per-organization basis, you can generate your own private key and CSR. When you generate the private key and CSR, you can then enter information that will be incorporated into your certificate request.\n\nFor example, if you run the following command (with OpenSSL installed):",
+      "language": "unknown"
+    },
+    {
+      "code": "You can then specify:",
+      "language": "unknown"
+    },
+    {
+      "code": "Usually, adding `Country Name` and `Organization Name` is enough, but you can provide as much information as you need or want.\n\nThe additional information will be included in the **Certificate Subject**, allowing you to easily identify which certificate belongs to which client. This can also make it easier to revoke a specific certificate when needed.\n\nThe following image displays an example of how a certificate with with `Country Name`, `Organization Name`, and `Organizational Unit Name` will look like on the Cloudflare dashboard:\n\n![](https://developers.cloudflare.com/_astro/chrome_mQRJVOpkTQ.BiKeZMXO_Z181z3T.webp)\n\n</page>\n\n<page>\n---\ntitle: Revoke a client certificate · Cloudflare SSL/TLS docs\ndescription: You can revoke a client certificate you previously generated with\n  the default Cloudflare Managed CA.\nlastUpdated: 2025-10-28T14:13:10.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/client-certificates/revoke-client-certificate/\n  md: https://developers.cloudflare.com/ssl/client-certificates/revoke-client-certificate/index.md\n---\n\nYou can revoke a client certificate you previously generated with the default [Cloudflare Managed CA](https://developers.cloudflare.com/ssl/client-certificates/).\n\nIt is not possible to permanently delete client certificates generated with the default Cloudflare Managed CA. Once revoked, these client certificates will still be listed on the [**Client Certificates**](https://dash.cloudflare.com/?to=/:account/:zone/ssl-tls/client-certificates) page, and can be restored at any time.\n\n## Steps\n\n1. In the Cloudflare dashboard, go to the **Client Certificates** page.\n\n   [Go to **Client Certificates**](https://dash.cloudflare.com/?to=/:account/:zone/ssl-tls/client-certificates)\n\n2. Select the certificate you want to revoke.\n\n3. Select **Revoke** and confirm the operation.\n\nImportant\n\nAfter revoking a certificate, you must update any mTLS rules that check for the presence of a client certificate so that they block all requests that include a revoked certificate.\n\nFor more information, refer to [Check for revoked certificates](https://developers.cloudflare.com/api-shield/security/mtls/configure/#check-for-revoked-certificates).\n\n</page>\n\n<page>\n---\ntitle: Troubleshooting client certificates · Cloudflare SSL/TLS docs\ndescription: Troubleshoot issues with client certificates\nlastUpdated: 2025-10-28T14:13:10.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/client-certificates/troubleshooting/\n  md: https://developers.cloudflare.com/ssl/client-certificates/troubleshooting/index.md\n---\n\nIf your query returns an error even after configuring and embedding a client SSL certificate, check the following settings.\n\n***\n\n## Check SSL/TLS handshake\n\nOn your terminal, use the following command to check whether an SSL/TLS connection can be established successfully between the client and the API endpoint.",
+      "language": "unknown"
+    },
+    {
+      "code": "If the SSL/TLS handshake cannot be completed, check whether the certificate and the private key are correct.\n\n***\n\n## Check mTLS hosts\n\nCheck whether [mTLS has been enabled](https://developers.cloudflare.com/ssl/client-certificates/enable-mtls/) for the correct host. The host should match the API endpoint that you want to protect.\n\n***\n\n## Review mTLS rules\n\nTo review mTLS rules, consider the steps below. For further guidance refer to [Custom rules](https://developers.cloudflare.com/waf/custom-rules/create-dashboard/).\n\n1. In the Cloudflare dashboard, go to the **Security rules** page.\n\n   [Go to **Security rules**](https://dash.cloudflare.com/?to=/:account/:zone/security/security-rules)\n\n2. On a specific rule, select **Edit**.\n\n3. On that rule, check whether:\n\n   * The Expression Preview is correct.\n\n   * The hostname, if defined, matches your API endpoint. For example, for the API endpoint `api.trackers.ninja/time`, the rule should look like:",
+      "language": "unknown"
+    },
+    {
+      "code": "4. To edit the rule, either use the user interface or select **Edit expression**.\n\n</page>\n\n<page>\n---\ntitle: mTLS for Zero Trust · Cloudflare SSL/TLS docs\nlastUpdated: 2025-10-28T21:24:57.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/client-certificates/zero-trust-mtls/\n  md: https://developers.cloudflare.com/ssl/client-certificates/zero-trust-mtls/index.md\n---\n\n\n</page>\n\n<page>\n---\ntitle: Advanced certificates · Cloudflare SSL/TLS docs\ndescription: Use advanced certificates when you want something more customizable\n  than Universal SSL but still want the convenience of SSL certificate issuance\n  and renewal.\nlastUpdated: 2025-10-16T07:43:21.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/index.md\n---\n\nUse advanced certificates when you want something more customizable than [Universal SSL](https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/) but still want the convenience of SSL certificate issuance and renewal.\n\n\n\nTo order advanced certificates you must purchase the Advanced Certificate Manager add-on, which also includes other features.\n\n## Advanced Certificate Manager\n\nAdvanced Certificate Manager allows you to:\n\n* Order advanced certificates that can:\n\n  * Include the zone apex and up to 50 hosts as covered hostnames.\n  * Cover more than one level of subdomain.\n  * Be issued by the certificate authority (CA) you choose.\n  * Use your preferred validation method.\n  * Have the validity period you choose.\n\n* Use [delegated DCV](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/methods/delegated-dcv/) to delegate the DCV process of your [partial zones](https://developers.cloudflare.com/dns/zone-setups/partial-setup/) to Cloudflare.\n\n* Enable [Total TLS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/total-tls/) to automatically protect proxied hostnames.\n\n* Select a [custom trust store](https://developers.cloudflare.com/ssl/origin-configuration/custom-origin-trust-store/) for origin authentication.\n\n* Control [cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/) and [per-hostname minimum TLS version](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/minimum-tls/#per-hostname).\n\nNote\n\nEnterprise customers can also purchase a subscription for Advanced Certificate Manager, which allows them to add up to 100 edge certificates per zone.\n\n## Availability\n\n| | Free | Pro | Business | Enterprise |\n| - | - | - | - | - |\n| Availability | Paid add-on | Paid add-on | Paid add-on | Paid add-on |\n\nNote\n\nEnterprise customers can preview this product as a [non-contract service](https://developers.cloudflare.com/billing/preview-services/), which provides full access, free of metered usage fees, limits, and certain other restrictions.\n\n## Limitations\n\nAdvanced certificates are not used with [Cloudflare Pages](https://developers.cloudflare.com/pages/) nor [R2](https://developers.cloudflare.com/r2/) due to [certificate prioritization](https://developers.cloudflare.com/ssl/reference/certificate-and-hostname-priority/). Both Pages and R2 custom domains use Cloudflare for SaaS certificates.\n\nAdvanced certificates are [Domain Validated (DV)](https://developers.cloudflare.com/ssl/concepts/#validation-level). If your organization needs Organization Validated (OV) or Extended Validation (EV) certificates, refer to [Custom certificates](https://developers.cloudflare.com/ssl/edge-certificates/custom-certificates/).\n\nAdvanced certificates do not cover multiple different domains. For multi-domain certificate (MDC), consider the [Cloudflare for SaaS](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/) product. You can also find further guidance in [Leveraging Cloudflare for your SaaS applications](https://developers.cloudflare.com/reference-architecture/design-guides/leveraging-cloudflare-for-your-saas-applications/).\n\n## Related resources\n\n* [Manage advanced certificates](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/manage-certificates/)\n* [API commands](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/api-commands/)\n\n</page>\n\n<page>\n---\ntitle: Additional options · Cloudflare SSL/TLS docs\ndescription: \"Once you set up SSL/TLS on your application, you can adjust the\n  following settings on the Edge Certificates page:\"\nlastUpdated: 2025-10-28T14:13:10.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/additional-options/index.md\n---\n\nOnce you set up SSL/TLS on your application, you can adjust the following settings on the [**Edge Certificates**](https://dash.cloudflare.com/?to=/:account/:zone/ssl-tls/edge-certificates) page:\n\n* [Cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/)\n* [Certificate Transparency Monitoring](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/certificate-transparency-monitoring/)\n* [HTTP Strict Transport Security (HSTS)](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/http-strict-transport-security/)\n* [Certificate Signing Requests (CSRs)](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/certificate-signing-requests/)\n* [TLS 1.3](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/tls-13/)\n* [Minimum TLS Version](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/minimum-tls/)\n* [Automatic HTTPS Rewrites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/automatic-https-rewrites/)\n* [Total TLS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/total-tls/)\n* [Always Use HTTPS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/always-use-https/)\n* [Opportunistic Encryption](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/opportunistic-encryption/)\n\n</page>\n\n<page>\n---\ntitle: Backup certificates · Cloudflare SSL/TLS docs\ndescription: If Cloudflare is providing authoritative DNS for your domain,\n  Cloudflare will issue a backup Universal SSL certificate for every standard\n  Universal certificate issued.\nlastUpdated: 2024-09-19T08:55:48.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/backup-certificates/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/backup-certificates/index.md\n---\n\nIf Cloudflare is providing [authoritative DNS](https://developers.cloudflare.com/dns/zone-setups/full-setup/) for your domain, Cloudflare will issue a backup [Universal SSL certificate](https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/) for every standard Universal certificate issued.\n\nBackup certificates are wrapped with a different private key and issued from a different Certificate Authority — either Google Trust Services, Let's Encrypt, Sectigo, or SSL.com — than your domain's primary Universal SSL certificate.\n\nThese backup certificates are not normally deployed, but they will be deployed automatically by Cloudflare in the event of a certificate revocation or key compromise.\n\nFor additional details, refer to the [introductory blog post](https://blog.cloudflare.com/introducing-backup-certificates/).\n\n## Availability\n\n| | Free | Pro | Business | Enterprise |\n| - | - | - | - | - |\n| Availability | Yes | Yes | Yes | Yes |\n| Can opt out? | No | No | No | Yes |\n\n</page>\n\n<page>\n---\ntitle: Add CAA records · Cloudflare SSL/TLS docs\ndescription: A Certificate Authority Authorization (CAA) DNS record specifies\n  which certificate authorities (CAs) are allowed to issue certificates for a\n  domain. This record reduces the chance of unauthorized certificate issuance\n  and promotes standardization across your organization.\nlastUpdated: 2025-10-28T14:13:10.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/caa-records/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/caa-records/index.md\n---\n\nA Certificate Authority Authorization (CAA) DNS record specifies which certificate authorities (CAs) are allowed to issue certificates for a domain. This record reduces the chance of unauthorized certificate issuance and promotes standardization across your organization.\n\n\n\nFor additional security, set up [Certificate Transparency Monitoring](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/certificate-transparency-monitoring/) as well.\n\nNote\n\nFor more technical details about CAA records, refer to the [introductory blog post](https://blog.cloudflare.com/caa-of-the-wild/).\n\n## Who should create CAA records?\n\nYou should [create CAA records](#create-caa-records) in Cloudflare if each of the following is true:\n\n* You uploaded your own custom origin server certificate (not provisioned by Cloudflare).\n* That certificate was issued by a CA (not self-signed).\n* Your domain is on a full setup (not a [CNAME setup](https://developers.cloudflare.com/dns/zone-setups/partial-setup)).\n* When adding new [Custom Hostname](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/start/getting-started/) and your customer has existing CAA records. In this case, ask your customer to remove the existing CAA records or add the missing CAA record.\n\n## CAA records added by Cloudflare\n\nCloudflare adds CAA records automatically in the following situations:\n\n* When you have [Universal SSL](https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/) and add any CAA records to your zone.\n* When you have [advanced certificates](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/) and add any CAA records to your zone.\n\nThese records make sure Cloudflare can still issue Universal certificates on your behalf.\n\nIf Cloudflare has automatically added CAA records on your behalf, these records will not appear in the Cloudflare dashboard. However, if you run a command line query using `dig`, you can see any existing CAA records, including those added by Cloudflare (replacing `example.com` with your own domain on Cloudflare):",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "3. Embed the client certificate in your mobile app",
+      "id": "3.-embed-the-client-certificate-in-your-mobile-app"
+    },
+    {
+      "level": "h3",
+      "text": "Embed the client certificate in an Android app",
+      "id": "embed-the-client-certificate-in-an-android-app"
+    },
+    {
+      "level": "h2",
+      "text": "4. Embed the client certificate on your IoT device",
+      "id": "4.-embed-the-client-certificate-on-your-iot-device"
+    },
+    {
+      "level": "h2",
+      "text": "5. Enable mTLS",
+      "id": "5.-enable-mtls"
+    },
+    {
+      "level": "h2",
+      "text": "6. Configure API Shield to require client certificates",
+      "id": "6.-configure-api-shield-to-require-client-certificates"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "CAs in use",
+      "id": "cas-in-use"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "Forward a client certificate",
+      "id": "forward-a-client-certificate"
+    },
+    {
+      "level": "h3",
+      "text": "Cloudflare API",
+      "id": "cloudflare-api"
+    },
+    {
+      "level": "h3",
+      "text": "Managed Transforms",
+      "id": "managed-transforms"
+    },
+    {
+      "level": "h3",
+      "text": "Cloudflare Workers",
+      "id": "cloudflare-workers"
+    },
+    {
+      "level": "h2",
+      "text": "Root Cause",
+      "id": "root-cause"
+    },
+    {
+      "level": "h2",
+      "text": "Solution",
+      "id": "solution"
+    },
+    {
+      "level": "h2",
+      "text": "Steps",
+      "id": "steps"
+    },
+    {
+      "level": "h2",
+      "text": "Check SSL/TLS handshake",
+      "id": "check-ssl/tls-handshake"
+    },
+    {
+      "level": "h2",
+      "text": "Check mTLS hosts",
+      "id": "check-mtls-hosts"
+    },
+    {
+      "level": "h2",
+      "text": "Review mTLS rules",
+      "id": "review-mtls-rules"
+    },
+    {
+      "level": "h2",
+      "text": "Advanced Certificate Manager",
+      "id": "advanced-certificate-manager"
+    },
+    {
+      "level": "h2",
+      "text": "Availability",
+      "id": "availability"
+    },
+    {
+      "level": "h2",
+      "text": "Limitations",
+      "id": "limitations"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Availability",
+      "id": "availability"
+    },
+    {
+      "level": "h2",
+      "text": "Who should create CAA records?",
+      "id": "who-should-create-caa-records?"
+    },
+    {
+      "level": "h2",
+      "text": "CAA records added by Cloudflare",
+      "id": "caa-records-added-by-cloudflare"
+    }
+  ],
+  "url": "llms-txt#now-ask-that-the-second-client-certificate-signing-request-be-signed.",
+  "links": []
+}

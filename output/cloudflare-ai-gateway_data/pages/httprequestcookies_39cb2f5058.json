@@ -1,0 +1,17 @@
+{
+  "title": "http.request.cookies",
+  "content": "`http.request.cookies` Map\\<Array\\<String>>\n\nThe `Cookie` HTTP header associated with a request represented as a Map (associative array).\n\nRequires a Cloudflare Pro, Business, or Enterprise plan.\n\nThe cookie names are URL decoded. If two cookies have the same name after decoding, their value arrays are merged.\n\nThe cookie values are not pre-processed and retain the original case used in the request.\n\n<page>\n---\ntitle: http.request.headers · Cloudflare Ruleset Engine docs\ndescription: The HTTP request headers represented as a Map (or associative array).\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.headers/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.headers/index.md\n---",
+  "code_samples": [
+    {
+      "code": "{ \"app\": [\"test\"] }",
+      "language": "txt"
+    },
+    {
+      "code": "any(http.request.cookies[\"app\"][*] == \"test\")",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#http.request.cookies",
+  "links": []
+}

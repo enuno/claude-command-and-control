@@ -1,0 +1,173 @@
+{
+  "title": "CAA records added by Sectigo",
+  "content": "0 issue \"sectigo.com\"\n0 issuewild \"sectigo.com\"\njson\n\"tunnel\": {\n  \"vnet_id\": \"<VIRTUAL_NETWORK_ID>\",\n  \"private_ip\": \"<NETWORK>\"\n}\nsh\nsudo mkdir -p --mode=0755 /usr/share/keyrings\ncurl -fsSL https://pkg.cloudflare.com/cloudflare-public-v2.gpg | sudo tee /usr/share/keyrings/cloudflare-public-v2.gpg >/dev/null",
+  "code_samples": [
+    {
+      "code": "Note\n\nThis list is not exhaustive, and other CAs might be added or removed for operational reasons.\n\n</page>\n\n<page>\n---\ntitle: Alerts for Universal SSL · Cloudflare SSL/TLS docs\ndescription: You can configure alerts to receive notifications for changes in\n  your certificates.\nlastUpdated: 2024-08-13T19:56:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/alerts/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/alerts/index.md\n---\n\nYou can configure alerts to receive notifications for changes in your certificates.\n\nUniversal SSL Alert\n\n**Who is it for?**\n\nCustomers with universal certificates who want to receive a notification on validation, issuance, renewal, and expiration notices.\n\n**Other options / filters**\n\nNone.\n\n**Included with**\n\nAll Cloudflare plans.\n\n**What should you do if you receive one?**\n\nYou only need to take action if you are notified that you have a certificate that failed. You can find the reasons why a certificate is not being issued in [Troubleshooting SSL errors](https://developers.cloudflare.com/ssl/troubleshooting/general-ssl-errors/).\n\nRefer to [Cloudflare Notifications](https://developers.cloudflare.com/notifications/get-started/) for more information on how to set up an alert.\n\n</page>\n\n<page>\n---\ntitle: Disable Universal SSL certificates · Cloudflare SSL/TLS docs\ndescription: Some customers may need to manage their own SSL certificates or\n  rely on specific Certificate Authorities.\nlastUpdated: 2025-11-11T15:08:08.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/disable-universal-ssl/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/disable-universal-ssl/index.md\n---\n\nSome customers may need to manage their own SSL certificates or rely on specific Certificate Authorities.\n\nIf you disable your domain's Universal SSL certificate, Cloudflare removes that certificate from our network and will not order or renew any additional Universal SSL certificates.\n\nDisabling Universal SSL will not cause any interruption to ongoing TLS connections to your domain on Cloudflare's network, they will continue to be served according the the Universal SSL certificate used when they were first established. Eventually these connections will naturally end.\n\nNew TLS connections are expected to succeed as long as you have another valid certificate active, such as a [custom](https://developers.cloudflare.com/ssl/edge-certificates/custom-certificates/)) or [advanced](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/) certificate. New TLS connections will receive the highest priority certificate from our edge as per our [certificate and hostname priority](https://developers.cloudflare.com/ssl/reference/certificate-and-hostname-priority/). If a valid certificate is not active before disabling, TLS connections will fail. For more information, refer to [Potential errors](#potential-errors) below.\n\n## Potential errors\n\nTo avoid errors with your domain, either [upload a custom certificate](https://developers.cloudflare.com/ssl/edge-certificates/custom-certificates/) or purchase [Advanced Certificate Manager](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/) before disabling Universal SSL.\n\nIf you disable Universal SSL, you may experience errors with the following scenarios:\n\n* **Enabled features**:\n\n  * [HTTP Strict Transport Security (HSTS)](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/http-strict-transport-security/)\n  * [Always Use HTTPS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/always-use-https/)\n  * [Opportunistic Encryption](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/opportunistic-encryption/)\n\n* **Other setups**:\n\n  * [Page Rules](https://developers.cloudflare.com/rules/page-rules/) that redirect traffic to HTTPS\n  * HTTP to HTTPS redirects at your origin web server\n\n## Disable Universal SSL certificate\n\nBefore you disable Universal SSL/TLS, make sure you have [uploaded a custom certificate](https://developers.cloudflare.com/ssl/edge-certificates/custom-certificates/) or purchased [Advanced Certificate Manager](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/) to protect your domain.\n\n* Dashboard\n\n  To disable Universal SSL in the dashboard:\n\n  1. In the Cloudflare dashboard, go to the **Edge Certificates** page.\n\n     [Go to **Edge Certificates**](https://dash.cloudflare.com/?to=/:account/:zone/ssl-tls/edge-certificates)\n\n  2. For **Disable Universal SSL**, select **Disable Universal SSL**.\n\n  3. Read the warnings in the **Acknowledgement**.\n\n  4. Select **I Understand** and select **Confirm**.\n\n* API\n\n  To disable Universal SSL with the Cloudflare API, send a [`PATCH`](https://developers.cloudflare.com/api/resources/ssl/subresources/universal/subresources/settings/methods/edit/) request and include the `\"enabled\": false` parameter.\n\n## Re-enable Universal SSL\n\n* Dashboard\n\n  To re-enable Universal SSL in the dashboard:\n\n  1. In the Cloudflare dashboard, go to the **Edge Certificates** page.\n\n     [Go to **Edge Certificates**](https://dash.cloudflare.com/?to=/:account/:zone/ssl-tls/edge-certificates)\n\n  2. For **Disable Universal SSL**, select **Enable Universal SSL**.\n\n* API\n\n  To re-enable Universal SSL with the Cloudflare API, send a [`PATCH`](https://developers.cloudflare.com/api/resources/ssl/subresources/universal/subresources/settings/methods/edit/) request and include the `\"enabled\": true` parameter.\n\n</page>\n\n<page>\n---\ntitle: Enable Universal SSL certificates · Cloudflare SSL/TLS docs\ndescription: By default, Cloudflare issues — and renews — free, unshared,\n  publicly trusted SSL certificates to all domains added to and activated on\n  Cloudflare.\nlastUpdated: 2025-10-28T14:13:10.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/enable-universal-ssl/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/enable-universal-ssl/index.md\n---\n\nBy default, Cloudflare issues — and [renews](https://developers.cloudflare.com/ssl/reference/certificate-validity-periods/#universal-ssl) — free, unshared, publicly trusted SSL certificates to all domains [added to](https://developers.cloudflare.com/fundamentals/manage-domains/add-site/) and [activated on](https://developers.cloudflare.com/dns/zone-setups/reference/domain-status/) Cloudflare.\n\n***\n\nThe process for activating a Universal SSL certificate depends on your domain's DNS setup.\n\n## Full DNS setup\n\nFor domains on a [full setup](https://developers.cloudflare.com/dns/zone-setups/full-setup/)[1](#user-content-fn-1), your domain should **automatically** receive its Universal SSL certificate within **15 minutes to 24 hours** of domain activation[2](#user-content-fn-2).\n\nThis certificate will cover your zone apex (`example.com`) and all first-level subdomains (`subdomain.example.com`), and is provisioned even if your records are DNS only. However, the certificate will only be presented if your domain or subdomains are [proxied](https://developers.cloudflare.com/dns/proxy-status/).\n\n## Footnotes\n\n1. The most common Cloudflare setup that involves changing your authoritative nameservers. [↩](#user-content-fnref-1)\n\n2. Provisioning time depends on certain security checks and other requirements mandated by Certificate Authorities (CA). [↩](#user-content-fnref-2)\n\n### Minimize downtime\n\nIf your website or application is already live and cannot be uncovered while the Universal certificate is provisioned, consider the following:\n\n* Order an [advanced certificate](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/) before proxying traffic to Cloudflare.\n* Upload a [custom certificate](https://developers.cloudflare.com/ssl/edge-certificates/custom-certificates/) prior to migrating and then delete the certificate after your [Universal certificate is active](#verify-your-certificate-is-active).\n* Keep DNS records [**unproxied**](https://developers.cloudflare.com/dns/proxy-status/) until your [certificate is active](#verify-your-certificate-is-active).\n\nNote\n\nIf your domain is using a **partial setup**, you will need to add [Domain Control Validation (DCV) records](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/) to your authoritative DNS.\n\n## Partial DNS setup\n\nFor non-authoritative or [partial domains](https://developers.cloudflare.com/dns/zone-setups/partial-setup/), Universal SSL will be:\n\n* Provisioned once the DNS record is [proxied through Cloudflare](https://developers.cloudflare.com/dns/zone-setups/partial-setup/setup/#3-add-dns-records).\n\n* Validated:\n\n  * Immediately if you add [Domain Control Validation (DCV)](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/) records to your authoritative DNS.\n  * After a brief period of downtime if you **do not** add DCV records (once your traffic is proxied).\n\nUnless you cover and validate multiple subdomains with an [advanced certificate](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/), you will need to proxy and validate new subdomains as they are added.\n\n***\n\n## Verify your certificate is active\n\nOnce you enable Universal SSL, you can review the [activation status](https://developers.cloudflare.com/ssl/reference/certificate-statuses/) on the [**Edge Certificates**](https://dash.cloudflare.com/?to=/:account/:zone/ssl-tls/edge-certificates) page or via the API with a [GET request](https://developers.cloudflare.com/api/resources/ssl/subresources/certificate_packs/methods/list/).\n\n***\n\n## Universal SSL renewal\n\nFor Universal certificates, Cloudflare controls the validity periods and certificate authorities (CAs), making sure that renewal always occur.\n\nPartial setup and DCV\n\nIf you are on a [partial setup](https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/enable-universal-ssl/#partial-dns-setup), make sure [Domain control validation (DCV)](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/) is configured correctly. Refer to [Troubleshooting DCV](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/troubleshooting/) for further help.\n\nUniversal certificates have a 90-day validity period. The auto renewal period starts 30 days before expiration.\n\nFor details, refer to [Validity periods and renewal](https://developers.cloudflare.com/ssl/reference/certificate-validity-periods/).\n\n</page>\n\n<page>\n---\ntitle: Limitations for Universal SSL · Cloudflare SSL/TLS docs\ndescription: Review the limitations of Universal certificates, such as hostname\n  coverage, certificate authority  choice, and compatibility with other\n  products.\nlastUpdated: 2025-07-31T09:31:55.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/limitations/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/limitations/index.md\n---\n\nUniversal SSL certificates present some limitations.\n\n## Proxy status\n\nCloudflare can only serve an SSL/TLS certificate for a DNS record when you set the record's [proxy status](https://developers.cloudflare.com/dns/proxy-status/) to **Proxied**. If you do not do this, the origin server your record points to will be responsible for supporting SSL/TLS connections.\n\n## Hostname coverage\n\n### Full setup\n\nUniversal SSL certificates only support SSL for the root or first-level subdomains such as `example.com` and `www.example.com`. To enable SSL support on second, third, and fourth-level subdomains such as `dev.www.example.com` or `app3.dev.www.example.com`, you can:\n\n* Purchase [Advanced Certificate Manager](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/) to order advanced certificates.\n* Upgrade to a Business or Enterprise plan to [upload custom certificates](https://developers.cloudflare.com/ssl/edge-certificates/custom-certificates/).\n\n### CNAME setup\n\nOn a [CNAME setup zone](https://developers.cloudflare.com/dns/zone-setups/partial-setup/), each subdomain (regardless of level) has its own Universal SSL certificate and does not require additional features or purchases. As long as the subdomains are proxied to Cloudflare, a universal certificate [will be provisioned](https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/enable-universal-ssl/#partial-dns-setup).\n\n## Certificate authority\n\nFor Universal SSL certificates, Cloudflare chooses the certificate authority (CA) used for your certificate.\n\nCloudflare can change the [certificate authority](https://developers.cloudflare.com/ssl/reference/certificate-authorities/) without prior notification, and will not send any notification as the change happens.\n\nIf you want to choose the issuing certificate authority, [order an advanced certificate](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/).\n\n## Validity period\n\nFor Universal certificates, Cloudflare controls the validity period. Refer to [validity periods and renewal](https://developers.cloudflare.com/ssl/reference/certificate-validity-periods/#universal-ssl) for details.\n\n## TLS settings\n\n[Customizing cipher suites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/cipher-suites/customize-cipher-suites/) is only available with [Advanced Certificate Manager](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/) or within [Cloudflare for SaaS](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/security/certificate-management/).\n\nYou can set up [minimum TLS version](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/minimum-tls/) at the zone level, but, for per-hostname settings, you must have [Advanced Certificate Manager](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/).\n\n## Delegated DCV\n\nDelegated DCV allows zones with [partial DNS setups](https://developers.cloudflare.com/dns/zone-setups/partial-setup/) to delegate the DCV process to Cloudflare. DCV delegation will not work with Universal SSL certificates and requires the use of an [advanced certificate](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/).\n\n## Spectrum\n\nUniversal SSL is not compatible with [Cloudflare Spectrum](https://developers.cloudflare.com/spectrum/). If you are trying to use Spectrum, use either [an advanced certificate](https://developers.cloudflare.com/ssl/edge-certificates/advanced-certificate-manager/) or [a custom certificate](https://developers.cloudflare.com/ssl/edge-certificates/custom-certificates/).\n\n## Load balancing\n\nDue to internal limitations, Universal SSL certificates do not cover [load balancing hostnames](https://developers.cloudflare.com/load-balancing/load-balancers/dns-records/) by default. This behavior will be corrected in the future.\n\n## Browser support\n\nFor more on browser support, see [Browser compatibility](https://developers.cloudflare.com/ssl/reference/browser-compatibility/).\n\n</page>\n\n<page>\n---\ntitle: Troubleshooting Universal SSL · Cloudflare SSL/TLS docs\ndescription: Review how to troubleshoot issues such as certificate timeouts when\n  using Cloudflare Universal SSL.\nlastUpdated: 2025-07-10T08:33:54.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/troubleshooting/\n  md: https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/troubleshooting/index.md\n---\n\n## Resolve a timed out state\n\nIf a certificate issuance times out, Cloudflare tells you where in the chain of issuance the timeout occurred: Initializing, Validation, Issuance, Deployment, or Deletion.\n\nTo resolve timeout issues, try one or more of the following options:\n\n* Change the **Proxy status** of related DNS records to **DNS only** (gray-clouded) and wait at least a minute. Then, change the **Proxy status** back to **Proxied** (orange-clouded).\n* [Disable Universal SSL](https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/disable-universal-ssl/) and wait at least a minute. Then, re-enable Universal SSL.\n* Send a PATCH request to the [validation endpoint](https://developers.cloudflare.com/api/resources/ssl/subresources/verification/methods/edit/) using the same [DCV method](https://developers.cloudflare.com/ssl/edge-certificates/changing-dcv-method/) (API only). Make sure that the `--data` field is not empty in your request.\n* Review your domain control validation (DCV). Changing the DCV method will restart certificate issuance.\n\n## Delete certificates\n\nYou can [use the API](https://developers.cloudflare.com/api/resources/ssl/subresources/certificate_packs/methods/delete/) to delete certificates that you no longer want listed on the Cloudflare dashboard.\n\n## Other issues\n\nFor additional troubleshooting help, refer to [Troubleshooting SSL errors](https://developers.cloudflare.com/ssl/troubleshooting/).\n\n</page>\n\n<page>\n---\ntitle: Cloudflare Tunnel setup - Keyless SSL · Cloudflare SSL/TLS docs\ndescription: Through an integration with Cloudflare Tunnel, you can send traffic\n  to a key server through a secure channel and avoid exposing your key server to\n  the public Internet.\nlastUpdated: 2025-10-21T14:33:19.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ssl/keyless-ssl/configuration/cloudflare-tunnel/\n  md: https://developers.cloudflare.com/ssl/keyless-ssl/configuration/cloudflare-tunnel/index.md\n---\n\nThrough an integration with [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/), you can send traffic to a key server through a secure channel and avoid exposing your key server to the public Internet.\n\n***\n\n## Before you begin\n\n### Supported platforms\n\nKeyless has been tested on `amd64` and `arm` architectures. The key server binary will likely run on all architectures that Go supports. Code support may exist for other CPUs too, but these other architectures have not been tested.\n\nIn addition to running on bare metal, the key server should run without issue in a virtualized or containerized environment. Care will need to be taken to configure ingress access to the appropriate TCP port and file system access to private keys (if using filesystem storage).\n\n### Supported operating systems\n\nYou will need to have a supported operating system (OS) to run Keyless. Supported operating systems include:\n\n* Ubuntu 14.04 LTS, 16.04 LTS, 18.04 LTS, 20.04 LTS, 22.04 LTS, 22.10\n* Debian 8, 9, 10, 11, 12\n* RHEL and CentOS 6, 7, 8, 9\n* Amazon Linux 1, 2\n\nWe strongly recommend that you use an operating system still supported by the vendor (still receiving security updates) as your key server will have access to your private keys.\n\n***\n\n## 1. Install `cloudflared` on key server\n\nFirst, install `cloudflared` on your key server.\n\nThis process differs depending on whether you are using the [command line](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/do-more-with-tunnels/local-management/create-local-tunnel/) or the [Cloudflare dashboard](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/get-started/create-remote-tunnel/).\n\n\n\n## 2. Create a Tunnel\n\nThen, create a Cloudflare Tunnel.\n\nThis process differs depending on whether you are using the [command line](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/do-more-with-tunnels/local-management/create-local-tunnel/) or the [Cloudflare dashboard](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/get-started/create-remote-tunnel/).\n\n\n\nIn these steps, you should choose the option to **Connect a network** and use the private IP address of your key server.\n\nAfter you create the Tunnel, use the Cloudflare API to [List tunnel routes](https://developers.cloudflare.com/api/resources/zero_trust/subresources/networks/subresources/routes/methods/list/), saving the following values for a future step:\n\n* `\"virtual_network_id\"`\n* `\"network\"`\n\n## 3. Upload Keyless SSL Certificates\n\nBefore your key servers can be configured, you must next upload the corresponding SSL certificates to Cloudflare’s edge. During TLS termination, Cloudflare will present these certificates to connecting browsers and then (for non-resumed sessions) communicate with the specified key server to complete the handshake.\n\nUpload certificates to Cloudflare with only SANs that you wish to use with Cloudflare Keyless SSL. All Keyless SSL hostnames must be [proxied](https://developers.cloudflare.com/dns/proxy-status/).\n\nYou will have to upload each certificate used with Keyless SSL.\n\nTo upload a Keyless certificate with the API, send a [`POST`](https://developers.cloudflare.com/api/resources/keyless_certificates/methods/create/) request that includes a `\"tunnel\"` object.",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nWhen you receive the `network` value from the Tunnel route API, it will include a subnet mask, such as `10.0.0.1/32`. Remove the subnet mask and use the IP address (`10.0.0.1`).\n\n## 4. Set up and activate key server\n\nFinally, you need to install the key server on your infrastructure, populate it with the SSL keys of the certificates you wish to use to terminate TLS at Cloudflare’s edge, and activate the key server so it can be mutually authenticated.\n\nNote\n\nIf you plan to run Keyless SSL in a [high availability setup](https://developers.cloudflare.com/ssl/keyless-ssl/reference/high-availability/), you may need to set up additional infrastructure (load balancing and health checks).\n\n### Install\n\nThese steps are also at the [Cloudflare package repository](https://pkg.cloudflare.com/).\n\n#### Debian/Ubuntu packages",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Potential errors",
+      "id": "potential-errors"
+    },
+    {
+      "level": "h2",
+      "text": "Disable Universal SSL certificate",
+      "id": "disable-universal-ssl-certificate"
+    },
+    {
+      "level": "h2",
+      "text": "Re-enable Universal SSL",
+      "id": "re-enable-universal-ssl"
+    },
+    {
+      "level": "h2",
+      "text": "Full DNS setup",
+      "id": "full-dns-setup"
+    },
+    {
+      "level": "h2",
+      "text": "Footnotes",
+      "id": "footnotes"
+    },
+    {
+      "level": "h3",
+      "text": "Minimize downtime",
+      "id": "minimize-downtime"
+    },
+    {
+      "level": "h2",
+      "text": "Partial DNS setup",
+      "id": "partial-dns-setup"
+    },
+    {
+      "level": "h2",
+      "text": "Verify your certificate is active",
+      "id": "verify-your-certificate-is-active"
+    },
+    {
+      "level": "h2",
+      "text": "Universal SSL renewal",
+      "id": "universal-ssl-renewal"
+    },
+    {
+      "level": "h2",
+      "text": "Proxy status",
+      "id": "proxy-status"
+    },
+    {
+      "level": "h2",
+      "text": "Hostname coverage",
+      "id": "hostname-coverage"
+    },
+    {
+      "level": "h3",
+      "text": "Full setup",
+      "id": "full-setup"
+    },
+    {
+      "level": "h3",
+      "text": "CNAME setup",
+      "id": "cname-setup"
+    },
+    {
+      "level": "h2",
+      "text": "Certificate authority",
+      "id": "certificate-authority"
+    },
+    {
+      "level": "h2",
+      "text": "Validity period",
+      "id": "validity-period"
+    },
+    {
+      "level": "h2",
+      "text": "TLS settings",
+      "id": "tls-settings"
+    },
+    {
+      "level": "h2",
+      "text": "Delegated DCV",
+      "id": "delegated-dcv"
+    },
+    {
+      "level": "h2",
+      "text": "Spectrum",
+      "id": "spectrum"
+    },
+    {
+      "level": "h2",
+      "text": "Load balancing",
+      "id": "load-balancing"
+    },
+    {
+      "level": "h2",
+      "text": "Browser support",
+      "id": "browser-support"
+    },
+    {
+      "level": "h2",
+      "text": "Resolve a timed out state",
+      "id": "resolve-a-timed-out-state"
+    },
+    {
+      "level": "h2",
+      "text": "Delete certificates",
+      "id": "delete-certificates"
+    },
+    {
+      "level": "h2",
+      "text": "Other issues",
+      "id": "other-issues"
+    },
+    {
+      "level": "h2",
+      "text": "Before you begin",
+      "id": "before-you-begin"
+    },
+    {
+      "level": "h3",
+      "text": "Supported platforms",
+      "id": "supported-platforms"
+    },
+    {
+      "level": "h3",
+      "text": "Supported operating systems",
+      "id": "supported-operating-systems"
+    },
+    {
+      "level": "h2",
+      "text": "1. Install `cloudflared` on key server",
+      "id": "1.-install-`cloudflared`-on-key-server"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create a Tunnel",
+      "id": "2.-create-a-tunnel"
+    },
+    {
+      "level": "h2",
+      "text": "3. Upload Keyless SSL Certificates",
+      "id": "3.-upload-keyless-ssl-certificates"
+    },
+    {
+      "level": "h2",
+      "text": "4. Set up and activate key server",
+      "id": "4.-set-up-and-activate-key-server"
+    },
+    {
+      "level": "h3",
+      "text": "Install",
+      "id": "install"
+    }
+  ],
+  "url": "llms-txt#caa-records-added-by-sectigo",
+  "links": []
+}

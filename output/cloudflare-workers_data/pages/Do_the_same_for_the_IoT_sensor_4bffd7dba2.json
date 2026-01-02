@@ -1,0 +1,8 @@
+{
+  "title": "Do the same for the IoT sensor.",
+  "content": "$ sed -i.bak 's/ios-bootstrap/sensor-001/g' csr.json\n$ cfssl genkey csr.json | cfssljson -bare certificate\n...\n$ mv certificate-key.pem sensor-key.pem\n$ mv certificate.csr sensor.csr",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#do-the-same-for-the-iot-sensor.",
+  "links": []
+}

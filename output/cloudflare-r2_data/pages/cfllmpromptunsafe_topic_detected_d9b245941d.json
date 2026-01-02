@@ -1,0 +1,8 @@
+{
+  "title": "cf.llm.prompt.unsafe\\_topic\\_detected",
+  "content": "`cf.llm.prompt.unsafe_topic_detected` Boolean\n\nIndicates whether the incoming request includes any unsafe topic category in the LLM prompt.\n\nEquivalent to checking if the [`cf.llm.prompt.unsafe_topic_categories`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.unsafe_topic_categories/) field is not empty.\n\nRequires a Cloudflare Enterprise plan. You must also enable [Firewall for AI](https://developers.cloudflare.com/waf/detections/firewall-for-ai/).\n\n<page>\n---\ntitle: cf.random_seed · Cloudflare Ruleset Engine docs\ndescription: Returns per-request random bytes that you can use in the\n  [`uuidv4()`](/ruleset-engine/rules-language/functions/#uuidv4) function.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.random_seed/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.random_seed/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#cf.llm.prompt.unsafe\\_topic\\_detected",
+  "links": []
+}

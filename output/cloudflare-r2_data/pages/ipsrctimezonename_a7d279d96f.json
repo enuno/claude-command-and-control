@@ -1,0 +1,13 @@
+{
+  "title": "ip.src.timezone.name",
+  "content": "`ip.src.timezone.name` String\n\nThe name of the timezone associated with the incoming request.\n\nThis field is only available in rewrite expressions of [Transform Rules](https://developers.cloudflare.com/rules/transform/).\n\n* Request\n* Geolocation\n\n<page>\n---\ntitle: raw.http.request.full_uri · Cloudflare Ruleset Engine docs\ndescription: The raw full URI as received by the web server without any transformation.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/raw.http.request.full_uri/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/raw.http.request.full_uri/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"America/Chicago\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#ip.src.timezone.name",
+  "links": []
+}

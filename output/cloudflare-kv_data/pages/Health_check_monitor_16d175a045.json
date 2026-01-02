@@ -1,0 +1,8 @@
+{
+  "title": "Health check monitor",
+  "content": "resource \"cloudflare_load_balancer_monitor\" \"health_check\" {\n  account_id     = var.account_id\n  expected_body = \"alive\"\n  expected_codes = \"2xx\"\n  method         = \"GET\"\n  timeout        = 5\n  path           = \"/health\"\n  interval       = 60\n  retries        = 2\n  description    = \"Health check for www origins\"\n  type           = \"https\"\n\nheader = {\n    Host = [\"${var.domain}\"]\n  }\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#health-check-monitor",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Version settings (the \"code\")",
+  "content": "POST /workers/workers/{id}/versions\n{\n  \"compatibility_date\": \"$today\",\n  \"bindings\": [...],\n  \"modules\": [...]\n}\nsh",
+  "code_samples": [
+    {
+      "code": "#### `/workers` API endpoints now support UUIDs (in addition to names)\n\nThe `/workers/workers/` path now supports addressing a Worker by both its immutable UUID and its mutable name.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#version-settings-(the-\"code\")",
+  "links": []
+}

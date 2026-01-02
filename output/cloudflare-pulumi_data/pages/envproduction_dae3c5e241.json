@@ -1,0 +1,519 @@
+{
+  "title": ".env.production",
+  "content": "TURNSTILE_SITEKEY=your-real-sitekey\nTURNSTILE_SECRET_KEY=your-real-secret-key\njson\n{\n  \"success\": true,\n  \"challenge_ts\": \"2022-02-28T15:14:30.096Z\",\n  \"hostname\": \"localhost\",\n  \"error-codes\": [],\n  \"action\": \"test\",\n  \"cdata\": \"test-data\"\n}\njson\n{\n  \"success\": false,\n  \"error-codes\": [\"invalid-input-response\"]\n}\njson\n{\n  \"success\": false,\n  \"error-codes\": [\"timeout-or-duplicate\"]\n}\njs\nexport default {\n  async fetch(request) {\n    // ...\n\nif (request.headers.get(\"x-bypass-turnstile\") === \"VerySecretValue\") {\n      class RemoveHandler {\n        element(element) {\n          element.remove();\n        }\n      }\n\nreturn new HTMLRewriter()\n        // Remove the script tag\n        .on(\n          'script[src=\"https://challenges.cloudflare.com/turnstile/v0/api.js\"]',\n          new RemoveHandler(),\n        )\n       // Remove the container used in implicit rendering\n        .on(\n          '.cf-turnstile',\n          new RemoveHandler(),\n        )\n       // Remove the container used in explicit rendering\n        .on(\n          '#myWidget',\n          new RemoveHandler(),\n        )\n        .transform(body);\n    }\n\nreturn new Response(body, {\n      headers: {\n        \"Content-Type\": \"text/html\",\n      },\n    });\n  },\n};\njs\nasync function handlePost(request) {\n  if (request.headers.get(\"x-bypass-turnstile\") === \"VerySecretValue\") {\n    return new Response('Turnstile not enforced on this request')\n  }\n  // Proceed with validation as normal!\n  const body = await request.formData();\n  // Turnstile injects a token in \"cf-turnstile-response\".\n  const token = body.get('cf-turnstile-response');\n  const ip = request.headers.get('CF-Connecting-IP');\n  // ...\n}\nsh\ncurl -X POST http://localhost:8787/handler -H \"x-bypass-turnstile: VerySecretValue\"\ntxt\nTurnstile not enforced on this request\ntypescript\n// Detect test environments using IP addresses or headers\nfunction isTestEnvironment(request) {\n  const testIPs = ['127.0.0.1', '::1'];\n  const isTestIP = testIPs.includes(request.ip);\n  const hasTestHeader = request.headers['x-test-environment'] === 'secret-token';\n\nreturn isTestIP || hasTestHeader;\n}\n\n// Use the appropriate credentials based on the environment\nfunction getTurnstileCredentials(request) {\n  if (isTestEnvironment(request)) {\n    return {\n      sitekey: '1x00000000000000000000AA',\n      secretKey: '1x0000000000000000000000000000000AA'\n    };\n  }\n\nreturn {\n    sitekey: process.env.TURNSTILE_SITE_KEY,\n    secretKey: process.env.TURNSTILE_SECRET_KEY\n  };\n}\ntypescript\napp.get('/your-form', (req, res) => {\n  const { sitekey } = getTurnstileCredentials(req);\n  res.render('form', { sitekey });\n});\nhtml\n<div class=\"turnstile\" data-sitekey=\"<%= sitekey %>\"></div>\ntypescript\n// Set test header for all test requests\nbeforeEach(() => {\n  cy.intercept('*', (req) => {\n    req.headers['x-test-environment'] = 'secret-token';\n  });\n});\n\n// Your test can now interact with the form normally\nit('submits form successfully', () => {\n  cy.visit('/your-form');\n  cy.get('form').submit();\n  // Turnstile will automatically pass verification\n});\nhtml\n<form id=\"login-form\">\n  <input type=\"text\" id=\"username\" placeholder=\"Username\" required />\n  <input type=\"password\" id=\"password\" placeholder=\"Password\" required />\n  <div class=\"cf-turnstile\" data-sitekey=\"<YOUR-SITE-KEY>\"></div>\n  <button type=\"submit\">Log in</button>\n</form>\n\n<script\n  src=\"https://challenges.cloudflare.com/turnstile/v0/api.js\"\n  async\n  defer\n></script>\ntypescript\nasync function validateTurnstileToken(\n  ip: string,\n  token: string,\n  secret: string,\n): Promise<boolean> {\n  const response = await fetch(\n    \"https://challenges.cloudflare.com/turnstile/v0/siteverify\",\n    {\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({ ip, secret, response: token }),\n    },\n  );\n\nconst outcome = await response.json();\n  return outcome.success;\n}\n\n// Assume that this is a TypeScript route handler.\n// You may replace this with a different implementation,\n// based on your language or framework\nexport async function onRequestPost(context) {\n  const { request, env } = context;\n  const { username, password, token } = await request.json();\n\n// Validate Turnstile token\n  const secretKey = env.TURNSTILE_SECRET_KEY;\n  const ip = request.headers.get(\"CF-Connecting-IP\");\n  const turnstileValid = await validateTurnstileToken(ip, token, secretKey);\n  if (!turnstileValid) {\n    // Return back to the login page with an error message\n    return Response.redirect(\"/login\", 302, {\n      headers: {\n        Location: \"/login?error=invalid-turnstile-token\",\n      },\n    });\n  }\n\n// Perform your existing authentication logic here\n  const isValidLogin = await checkCredentials(username, password);\n\nif (isValidLogin) {\n    return new Response(JSON.stringify({ message: \"Login successful\" }), {\n      status: 200,\n      headers: { \"Content-Type\": \"application/json\" },\n    });\n  } else {\n    return new Response(JSON.stringify({ error: \"Invalid credentials\" }), {\n      status: 401,\n      headers: { \"Content-Type\": \"application/json\" },\n    });\n  }\n}\n\nasync function checkCredentials(\n  username: string,\n  password: string,\n): Promise<boolean> {\n  // Your existing credential checking logic\n}\nhtml\n<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>Contact Form</title>\n    <script\n      src=\"https://challenges.cloudflare.com/turnstile/v0/api.js\"\n      async\n      defer\n    ></script>\n    <script>\n      function enableSubmit() {\n        document.getElementById(\"submit-button\").disabled = false;\n      }\n    </script>\n  </head>\n  <body>\n    <form id=\"contact-form\" action=\"/submit\" method=\"POST\">\n      <input type=\"text\" name=\"name\" placeholder=\"Name\" required />\n      <input type=\"email\" name=\"email\" placeholder=\"Email\" required />\n      <textarea name=\"message\" placeholder=\"Message\" required></textarea>\n\n<!-- Turnstile widget -->\n      <div\n        class=\"cf-turnstile\"\n        data-sitekey=\"<YOUR-SITE-KEY>\"\n        data-callback=\"enableSubmit\"\n      ></div>\n\n<button type=\"submit\" id=\"submit-button\" disabled>Submit</button>\n    </form>\n  </body>\n</html>\njs\nconst express = require(\"express\");\nconst axios = require(\"axios\");\nconst bodyParser = require(\"body-parser\");\nconst app = express();\n\napp.use(bodyParser.urlencoded({ extended: true }));\n\napp.post(\"/submit\", async (req, res) => {\n  const turnstileToken = req.body[\"cf-turnstile-response\"];\n  const secretKey = \"your-secret-key\";\n\ntry {\n    const response = await axios.post(\n      \"https://challenges.cloudflare.com/turnstile/v0/siteverify\",\n      null,\n      {\n        params: {\n          secret: secretKey,\n          response: turnstileToken,\n        },\n      },\n    );\n\nif (response.data.success) {\n      // Token is valid, proceed with form submission\n      const name = req.body.name;\n      const email = req.body.email;\n      const message = req.body.message;\n      // Your form processing logic here\n      res.send(\"Form submission successful\");\n    } else {\n      res.status(400).send(\"Turnstile verification failed\");\n    }\n  } catch (error) {\n    res.status(500).send(\"Error verifying Turnstile token\");\n  }\n});\n\napp.listen(3000, () => {\n  console.log(\"Server is running on port 3000\");\n});\nbash\n   curl \"https://api.cloudflare.com/client/v4/zones/{zone_id}/environments\" \\\n   --header \"X-Auth-Email: <EMAIL>\" \\\n   --header \"X-Auth-Key: <API_KEY>\"\n   bash\n   curl --request DELETE \\\n   \"https://api.cloudflare.com/client/v4/zones/{zone_id}/environments/{ref}\" \\\n   --header \"X-Auth-Email: <EMAIL>\" \\\n   --header \"X-Auth-Key: <API_KEY>\"\n   bash\n   curl \"https://api.cloudflare.com/client/v4/zones/{zone_id}/http_applications\" \\\n   --header \"X-Auth-Email: <EMAIL>\" \\\n   --header \"X-Auth-Key: <API_KEY>\"\n   bash\n   curl --request DELETE \\\n   \"https://api.cloudflare.com/client/v4/zones/{zone_id}/http_applications/{http_application_id}\" \\\n   --header \"X-Auth-Email: <EMAIL>\" \\\n   --header \"X-Auth-Key: <API_KEY>\"\n   sh\nnpx wrangler vectorize create your-index-name --dimensions=NUM_DIMENSIONS --metric=SELECTED_METRIC\nsh\nnpx wrangler vectorize create your-index-name --dimensions=768 --metric=cosine\npy\nimport requests\n\nurl = \"https://api.cloudflare.com/client/v4/accounts/{}/vectorize/v2/indexes\".format(\"your-account-id\")\n\nheaders = {\n    \"Authorization\": \"Bearer <your-api-token>\"\n}\n\nbody = {\n  \"name\": \"demo-index\",\n  \"description\": \"some index description\",\n  \"config\": {\n    \"dimensions\": 1024,\n    \"metric\": \"euclidean\"\n  },\n}\n\nresp = requests.post(url, headers=headers, json=body)\n\nprint('Status Code:', resp.status_code)\nprint('Response JSON:', resp.json())\nts\n{ id: '1', values: [32.4, 74.1, 3.2, ...], metadata: { path: 'r2://bucket-name/path/to/image.png', format: 'png', category: 'profile_image' } }\nts\n// Mock vectors\n// Vectors from a machine-learning model are typically ~100 to 1536 dimensions\n// wide (or wider still).\nconst sampleVectors: Array<VectorizeVector> = [\n  {\n    id: \"1\",\n    values: [32.4, 74.1, 3.2, ...],\n    namespace: \"text\",\n  },\n  {\n    id: \"2\",\n    values: [15.1, 19.2, 15.8, ...],\n    namespace: \"images\",\n  },\n  {\n    id: \"3\",\n    values: [0.16, 1.2, 3.8, ...],\n    namespace: \"pdfs\",\n  },\n];\n\n// Insert your vectors, returning a count of the vectors inserted and their vector IDs.\nlet inserted = await env.TUTORIAL_INDEX.insert(sampleVectors);\nts\n// Your queryVector will be searched against vectors within the namespace (only)\nlet matches = await env.TUTORIAL_INDEX.query(queryVector, {\n  namespace: \"images\",\n});\nts\n// Mock vectors\n// Vectors from a machine-learning model are typically ~100 to 1536 dimensions\n// wide (or wider still).\nconst sampleVectors: Array<VectorizeVector> = [\n  {\n    id: \"1\",\n    values: [32.4, 74.1, 3.2, ...],\n    metadata: { url: \"/products/sku/13913913\" },\n  },\n  {\n    id: \"2\",\n    values: [15.1, 19.2, 15.8, ...],\n    metadata: { url: \"/products/sku/10148191\" },\n  },\n  {\n    id: \"3\",\n    values: [0.16, 1.2, 3.8, ...],\n    metadata: { url: \"/products/sku/97913813\" },\n  },\n];\n\n// Insert your vectors, returning a count of the vectors inserted and their vector IDs.\nlet inserted = await env.TUTORIAL_INDEX.insert(sampleVectors);\njson\n{ \"id\": \"4444\", \"values\": [175.1, 167.1, 129.9], \"metadata\": {\"url\": \"/products/sku/918318313\"}}\n{ \"id\": \"5555\", \"values\": [158.8, 116.7, 311.4], \"metadata\": {\"url\": \"/products/sku/183183183\"}}\n{ \"id\": \"6666\", \"values\": [113.2, 67.5, 11.2], \"metadata\": {\"url\": \"/products/sku/717313811\"}}\nsh\nwrangler vectorize insert <your-index-name> --file=embeddings.ndjson\npy\nimport requests\n\nurl = \"https://api.cloudflare.com/client/v4/accounts/{}/vectorize/v2/indexes/{}/insert\".format(\"your-account-id\", \"index-name\")\n\nheaders = {\n    \"Authorization\": \"Bearer <your-api-token>\"\n}\n\nwith open('embeddings.ndjson', 'rb') as embeddings:\n    resp = requests.post(url, headers=headers, files=dict(vectors=embeddings))\n    print(resp)\npy\nimport pandas as pd\ndata = pd.read_json('embeddings.ndjson', lines=True)\nsh",
+  "code_samples": [
+    {
+      "code": "***\n\n## Dummy token behavior\n\n### Token generation\n\nTest sitekeys generate a dummy token: `XXXX.DUMMY.TOKEN.XXXX`\n\n### Token validation\n\n* Test secret keys: Only accept the dummy token, reject real tokens.\n* Production secret keys: Only accept real tokens, reject dummy tokens.\n\nNote\n\nProduction secret keys will reject the dummy token. You must also use a dummy secret key for testing purposes.\n\n### Validation response",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "***\n\n## Testing scenarios\n\n| Test sitekey | Test secret key | Test case |\n| - | - | - |\n| `1x00000000000000000000AA` | `1x0000000000000000000000000000000AA` | This combination will always result in successful validation. |\n| `2x00000000000000000000AB` | `2x0000000000000000000000000000000AA` | This combination will always fail. |\n| `1x00000000000000000000AA` | `3x0000000000000000000000000000000AA` | This combination will always fail with \"timeout-or-duplicate\" error. |\n\n</page>\n\n<page>\n---\ntitle: Challenge outcome · Cloudflare Turnstile docs\ndescription: When a visitor encounters Turnstile, it assesses whether they are\n  human or bot-like based on various signals. These outcomes help you evaluate\n  how effectively Turnstile is protecting your application.\nlastUpdated: 2025-08-20T21:45:15.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/turnstile-analytics/challenge-outcomes/\n  md: https://developers.cloudflare.com/turnstile/turnstile-analytics/challenge-outcomes/index.md\n---\n\nWhen a visitor encounters Turnstile, it assesses whether they are human or bot-like based on various signals. These outcomes help you evaluate how effectively Turnstile is protecting your application.\n\n## Metrics\n\nA \"solved\" Turnstile challenge does not automatically confirm the visitor is human. You must [call the Siteverify API](#call-siteverify) to validate the token and proceed only if the response returns `success:true`.\n\nFor example, the challenge outcome values in your analytics may look like this:\n\n![Challenge outcome example values](https://developers.cloudflare.com/_astro/challenge-outcomes.Czqs3OEs_1xMeVb.webp)\n\n* **Challenges issued**: The total number of challenges presented to visitors within a specific timeframe.\n* **Challenges solved**: The number of challenges successfully completed by visitors in that period.\n* **Challenges unsolved**: Challenges that were abandoned or failed in that period.\n* **Likely human**: The total number of challenges solved or the total number of challenges issued.\n* **Likely bot**: The total number of challenges unsolved or the total number challenges issued.\n\nBy analyzing these metrics, you can identify trends such as high failure rates in specific regions, device types, or traffic sources, which may indicate bot activity or misconfigurations.\n\n### Call Siteverify\n\nIt is important to [call the Siteverify API](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/). Without calling Siteverify API to validate the tokens, your website or application is not protected. Skipping token validation means you cannot confirm the visitor's legitimacy.\n\n* Tokens can only be redeemed once. Even valid tokens will return `success:false` if they are reused, preventing token theft and replay attacks.\n* Tokens expire after five minutes. Validation must occur within this window to be effective.\n* Tokens can be invalid. Bots might complete challenges, but Cloudflare can detect bot-like signals and mark the token as invalid.\n\n## Solve rates\n\nTurnstile's solve rate is a critical metric that helps gauge how many legitimate visitors are passing a challenge. Solve rates can be broken down into the total number of challenges solved and whether they are interactive, non-interactive, or pre-clearance solves.\n\nIf you are using [managed mode](https://developers.cloudflare.com/turnstile/concepts/widget/#managed-mode-recommended), you can monitor how many of your visitors were prompted interactivity to check the box on the widget (interactive solves) and how many were verified without any disruptions to their experience (non-interactive solves).\n\nFor example, the solve rate values in your analytics may look like this:\n\n![Solve rate example values](https://developers.cloudflare.com/_astro/solve-rates.YNiFNAbV_22uO4.webp)\n\n### Metrics\n\n* **Non-interactive solves**: Challenges solved without requiring the visitor to click a checkbox.\n* **Interactive solves**: Challenges solved that required visitor interaction to be solved.\n* [**Pre-clearance solves**](https://developers.cloudflare.com/cloudflare-challenges/concepts/clearance/#pre-clearance-support-in-turnstile): Challenges solved that issued the `cf_clearance` cookie along with the Turnstile token.\n\nA low solve rate might indicate increased bot activity attempting to bypass Turnstile or anomalous traffic patterns that require further investigation.\n\n</page>\n\n<page>\n---\ntitle: Token validation · Cloudflare Turnstile docs\ndescription: After a visitor successfully completes a Turnstile challenge, a\n  token is generated and validated via the Siteverify API. Token validation data\n  provides crucial insights into your security posture.\nlastUpdated: 2025-08-20T21:45:15.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/turnstile-analytics/token-validation/\n  md: https://developers.cloudflare.com/turnstile/turnstile-analytics/token-validation/index.md\n---\n\nAfter a visitor successfully completes a Turnstile challenge, a token is generated and validated via the Siteverify API. Token validation data provides crucial insights into your security posture.\n\nFor example, the token validation values in your analytics may look like this:\n\n![Token validation example values](https://developers.cloudflare.com/_astro/token-validation.DRmcNOiF_1E5hpj.webp)\n\n## Metrics\n\n* **Siteverify requests**: The total number of requests made to the Siteverify API in the given timeframe.\n* **Valid tokens**: The number of Siteverify requests with `success:true` responses.\n* **Invalid tokens**: The number of Siteverify requests with `success:false` responses.\n\n### Call Siteverify\n\nIt is important to [call the Siteverify API](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/). Without calling Siteverify API to validate the tokens, your website or application is not protected. Skipping token validation means you cannot confirm the visitor's legitimacy.\n\n* Tokens can only be redeemed once. Even valid tokens will return `success:false` if they are reused, preventing token theft and replay attacks.\n* Tokens expire after five minutes. Validation must occur within this window to be effective.\n* Tokens can be invalid. Bots might complete challenges, but Cloudflare can detect bot-like signals and mark the token as invalid.\n\n</page>\n\n<page>\n---\ntitle: Conditionally enforce Turnstile · Cloudflare Turnstile docs\ndescription: This tutorial explains how to conditionally enforce Turnstile based\n  on the incoming request, such as a pre-shared secret in a header or a specific\n  IP address.\nlastUpdated: 2025-10-09T15:47:46.000Z\nchatbotDeprioritize: false\ntags: Node.js,TypeScript\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/tutorials/conditionally-enforcing-turnstile/\n  md: https://developers.cloudflare.com/turnstile/tutorials/conditionally-enforcing-turnstile/index.md\n---\n\nThis tutorial explains how to conditionally enforce Turnstile based on the incoming request, such as a pre-shared secret in a header or a specific IP address.\n\n## Overview\n\nYou may have setups such as automation that cannot load or run the Turnstile challenge. Using [`HTMLRewriter`](https://developers.cloudflare.com/workers/runtime-apis/html-rewriter/), this tutorial will demonstrate how to conditionally handle the [client-side widget](https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/) and [Siteverify API](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/) when specific criteria are met.\n\nNote\n\nWhile this tutorial removes Turnstile client-side elements when specific criteria are met, you could instead conditionally insert them.\n\nWarning\n\nIt is critical to make sure you are validating tokens with the Siteverify API when your criteria for enforcing Turnstile are not met.\n\nIt is not sufficient to only remove the client-side widget from the page, as an attacker can forge the request to your API.\n\n## Implementation\n\nThis tutorial will modify the existing [Turnstile demo](https://github.com/cloudflare/turnstile-demo-workers/blob/main/src/) to conditionally remove the existing `script` and widget container elements.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Server-side integration\n\nWe will exit early in our validation if the same logic we used to remove the client-side elements is present.\n\nWarning\n\nThe same logic must be used in both the client-side and the server-side implementations.",
+      "language": "unknown"
+    },
+    {
+      "code": "With these changes, Turnstile will not be enforced on requests with the header `x-bypass-turnstile: VerySecretValue` present.\n\n## Demonstration\n\nAfter running `npm run dev` in the project folder, you can test the changes by running the following command:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Exclude Turnstile from E2E tests · Cloudflare Turnstile docs\ndescription: This tutorial explains how to handle Turnstile in your end-to-end\n  (E2E) tests by using Turnstile's dedicated testing keys.\nlastUpdated: 2025-10-09T15:47:46.000Z\nchatbotDeprioritize: false\ntags: Node.js,TypeScript\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/tutorials/excluding-turnstile-from-e2e-tests/\n  md: https://developers.cloudflare.com/turnstile/tutorials/excluding-turnstile-from-e2e-tests/index.md\n---\n\nThis tutorial explains how to handle Turnstile in your end-to-end (E2E) tests by using Turnstile's dedicated testing keys.\n\n## Overview\n\nWhen running E2E tests, you often want to bypass or simplify the Turnstile verification process. Cloudflare provides official test credentials that always pass verification, making them perfect for testing environments:\n\n* Test sitekey: `1x00000000000000000000AA`\n* Test secret key: `1x0000000000000000000000000000000AA`\n\nFor more details, refer to the [testing documentation](https://developers.cloudflare.com/turnstile/troubleshooting/testing/).\n\nWarning\n\nNever use test credentials in production. Always ensure:\n\n* Test credentials are only used in test environments.\n* Production credentials are properly protected.\n* Your deployment process prevents test credentials from reaching production.\n\n## Implementation\n\nThe key to implementing test-environment detection is identifying test requests server-side. Here is a simple approach:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Server-side integration\n\nWhen rendering your page, inject the appropriate sitekey based on the environment:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Client-side integration\n\nYour template can then use the injected sitekey:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Best practices\n\n1. **Environment detection**\n\n   * Use multiple factors to identify test environments (IP, headers, etc.).\n   * Keep your test environment identifiers secure if you need to test from the public web.\n\n2. **Credential management**\n\n   * Store production credentials securely (for example, in environment variables).\n   * Never commit credentials to version control.\n   * Use different credentials for each environment.\n\n3. **Deployment safety**\n\n   * Add checks to prevent test credentials in production.\n   * Include credential validation in your CI/CD pipeline.\n   * Monitor for accidental test credential usage.\n\n## Testing considerations\n\n* Test credentials will always pass verification.\n* They are perfect for automated testing environments.\n* They help avoid rate limiting during testing.\n* They make tests more predictable and faster.\n\n## Example test setup\n\nFor Cypress or similar E2E testing frameworks:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Conclusion\n\nBy using Turnstile's test credentials and proper environment detection, you can create reliable E2E tests while maintaining security in production. Remember to always keep test credentials separate from production and implement proper safeguards in your deployment process.\n\n</page>\n\n<page>\n---\ntitle: Integrate Turnstile, WAF, & Bot Management · Cloudflare Turnstile docs\ndescription: This tutorial will guide you on how to integrate Cloudflare\n  Turnstile, Web Application Firewall (WAF), and Bot Management. This\n  combination creates a robust defense against various threats, including\n  automated attacks and malicious login attempts.\nlastUpdated: 2025-10-13T13:40:40.000Z\nchatbotDeprioritize: false\ntags: JavaScript\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/tutorials/integrating-turnstile-waf-and-bot-management/\n  md: https://developers.cloudflare.com/turnstile/tutorials/integrating-turnstile-waf-and-bot-management/index.md\n---\n\nThis tutorial will guide you on how to integrate Cloudflare Turnstile, [Web Application Firewall (WAF)](https://developers.cloudflare.com/waf/), and [Bot Management](https://developers.cloudflare.com/bots/get-started/bot-management/) into an existing authentication system. This combination creates a robust defense against various threats, including automated attacks and malicious login attempts.\n\n## Overview\n\nTo use WAF and Bot Management, your site must have its DNS pointing through Cloudflare. However, Turnstile can be used independently on any site including those not on Cloudflare's network. This tutorial will cover how to implement all three products, but you can focus on Turnstile if your site is not on Cloudflare's network.\n\nWAF, Bot Management, and Turnstile work well together by operating on different layers of the application:\n\n* WAF filters malicious traffic based on network signals.\n* Bot Management analyzes requests to identify and mitigate automated threats.\n* Turnstile examines client-side and browser signals to distinguish between human users and bots.\n\nBy combining server-side (WAF and Bot Management) and client-side (Turnstile) security measures, you can combine multiple layers of defense to create a protection system that is difficult for attackers to circumvent.\n\n## Before you begin\n\n* You must have a Cloudflare account with access to WAF and Bot Management (if using).\n* An existing JavaScript/TypeScript-based route handling authentication.\n\nThis tutorial uses a simple login form written in plain HTML to demonstrate how to integrate Turnstile into your application. In the backend, a stubbed out authentication route, written in TypeScript, will handle the login request. You may replace this with the language of your choice. As long as your language or framework is able to make an external HTTP request to [Turnstile's API](https://developers.cloudflare.com/api/resources/turnstile/subresources/widgets/methods/create/), you can integrate Turnstile into your application.\n\n## Configure WAF and Bot Management\n\nIf your site is on Cloudflare's network and subscribed to an Enterprise plan, you must configure WAF and Bot Management.\n\n### Issue challenges for potential bot traffic\n\n1. In the Cloudflare dashboard, go to the **WAF** page.\n\n   [Go to **WAF**](https://dash.cloudflare.com/?to=/:account/application-security/waf)\n\n2. Create a new custom WAF rule by selecting **Edit expression**:\n\n   * Field: \"Bot Score\"\n   * Operator: \"less than or equal to\"\n   * Value: \"30\"\n   * Action: \"Managed Challenge\"\n\nThis configuration challenges requests with a low bot score, leveraging network signals to identify potential threats before they reach your application. You may customize the score threshold based on your specific use case.\n\n## Set up Cloudflare Turnstile\n\nTurnstile can be used on any site, regardless of whether it is on Cloudflare's network:\n\n1. In the Cloudflare dashboard, go to the **Turnstile** page.\n\n   [Go to **Turnstile**](https://dash.cloudflare.com/?to=/:account/turnstile)\n\n2. Select **Add widget** and fill out the necessary information.\n\n3. Add your domain to the Turnstile configuration.\n\n4. Select **Create**.\n\nTurnstile adds an extra layer of security by analyzing browser and client-side signals, complementing the server-side checks performed by WAF and Bot Management.\n\n### Enable the option to use the existing clearance cookie\n\nIf your site is on Cloudflare, you can enable the option to use the existing [clearance cookie](https://developers.cloudflare.com/cloudflare-challenges/concepts/clearance/#pre-clearance-support-in-turnstile) in Turnstile's settings. This integration allows Turnstile to use the clearance cookie as part of its determination of whether a user should receive a challenge. This integration is optional, but recommended if you already are using WAF and Bot Management.\n\n## Integrate Turnstile into your application\n\nThere are two components to implementing Turnstile into your application: the Turnstile widget and the server-side validation logic.\n\n### Add the Turnstile widget to your login form\n\nAdd the Turnstile widget to your existing login form:",
+      "language": "unknown"
+    },
+    {
+      "code": "Replace `<YOUR-SITE-KEY>` with your actual Turnstile site key.\n\n## Handle the login request\n\nIn your existing authentication route, add Turnstile validation:",
+      "language": "unknown"
+    },
+    {
+      "code": "This setup ensures that the Turnstile token is validated on the server-side before proceeding with the login process, adding an extra layer of security based on client-side signals.\n\n## Testing\n\nAfter deployment, you will want to test your integration. Because your bot score will be low, you will probably not receive a challenge. However, you can add additional rules as needed to force a redirect to the challenge page. Some options to do this are:\n\n1. Add a WAF rule that always forwards your IP address to the challenge page.\n2. Add a WAF rule that checks for the presence of a query parameter, such as `?challenge=true`.\n\n## Best practices\n\n1. Always validate the Turnstile token on the server-side before checking credentials.\n2. Use environment variables to store sensitive information like your Turnstile secret key.\n3. Implement proper error handling and logging to monitor for potential security issues.\n\nBy combining Turnstile with WAF and Bot Management, you can create a system that secures your application at the network layer, while also providing an extra layer of protection using client-side signals. This approach makes it significantly more difficult for malicious actors to automate attacks against your login system.\n\n## Resources\n\nIf you are interested in customizing Turnstile, refer to the resources below for more information:\n\n* [Client-side rendering](https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/). Learn how to customize how and when Turnstile renders in your user interface, to better fit your application's needs and user experience.\n* [Server-side validation](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/). Learn how Turnstile's API works, including request parameters, as well as how to handle different types of responses, including error codes.\n* [Turnstile Analytics](https://developers.cloudflare.com/turnstile/turnstile-analytics/). Learn how to view Turnstile's analytics in the Cloudflare dashboard. This includes metrics on the number of challenges issued, as well as the [challenge solve rate (CSR)](https://developers.cloudflare.com/cloudflare-challenges/reference/challenge-solve-rate/).\n\n</page>\n\n<page>\n---\ntitle: Protect your forms · Cloudflare Turnstile docs\ndescription: This tutorial will guide you through integrating Cloudflare\n  Turnstile to protect your web forms, such as login, signup, or contact forms.\nlastUpdated: 2025-10-09T15:47:46.000Z\nchatbotDeprioritize: false\ntags: JavaScript,Node.js\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/tutorials/login-pages/\n  md: https://developers.cloudflare.com/turnstile/tutorials/login-pages/index.md\n---\n\nThis tutorial will guide you through integrating Cloudflare Turnstile to protect your web forms, such as login, signup, or contact forms. Learn how to implement the Turnstile widget on the client side and verify the Turnstile token via the Siteverify API on the server side.\n\n## Before you begin\n\n* You must have a Cloudflare account.\n* You must have a web application with a form you want to protect.\n* You must have basic knowledge of HTML and your server-side language of choice, such as Node.js or Python.\n\n## Get Your Turnstile sitekey and secret key\n\n1. In the Cloudflare dashboard, go to the **Turnstile** page.\n\n   [Go to **Turnstile**](https://dash.cloudflare.com/?to=/:account/turnstile)\n\n2. [Create a new Turnstile widget](https://developers.cloudflare.com/turnstile/get-started/).\n\n3. Copy the sitekey and the secret key to use in the next step.\n\n## Add the Turnstile widget to your HTML form\n\n1. Add the Turnstile widget to your form.\n2. Replace `<YOUR-SITE-KEY>` with the sitekey from Cloudflare.\n3. Add a `data-callback` attribute to the Turnstile widget div. This JavaScript function will be called when the challenge is successful.\n4. Ensure your submit button is initially disabled.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Verify the Turnstile token on the server side\n\nYou will need to verify the Turnstile token sent from the client side. Below is an example in Node.js.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Important considerations\n\nIt is crucial to handle the verification of the Turnstile token correctly. This section covers some key points to keep in mind.\n\n### Verify the token after form input\n\n* Ensure that you verify the Turnstile token after the user has filled out the form and selected **submit**.\n* If you verify the token before the user inputs their data, a malicious actor could potentially bypass the protection by manipulating the form submission after obtaining a valid token.\n\n### Proper flow implementation\n\n* When the user submits the form, send both the form data and the Turnstile token to your server.\n* On the server side, verify the Turnstile token first.\n* Based on the verification response, decide whether to proceed with processing the form data.\n\n</page>\n\n<page>\n---\ntitle: Compare versions · Cloudflare Version Management docs\ndescription: Quickly view differences between versions to make sure your\n  configurations are correct before promoting a version to a new environment.\nlastUpdated: 2025-09-15T16:24:30.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/version-management/how-to/compare-versions/\n  md: https://developers.cloudflare.com/version-management/how-to/compare-versions/index.md\n---\n\nQuickly view differences between versions to make sure your configurations are correct before [promoting a version](https://developers.cloudflare.com/version-management/how-to/environments/#change-environment-version) to a new environment.\n\nA common use case would be to compare the versions in staging and production to verify the changes before promoting the staging version to production.\n\nTo compare versions:\n\n1. Log in to the Cloudflare dashboard.\n\n   [Go to **Account home**](https://dash.cloudflare.com/?to=/:account/home)\n\n2. Select your account and zone.\n\n3. Go to **Version Management** > **Comparisons**.\n\n4. Select two different versions.\n\n5. Select **Compare**.\n\nAfter a few seconds, the page will update automatically with a comparison on a per-product basis. The lower numbered version will always be presented on the left and the top will show you which environments the versions are assigned to so that you can ensure you are comparing the right versions.\n\n![View changes side-by-side between versions](https://developers.cloudflare.com/_astro/compare-versions.AiuozF29_ZiQDsV.webp)\n\nChanges will be highlighted for new additions and removals for that service. Based on the comparison, you can then decide if more changes are necessary or if that new version is ready to be rolled out.\n\n</page>\n\n<page>\n---\ntitle: Enable version management · Cloudflare Version Management docs\ndescription: By default, Version Management is not enabled on a zone.\nlastUpdated: 2025-08-20T21:45:15.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/version-management/how-to/enable/\n  md: https://developers.cloudflare.com/version-management/how-to/enable/index.md\n---\n\nBy default, Version Management is not enabled on a zone.\n\nTo enable [Version Management](https://dash.cloudflare.com/?to=/:account/:zone/versioning):\n\n1. Log in to the Cloudflare dashboard.\n\n   [Go to **Account home**](https://dash.cloudflare.com/?to=/:account/home)\n\n2. Select your account and zone.\n\n3. Go to **Version Management**.\n\n4. Select **Enable versioning**.\n\nNote\n\nIf you cannot enable Version Management, make sure your zone, account, and user meet the [requirements](https://developers.cloudflare.com/version-management/#requirements).\n\nOnce you [enable](https://developers.cloudflare.com/version-management/how-to/enable/) Version Management, Cloudflare will automatically create:\n\n* **Version Zero**, think about this as the configuration of your current zone. Once default environments are created, Version Zero is automatically deployed to them, guaranteeing no disruption in your live traffic. This Version is also permanently editable. In case you decide to disable Zone Versioning, Version Zero will become your zone again.\n* **Global Configuration**, you can find all the configurations here that are not supported by Version Management.\n\nImportant\n\nAny changes made to the **Global Configuration** will immediately apply to your zone and all versions of your zone, affecting live traffic.\n\nOn the Environments page, you can create default environments for **Production**, **Staging**, and **Development**.\n\n## Disable Version Management\n\nWarning\n\nWhen you disable Zone Versioning, all your zone configurations will revert to those in your **Version Zero**.\n\nWhen deleting the production environment, all traffic will default to Version 0. The action of deleting an environment does not impact any versions configuration.\n\nTo disable Zone Versioning:\n\n1. Confirm that **Version Zero** has the correct configurations for your zone:\n\n   1. Use the [comparison feature](https://developers.cloudflare.com/version-management/how-to/compare-versions/) to view the differences between your current **Production** version and **Version Zero**.\n\n   2. If there are differences, make changes to **Version Zero** so it matches your current **Production** version.\n\n   3. [Promote](https://developers.cloudflare.com/version-management/how-to/environments/#promote-a-version) **Version Zero** to your **Production** environment.\n\n   4. Confirm that your new **Production** environment functions as expected.\n\n2. Send a `GET` request to the `/zones/{zone_id}/environments` endpoint.",
+      "language": "unknown"
+    },
+    {
+      "code": "In the response, save the following values:\n\n   * The environment `ref` of every rule\n\n3. Using the `ref` of those environments, send a `DELETE` request to the `/zones/{zone_id}/environments/{ref}` endpoint for each environment.",
+      "language": "unknown"
+    },
+    {
+      "code": "4. Then, send a `GET` request to find all HTTP applications (or versions of your zone).",
+      "language": "unknown"
+    },
+    {
+      "code": "Save the `id` of each HTTP application.\n\n5. Using the `id` of those HTTP applications, send `DELETE` requests for every application.",
+      "language": "unknown"
+    },
+    {
+      "code": "Once all these steps are completed, Zone Versioning will go back to its original landing page.\n\n</page>\n\n<page>\n---\ntitle: Manage environments · Cloudflare Version Management docs\ndescription: An environment is a place to test different versions of your zone\n  configurations.\nlastUpdated: 2025-09-15T14:53:30.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/version-management/how-to/environments/\n  md: https://developers.cloudflare.com/version-management/how-to/environments/index.md\n---\n\nAn environment is a place to test different versions of your zone configurations.\n\n***\n\n## Create environment\n\nOnce you [enable](https://developers.cloudflare.com/version-management/how-to/enable/) Version Management, Cloudflare will automatically create:\n\n* **Version Zero**, think about this as the configuration of your current zone. Once default environments are created, Version Zero is automatically deployed to them, guaranteeing no disruption in your live traffic. This Version is also permanently editable. In case you decide to disable Zone Versioning, Version Zero will become your zone again.\n* **Global Configuration**, you can find all the configurations here that are not supported by Version Management.\n\nImportant\n\nAny changes made to the **Global Configuration** will immediately apply to your zone and all versions of your zone, affecting live traffic.\n\nOn the Environments page, you can create default environments for **Production**, **Staging**, and **Development**.\n\nBased on your organization's needs, you may need to create additional environments to test and roll out changes.\n\n\n\nTo create a new environment:\n\n1. In the Cloudflare dashboard, go to the **Account home** page and select your account and zone.\n\n   [Go to **Account home**](https://dash.cloudflare.com/?to=/:account/home)\n\n2. Go to **Version Management**.\n\n3. Go to **Environments**.\n\n4. Select **Create Environment**.\n\n5. Provide the following information:\n\n* **Environment Name**: A unique, descriptive name for the environment.\n* [**Traffic filter**](https://developers.cloudflare.com/version-management/reference/traffic-filters/): Limits which requests are sent to this environment.\n* **Initial position**: Controls where this environment should be in your testing process.\n\n1. Select **Create**.\n\nNote\n\nYou can only adjust the [**Read-only Environment**](https://developers.cloudflare.com/version-management/reference/read-only-environments/) configuration after an environment has been created.\n\n***\n\n## Edit environment\n\nTo edit an environment:\n\n1. In the Cloudflare dashboard, go to the **Account home** page and select your account and zone.\n\n   [Go to **Account home**](https://dash.cloudflare.com/?to=/:account/home)\n\n2. Go to **Version Management**.\n\n3. Select **Environments**.\n\n4. On a specific environment, select **Edit**.\n\n5. Make any required changes.\n\n6. Select **Save**.\n\n***\n\n## Change environment version\n\nTo prevent accidental changes, you can only update an environment's version through the process of **Promotion** or **Roll back**.\n\nFor more details on the flow of versions and environments, refer to [How it works](https://developers.cloudflare.com/version-management/about/).\n\n### Promote a version\n\nPromotion moves a version from a lower-ranked environment to the next highest one.\n\nTo promote a version:\n\n1. Log in to the Cloudflare dashboard.\n\n   [Go to **Account home**](https://dash.cloudflare.com/?to=/:account/home)\n\n2. Select your account and zone.\n\n3. Go to **Version Management**.\n\n4. Select **Environments**.\n\n5. On the environment in which you tested the version, select **Promote**. This option will only be available if the lower-ranked environment has a different version than the higher-ranked environment.\n\nPromoting a version to a read-only environment will make the version permanently read-only.\n\n\n\n### Roll back a version\n\nWhen you roll back a version, you revert the environment to the previous version assigned to it.\n\nTo roll back a version:\n\n1. In the Cloudflare dashboard, go to the **Account home** page and select your account and zone.\n\n   [Go to **Account home**](https://dash.cloudflare.com/?to=/:account/home)\n\n2. Go to **Version Management**.\n\n3. Select **Environments**.\n\n4. On a specific environment, select **Roll back**.\n\n***\n\n## Delete environment\n\nTo delete an environment:\n\n1. In the Cloudflare dashboard, go to the **Account home** page and select your account and zone.\n\n   [Go to **Account home**](https://dash.cloudflare.com/?to=/:account/home)\n\n2. Go to **Version Management**.\n\n3. Select **Environments**.\n\n4. On a specific environment, select **Edit**.\n\n5. Select **Delete Environment**.\n\nNote\n\nYou cannot delete your **Production** environment.\n\n</page>\n\n<page>\n---\ntitle: Manage versions · Cloudflare Version Management docs\ndescription: A version is a collection of configurations related to your zone,\n  such as WAF custom rules and other optimization configurations.\nlastUpdated: 2025-09-15T14:53:30.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/version-management/how-to/versions/\n  md: https://developers.cloudflare.com/version-management/how-to/versions/index.md\n---\n\nA version is a collection of configurations related to your zone, such as WAF custom rules and [other optimization configurations](https://developers.cloudflare.com/version-management/reference/available-configurations/).\n\n***\n\n## Create version\n\nOnce you [enable](https://developers.cloudflare.com/version-management/how-to/enable/) Version Management, Cloudflare will automatically create:\n\n* **Version Zero**, think about this as the configuration of your current zone. Once default environments are created, Version Zero is automatically deployed to them, guaranteeing no disruption in your live traffic. This Version is also permanently editable. In case you decide to disable Zone Versioning, Version Zero will become your zone again.\n* **Global Configuration**, you can find all the configurations here that are not supported by Version Management.\n\nImportant\n\nAny changes made to the **Global Configuration** will immediately apply to your zone and all versions of your zone, affecting live traffic.\n\nOn the Environments page, you can create default environments for **Production**, **Staging**, and **Development**.\n\nIf you need to test out different implementations of configurations at the same time or multiple types of changes, create a new version of your zone. **Zone Versioning** roles are not adequate for creating a new version. A **Super Administrator** or **Administrator** role is required.\n\nTo create a new version:\n\n1. In the Cloudflare dashboard, go to the **Account home** page and select your account and zone.\n\n   [Go to **Account home**](https://dash.cloudflare.com/?to=/:account/home)\n\n2. Go to **Version Management**.\n\n3. On an existing version, select **Clone**. This will copy over all configurations from that version.\n\n4. If needed, you can also **Edit Description** to provide more detail about the purpose of this version.\n\n***\n\n## Change configurations in a version\n\nYour zone configurations are split up into two areas: **Global Configuration** and different versions.\n\n* Global Configuration controls the configurations of a zone that is not available for versioning and, when changed, automatically apply to all versions of your zone.\n\n* Version configurations update configurations of a zone that is available for versioning and are:\n\n  * Editable when not applied to a [read-only environment](https://developers.cloudflare.com/version-management/reference/read-only-environments/).\n  * Applied when [associated with an environment](https://developers.cloudflare.com/version-management/how-to/environments/#change-environment-version).\n\nNote\n\nTo use the API for a different version, you will need to use a different zone ID.\n\n### Editable versions\n\nBefore making changes, make sure you are inside the correct version of your zone.\n\nTo change between different versions of your zone:\n\n1. Log in to the Cloudflare dashboard.\n\n   [Go to **Account home**](https://dash.cloudflare.com/?to=/:account/home)\n\n2. Select your account and a domain that has version management. The Global Configuration of your domain will load.\n\n3. Go to the product or feature you wish to modify.\n\n   * **If the product or feature is available for versioning**: The last version you were working on will load.\n   * **If the product or feature is NOT available for versioning**: Your Global Configuration will load, and any changes you make will impact live traffic.\n\n4. Ensure that the configuration or version displayed in the domain summary bar is the one you would like to work on. If not, select the version in the domain summary bar to open the version switcher.\n\nNote\n\nIf you are on a product that is not available for versioning, you will not be able to switch to another version, and can only make changes under your Global Configuration.\n\nThe Domain Summary is accessible from all pages and allows you to quickly switch between versions and domains.\n\n![Switch between versions of your configuration](https://developers.cloudflare.com/_astro/configurable-versions.BsHb-j9S_77GY1.webp)\n\nFrom within a version, you can update configurations just as you would with your normal zone configurations. Any changes are saved automatically.\n\nNote\n\nTo change the version associated with an environment, you need to update configurations on the [Environment](https://developers.cloudflare.com/version-management/how-to/environments/#change-environment-version) itself.\n\n### Read-only versions\n\n**Production** is a read-only environment by default. This means that any version associated with **Production** also becomes read-only. This configuration prevents another member of your account from accidentally editing the version associated with your live traffic. You can change this configuration by editing the environment.\n\n\n\nIn order to change configurations in a version associated with a [read-only environment](https://developers.cloudflare.com/version-management/reference/read-only-environments/), either:\n\n* [Change the environment version](https://developers.cloudflare.com/version-management/how-to/environments/#change-environment-version) to another version and then make changes to your version.\n* [Edit](https://developers.cloudflare.com/version-management/how-to/environments/#edit-environment) the environment's configurations to remove the **Read-only environment** configuration. Then, promote a new version to this environment.\n\n***\n\n## View metrics\n\nOnce you begin [sending traffic](https://developers.cloudflare.com/version-management/reference/traffic-filters/) to an environment with a version applied, you can also view metrics about what happens to that traffic.\n\nTo view metrics:\n\n1. In the Cloudflare dashboard, go to the **Account home** page and select your account and zone.\n\n   [Go to **Account home**](https://dash.cloudflare.com/?to=/:account/home)\n\n2. Go to **Version Management**.\n\n3. On an existing version, select **View Metrics**.\n\nNote\n\nYou will only see metrics for the specific version that is active in the Cloudflare dashboard during the time frame that you select.\n\n</page>\n\n<page>\n---\ntitle: Available configurations · Cloudflare Version Management docs\ndescription: When you use Version Management, you can edit various\n  configurations, such as WAF custom rules and Cache.\nlastUpdated: 2025-08-20T18:25:25.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/version-management/reference/available-configurations/\n  md: https://developers.cloudflare.com/version-management/reference/available-configurations/index.md\n---\n\nWhen you use Version Management, you can edit various configurations, such as [WAF custom rules](https://developers.cloudflare.com/waf/custom-rules/) and [Cache](https://developers.cloudflare.com/cache/).\n\nGenerally, you are allowed to edit all zone-level configurations except for the following:\n\n* [DNS](https://developers.cloudflare.com/dns/)\n* [Spectrum](https://developers.cloudflare.com/spectrum/)\n* Traffic ([Load Balancing](https://developers.cloudflare.com/load-balancing/), [Waiting Rooms](https://developers.cloudflare.com/waiting-room/), Health Checks, and more)\n* [Zero Trust](https://developers.cloudflare.com/cloudflare-one/) and Access policies\n* [SSL certificates](https://developers.cloudflare.com/ssl/edge-certificates/) (though you can test these with a separate [staging certificates](https://developers.cloudflare.com/ssl/edge-certificates/staging-environment/) feature)\n\nNote\n\nFor the most up-to-date list of these configurations, start [editing configurations within a version](https://developers.cloudflare.com/version-management/how-to/versions/#change-configurations-in-a-version) in the Cloudflare dashboard.\n\n## Limitations\n\nVersion Management does not currently support or have limited support for the following products or features:\n\nAPI Shield\n\n* Some [API Shield](https://developers.cloudflare.com/api-shield/) configurations are not cloned when a new zone version is created.\n* Customers are allowed to opt-in to remove the UI block that prevents enabling Version Management.\n\nAuthenticated Origin Pull\n\n* [Authenticated Origin Pull](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/) does not work with Zone Versioning.\n* Accessing your domain from an allowlisted IP returns a Cloudflare 520 error.\n\nCache\n\n* [Cache Reserve](https://developers.cloudflare.com/cache/advanced-configuration/cache-reserve/) is intended for production use only.\n* Purging the production environment purges all environments.\n\nCache Rules when used with Cloudflare Images\n\n* [Image Resizing](https://developers.cloudflare.com/images/) does not work with the `additional_cacheable_ports` [Cache Rule](https://developers.cloudflare.com/cache/how-to/cache-rules/) setting and Zone Versioning.\n* If you use `additional_cacheable_ports` with Image Resizing, the image will be resized every time it is requested and will result in low performance.\n\nWorkers Cache API\n\n* [Workers Cache API](https://developers.cloudflare.com/workers/runtime-apis/cache/) does not work with Version Management.\n* If you use the Workers Cache API with Zone Versioning, you might encounter unexpected caching behaviours.\n\nChina Network\n\n* Regardless of the version deployed to production, traffic in China will always target the root zone.\n* Other incompatibility issues with Access and ICP licenses.\n\nCloudflare API\n\n* Version Management does not currently expose a public [API](https://developers.cloudflare.com/api/).\n* Customers can only use Version Management through the [Cloudflare dashboard](https://dash.cloudflare.com/).\n\nDomain-scoped Roles\n\n* [Domain-scoped Roles](https://developers.cloudflare.com/fundamentals/manage-members/roles/#domain-scoped-roles) apply only to your root zone.\n* Once a new version is created, these roles do not copy over and they lose access to versions.\n\nImage Transformations\n\n* Changes made to [Image Transformations](https://developers.cloudflare.com/images/transform-images/) are not cloned when a new zone version is created.\n\nNetwork Error Logging\n\n* [Network Error Logging](https://developers.cloudflare.com/network-error-logging/) configurations are not cloned when a new version is created.\n\nPage Shield\n\n* [Page Shield](https://developers.cloudflare.com/page-shield/) is not available for versioning and is only configurable under your Global Configuration.\n\nRules\n\n* Version Management does not currently support the following:\n\n  * [Snippets](https://developers.cloudflare.com/rules/snippets/)\n  * [Compression Rules](https://developers.cloudflare.com/rules/compression-rules/)\n\nSecurity Insights\n\n* [Security Insights](https://developers.cloudflare.com/security-center/security-insights/) are not shown when Zone Versioning is enabled and the first version is deployed to production.\n\nTerraform\n\n* Version Management does not currently support [Terraform](https://developers.cloudflare.com/terraform/).\n* Customers should either use Terraform or Version Management.\n\nWAF Attack Score\n\n* [WAF Attack Score](https://developers.cloudflare.com/waf/detections/attack-score/) configurations are not cloned when a new zone version is created.\n\nWaiting Room\n\n* [Waiting Room](https://developers.cloudflare.com/waiting-room/) users active on the site may be placed back in the queue.\n* Waiting Room users in the queue may lose their place in line.\n* Traffic may exceed limits.\n\nWrangler\n\n* If a version has a Worker route, it might disappear when a Worker is deployed via [Wrangler](https://developers.cloudflare.com/workers/wrangler/).\n* If two versions have the same custom domains, the Worker might randomly choose between them.\n\n</page>\n\n<page>\n---\ntitle: Read-only environments · Cloudflare Version Management docs\ndescription: When an environment is read-only, versions deployed to this\n  environment will permanently become read-only. This configuration protects\n  sensitive environments from accidental changes.\nlastUpdated: 2025-08-20T18:25:25.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/version-management/reference/read-only-environments/\n  md: https://developers.cloudflare.com/version-management/reference/read-only-environments/index.md\n---\n\nWhen an environment is read-only, versions deployed to this environment will permanently become read-only. This configuration protects sensitive environments from accidental changes.\n\n**Version Zero** is an exception to this rule and is always editable.\n\n**Production** is a read-only environment by default. This means that any version associated with **Production** also becomes read-only. This configuration prevents another member of your account from accidentally editing the version associated with your live traffic. You can change this configuration by editing the environment.\n\n\n\nFor similar reasons, some organizations may make **Staging** a read-only environment. Otherwise, another member of your account could make changes to a version in **Staging** *after* your organization has performed the validation tests prior to promoting to **Production**. Without having a read-only **Staging** environment, this change could be released into **Production** without testing and might cause an issue with live traffic.\n\nTo change the read-only status of an environment, [edit the environment](https://developers.cloudflare.com/version-management/how-to/environments/#edit-environment).\n\n</page>\n\n<page>\n---\ntitle: Traffic filters · Cloudflare Version Management docs\ndescription: When you create an environment, you specify a traffic filter for\n  that environment. This filter ensures that all traffic reaching the\n  environment and, by extension, the configuration changes associated with the\n  environment's version is intentional.\nlastUpdated: 2024-08-13T19:56:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/version-management/reference/traffic-filters/\n  md: https://developers.cloudflare.com/version-management/reference/traffic-filters/index.md\n---\n\nWhen you [create an environment](https://developers.cloudflare.com/version-management/how-to/environments/#create-environment), you specify a traffic filter for that environment. This filter ensures that all traffic reaching the environment and, by extension, the configuration changes associated with the environment's version is intentional.\n\nTo send traffic to a specific environment, send requests to your zone that match the pattern specified in your filter. These could be characteristics such as **Edge Server IP**, **Cookie**, **Hostname**, or **User Agent**.\n\nTo make sure requests are reaching an environment, review the [Metrics](https://developers.cloudflare.com/version-management/how-to/versions/#view-metrics) associated with your environment. These metrics will also help you evaluate whether your configuration changes are affecting traffic in the way you expect.\n\n</page>\n\n<page>\n---\ntitle: Create indexes · Cloudflare Vectorize docs\ndescription: Indexes are the \"atom\" of Vectorize. Vectors are inserted into an\n  index and enable you to query the index for similar vectors for a given input\n  vector.\nlastUpdated: 2025-11-24T11:28:05.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/vectorize/best-practices/create-indexes/\n  md: https://developers.cloudflare.com/vectorize/best-practices/create-indexes/index.md\n---\n\nIndexes are the \"atom\" of Vectorize. Vectors are inserted into an index and enable you to query the index for similar vectors for a given input vector.\n\nCreating an index requires three inputs:\n\n* A kebab-cased name, such as `prod-search-index` or `recommendations-idx-dev`.\n* The (fixed) [dimension size](#dimensions) of each vector, for example 384 or 1536.\n* The (fixed) [distance metric](#distance-metrics) to use for calculating vector similarity.\n\nAn index cannot be created using the same name as an index that is currently active on your account. However, an index can be created with a name that belonged to an index that has been deleted.\n\nThe configuration of an index cannot be changed after creation.\n\n## Create an index\n\n### wrangler CLI\n\nWrangler version 3.71.0 required\n\nVectorize V2 requires [wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) version `3.71.0` or later. Ensure you have the latest version of `wrangler` installed, or use `npx wrangler@latest vectorize` to always use the latest version.\n\nUsing legacy Vectorize (V1) indexes?\n\nPlease use the `wrangler vectorize --deprecated-v1` flag to create, get, list, delete and insert vectors into legacy Vectorize V1 indexes.\n\nPlease note that by December 2024, you will not be able to create legacy Vectorize indexes. Other operations will remain functional.\n\nRefer to the [legacy transition](https://developers.cloudflare.com/vectorize/reference/transition-vectorize-legacy) page for more details on transitioning away from legacy indexes.\n\nTo create an index with `wrangler`:",
+      "language": "unknown"
+    },
+    {
+      "code": "To create an index that can accept vector embeddings from Worker's AI's [`@cf/baai/bge-base-en-v1.5`](https://developers.cloudflare.com/workers-ai/models/#text-embeddings) embedding model, which outputs vectors with 768 dimensions, use the following command:",
+      "language": "unknown"
+    },
+    {
+      "code": "### HTTP API\n\nVectorize also supports creating indexes via [REST API](https://developers.cloudflare.com/api/resources/vectorize/subresources/indexes/methods/create/).\n\nFor example, to create an index directly from a Python script:",
+      "language": "unknown"
+    },
+    {
+      "code": "This script should print the response with a status code `201`, along with a JSON response body indicating the creation of an index with the provided configuration.\n\n## Dimensions\n\nDimensions are determined from the output size of the machine learning (ML) model used to generate them, and are a function of how the model encodes and describes features into a vector embedding.\n\nThe number of output dimensions can determine vector search accuracy, search performance (latency), and the overall size of the index. Smaller output dimensions can be faster to search across, which can be useful for user-facing applications. Larger output dimensions can provide more accurate search, especially over larger datasets and/or datasets with substantially similar inputs.\n\nThe number of dimensions an index is created for cannot change. Indexes expect to receive dense vectors with the same number of dimensions.\n\nThe following table highlights some example embeddings models and their output dimensions:\n\n| Model / Embeddings API | Output dimensions | Use-case |\n| - | - | - |\n| Workers AI - `@cf/baai/bge-base-en-v1.5` | 768 | Text |\n| OpenAI - `ada-002` | 1536 | Text |\n| Cohere - `embed-multilingual-v2.0` | 768 | Text |\n| Google Cloud - `multimodalembedding` | 1408 | Multi-modal (text, images) |\n\nLearn more about Workers AI\n\nRefer to the [Workers AI documentation](https://developers.cloudflare.com/workers-ai/models/#text-embeddings) to learn about its built-in embedding models.\n\n## Distance metrics\n\nDistance metrics are functions that determine how close vectors are from each other. Vectorize indexes support the following distance metrics:\n\n| Metric | Details |\n| - | - |\n| `cosine` | Distance is measured between `-1` (most dissimilar) to `1` (identical). `0` denotes an orthogonal vector. |\n| `euclidean` | Euclidean (L2) distance. `0` denotes identical vectors. The larger the positive number, the further the vectors are apart. |\n| `dot-product` | Negative dot product. Larger negative values *or* smaller positive values denote more similar vectors. A score of `-1000` is more similar than `-500`, and a score of `15` more similar than `50`. |\n\nDetermining the similarity between vectors can be subjective based on how the machine-learning model that represents features in the resulting vector embeddings. For example, a score of `0.8511` when using a `cosine` metric means that two vectors are close in distance, but whether data they represent is *similar* is a function of how well the model is able to represent the original content.\n\nWhen querying vectors, you can specify Vectorize to use either:\n\n* High-precision scoring, which increases the precision of the query matches scores as well as the accuracy of the query results.\n* Approximate scoring for faster response times. Using approximate scoring, returned scores will be an approximation of the real distance/similarity between your query and the returned vectors. Refer to [Control over scoring precision and query accuracy](https://developers.cloudflare.com/vectorize/best-practices/query-vectors/#control-over-scoring-precision-and-query-accuracy).\n\nDistance metrics cannot be changed after index creation, and that each metric has a different scoring function.\n\n</page>\n\n<page>\n---\ntitle: Insert vectors · Cloudflare Vectorize docs\ndescription: \"Vectorize indexes allow you to insert vectors at any point:\n  Vectorize will optimize the index behind the scenes to ensure that vector\n  search remains efficient, even as new vectors are added or existing vectors\n  updated.\"\nlastUpdated: 2025-08-20T21:45:15.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/\n  md: https://developers.cloudflare.com/vectorize/best-practices/insert-vectors/index.md\n---\n\nVectorize indexes allow you to insert vectors at any point: Vectorize will optimize the index behind the scenes to ensure that vector search remains efficient, even as new vectors are added or existing vectors updated.\n\nInsert vs Upsert\n\nIf the same vector id is *inserted* twice in a Vectorize index, the index would reflect the vector that was added first.\n\nIf the same vector id is *upserted* twice in a Vectorize index, the index would reflect the vector that was added last.\n\nUse the upsert operation if you want to overwrite the vector value for a vector id that already exists in an index.\n\n## Supported vector formats\n\nVectorize supports the insert/upsert of vectors in three formats:\n\n* An array of floating point numbers (converted into a JavaScript `number[]` array).\n* A [Float32Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array)\n* A [Float64Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array)\n\nIn most cases, a `number[]` array is the easiest when dealing with other APIs, and is the return type of most machine-learning APIs.\n\nVectorize stores and restitutes vector dimensions as Float32; vector dimensions provided as Float64 will be converted to Float32 before being stored.\n\n## Metadata\n\nMetadata is an optional set of key-value pairs that can be attached to a vector on insert or upsert, and allows you to embed or co-locate data about the vector itself.\n\nMetadata keys cannot be empty, contain the dot character (`.`), contain the double-quote character (`\"`), or start with the dollar character (`$`).\n\nMetadata can be used to:\n\n* Include the object storage key, database UUID or other identifier to look up the content the vector embedding represents.\n* Store JSON data (up to the [metadata limits](https://developers.cloudflare.com/vectorize/platform/limits/)), which can allow you to skip additional lookups for smaller content.\n* Keep track of dates, timestamps, or other metadata that describes when the vector embedding was generated or how it was generated.\n\nFor example, a vector embedding representing an image could include the path to the [R2 object](https://developers.cloudflare.com/r2/) it was generated from, the format, and a category lookup:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Performance Tips When Filtering by Metadata\n\nWhen creating metadata indexes for a large Vectorize index, we encourage users to think ahead and plan how they will query for vectors with filters on this metadata.\n\nCarefully consider the cardinality of metadata values in relation to your queries. Cardinality is the level of uniqueness of data values within a set. Low cardinality means there are only a few unique values: for instance, the number of planets in the Solar System; the number of countries in the world. High cardinality means there are many unique values: UUIv4 strings; timestamps with millisecond precision.\n\nHigh cardinality is good for the selectiveness of the equal (`$eq`) filter. For example, if you want to find vectors associated with one user's id. But the filter is not going to help if all vectors have the same value. That's an example of extreme low cardinality.\n\nHigh cardinality can also impact range queries, which searches across multiple unqiue metadata values. For example, an indexed metadata value using millisecond timestamps will see lower performance if the range spans long periods of time in which thousands of vectors with unique timestamps were written.\n\nBehind the scenes, Vectorize uses a reverse index to map values to vector ids. If the number of unique values in a particular range is too high, then that requires reading large portions of the index (a full index scan in the worst case). This would lead to memory issues, so Vectorize will degrade performance and the accuracy of the query in order to finish the request.\n\nOne approach for high cardinality data is to somehow create buckets where more vectors get grouped to the same value. Continuing the millisecond timestamp example, let's imagine we typically filter with date ranges that have 5 minute increments of granularity. We could use a timestamp which is rounded down to the last 5 minute point. This \"windows\" our metadata values into 5 minute increments. And we can still store the original millisecond timestamp as a separate non-indexed field.\n\n## Namespaces\n\nNamespaces provide a way to segment the vectors within your index. For example, by customer, merchant or store ID.\n\nTo associate vectors with a namespace, you can optionally provide a `namespace: string` value when performing an insert or upsert operation. When querying, you can pass the namespace to search within as an optional parameter to your query.\n\nA namespace can be up to 64 characters (bytes) in length and you can have up to 1,000 namespaces per index. Refer to the [Limits](https://developers.cloudflare.com/vectorize/platform/limits/) documentation for more details.\n\nWhen a namespace is specified in a query operation, only vectors within that namespace are used for the search. Namespace filtering is applied before vector search, increasing the precision of the matched results.\n\nTo insert vectors with a namespace:",
+      "language": "unknown"
+    },
+    {
+      "code": "To query vectors within a namespace:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Improve Write Throughput\n\nOne way to reduce the time to make updates visible in queries is to batch more vectors into fewer requests. This is important for write-heavy workloads. To see how many vectors you can write in a single request, please refer to the [Limits](https://developers.cloudflare.com/vectorize/platform/limits/) page.\n\nVectorize writes changes immeditely to a write ahead log for durability. To make these writes visible for reads, an asynchronous job needs to read the current index files from R2, create an updated index, write the new index files back to R2, and commit the change. To keep the overhead of writes low and improve write throughput, Vectorize will combine multiple changes together into a single batch. It sets the maximum size of a batch to 200,000 total vectors or to 1,000 individual updates, whichever limit it hits first.\n\nFor example, let's say we have 250,000 vectors we would like to insert into our index. We decide to insert them one at a time, calling the insert API 250,000 times. Vectorize will only process 1000 vectors in each job, and will need to work through 250 total jobs. This could take at least an hour to do.\n\nThe better approach is to batch our updates. For example, we can split our 250,000 vectors into 100 files, where each file has 2,500 vectors. We would call the insert HTTP API 100 times. Vectorize would update the index in only 2 or 3 jobs. All 250,000 vectors will visible in queries within minutes.\n\n## Examples\n\n### Workers API\n\nUse the `insert()` and `upsert()` methods available on an index from within a Cloudflare Worker to insert vectors into the current index.",
+      "language": "unknown"
+    },
+    {
+      "code": "Refer to [Vectorize API](https://developers.cloudflare.com/vectorize/reference/client-api/) for additional examples.\n\n### wrangler CLI\n\nCloudflare API rate limit\n\nPlease use a maximum of 5000 vectors per embeddings.ndjson file to prevent the global [rate limit](https://developers.cloudflare.com/fundamentals/api/reference/limits/) for the Cloudflare API.\n\nYou can bulk upload vector embeddings directly:\n\n* The file must be in newline-delimited JSON (NDJSON format): each complete vector must be newline separated, and not within an array or object.\n* Vectors must be complete and include a unique string `id` per vector.\n\nAn example NDJSON formatted file:",
+      "language": "unknown"
+    },
+    {
+      "code": "Wrangler version 3.71.0 required\n\nVectorize V2 requires [wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) version `3.71.0` or later. Ensure you have the latest version of `wrangler` installed, or use `npx wrangler@latest vectorize` to always use the latest version.",
+      "language": "unknown"
+    },
+    {
+      "code": "### HTTP API\n\nVectorize also supports inserting vectors via the [REST API](https://developers.cloudflare.com/api/resources/vectorize/subresources/indexes/methods/insert/), which allows you to operate on a Vectorize index from existing machine-learning tooling and languages (including Python).\n\nFor example, to insert embeddings in [NDJSON format](#workers-api) directly from a Python script:",
+      "language": "unknown"
+    },
+    {
+      "code": "This code would insert the vectors defined in `embeddings.ndjson` into the provided index. Python libraries, including Pandas, also support the NDJSON format via the built-in `read_json` method:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: List vectors · Cloudflare Vectorize docs\ndescription: The list-vectors operation allows you to enumerate all vector\n  identifiers in a Vectorize index using paginated requests. This guide covers\n  best practices for efficiently using this operation.\nlastUpdated: 2025-08-26T18:15:57.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/vectorize/best-practices/list-vectors/\n  md: https://developers.cloudflare.com/vectorize/best-practices/list-vectors/index.md\n---\n\nThe list-vectors operation allows you to enumerate all vector identifiers in a Vectorize index using paginated requests. This guide covers best practices for efficiently using this operation.\n\n## When to use list-vectors\n\nUse list-vectors for:\n\n* **Bulk operations**: To process all vectors in an index\n* **Auditing**: To verify the contents of your index or generate reports\n* **Data migration**: To move vectors between indexes or systems\n* **Cleanup operations**: To identify and remove outdated vectors\n\n## Pagination behavior\n\nThe list-vectors operation uses cursor-based pagination with important consistency guarantees:\n\n### Snapshot consistency\n\nVector identifiers returned belong to the index snapshot captured at the time of the first list-vectors request. This ensures consistent pagination even when the index is being modified during iteration:\n\n* **New vectors**: Vectors inserted after the initial request will not appear in subsequent paginated results\n* **Deleted vectors**: Vectors deleted after the initial request will continue to appear in the remaining responses until pagination is complete\n\n### Starting a new iteration\n\nTo see recently added or removed vectors, you must start a new list-vectors request sequence (without a cursor). This captures a fresh snapshot of the index.\n\n### Response structure\n\nEach response includes:\n\n* `count`: Number of vectors returned in this response\n* `totalCount`: Total number of vectors in the index\n* `isTruncated`: Whether there are more vectors available\n* `nextCursor`: Cursor for the next page (null if no more results)\n* `cursorExpirationTimestamp`: Timestamp of when the cursor expires\n* `vectors`: Array of vector identifiers\n\n### Cursor expiration\n\nCursors have an expiration timestamp. If a cursor expires, you'll need to start a new list-vectors request sequence to continue pagination.\n\n## Performance considerations\n\nTake care to have sufficient gap between consecutive requests to avoid hitting rate-limits.\n\n## Example workflow\n\nHere's a typical pattern for processing all vectors in an index:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Dummy token behavior",
+      "id": "dummy-token-behavior"
+    },
+    {
+      "level": "h3",
+      "text": "Token generation",
+      "id": "token-generation"
+    },
+    {
+      "level": "h3",
+      "text": "Token validation",
+      "id": "token-validation"
+    },
+    {
+      "level": "h3",
+      "text": "Validation response",
+      "id": "validation-response"
+    },
+    {
+      "level": "h2",
+      "text": "Testing scenarios",
+      "id": "testing-scenarios"
+    },
+    {
+      "level": "h2",
+      "text": "Metrics",
+      "id": "metrics"
+    },
+    {
+      "level": "h3",
+      "text": "Call Siteverify",
+      "id": "call-siteverify"
+    },
+    {
+      "level": "h2",
+      "text": "Solve rates",
+      "id": "solve-rates"
+    },
+    {
+      "level": "h3",
+      "text": "Metrics",
+      "id": "metrics"
+    },
+    {
+      "level": "h2",
+      "text": "Metrics",
+      "id": "metrics"
+    },
+    {
+      "level": "h3",
+      "text": "Call Siteverify",
+      "id": "call-siteverify"
+    },
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Implementation",
+      "id": "implementation"
+    },
+    {
+      "level": "h2",
+      "text": "Server-side integration",
+      "id": "server-side-integration"
+    },
+    {
+      "level": "h2",
+      "text": "Demonstration",
+      "id": "demonstration"
+    },
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Implementation",
+      "id": "implementation"
+    },
+    {
+      "level": "h2",
+      "text": "Server-side integration",
+      "id": "server-side-integration"
+    },
+    {
+      "level": "h2",
+      "text": "Client-side integration",
+      "id": "client-side-integration"
+    },
+    {
+      "level": "h2",
+      "text": "Best practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Testing considerations",
+      "id": "testing-considerations"
+    },
+    {
+      "level": "h2",
+      "text": "Example test setup",
+      "id": "example-test-setup"
+    },
+    {
+      "level": "h2",
+      "text": "Conclusion",
+      "id": "conclusion"
+    },
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Before you begin",
+      "id": "before-you-begin"
+    },
+    {
+      "level": "h2",
+      "text": "Configure WAF and Bot Management",
+      "id": "configure-waf-and-bot-management"
+    },
+    {
+      "level": "h3",
+      "text": "Issue challenges for potential bot traffic",
+      "id": "issue-challenges-for-potential-bot-traffic"
+    },
+    {
+      "level": "h2",
+      "text": "Set up Cloudflare Turnstile",
+      "id": "set-up-cloudflare-turnstile"
+    },
+    {
+      "level": "h3",
+      "text": "Enable the option to use the existing clearance cookie",
+      "id": "enable-the-option-to-use-the-existing-clearance-cookie"
+    },
+    {
+      "level": "h2",
+      "text": "Integrate Turnstile into your application",
+      "id": "integrate-turnstile-into-your-application"
+    },
+    {
+      "level": "h3",
+      "text": "Add the Turnstile widget to your login form",
+      "id": "add-the-turnstile-widget-to-your-login-form"
+    },
+    {
+      "level": "h2",
+      "text": "Handle the login request",
+      "id": "handle-the-login-request"
+    },
+    {
+      "level": "h2",
+      "text": "Testing",
+      "id": "testing"
+    },
+    {
+      "level": "h2",
+      "text": "Best practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Resources",
+      "id": "resources"
+    },
+    {
+      "level": "h2",
+      "text": "Before you begin",
+      "id": "before-you-begin"
+    },
+    {
+      "level": "h2",
+      "text": "Get Your Turnstile sitekey and secret key",
+      "id": "get-your-turnstile-sitekey-and-secret-key"
+    },
+    {
+      "level": "h2",
+      "text": "Add the Turnstile widget to your HTML form",
+      "id": "add-the-turnstile-widget-to-your-html-form"
+    },
+    {
+      "level": "h2",
+      "text": "Verify the Turnstile token on the server side",
+      "id": "verify-the-turnstile-token-on-the-server-side"
+    },
+    {
+      "level": "h2",
+      "text": "Important considerations",
+      "id": "important-considerations"
+    },
+    {
+      "level": "h3",
+      "text": "Verify the token after form input",
+      "id": "verify-the-token-after-form-input"
+    },
+    {
+      "level": "h3",
+      "text": "Proper flow implementation",
+      "id": "proper-flow-implementation"
+    },
+    {
+      "level": "h2",
+      "text": "Disable Version Management",
+      "id": "disable-version-management"
+    },
+    {
+      "level": "h2",
+      "text": "Create environment",
+      "id": "create-environment"
+    },
+    {
+      "level": "h2",
+      "text": "Edit environment",
+      "id": "edit-environment"
+    },
+    {
+      "level": "h2",
+      "text": "Change environment version",
+      "id": "change-environment-version"
+    },
+    {
+      "level": "h3",
+      "text": "Promote a version",
+      "id": "promote-a-version"
+    },
+    {
+      "level": "h3",
+      "text": "Roll back a version",
+      "id": "roll-back-a-version"
+    },
+    {
+      "level": "h2",
+      "text": "Delete environment",
+      "id": "delete-environment"
+    },
+    {
+      "level": "h2",
+      "text": "Create version",
+      "id": "create-version"
+    },
+    {
+      "level": "h2",
+      "text": "Change configurations in a version",
+      "id": "change-configurations-in-a-version"
+    },
+    {
+      "level": "h3",
+      "text": "Editable versions",
+      "id": "editable-versions"
+    },
+    {
+      "level": "h3",
+      "text": "Read-only versions",
+      "id": "read-only-versions"
+    },
+    {
+      "level": "h2",
+      "text": "View metrics",
+      "id": "view-metrics"
+    },
+    {
+      "level": "h2",
+      "text": "Limitations",
+      "id": "limitations"
+    },
+    {
+      "level": "h2",
+      "text": "Create an index",
+      "id": "create-an-index"
+    },
+    {
+      "level": "h3",
+      "text": "wrangler CLI",
+      "id": "wrangler-cli"
+    },
+    {
+      "level": "h3",
+      "text": "HTTP API",
+      "id": "http-api"
+    },
+    {
+      "level": "h2",
+      "text": "Dimensions",
+      "id": "dimensions"
+    },
+    {
+      "level": "h2",
+      "text": "Distance metrics",
+      "id": "distance-metrics"
+    },
+    {
+      "level": "h2",
+      "text": "Supported vector formats",
+      "id": "supported-vector-formats"
+    },
+    {
+      "level": "h2",
+      "text": "Metadata",
+      "id": "metadata"
+    },
+    {
+      "level": "h3",
+      "text": "Performance Tips When Filtering by Metadata",
+      "id": "performance-tips-when-filtering-by-metadata"
+    },
+    {
+      "level": "h2",
+      "text": "Namespaces",
+      "id": "namespaces"
+    },
+    {
+      "level": "h2",
+      "text": "Improve Write Throughput",
+      "id": "improve-write-throughput"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h3",
+      "text": "Workers API",
+      "id": "workers-api"
+    },
+    {
+      "level": "h3",
+      "text": "wrangler CLI",
+      "id": "wrangler-cli"
+    },
+    {
+      "level": "h3",
+      "text": "HTTP API",
+      "id": "http-api"
+    },
+    {
+      "level": "h2",
+      "text": "When to use list-vectors",
+      "id": "when-to-use-list-vectors"
+    },
+    {
+      "level": "h2",
+      "text": "Pagination behavior",
+      "id": "pagination-behavior"
+    },
+    {
+      "level": "h3",
+      "text": "Snapshot consistency",
+      "id": "snapshot-consistency"
+    },
+    {
+      "level": "h3",
+      "text": "Starting a new iteration",
+      "id": "starting-a-new-iteration"
+    },
+    {
+      "level": "h3",
+      "text": "Response structure",
+      "id": "response-structure"
+    },
+    {
+      "level": "h3",
+      "text": "Cursor expiration",
+      "id": "cursor-expiration"
+    },
+    {
+      "level": "h2",
+      "text": "Performance considerations",
+      "id": "performance-considerations"
+    },
+    {
+      "level": "h2",
+      "text": "Example workflow",
+      "id": "example-workflow"
+    }
+  ],
+  "url": "llms-txt#.env.production",
+  "links": []
+}

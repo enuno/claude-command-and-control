@@ -1,0 +1,24 @@
+{
+  "title": "The upload will only succeed if the client sends Content-Type: image/png",
+  "content": "put_url = s3.generate_presigned_url(\n    'put_object',\n    Params={\n        'Bucket': 'my-bucket',\n        'Key': 'dog.png',\n        'ContentType': 'image/png'\n    },\n    ExpiresIn=3600\n)\npython\nimport boto3\n\nclient = boto3.resource('s3',\n  # Provide your Cloudflare account ID\n  endpoint_url = 'https://<ACCOUNT_ID>.r2.cloudflarestorage.com',\n  # Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n  aws_access_key_id = '<ACCESS_KEY_ID>',\n  aws_secret_access_key = '<SECRET_ACCESS_KEY>'\n)\n\nevent_system = client.meta.events",
+  "code_samples": [
+    {
+      "code": "When a client uses this presigned URL, they must:\n\n* Make the request from an allowed origin (enforced by CORS)\n* Include the `Content-Type: image/png` header (enforced by the signature)\n\n</page>\n\n<page>\n---\ntitle: Configure custom headers · Cloudflare R2 docs\ndescription: Some of R2's extensions require setting a specific header when\n  using them in the S3 compatible API. For some functionality you may want to\n  set a request header on an entire category of requests. Other times you may\n  want to configure a different header for each individual request. This page\n  contains some examples on how to do so with boto3 and with aws-sdk-js-v3.\nlastUpdated: 2025-12-02T15:31:53.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/examples/aws/custom-header/\n  md: https://developers.cloudflare.com/r2/examples/aws/custom-header/index.md\n---\n\nSome of R2's [extensions](https://developers.cloudflare.com/r2/api/s3/extensions/) require setting a specific header when using them in the S3 compatible API. For some functionality you may want to set a request header on an entire category of requests. Other times you may want to configure a different header for each individual request. This page contains some examples on how to do so with `boto3` and with `aws-sdk-js-v3`.\n\n## Setting a custom header on all requests\n\nWhen using certain functionality, like the `cf-create-bucket-if-missing` header, you may want to set a constant header for all `PutObject` requests you're making.\n\n### Set a header for all requests with `boto3`\n\n`Boto3` has an event system which allows you to modify requests. Here we register a function into the event system which adds our header to every `PutObject` request being made.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Setting a custom header on all requests",
+      "id": "setting-a-custom-header-on-all-requests"
+    },
+    {
+      "level": "h3",
+      "text": "Set a header for all requests with `boto3`",
+      "id": "set-a-header-for-all-requests-with-`boto3`"
+    }
+  ],
+  "url": "llms-txt#the-upload-will-only-succeed-if-the-client-sends-content-type:-image/png",
+  "links": []
+}

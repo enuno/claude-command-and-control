@@ -1,0 +1,49 @@
+{
+  "title": "change default branch name",
+  "content": "git branch -M main\nhtml\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf8\" />\n    <title>Form Demo</title>\n    <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" />\n  </head>\n  <body>\n    <form method=\"POST\" action=\"/api/submit\">\n      <div class=\"input\">\n        <label for=\"name\">Full Name</label>\n        <input id=\"name\" name=\"name\" type=\"text\" />\n      </div>\n\n<div class=\"input\">\n        <label for=\"email\">Email Address</label>\n        <input id=\"email\" name=\"email\" type=\"email\" />\n      </div>\n\n<div class=\"input\">\n        <label for=\"referers\">How did you hear about us?</label>\n        <select id=\"referers\" name=\"referers\">\n          <option hidden disabled selected value></option>\n          <option value=\"Facebook\">Facebook</option>\n          <option value=\"Twitter\">Twitter</option>\n          <option value=\"Google\">Google</option>\n          <option value=\"Bing\">Bing</option>\n          <option value=\"Friends\">Friends</option>\n        </select>\n      </div>\n\n<div class=\"checklist\">\n        <label>What are your favorite movies?</label>\n        <ul>\n          <li>\n            <input id=\"m1\" type=\"checkbox\" name=\"movies\" value=\"Space Jam\" />\n            <label for=\"m1\">Space Jam</label>\n          </li>\n          <li>\n            <input\n              id=\"m2\"\n              type=\"checkbox\"\n              name=\"movies\"\n              value=\"Little Rascals\"\n            />\n            <label for=\"m2\">Little Rascals</label>\n          </li>\n          <li>\n            <input id=\"m3\" type=\"checkbox\" name=\"movies\" value=\"Frozen\" />\n            <label for=\"m3\">Frozen</label>\n          </li>\n          <li>\n            <input id=\"m4\" type=\"checkbox\" name=\"movies\" value=\"Home Alone\" />\n            <label for=\"m4\">Home Alone</label>\n          </li>\n        </ul>\n      </div>\n\n<button type=\"submit\">Submit</button>\n    </form>\n  </body>\n</html>\ntxt\n├── functions\n│   └── api\n│       └── submit.js\n└── public\n    └── index.html\njs\n/**\n * POST /api/submit\n */\nexport async function onRequestPost(context) {\n  // TODO: Handle the form submission\n}\njs\n/**\n * POST /api/submit\n */\nexport async function onRequestPost(context) {\n  try {\n    let input = await context.request.formData();\n    let pretty = JSON.stringify([...input], null, 2);\n    return new Response(pretty, {\n      headers: {\n        \"Content-Type\": \"application/json;charset=utf-8\",\n      },\n    });\n  } catch (err) {\n    return new Response(\"Error parsing JSON content\", { status: 400 });\n  }\n}\njs\n/**\n * POST /api/submit\n */\nexport async function onRequestPost(context) {\n  try {\n    let input = await context.request.formData();\n\n// Convert FormData to JSON\n    // NOTE: Allows multiple values per key\n    let output = {};\n    for (let [key, value] of input) {\n      let tmp = output[key];\n      if (tmp === undefined) {\n        output[key] = value;\n      } else {\n        output[key] = [].concat(tmp, value);\n      }\n    }\n\nlet pretty = JSON.stringify(output, null, 2);\n    return new Response(pretty, {\n      headers: {\n        \"Content-Type\": \"application/json;charset=utf-8\",\n      },\n    });\n  } catch (err) {\n    return new Response(\"Error parsing JSON content\", { status: 400 });\n  }\n}\nsh",
+  "code_samples": [
+    {
+      "code": "You may now begin working in the `new-project` directory you created.\n\n### Markup\n\nThe form for this example is fairly straightforward. It includes an array of different input types, including checkboxes for selecting multiple values. The form also does not include any validations so that you may see how empty and/or missing values are interpreted on the server.\n\nYou will only be using plain HTML for this example project. You may use your preferred JavaScript framework, but raw languages have been chosen for simplicity and familiarity – all frameworks are abstracting and/or producing a similar result.\n\nCreate a `public/index.html` in your project directory. All front-end assets will exist within this `public` directory and this `index.html` file will serve as the home page for the website.\n\nCopy and paste the following content into your `public/index.html` file:",
+      "language": "unknown"
+    },
+    {
+      "code": "This HTML document will contain a form with a few fields for the user to fill out. Because there is no validation rules within the form, all fields are optional and the user is able to submit an empty form. For this example, this is intended behavior.\n\nOptional content\n\nTechnically, only the `<form>` and its child elements are necessary. The `<head>` and the enclosing `<html>` and `<body>` tags are optional and not strictly necessary for a valid HTML document.\n\nThe HTML page is also completely unstyled at this point, relying on the browsers' default UI and color palettes. Styling the page is entirely optional and not necessary for the form to function. If you would like to attach a CSS stylesheet, you may [add a `<link>` element](https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps/Getting_started#adding_css_to_our_document). Refer to the finished tutorial's [source code](https://github.com/cloudflare/submit.pages.dev/blob/8c0594f48681935c268987f2f08bcf3726a74c57/public/index.html#L11) for an example or any inspiration – the only requirement is that your CSS stylesheet also resides within the `public` directory.\n\n### Worker\n\nThe HTML form is complete and ready for deployment. When the user submits this form, all data will be sent in a `POST` request to the `/api/submit` URL. This is due to the form's `method` and `action` attributes. However, there is currently no request handler at the `/api/submit` address. You will now create it.\n\nCloudflare Pages offers a [Functions](https://developers.cloudflare.com/pages/functions/) feature, which allows you to define and deploy Workers for dynamic behaviors.\n\nFunctions are linked to the `functions` directory and conveniently construct URL request handlers in relation to the `functions` file structure. For example, the `functions/about.js` file will map to the `/about` URL and `functions/hello/[name].js` will handle the `/hello/:name` URL pattern, where `:name` is any matching URL segment. Refer to the [Functions routing](https://developers.cloudflare.com/pages/functions/routing/) documentation for more information.\n\nTo define a handler for `/api/submit`, you must create a `functions/api/submit.js` file. This means that your `functions` and `public` directories should be siblings, with a total project structure similar to the following:",
+      "language": "unknown"
+    },
+    {
+      "code": "The `<form>` will send `POST` requests, which means that the `functions/api/submit.js` file needs to export an `onRequestPost` handler:",
+      "language": "unknown"
+    },
+    {
+      "code": "The `context` parameter is an object filled with several values of potential interest. For this example, you only need the [`Request`](https://developers.cloudflare.com/workers/runtime-apis/request/) object, which can be accessed through the `context.request` key.\n\nAs mentioned, a `<form>` defaults to the `application/x-www-form-urlencoded` MIME type when submitting. And, for more advanced scenarios, the `enctype=\"multipart/form-data\"` attribute is needed. Luckily, both MIME types can be parsed and treated as [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData). This means that with Workers – which includes Pages Functions – you are able to use the native [`Request.formData`](https://developer.mozilla.org/en-US/docs/Web/API/Request/formData) parser.\n\nFor illustrative purposes, the example application's form handler will reply with all values it received. A `Response` must always be returned by the handler, too:",
+      "language": "unknown"
+    },
+    {
+      "code": "With this handler in place, the example is now fully functional. When a submission is received, the Worker will reply with a JSON list of the `FormData` key-value pairs.\n\nHowever, if you want to reply with a JSON object instead of the key-value pairs (an Array of Arrays), then you must do so manually. Recently, JavaScript added the [`Object.fromEntries`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries) utility. This works well in some cases; however, the example `<form>` includes a `movies` checklist that allows for multiple values. If using `Object.fromEntries`, the generated object would only keep one of the `movies` values, discarding the rest. To avoid this, you must write your own `FormData` to `Object` utility instead:",
+      "language": "unknown"
+    },
+    {
+      "code": "The final snippet (above) allows the Worker to retain all values, returning a JSON response with an accurate representation of the `<form>` submission.\n\n### Deployment\n\nYou are now ready to deploy your project.\n\nIf you have not already done so, save your progress within `git` and then push the commit(s) to the GitHub repository:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Markup",
+      "id": "markup"
+    },
+    {
+      "level": "h3",
+      "text": "Worker",
+      "id": "worker"
+    },
+    {
+      "level": "h3",
+      "text": "Deployment",
+      "id": "deployment"
+    }
+  ],
+  "url": "llms-txt#change-default-branch-name",
+  "links": []
+}

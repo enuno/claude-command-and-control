@@ -1,0 +1,19 @@
+{
+  "title": "Enable snapshot expiration for a specific table",
+  "content": "npx wrangler r2 bucket catalog snapshot-expiration enable <BUCKET_NAME> <NAMESPACE> <TABLE> \\\n  --older-than-days 2 \\\n  --retain-last 5\nbash",
+  "code_samples": [
+    {
+      "code": "API token permission requirements\n\nCatalog-level snapshot expiration requires a Cloudflare API token with both R2 storage and R2 Data Catalog read/write permissions to act as a service credential. The snapshot expiration process uses this token to update table metadata and remove old snapshots.\n\nRefer to [Authenticate your Iceberg engine](#authenticate-your-iceberg-engine) for details on creating a token with the required permissions.\n\n## Disable snapshot expiration\n\nDisabling snapshot expiration prevents the process from running for all tables (catalog level) or a specific table (table level). You can re-enable snapshot expiration at any time.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Disable snapshot expiration",
+      "id": "disable-snapshot-expiration"
+    }
+  ],
+  "url": "llms-txt#enable-snapshot-expiration-for-a-specific-table",
+  "links": []
+}

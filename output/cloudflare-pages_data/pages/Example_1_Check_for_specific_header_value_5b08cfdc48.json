@@ -1,0 +1,8 @@
+{
+  "title": "Example 1: Check for specific header value.",
+  "content": "any(raw.http.response.headers.values[*] == \"application/json\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#example-1:-check-for-specific-header-value.",
+  "links": []
+}

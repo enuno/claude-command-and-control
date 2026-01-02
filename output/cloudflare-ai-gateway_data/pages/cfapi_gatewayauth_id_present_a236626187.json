@@ -1,0 +1,38 @@
+{
+  "title": "cf.api\\_gateway.auth\\_id\\_present",
+  "content": "`cf.api_gateway.auth_id_present` Boolean\n\nIndicates whether the request contained an API session authentication token, as defined by API Shield's saved [session identifiers](https://developers.cloudflare.com/api-shield/get-started/#session-identifiers).\n\n<page>\n---\ntitle: How Dedicated CDN Egress IPs work · Cloudflare Smart Shield docs\ndescription: When you use Cloudflare as a reverse proxy, Cloudflare's global\n  network sits between client requests and your origin servers.\nlastUpdated: 2025-11-19T12:11:06.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/smart-shield/configuration/dedicated-egress-ips/how-it-works/egress-ips/\n  md: https://developers.cloudflare.com/smart-shield/configuration/dedicated-egress-ips/how-it-works/egress-ips/index.md\n---\n\nWhen you use Cloudflare [as a reverse proxy](https://developers.cloudflare.com/fundamentals/concepts/how-cloudflare-works/#how-cloudflare-works-as-a-reverse-proxy), [Cloudflare's global network](https://www.cloudflare.com/network/) sits between client requests and your origin servers.\n\nZooming into what happens as a request routes through Cloudflare, you can consider two parts of the process: ingress and egress.\n\nIngress refers to the data center where the client request lands on, based on Internet routing. From there on, the request will be processed according to your Cloudflare configurations and, if needed, a connection to the origin will be initiated via an egress data center.\n\nTraditionally, Cloudflare maintains a very large pool of egress IPs that are used by all Cloudflare customers and are [publicly documented](https://www.cloudflare.com/ips/). With Dedicated CDN Egress IPs, Cloudflare connects to your origin using IPs that are reserved for you.\n\n## BYOIP or Cloudflare-leased\n\nEach dedicated CDN egress IP pool can consist of either IPs from a [BYOIP prefix](https://developers.cloudflare.com/byoip/) or Cloudflare-leased IPs. A single dedicated CDN egress IP pool cannot contain both BYOIPs and leased IPs.\n\nYou can find your leased dedicated IPs for CDN egress on the dashboard under [**IP addresses** > **Leased IPs**](https://dash.cloudflare.com/?to=/:account/ip-addresses/leased-ips).\n\nIf you are using BYOIP, refer to [**IP addresses** > **BYOIP prefixes**](https://dash.cloudflare.com/?to=/:account/ip-addresses/ip-prefixes) instead.\n\nDedicated CDN Egress IPs support both IPv4 and IPv6 addresses.\n\nIPv6 address ranges are deployed globally, meaning your dedicated IPv6 addresses can be used for connections from Cloudflare to your origin servers across all Cloudflare data centers.\n\nDedicated CDN Egress IPs are currently **not** available in the [Cloudflare China Network](https://developers.cloudflare.com/china-network/).\n\nFor IPv4 addresses, you should work with your account team to choose the locations where each IP should be deployed. Ideally, your dedicated IPv4 addresses should be placed near your origin servers and adjusted to the amount of traffic expected for each region.\n\nRefer to [connection forwarding](https://developers.cloudflare.com/smart-shield/configuration/dedicated-egress-ips/how-it-works/connection-forwarding/) to understand how requests are processed when reaching different Cloudflare data centers.\n\n### Connections to your origin\n\nEach Dedicated CDN Egress IP can support 40,000 concurrent connections per origin IP port. For example, if you have one dedicated IP and two origins (A and B), this single IP can support 40,000 concurrent connections to origin A, while simultaneously supporting 40,000 concurrent connections to origin B.\n\nDedicated CDN Egress IPs also benefit from [connection reuse and coalescing](https://developers.cloudflare.com/smart-shield/concepts/connection-reuse/).\n\nGraphQL Analytics API allows you to get visibility over [IPs utilization](https://developers.cloudflare.com/smart-shield/configuration/dedicated-egress-ips/ips-utilization/).\n\n### Regional Services\n\nIf you are using [Regional Services](https://developers.cloudflare.com/data-localization/regional-services/), you should take this into consideration when allocating dedicated IPv4 addresses. Traffic will egress from the specified locations as long as you have Dedicated CDN Egress IPs provisioned in those locations.\n\n<page>\n---\ntitle: cf.api_gateway.fallthrough_detected · Cloudflare Ruleset Engine docs\ndescription: Indicates whether the request matched a saved endpoint in [Endpoint\n  Management](/api-shield/management-and-monitoring/).\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.api_gateway.fallthrough_detected/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.api_gateway.fallthrough_detected/index.md\n---",
+  "code_samples": [
+    {
+      "code": "flowchart LR\n        accTitle: Cloudflare as a reverse proxy\n        accDescr: Diagram showing Cloudflare's network between clients and the origin server.\n        A[Client] <--> B((Cloudflare))<--> C[(Origin server)]",
+      "language": "mermaid"
+    },
+    {
+      "code": "flowchart LR\n        accTitle: Cloudflare as a reverse proxy\n        accDescr: Diagram showing Cloudflare's network between clients and the origin server.\n        A[Client] --ingress--> B((Cloudflare))--egress--> C[(Origin server)]",
+      "language": "mermaid"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "BYOIP or Cloudflare-leased",
+      "id": "byoip-or-cloudflare-leased"
+    },
+    {
+      "level": "h2",
+      "text": "IPs allocation",
+      "id": "ips-allocation"
+    },
+    {
+      "level": "h3",
+      "text": "Connections to your origin",
+      "id": "connections-to-your-origin"
+    },
+    {
+      "level": "h3",
+      "text": "Regional Services",
+      "id": "regional-services"
+    }
+  ],
+  "url": "llms-txt#cf.api\\_gateway.auth\\_id\\_present",
+  "links": []
+}

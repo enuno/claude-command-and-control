@@ -1,0 +1,8 @@
+{
+  "title": "cf.api\\_gateway.request\\_violates\\_schema",
+  "content": "`cf.api_gateway.request_violates_schema` Boolean\n\nIndicates whether the request [violated the schema](https://developers.cloudflare.com/api-shield/security/schema-validation/) assigned to the respective saved endpoint.\n\n<page>\n---\ntitle: cf.bot_management.corporate_proxy · Cloudflare Ruleset Engine docs\ndescription: Indicates whether the incoming request comes from an identified\n  Enterprise-only cloud-based corporate proxy or secure web gateway.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.bot_management.corporate_proxy/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.bot_management.corporate_proxy/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#cf.api\\_gateway.request\\_violates\\_schema",
+  "links": []
+}

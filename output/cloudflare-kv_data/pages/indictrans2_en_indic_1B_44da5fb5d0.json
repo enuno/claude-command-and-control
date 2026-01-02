@@ -1,0 +1,55 @@
+{
+  "title": "indictrans2-en-indic-1B",
+  "content": "Translation • ai4bharat\n\n@cf/ai4bharat/indictrans2-en-indic-1B\n\nIndicTrans2 is the first open-source transformer-based multilingual NMT model that supports high-quality translations across all the 22 scheduled Indic languages\n\n| Model Info | |\n| - | - |\n| Unit Pricing | $0.34 per M input tokens, $0.34 per M output tokens |\n\n\\* indicates a required field\n\n* `text` one of required\n\nInput text to translate. Can be a single string or a list of strings.\n\nInput text to translate. Can be a single string or a list of strings.\n\n* `target_language` string required default hin\\_Deva\n\nTarget langauge to translate to\n\n* `translations` array required\n\nThe following schemas are based on JSON Schema\n\n<page>\n---\ntitle: llama-2-13b-chat-awq · Cloudflare Workers AI docs\ndescription: Llama 2 13B Chat AWQ is an efficient, accurate and blazing-fast\n  low-bit weight quantized Llama 2 variant.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers-ai/models/llama-2-13b-chat-awq/\n  md: https://developers.cloudflare.com/workers-ai/models/llama-2-13b-chat-awq/index.md\n---",
+  "code_samples": [
+    {
+      "code": "export interface Env {\n  AI: Ai;\n}\n\n\nexport default {\n  async fetch(request, env): Promise<Response> {\n\n\n    const response = await env.AI.run(\n      \"@cf/ai4bharat/indictrans2-en-indic-1B\",\n      {\n        text: \"I'll have an order of the moule frites\",\n        source_lang: \"english\", // defaults to english\n        target_lang: \"french\",\n      }\n    );\n\n\n    return new Response(JSON.stringify(response));\n  },\n} satisfies ExportedHandler<Env>;",
+      "language": "ts"
+    },
+    {
+      "code": "import requests\n\n\nAPI_BASE_URL = \"https://api.cloudflare.com/client/v4/accounts/{ACCOUNT_ID}/ai/run/\"\nheaders = {\"Authorization\": \"Bearer {API_TOKEN}\"}\n\n\ndef run(model, input):\n    response = requests.post(f\"{API_BASE_URL}{model}\", headers=headers, json=input)\n    return response.json()\n\n\noutput = run('@cf/ai4bharat/indictrans2-en-indic-1B', {\n  \"text\": \"I'll have an order of the moule frites\",\n  \"source_lang\": \"english\",\n  \"target_lang\": \"french\"\n})\n\n\nprint(output)",
+      "language": "py"
+    },
+    {
+      "code": "curl https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/ai/run/@cf/ai4bharat/indictrans2-en-indic-1B  \\\n    -X POST  \\\n    -H \"Authorization: Bearer $CLOUDFLARE_API_TOKEN\"  \\\n    -d '{ \"text\": \"Ill have an order of the moule frites\", \"source_lang\": \"english\", \"target_lang\": \"french\" }'",
+      "language": "sh"
+    },
+    {
+      "code": "{\n      \"type\": \"object\",\n      \"properties\": {\n          \"text\": {\n              \"oneOf\": [\n                  {\n                      \"type\": \"string\"\n                  },\n                  {\n                      \"type\": \"array\",\n                      \"items\": {\n                          \"type\": \"string\"\n                      }\n                  }\n              ],\n              \"description\": \"Input text to translate. Can be a single string or a list of strings.\"\n          },\n          \"target_language\": {\n              \"type\": \"string\",\n              \"enum\": [\n                  \"asm_Beng\",\n                  \"awa_Deva\",\n                  \"ben_Beng\",\n                  \"bho_Deva\",\n                  \"brx_Deva\",\n                  \"doi_Deva\",\n                  \"eng_Latn\",\n                  \"gom_Deva\",\n                  \"gon_Deva\",\n                  \"guj_Gujr\",\n                  \"hin_Deva\",\n                  \"hne_Deva\",\n                  \"kan_Knda\",\n                  \"kas_Arab\",\n                  \"kas_Deva\",\n                  \"kha_Latn\",\n                  \"lus_Latn\",\n                  \"mag_Deva\",\n                  \"mai_Deva\",\n                  \"mal_Mlym\",\n                  \"mar_Deva\",\n                  \"mni_Beng\",\n                  \"mni_Mtei\",\n                  \"npi_Deva\",\n                  \"ory_Orya\",\n                  \"pan_Guru\",\n                  \"san_Deva\",\n                  \"sat_Olck\",\n                  \"snd_Arab\",\n                  \"snd_Deva\",\n                  \"tam_Taml\",\n                  \"tel_Telu\",\n                  \"urd_Arab\",\n                  \"unr_Deva\"\n              ],\n              \"default\": \"hin_Deva\",\n              \"description\": \"Target langauge to translate to\"\n          }\n      },\n      \"required\": [\n          \"text\",\n          \"target_language\"\n      ]\n  }",
+      "language": "json"
+    },
+    {
+      "code": "{\n      \"type\": \"object\",\n      \"properties\": {\n          \"translations\": {\n              \"type\": \"array\",\n              \"items\": {\n                  \"type\": \"string\"\n              },\n              \"description\": \"Translated texts\"\n          }\n      },\n      \"required\": [\n          \"translations\"\n      ]\n  }",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Input",
+      "id": "input"
+    },
+    {
+      "level": "h3",
+      "text": "Output",
+      "id": "output"
+    },
+    {
+      "level": "h2",
+      "text": "API Schemas",
+      "id": "api-schemas"
+    }
+  ],
+  "url": "llms-txt#indictrans2-en-indic-1b",
+  "links": []
+}

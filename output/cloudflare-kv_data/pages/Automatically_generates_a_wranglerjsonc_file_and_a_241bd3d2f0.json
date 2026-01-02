@@ -1,0 +1,8 @@
+{
+  "title": "Automatically generates a wrangler.jsonc file and adds it to your project:",
+  "content": "{\n  \"name\": \"my-astro-site\",\n  \"compatibility_date\": \"2025-09-09\",\n  \"assets\": {\n    \"directory\": \"dist\"\n  }\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#automatically-generates-a-wrangler.jsonc-file-and-adds-it-to-your-project:",
+  "links": []
+}

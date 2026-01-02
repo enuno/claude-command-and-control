@@ -1,0 +1,38 @@
+{
+  "title": "Bundler will show a lot of output as it fetches the dependencies",
+  "content": "sh\ngit add Gemfile Gemfile.lock\ngit commit -m \"deps: added Gemfiles\"\ngit push origin main\nsh",
+  "code_samples": [
+    {
+      "code": "This should complete successfully. If not, verify that you have copied the `github-pages` line above exactly, and have not commented it out with a leading `#`.\n\nYou will now need to commit these files to your repository so that Cloudflare Pages can reference them in the following steps:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Configuring your Pages project\n\nWith your GitHub Pages project now explicitly specifying its dependencies, you can start configuring Cloudflare Pages. The process is almost identical to [deploying a Jekyll site](https://developers.cloudflare.com/pages/framework-guides/deploy-a-jekyll-site/).\n\nNote\n\nIf you are configuring your Cloudflare Pages site for the first time, refer to the [Git integration guide](https://developers.cloudflare.com/pages/get-started/git-integration/), which explains how to connect your existing Git repository to Cloudflare Pages.\n\nTo deploy your site to Pages:\n\n1. In the Cloudflare dashboard, go to the **Workers & Pages** page.\n\n   [Go to **Workers & Pages**](https://dash.cloudflare.com/?to=/:account/workers-and-pages)\n\n2. Select **Create application** > **Pages** > **Import an existing Git repository**.\n\n3. Select the new GitHub repository that you created and, in the **Set up builds and deployments** section, provide the following information:\n\n| Configuration option | Value |\n| - | - |\n| Production branch | `main` |\n| Build command | `jekyll build` |\n| Build directory | `_site` |\n\nAfter you have configured your site, you can begin your first deploy. You should see Cloudflare Pages installing `jekyll`, your project dependencies, and building your site, before deploying it.\n\nNote\n\nFor the complete guide to deploying your first site to Cloudflare Pages, refer to the [Get started guide](https://developers.cloudflare.com/pages/get-started/).\n\nAfter deploying your site, you will receive a unique subdomain for your project on `*.pages.dev`. Every time you commit new code to your Jekyll site, Cloudflare Pages will automatically rebuild your project and deploy it. You will also get access to [preview deployments](https://developers.cloudflare.com/pages/configuration/preview-deployments/) on new pull requests, so you can preview how changes look to your site before deploying them to production.\n\n## Migrating your custom domain\n\nIf you are using a [custom domain with GitHub Pages](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site), you must update your DNS record(s) to point at your new Cloudflare Pages deployment. This will require you to update the `CNAME` record at the DNS provider for your domain to point to `<your-pages-site>.pages.dev`, replacing `<your-username>.github.io`.\n\nNote that it may take some time for DNS caches to expire and for this change to be reflected, depending on the DNS TTL (time-to-live) value you set when you originally created the record.\n\nRefer to the [adding a custom domain](https://developers.cloudflare.com/pages/configuration/custom-domains/#add-a-custom-domain) section of the Get started guide for a list of detailed steps.\n\n## What's next?\n\n* Learn how to [customize HTTP response headers](https://developers.cloudflare.com/pages/how-to/add-custom-http-headers/) for your Pages site using Cloudflare Workers.\n* Understand how to [rollback a potentially broken deployment](https://developers.cloudflare.com/pages/configuration/rollbacks/) to a previously working version.\n* [Configure redirects](https://developers.cloudflare.com/pages/configuration/redirects/) so that visitors are always directed to your 'canonical' custom domain.\n\n</page>\n\n<page>\n---\ntitle: Add a React form with Formspree · Cloudflare Pages docs\ndescription: Learn how to add a React form with Formspree, a back-end service\n  that handles form processing and storage.\nlastUpdated: 2025-10-09T15:47:46.000Z\nchatbotDeprioritize: false\ntags: Forms,JavaScript\nsource_url:\n  html: https://developers.cloudflare.com/pages/tutorials/add-a-react-form-with-formspree/\n  md: https://developers.cloudflare.com/pages/tutorials/add-a-react-form-with-formspree/index.md\n---\n\nAlmost every React website needs a form to collect user data. [Formspree](https://formspree.io/) is a back-end service that handles form processing and storage, allowing developers to include forms on their website without writing server-side code or functions.\n\nIn this tutorial, you will create a `<form>` component using React and add it to a single page application built with `create-react-app`. Though you are using `create-react-app` (CRA), the concepts will apply to any React framework including Next.js, Gatsby, and more. You will use Formspree to collect the submitted data and send out email notifications when new submissions arrive, without requiring any server-side coding.\n\nYou will deploy your site to Cloudflare Pages. Refer to the [Get started guide](https://developers.cloudflare.com/pages/get-started/) to familiarize yourself with the platform.\n\n## Setup\n\nTo begin, create a new React project on your local machine with `create-react-app`. Then create a [new GitHub repository](https://repo.new/), and attach the GitHub location as a remote destination:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Configuring your Pages project",
+      "id": "configuring-your-pages-project"
+    },
+    {
+      "level": "h2",
+      "text": "Migrating your custom domain",
+      "id": "migrating-your-custom-domain"
+    },
+    {
+      "level": "h2",
+      "text": "What's next?",
+      "id": "what's-next?"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    }
+  ],
+  "url": "llms-txt#bundler-will-show-a-lot-of-output-as-it-fetches-the-dependencies",
+  "links": []
+}

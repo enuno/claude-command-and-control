@@ -1,0 +1,13 @@
+{
+  "title": "http.request.uri.query",
+  "content": "`http.request.uri.query` String\n\nThe entire query string, without the `?` delimiter.\n\n<page>\n---\ntitle: http.request.version · Cloudflare Ruleset Engine docs\ndescription: The version of the HTTP protocol used. Use this field when\n  different checks are needed for different versions.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.version/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.version/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"section=539061&expand=comments\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#http.request.uri.query",
+  "links": []
+}

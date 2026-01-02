@@ -1,0 +1,17 @@
+{
+  "title": "open up README.md and follow the instructions",
+  "content": "sh\nnpm i agents\nts\nimport { Agent } from \"agents\";\n\nexport class YourAgent extends Agent<Env> {\n  // Build it out\n  // Access state on this.state or query the Agent's database via this.sql\n  // Handle WebSocket events with onConnect and onMessage\n  // Run tasks on a schedule with this.schedule\n  // Call AI models\n  // ... and/or call other Agents.\n}\n```\n\nHead over to the [Agents documentation](https://developers.cloudflare.com/agents/) to learn more about the Agents SDK, the SDK APIs, as well as how to test and deploying agents to production.\n\n<page>\n---\ntitle: Use DLP Assist for M365 · Changelog\ndescription: Quickly deploy a free Email DLP solution for Microsoft 365 environments.\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/changelog/2025-02-25-dlp-assist-for-m365/\n  md: https://developers.cloudflare.com/changelog/2025-02-25-dlp-assist-for-m365/index.md\n---",
+  "code_samples": [
+    {
+      "code": "You can also add an Agent to any existing Workers application by installing the `agents` package directly",
+      "language": "unknown"
+    },
+    {
+      "code": "... and then define your first Agent:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#open-up-readme.md-and-follow-the-instructions",
+  "links": []
+}

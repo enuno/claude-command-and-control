@@ -1,0 +1,112 @@
+{
+  "name": "latex-overleaf",
+  "description": "Comprehensive LaTeX documentation from Overleaf Learn tutorials",
+  "base_url": "https://www.overleaf.com/",
+  "start_urls": [
+    "https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes",
+    "https://www.overleaf.com/learn/latex/Tutorials",
+    "https://www.overleaf.com/learn/latex/Free_online_introduction_to_LaTeX_(part_1)",
+    "https://www.overleaf.com/learn/latex/Creating_a_document_in_LaTeX",
+    "https://www.overleaf.com/learn/latex/Sections_and_chapters",
+    "https://www.overleaf.com/learn/latex/Mathematical_expressions",
+    "https://www.overleaf.com/learn/latex/Subscripts_and_superscripts",
+    "https://www.overleaf.com/learn/latex/Brackets_and_Parentheses",
+    "https://www.overleaf.com/learn/latex/Fractions_and_Binomials",
+    "https://www.overleaf.com/learn/latex/Aligning_equations",
+    "https://www.overleaf.com/learn/latex/Operators",
+    "https://www.overleaf.com/learn/latex/Spacing_in_math_mode",
+    "https://www.overleaf.com/learn/latex/Integrals,_sums_and_limits",
+    "https://www.overleaf.com/learn/latex/Display_style_in_math_mode",
+    "https://www.overleaf.com/learn/latex/List_of_Greek_letters_and_math_symbols",
+    "https://www.overleaf.com/learn/latex/Tables",
+    "https://www.overleaf.com/learn/latex/Inserting_Images",
+    "https://www.overleaf.com/learn/latex/Positioning_images_and_tables",
+    "https://www.overleaf.com/learn/latex/Lists",
+    "https://www.overleaf.com/learn/latex/Paragraph_formatting",
+    "https://www.overleaf.com/learn/latex/Text_alignment",
+    "https://www.overleaf.com/learn/latex/Bold,_italics_and_underlining",
+    "https://www.overleaf.com/learn/latex/Bibliography_management_with_bibtex",
+    "https://www.overleaf.com/learn/latex/Bibliography_management_with_biblatex",
+    "https://www.overleaf.com/learn/latex/Cross_referencing_sections,_equations_and_floats",
+    "https://www.overleaf.com/learn/latex/Hyperlinks",
+    "https://www.overleaf.com/learn/latex/Page_size_and_margins",
+    "https://www.overleaf.com/learn/latex/Headers_and_footers",
+    "https://www.overleaf.com/learn/latex/Table_of_contents",
+    "https://www.overleaf.com/learn/latex/Beamer",
+    "https://www.overleaf.com/learn/latex/TikZ_package"
+  ],
+  "url_patterns": {
+    "include": ["/learn/latex/"],
+    "exclude": [
+      "/templates/",
+      "/gallery/",
+      "/blog/",
+      "/project/",
+      "/university/",
+      "/for/",
+      "/about/"
+    ]
+  },
+  "categories": {
+    "getting_started": [
+      "30_minutes",
+      "tutorial",
+      "introduction",
+      "creating",
+      "document"
+    ],
+    "document_structure": [
+      "sections",
+      "chapters",
+      "table_of_contents",
+      "cross_referencing"
+    ],
+    "math": [
+      "mathematical",
+      "equations",
+      "subscripts",
+      "brackets",
+      "fractions",
+      "operators",
+      "integrals",
+      "greek",
+      "symbols",
+      "aligning",
+      "spacing",
+      "display"
+    ],
+    "formatting": [
+      "tables",
+      "images",
+      "positioning",
+      "lists",
+      "paragraph",
+      "alignment",
+      "bold",
+      "italics",
+      "page_size",
+      "margins",
+      "headers",
+      "footers"
+    ],
+    "bibliography": [
+      "bibliography",
+      "bibtex",
+      "biblatex",
+      "citations"
+    ],
+    "presentations": [
+      "beamer",
+      "slides",
+      "presentation"
+    ],
+    "graphics": [
+      "tikz",
+      "pgf",
+      "drawings",
+      "diagrams"
+    ]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 100
+}

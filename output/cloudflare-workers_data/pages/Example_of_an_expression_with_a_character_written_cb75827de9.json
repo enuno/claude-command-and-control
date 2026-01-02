@@ -1,0 +1,13 @@
+{
+  "title": "Example of an expression with a \" character written using quoted string syntax",
+  "content": "http.request.uri.path eq \"/foo\\\"bar\"\ntxt",
+  "code_samples": [
+    {
+      "code": "The Expression Builder supports both the [quoted string syntax](https://developers.cloudflare.com/ruleset-engine/rules-language/values/#quoted-string-syntax) and the [raw string syntax](https://developers.cloudflare.com/ruleset-engine/rules-language/values/#raw-string-syntax). In the raw string syntax, there are no special characters or escape sequences, so all characters up to the ending delimiter are interpreted as is.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#example-of-an-expression-with-a-\"-character-written-using-quoted-string-syntax",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Terminal 2: Run your auth worker separately",
+  "content": "wrangler dev --config ./auth/wrangler.jsonc\njs\nexport default {\n  async fetch(request, env) {\n    // This service binding call now works across dev commands\n    const authorized = await env.AUTH.isAuthorized(request);\n\nif (!authorized) {\n      return new Response('Unauthorized', { status: 401 });\n    }\n\nreturn new Response('Hello from API Worker!', { status: 200 });\n  },\n};\n```\n\nCheck out the [Developing with multiple Workers](https://developers.cloudflare.com/workers/development-testing/multi-workers) guide to learn more about the different approaches and when to use each one.\n\n<page>\n---\ntitle: WAF Release - 2025-09-24 - Emergency · Changelog\ndescription: Cloudflare WAF managed rulesets 2025-09-24 emergency release\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/changelog/2025-09-24-emergency-waf-release/\n  md: https://developers.cloudflare.com/changelog/2025-09-24-emergency-waf-release/index.md\n---",
+  "code_samples": [
+    {
+      "code": "These Workers can now communicate with each other across separate dev commands, regardless of your development setup.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#terminal-2:-run-your-auth-worker-separately",
+  "links": []
+}

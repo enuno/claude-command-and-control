@@ -1,0 +1,8 @@
+{
+  "title": "raw\\.http.request.uri.path",
+  "content": "`raw.http.request.uri.path` String\n\nThe raw URI path of the request without any transformation.\n\nThis is the raw field version of the [`http.request.uri.path`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.uri.path/) field. Raw fields, prefixed with `raw.`, preserve original request values for later evaluations. These fields are immutable during the entire request evaluation workflow, and they are not affected by the actions of previously matched rules.\n\n**Note**: This raw field may include some basic normalization done by Cloudflare's HTTP server. However, this can change in the future.\n\n* Request\n* URI\n* Raw fields\n\n<page>\n---\ntitle: raw.http.request.uri.path.extension · Cloudflare Ruleset Engine docs\ndescription: The raw file extension in the request URI path without any transformation.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/raw.http.request.uri.path.extension/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/raw.http.request.uri.path.extension/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#raw\\.http.request.uri.path",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "http.x\\_forwarded\\_for",
+  "content": "`http.x_forwarded_for` String\n\nThe full value of the `X-Forwarded-For` HTTP header.\n\n<page>\n---\ntitle: http.user_agent · Cloudflare Ruleset Engine docs\ndescription: The HTTP `User-Agent` request header, which contains a\n  characteristic string to identify the client operating system and web browser.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.user_agent/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.user_agent/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"203.0.113.195, 70.41.3.18\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#http.x\\_forwarded\\_for",
+  "links": []
+}

@@ -1,0 +1,100 @@
+{
+  "title": "This must match the URL provided in step 6",
+  "content": "curl -s https://workflows-starter.YOUR_WORKERS_SUBDOMAIN.workers.dev/\nsh\n{\"id\":\"16ac31e5-db9d-48ae-a58f-95b95422d0fa\",\"details\":{\"status\":\"queued\",\"error\":null,\"output\":null}}\ngraphql\nquery WorkflowInvocationsExample(\n  $accountTag: string!\n  $datetimeStart: Time\n  $datetimeEnd: Time\n  $workflowName: string\n) {\n  viewer {\n    accounts(filter: { accountTag: $accountTag }) {\n      wallTime: workflowsAdaptiveGroups(\n        limit: 10000\n        filter: {\n          datetimeHour_geq: $datetimeStart\n          datetimeHour_leq: $datetimeEnd\n          workflowName: $workflowName\n        }\n        orderBy: [count_DESC]\n      ) {\n        count\n        sum {\n          wallTime\n        }\n        dimensions {\n          date: datetimeHour\n        }\n      }\n    }\n  }\n}\ngraphql\nquery WorkflowInvocationsExample2(\n  $accountTag: string!\n  $datetimeStart: Time\n  $datetimeEnd: Time\n  $workflowName: string\n) {\n  viewer {\n    accounts(filter: { accountTag: $accountTag }) {\n      instanceRuns: workflowsAdaptiveGroups(\n        limit: 10000\n        filter: {\n          datetimeHour_geq: $datetimeStart\n          datetimeHour_leq: $datetimeEnd\n          workflowName: $workflowName\n          eventType: \"WORKFLOW_START\"\n        }\n        orderBy: [count_DESC]\n      ) {\n        count\n        dimensions {\n          date: datetimeHour\n        }\n      }\n      stepCount: workflowsAdaptiveGroups(\n        limit: 10000\n        filter: {\n          datetimeHour_geq: $datetimeStart\n          datetimeHour_leq: $datetimeEnd\n          workflowName: $workflowName\n          eventType: \"WORKFLOW_START\"\n        }\n        orderBy: [count_DESC]\n      ) {\n        count\n        dimensions {\n          date: datetimeHour\n        }\n      }\n      wallTime: workflowsAdaptiveGroups(\n        limit: 10000\n        filter: {\n          datetimeHour_geq: $datetimeStart\n          datetimeHour_leq: $datetimeEnd\n          workflowName: $workflowName\n        }\n        orderBy: [count_DESC]\n      ) {\n        count\n        sum {\n          wallTime\n        }\n        dimensions {\n          date: datetimeHour\n        }\n      }\n    }\n  }\n}\ngraphql\nquery WorkflowsAdaptiveExample(\n  $accountTag: string!\n  $datetimeStart: Time\n  $datetimeEnd: Time\n  $instanceId: string\n) {\n  viewer {\n    accounts(filter: { accountTag: $accountTag }) {\n      workflowsAdaptive(\n        limit: 100\n        filter: {\n          datetime_geq: $datetimeStart\n          datetime_leq: $datetimeEnd\n          instanceId: $instanceId\n        }\n        orderBy: [datetime_ASC]\n      ) {\n        datetime\n        eventType\n        workflowName\n        instanceId\n        stepCount\n        wallTime\n      }\n    }\n  }\n}\njson\n{\n  \"accountTag\": \"fedfa729a5b0ecfd623bca1f9000f0a22\",\n  \"datetimeStart\": \"2024-10-20T00:00:00Z\",\n  \"datetimeEnd\": \"2024-10-29T00:00:00Z\",\n  \"workflowName\": \"shoppingCart\",\n  \"instanceId\": \"ecc48200-11c4-22a3-b05f-88a3c1c1db81\"\n}\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"workflows-starter\",\n    \"main\": \"src/index.ts\",\n    \"compatibility_date\": \"2025-10-24\",\n    \"compatibility_flags\": [\n      \"python_workflows\",\n      \"python_workers\"\n    ],\n    \"workflows\": [\n      {\n        \"name\": \"workflows-starter\",\n        \"binding\": \"MY_WORKFLOW\",\n        \"class_name\": \"MyWorkflow\"\n      }\n    ]\n  }\n  toml\n  #:schema node_modules/wrangler/config-schema.json\n  name = \"workflows-starter\"\n  main = \"src/index.ts\"\n  compatibility_date = \"2025-10-24\"\n  compatibility_flags = [\"python_workflows\", \"python_workers\"]\n\n[[workflows]]\n  # name of your workflow\n  name = \"workflows-starter\"\n  # binding name env.MY_WORKFLOW\n  binding = \"MY_WORKFLOW\"\n  # this is class that extends the Workflow class in src/index.ts\n  class_name = \"MyWorkflow\"\n  python\nfrom pyodide.ffi import to_js\n\nclass DemoWorkflowClass(WorkflowEntrypoint):\n    async def run(self, event, step):\n        @step.do('step-name')\n        async def first_step():\n            payload = event[\"payload\"]\n            return payload\npython\nfrom js import Object\nfrom pyodide.ffi import to_js\nfrom workers import WorkerEntrypoint, Response\n\nclass Default(WorkerEntrypoint):\n    async def fetch(self, request):\n        event = {\"foo\": \"bar\"}\n        options = to_js({\"params\": event}, dict_converter=Object.fromEntries)\n        await self.env.MY_WORKFLOW.create(options)\n        return Response.json({\"status\": \"success\"})\npython\nfrom pyodide.ffi import to_js\nfrom js import Object",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "***\n\n## Next steps\n\n* Learn more about [how events are passed to a Workflow](https://developers.cloudflare.com/workflows/build/events-and-parameters/).\n* Learn more about binding to and triggering Workflow instances using the [Workers API](https://developers.cloudflare.com/workflows/build/workers-api/).\n* Learn more about the [Rules of Workflows](https://developers.cloudflare.com/workflows/build/rules-of-workflows/) and best practices for building applications using Workflows.\n\nIf you have any feature requests or notice any bugs, share your feedback directly with the Cloudflare team by joining the [Cloudflare Developers community on Discord](https://discord.cloudflare.com).\n\n</page>\n\n<page>\n---\ntitle: Metrics and analytics · Cloudflare Workflows docs\ndescription: Workflows expose metrics that allow you to inspect and measure\n  Workflow execution, error rates, steps, and total duration across each (and\n  all) of your Workflows.\nlastUpdated: 2025-12-03T22:57:02.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workflows/observability/metrics-analytics/\n  md: https://developers.cloudflare.com/workflows/observability/metrics-analytics/index.md\n---\n\nWorkflows expose metrics that allow you to inspect and measure Workflow execution, error rates, steps, and total duration across each (and all) of your Workflows.\n\nThe metrics displayed in the [Cloudflare dashboard](https://dash.cloudflare.com/) charts are queried from Cloudflare’s [GraphQL Analytics API](https://developers.cloudflare.com/analytics/graphql-api/). You can access the metrics [programmatically](#query-via-the-graphql-api) via GraphQL or HTTP client.\n\n## Metrics\n\nWorkflows currently export the below metrics within the `workflowsAdaptiveGroups` GraphQL dataset.\n\n| Metric | GraphQL Field Name | Description |\n| - | - | - |\n| Read Queries (qps) | `readQueries` | The number of read queries issued against a database. This is the raw number of read queries, and is not used for billing. |\n\nMetrics can be queried (and are retained) for the past 31 days.\n\n### Labels and dimensions\n\nThe `workflowsAdaptiveGroups` dataset provides the following dimensions for filtering and grouping query results:\n\n* `workflowName` - Workflow name - e.g. `my-workflow`\n* `instanceId` - Instance ID\n* `stepName` - Step name\n* `eventType` - Event type (see [event types](#event-types))\n* `stepCount` - Step number within a given instance\n* `date` - The date when the Workflow was triggered\n* `datetimeFifteenMinutes` - The date and time truncated to fifteen minutes\n* `datetimeFiveMinutes` - The date and time truncated to five minutes\n* `datetimeHour` - The date and time truncated to the hour\n* `datetimeMinute` - The date and time truncated to the minute\n\n### Event types\n\nThe `eventType` metric allows you to filter (or groupBy) Workflows and steps based on their last observed status.\n\nThe possible values for `eventType` are documented below:\n\n#### Workflows-level status labels\n\n* `WORKFLOW_QUEUED` - the Workflow is queued, but not currently running. This can happen when you are at the [concurrency limit](https://developers.cloudflare.com/workflows/reference/limits/) and new instances are waiting for currently running instances to complete.\n* `WORKFLOW_START` - the Workflow has started and is running.\n* `WORKFLOW_SUCCESS` - the Workflow finished without errors.\n* `WORKFLOW_FAILURE` - the Workflow failed due to errors (exhausting retries, errors thrown, etc).\n* `WORKFLOW_TERMINATED` - the Workflow was explicitly terminated.\n\n#### Step-level status labels\n\n* `STEP_START` - the step has started and is running.\n* `STEP_SUCCESS` - the step finished without errors.\n* `STEP_FAILURE` - the step failed due to an error.\n* `SLEEP_START` - the step is sleeping.\n* `SLEEP_COMPLETE` - the step last finished sleeping.\n* `ATTEMPT_START` - a step is retrying.\n* `ATTEMPT_SUCCESS` - the retry succeeded.\n* `ATTEMPT_FAILURE` - the retry attempt failed.\n\n## View metrics in the dashboard\n\nPer-Workflow and instance analytics for Workflows are available in the Cloudflare dashboard. To view current and historical metrics for a database:\n\n1. In the Cloudflare dashboard, go to the **Workflows** page.\n\n   [Go to **Workflows**](https://dash.cloudflare.com/?to=/:account/workers/workflows)\n\n2. Select a Workflow to view its metrics.\n\nYou can optionally select a time window to query. This defaults to the last 24 hours.\n\n## Query via the GraphQL API\n\nYou can programmatically query analytics for your Workflows via the [GraphQL Analytics API](https://developers.cloudflare.com/analytics/graphql-api/). This API queries the same datasets as the Cloudflare dashboard, and supports GraphQL [introspection](https://developers.cloudflare.com/analytics/graphql-api/features/discovery/introspection/).\n\nWorkflows GraphQL datasets require an `accountTag` filter with your Cloudflare account ID, and includes the `workflowsAdaptiveGroups` dataset.\n\n### Examples\n\nTo query the count (number of workflow invocations) and sum of `wallTime` for a given `$workflowName` between `$datetimeStart` and `$datetimeEnd`, grouping by `date`:",
+      "language": "unknown"
+    },
+    {
+      "code": "[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBA6gewgawGYBsEHcCSA7ANwQGMBDAFwEsE8BnAUQA9SBbAB3TAAoAoGGACSlixBCDzkAKqQDmALhi1yESnhkBCPoIAmFMFRZgAyuVIRyCyZUNaBu8vuth6ebZae2sSNJiwA5VjAFJRU1HgBKGABvLQJKMCxIaK1+YVFxclouVEp0BwgFKJg0sQlpeUESjPKYAF9ImP4mmCxSdHQrQwUvFAxsWgBBXTYqAjAAcQgxNiyU5ph0a0oLGABGAAZN9bnmnLzIQp35+0dDAAkxCAB9GTBgBTs9A2NTcyPmk+eLkGvOe50nk4XNp3k0ej5sAEuoJwX1-IFQbVQUhtJAAEJQBQAbXSEiuABF6EYAMIAXSODVBuPIoNoIBYyXm81a7U6YERoO0Tjo1DojKZTROCk+Tm+EA5TKRzSldR4tSAA\\&variables=N4IghgxhD2CuB2AXAKmA5iAXCAggYTwHkBVAOWQH0BJAERABoQATMRAU0QEsBbNgZURgAToiwgATAAZxAVgC0ARnFyAzJOTjxmNZkkyAWg2asOPNgFF4TMVNmLlKhckkAWbZN0GjAd2hCA1gBmADbQ3qRgvGIASuYACgAy+OYUAOpUyAASFHzI0VSkAOIgAL5AA)\n\nHere we are doing the same for `wallTime`, `instanceRuns` and `stepCount` in the same query:",
+      "language": "unknown"
+    },
+    {
+      "code": "[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBA6gewgawGYBsEHcCSA7ANwQGMBDAFwEsE8BnAUQA9SBbAB3TACYAKAKBgwAJKWLEEIPOQAqpAOYAuGLXIRKeOQEIBwgCYUwVFmADK5UhHJLplYzqH7yh22Hp5d1l-axI0mLAByrGBKKmoafACUMADeOgSUYFiQsTqCouKS5LQ8qJToThBKMTAZElKyisJlWZUwAL7RcYItMOoqpHjEYABKkrRKPigY2LQAgvpsVARgAOIQEmw5aa0w6LaUVjAAjAAM+7srrXkFkMVHq47OxgASEhAA+nJgwEoOBkam5pYXrVefdxAj04rz0Hxcbl0vxaQz82CCxjesJGgWC0MEYBmFSgbBCMAARHAAPI9ADSADEADJEuAPEzSMY9aT46H1aFIXSQABCUCUAG1MlIHgARegmADCAF0Lk1oYLyNDdC46NQ6KlVpcDEp-i5ARBWRc2RqVGA2OLyltkf5xpNpnMFiAlvwNYJ1ixNko9gdoSdCucXS0dbd7k8Xm8g18LAqA4II3qHiDw+DjJD0TArfDgkjfCiEWA05iwNjcUpCSSKdTafTGcyDQGOdzeTABRaRWKpTL1S75YrlbRVbQuwGrtrk2A9XXVkbVlhSOh0DZEemc9aJqQppQZvNFssA26PTsDocA76zkOXXGQ89Qe8nJ8zFG05egQmw2C7xD3GmM6il0If3mk4ag2EA8vy8pthK0oarKAY9gGtAgCw54arO86LvmAbThqSrGCqNCDs0MYjjAz76lhhorNObL1EAA\\&variables=N4IghgxhD2CuB2AXAKmA5iAXCAggYTwHkBVAOWQH0BJAERABoQATMRAU0QEsBbNgZURgAToiwgATAAZxAVgC0ARnFyAzJOTjxmNZkkyAWg2asOPNgFF4TMVNmLlKhckkAWbZN0GjAd2hCA1gBmADbQ3qRgvGIASuYACgAy+OYUAOpUyAASFHzI0VSkAOIgAL5AA)\n\nHere lets query `workflowsAdaptive` for raw data about `$instanceId` between `$datetimeStart` and `$datetimeEnd`:",
+      "language": "unknown"
+    },
+    {
+      "code": "[Run in GraphQL API Explorer](https://graphql.cloudflare.com/explorer?query=I4VwpgTgngBA6gewgawGYBsEHcDOBBAEwEMAHAFwEsA3MAUQA8iBbE9MACgCgYYASIgMYCEIAHZkAKkQDmALhg4yECqOkBCbn2JkwlJmADKZIhDLyJFfZt7bdluqILn71lYqKiBYAJJOFSlWlOAEoYAG9NKgowLEhwzR5BYTEyHHZUCnQdCHkwmCSRcSk5PgKU4pgAX1CInjqYLCQ0TFxCUkoaLnr69EsKMxgARgAGYYTujKzIXPHumFs9MAB9aTBgeRsiHUWjEzJZ7oX7JbZ1rS27fVpHA-q3Y08fP157jy9fW6rPpAJIACEoPIANpHfRLPAGADCAF0DjVPqCwJ8wDQilASEi5jxGigMNgAHLMTFY16PD5Y-xgEiQwr7ClYIjodAWKxzSrjdk8dmVIA\\&variables=N4IghgxhD2CuB2AXAKmA5iAXCAggYTwHkBVAOWQH0BJAERABoQATMRAU0QEsBbNgZURgAToiwgATAAZxAVgC0ARnFyAzJOTjxmNZkkyAWg2asOPNgFF4TMVNmLlKhckkAWbZN0GjneAGdB8BBsVNbYAErmAAoAMvjmFADqVMgAEtR0AL5AA)\n\n#### GraphQL query variables\n\nExample values for the query variables:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Interact with a Workflow · Cloudflare Workflows docs\ndescription: The Python Workers platform leverages FFI to access bindings to\n  Cloudflare resources. Refer to the bindings documentation for more\n  information.\nlastUpdated: 2025-11-24T16:55:57.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/workflows/python/bindings/\n  md: https://developers.cloudflare.com/workflows/python/bindings/index.md\n---\n\nPython Workflows are in beta, as well as the underlying platform.\n\nYou must add both `python_workflows` and `python_workers` compatibility flags to your Wrangler config file.\n\nAlso, Python Workflows requires `compatibility_date = \"2025-08-01\"`, or later, to be set in your Wrangler config file.\n\nThe Python Workers platform leverages [FFI](https://en.wikipedia.org/wiki/Foreign_function_interface) to access bindings to Cloudflare resources. Refer to the [bindings](https://developers.cloudflare.com/workers/languages/python/ffi/#using-bindings-from-python-workers) documentation for more information.\n\nFrom the configuration perspective, enabling Python Workflows requires adding the `python_workflows` compatibility flag to your `wrangler.toml` file.\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "And this is how you use the payload in your workflow:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Workflow\n\nThe `Workflow` binding gives you access to the [Workflow](https://developers.cloudflare.com/workflows/build/workers-api/#workflow) class. All its methods are available on the binding.\n\nUnder the hood, the `Workflow` binding is a Javascript object that is exposed to the Python script via [JsProxy](https://pyodide.org/en/stable/usage/api/python-api/ffi.html#pyodide.ffi.JsProxy). This means that the values returned by its methods are also `JsProxy` objects, and need to be converted back into Python objects using `python_from_rpc`.\n\n### `create`\n\nCreate (trigger) a new instance of a given Workflow.\n\n* `create(options=None)`\\* `options` - an **optional** dictionary of options to pass to the workflow instance. Should contain the same keys as the [WorkflowInstanceCreateOptions](https://developers.cloudflare.com/workflows/build/workers-api/#workflowinstancecreateoptions) type.",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nValues returned from steps need to be converted into Javascript objects using `to_js`. This is why we explicitly construct the payload using `Object.fromEntries`.\n\nThe `create` method returns a [`WorkflowInstance`](https://developers.cloudflare.com/workflows/build/workers-api/#workflowinstance) object, which can be used to query the status of the workflow instance. Note that this is a Javascript object, and not a Python object.\n\n### `create_batch`\n\nCreate (trigger) a batch of new workflow instances, up to 100 instances at a time. This is useful if you need to create multiple instances at once within the [instance creation limit](https://developers.cloudflare.com/workflows/reference/limits/).\n\n* `create_batch(batch)`\n  * `batch` - list of `WorkflowInstanceCreateOptions` to pass when creating an instance, including a user-provided ID and payload parameters.\n\nEach element of the `batch` list is expected to include both `id` and `params` properties:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "Metrics",
+      "id": "metrics"
+    },
+    {
+      "level": "h3",
+      "text": "Labels and dimensions",
+      "id": "labels-and-dimensions"
+    },
+    {
+      "level": "h3",
+      "text": "Event types",
+      "id": "event-types"
+    },
+    {
+      "level": "h2",
+      "text": "View metrics in the dashboard",
+      "id": "view-metrics-in-the-dashboard"
+    },
+    {
+      "level": "h2",
+      "text": "Query via the GraphQL API",
+      "id": "query-via-the-graphql-api"
+    },
+    {
+      "level": "h3",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "Workflow",
+      "id": "workflow"
+    },
+    {
+      "level": "h3",
+      "text": "`create`",
+      "id": "`create`"
+    },
+    {
+      "level": "h3",
+      "text": "`create_batch`",
+      "id": "`create_batch`"
+    }
+  ],
+  "url": "llms-txt#this-must-match-the-url-provided-in-step-6",
+  "links": []
+}

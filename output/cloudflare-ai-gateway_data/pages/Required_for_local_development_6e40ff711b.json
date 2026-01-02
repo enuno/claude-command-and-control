@@ -1,0 +1,155 @@
+{
+  "title": "Required for local development",
+  "content": "EXPOSE 8080\nsh\n  npm create cloudflare@latest -- ai-code-executor --template=cloudflare/sandbox-sdk/examples/minimal\n  sh\n  yarn create cloudflare ai-code-executor --template=cloudflare/sandbox-sdk/examples/minimal\n  sh\n  pnpm create cloudflare@latest ai-code-executor --template=cloudflare/sandbox-sdk/examples/minimal\n  sh\ncd ai-code-executor\nsh\n  npm i @anthropic-ai/sdk\n  sh\n  yarn add @anthropic-ai/sdk\n  sh\n  pnpm add @anthropic-ai/sdk\n  `typescript\nimport { getSandbox, type Sandbox } from '@cloudflare/sandbox';\nimport Anthropic from '@anthropic-ai/sdk';\n\nexport { Sandbox } from '@cloudflare/sandbox';\n\ninterface Env {\n  Sandbox: DurableObjectNamespace<Sandbox>;\n  ANTHROPIC_API_KEY: string;\n}\n\nexport default {\n  async fetch(request: Request, env: Env): Promise<Response> {\n    if (request.method !== 'POST' || new URL(request.url).pathname !== '/execute') {\n      return new Response('POST /execute with { \"question\": \"your question\" }');\n    }\n\ntry {\n      const { question } = await request.json();\n\nif (!question) {\n        return Response.json({ error: 'Question is required' }, { status: 400 });\n      }\n\n// Use Claude to generate Python code\n      const anthropic = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });\n      const codeGeneration = await anthropic.messages.create({\n        model: 'claude-sonnet-4-5',\n        max_tokens: 1024,\n        messages: [{\n          role: 'user',\n          content: `Generate Python code to answer: \"${question}\"\n\nRequirements:\n- Use only Python standard library\n- Print the result using print()\n- Keep code simple and safe\n\nReturn ONLY the code, no explanations.`\n        }],\n      });\n\nconst generatedCode = codeGeneration.content[0]?.type === 'text'\n        ? codeGeneration.content[0].text\n        : '';\n\nif (!generatedCode) {\n        return Response.json({ error: 'Failed to generate code' }, { status: 500 });\n      }\n\n// Strip markdown code fences if present\n      const cleanCode = generatedCode\n        .replace(/^\\s*$/, '')\n        .trim();\n\n// Execute the code in a sandbox\n      const sandbox = getSandbox(env.Sandbox, 'demo-user');\n      await sandbox.writeFile('/tmp/code.py', cleanCode);\n      const result = await sandbox.exec('python /tmp/code.py');\n\nreturn Response.json({\n        success: result.success,\n        question,\n        code: generatedCode,\n        output: result.stdout,\n        error: result.stderr\n      });\n\n} catch (error: any) {\n      return Response.json(\n        { error: 'Internal server error', message: error.message },\n        { status: 500 }\n      );\n    }\n  },\n};\nsh\necho \"ANTHROPIC_API_KEY=your_api_key_here\" > .dev.vars\nsh\nnpm run dev\nsh\ncurl -X POST http://localhost:8787/execute \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"question\": \"What is the 10th Fibonacci number?\"}'\njson\n{\n  \"success\": true,\n  \"question\": \"What is the 10th Fibonacci number?\",\n  \"code\": \"def fibonacci(n):\\n    if n <= 1:\\n        return n\\n    return fibonacci(n-1) + fibonacci(n-2)\\n\\nprint(fibonacci(10))\",\n  \"output\": \"55\\n\",\n  \"error\": \"\"\n}\nsh\nnpx wrangler deploy\nsh\nnpx wrangler secret put ANTHROPIC_API_KEY\nsh",
+  "code_samples": [
+    {
+      "code": "Note\n\nPort exposure in Dockerfile is only required for local development. In production, all ports are automatically accessible.\n\n## Related resources\n\n* [Ports API reference](https://developers.cloudflare.com/sandbox/api/ports/) - Complete API documentation\n* [Preview URLs concept](https://developers.cloudflare.com/sandbox/concepts/preview-urls/) - How preview URLs work\n* [Background processes guide](https://developers.cloudflare.com/sandbox/guides/background-processes/) - Managing long-running services\n\n</page>\n\n<page>\n---\ntitle: Beta Information · Cloudflare Sandbox SDK docs\ndescription: Sandbox SDK is currently in open beta. This means the product is\n  publicly available and ready to use, but we're actively gathering feedback and\n  may make changes based on what we learn.\nlastUpdated: 2025-10-15T17:28:03.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/sandbox/platform/beta-info/\n  md: https://developers.cloudflare.com/sandbox/platform/beta-info/index.md\n---\n\nSandbox SDK is currently in open beta. This means the product is publicly available and ready to use, but we're actively gathering feedback and may make changes based on what we learn.\n\n## What to Expect\n\nDuring the beta period:\n\n* **API stability** - The core API is stable, but we may introduce new features or adjust existing ones based on feedback\n* **Production use** - You can use Sandbox SDK in production, but be aware of potential changes\n* **Active development** - We're continuously improving performance, adding features, and fixing bugs\n* **Documentation updates** - Guides and examples will be refined as we learn from real-world usage\n\n## Known Limitations\n\nSee [Containers Beta Information](https://developers.cloudflare.com/containers/beta-info/) for current limitations and known issues, as Sandbox SDK inherits the same constraints.\n\n## Feedback Wanted\n\nWe'd love to hear about your experience with Sandbox SDK:\n\n* What are you building?\n* What features would be most valuable?\n* What challenges have you encountered?\n* What instance sizes do you need?\n\nShare your feedback:\n\n* [GitHub Issues](https://github.com/cloudflare/sandbox-sdk/issues) - Report bugs or request features\n* [Developer Discord](https://discord.cloudflare.com) - Chat with the team and community\n* [Community Forum](https://community.cloudflare.com) - Discuss use cases and best practices\n\nCheck the [GitHub repository](https://github.com/cloudflare/sandbox-sdk) for the latest updates and upcoming features.\n\n</page>\n\n<page>\n---\ntitle: Limits · Cloudflare Sandbox SDK docs\ndescription: Since the Sandbox SDK is built on top of the Containers platform,\n  it shares the same underlying platform characteristics. Refer to these pages\n  to understand how pricing and limits work for your sandbox deployments.\nlastUpdated: 2025-10-15T17:28:03.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/sandbox/platform/limits/\n  md: https://developers.cloudflare.com/sandbox/platform/limits/index.md\n---\n\nSince the Sandbox SDK is built on top of the [Containers](https://developers.cloudflare.com/containers/) platform, it shares the same underlying platform characteristics. Refer to these pages to understand how pricing and limits work for your sandbox deployments.\n\n## Container Limits\n\nRefer to [Containers limits](https://developers.cloudflare.com/containers/platform-details/limits/) for complete details on:\n\n* Memory, vCPU, and disk limits for concurrent container instances\n* Instance types and their resource allocations\n* Image size and storage limits\n\n## Best Practices\n\nTo work within these limits:\n\n* **Right-size your instances** - Choose the appropriate [instance type](https://developers.cloudflare.com/containers/platform-details/limits/#instance-types) based on your workload requirements\n* **Clean up unused sandboxes** - Terminate sandbox sessions when they're no longer needed to free up resources\n* **Optimize images** - Keep your [custom Dockerfiles](https://developers.cloudflare.com/sandbox/configuration/dockerfile/) lean to reduce image size\n\n</page>\n\n<page>\n---\ntitle: Pricing · Cloudflare Sandbox SDK docs\ndescription: Sandbox SDK pricing is determined by the underlying Containers\n  platform it's built on.\nlastUpdated: 2025-10-15T17:28:03.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/sandbox/platform/pricing/\n  md: https://developers.cloudflare.com/sandbox/platform/pricing/index.md\n---\n\nSandbox SDK pricing is determined by the underlying [Containers](https://developers.cloudflare.com/containers/) platform it's built on.\n\n## Containers Pricing\n\nRefer to [Containers pricing](https://developers.cloudflare.com/containers/pricing/) for complete details on:\n\n* vCPU, memory, and disk usage rates\n* Network egress pricing\n* Instance types and their costs\n\n## Related Pricing\n\nWhen using Sandbox, you'll also be billed for:\n\n* [Workers](https://developers.cloudflare.com/workers/platform/pricing/) - Handles incoming requests to your sandbox\n* [Durable Objects](https://developers.cloudflare.com/durable-objects/platform/pricing/) - Powers each sandbox instance\n* [Workers Logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#pricing) - Optional observability (if enabled)\n\n</page>\n\n<page>\n---\ntitle: Build an AI code executor · Cloudflare Sandbox SDK docs\ndescription: Use Claude to generate Python code from natural language and\n  execute it securely in sandboxes.\nlastUpdated: 2025-10-21T14:02:11.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/sandbox/tutorials/ai-code-executor/\n  md: https://developers.cloudflare.com/sandbox/tutorials/ai-code-executor/index.md\n---\n\nBuild an AI-powered code execution system using Sandbox SDK and Claude. Turn natural language questions into Python code, execute it securely, and return results.\n\n**Time to complete:** 20 minutes\n\n## What you'll build\n\nAn API that accepts questions like \"What's the 100th Fibonacci number?\", uses Claude to generate Python code, executes it in an isolated sandbox, and returns the results.\n\n## Prerequisites\n\n1. Sign up for a [Cloudflare account](https://dash.cloudflare.com/sign-up/workers-and-pages).\n2. Install [`Node.js`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).\n\nNode.js version manager\n\nUse a Node version manager like [Volta](https://volta.sh/) or [nvm](https://github.com/nvm-sh/nvm) to avoid permission issues and change Node.js versions. [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/), discussed later in this guide, requires a Node version of `16.17.0` or later.\n\nYou'll also need:\n\n* An [Anthropic API key](https://console.anthropic.com/) for Claude\n* [Docker](https://www.docker.com/) running locally\n\n## 1. Create your project\n\nCreate a new Sandbox SDK project:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## 2. Install dependencies\n\nInstall the Anthropic SDK:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "## 3. Build your code executor\n\nReplace the contents of `src/index.ts`:",
+      "language": "unknown"
+    },
+    {
+      "code": "**How it works:**\n\n1. Receives a question via POST to `/execute`\n2. Uses Claude to generate Python code\n3. Writes code to `/tmp/code.py` in the sandbox\n4. Executes with `sandbox.exec('python /tmp/code.py')`\n5. Returns both the code and execution results\n\n## 4. Set up local environment variables\n\nCreate a `.dev.vars` file in your project root for local development:",
+      "language": "unknown"
+    },
+    {
+      "code": "Replace `your_api_key_here` with your actual API key from the [Anthropic Console](https://console.anthropic.com/).\n\nNote\n\nThe `.dev.vars` file is automatically gitignored and only used during local development with `npm run dev`.\n\n## 5. Test locally\n\nStart the development server:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nFirst run builds the Docker container (2-3 minutes). Subsequent runs are much faster.\n\nTest with curl:",
+      "language": "unknown"
+    },
+    {
+      "code": "Response:",
+      "language": "unknown"
+    },
+    {
+      "code": "## 6. Deploy\n\nDeploy your Worker:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then set your Anthropic API key as a production secret:",
+      "language": "unknown"
+    },
+    {
+      "code": "Paste your API key from the [Anthropic Console](https://console.anthropic.com/) when prompted.\n\nWarning\n\nAfter first deployment, wait 2-3 minutes for container provisioning. Check status with `npx wrangler containers list`.\n\n## 7. Test your deployment\n\nTry different questions:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "What to Expect",
+      "id": "what-to-expect"
+    },
+    {
+      "level": "h2",
+      "text": "Known Limitations",
+      "id": "known-limitations"
+    },
+    {
+      "level": "h2",
+      "text": "Feedback Wanted",
+      "id": "feedback-wanted"
+    },
+    {
+      "level": "h2",
+      "text": "Container Limits",
+      "id": "container-limits"
+    },
+    {
+      "level": "h2",
+      "text": "Best Practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Containers Pricing",
+      "id": "containers-pricing"
+    },
+    {
+      "level": "h2",
+      "text": "Related Pricing",
+      "id": "related-pricing"
+    },
+    {
+      "level": "h2",
+      "text": "What you'll build",
+      "id": "what-you'll-build"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "1. Create your project",
+      "id": "1.-create-your-project"
+    },
+    {
+      "level": "h2",
+      "text": "2. Install dependencies",
+      "id": "2.-install-dependencies"
+    },
+    {
+      "level": "h2",
+      "text": "3. Build your code executor",
+      "id": "3.-build-your-code-executor"
+    },
+    {
+      "level": "h2",
+      "text": "4. Set up local environment variables",
+      "id": "4.-set-up-local-environment-variables"
+    },
+    {
+      "level": "h2",
+      "text": "5. Test locally",
+      "id": "5.-test-locally"
+    },
+    {
+      "level": "h2",
+      "text": "6. Deploy",
+      "id": "6.-deploy"
+    },
+    {
+      "level": "h2",
+      "text": "7. Test your deployment",
+      "id": "7.-test-your-deployment"
+    }
+  ],
+  "url": "llms-txt#required-for-local-development",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Create custom startup script",
+  "content": "COPY startup.sh /container-server/startup.sh\nRUN chmod +x /container-server/startup.sh\nbash\n#!/bin/bash",
+  "code_samples": [
+    {
+      "code": "**Create startup script:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#create-custom-startup-script",
+  "links": []
+}

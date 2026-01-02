@@ -1,0 +1,13 @@
+{
+  "title": "If you expect to have multiple sandbox instances, you can increase `max_instances`.",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "Note\n\nFirst run builds the Docker container (2-3 minutes). Subsequent runs are much faster due to caching.\n\nTest the endpoints:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#if-you-expect-to-have-multiple-sandbox-instances,-you-can-increase-`max_instances`.",
+  "links": []
+}

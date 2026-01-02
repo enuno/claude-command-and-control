@@ -1,0 +1,75 @@
+{
+  "title": "R2 Data Catalog Configuration",
+  "content": "iceberg.catalog.type=rest\niceberg.rest-catalog.uri=<Your R2 Data Catalog URI>\niceberg.rest-catalog.warehouse=<Your R2 Data Catalog warehouse>\niceberg.rest-catalog.security=OAUTH2\niceberg.rest-catalog.oauth2.token=<Your R2 authentication token>\nbash\n   # Create a local directory for the catalog configuration\n   mkdir -p trino-catalog\n\n# Place your r2.properties file in the catalog directory\n   cp r2.properties trino-catalog/\n\n# Run Trino with the catalog configuration\n   docker run -d \\\n     --name trino-r2 \\\n     -p 8080:8080 \\\n     -v $(pwd)/trino-catalog:/etc/trino/catalog \\\n     trinodb/trino:latest\n   bash\n   # Connect to the Trino CLI\n   docker exec -it trino-r2 trino\n   sql\n   -- Show all schemas in the R2 catalog\n   SHOW SCHEMAS IN r2;\n\n-- Show all schemas in the R2 catalog\n   CREATE SCHEMA r2.example_schema\n\n-- Create a table with some values in it\n   CREATE TABLE r2.example_schema.yearly_clicks (\n       year,\n       clicks\n   )\n   WITH (\n      partitioning = ARRAY['year']\n   )\n   AS VALUES\n       (2021, 10000),\n       (2022, 20000);\n\n-- Show tables in a specific schema\n   SHOW TABLES IN r2.example_schema;\n\n-- Query your Iceberg table\n   SELECT * FROM r2.example_schema.yearly_clicks;\n   sql\n-- Create an Iceberg catalog named `r2` and set it as the current catalog\n\nCREATE EXTERNAL CATALOG r2\nPROPERTIES\n(\n    \"type\" = \"iceberg\",\n    \"iceberg.catalog.type\" = \"rest\",\n    \"iceberg.catalog.uri\" = \"<r2_catalog_uri>\",\n    \"iceberg.catalog.security\" = \"oauth2\",\n    \"iceberg.catalog.oauth2.token\" = \"<r2_api_token>\",\n    \"iceberg.catalog.warehouse\" = \"<r2_warehouse_name>\"\n);\n\n-- Create a database and display all databases in newly connected catalog\n\nCREATE DATABASE testdb;\n\nSHOW DATABASES FROM r2;\n\n+--------------------+\n| Database           |\n+--------------------+\n| information_schema |\n| testdb             |\n+--------------------+\n2 rows in set (0.66 sec)\njava\npackage com.example\n\nimport org.apache.spark.sql.SparkSession\n\nobject R2DataCatalogDemo {\n    def main(args: Array[String]): Unit = {\n\nval uri = sys.env(\"CATALOG_URI\")\n        val warehouse = sys.env(\"WAREHOUSE\")\n        val token = sys.env(\"TOKEN\")\n\nval spark = SparkSession.builder()\n            .appName(\"My R2 Data Catalog Demo\")\n            .master(\"local[*]\")\n            .config(\"spark.sql.extensions\", \"org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions\")\n            .config(\"spark.sql.catalog.mydemo\", \"org.apache.iceberg.spark.SparkCatalog\")\n            .config(\"spark.sql.catalog.mydemo.type\", \"rest\")\n            .config(\"spark.sql.catalog.mydemo.uri\", uri)\n            .config(\"spark.sql.catalog.mydemo.warehouse\", warehouse)\n            .config(\"spark.sql.catalog.mydemo.token\", token)\n            .getOrCreate()\n\nimport spark.implicits._\n\nval data = Seq(\n            (1, \"Alice\", 25),\n            (2, \"Bob\", 30),\n            (3, \"Charlie\", 35),\n            (4, \"Diana\", 40)\n        ).toDF(\"id\", \"name\", \"age\")\n\nspark.sql(\"USE mydemo\")\n\nspark.sql(\"CREATE NAMESPACE IF NOT EXISTS demoNamespace\")\n\ndata.writeTo(\"demoNamespace.demotable\").createOrReplace()\n\nval readResult = spark.sql(\"SELECT * FROM demoNamespace.demotable WHERE age > 30\")\n        println(\"Records with age > 30:\")\n        readResult.show()\n    }\n}\njava\nname := \"R2DataCatalogDemo\"\n\nval sparkVersion = \"3.5.3\"\nval icebergVersion = \"1.8.1\"\n\n// You need to use binaries of Spark compiled with either 2.12 or 2.13; and 2.12 is more common.\n// If you download Spark 3.5.3 with sdkman, then it comes with 2.12.18\nscalaVersion := \"2.12.18\"\n\nlibraryDependencies ++= Seq(\n    \"org.apache.spark\" %% \"spark-core\" % sparkVersion,\n    \"org.apache.spark\" %% \"spark-sql\" % sparkVersion,\n    \"org.apache.iceberg\" % \"iceberg-core\" % icebergVersion,\n    \"org.apache.iceberg\" % \"iceberg-spark-runtime-3.5_2.12\" % icebergVersion,\n    \"org.apache.iceberg\" % \"iceberg-aws-bundle\" % icebergVersion,\n)\n\n// build a fat JAR with all dependencies\nassembly / assemblyMergeStrategy := {\n    case PathList(\"META-INF\", \"services\", xs @ _*) => MergeStrategy.concat\n    case PathList(\"META-INF\", xs @ _*) => MergeStrategy.discard\n    case \"reference.conf\" => MergeStrategy.concat\n    case \"application.conf\" => MergeStrategy.concat\n    case x if x.endsWith(\".properties\") => MergeStrategy.first\n    case x => MergeStrategy.first\n}\n\n// For Java  17 Compatability\nCompile / javacOptions ++= Seq(\"--release\", \"17\")\nplaintext\naddSbtPlugin(\"com.eed3si9n\" % \"sbt-assembly\" % \"1.2.0\")\nbash\nsdk install java 17.0.14-amzn\nsdk install spark 3.5.3\nsdk install sbt 1.10.11\nbash\nsbt clean assembly\nplaintext",
+  "code_samples": [
+    {
+      "code": "## Example usage\n\n1. Start Trino with the R2 catalog configuration:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Connect to Trino and query your R2 Data Catalog:",
+      "language": "unknown"
+    },
+    {
+      "code": "3. In the Trino CLI, run the following commands:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: StarRocks · Cloudflare R2 docs\ndescription: Below is an example of using StarRocks to connect, query, modify\n  data from R2 Data Catalog (read-write).\nlastUpdated: 2025-07-31T10:17:29.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/data-catalog/config-examples/starrocks/\n  md: https://developers.cloudflare.com/r2/data-catalog/config-examples/starrocks/index.md\n---\n\nBelow is an example of using [StarRocks](https://docs.starrocks.io/docs/data_source/catalog/iceberg/iceberg_catalog/#rest) to connect, query, modify data from R2 Data Catalog (read-write).\n\n## Prerequisites\n\n* Sign up for a [Cloudflare account](https://dash.cloudflare.com/sign-up/workers-and-pages).\n* [Create an R2 bucket](https://developers.cloudflare.com/r2/buckets/create-buckets/) and [enable the data catalog](https://developers.cloudflare.com/r2/data-catalog/manage-catalogs/#enable-r2-data-catalog-on-a-bucket).\n* [Create an R2 API token](https://developers.cloudflare.com/r2/api/tokens/) with both [R2 and data catalog permissions](https://developers.cloudflare.com/r2/api/tokens/#permissions).\n* A running [StarRocks](https://www.starrocks.io/) frontend instance. You can use the [all-in-one](https://docs.starrocks.io/docs/quick_start/shared-nothing/#launch-starrocks) docker setup.\n\n## Example usage\n\nIn your running StarRocks instance, run these commands:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Spark (Scala) · Cloudflare R2 docs\ndescription: Below is an example of how you can build an Apache Spark\n  application (with Scala) which connects to R2 Data Catalog. This application\n  is built to run locally, but it can be adapted to run on a cluster.\nlastUpdated: 2025-07-08T08:09:06.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/data-catalog/config-examples/spark-scala/\n  md: https://developers.cloudflare.com/r2/data-catalog/config-examples/spark-scala/index.md\n---\n\nBelow is an example of how you can build an [Apache Spark](https://spark.apache.org/) application (with Scala) which connects to R2 Data Catalog. This application is built to run locally, but it can be adapted to run on a cluster.\n\n## Prerequisites\n\n* Sign up for a [Cloudflare account](https://dash.cloudflare.com/sign-up/workers-and-pages).\n\n* [Create an R2 bucket](https://developers.cloudflare.com/r2/buckets/create-buckets/) and [enable the data catalog](https://developers.cloudflare.com/r2/data-catalog/manage-catalogs/#enable-r2-data-catalog-on-a-bucket).\n\n* [Create an R2 API token](https://developers.cloudflare.com/r2/api/tokens/) with both [R2 and data catalog permissions](https://developers.cloudflare.com/r2/api/tokens/#permissions).\n\n* Install Java 17, Spark 3.5.3, and SBT 1.10.11\n\n  * Note: The specific versions of tools are critical for getting things to work in this example.\n  * Tip: [“SDKMAN”](https://sdkman.io/) is a convenient package manager for installing SDKs.\n\n## Example usage\n\nTo start, create a new empty project directory somewhere on your machine.\n\nInside that directory, create the following file at `src/main/scala/com/example/R2DataCatalogDemo.scala`. This will serve as the main entry point for your Spark application.",
+      "language": "unknown"
+    },
+    {
+      "code": "For building this application and managing dependencies, we will use [sbt (“simple build tool”)](https://www.scala-sbt.org/). The following is an example `build.sbt` file to place at the root of your project. It is configured to produce a \"fat JAR\", bundling all required dependencies.",
+      "language": "unknown"
+    },
+    {
+      "code": "To enable the [sbt-assembly plugin](https://github.com/sbt/sbt-assembly?tab=readme-ov-file) (used to build fat JARs), add the following to a new file at `project/assembly.sbt`:",
+      "language": "unknown"
+    },
+    {
+      "code": "Make sure Java, Spark, and sbt are installed and available in your shell. If you are using SDKMAN, you can install them as shown below:",
+      "language": "unknown"
+    },
+    {
+      "code": "With everything installed, you can now build the project using sbt. This will generate a single bundled JAR file.",
+      "language": "unknown"
+    },
+    {
+      "code": "After building, the output JAR should be located at `target/scala-2.12/R2DataCatalogDemo-assembly-1.0.jar`.\n\nTo run the application, you will use `spark-submit`. Below is an example shell script (`submit.sh`) that includes the necessary Java compatibility flags for Spark on Java 17:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Example usage",
+      "id": "example-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Example usage",
+      "id": "example-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Example usage",
+      "id": "example-usage"
+    }
+  ],
+  "url": "llms-txt#r2-data-catalog-configuration",
+  "links": []
+}

@@ -1,0 +1,17 @@
+{
+  "title": "Initialize the new ESC Environment",
+  "content": "pulumi config env init --env $E --yes\nsh\nCreating environment hello-world/dev-env for stack dev...\nsh",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#initialize-the-new-esc-environment",
+  "links": []
+}

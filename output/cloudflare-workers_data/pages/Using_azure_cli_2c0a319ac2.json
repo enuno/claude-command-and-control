@@ -1,0 +1,87 @@
+{
+  "title": "Using azure-cli",
+  "content": "az login\naz account get-access-token --resource https://graph.microsoft.com\n\n(payload with accessToken returned)\ncurl\ncurl -X POST 'https://graph.microsoft.com/v1.0/applicationTemplates/8adf8e6e-67b2-4cf2-a259-e3dc5476c621/instantiate' \\\n  --header 'Content-Type: application/json' \\\n  --header 'Authorization: Bearer <accessToken>' \\\n  --data-raw '{\n    \"displayName\": \"Entra API create application test\"\n}'\ncurl\n{\n  \"@odata.context\": \"https://graph.microsoft.com/v1.0/$metadata#microsoft.graph.applicationServicePrincipal\",\n  \"application\": {\n    \"id\": \"343a8552-f9d9-471c-b677-d37062117cc8\", //\n    \"appId\": \"03d8207b-e837-4be9-b4e6-180492eb3b61\",\n    \"applicationTemplateId\": \"8adf8e6e-67b2-4cf2-a259-e3dc5476c621\",\n    \"createdDateTime\": \"2025-01-30T00:37:44Z\",\n    \"deletedDateTime\": null,\n    \"displayName\": \"Entra API create application test\",\n    \"description\": null,\n    // ... snipped rest of large application payload\n  },\n  \"servicePrincipal\": {\n    \"id\": \"a8cb133d-f841-4eb9-8bc9-c8e9e8c0d417\", // Note this ID for the subsequent request\n    \"deletedDateTime\": null,\n    \"accountEnabled\": true,\n    \"appId\": \"03d8207b-e837-4be9-b4e6-180492eb3b61\",\n    \"applicationTemplateId\": \"8adf8e6e-67b2-4cf2-a259-e3dc5476c621\",\n    \"appDisplayName\": \"Entra API create application test\",\n  // ...snipped rest of JSON payload\n}\n}\ncurl\ncurl -X POST 'https://graph.microsoft.com/v1.0/servicePrincipals/<SERVICE_PRINCIPAL_ID>/synchronization/jobs' \\\n  --header 'Content-Type: application/json' \\\n  --header 'Authorization: Bearer <accessToken>' \\\n  --data-raw '{\n    \"templateId\": \"scim\"\n}'\ncurl\n{\n  \"@odata.context\": \"https://graph.microsoft.com/v1.0/$metadata#servicePrincipals('a8cb133d-f841-4eb9-8bc9-c8e9e8c0d417')/synchronization/jobs/$entity\",\n  \"id\": \"scim.5b223a2cc249463bbd9a791550f11c76.03d8207b-e837-4be9-b4e6-180492eb3b61\",\n  \"templateId\": \"scim\",\n  \"schedule\": {\n    \"expiration\": null,\n    \"interval\": \"PT40M\",\n    \"state\": \"Disabled\"\n  },\n}\n// ... snipped rest of JSON payload\ncurl\n --header 'Content-Type: application/json' \\\n  --header 'Authorization: Bearer <accessToken>' \\\n  --data-raw '{\n  \"value\": [\n    {\n      \"key\": \"BaseAddress\",\n      \"value\": \"https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/scim/v2\"\n    },\n    {\n      \"key\": \"SecretToken\",\n      \"value\": \"<SCIM_PROVISIONING_API_TOKEN_VALUE>\"\n    }\n  ]\n}'\ncurl\ncurl -X GET \"https://api.cloudflare.com/client/v4/accounts/{account_id}/members\" \\\n  -H \"Authorization: Bearer YOUR_SCIM_AOT\" \\\n  -H \"Content-Type: application/json\"\ncurl\ncurl -X PUT \"https://api.cloudflare.com/client/v4/accounts/{account_id}/members/{member_id}\" \\\n  -H \"Authorization: Bearer YOUR_SCIM_AOT\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"roles\": [\n      {\n        \"id\": \"33666b9c79b9a5273fc7344ff42f953d\"\n      }\n    ]\n  }'\nsh",
+  "code_samples": [
+    {
+      "code": "**2. Create a new application via template.**\n\nThe template ID 8adf8e6e-67b2-4cf2-a259-e3dc5476c621 is the suggested template to create non-gallery apps in the Entra docs. Replace `<accessToken>` and `displayName` with your values.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "**3. Create a provisioning job**\n\nTo enable provisioning, you will also need to create a job. Note the SERVICE\\_PRINCIPAL\\_ID in the previous request will be used in the request below. The SCIM templateId is an Entra provided template.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "**4. Configure the SCIM provisioning URL and API token**\n\nNext, configure the Tenant URL (Cloudflare SCIM endpoint) and API token (SCIM Provisioning API Token).\n\nReplace `<accessToken>`, `<ACCOUNT_ID>`, `<SCIM_PROVISIONING_API_TOKEN_VALUE>` with your values.",
+      "language": "unknown"
+    },
+    {
+      "code": "After completing the tasks above, the next steps in Entra include:\n\n* Additional group/provisioning configuration\n* Test and save after updating the config.\n* Provisioning after configuration is complete\n\n</page>\n\n<page>\n---\ntitle: Provision with Okta · Cloudflare Fundamentals docs\ndescription: Once you have gathered the required data, the following steps will\n  be required to finish the provisioning with Okta.\nlastUpdated: 2025-08-20T18:47:44.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/fundamentals/account/account-security/scim-setup/okta/\n  md: https://developers.cloudflare.com/fundamentals/account/account-security/scim-setup/okta/index.md\n---\n\nNote\n\n**Important Update:** Cloudflare now supports native User Groups for enhanced access control. This new feature replaces the previous method of directly assigning Cloudflare roles based on IdP group mappings (identified by the pattern `CF-<accountID> - <Role Name>`), which is deprecated as of June 2nd, 2025. SCIM Virtual Groups will reach end-of-life on December 2, 2025. Update your SCIM configurations using the instructions below to utilize User Groups for seamless provisioning.\n\nOnce you have [gathered the required data](https://developers.cloudflare.com/fundamentals/account/account-security/scim-setup/#gather-the-required-data), the following steps will be required to finish the provisioning with Okta.\n\n## Set up your Okta SCIM application\n\n1. In the Okta dashboard, go to **Applications** > **Applications**.\n\n2. Select **Browse App Catalog**.\n\n3. Locate and select **SCIM 2.0 Test App (OAuth Bearer Token)**.\n\n4. Select **Add Integration** and name your integration.\n\n5. Enable the following options:\n\n   * **Do not display application icon to users**\n   * **Do not display application icon in the Okta Mobile App**\n\n6. Disable **Automatically log in when user lands on login page**.\n\n7. Select **Next**, then select **Done**.\n\n## Integrate the Cloudflare API\n\nNote\n\nThe **Update User Attributes** option is not supported.\n\n1. In your integration page, go to **Provisioning** > **Configure API Integration**.\n2. Enable **Enable API Integration**.\n3. In SCIM 2.0 Base URL, enter: `https://api.cloudflare.com/client/v4/accounts/<accountID>/scim/v2`, substituting `accountID` for your [Cloudflare Account ID](https://developers.cloudflare.com/fundamentals/account/account-security/scim-setup/#get-your-account-id).\n4. In the **OAuth Bearer Token** field, enter your API token value.\n5. Deselect **Import Groups**.\n\n## Configure user & group sync in Okta\n\n1. In **Provisioning to App**, select **Edit**.\n2. Enable **Create Users** and **Deactivate Users**. Select **Save**.\n3. Select **Done**.\n4. In the Assignments tab, add the users you want to synchronize with Cloudflare dashboard. You can add users in batches by assigning a group. If a user is removed from the application assignment via either direct user assignment or removed from the group that was assigned to the app, this will trigger a deprovisioning event from Okta to Cloudflare.\n5. In the Push Groups tab, add the Okta groups you want to synchronize with Cloudflare dashboard. View these Okta groups in the dashboard under Manage Account > Manage members > Members > User Groups.\n\nTo verify the integration, select **View Logs** in the Okta SCIM application, and check the Audit Logs in the Cloudflare dashboard by navigating to **Manage Account** > **Audit Log**.\n\nThis will provision all of the users in the group(s) affected to your Cloudflare account with \"minimal account access.\"\n\n</page>\n\n<page>\n---\ntitle: SCIM troubleshooting · Cloudflare Fundamentals docs\ndescription: If you have removed all Super Administrators mistakenly, you can\n  restore the role to account member(s) using the Account API Token you created\n  for SCIM provisioning.\nlastUpdated: 2025-11-07T11:09:44.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/fundamentals/account/account-security/scim-setup/troubleshooting/\n  md: https://developers.cloudflare.com/fundamentals/account/account-security/scim-setup/troubleshooting/index.md\n---\n\n## Restore Super Administrator after group misconfiguration\n\nIf you have removed all Super Administrators mistakenly, you can restore the role to account member(s) using the Account API Token you created for SCIM provisioning.\n\nFirst, fetch a list of account members and find the member ID for the user you want to restore Super Admin to via [list members](https://developers.cloudflare.com/api/resources/accounts/subresources/members/methods/list/).",
+      "language": "unknown"
+    },
+    {
+      "code": "Then restore the Super Admin role to that member via [update member](https://developers.cloudflare.com/api/resources/accounts/subresources/members/methods/update/)",
+      "language": "unknown"
+    },
+    {
+      "code": "The value `33666b9c79b9a5273fc7344ff42f953d` is the role ID of Super Administrator.\n\n</page>\n\n<page>\n---\ntitle: AWS RDS and Aurora · Cloudflare Hyperdrive docs\ndescription: Connect Hyperdrive to an AWS RDS or Aurora Postgres database instance.\nlastUpdated: 2025-08-20T20:59:04.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-database-providers/aws-rds-aurora/\n  md: https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/postgres-database-providers/aws-rds-aurora/index.md\n---\n\nThis example shows you how to connect Hyperdrive to an Amazon Relational Database Service (Amazon RDS) Postgres or Amazon Aurora database instance.\n\n## 1. Allow Hyperdrive access\n\nTo allow Hyperdrive to connect to your database, you will need to ensure that Hyperdrive has valid user credentials and network access.\n\nNote\n\nTo allow Hyperdrive to connect to your database, you must allow Cloudflare IPs to be able to access your database. You can either allow-list all IP address ranges (0.0.0.0 - 255.255.255.255) or restrict your IP access control list to the [IP ranges used by Hyperdrive](https://developers.cloudflare.com/hyperdrive/configuration/firewall-and-networking-configuration/).\n\nAlternatively, you can connect to your databases over in your private network using [Cloudflare Tunnels](https://developers.cloudflare.com/hyperdrive/configuration/connect-to-private-database/).\n\n### AWS Console\n\nWhen creating or modifying an instance in the AWS console:\n\n1. Configure a **DB cluster identifier** and other settings you wish to customize.\n2. Under **Settings** > **Credential settings**, note down the **Master username** and **Master password** (Aurora only).\n3. Under the **Connectivity** header, ensure **Public access** is set to **Yes**.\n4. Select an **Existing VPC security group** that allows public Internet access from `0.0.0.0/0` to the port your database instance is configured to listen on (default: `5432` for PostgreSQL instances).\n5. Select **Create database**.\n\nWarning\n\nYou must ensure that the [VPC security group](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html) associated with your database allows public IPv4 access to your database port.\n\nRefer to AWS' [database server rules](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-rules-reference.html#sg-rules-db-server) for details on how to configure rules specific to your RDS or Aurora database.\n\n### Retrieve the database endpoint (Aurora)\n\nTo retrieve the database endpoint (hostname) for Hyperdrive to connect to:\n\n1. Go to **Databases** view under **RDS** in the AWS console.\n2. Select the database you want Hyperdrive to connect to.\n3. Under the **Endpoints** header, note down the **Endpoint name** with the type `Writer` and the **Port**.\n\n### Retrieve the database endpoint (RDS PostgreSQL)\n\nFor regular RDS instances (non-Aurora), you will need to fetch the endpoint and port of the database:\n\n1. Go to **Databases** view under **RDS** in the AWS console.\n2. Select the database you want Hyperdrive to connect to.\n3. Under the **Connectivity & security** header, note down the **Endpoint** and the **Port**.\n\nThe endpoint will resemble `YOUR_DATABASE_NAME.cpuo5rlli58m.AWS_REGION.rds.amazonaws.com` and the port will default to `5432`.\n\n## 2. Create your user\n\nOnce your database is created, you will need to create a user for Hyperdrive to connect as. Although you can use the **Master username** configured during initial database creation, best practice is to create a less privileged user.\n\nTo create a new user, log in to the database and use the `CREATE ROLE` command:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Set up your Okta SCIM application",
+      "id": "set-up-your-okta-scim-application"
+    },
+    {
+      "level": "h2",
+      "text": "Integrate the Cloudflare API",
+      "id": "integrate-the-cloudflare-api"
+    },
+    {
+      "level": "h2",
+      "text": "Configure user & group sync in Okta",
+      "id": "configure-user-&-group-sync-in-okta"
+    },
+    {
+      "level": "h2",
+      "text": "Restore Super Administrator after group misconfiguration",
+      "id": "restore-super-administrator-after-group-misconfiguration"
+    },
+    {
+      "level": "h2",
+      "text": "1. Allow Hyperdrive access",
+      "id": "1.-allow-hyperdrive-access"
+    },
+    {
+      "level": "h3",
+      "text": "AWS Console",
+      "id": "aws-console"
+    },
+    {
+      "level": "h3",
+      "text": "Retrieve the database endpoint (Aurora)",
+      "id": "retrieve-the-database-endpoint-(aurora)"
+    },
+    {
+      "level": "h3",
+      "text": "Retrieve the database endpoint (RDS PostgreSQL)",
+      "id": "retrieve-the-database-endpoint-(rds-postgresql)"
+    },
+    {
+      "level": "h2",
+      "text": "2. Create your user",
+      "id": "2.-create-your-user"
+    }
+  ],
+  "url": "llms-txt#using-azure-cli",
+  "links": []
+}

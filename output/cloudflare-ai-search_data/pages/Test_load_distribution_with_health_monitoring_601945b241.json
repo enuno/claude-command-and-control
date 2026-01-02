@@ -1,0 +1,731 @@
+{
+  "title": "Test load distribution with health monitoring",
+  "content": "for i in {1..6}; do\n  echo \"Request $i:\"\n  curl -s https://www.example.com\n  sleep 2\ndone\nbash\nRequest 1:\nHello, this is 198.51.100.15!\nRequest 2:\nHello, this is 203.0.113.10!\nRequest 3:\nHello, this is 198.51.100.15!\nRequest 4:\nHello, this is 203.0.113.10!\nRequest 5:\nHello, this is 203.0.113.10!\nRequest 6:\nHello, this is 198.51.100.15!\nbash\ngit add main.tf\ngit commit -m \"Step 4 - Create load balancer (LB) monitor, LB pool, and LB\"\ngit push\nbash\n   curl -X PUT \"https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/challenges/widgets/$WIDGET_ID\" \\\n     -H \"Authorization: Bearer $API_TOKEN\" \\\n     -H \"Content-Type: application/json\" \\\n     -d '{\n       \"ephemeral_id\": true\n     }'\n   bash\n   curl -X GET \"https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/challenges/widgets/$WIDGET_ID\" \\\n     -H \"Authorization: Bearer $API_TOKEN\"\n   json\n{\n  \"success\": true,\n  \"challenge_ts\": \"2022-02-28T15:14:30.096Z\",\n  \"hostname\": \"example.com\",\n  \"error-codes\": [],\n  \"action\": \"login\",\n  \"cdata\": \"sessionid-123456789\",\n  \"metadata\": {\n    \"ephemeral_id\": \"x:9f78e0ed210960d7693b167e\"\n  }\n}\nbash\n    curl -X PUT \"https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/challenges/widgets/$WIDGET_ID\" \\\n    -H \"Authorization: Bearer $API_TOKEN\" \\\n    -H \"Content-Type: application/json\" \\\n    -d '{\n    \"domains\": [\"example.com\", \"app.example.com\", \"api.example.com\"]\n    }'\n  bash\ncurl -X PUT \"https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/challenges/widgets/$WIDGET_ID\" \\\n-H \"Authorization: Bearer $API_TOKEN\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"offlabel\": true\n}'\nbash\ncurl -X POST \"https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/challenges/widgets\" \\\n-H \"Authorization: Bearer $API_TOKEN\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"name\": \"Branded Widget\",\n    \"domains\": [\"example.com\"],\n    \"mode\": \"managed\",\n    \"offlabel\": true\n}'\nbash\ncurl -X GET \"https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/challenges/widgets/$WIDGET_ID\" \\\n-H \"Authorization: Bearer $API_TOKEN\"\nmermaid\nflowchart LR\n    A[<b>Loading</b><br /><small>Widget is processing the challenge.</small> ] --> B[<b>Interaction*</b><br /><small>Visitor needs to check the box. <br />*Managed mode only.</small>] \n    B --> C[<b>Success</b><br /><small>The Challenge was completed successfully.</small>]\njs\n   import { initializeApp } from \"firebase/app\";\n   import { getAppCheck, initializeAppCheck } from \"firebase/app-check\";\n   import {\n       CloudflareProviderOptions,\n   } from '@cloudflare/turnstile-firebase-app-check';\n\nconst firebaseConfig = {\n   apiKey: \"YOUR_API_KEY\",\n   authDomain: \"YOUR_PROJECT_ID.firebaseapp.com\",\n   projectId: \"YOUR_PROJECT_ID\",\n   storageBucket: \"YOUR_PROJECT_ID.appspot.com\",\n   messagingSenderId: \"YOUR_MESSAGING_SENDER_ID\",\n   appId: \"YOUR_APP_ID\",\n   };\n\nconst app = initializeApp(firebaseConfig);\n\n// Initialize App Check\n   const siteKey = 'YOUR-SITEKEY';\n   const HTTP_ENDPOINT = '${function:ext-cloudflare-turnstile-app-check-provider-tokenExchange.url}';\n\nconst cpo = new CloudflareProviderOptions(HTTP_ENDPOINT, siteKey);\n   const provider = new CustomProvider(cpo);\n\ninitializeAppCheck(app, { provider });\n\n// retrieve App Check token from Cloudflare Turnstile\n   cpo.getToken().then(({ token }) => {\n       document.getElementById('app-check-token').innerHTML = token;\n   });\n   js\nimport express from \"express\";\nimport { initializeApp } from \"firebase-admin/app\";\nimport { getAppCheck } from \"firebase-admin/app-check\";\n\nconst expressApp = express();\nconst firebaseApp = initializeApp();\n\nconst appCheckVerification = async (req, res, next) => {\n    const appCheckToken = req.header(\"X-Firebase-AppCheck\");\n\nif (!appCheckToken) {\n        res.status(401);\n        return next(\"Unauthorized\");\n    }\n\ntry {\n        const appCheckClaims = await getAppCheck().verifyToken(appCheckToken);\n\n// If verifyToken() succeeds, continue with the next middleware function in the stack.\n        return next();\n    } catch (err) {\n        res.status(401);\n        return next(\"Unauthorized\");\n    }\n}\n\nexpressApp.get(\"/yourApiEndpoint\", [appCheckVerification], (req, res) => {\n    // Handle request.\n});\nhtml\n<script\n  src=\"https://challenges.cloudflare.com/turnstile/v0/api.js\"\n  async\n  defer\n></script>\nhtml\n<link rel=\"preconnect\" href=\"https://challenges.cloudflare.com\">\nhtml\n<div class=\"cf-turnstile\" data-sitekey=\"<YOUR-SITE-KEY>\"></div>\nhtml\n<div\n  class=\"cf-turnstile\"\n  data-sitekey=\"<YOUR-SITE-KEY>\"\n  data-theme=\"light\"\n  data-size=\"normal\"\n  data-callback=\"onSuccess\"\n></div>\nhtml\n<!DOCTYPE html>\n<html>\n<head>\n    <title>Login Form</title>\n    <script src=\"https://challenges.cloudflare.com/turnstile/v0/api.js\" async defer></script>\n</head>\n<body>\n    <form action=\"/login\" method=\"POST\">\n        <input type=\"text\" name=\"username\" placeholder=\"Username\" required />\n        <input type=\"password\" name=\"password\" placeholder=\"Password\" required />\n\n<!-- Turnstile widget with basic configuration -->\n        <div class=\"cf-turnstile\" data-sitekey=\"<YOUR-SITE-KEY>\"></div>\n        <button type=\"submit\">Log in</button>\n    </form>\n\n</body>\n</html>\nhtml\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Implicit Rendering with Cloudflare Turnstile</title>\n  <script src=\"https://challenges.cloudflare.com/turnstile/v0/api.js\" async defer></script>\n</head>\n<body>\n  <h1>Contact Us</h1>\n  <form action=\"/submit\" method=\"POST\">\n    <label for=\"name\">Name:</label><br>\n    <input type=\"text\" id=\"name\" name=\"name\" required><br>\n    <label for=\"email\">Email:</label><br>\n    <input type=\"email\" id=\"email\" name=\"email\" required><br>\n    <!-- Turnstile Widget -->\n    <div class=\"cf-turnstile\" data-sitekey=\"<YOUR-SITE-KEY>\"></div>\n    <br>\n    <button type=\"submit\">Submit</button>\n  </form>\n</body>\n</html>\nhtml\n<form action=\"/contact\" method=\"POST\" id=\"contact-form\">\n  <input type=\"email\" name=\"email\" placeholder=\"Email\" required />\n  <textarea name=\"message\" placeholder=\"Message\" required></textarea>\n  <!-- Widget with callbacks and custom configuration -->\n  <div\n    class=\"cf-turnstile\"\n    data-sitekey=\"<YOUR-SITE-KEY>\"\n    data-theme=\"auto\"\n    data-size=\"flexible\"\n    data-callback=\"onTurnstileSuccess\"\n    data-error-callback=\"onTurnstileError\"\n    data-expired-callback=\"onTurnstileExpired\"\n  ></div>\n  <button type=\"submit\" id=\"submit-btn\" disabled>Send Message</button>\n</form>\n\n<script>\n  function onTurnstileSuccess(token) {\n    console.log(\"Turnstile success:\", token);\n    document.getElementById(\"submit-btn\").disabled = false;\n  }\n  function onTurnstileError(errorCode) {\n    console.error(\"Turnstile error:\", errorCode);\n    document.getElementById(\"submit-btn\").disabled = true;\n  }\n  function onTurnstileExpired() {\n    console.warn(\"Turnstile token expired\");\n    document.getElementById(\"submit-btn\").disabled = true;\n  }\n</script>\nhtml\n<!-- Compact widget for newsletter signup -->\n<form action=\"/newsletter\" method=\"POST\">\n  <input type=\"email\" name=\"email\" placeholder=\"Email\" />\n  <div\n    class=\"cf-turnstile\"\n    data-sitekey=\"<YOUR-SITE-KEY>\"\n    data-size=\"compact\"\n    data-action=\"newsletter\"\n  ></div>\n  <button type=\"submit\">Subscribe</button>\n</form>\n\n<!-- Normal widget for contact form -->\n<form action=\"/contact\" method=\"POST\">\n  <input type=\"text\" name=\"name\" placeholder=\"Name\" />\n  <input type=\"email\" name=\"email\" placeholder=\"Email\" />\n  <textarea name=\"message\" placeholder=\"Message\"></textarea>\n  <div\n    class=\"cf-turnstile\"\n    data-sitekey=\"<YOUR-SITE-KEY>\"\n    data-action=\"contact\"\n    data-theme=\"dark\"\n  ></div>\n  <button type=\"submit\">Send</button>\n</form>\nhtml\n<form action=\"/submit\" method=\"POST\">\n  <input type=\"text\" name=\"data\" />\n  <div class=\"cf-turnstile\" data-sitekey=\"<YOUR-SITE-KEY>\"></div>\n  <!-- Hidden field automatically added: -->\n  <!-- <input type=\"hidden\" name=\"cf-turnstile-response\" value=\"TOKEN_VALUE\" /> -->\n  <button type=\"submit\">Submit</button>\n</form>\nhtml\n<script\n  src=\"https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit\"\n  defer\n></script>\nhtml\n<div id=\"turnstile-container\"></div>\njs\nconst widgetId = turnstile.render(\"#turnstile-container\", {\n  sitekey: \"<YOUR-SITE-KEY>\",\n  callback: function (token) {\n    console.log(\"Success:\", token);\n  },\n});\njs\nturnstile.reset(widgetId);\njs\nconst responseToken = turnstile.getResponse(widgetId);\njs\nturnstile.remove(widgetId)\nhtml\n<!DOCTYPE html>\n<html>\n  <head>\n    <title>Explicit Rendering</title>\n    <script\n      src=\"https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit\"\n      defer\n    ></script>\n  </head>\n  <body>\n    <form id=\"login-form\">\n      <input type=\"text\" name=\"username\" placeholder=\"Username\" />\n      <input type=\"password\" name=\"password\" placeholder=\"Password\" />\n      <div id=\"turnstile-widget\"></div>\n      <button type=\"submit\">Login</button>\n    </form>\n\n<script>\n      window.onload = function () {\n        turnstile.render(\"#turnstile-widget\", {\n          sitekey: \"<YOUR-SITE-KEY>\",\n          callback: function (token) {\n            console.log(\"Turnstile token:\", token);\n            // Handle successful verification\n          },\n          \"error-callback\": function (errorCode) {\n            console.error(\"Turnstile error:\", errorCode);\n          },\n        });\n      };\n    </script>\n  </body>\n</html>\nhtml\n<script\n  src=\"https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad\"\n  defer\n></script>\n<div id=\"widget-container\"></div>\n<script>\n  function onTurnstileLoad() {\n    turnstile.render(\"#widget-container\", {\n      sitekey: \"<YOUR-SITE-KEY>\",\n      theme: \"light\",\n      callback: function (token) {\n        console.log(\"Challenge completed:\", token);\n      },\n    });\n  }\n</script>\nhtml\n<div id=\"dynamic-form-container\"></div>\n\n<script src=\"https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit\"></script>\n\n<script>\n  class TurnstileManager {\n    constructor() {\n      this.widgets = new Map();\n    }\n    createWidget(containerId, config) {\n      // Wait for Turnstile to be ready\n      turnstile.ready(() => {\n        const widgetId = turnstile.render(containerId, {\n          sitekey: config.sitekey,\n          theme: config.theme || \"auto\",\n          size: config.size || \"normal\",\n          callback: (token) => {\n            console.log(`Widget ${widgetId} completed:`, token);\n            if (config.onSuccess) config.onSuccess(token, widgetId);\n          },\n          \"error-callback\": (error) => {\n            console.error(`Widget ${widgetId} error:`, error);\n            if (config.onError) config.onError(error, widgetId);\n          },\n        });\n\nthis.widgets.set(containerId, widgetId);\n        return widgetId;\n      });\n    }\n    removeWidget(containerId) {\n      const widgetId = this.widgets.get(containerId);\n      if (widgetId) {\n        turnstile.remove(widgetId);\n        this.widgets.delete(containerId);\n      }\n    }\n    resetWidget(containerId) {\n      const widgetId = this.widgets.get(containerId);\n      if (widgetId) {\n        turnstile.reset(widgetId);\n      }\n    }\n  }\n\n// Usage\n  const manager = new TurnstileManager();\n\n// Create a widget when user clicks a button\n  document.getElementById(\"show-form-btn\").addEventListener(\"click\", () => {\n    document.getElementById(\"dynamic-form-container\").innerHTML = `\n        <form>\n            <input type=\"email\" placeholder=\"Email\" />\n            <div id=\"turnstile-widget\"></div>\n            <button type=\"submit\">Submit</button>\n        </form>\n    `;\n    manager.createWidget(\"#turnstile-widget\", {\n      sitekey: \"<YOUR-SITE-KEY>\",\n      theme: \"dark\",\n      onSuccess: (token) => {\n        // Handle successful verification\n        console.log(\"Form ready for submission\");\n      },\n    });\n  });\n</script>\njs\n// Render a widget\nconst widgetId = turnstile.render(\"#container\", {\n  sitekey: \"<YOUR-SITE-KEY>\",\n  callback: handleSuccess,\n});\n\n// Get the current token\nconst token = turnstile.getResponse(widgetId);\n\n// Check if widget is expired\nconst isExpired = turnstile.isExpired(widgetId);\n\n// Reset the widget (clears current state)\nturnstile.reset(widgetId);\n\n// Remove the widget completely\nturnstile.remove(widgetId);\njs\n// Render widget but don't run challenge yet\nconst widgetId = turnstile.render(\"#container\", {\n  sitekey: \"<YOUR-SITE-KEY>\",\n  execution: \"execute\", // Don't auto-execute\n});\n\n// Later, run the challenge when needed\nturnstile.execute(\"#container\");\njs\nWebView webView = findViewById(R.id.webview);\nWebSettings webSettings = webView.getSettings();\n\n// Required: Enable JavaScript\nwebSettings.setJavaScriptEnabled(true);\n\n// Required: Enable DOM storage\nwebSettings.setDomStorageEnabled(true);\n\n// Recommended: Enable other web features\nwebSettings.setLoadWithOverviewMode(true);\nwebSettings.setUseWideViewPort(true);\nwebSettings.setAllowFileAccess(true);\nwebSettings.setAllowContentAccess(true);\n\n// Load your web content with Turnstile\nwebView.loadUrl(\"https://yoursite.com/protected-form\");\njs\nimport WebKit\n\nclass ViewController: UIViewController {\n    @IBOutlet weak var webView: WKWebView!\n\noverride func viewDidLoad() {\n        super.viewDidLoad()\n\n// Configure WebView\n        let configuration = WKWebViewConfiguration()\n        configuration.preferences.javaScriptEnabled = true\n\n// Load your web content with Turnstile\n        if let url = URL(string: \"https://yoursite.com/protected-form\") {\n            webView.load(URLRequest(url: url))\n        }\n    }\n}\njs\nimport { WebView } from 'react-native-webview';\n\nexport default function App() {\n  return (\n    <WebView\n      source={{ uri: 'https://yoursite.com/protected-form' }}\n      javaScriptEnabled={true}\n      domStorageEnabled={true}\n      allowsInlineMediaPlayback={true}\n      mediaPlaybackRequiresUserAction={false}\n    />\n  );\n}\njs\nimport 'package:flutter_inappwebview/flutter_inappwebview.dart';\n\nclass WebViewScreen extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    return InAppWebView(\n      initialUrlRequest: URLRequest(\n        url: Uri.parse('https://yoursite.com/protected-form')\n      ),\n      initialOptions: InAppWebViewGroupOptions(\n        crossPlatform: InAppWebViewOptions(\n          javaScriptEnabled: true,\n          useShouldOverrideUrlLoading: false,\n        ),\n        android: AndroidInAppWebViewOptions(\n          domStorageEnabled: true,\n        ),\n        ios: IOSInAppWebViewOptions(\n          allowsInlineMediaPlayback: true,\n        ),\n      ),\n    );\n  }\n}\njs\n// Android - Set consistent User Agent\nwebSettings.setUserAgentString(webSettings.getUserAgentString());\njs\n// iOS - Maintain default User Agent\nwebView.customUserAgent = webView.value(forKey: \"userAgent\") as? String\nhtml\n<meta http-equiv=\"Content-Security-Policy\" content=\"\n  default-src 'self';\n  script-src 'self' challenges.cloudflare.com 'unsafe-inline';\n  connect-src 'self' challenges.cloudflare.com;\n  frame-src 'self' challenges.cloudflare.com;\n\">\njs\n// Android - Enable cookies\nCookieManager.getInstance().setAcceptCookie(true);\nCookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);\njs\n// iOS - Configure cookie storage\nwebView.configuration.websiteDataStore = WKWebsiteDataStore.default()\nshell\nPOST https://challenges.cloudflare.com/turnstile/v0/siteverify\njs\n    const SECRET_KEY = 'your-secret-key';\n\nasync function validateTurnstile(token, remoteip) {\n  const formData = new FormData();\n  formData.append('secret', SECRET_KEY);\n  formData.append('response', token);\n  formData.append('remoteip', remoteip);\n\ntry {\n            const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {\n                method: 'POST',\n                body: formData\n            });\n\nconst result = await response.json();\n            return result;\n        } catch (error) {\n            console.error('Turnstile validation error:', error);\n            return { success: false, 'error-codes': ['internal-error'] };\n        }\n\n// Usage in form handler\n  async function handleFormSubmission(request) {\n  const body = await request.formData();\n  const token = body.get('cf-turnstile-response');\n  const ip = request.headers.get('CF-Connecting-IP') ||\n  request.headers.get('X-Forwarded-For') ||\n  'unknown';\n\nconst validation = await validateTurnstile(token, ip);\n\nif (validation.success) {\n            // Token is valid - process the form\n            console.log('Valid submission from:', validation.hostname);\n            return processForm(body);\n        } else {\n            // Token is invalid - reject the submission\n            console.log('Invalid token:', validation['error-codes']);\n            return new Response('Invalid verification', { status: 400 });\n        }\n\n}\n  json\n  const SECRET_KEY = 'your-secret-key';\n\nasync function validateTurnstile(token, remoteip) {\n      try {\n          const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {\n              method: 'POST',\n              headers: {\n                  'Content-Type': 'application/json'\n              },\n              body: JSON.stringify({\n                  secret: SECRET_KEY,\n                  response: token,\n                  remoteip: remoteip\n              })\n          });\n\nconst result = await response.json();\n          return result;\n      } catch (error) {\n          console.error('Turnstile validation error:', error);\n          return { success: false, 'error-codes': ['internal-error'] };\n      }\n  }\n  php\n  <?php\n  function validateTurnstile($token, $secret, $remoteip = null) {\n      $url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';\n\n$data = [\n          'secret' => $secret,\n          'response' => $token\n      ];\n\nif ($remoteip) {\n          $data['remoteip'] = $remoteip;\n      }\n\n$options = [\n          'http' => [\n              'header' => \"Content-type: application/x-www-form-urlencoded\\r\\n\",\n              'method' => 'POST',\n              'content' => http_build_query($data)\n          ]\n      ];\n\n$context = stream_context_create($options);\n      $response = file_get_contents($url, false, $context);\n\nif ($response === FALSE) {\n          return ['success' => false, 'error-codes' => ['internal-error']];\n      }\n\nreturn json_decode($response, true);\n\n// Usage\n  $secret_key = 'your-secret-key';\n  $token = $_POST['cf-turnstile-response'] ?? '';\n  $remoteip = $\\_SERVER['HTTP_CF_CONNECTING_IP'] ??\n  $\\_SERVER['HTTP_X_FORWARDED_FOR'] ??\n  $\\_SERVER['REMOTE_ADDR'];\n\n$validation = validateTurnstile($token, $secret_key, $remoteip);\n\nif ($validation['success']) {\n  // Valid token - process form\n  echo \"Form submission successful!\";\n  // Process your form data here\n  } else {\n  // Invalid token - show error\n  echo \"Verification failed. Please try again.\";\n  error_log('Turnstile validation failed: ' . implode(', ', $validation['error-codes']));\n  }\n  ?>\n  python\n  import requests\n\ndef validate_turnstile(token, secret, remoteip=None):\n      url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'\n\ndata = {\n          'secret': secret,\n          'response': token\n      }\n\nif remoteip:\n          data['remoteip'] = remoteip\n\ntry:\n          response = requests.post(url, data=data, timeout=10)\n          response.raise_for_status()\n          return response.json()\n      except requests.RequestException as e:\n          print(f\"Turnstile validation error: {e}\")\n          return {'success': False, 'error-codes': ['internal-error']}\n\n# Usage with Flask\n  from flask import Flask, request, jsonify\n\napp = Flask(__name__)\n  SECRET_KEY = 'your-secret-key'\n\n@app.route('/submit-form', methods=['POST'])\n  def submit_form():\n      token = request.form.get('cf-turnstile-response')\n      remoteip = request.headers.get('CF-Connecting-IP') or \\\n                 request.headers.get('X-Forwarded-For') or \\\n                 request.remote_addr\n\nvalidation = validate_turnstile(token, SECRET_KEY, remoteip)\n\nif validation['success']:\n          # Valid token - process form\n          return jsonify({'status': 'success', 'message': 'Form submitted successfully'})\n      else:\n          # Invalid token - reject submission\n          return jsonify({\n              'status': 'error',\n              'message': 'Verification failed',\n              'errors': validation['error-codes']\n          }), 400\n  java\n  import org.springframework.web.client.RestTemplate;\n  import org.springframework.util.LinkedMultiValueMap;\n  import org.springframework.util.MultiValueMap;\n  import org.springframework.http.HttpEntity;\n  import org.springframework.http.HttpHeaders;\n  import org.springframework.http.MediaType;\n  import org.springframework.http.ResponseEntity;\n\n@Service\n  public class TurnstileService {\n  private static final String SITEVERIFY_URL = \"https://challenges.cloudflare.com/turnstile/v0/siteverify\";\n  private final String secretKey = \"your-secret-key\";\n  private final RestTemplate restTemplate = new RestTemplate();\n\npublic TurnstileResponse validateToken(String token, String remoteip) {\n          HttpHeaders headers = new HttpHeaders();\n          headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);\n\nMultiValueMap<String, String> params = new LinkedMultiValueMap<>();\n          params.add(\"secret\", secretKey);\n          params.add(\"response\", token);\n          if (remoteip != null) {\n              params.add(\"remoteip\", remoteip);\n          }\n\nHttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);\n\ntry {\n              ResponseEntity<TurnstileResponse> response = restTemplate.postForEntity(\n                  SITEVERIFY_URL, request, TurnstileResponse.class);\n              return response.getBody();\n          } catch (Exception e) {\n              TurnstileResponse errorResponse = new TurnstileResponse();\n              errorResponse.setSuccess(false);\n              errorResponse.setErrorCodes(List.of(\"internal-error\"));\n              return errorResponse;\n          }\n      }\n\n// Controller usage\n  @PostMapping(\"/submit-form\")\n  public ResponseEntity<?> submitForm(\n  @RequestParam(\"cf-turnstile-response\") String token,\n  HttpServletRequest request) {\n\nString remoteip = request.getHeader(\"CF-Connecting-IP\");\n      if (remoteip == null) {\n          remoteip = request.getHeader(\"X-Forwarded-For\");\n      }\n      if (remoteip == null) {\n          remoteip = request.getRemoteAddr();\n      }\n\nTurnstileResponse validation = turnstileService.validateToken(token, remoteip);\n\nif (validation.isSuccess()) {\n          // Valid token - process form\n          return ResponseEntity.ok(\"Form submitted successfully\");\n      } else {\n          // Invalid token - reject submission\n          return ResponseEntity.badRequest()\n              .body(\"Verification failed: \" + validation.getErrorCodes());\n      }\n\n}\n  csharp\n  using System.Text.Json;\n\npublic class TurnstileService\n  {\n      private readonly HttpClient _httpClient;\n      private readonly string _secretKey = \"your-secret-key\";\n      private const string SiteverifyUrl = \"https://challenges.cloudflare.com/turnstile/v0/siteverify\";\n\npublic TurnstileService(HttpClient httpClient)\n      {\n          _httpClient = httpClient;\n      }\n\npublic async Task<TurnstileResponse> ValidateTokenAsync(string token, string remoteip = null)\n      {\n          var parameters = new Dictionary<string, string>\n          {\n              { \"secret\", _secretKey },\n              { \"response\", token }\n          };\n\nif (!string.IsNullOrEmpty(remoteip))\n          {\n              parameters.Add(\"remoteip\", remoteip);\n          }\n\nvar postContent = new FormUrlEncodedContent(parameters);\n\ntry\n          {\n              var response = await _httpClient.PostAsync(SiteverifyUrl, postContent);\n              var stringContent = await response.Content.ReadAsStringAsync();\n\nreturn JsonSerializer.Deserialize<TurnstileResponse>(stringContent);\n          }\n          catch (Exception ex)\n          {\n              return new TurnstileResponse\n              {\n                  Success = false,\n                  ErrorCodes = new[] { \"internal-error\" }\n              };\n          }\n      }\n  }\n\n// Controller usage\n  [HttpPost(\"submit-form\")]\n  public async Task<IActionResult> SubmitForm([FromForm] string cfTurnstileResponse)\n  {\n      var remoteip = HttpContext.Request.Headers[\"CF-Connecting-IP\"].FirstOrDefault() ??\n                     HttpContext.Request.Headers[\"X-Forwarded-For\"].FirstOrDefault() ??\n                     HttpContext.Connection.RemoteIpAddress?.ToString();\n\nvar validation = await _turnstileService.ValidateTokenAsync(cfTurnstileResponse, remoteip);\n\nif (validation.Success)\n      {\n          // Valid token - process form\n          return Ok(\"Form submitted successfully\");\n      }\n      else\n      {\n          // Invalid token - reject submission\n          return BadRequest($\"Verification failed: {string.Join(\", \", validation.ErrorCodes)}\");\n      }\n  }\n  js\nconst crypto = require(\"crypto\");\n\nasync function validateWithRetry(token, remoteip, maxRetries = 3) {\n  const idempotencyKey = crypto.randomUUID();\n\nfor (let attempt = 1; attempt <= maxRetries; attempt++) {\n    try {\n      const formData = new FormData();\n      formData.append(\"secret\", SECRET_KEY);\n      formData.append(\"response\", token);\n      formData.append(\"remoteip\", remoteip);\n      formData.append(\"idempotency_key\", idempotencyKey);\n\nconst response = await fetch(\n        \"https://challenges.cloudflare.com/turnstile/v0/siteverify\",\n        {\n          method: \"POST\",\n          body: formData,\n        },\n      );\n\nconst result = await response.json();\n\nif (response.ok) {\n        return result;\n      }\n\n// If this is the last attempt, return the error\n      if (attempt === maxRetries) {\n        return result;\n      }\n\n// Wait before retrying (exponential backoff)\n      await new Promise((resolve) =>\n        setTimeout(resolve, Math.pow(2, attempt) * 1000),\n      );\n    } catch (error) {\n      if (attempt === maxRetries) {\n        return { success: false, \"error-codes\": [\"internal-error\"] };\n      }\n    }\n  }\n}\njs\nasync function validateTurnstileEnhanced(\n  token,\n  remoteip,\n  expectedAction = null,\n  expectedHostname = null,\n) {\n  const validation = await validateTurnstile(token, remoteip);\n\nif (!validation.success) {\n    return {\n      valid: false,\n      reason: \"turnstile_failed\",\n      errors: validation[\"error-codes\"],\n    };\n  }\n\n// Check if action matches expected value (if specified)\n  if (expectedAction && validation.action !== expectedAction) {\n    return {\n      valid: false,\n      reason: \"action_mismatch\",\n      expected: expectedAction,\n      received: validation.action,\n    };\n  }\n\n// Check if hostname matches expected value (if specified)\n  if (expectedHostname && validation.hostname !== expectedHostname) {\n    return {\n      valid: false,\n      reason: \"hostname_mismatch\",\n      expected: expectedHostname,\n      received: validation.hostname,\n    };\n  }\n\n// Check token age (warn if older than 4 minutes)\n  const challengeTime = new Date(validation.challenge_ts);\n  const now = new Date();\n  const ageMinutes = (now - challengeTime) / (1000 * 60);\n\nif (ageMinutes > 4) {\n    console.warn(`Token is ${ageMinutes.toFixed(1)} minutes old`);\n  }\n\nreturn {\n    valid: true,\n    data: validation,\n    tokenAge: ageMinutes,\n  };\n}\n\n// Usage\nconst result = await validateTurnstileEnhanced(\n  token,\n  remoteip,\n  \"login\", // expected action\n  \"example.com\", // expected hostname\n);\n\nif (result.valid) {\n  // Process the request\n  console.log(\"Validation successful:\", result.data);\n} else {\n  // Handle validation failure\n  console.log(\"Validation failed:\", result.reason);\n}\njson\n  {\n    \"success\": true,\n    \"challenge_ts\": \"2022-02-28T15:14:30.096Z\",\n    \"hostname\": \"example.com\",\n    \"error-codes\": [],\n    \"action\": \"login\",\n    \"cdata\": \"sessionid-123456789\",\n    \"metadata\": {\n      \"ephemeral_id\": \"x:9f78e0ed210960d7693b167e\"\n    }\n  }\n  json\n  {\n    \"success\": false,\n    \"error-codes\": [\"invalid-input-response\"]\n  }\n  js\nclass TurnstileValidator {\n  constructor(secretKey, timeout = 10000) {\n    this.secretKey = secretKey;\n    this.timeout = timeout;\n  }\n\nasync validate(token, remoteip, options = {}) {\n    // Input validation\n    if (!token || typeof token !== \"string\") {\n      return { success: false, error: \"Invalid token format\" };\n    }\n\nif (token.length > 2048) {\n      return { success: false, error: \"Token too long\" };\n    }\n\n// Prepare request\n    const controller = new AbortController();\n    const timeoutId = setTimeout(() => controller.abort(), this.timeout);\n\ntry {\n      const formData = new FormData();\n      formData.append(\"secret\", this.secretKey);\n      formData.append(\"response\", token);\n\nif (remoteip) {\n        formData.append(\"remoteip\", remoteip);\n      }\n\nif (options.idempotencyKey) {\n        formData.append(\"idempotency_key\", options.idempotencyKey);\n      }\n\nconst response = await fetch(\n        \"https://challenges.cloudflare.com/turnstile/v0/siteverify\",\n        {\n          method: \"POST\",\n          body: formData,\n          signal: controller.signal,\n        },\n      );\n\nconst result = await response.json();\n\n// Additional validation\n      if (result.success) {\n        if (\n          options.expectedAction &&\n          result.action !== options.expectedAction\n        ) {\n          return {\n            success: false,\n            error: \"Action mismatch\",\n            expected: options.expectedAction,\n            received: result.action,\n          };\n        }\n\nif (\n          options.expectedHostname &&\n          result.hostname !== options.expectedHostname\n        ) {\n          return {\n            success: false,\n            error: \"Hostname mismatch\",\n            expected: options.expectedHostname,\n            received: result.hostname,\n          };\n        }\n      }\n\nreturn result;\n    } catch (error) {\n      if (error.name === \"AbortError\") {\n        return { success: false, error: \"Validation timeout\" };\n      }\n\nconsole.error(\"Turnstile validation error:\", error);\n      return { success: false, error: \"Internal error\" };\n    } finally {\n      clearTimeout(timeoutId);\n    }\n  }\n}\n\n// Usage\nconst validator = new TurnstileValidator(process.env.TURNSTILE_SECRET_KEY);\n\nconst result = await validator.validate(token, remoteip, {\n  expectedAction: \"login\",\n  expectedHostname: \"example.com\",\n});\n\nif (result.success) {\n  // Process the request\n} else {\n  // Handle failure\n  console.log(\"Validation failed:\", result.error);\n}\nhtml\n   <script src=\"https://challenges.cloudflare.com/turnstile/v0/api.js\" async defer></script>\n   js\n   // before\n   hcaptcha.render(element, {\n       sitekey: \"00000000-0000-0000-0000-000000000000\"\n   })\n   // after\n   turnstile.render(element, {\n       sitekey: \"1x00000000000000000000AA\"\n   })\n   txt\n   https://challenges.cloudflare.com/turnstile/v0/siteverify\n   txt\n   cf-turnstile-response\n   html\n   <script src=\"https://challenges.cloudflare.com/turnstile/v0/api.js?compat=recaptcha\" async defer></script>\n   txt\nhttps://challenges.cloudflare.com/turnstile/v0/siteverify\njs\n  turnstile.render('#my-widget', {\n    sitekey: 'your-sitekey',\n    'error-callback': function(errorCode) {\n      console.error('Turnstile error occurred:', errorCode);\n      handleTurnstileError(errorCode);\n      return true; // Indicates we handled the error\n    }\n  });\n  html\n  <div class=\"cf-turnstile\"\n       data-sitekey=\"your-sitekey\"\n       data-error-callback=\"onTurnstileError\"></div>\n  js\nfunction handleTurnstileError(errorCode) {\n  const errorFamily = Math.floor(errorCode / 1000);\n\nswitch(errorFamily) {\n    case 100:\n      showMessage('Please refresh the page and try again.');\n      break;\n    case 110:\n      showMessage('Configuration error. Please contact support.');\n      break;\n    case 300:\n    case 600:\n      showMessage('Security check failed. Please try refreshing or using a different browser.');\n      break;\n    default:\n      showMessage('An unexpected error occurred. Please try again.');\n  }\n}\njs\nlet retryCount = 0;\n\nturnstile.render('#my-widget', {\n  sitekey: 'your-sitekey',\n  'error-callback': function(errorCode) {\n    retryCount++;\n\nif (retryCount <= 2) {\n      console.log(`Turnstile retry attempt ${retryCount}`);\n      return false; // Let Turnstile handle the retry\n    } else {\n      showPersistentErrorMessage(errorCode);\n      return true; // We'll handle it from here\n    }\n  }\n});\njs\nturnstile.render('#my-widget', {\n  sitekey: 'your-sitekey',\n  retry: 'never',\n  'error-callback': function(errorCode) {\n    // You control all retry logic\n    setTimeout(() => {\n      turnstile.reset('#my-widget');\n    }, 3000);\n  }\n});\njs\nturnstile.render('#my-widget', {\n  sitekey: 'your-sitekey',\n  retry: 'auto',\n  'retry-interval': 8000, // Wait 8 seconds between retries\n  'error-callback': handleError\n});\njs\nturnstile.render('#my-widget', {\n  sitekey: 'your-sitekey',\n  callback: function(token) {\n    console.log('Challenge completed successfully');\n  },\n  'timeout-callback': function() {\n    console.log('Challenge timed out - user action required');\n    document.getElementById('challenge-notice').textContent =\n      'Please complete the security check above to continue.';\n\n// Optionally highlight the widget\n    document.getElementById('my-widget').style.border = '2px solid orange';\n  },\n  'expired-callback': function() {\n    console.log('Token expired - challenge needs refresh');\n    document.getElementById('challenge-notice').textContent =\n      'Security check expired. Please try again.';\n  }\n});\nhtml\n<!-- Development/Testing -->\n<div class=\"cf-turnstile\" data-sitekey=\"1x00000000000000000000AA\"></div>\n\n<!-- Production -->\n<div class=\"cf-turnstile\" data-sitekey=\"your-real-sitekey\"></div>\njs\n// Environment-based configuration\nconst SECRET_KEY = process.env.NODE_ENV === 'production'\n  ? process.env.TURNSTILE_SECRET_KEY\n  : '1x0000000000000000000000000000000AA';\n\n// Use in validation\nconst validation = await validateTurnstile(token, SECRET_KEY);\nshell",
+  "code_samples": [
+    {
+      "code": "Expected output:",
+      "language": "unknown"
+    },
+    {
+      "code": "You should now see more predictable load distribution with the added benefits of health monitoring and automatic failover.\n\nMerge and verify:",
+      "language": "unknown"
+    },
+    {
+      "code": "Verify the configuration is working by checking the Cloudflare dashboard under **Traffic** > **Load Balancing**. You should see your monitor, pool, and load balancer with health status indicators. Your load balancer will now:\n\n* Distribute traffic intelligently between origins\n* Automatically route around unhealthy servers\n* Provide real-time health monitoring\n\n</page>\n\n<page>\n---\ntitle: Ephemeral IDs · Cloudflare Turnstile docs\ndescription: Ephemeral IDs provide device fingerprinting capabilities to enhance\n  bot detection and abuse prevention beyond traditional IP-based methods.\n  Ephemeral IDs are unique, short-lived identifiers that Turnstile generates to\n  link visitor behavior to a specific client device without relying on cookies\n  or client-side storage. They are temporary device fingerprints that help\n  identify patterns of behavior across multiple interactions. Ephemeral ID is an\n  advanced detection method that persists even when attackers change their IP\n  addresses.\nlastUpdated: 2025-11-17T17:38:40.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/additional-configuration/ephemeral-id/\n  md: https://developers.cloudflare.com/turnstile/additional-configuration/ephemeral-id/index.md\n---\n\nEphemeral IDs provide device fingerprinting capabilities to enhance bot detection and abuse prevention beyond traditional IP-based methods. Ephemeral IDs are unique, short-lived identifiers that Turnstile generates to link visitor behavior to a specific client device without relying on cookies or client-side storage. They are temporary device fingerprints that help identify patterns of behavior across multiple interactions. Ephemeral ID is an advanced detection method that persists even when attackers change their IP addresses.\n\n## Process\n\nEphemeral IDs use advanced analysis techniques to create unique identifiers that help find patterns of behavior across multiple interactions. These identifiers are generated dynamically for each visitor interaction with Turnstile widgets.\n\nNo cookies or local storage is required.\n\nEphemeral IDs are scoped to your Cloudflare account and cannot be shared across accounts. IDs have a short lifespan and expire within a few days. They cannot be used to identify individual users\n\nEphemeral IDs provide more accurate abuse detection than IP-based methods by linking behavior to individual clients rather than network addresses. This is particularly effective against acute attacks where bad actors try to evade detection, such as credential stuffing and fake account creation attacks.\n\nRefer to the [blog post](https://blog.cloudflare.com/turnstile-ephemeral-ids-for-fraud-detection/) for more information.\n\n***\n\n## Implementation\n\n### Enable Ephemeral IDs\n\n1. Contact your Cloudflare account team to enable Ephemeral ID entitlement for your account. This feature requires Enterprise-level access and cannot be self-activated.\n\n2. After entitlement is enabled, activate Ephemeral IDs for specific widgets using the Cloudflare API.",
+      "language": "unknown"
+    },
+    {
+      "code": "3. Confirm Ephemeral IDs are active by checking your widget configuration.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Access Ephemeral IDs\n\nOnce enabled, Ephemeral IDs are included in Siteverify API responses.",
+      "language": "unknown"
+    },
+    {
+      "code": "***\n\n## Availability\n\nEphemeral IDs are available to Enterprise Bot Management customers with the Enterprise Turnstile add-on or standalone Enterprise Turnstile customers. Contact your account team for access to Ephemeral IDs.\n\n</page>\n\n<page>\n---\ntitle: Hostname management · Cloudflare Turnstile docs\ndescription: Hostname management controls where your Turnstile widgets can be\n  used by specifying which domains are authorized to load and execute your\n  widgets. This security measure prevents unauthorized use of your widgets on\n  domains that you do not control.\nlastUpdated: 2025-11-17T17:38:40.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/additional-configuration/hostname-management/\n  md: https://developers.cloudflare.com/turnstile/additional-configuration/hostname-management/index.md\n---\n\nHostname management controls where your Turnstile widgets can be used by specifying which domains are authorized to load and execute your widgets. This security measure prevents unauthorized use of your widgets on domains that you do not control.\n\nYou can associate hostnames with your widget to control where it can be used via Hostname Management. Managing your hostnames ensures that Turnstile works seamlessly with your setup, whether you add standalone hostnames or leverage zones registered to your Cloudflare account.\n\n***\n\n## Hostname requirements\n\n### Standard configuration\n\nBy default, every widget requires at least one hostname to be configured. You cannot create a widget without specifying at least one authorized hostname.\n\n### Hostname format requirements\n\nWhen adding hostnames, follow these requirements:\n\n* The hostname must be fully qualified domain names (FQDNs): `example.com` or `subdomain.example.com`\n* No wildcards are supported. You must specify each hostname individually.\n\nInvalid formats\n\nThe following formats are not valid and will not be accepted:\n\n* Schemes such as `http://example.com` or `https://example.com`\n* Ports such as `example.com:443` or `subdomain.example.com:8080`\n* Paths such as `example.com/path` or `subdomain.example.com/login`\n\n### Subdomain behavior\n\nSpecifying a subdomain provides additional security by restricting widget usage.\n\nFor example, adding `www.example.com` as a hostname will allow widgets to work on:\n\n* `www.example.com`\n* `abc.www.example.com:8080` (subdomains of the specified hostname).\n\nHowever, it will not work on:\n\n* `example.com` (parent domain)\n* `dash.example.com` (sibling subdomain)\n* `cloudflare.com` (unrelated domain)\n\n## Add hostnames\n\n* Dashboard\n\n  Existing widget\n\n  1. In the Cloudflare dashboard, go to the **Turnstile** page.\n\n     [Go to **Turnstile**](https://dash.cloudflare.com/?to=/:account/turnstile)\n\n  2. Select an existing widget.\n\n  3. Go to **Settings**.\n\n  4. Under **Hostname Management**, select **Add Hostnames**.\n\n  5. Add a custom hostname or choose from an existing hostname.\n\n  6. Select **Add**.\n\n  New widget\n\n  1. In the Cloudflare dashboard, go to the **Turnstile** page.\n\n     [Go to **Turnstile**](https://dash.cloudflare.com/?to=/:account/turnstile)\n\n  2. Select **Add widget**.\n\n  3. In the hostname field, enter your domain(s).\n\n  4. If you have zones registered with Cloudflare, you can select from existing zones\n\n* API",
+      "language": "unknown"
+    },
+    {
+      "code": "***\n\n## Limitations\n\nFree users are entitled to a maximum of 15 hostnames per widget.\n\nEnterprise customers can have up to 200 hostnames per widget.\n\n</page>\n\n<page>\n---\ntitle: Remove Cloudflare branding with Offlabel · Cloudflare Turnstile docs\ndescription: Offlabel is an Enterprise-only feature that removes Cloudflare\n  branding and logo from Turnstile widgets. When enabled, widgets display\n  without any visual references to Cloudflare, allowing for a seamless\n  integration with your brand identity.\nlastUpdated: 2025-11-17T17:38:40.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/additional-configuration/offlabel/\n  md: https://developers.cloudflare.com/turnstile/additional-configuration/offlabel/index.md\n---\n\nOfflabel is an Enterprise-only feature that removes Cloudflare branding and logo from Turnstile widgets. When enabled, widgets display without any visual references to Cloudflare, allowing for a seamless integration with your brand identity.\n\nWhen Offlabel is enabled:\n\n* The Cloudflare logo and color schemes are removed from all widget states.\n* The widget maintains the same functionality, behavior, and WCAG 2.1 AA accessibility compliance.\n* All security features remain unchanged.\n\nThe widget will display with a clean, unbranded appearance that integrates seamlessly with your website's design.\n\n***\n\n## Implementation\n\n### Enable Offlabel\n\nAfter your account team enables the Offlabel entitlement, you can activate it for specific widgets using the Cloudflare API.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Create new widgets with Offlabel\n\nYou can enable Offlabel when creating new widgets.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Verification\n\nConfirm Offlabel is enabled by checking your widget configuration.",
+      "language": "unknown"
+    },
+    {
+      "code": "The response will include `\"offlabel\": true` when the feature is active.\n\n***\n\n## Availability\n\nOfflabel is available exclusively to Enterprise customers with the Enterprise Turnstile add-on or Standalone Enterprise Turnstile customers.\n\nContact your account team for access to the Offlabel feature.\n\n</page>\n\n<page>\n---\ntitle: Pre-clearance support · Cloudflare Turnstile docs\nlastUpdated: 2025-08-13T20:53:06.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/additional-configuration/pre-clearance-support/\n  md: https://developers.cloudflare.com/turnstile/additional-configuration/pre-clearance-support/index.md\n---\n\n\n</page>\n\n<page>\n---\ntitle: Cloudflare Challenges · Cloudflare Turnstile docs\nlastUpdated: 2025-08-13T20:53:06.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/concepts/challenges/\n  md: https://developers.cloudflare.com/turnstile/concepts/challenges/index.md\n---\n\n\n</page>\n\n<page>\n---\ntitle: Turnstile widgets · Cloudflare Turnstile docs\ndescription: Every instance of Turnstile belongs to a Turnstile widget. It is\n  configured on a per-widget level. Every widget has a mode, a label, a sitekey,\n  and a secret key.\nlastUpdated: 2025-11-17T17:38:40.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/concepts/widget/\n  md: https://developers.cloudflare.com/turnstile/concepts/widget/index.md\n---\n\nEvery instance of Turnstile belongs to a Turnstile widget. It is configured on a per-widget level. Every widget has a mode, a label, a sitekey, and a secret key.\n\nTurnstile is hosted under `challenges.cloudflare.com`. Your application will connect to this origin.\n\n## Widget components\n\nEach widget gets its own unique sitekey and secret key pair, and options for configurations.\n\n| Component | Description |\n| - | - |\n| Sitekey | Public key used to invoke the Turnstile widget on your site. |\n| Secret key | Private key used for server-side token validation. |\n| Configurations | Mode, hostnames, appearance settings, and other options. |\n\n## Widget modes\n\nThe available modes for Turnstile widgets are **Managed**, **Non-Interactive**, and **Invisible**.\n\n### Managed mode (recommended)\n\nManaged mode is fully managed by Cloudflare. It automatically chooses the appropriate action based on client-side signals and risk levels. Cloudflare uses the information from the visitor to decide if an interactive challenge should be used.\n\nTurnstile will only require interaction if a further check is necessary to verify that the visitor is human. When an interaction is required, the visitor will be prompted to select a box. There will be no images or text to decipher.\n\nManaged mode is ideal for users who want a simple configuration without needing to fine-tune the widget's behavior.\n\n### Non-Interactive mode\n\nVisitors will see a widget with a loading spinner while the challenges run in their browsers. Unlike managed mode, visitors will never be required or prompted to interact with the widget.\n\nNon-Interactive mode is ideal for users who want to prioritize visitor experience and do not want to add any friction on their website with a Turnstile interaction.\n\n### Invisible mode\n\nInvisible mode is similar to Non-Interactive mode where visitors will never interact with the Turnstile widget. Visitors will also not see a widget or any indication that an invisible browser challenge is in progress.\n\nInvisible mode is ideal for users who want to prioritize visitor and visual experience on their website.\n\n***\n\n## Widget customization\n\n### Sizes\n\nWidgets can be implemented in normal, flexible, or compact sizes.\n\nRefer to [Widget configurations](https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/widget-configurations/) for detailed configuration options and code examples.\n\n### Appearance and themes\n\nTurnstile widgets support multiple appearance modes and themes to match your website's design.\n\nRefer to [Widget configurations](https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/widget-configurations/) for implementation details.\n\n***\n\n## Widget states\n\n### Normal operation states",
+      "language": "unknown"
+    },
+    {
+      "code": "### Error states\n\n| Type | Description |\n| - | - |\n| Unknown error | When an unknown error occurs during the challenge, visitors will encounter this widget state. Visitors can follow the troubleshooting guidelines from the widget or refresh the page to retry the challenge. |\n| Interaction timed out | When the visitor is presented with a checkbox but does not interact with it for an extended period of time. The challenge must be reissued by reloading the page or the widget. |\n| Challenge timed out | When the verification was completed but no further action has been taken, the challenge outcome will no longer be valid. For example, if a Turnstile widget is on a login page and the Turnstile successfully ran, but the visitor did not log in for an extended period of time, the challenge must be reissued by reloading the page or the widget. |\n| Outdated or unsupported browser | Visitors with outdated browsers or unsupported browsers will encounter this widget state. Refer to [Supported browsers](https://developers.cloudflare.com/cloudflare-challenges/reference/supported-browsers/) for more information regarding supported browsers. |\n\n</page>\n\n<page>\n---\ntitle: Implement Turnstile with Google Firebase · Cloudflare Turnstile docs\ndescription: Turnstile is available as an extension with Google's Firebase\n  platform as an App Check provider. You can leverage Cloudflare Turnstile's bot\n  detection and challenge capabilities to ensure that requests to your Firebase\n  backend services are verified and only authentic human visitors can interact\n  with your application.\nlastUpdated: 2025-09-04T15:24:34.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/extensions/google-firebase/\n  md: https://developers.cloudflare.com/turnstile/extensions/google-firebase/index.md\n---\n\nTurnstile is [available as an extension](https://extensions.dev/extensions/cloudflare/cloudflare-turnstile-app-check-provider) with [Google's Firebase](https://firebase.google.com/) platform as an [App Check](https://firebase.google.com/docs/app-check) provider. You can leverage Cloudflare Turnstile's bot detection and challenge capabilities to ensure that requests to your Firebase backend services are verified and only authentic human visitors can interact with your application.\n\nGoogle Firebase is a comprehensive app development platform that provides a variety of tools and services to help developers build, improve, and grow their mobile and web applications.\n\nFirebase App Check helps protect Firebase resources like Cloud Firestore, Realtime Database, Cloud Storage, and Functions from abuse, such as automated fraud attacks and denial of service (DoS) attacks, by ensuring that incoming requests are from legitimate visitors and trusted sources.\n\n## 1. Set up a Google Firebase project\n\n1. Create a Firebase project by going to the [Firebase Console](https://console.firebase.google.com/).\n2. Select **Add Project** and follow the prompts to create a new project.\n3. Add an app to your project by selecting your project.\n4. In the project overview, select **Add App** and choose the platform: **Web**.\n5. [Register your app](https://firebase.google.com/docs/web/setup?hl=en\\&authuser=0#register-app) and follow the guide to get your Firebase configuration.\n\nNote\n\nIt is important to register your web app first to connect it with Turnstile later.\n\n## 2. Set up Cloudflare Turnstile\n\n1. Create a Cloudflare Turnstile site by going to the [Cloudflare Turnstile dashboard](https://dash.cloudflare.com/?to=/:account/turnstile).\n\n2. Create a new widget and get the [sitekey and secret key](https://developers.cloudflare.com/turnstile/get-started/#get-a-sitekey-and-secret-key).\n\n   * The domain you configure with the Turnstile widget should be the domain of your web app.\n   * The [widget mode](https://developers.cloudflare.com/turnstile/concepts/widget/) must be **Invisible**.\n\n## 3. Integrate Firebase App Check with Turnstile\n\n### 3a. Enable App Check in Firebase\n\n1. Go to [Cloudflare Turnstile in the Firebase Extensions hub](https://extensions.dev/extensions/cloudflare/cloudflare-turnstile-app-check-provider).\n2. Install the Cloudflare Turnstile extension to your Firebase project.\n3. Enable [Cloud Functions](https://cloud.google.com/functions?hl=en), [Artifact Registry](https://cloud.google.com/artifact-registry), and [Secret Manager](https://cloud.google.com/security/products/secret-manager?hl=en).\n4. Enter the secret key from Cloudflare Turnstile and your Firebase App ID.\n5. Select **Install extension**.\n\n### 3b. Grant access to the Cloudflare extension\n\n1. Grant access to the Cloudflare extension under the IAM section of your project by selecting **Grant Access** under **View by Principals**.\n2. Select `ext-cloudflare-turnstile` from the dropdown menu.\n3. When filtering the token, select **Service Account Token Creator**.\n\n### 3c. Configure Firebase in your app with Turnstile\n\n1. Create an `index.ts` file.\n\n2. Add your Firebase configuration.",
+      "language": "unknown"
+    },
+    {
+      "code": "### 3d. Verify the App Check token in your web application\n\nTo verify the App Check token in your web application, refer to Firebase's [Token Verification guide](https://firebase.google.com/docs/app-check/custom-resource-backend?hl=en#verification).",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Pages Plugin · Cloudflare Turnstile docs\nlastUpdated: 2025-02-14T19:43:11.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/extensions/pages-plugin/\n  md: https://developers.cloudflare.com/turnstile/extensions/pages-plugin/index.md\n---\n\n\n</page>\n\n<page>\n---\ntitle: Waiting Room Analytics · Cloudflare Turnstile docs\nlastUpdated: 2025-02-14T19:43:11.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/extensions/waiting-room/\n  md: https://developers.cloudflare.com/turnstile/extensions/waiting-room/index.md\n---\n\n\n</page>\n\n<page>\n---\ntitle: Embed the widget · Cloudflare Turnstile docs\ndescription: Learn how to add the Turnstile widget to your webpage using\n  implicit or explicit rendering methods.\nlastUpdated: 2025-12-04T16:35:33.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/\n  md: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/index.md\n---\n\nLearn how to add the Turnstile widget to your webpage using implicit or explicit rendering methods.\n\nChoosing the appropriate rendering method for Turnstile is important and effectively helps you to add it to your website while ensuring optimal performance and user experience. Both implicit and explicit rendering have their own advantages and are suited to different types of web applications. Refer to the table below that highlights the ideal use case for each of these rendering methods:\n\n| Feature | Implicit rendering | Explicit rendering |\n| - | - | - |\n| **Ease of setup** | Simple, minimal code | Requires additional JavaScript |\n| **Control over timing** | Renders automatically on page load | Full control over rendering timing |\n| **Use cases** | Static content | Dynamic or interactive content |\n| **Customization** | Limited to HTML attributes | Extensive via JavaScript API |\n\n## Prerequisites\n\nBefore you begin, you must have:\n\n* A Cloudflare account\n* [A Turnstile widget](https://developers.cloudflare.com/turnstile/get-started/#1-create-your-widget) with a sitekey\n* Access to edit your website's HTML\n* Basic knowledge of HTML and JavaScript\n\n## Process\n\n1. Page load: The Turnstile script loads and scans for elements or waits for programmatic calls.\n2. Widget rendering: Widgets are created and begin running challenges.\n3. Token generation: When a challenge is completed, a token is generated.\n4. Form integration: The token is made available via callbacks or hidden form fields.\n5. Server validation: Your server receives the token and validates it using the Siteverify API.\n\n## Implicit rendering\n\nImplicit rendering automatically scans your HTML for elements with the `cf-turnstile` class and renders widgets without additional JavaScript code. This set up is ideal for static pages where you want the widget to load immediately when the page loads.\n\n### Use cases\n\nCloudflare recommends using implicit rendering on the following scenarios:\n\n* You have simple implementations and want a quick integration.\n* You have static websites with straightforward forms.\n* You want widgets to appear immediately on pageload.\n* You do not need programmatic control of the widget.\n\n### Implementation\n\n#### 1. Add the Turnstile script\n\n**Include the Turnstile Script**: Add the Turnstile JavaScript API to your HTML file within the `<head>` section or just before the closing `</body>` tag.",
+      "language": "unknown"
+    },
+    {
+      "code": "Warning\n\nThe `api.js` file must be fetched from the exact URL shown above. Proxying or caching this file will cause Turnstile to fail when future updates are released.\n\n#### 2. (Optional) Optimize performance with resource hints\n\nAdd resource hints to improve loading performance by establishing early connections to Cloudflare servers. Place this `<link>` tag in your HTML `<head>` section before the Turnstile script.",
+      "language": "unknown"
+    },
+    {
+      "code": "#### 3. Add widget elements\n\nAdd widget containers where you want the challenges to appear on your website.",
+      "language": "unknown"
+    },
+    {
+      "code": "#### 3. Configure with data attributes\n\n[Customize your widgets](https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/widget-configurations/) using data attributes. Insert a `div` element where you want the widget to appear.",
+      "language": "unknown"
+    },
+    {
+      "code": "Once a challenge has been solved, a token is passed to the success callback. This token must be validated against our [Siteverify endpoint](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/).\n\n### Complete implicit rendering examples by use case\n\nBasic login form\n\nTurnstile is often used to protect forms on websites such as login forms or contact forms. You can embed the widget within your `<form>` tag.",
+      "language": "unknown"
+    },
+    {
+      "code": "An invisible input with the name `cf-turnstile-response` is added and will be sent to the server with the other fields.",
+      "language": "unknown"
+    },
+    {
+      "code": "Advanced form with callbacks",
+      "language": "unknown"
+    },
+    {
+      "code": "Multiple widgets with different configurations",
+      "language": "unknown"
+    },
+    {
+      "code": "Automatic form integration\n\nWhen you embed a Turnstile widget inside a `<form>` element, an invisible input field with the name `cf-turnstile-response` is automatically created. This field contains the verification token and gets submitted with your other form data.",
+      "language": "unknown"
+    },
+    {
+      "code": "***\n\n## Explicit rendering\n\nExplicit rendering gives you programmatic control over when and where the widget appears and how the widgets are created using JavaScript functions. This method is suitable for dynamic content, single-page applications(SPAs), or conditional rendering based on user interactions.\n\n### Use cases\n\nCloudflare recommends using explicit rendering on the following scenarios:\n\n* You have dynamic websites and single-page applications (SPAs).\n* You need to control the timing of widget creation.\n* You want to conditionally render the widget based on visitor interactions.\n* You want multiple widgets with different configurations.\n* You have complex applications requiring widget lifecycle management.\n\n### Implementation\n\n#### 1. Add the script to your website with explicit rendering",
+      "language": "unknown"
+    },
+    {
+      "code": "#### 2. Create container elements\n\nCreate containers without the `cf-turnstile` class.",
+      "language": "unknown"
+    },
+    {
+      "code": "#### 3. Render the widgets programmatically\n\nCall `turnstile.render()` when you are ready to create the widget.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Optional calls\n\nAfter rendering the Turnstile widget explicitly, you may need to interact with it based on your application's requirements. Refer to the sections below to manage the widget's state.\n\n#### Reset a widget\n\nTo reset the widget if the given widget timed out or expired, you can use the function:",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Get the response token\n\nRetrieve the current response token at any time:",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Remove a widget\n\nWhen a widget is no longer needed, it can be removed from the page using:",
+      "language": "unknown"
+    },
+    {
+      "code": "This will not call any callback and will remove all related DOM elements.\n\n### Complete explicit rendering examples by use case\n\nBasic explicit implementation",
+      "language": "unknown"
+    },
+    {
+      "code": "Using onload callback",
+      "language": "unknown"
+    },
+    {
+      "code": "Advanced SPA implementation",
+      "language": "unknown"
+    },
+    {
+      "code": "### Widget lifecycle management\n\nExplicit rendering provides full control over the widget lifecycle.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Execution mode\n\nControl when challenges run with execution modes.",
+      "language": "unknown"
+    },
+    {
+      "code": "***\n\n## Performance and user experience optimization\n\nCloudflare recommends that you execute the Turnstile script as early upon the visitor's page entry as possible, so that the verification is complete and the interaction is available once the visitor attempts an action on the page.\n\n***\n\n## Configuration options\n\nBoth implicit and explicit rendering methods support the same configuration options. Refer to the table below for the most commonly used configurations.\n\n| Option | Description | Values |\n| - | - | - |\n| `sitekey` | Your widget's sitekey | Required string |\n| `theme` | Visual theme | `auto`, `light`, `dark` |\n| `size` | Widget size | `normal`, `flexible`, `compact` |\n| `callback` | Success callback | Function |\n| `error-callback` | Error callback | Function |\n| `execution` | When to run the challenge | `render`, `execute` |\n| `appearance` | When the widget is visible | `always`, `execute`, `interaction-only` |\n\nFor a complete list of configuration options, refer to [Widget configurations](https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/widget-configurations/).\n\n***\n\n## Testing\n\nYou can test your Turnstile widget on your webpage without triggering an actual Cloudflare Challenge by using a testing sitekey.\n\nRefer to [Testing](https://developers.cloudflare.com/turnstile/troubleshooting/testing/) for more information.\n\n***\n\n## Limitations\n\nTurnstile is designed to function only on pages using `http://` or `https://` URI schemes. Other protocols, such as `file://`, are not supported for embedding the widget.\n\n***\n\n## Security requirements\n\n* Server-side validation is mandatory. It is critical to enforce Turnstile tokens with the Siteverify API. The Turnstile token could be invalid, expired, or already redeemed. Not verifying the token will leave major vulnerabilities in your implementation. You must call Siteverify to complete your Turnstile configuration. Otherwise, it is incomplete and will result in zeroes for token validation when viewing your metrics in [Turnstile Analytics](https://developers.cloudflare.com/turnstile/turnstile-analytics/).\n\n* Tokens expire after 300 seconds (5 minutes). Each token can only be validated once. Expired or used tokens must be replaced with fresh challenges.\n\n</page>\n\n<page>\n---\ntitle: Mobile implementation · Cloudflare Turnstile docs\ndescription: Turnstile is designed to run in standard browser environments,\n  which includes mobile devices accessing your website through mobile browsers.\nlastUpdated: 2025-12-19T17:29:06.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/get-started/mobile-implementation/\n  md: https://developers.cloudflare.com/turnstile/get-started/mobile-implementation/index.md\n---\n\nTurnstile is designed to run in standard browser environments, which includes mobile devices accessing your website through mobile browsers.\n\nFor native mobile applications, Turnstile can be integrated using WebViews that render your web content containing Turnstile widgets.\n\n***\n\n## WebView integration\n\nWebViews are components that allow native mobile applications to display web content. They embed a browser engine within your native application, enabling you to show web pages, forms, and JavaScript-powered content like Turnstile widgets.\n\n### Requirements\n\nFor Turnstile to function properly in WebView, the following requirements must be met.\n\n#### JavaScript support\n\n* JavaScript execution must be enabled.\n* DOM storage API must be available.\n* Standard web APIs must be accessible.\n\n#### Network access\n\n* Access to `challenges.cloudflare.com`\n* Support for both HTTP and HTTPS connections.\n* Allow connections to `about:blank` and `about:srcdoc`\n\n#### Environment consistency\n\n* Consistent User Agent throughout the session\n* Stable device and browser characteristics\n* No modification to core browser behavior\n\n### Platform-specific implementation\n\n#### Android WebView",
+      "language": "unknown"
+    },
+    {
+      "code": "#### iOS WKWebView (Swift)",
+      "language": "unknown"
+    },
+    {
+      "code": "#### React Native WebView",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Flutter WebView",
+      "language": "unknown"
+    },
+    {
+      "code": "***\n\n## Common implementation issues\n\n### User Agent consistency\n\nChanging the User Agent during a session causes Turnstile challenges to fail because the system relies on consistent browser characteristics to validate the visitor's authenticity. When the User Agent changes mid-session, Turnstile treats this as a potential security risk and rejects the challenge.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "### Content Security Policy (CSP)\n\nStrict [Content Security Policy](https://developers.cloudflare.com/turnstile/reference/content-security-policy/) settings can prevent Turnstile from loading the necessary scripts and making required network connections. This happens when CSP headers or meta tags block access to the domains and resources that Turnstile needs to function properly.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Domain configuration\n\nWebView security restrictions can prevent access to the domains that Turnstile requires for proper operation. Some WebViews are configured to only allow specific domains or block certain types of connections, which can interfere with Turnstile's ability to load challenges and communicate with Cloudflare's servers.\n\nTo resolve this, configure your WebView's allowed origins to include all domains that Turnstile needs:\n\n* `challenges.cloudflare.com`\n* `about:blank`\n* `about:srcdoc`\n* Your own domain(s)\n\nThe exact configuration method varies by platform, but the principle is to explicitly allow network access for these domains.\n\n### Cookie and storage issues\n\nCookies and local storage not persisting between sessions can cause Turnstile to fail because it relies on these mechanisms to maintain state and track visitor behavior. This commonly occurs when WebView storage settings are too restrictive or when the app clears storage between sessions. Ensure that your WebView is configured to properly handle cookies and local storage.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Validate the token · Cloudflare Turnstile docs\ndescription: Learn how to securely validate Turnstile tokens on your server\n  using the Siteverify API.\nlastUpdated: 2025-10-03T20:30:58.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/get-started/server-side-validation/\n  md: https://developers.cloudflare.com/turnstile/get-started/server-side-validation/index.md\n---\n\nLearn how to securely validate Turnstile tokens on your server using the Siteverify API.\n\nMandatory server-side validation\n\nYou must call Siteverify API to complete your Turnstile configuration. The client-side widget alone does not provide protection.\n\nYou must validate tokens on your server because tokens can be forged by attackers, expire after 5 minutes (300 seconds), and are single-use and cannot be validated twice.\n\nClient-side verification alone leaves major security vulnerabilities.\n\n## Process\n\n1. Client generates token: Visitor completes Turnstile challenge on your webpage.\n2. Token sent to server: Form submission includes the Turnstile token.\n3. Server validates token: Your server calls Cloudflare's Siteverify API.\n4. Cloudflare responds: Returns `success` or `failure` and additional data.\n5. Server takes action: Allow or reject the original request based on validation.\n\n## Siteverify API overview",
+      "language": "unknown"
+    },
+    {
+      "code": "### Request format\n\nThe API accepts both `application/x-www-form-urlencoded` and `application/json` requests, but always returns JSON responses.\n\n#### Required parameters\n\n| Parameter | Required | Description |\n| - | - | - |\n| `secret` | Yes | Your widget's secret key from the Cloudflare dashboard |\n| `response` | Yes | The token from the client-side widget |\n| `remoteip` | No | The visitor's IP address |\n| `idempotency_key` | No | UUID for retry protection |\n\n#### Token characteristics\n\n* Maximum length: 2048 characters\n* Validity period: 300 seconds (5 minutes) from generation\n* Single use: Each token can only be validated once\n* Automatic expiry: Tokens automatically expire and cannot be reused\n\nThe validation token issued by Turnstile is valid for five minutes. If a user submits the form after this period, the token is considered expired. In this scenario, the server-side verification API will return a failure, and the `error-codes` field in the response will include `timeout-or-duplicate`.\n\nTo ensure a successful validation, the visitor must initiate the request and submit the token to your backend within the five-minute window. Otherwise, the Turnstile widget needs to be refreshed to generate a new token. This can be done using the `turnstile.reset` function.\n\n***\n\n## Basic validation examples\n\n* Form Data",
+      "language": "unknown"
+    },
+    {
+      "code": "* JSON",
+      "language": "unknown"
+    },
+    {
+      "code": "* PHP",
+      "language": "unknown"
+    },
+    {
+      "code": "* Python",
+      "language": "unknown"
+    },
+    {
+      "code": "* Java",
+      "language": "unknown"
+    },
+    {
+      "code": "* C#",
+      "language": "unknown"
+    },
+    {
+      "code": "***\n\n## Advanced validation techniques",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "***\n\n## API response format\n\n* Successful response",
+      "language": "unknown"
+    },
+    {
+      "code": "* Failed response",
+      "language": "unknown"
+    },
+    {
+      "code": "### Response fields\n\n| Field | Description |\n| - | - |\n| `success` | Boolean indicating if validation was successful |\n| `challenge_ts` | ISO timestamp when the challenge was solved |\n| `hostname` | Hostname where the challenge was served |\n| `error-codes` | Array of error codes (if validation failed) |\n| `action` | Custom action identifier from client-side |\n| `cdata` | Custom data payload from client-side |\n| `metadata.ephemeral_id` | Device fingerprint ID (Enterprise only) |\n\n### Error codes reference\n\n| Error code | Description | Action required |\n| - | - | - |\n| `missing-input-secret` | Secret parameter not provided | Ensure secret key is included |\n| `invalid-input-secret` | Secret key is invalid or expired | Check your secret key in the Cloudflare dashboard |\n| `missing-input-response` | Response parameter was not provided | Ensure token is included |\n| `invalid-input-response` | Token is invalid, malformed, or expired | User should retry the challenge |\n| `bad-request` | Request is malformed | Check request format and parameters |\n| `timeout-or-duplicate` | Token has already been validated | Each token can only be used once |\n| `internal-error` | Internal error occurred | Retry the request |\n\n***\n\n## Implementation",
+      "language": "unknown"
+    },
+    {
+      "code": "***\n\n## Testing\n\nYou can test the dummy token generated with testing sitekey via Siteverify API with the testing secret key. Your production secret keys will reject dummy tokens.\n\nRefer to [Testing](https://developers.cloudflare.com/turnstile/troubleshooting/testing/) for more information.\n\n***\n\n## Best practices\n\n### Security\n\n* Store your secret keys securely. Use environment variables or secure key management.\n* Validate the token on every request. Never trust client-side validation alone.\n* Check additional fields. Validate the action and hostname when specified.\n* Monitor for abuse and log failed validations and unusual patterns.\n* Use HTTPS. Always validate over secure connections.\n* Only call the Siteverify API in your backend environment. If you expose the secret key in the front-end client code to call Siteverify, attackers can bypass the security check. Ensure that your client-side code sends the validation token to your backend, and that your backend is the sole caller of the Siteverify API.\n\n### Performance\n\n* Set reasonable timeouts. Do not wait indefinitely for Siteverify responses.\n* Implement retry logic and handle temporary network issues.\n* Cache validation results for the same token, if it is needed for your flow.\n* Monitor your API latency. Track the Siteverify response time.\n\n### Error handling\n\n* Have fallback behavior for API failures.\n* Use user-friendly messaging. Do not expose internal error details to users.\n* Properly log errors for debugging without exposing secrets.\n* Rate limit to protect against validation flooding.\n\n</page>\n\n<page>\n---\ntitle: Widget management · Cloudflare Turnstile docs\ndescription: \"Refer to the following pages for more information about managing\n  Turnstile widgets:\"\nlastUpdated: 2025-08-13T20:53:06.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/get-started/widget-management/\n  md: https://developers.cloudflare.com/turnstile/get-started/widget-management/index.md\n---\n\nRefer to the following pages for more information about managing Turnstile widgets:\n\n* [Create and manage widgets using the Cloudflare dashboard](https://developers.cloudflare.com/turnstile/get-started/widget-management/dashboard/)\n* [Create and manage widgets using Cloudflare API](https://developers.cloudflare.com/turnstile/get-started/widget-management/api/)\n* [Create and manage widgets using Terraform](https://developers.cloudflare.com/turnstile/get-started/widget-management/terraform/)\n\n</page>\n\n<page>\n---\ntitle: Migrate from hCaptcha · Cloudflare Turnstile docs\ndescription: If you are using hCaptcha today, you can switch seamlessly to\n  Cloudflare Turnstile by following the step-by-step guide below to assist with\n  the upgrade process.\nlastUpdated: 2025-09-04T15:24:34.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/migration/hcaptcha/\n  md: https://developers.cloudflare.com/turnstile/migration/hcaptcha/index.md\n---\n\nIf you are using hCaptcha today, you can switch seamlessly to Cloudflare Turnstile by following the step-by-step guide below to assist with the upgrade process.\n\nTo complete the migration, you must obtain the [sitekey and secret key](https://developers.cloudflare.com/turnstile/get-started/#get-a-sitekey-and-secret-key).\n\n## Client-side integration\n\n1. Update the client-side integration by inserting the Turnstile script snippet in your HTML's `<head>` element:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Locate the `hcaptcha.render()` calls and replace the sitekey with your Turnstile sitekey and the API.",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nTurnstile supports:\n\n* the `render()` call\n* hCaptcha invisible mode with the `execute()` call\n\n## Server-side integration\n\n1. Update the server-side integration by replacing the Siteverify URL.\n\n   Replace: `https://hcaptcha.com/siteverify` with the following:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Replace the `h-captcha-response` input name with the following:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Migrate from reCAPTCHA · Cloudflare Turnstile docs\ndescription: If you are using reCAPTCHA today, you can switch seamlessly to\n  Cloudflare Turnstile by following the step-by-step guide below to assist with\n  the upgrade process.\nlastUpdated: 2025-09-04T15:24:34.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/migration/recaptcha/\n  md: https://developers.cloudflare.com/turnstile/migration/recaptcha/index.md\n---\n\nIf you are using reCAPTCHA today, you can switch seamlessly to Cloudflare Turnstile by following the step-by-step guide below to assist with the upgrade process.\n\nTo complete the migration, you must obtain the [sitekey and secret key](https://developers.cloudflare.com/turnstile/get-started/#get-a-sitekey-and-secret-key).\n\nNote\n\nTurnstile migration is currently compatible up to reCAPTCHA v2.\n\n## Client-side integration\n\n1. Update the client-side integration by inserting the Turnstile script snippet in your HTML's `<head>` element.",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\n   Adding `?compat=recaptcha` runs Turnstile in compatibility mode, which enables the following features:\n\n   * implicit rendering for reCAPTCHA\n   * `g-recaptcha-response` input name for forms\n   * register the Turnstile API as `grecaptcha`\n\n2. Locate the `grecaptcha.render()` calls and replace the sitekey with your Turnstile sitekey.\n\n   Note\n\n   Turnstile supports:\n\n   * the `render()` call\n   * reCAPTCHA v2 invisible mode with the `execute()` call\n\n## Server-side integration\n\nUpdate the server-side integration by replacing the Siteverify URL.\n\nReplace `https://www.google.com/recaptcha/api/siteverify` with the following:",
+      "language": "unknown"
+    },
+    {
+      "code": "Differences to reCAPTCHA's Siteverify\n\nreCAPTCHA supports `GET` requests using query parameters, such as `GET /siteverify?response=<response>&secret=<secret>`.\n\nTurnstile's Siteverify endpoint does *not* support this and only accepts `POST` requests with a FormData or JSON body.\n\nRefer to [server-side validation](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/) for more information.\n\n</page>\n\n<page>\n---\ntitle: Content Security Policy · Cloudflare Turnstile docs\ndescription: The HTTP Content-Security-Policy response header allows website\n  administrators to control resources the user agent is allowed to load for a\n  given page.\nlastUpdated: 2025-08-13T20:53:06.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/reference/content-security-policy/\n  md: https://developers.cloudflare.com/turnstile/reference/content-security-policy/index.md\n---\n\nThe HTTP Content-Security-Policy response header allows website administrators to control resources the user agent is allowed to load for a given page.\n\nWe recommend using the nonce-based approach documented with [CSP3](https://w3c.github.io/webappsec-csp/#framework-directive-source-list). Make sure to include your nonce in the `api.js` script tag and we will handle the rest. Cloudflare Turnstile works with **strict-dynamic**.\n\nAlternatively, add the following values to your CSP header:\n\n* **script-src**: `https://challenges.cloudflare.com`\n* **frame-src**: `https://challenges.cloudflare.com`\n\nWe recommend validating your CSP with [Google's CSP Evaluator](https://csp-evaluator.withgoogle.com/).\n\nNote\n\nYou cannot set your own CSP and/or Referer-Policy via meta tags or [Transform rules](https://developers.cloudflare.com/rules/transform/) in challenge pages.\n\n## Pre-clearance support\n\nIf you are using [Turnstile in pre-clearance mode](https://developers.cloudflare.com/cloudflare-challenges/concepts/clearance/#pre-clearance-support-in-turnstile), Turnstile sets the `cf_clearance` cookie by doing a fetch request to a special endpoint in [`/cdn-cgi/`](https://developers.cloudflare.com/fundamentals/reference/cdn-cgi-endpoint/) of your domain.\n\nFor this request to succeed, your `connect-src` directive must include `'self'`.\n\n</page>\n\n<page>\n---\ntitle: Supported browsers · Cloudflare Turnstile docs\nlastUpdated: 2025-10-03T20:30:58.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/reference/supported-browsers/\n  md: https://developers.cloudflare.com/turnstile/reference/supported-browsers/index.md\n---\n\n\n</page>\n\n<page>\n---\ntitle: Supported languages · Cloudflare Turnstile docs\ndescription: \"Turnstile supports auto (default), which uses the visitor's\n  browser language if it is supported. You can also explicitly set the widget's\n  language using the client-side configuration attribute to one listed on the\n  table below:\"\nlastUpdated: 2025-10-03T20:30:58.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/reference/supported-languages/\n  md: https://developers.cloudflare.com/turnstile/reference/supported-languages/index.md\n---\n\nTurnstile supports `auto` (default), which uses the visitor's browser language if it is supported. You can also explicitly set the widget's language using the [client-side configuration attribute](https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#configurations) to one listed on the table below:\n\nNote\n\nTo request Turnstile support for a language not listed below, you can fill out [this form](https://forms.gle/L8njBeRFCsZAjJ2f7).\n\nYou can also submit feedback on a translation error via [this form](https://forms.gle/Cdz4YTRoagGpVwd7A).\n\n| Language | Language code (4 letters) | Language code (2 letters) |\n| - | - | - |\n| Arabic (Egypt) | `ar-eg` | `ar` |\n| Bulgarian (Bulgaria) | `bg-bg` | `bg` |\n| Chinese (Simplified, China) | `zh-cn` | `zh` |\n| Chinese (Traditional, Taiwan) | `zh-tw` | -- |\n| Croatian (Croatia) | `hr-hr` | `hr` |\n| Czech (Czech Republic) | `cs-cz` | `cs` |\n| Danish (Denmark) | `da-dk` | `da` |\n| Dutch (Netherlands) | `nl-nl` | `nl` |\n| English (United States) | `en-us` | `en` |\n| Farsi (Iran) | `fa-ir` | `fa` |\n| Finnish (Finland) | `fi-fi` | `fi` |\n| French (France) | `fr-fr` | `fr` |\n| German (Germany) | `de-de` | `de` |\n| Greek (Greece) | `el-gr` | `el` |\n| Hebrew (Israel) | `he-il` | `he` |\n| Hindi (India) | `hi-in` | `hi` |\n| Hungarian (Hungary) | `hu-hu` | `hu` |\n| Indonesian (Indonesia) | `id-id` | `id` |\n| Italian (Italy) | `it-it` | `it` |\n| Japanese (Japan) | `ja-jp` | `ja` |\n| Klingon (Qo'noS) | `tlh` | -- |\n| Korean (Korea) | `ko-kr` | `ko` |\n| Lithuanian (Lithuania) | `lt-lt` | `lt` |\n| Malay (Malaysia) | `ms-my` | `ms` |\n| Norwegian Bokmål (Norway) | `nb-no` | `nb` |\n| Polish (Poland) | `pl-pl` | `pl` |\n| Portuguese (Brazil) | `pt-br` | `pt` |\n| Romanian (Romania) | `ro-ro` | `ro` |\n| Russian (Russia) | `ru-ru` | `ru` |\n| Serbian (Bosnia and Herzegovina) | `sr-ba` | `sr` |\n| Slovak (Slovakia) | `sk-sk` | `sk` |\n| Slovenian (Slovenia) | `sl-si` | `sl` |\n| Spanish (Spain) | `es-es` | `es` |\n| Swedish (Sweden) | `sv-se` | `sv` |\n| Tagalog (Philippines) | `tl-ph` | `tl` |\n| Thai (Thailand) | `th-th` | `th` |\n| Turkish (Turkey) | `tr-tr` | `tr` |\n| Ukrainian (Ukraine) | `uk-ua` | `uk` |\n| Vietnamese (Vietnam) | `vi-vn` | `vi` |\n\n</page>\n\n<page>\n---\ntitle: Turnstile Privacy Addendum · Cloudflare Turnstile docs\nlastUpdated: 2025-10-03T20:30:58.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/reference/turnstile-privacy-addendum/\n  md: https://developers.cloudflare.com/turnstile/reference/turnstile-privacy-addendum/index.md\n---\n\n\n</page>\n\n<page>\n---\ntitle: Challenge solve issues · Cloudflare Turnstile docs\nlastUpdated: 2025-09-05T21:19:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/troubleshooting/challenge-solve-issues/\n  md: https://developers.cloudflare.com/turnstile/troubleshooting/challenge-solve-issues/index.md\n---\n\n\n</page>\n\n<page>\n---\ntitle: Client-side errors · Cloudflare Turnstile docs\ndescription: There are instances where Turnstile may encounter problems,\n  invoking the error-callback.\nlastUpdated: 2025-12-19T17:29:06.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/troubleshooting/client-side-errors/\n  md: https://developers.cloudflare.com/turnstile/troubleshooting/client-side-errors/index.md\n---\n\nThere are instances where Turnstile may encounter problems, invoking the `error-callback`.\n\nThese problems can range from network connectivity issues and browser compatibility problems to configuration errors and challenge failures.\n\nWhen errors occur, implementing proper error handling ensures your visitors receive helpful feedback and your application can recover from temporary issues.\n\nRefer to the [Error codes](https://developers.cloudflare.com/turnstile/troubleshooting/client-side-errors/error-codes/) for troubleshooting guidance to address specific error conditions.\n\n## Error handling\n\nThe `error-callback` option for explicitly rendering widgets and the `data-error-callback` attribute for implicit rendering provides a JavaScript callback to handle potential errors that occur.\n\nThis callback mechanism gives you complete control over how errors are presented to visitors and allows you to implement custom recovery strategies tailored to your application's needs.\n\n* Explicit rendering with error callback",
+      "language": "unknown"
+    },
+    {
+      "code": "* Implicit rendering with error callback",
+      "language": "unknown"
+    },
+    {
+      "code": "Specifying an error callback is optional, but recommended for production applications. If no error callback is set, Turnstile will throw a JavaScript exception upon error, which can disrupt your page's functionality and create a poor user experience. By providing an error callback, you can catch these exceptions and handle them.\n\nIf an error callback returns with a non-falsy result, Turnstile will assume that the error callback handled the error accordingly and will not perform any additional error logging. If the error callback returns with a falsy result (including `undefined`), Turnstile will log a warning to the JavaScript console containing the error code, which can be useful for debugging during development.\n\nAn error callback will retrieve an error code as its first parameter. This error code follows a structured format where the first three digits indicate the error family (such as configuration issues, network problems, or challenge failures), and the remaining digits specify the exact error within that family.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Retry\n\nBy default, Turnstile will automatically retry upon encountering a problem, which helps handle transient network issues or temporary service disruptions without requiring user intervention.\n\nThis automatic retry mechanism is useful for [mobile visitors](https://developers.cloudflare.com/turnstile/get-started/mobile-implementation/) who may experience intermittent connectivity or visitors on networks with occasional stability issues.\n\nWhen subsequent failures due to retries are observed, the error callback can be invoked multiple times for the same underlying issue. Your error handling code should account for this possibility to avoid showing duplicate error messages or performing the same recovery action repeatedly.",
+      "language": "unknown"
+    },
+    {
+      "code": "You can adjust the retry behavior by setting the retry value to `never` instead of the default `auto`. This will result in Turnstile not automatically retrying, giving you control over when and how recovery attempts are made. If there is any issue or error verifying the visitor, the widget will not retry and will remain in the respective failure state until you take manual action.",
+      "language": "unknown"
+    },
+    {
+      "code": "You may call `turnstile.reset()` in the corresponding `error-callback` to manually trigger a retry. This approach is useful for when you want to implement custom retry logic, such as exponential backoff, user confirmation before retrying, or different retry strategies based on the specific error encountered.\n\nThe interval between retries for Turnstile can be configured by the `retry-interval` option, allowing you to optimize retry timing for your visitors’ typical network conditions. A longer interval may be more appropriate for visitors on slower or less reliable connections, while shorter intervals work well in environments with typically stable connectivity.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Interactivity\n\nIf the visitor fails to engage with an interactive challenge within a reasonable timeframe, the timeout callback function is triggered. This timeout mechanism prevents challenges from remaining in a pending state indefinitely and ensures that visitors receive feedback when action is required.\n\nFor instance, in a scenario where the Turnstile widget is implemented within a form that may require several minutes to complete, the interactive challenge within the widget becomes outdated if it remains unaddressed for an extended period. Visitors might focus on filling out form fields and overlook the Turnstile challenge, leading to a situation where they attempt to submit the form with an expired or invalid token.\n\nIn such instances, the `timeout-callback` of the widget is activated, enabling the widget to reset itself as needed and provide appropriate guidance. This callback allows you to implement user-friendly timeout handling, such as highlighting the Turnstile widget, displaying a notification, or automatically refreshing the challenge.",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Feedback reports · Cloudflare Turnstile docs\ndescription: When Cloudflare detects that a challenge has failed or the user\n  cannot be verified on a page with Turnstile, the user will encounter an error\n  on the widget and may be asked to send feedback on the issue that they have\n  encountered by choosing one of the options listed.\nlastUpdated: 2025-10-03T20:30:58.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/troubleshooting/feedback-reports/\n  md: https://developers.cloudflare.com/turnstile/troubleshooting/feedback-reports/index.md\n---\n\nWhen Cloudflare detects that a challenge has failed or the user cannot be verified on a page with Turnstile, the user will encounter an [error](https://developers.cloudflare.com/turnstile/concepts/widget/#error-states) on the widget and may be asked to send feedback on the issue that they have encountered by choosing one of the options listed.\n\nWhen debugging or submitting a feedback report for an unresolved issue, you must provide the Ray ID or QR code associated with the challenge. These identifiers are essential for Cloudflare Support to trace the specific event.\n\nTo obtain these identifiers:\n\n1. Ray ID: Find the Ray ID displayed at the end of the Challenge Page. The RayID is collected by the feedback report.\n2. QR Code: Click the success, failure, or spinner logo on the Turnstile widget four times. This action will reveal the unique QR code for that challenge instance.\n\nNote\n\nCurrently, feedback submitted via the feedback form is sent directly to Cloudflare and used for improvements on the Turnstile user experience.\n\nAvailable options include:\n\n* The widget always fails\n* The widget sometimes fails\n* The widget is too slow\n* The widget keeps looping\n* Other\n\nUsers can provide additional data in the text field and then select **Submit**.\n\n</page>\n\n<page>\n---\ntitle: Rotate secret key · Cloudflare Turnstile docs\ndescription: \"You can rotate the secret key using the following steps:\"\nlastUpdated: 2025-09-04T15:24:34.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/troubleshooting/rotate-secret-key/\n  md: https://developers.cloudflare.com/turnstile/troubleshooting/rotate-secret-key/index.md\n---\n\nYou can rotate the secret key using the following steps:\n\n1. In the Cloudflare dashboard, go to the **Turnstile** page.\n\n   [Go to **Turnstile**](https://dash.cloudflare.com/?to=/:account/turnstile)\n\n2. [Create a new Turnstile widget](https://developers.cloudflare.com/turnstile/get-started/).\n\n3. In the widget overview, select **Settings** > **Rotate Secret Key**.\n\n4. Configure your website to use the new secret key.\n\nThe rotation occurs over the course of two hours. During this time, both the old secret key and the new secret key are valid. This allows you to swap the secret key while avoiding any issues with your website.\n\n</page>\n\n<page>\n---\ntitle: Test your Turnstile implementation · Cloudflare Turnstile docs\ndescription: Use dummy sitekeys and secret keys to test your Turnstile\n  implementation without triggering real challenges that would interfere with\n  automated testing suites.\nlastUpdated: 2025-11-17T17:38:40.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/turnstile/troubleshooting/testing/\n  md: https://developers.cloudflare.com/turnstile/troubleshooting/testing/index.md\n---\n\nUse dummy sitekeys and secret keys to test your Turnstile implementation without triggering real challenges that would interfere with automated testing suites.\n\nAutomated testing suites (like Selenium, Cypress, or Playwright) are detected as bots by Turnstile, which can cause:\n\n* Tests to fail when Turnstile blocks automated browsers\n* Unpredictable test results due to challenge variations\n* Interference with form submission testing\n* Difficulty testing complete user flows\n\nDummy keys solve this by providing predictable, controlled responses that work with automated testing tools.\n\n## Test sitekeys\n\n| Sitekey | Behavior | Widget Type | Use case |\n| - | - | - | - |\n| `1x00000000000000000000AA` | Always passes | Visible | Test successful form submissions |\n| `2x00000000000000000000AB` | Always fails | Visible | Test error handling and retry logic |\n| `1x00000000000000000000BB` | Always passes | Invisible | Test invisible widget success flows |\n| `2x00000000000000000000BB` | Always fails | Invisible | Test invisible widget error handling |\n| `3x00000000000000000000FF` | Forces interactive challenge | Visible | Test user interaction scenarios |\n\n## Test secret keys\n\nUse these secret keys for server-side validation testing:\n\n| Secret key | Behavior | Use case |\n| - | - | - |\n| `1x0000000000000000000000000000000AA` | Always passes validation | Test successful token validation |\n| `2x0000000000000000000000000000000AA` | Always fails validation | Test validation error handling |\n| `3x0000000000000000000000000000000AA` | Returns \"token already spent\" error | Test duplicate token handling |\n\n***\n\n## Implementation\n\n### Local development\n\nTest keys work on any domain, including:\n\n* `localhost`\n* `127.0.0.1`\n* `0.0.0.0`\n* Any development domain\n\nCloudflare recommends that sitekeys used in production do not allow local domains (`localhost` or `127.0.0.1`), but users can choose to add local domains to the list of allowed domains under [Hostname Management](https://developers.cloudflare.com/turnstile/additional-configuration/hostname-management/). Dummy sitekeys can be used from any domain, including on `localhost`.\n\n### Client-side testing\n\nReplace your production sitekey with a test sitekey.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Server-side testing\n\nReplace your production secret key with a test secret key.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Environment configuration\n\nSet up different keys for different environments.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Process",
+      "id": "process"
+    },
+    {
+      "level": "h2",
+      "text": "Implementation",
+      "id": "implementation"
+    },
+    {
+      "level": "h3",
+      "text": "Enable Ephemeral IDs",
+      "id": "enable-ephemeral-ids"
+    },
+    {
+      "level": "h3",
+      "text": "Access Ephemeral IDs",
+      "id": "access-ephemeral-ids"
+    },
+    {
+      "level": "h2",
+      "text": "Availability",
+      "id": "availability"
+    },
+    {
+      "level": "h2",
+      "text": "Hostname requirements",
+      "id": "hostname-requirements"
+    },
+    {
+      "level": "h3",
+      "text": "Standard configuration",
+      "id": "standard-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Hostname format requirements",
+      "id": "hostname-format-requirements"
+    },
+    {
+      "level": "h3",
+      "text": "Subdomain behavior",
+      "id": "subdomain-behavior"
+    },
+    {
+      "level": "h2",
+      "text": "Add hostnames",
+      "id": "add-hostnames"
+    },
+    {
+      "level": "h2",
+      "text": "Limitations",
+      "id": "limitations"
+    },
+    {
+      "level": "h2",
+      "text": "Implementation",
+      "id": "implementation"
+    },
+    {
+      "level": "h3",
+      "text": "Enable Offlabel",
+      "id": "enable-offlabel"
+    },
+    {
+      "level": "h3",
+      "text": "Create new widgets with Offlabel",
+      "id": "create-new-widgets-with-offlabel"
+    },
+    {
+      "level": "h3",
+      "text": "Verification",
+      "id": "verification"
+    },
+    {
+      "level": "h2",
+      "text": "Availability",
+      "id": "availability"
+    },
+    {
+      "level": "h2",
+      "text": "Widget components",
+      "id": "widget-components"
+    },
+    {
+      "level": "h2",
+      "text": "Widget modes",
+      "id": "widget-modes"
+    },
+    {
+      "level": "h3",
+      "text": "Managed mode (recommended)",
+      "id": "managed-mode-(recommended)"
+    },
+    {
+      "level": "h3",
+      "text": "Non-Interactive mode",
+      "id": "non-interactive-mode"
+    },
+    {
+      "level": "h3",
+      "text": "Invisible mode",
+      "id": "invisible-mode"
+    },
+    {
+      "level": "h2",
+      "text": "Widget customization",
+      "id": "widget-customization"
+    },
+    {
+      "level": "h3",
+      "text": "Sizes",
+      "id": "sizes"
+    },
+    {
+      "level": "h3",
+      "text": "Appearance and themes",
+      "id": "appearance-and-themes"
+    },
+    {
+      "level": "h2",
+      "text": "Widget states",
+      "id": "widget-states"
+    },
+    {
+      "level": "h3",
+      "text": "Normal operation states",
+      "id": "normal-operation-states"
+    },
+    {
+      "level": "h3",
+      "text": "Error states",
+      "id": "error-states"
+    },
+    {
+      "level": "h2",
+      "text": "1. Set up a Google Firebase project",
+      "id": "1.-set-up-a-google-firebase-project"
+    },
+    {
+      "level": "h2",
+      "text": "2. Set up Cloudflare Turnstile",
+      "id": "2.-set-up-cloudflare-turnstile"
+    },
+    {
+      "level": "h2",
+      "text": "3. Integrate Firebase App Check with Turnstile",
+      "id": "3.-integrate-firebase-app-check-with-turnstile"
+    },
+    {
+      "level": "h3",
+      "text": "3a. Enable App Check in Firebase",
+      "id": "3a.-enable-app-check-in-firebase"
+    },
+    {
+      "level": "h3",
+      "text": "3b. Grant access to the Cloudflare extension",
+      "id": "3b.-grant-access-to-the-cloudflare-extension"
+    },
+    {
+      "level": "h3",
+      "text": "3c. Configure Firebase in your app with Turnstile",
+      "id": "3c.-configure-firebase-in-your-app-with-turnstile"
+    },
+    {
+      "level": "h3",
+      "text": "3d. Verify the App Check token in your web application",
+      "id": "3d.-verify-the-app-check-token-in-your-web-application"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Process",
+      "id": "process"
+    },
+    {
+      "level": "h2",
+      "text": "Implicit rendering",
+      "id": "implicit-rendering"
+    },
+    {
+      "level": "h3",
+      "text": "Use cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h3",
+      "text": "Implementation",
+      "id": "implementation"
+    },
+    {
+      "level": "h3",
+      "text": "Complete implicit rendering examples by use case",
+      "id": "complete-implicit-rendering-examples-by-use-case"
+    },
+    {
+      "level": "h2",
+      "text": "Explicit rendering",
+      "id": "explicit-rendering"
+    },
+    {
+      "level": "h3",
+      "text": "Use cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h3",
+      "text": "Implementation",
+      "id": "implementation"
+    },
+    {
+      "level": "h3",
+      "text": "Optional calls",
+      "id": "optional-calls"
+    },
+    {
+      "level": "h3",
+      "text": "Complete explicit rendering examples by use case",
+      "id": "complete-explicit-rendering-examples-by-use-case"
+    },
+    {
+      "level": "h3",
+      "text": "Widget lifecycle management",
+      "id": "widget-lifecycle-management"
+    },
+    {
+      "level": "h3",
+      "text": "Execution mode",
+      "id": "execution-mode"
+    },
+    {
+      "level": "h2",
+      "text": "Performance and user experience optimization",
+      "id": "performance-and-user-experience-optimization"
+    },
+    {
+      "level": "h2",
+      "text": "Configuration options",
+      "id": "configuration-options"
+    },
+    {
+      "level": "h2",
+      "text": "Testing",
+      "id": "testing"
+    },
+    {
+      "level": "h2",
+      "text": "Limitations",
+      "id": "limitations"
+    },
+    {
+      "level": "h2",
+      "text": "Security requirements",
+      "id": "security-requirements"
+    },
+    {
+      "level": "h2",
+      "text": "WebView integration",
+      "id": "webview-integration"
+    },
+    {
+      "level": "h3",
+      "text": "Requirements",
+      "id": "requirements"
+    },
+    {
+      "level": "h3",
+      "text": "Platform-specific implementation",
+      "id": "platform-specific-implementation"
+    },
+    {
+      "level": "h2",
+      "text": "Common implementation issues",
+      "id": "common-implementation-issues"
+    },
+    {
+      "level": "h3",
+      "text": "User Agent consistency",
+      "id": "user-agent-consistency"
+    },
+    {
+      "level": "h3",
+      "text": "Content Security Policy (CSP)",
+      "id": "content-security-policy-(csp)"
+    },
+    {
+      "level": "h3",
+      "text": "Domain configuration",
+      "id": "domain-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Cookie and storage issues",
+      "id": "cookie-and-storage-issues"
+    },
+    {
+      "level": "h2",
+      "text": "Process",
+      "id": "process"
+    },
+    {
+      "level": "h2",
+      "text": "Siteverify API overview",
+      "id": "siteverify-api-overview"
+    },
+    {
+      "level": "h3",
+      "text": "Request format",
+      "id": "request-format"
+    },
+    {
+      "level": "h2",
+      "text": "Basic validation examples",
+      "id": "basic-validation-examples"
+    },
+    {
+      "level": "h2",
+      "text": "Advanced validation techniques",
+      "id": "advanced-validation-techniques"
+    },
+    {
+      "level": "h2",
+      "text": "API response format",
+      "id": "api-response-format"
+    },
+    {
+      "level": "h3",
+      "text": "Response fields",
+      "id": "response-fields"
+    },
+    {
+      "level": "h3",
+      "text": "Error codes reference",
+      "id": "error-codes-reference"
+    },
+    {
+      "level": "h2",
+      "text": "Implementation",
+      "id": "implementation"
+    },
+    {
+      "level": "h2",
+      "text": "Testing",
+      "id": "testing"
+    },
+    {
+      "level": "h2",
+      "text": "Best practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h3",
+      "text": "Security",
+      "id": "security"
+    },
+    {
+      "level": "h3",
+      "text": "Performance",
+      "id": "performance"
+    },
+    {
+      "level": "h3",
+      "text": "Error handling",
+      "id": "error-handling"
+    },
+    {
+      "level": "h2",
+      "text": "Client-side integration",
+      "id": "client-side-integration"
+    },
+    {
+      "level": "h2",
+      "text": "Server-side integration",
+      "id": "server-side-integration"
+    },
+    {
+      "level": "h2",
+      "text": "Client-side integration",
+      "id": "client-side-integration"
+    },
+    {
+      "level": "h2",
+      "text": "Server-side integration",
+      "id": "server-side-integration"
+    },
+    {
+      "level": "h2",
+      "text": "Pre-clearance support",
+      "id": "pre-clearance-support"
+    },
+    {
+      "level": "h2",
+      "text": "Error handling",
+      "id": "error-handling"
+    },
+    {
+      "level": "h2",
+      "text": "Retry",
+      "id": "retry"
+    },
+    {
+      "level": "h2",
+      "text": "Interactivity",
+      "id": "interactivity"
+    },
+    {
+      "level": "h2",
+      "text": "Test sitekeys",
+      "id": "test-sitekeys"
+    },
+    {
+      "level": "h2",
+      "text": "Test secret keys",
+      "id": "test-secret-keys"
+    },
+    {
+      "level": "h2",
+      "text": "Implementation",
+      "id": "implementation"
+    },
+    {
+      "level": "h3",
+      "text": "Local development",
+      "id": "local-development"
+    },
+    {
+      "level": "h3",
+      "text": "Client-side testing",
+      "id": "client-side-testing"
+    },
+    {
+      "level": "h3",
+      "text": "Server-side testing",
+      "id": "server-side-testing"
+    },
+    {
+      "level": "h3",
+      "text": "Environment configuration",
+      "id": "environment-configuration"
+    }
+  ],
+  "url": "llms-txt#test-load-distribution-with-health-monitoring",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Create CA certificate bundle",
+  "content": "npx wrangler cert upload certificate-authority --ca-cert your-ca-cert.pem --name your-custom-ca-name",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-ca-certificate-bundle",
+  "links": []
+}

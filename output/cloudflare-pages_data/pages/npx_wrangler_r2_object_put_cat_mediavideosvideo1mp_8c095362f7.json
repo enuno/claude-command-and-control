@@ -1,0 +1,843 @@
+{
+  "title": "npx wrangler r2 object put cat-media/videos/video1.mp4 -f ~/Downloads/videos/video1.mp4",
+  "content": "jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"r2_buckets\": [\n      {\n        \"binding\": \"MEDIA\",\n        \"bucket_name\": \"cat-media\"\n      }\n    ]\n  }\n  toml\n  [[r2_buckets]]\n  binding = \"MEDIA\"\n  bucket_name = \"cat-media\"\n  plaintext\n.\n├── functions\n│   └── media\n│       └── [[all]].js\n├── public\n│   ├── index.html\n│   ├── static\n│   │   ├── favicon.ico\n│   │   └── icon.png\n│   └── style.css\n└── wrangler.toml\njs\nexport async function onRequestGet(ctx) {\n  const path = new URL(ctx.request.url).pathname.replace(\"/media/\", \"\");\n  const file = await ctx.env.MEDIA.get(path);\n  if (!file) return new Response(null, { status: 404 });\n  return new Response(file.body, {\n    headers: { \"Content-Type\": file.httpMetadata.contentType },\n  });\n}\nhtml\n<!doctype html>\n<html lang=\"en\">\n  <body>\n    <h1>Awesome Cat Blog! 😺</h1>\n    <p>Today's post:</p>\n    <video width=\"320\" controls>\n      <source src=\"/media/videos/video1.mp4\" type=\"video/mp4\" />\n    </video>\n    <p>Yesterday's post:</p>\n    <img src=\"/media/images/cat1.jpg\" width=\"320\" />\n  </body>\n</html>\nsh\nnpx wrangler deploy\nbash\nnpx wrangler pipelines create my-pipeline \\\n  --sql \"INSERT INTO my_sink SELECT * FROM my_stream\"\nbash\nnpx wrangler pipelines create my-pipeline \\\n  --sql-file pipeline.sql\nbash\nnpx wrangler pipelines setup\nsql\nINSERT INTO my_sink SELECT * FROM my_stream\nsql\nINSERT INTO my_sink\nSELECT * FROM my_stream\nWHERE event_type = 'purchase' AND amount > 100\nsql\nINSERT INTO my_sink\nSELECT user_id, event_type, timestamp, amount\nFROM my_stream\nsql\nINSERT INTO my_sink\nSELECT\n  user_id,\n  UPPER(event_type) as event_type,\n  timestamp,\n  amount * 1.1 as amount_with_tax\nFROM my_stream\nbash\nnpx wrangler pipelines get <PIPELINE_ID>\nbash\nnpx wrangler pipelines list\nbash\nnpx wrangler pipelines delete <PIPELINE_ID>\nbash\n   npx wrangler pipelines setup\n   sh\n  npx wrangler pipelines setup\n  sh\n  pnpm wrangler pipelines setup\n  sh\n  yarn wrangler pipelines setup\n  sh\n  npx wrangler pipelines create [PIPELINE]\n  sh\n  pnpm wrangler pipelines create [PIPELINE]\n  sh\n  yarn wrangler pipelines create [PIPELINE]\n  sh\n  npx wrangler pipelines list\n  sh\n  pnpm wrangler pipelines list\n  sh\n  yarn wrangler pipelines list\n  sh\n  npx wrangler pipelines get [PIPELINE]\n  sh\n  pnpm wrangler pipelines get [PIPELINE]\n  sh\n  yarn wrangler pipelines get [PIPELINE]\n  sh\n  npx wrangler pipelines update [PIPELINE]\n  sh\n  pnpm wrangler pipelines update [PIPELINE]\n  sh\n  yarn wrangler pipelines update [PIPELINE]\n  sh\n  npx wrangler pipelines delete [PIPELINE]\n  sh\n  pnpm wrangler pipelines delete [PIPELINE]\n  sh\n  yarn wrangler pipelines delete [PIPELINE]\n  sh\n  npx wrangler pipelines streams create [STREAM]\n  sh\n  pnpm wrangler pipelines streams create [STREAM]\n  sh\n  yarn wrangler pipelines streams create [STREAM]\n  sh\n  npx wrangler pipelines streams list\n  sh\n  pnpm wrangler pipelines streams list\n  sh\n  yarn wrangler pipelines streams list\n  sh\n  npx wrangler pipelines streams get [STREAM]\n  sh\n  pnpm wrangler pipelines streams get [STREAM]\n  sh\n  yarn wrangler pipelines streams get [STREAM]\n  sh\n  npx wrangler pipelines streams delete [STREAM]\n  sh\n  pnpm wrangler pipelines streams delete [STREAM]\n  sh\n  yarn wrangler pipelines streams delete [STREAM]\n  sh\n  npx wrangler pipelines sinks create [SINK]\n  sh\n  pnpm wrangler pipelines sinks create [SINK]\n  sh\n  yarn wrangler pipelines sinks create [SINK]\n  sh\n  npx wrangler pipelines sinks list\n  sh\n  pnpm wrangler pipelines sinks list\n  sh\n  yarn wrangler pipelines sinks list\n  sh\n  npx wrangler pipelines sinks get [SINK]\n  sh\n  pnpm wrangler pipelines sinks get [SINK]\n  sh\n  yarn wrangler pipelines sinks get [SINK]\n  sh\n  npx wrangler pipelines sinks delete [SINK]\n  sh\n  pnpm wrangler pipelines sinks delete [SINK]\n  sh\n  yarn wrangler pipelines sinks delete [SINK]\n  bash\nnpx wrangler pipelines sinks create <SINK_NAME> \\\n  --type r2 \\\n  --bucket my-bucket \\\nbash\nnpx wrangler pipelines setup\nbash\nnpx wrangler pipelines sinks get <SINK_ID>\nbash\nnpx wrangler pipelines sinks list\nbash\nnpx wrangler pipelines sinks delete <SINK_ID>\nsql\n[WITH with_query [, ...]]\nSELECT select_expr [, ...]\nFROM from_item\n[WHERE condition]\nsql\nWITH query_name AS (subquery) [, ...]\nsql\nWITH filtered_events AS\n    (SELECT user_id, event_type, amount\n        FROM user_events WHERE amount > 50)\nSELECT user_id, amount * 1.1 as amount_with_tax\nFROM filtered_events\nWHERE event_type = 'purchase';\nsql\nSELECT select_expr [, ...]\nsql\n-- Select specific columns\nSELECT user_id, event_type, amount FROM events\n\n-- Use expressions and aliases\nSELECT\n    user_id,\n    amount * 1.1 as amount_with_tax,\n    UPPER(event_type) as event_type_upper\nFROM events\n\n-- Select all columns\nSELECT * FROM events\nsql\nFROM from_item\nsql\nSELECT e.user_id, e.amount\nFROM user_events e\nWHERE e.event_type = 'purchase'\nsql\nWHERE condition\nsql\n-- Filter by field value\nSELECT * FROM events WHERE event_type = 'purchase'\n\n-- Multiple conditions\nSELECT * FROM events\nWHERE event_type = 'purchase' AND amount > 50\n\n-- String operations\nSELECT * FROM events\nWHERE user_id LIKE 'user_%'\n\n-- Null checks\nSELECT * FROM events\nWHERE description IS NOT NULL\nsql\nSELECT\n    UNNEST([1, 2, 3]) as numbers\nFROM events;\nplaintext\n+---------+\n| numbers |\n+---------+\n|       1 |\n|       2 |\n|       3 |\n+---------+\nsql\nSELECT [1, 2, 3] as numbers\nsql\nSELECT struct('user123', 'purchase', 29.99) as event_data FROM events\nbash\nnpx wrangler pipelines streams create <STREAM_NAME>\nbash\nnpx wrangler pipelines setup\nbash\nnpx wrangler pipelines streams create my-stream --schema-file schema.json\njson\n{\n  \"fields\": [\n    {\n      \"name\": \"user_id\",\n      \"type\": \"string\",\n      \"required\": true\n    },\n    {\n      \"name\": \"amount\",\n      \"type\": \"float64\",\n      \"required\": false\n    },\n    {\n      \"name\": \"tags\",\n      \"type\": \"list\",\n      \"required\": false,\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    {\n      \"name\": \"metadata\",\n      \"type\": \"struct\",\n      \"required\": false,\n      \"fields\": [\n        {\n          \"name\": \"source\",\n          \"type\": \"string\",\n          \"required\": false\n        },\n        {\n          \"name\": \"priority\",\n          \"type\": \"int32\",\n          \"required\": false\n        }\n      ]\n    }\n  ]\n}\nbash\nnpx wrangler pipelines streams get <STREAM_ID>\nbash\nnpx wrangler pipelines streams list\nbash\nnpx wrangler pipelines streams delete <STREAM_ID>\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"pipelines\": [\n      {\n        \"pipeline\": \"<STREAM_ID>\",\n        \"binding\": \"STREAM\"\n      }\n    ]\n  }\n  toml\n  [[pipelines]]\n  pipeline = \"<STREAM_ID>\"\n  binding = \"STREAM\"\n  js\n  export default {\n    async fetch(request, env, ctx) {\n      const event = {\n        user_id: \"12345\",\n        event_type: \"purchase\",\n        product_id: \"widget-001\",\n        amount: 29.99,\n      };\n\nawait env.STREAM.send([event]);\n\nreturn new Response(\"Event sent\");\n    },\n  };\n  ts\n  export default {\n    async fetch(request, env, ctx): Promise<Response> {\n      const event = {\n        user_id: \"12345\",\n        event_type: \"purchase\",\n        product_id: \"widget-001\",\n        amount: 29.99\n      };\n\nawait env.STREAM.send([event]);\n\nreturn new Response('Event sent');\n      },\n\n} satisfies ExportedHandler<Env>;\n  plaintext\nhttps://{stream-id}.ingest.cloudflare.com\nbash\nnpx wrangler pipelines streams get <STREAM_ID>\nbash\ncurl -X POST https://{stream-id}.ingest.cloudflare.com \\\n  -H \"Content-Type: application/json\" \\\n  -d '[\n    {\n      \"user_id\": \"12345\",\n      \"event_type\": \"purchase\",\n      \"product_id\": \"widget-001\",\n      \"amount\": 29.99\n    }\n  ]'\nbash\ncurl -X POST https://{stream-id}.ingest.cloudflare.com \\\n  -H \"Content-Type: application/json\" \\\n  -H \"Authorization: Bearer YOUR_API_TOKEN\" \\\n  -d '[{\"event\": \"test\"}]'\nsh\nmkdir addsite-cloudflare\ncd addsite-cloudflare\nsh\npulumi login\nsh\n  pulumi new javascript --name addsite-cloudflare --yes\n  # wait a few seconds while the project is initialized\n  sh\n  pulumi new typescript --name addsite-cloudflare --yes\n  # wait a few seconds while the project is initialized\n  sh\n  pulumi new python --name addsite-cloudflare --yes\n  # wait a few seconds while the project is initialized\n  sh\n  pulumi new go --name addsite-cloudflare --yes\n  # wait a few seconds while the project is initialized\n  sh\n  pulumi new java --name addsite-cloudflare --yes\n  # wait a few seconds while the project is initialized\n  sh\n  pulumi new csharp --name addsite-cloudflare --yes\n  # wait a few seconds while the project is initialized\n  sh\n  pulumi new yaml --name addsite-cloudflare --yes\n  sh\npulumi up --yes",
+  "code_samples": [
+    {
+      "code": "## Bind R2 to Pages\n\nTo bind the R2 bucket we have created to the cat blog, we need to update the Wrangler configuration.\n\nOpen the [Wrangler configuration file](https://developers.cloudflare.com/pages/functions/wrangler-configuration/), and add the following binding to the file. `bucket_name` should be the exact name of the bucket created earlier, while `binding` can be any custom name referring to the R2 resource:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nNote: The keyword `ASSETS` is reserved and cannot be used as a resource binding.\n\nSave the [Wrangler configuration file](https://developers.cloudflare.com/pages/functions/wrangler-configuration/), and we are ready to move on to the last step.\n\nAlternatively, you can add a binding to your Pages project on the dashboard by navigating to the project’s *Settings* tab > *Functions* > *R2 bucket bindings*.\n\n## Serve R2 Assets From Pages\n\nThe last step involves serving media assets from R2 on the blog. To do that, we will create a function to handle requests for media files.\n\nIn the project folder, create a *functions* directory. Then, create a *media* subdirectory and a file named `[[all]].js` in it. All HTTP requests to `/media` will be routed to this file.\n\nAfter creating the folders and JavaScript file, the blog directory structure should look like:",
+      "language": "unknown"
+    },
+    {
+      "code": "Finally, we will add a handler function to `[[all]].js`. This function receives all media requests, and returns the corresponding file asset from R2:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Deploy the blog\n\nBefore deploying the changes made so far to our cat blog, let us add a few new posts to `index.html`. These posts depend on media assets served from R2:",
+      "language": "unknown"
+    },
+    {
+      "code": "With all the files saved, open a new terminal window to deploy the app:",
+      "language": "unknown"
+    },
+    {
+      "code": "Once deployed, media assets are fetched and served from the R2 bucket.\n\n![Deployed App](https://developers.cloudflare.com/images/pages/tutorials/pages-r2/deployed.gif)\n\n## **Related resources**\n\n* [Learn how function routing works in Pages.](https://developers.cloudflare.com/pages/functions/routing/)\n* [Learn how to create public R2 buckets](https://developers.cloudflare.com/r2/buckets/public-buckets/).\n* [Learn how to use R2 from Workers](https://developers.cloudflare.com/r2/api/workers/workers-api-usage/).\n\n</page>\n\n<page>\n---\ntitle: Manage pipelines · Cloudflare Pipelines Docs\ndescription: Create, configure, and manage SQL transformations between streams and sinks\nlastUpdated: 2025-11-17T14:08:01.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pipelines/pipelines/manage-pipelines/\n  md: https://developers.cloudflare.com/pipelines/pipelines/manage-pipelines/index.md\n---\n\nLearn how to:\n\n* Create pipelines with SQL transformations\n* View pipeline configuration and SQL\n* Delete pipelines when no longer needed\n\n## Create a pipeline\n\nPipelines execute SQL statements that define how data flows from streams to sinks.\n\n### Dashboard\n\n1. In the Cloudflare dashboard, go to the **Pipelines** page.\n\n   [Go to **Pipelines**](https://dash.cloudflare.com/?to=/:account/pipelines/overview)\n\n2. Select **Create Pipeline** to launch the pipeline creation wizard.\n\n3. Follow the wizard to configure your stream, sink, and SQL transformation.\n\n### Wrangler CLI\n\nTo create a pipeline, run the [`pipelines create`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-create) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "You can also provide SQL from a file:",
+      "language": "unknown"
+    },
+    {
+      "code": "Alternatively, to use the interactive setup wizard that helps you configure a stream, sink, and pipeline, run the [`pipelines setup`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-setup) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "### SQL transformations\n\nPipelines support SQL statements for data transformation. For complete syntax, supported functions, and data types, see the [SQL reference](https://developers.cloudflare.com/pipelines/sql-reference/).\n\nCommon patterns include:\n\n#### Basic data flow\n\nTransfer all data from stream to sink:",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Filtering events\n\nFilter events based on conditions:",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Selecting specific fields\n\nChoose only the fields you need:",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Transforming data\n\nApply transformations to fields:",
+      "language": "unknown"
+    },
+    {
+      "code": "## View pipeline configuration\n\n### Dashboard\n\n1. In the Cloudflare dashboard, go to the **Pipelines** page.\n\n2. Select a pipeline to view its SQL transformation, connected streams/sinks, and associated metrics.\n\n### Wrangler CLI\n\nTo view a specific pipeline, run the [`pipelines get`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-get) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "To list all pipelines in your account, run the [`pipelines list`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-list) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Delete a pipeline\n\nDeleting a pipeline stops data flow from the connected stream to sink.\n\n### Dashboard\n\n1. In the Cloudflare dashboard, go to the **Pipelines** page.\n\n2. Select the pipeline you want to delete. 3. In the **Settings** tab, and select **Delete**.\n\n### Wrangler CLI\n\nTo delete a pipeline, run the [`pipelines delete`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-delete) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "Warning\n\nDeleting a pipeline immediately stops data flow between the stream and sink.\n\n## Limitations\n\nPipeline SQL cannot be modified after creation. To change the SQL transformation, you must delete and recreate the pipeline.\n\n</page>\n\n<page>\n---\ntitle: Legacy pipelines · Cloudflare Pipelines Docs\ndescription: Legacy pipelines, those created before September 25, 2025 via the\n  legacy API, are on a deprecation path.\nlastUpdated: 2025-09-25T04:07:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pipelines/reference/legacy-pipelines/\n  md: https://developers.cloudflare.com/pipelines/reference/legacy-pipelines/index.md\n---\n\nLegacy pipelines, those created before September 25, 2025 via the legacy API, are on a deprecation path.\n\nTo check if your pipelines are legacy pipelines, view them in the dashboard under **Pipelines** > **Pipelines** or run the [`pipelines list`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-list) command in [Wrangler](https://developers.cloudflare.com/workers/wrangler/). Legacy pipelines are labeled \"legacy\" in both locations.\n\nNew pipelines offer SQL transformations, multiple output formats, and improved architecture.\n\n## Notable changes\n\n* New pipelines support SQL transformations for data processing.\n* New pipelines write to JSON, Parquet, and Apache Iceberg formats instead of JSON only.\n* New pipelines separate streams, pipelines, and sinks into distinct resources.\n* New pipelines support optional structured schemas with validation.\n* New pipelines offer configurable rolling policies and customizable partitioning.\n\n## Moving to new pipelines\n\nLegacy pipelines will continue to work until Pipelines is Generally Available, but new features and improvements are only available in the new pipeline architecture. To migrate:\n\n1. Create a new pipeline using the interactive setup:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Configure your new pipeline with the desired streams, SQL transformations, and sinks.\n\n3. Update your applications to send data to the new stream endpoints.\n\n4. Once verified, delete your legacy pipeline.\n\nFor detailed guidance, refer to the [getting started guide](https://developers.cloudflare.com/pipelines/getting-started/).\n\n</page>\n\n<page>\n---\ntitle: Wrangler commands · Cloudflare Pipelines Docs\ndescription: Interactive setup for a complete pipeline\nlastUpdated: 2025-11-13T15:25:17.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pipelines/reference/wrangler-commands/\n  md: https://developers.cloudflare.com/pipelines/reference/wrangler-commands/index.md\n---\n\n## `pipelines setup`\n\nInteractive setup for a complete pipeline\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `--name` string\n\n  Pipeline name\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n## `pipelines create`\n\nCreate a new pipeline\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[PIPELINE]` string required\n\n  The name of the pipeline to create\n\n- `--sql` string\n\n  Inline SQL query for the pipeline\n\n- `--sql-file` string\n\n  Path to file containing SQL query for the pipeline\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n## `pipelines list`\n\nList all pipelines\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `--page` number default: 1\n\n  Page number for pagination\n\n- `--per-page` number default: 20\n\n  Number of pipelines per page\n\n- `--json` boolean default: false\n\n  Output in JSON format\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n## `pipelines get`\n\nGet details about a specific pipeline\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[PIPELINE]` string required\n\n  The ID of the pipeline to retrieve\n\n- `--json` boolean default: false\n\n  Output in JSON format\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n## `pipelines update`\n\nUpdate a pipeline configuration (legacy pipelines only)\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[PIPELINE]` string required\n\n  The name of the legacy pipeline to update\n\n- `--source` array\n\n  Space separated list of allowed sources. Options are 'http' or 'worker'\n\n- `--require-http-auth` boolean\n\n  Require Cloudflare API Token for HTTPS endpoint authentication\n\n- `--cors-origins` array\n\n  CORS origin allowlist for HTTP endpoint (use \\* for any origin). Defaults to an empty array\n\n- `--batch-max-mb` number\n\n  Maximum batch size in megabytes before flushing. Defaults to 100 MB if unset. Minimum: 1, Maximum: 100\n\n- `--batch-max-rows` number\n\n  Maximum number of rows per batch before flushing. Defaults to 10,000,000 if unset. Minimum: 100, Maximum: 10,000,000\n\n- `--batch-max-seconds` number\n\n  Maximum age of batch in seconds before flushing. Defaults to 300 if unset. Minimum: 1, Maximum: 300\n\n- `--r2-bucket` string\n\n  Destination R2 bucket name\n\n- `--r2-access-key-id` string\n\n  R2 service Access Key ID for authentication. Leave empty for OAuth confirmation.\n\n- `--r2-secret-access-key` string\n\n  R2 service Secret Access Key for authentication. Leave empty for OAuth confirmation.\n\n- `--r2-prefix` string\n\n  Prefix for storing files in the destination bucket. Default is no prefix\n\n- `--compression` string\n\n  Compression format for output files\n\n- `--shard-count` number\n\n  Number of shards for the pipeline. More shards handle higher request volume; fewer shards produce larger output files. Defaults to 2 if unset. Minimum: 1, Maximum: 15\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n## `pipelines delete`\n\nDelete a pipeline\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[PIPELINE]` string required\n\n  The ID or name of the pipeline to delete\n\n- `--force` boolean alias: --y default: false\n\n  Skip confirmation\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n## `pipelines streams create`\n\nCreate a new stream\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[STREAM]` string required\n\n  The name of the stream to create\n\n- `--schema-file` string\n\n  Path to JSON file containing stream schema\n\n- `--http-enabled` boolean default: true\n\n  Enable HTTP endpoint\n\n- `--http-auth` boolean default: true\n\n  Require authentication for HTTP endpoint\n\n- `--cors-origin` string\n\n  CORS origin\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n## `pipelines streams list`\n\nList all streams\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `--page` number default: 1\n\n  Page number for pagination\n\n- `--per-page` number default: 20\n\n  Number of streams per page\n\n- `--pipeline-id` string\n\n  Filter streams by pipeline ID\n\n- `--json` boolean default: false\n\n  Output in JSON format\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n## `pipelines streams get`\n\nGet details about a specific stream\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[STREAM]` string required\n\n  The ID of the stream to retrieve\n\n- `--json` boolean default: false\n\n  Output in JSON format\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n## `pipelines streams delete`\n\nDelete a stream\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[STREAM]` string required\n\n  The ID of the stream to delete\n\n- `--force` boolean alias: --y default: false\n\n  Skip confirmation\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n## `pipelines sinks create`\n\nCreate a new sink\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[SINK]` string required\n\n  The name of the sink to create\n\n- `--type` string required\n\n  The type of sink to create\n\n- `--bucket` string required\n\n  R2 bucket name\n\n- `--format` string default: parquet\n\n  Output format\n\n- `--compression` string default: zstd\n\n  Compression method (parquet only)\n\n- `--target-row-group-size` string\n\n  Target row group size for parquet format\n\n- `--path` string\n\n  The base prefix in your bucket where data will be written\n\n- `--partitioning` string\n\n  Time partition pattern (r2 sinks only)\n\n- `--roll-size` number\n\n  Roll file size in MB\n\n- `--roll-interval` number default: 300\n\n  Roll file interval in seconds\n\n- `--access-key-id` string\n\n  R2 access key ID (leave empty for R2 credentials to be automatically created)\n\n- `--secret-access-key` string\n\n  R2 secret access key (leave empty for R2 credentials to be automatically created)\n\n- `--namespace` string\n\n  Data catalog namespace (required for r2-data-catalog)\n\n- `--table` string\n\n  Table name within namespace (required for r2-data-catalog)\n\n- `--catalog-token` string\n\n  Authentication token for data catalog (required for r2-data-catalog)\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n## `pipelines sinks list`\n\nList all sinks\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `--page` number default: 1\n\n  Page number for pagination\n\n- `--per-page` number default: 20\n\n  Number of sinks per page\n\n- `--pipeline-id` string\n\n  Filter sinks by pipeline ID\n\n- `--json` boolean default: false\n\n  Output in JSON format\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n## `pipelines sinks get`\n\nGet details about a specific sink\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[SINK]` string required\n\n  The ID of the sink to retrieve\n\n- `--json` boolean default: false\n\n  Output in JSON format\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n## `pipelines sinks delete`\n\nDelete a sink\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "- `[SINK]` string required\n\n  The ID of the sink to delete\n\n- `--force` boolean alias: --y default: false\n\n  Skip confirmation\n\nGlobal flags\n\n* `--v` boolean alias: --version\n\n  Show version number\n\n* `--cwd` string\n\n  Run as if Wrangler was started in the specified directory instead of the current working directory\n\n* `--config` string alias: --c\n\n  Path to Wrangler configuration file\n\n* `--env` string alias: --e\n\n  Environment to use for operations, and for selecting .env and .dev.vars files\n\n* `--env-file` string\n\n  Path to an .env file to load - can be specified multiple times - values from earlier files are overridden by values in later files\n\n* `--experimental-provision` boolean aliases: --x-provision default: true\n\n  Experimental: Enable automatic resource provisioning\n\n* `--experimental-auto-create` boolean alias: --x-auto-create default: true\n\n  Automatically provision draft bindings with new resources\n\n</page>\n\n<page>\n---\ntitle: Limits · Cloudflare Pipelines Docs\ndescription: \"While in open beta, the following limits are currently in effect:\"\nlastUpdated: 2025-09-25T04:07:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pipelines/platform/limits/\n  md: https://developers.cloudflare.com/pipelines/platform/limits/index.md\n---\n\nWhile in open beta, the following limits are currently in effect:\n\n| Feature | Limit |\n| - | - |\n| Maximum streams per account | 20 |\n| Maximum payload size per ingestion request | 1 MB |\n| Maximum ingest rate per stream | 5 MB/s |\n| Maximum sinks per account | 20 |\n| Maximum pipelines per account | 20 |\n\nNeed a higher limit?\n\nTo request an adjustment to a limit, complete the [Limit Increase Request Form](https://forms.gle/ukpeZVLWLnKeixDu7). If the limit can be increased, Cloudflare will contact you with next steps.\n\n</page>\n\n<page>\n---\ntitle: Cloudflare Pipelines - Pricing · Cloudflare Pipelines Docs\ndescription: Cloudflare Pipelines is in open beta and available to any developer\n  with a Workers Paid plan.\nlastUpdated: 2025-09-25T04:07:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pipelines/platform/pricing/\n  md: https://developers.cloudflare.com/pipelines/platform/pricing/index.md\n---\n\nCloudflare Pipelines is in open beta and available to any developer with a [Workers Paid plan](https://developers.cloudflare.com/workers/platform/pricing/).\n\nWe are not currently billing for Pipelines during open beta. However, you will be billed for standard [R2 storage and operations](https://developers.cloudflare.com/r2/pricing/) for data written by sinks to R2 buckets.\n\nWe plan to bill based on the volume of data processed by pipelines, transformed by pipelines, and delivered to sinks. We'll provide at least 30 days notice before we make any changes or start charging for Pipelines usage.\n\n</page>\n\n<page>\n---\ntitle: Available sinks · Cloudflare Pipelines Docs\ndescription: Find detailed configuration options for each supported sink type.\nlastUpdated: 2025-09-25T04:07:16.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/pipelines/sinks/available-sinks/\n  md: https://developers.cloudflare.com/pipelines/sinks/available-sinks/index.md\n---\n\n[Pipelines](https://developers.cloudflare.com/pipelines/) supports the following sink types:\n\n* [R2](https://developers.cloudflare.com/pipelines/sinks/available-sinks/r2/)\n* [R2 Data Catalog](https://developers.cloudflare.com/pipelines/sinks/available-sinks/r2-data-catalog/)\n\n</page>\n\n<page>\n---\ntitle: Manage sinks · Cloudflare Pipelines Docs\ndescription: Create, configure, and manage sinks for data storage\nlastUpdated: 2025-11-17T14:08:01.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pipelines/sinks/manage-sinks/\n  md: https://developers.cloudflare.com/pipelines/sinks/manage-sinks/index.md\n---\n\nLearn how to:\n\n* Create and configure sinks for data storage\n* View sink configuration\n* Delete sinks when no longer needed\n\n## Create a sink\n\nSinks are made available to pipelines as SQL tables using the sink name (e.g., `INSERT INTO my_sink SELECT * FROM my_stream`).\n\n### Dashboard\n\n1. In the Cloudflare dashboard, go to the **Pipelines** page.\n\n   [Go to **Pipelines**](https://dash.cloudflare.com/?to=/:account/pipelines/overview)\n\n2. Select **Create Pipeline** to launch the pipeline creation wizard.\n\n3. Complete the wizard to create your sink along with the associated stream and pipeline.\n\n### Wrangler CLI\n\nTo create a sink, run the [`pipelines sinks create`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-sinks-create) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "For sink-specific configuration options, refer to [Available sinks](https://developers.cloudflare.com/pipelines/sinks/available-sinks/).\n\nAlternatively, to use the interactive setup wizard that helps you configure a stream, sink, and pipeline, run the [`pipelines setup`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-setup) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "## View sink configuration\n\n### Dashboard\n\n1. In the Cloudflare dashboard, go to **Pipelines** > **Sinks**.\n\n2. Select a sink to view its configuration.\n\n### Wrangler CLI\n\nTo view a specific sink, run the [`pipelines sinks get`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-sinks-get) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "To list all sinks in your account, run the [`pipelines sinks list`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-sinks-list) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Delete a sink\n\n### Dashboard\n\n1. In the Cloudflare dashboard, go to **Pipelines** > **Sinks**.\n\n2. Select the sink you want to delete.\n\n3. In the **Settings** tab, navigate to **General**, and select **Delete**.\n\n### Wrangler CLI\n\nTo delete a sink, run the [`pipelines sinks delete`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-sinks-delete) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "Warning\n\nDeleting a sink stops all data writes to that destination.\n\n## Limitations\n\nSinks cannot be modified after creation. To change sink configuration, you must delete and recreate the sink.\n\n</page>\n\n<page>\n---\ntitle: Scalar functions · Cloudflare Pipelines Docs\ndescription: Scalar functions available in Cloudflare Pipelines SQL.\nlastUpdated: 2025-09-25T04:07:16.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/pipelines/sql-reference/scalar-functions/\n  md: https://developers.cloudflare.com/pipelines/sql-reference/scalar-functions/index.md\n---\n\n[Pipelines](https://developers.cloudflare.com/pipelines/) scalar functions:\n\n* [Math functions](https://developers.cloudflare.com/pipelines/sql-reference/scalar-functions/math/)\n* [Conditional functions](https://developers.cloudflare.com/pipelines/sql-reference/scalar-functions/conditional/)\n* [String functions](https://developers.cloudflare.com/pipelines/sql-reference/scalar-functions/string/)\n* [Binary string functions](https://developers.cloudflare.com/pipelines/sql-reference/scalar-functions/binary-string/)\n* [Regex functions](https://developers.cloudflare.com/pipelines/sql-reference/scalar-functions/regex/)\n* [JSON functions](https://developers.cloudflare.com/pipelines/sql-reference/scalar-functions/json/)\n* [Time and date functions](https://developers.cloudflare.com/pipelines/sql-reference/scalar-functions/time-and-date/)\n* [Array functions](https://developers.cloudflare.com/pipelines/sql-reference/scalar-functions/array/)\n* [Struct functions](https://developers.cloudflare.com/pipelines/sql-reference/scalar-functions/struct/)\n* [Hashing functions](https://developers.cloudflare.com/pipelines/sql-reference/scalar-functions/hashing/)\n* [Other functions](https://developers.cloudflare.com/pipelines/sql-reference/scalar-functions/other/)\n\n</page>\n\n<page>\n---\ntitle: SELECT statements · Cloudflare Pipelines Docs\ndescription: Query syntax for data transformation in Cloudflare Pipelines SQL\nlastUpdated: 2025-09-25T04:07:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pipelines/sql-reference/select-statements/\n  md: https://developers.cloudflare.com/pipelines/sql-reference/select-statements/index.md\n---\n\nSELECT statements are used to transform data in Cloudflare Pipelines. The general form is:",
+      "language": "unknown"
+    },
+    {
+      "code": "## WITH clause\n\nThe WITH clause allows you to define named subqueries that can be referenced in the main query. This can improve query readability by breaking down complex transformations.\n\nSyntax:",
+      "language": "unknown"
+    },
+    {
+      "code": "Simple example:",
+      "language": "unknown"
+    },
+    {
+      "code": "## SELECT clause\n\nThe SELECT clause is a comma-separated list of expressions, with optional aliases. Column names must be unique.",
+      "language": "unknown"
+    },
+    {
+      "code": "Examples:",
+      "language": "unknown"
+    },
+    {
+      "code": "## FROM clause\n\nThe FROM clause specifies the data source for the query. It will be either a table name or subquery. The table name can be either a stream name or a table created in the WITH clause.",
+      "language": "unknown"
+    },
+    {
+      "code": "Tables can be given aliases:",
+      "language": "unknown"
+    },
+    {
+      "code": "## WHERE clause\n\nThe WHERE clause filters data using boolean conditions. Predicates are applied to input rows.",
+      "language": "unknown"
+    },
+    {
+      "code": "Examples:",
+      "language": "unknown"
+    },
+    {
+      "code": "## UNNEST operator\n\nThe UNNEST operator converts arrays into multiple rows. This is useful for processing list data types.\n\nUNNEST restrictions:\n\n* May only appear in the SELECT clause\n* Only one array may be unnested per SELECT statement\n\nExample:",
+      "language": "unknown"
+    },
+    {
+      "code": "This will produce:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: SQL data types · Cloudflare Pipelines Docs\ndescription: Supported data types in Cloudflare Pipelines SQL\nlastUpdated: 2025-09-25T04:07:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pipelines/sql-reference/sql-data-types/\n  md: https://developers.cloudflare.com/pipelines/sql-reference/sql-data-types/index.md\n---\n\nCloudflare Pipelines supports a set of primitive and composite data types for SQL transformations. These types can be used in stream schemas and SQL literals with automatic type inference.\n\n## Primitive types\n\n| Pipelines | SQL Types | Example Literals |\n| - | - | - |\n| `bool` | `BOOLEAN` | `TRUE`, `FALSE` |\n| `int32` | `INT`, `INTEGER` | `0`, `1`, `-2` |\n| `int64` | `BIGINT` | `0`, `1`, `-2` |\n| `float32` | `FLOAT`, `REAL` | `0.0`, `-2.4`, `1E-3` |\n| `float64` | `DOUBLE` | `0.0`, `-2.4`, `1E-35` |\n| `string` | `VARCHAR`, `CHAR`, `TEXT`, `STRING` | `\"hello\"`, `\"world\"` |\n| `timestamp` | `TIMESTAMP` | `'2020-01-01'`, `'2023-05-17T22:16:00.648662+00:00'` |\n| `binary` | `BYTEA` | `X'A123'` (hex) |\n| `json` | `JSON` | `'{\"event\": \"purchase\", \"amount\": 29.99}'` |\n\n## Composite types\n\nIn addition to primitive types, Pipelines SQL supports composite types for more complex data structures.\n\n### List types\n\nLists group together zero or more elements of the same type. In stream schemas, lists are declared using the `list` type with an `items` field specifying the element type. In SQL, lists correspond to arrays and are declared by suffixing another type with `[]`, for example `INT[]`.\n\nList values can be indexed using 1-indexed subscript notation (`v[1]` is the first element of `v`).\n\nLists can be constructed via `[]` literals:",
+      "language": "unknown"
+    },
+    {
+      "code": "Pipelines provides array functions for manipulating list values, and lists may be unnested using the `UNNEST` operator.\n\n### Struct types\n\nStructs combine related fields into a single value. In stream schemas, structs are declared using the `struct` type with a `fields` array. In SQL, structs can be created using the `struct` function.\n\nExample creating a struct in SQL:",
+      "language": "unknown"
+    },
+    {
+      "code": "This creates a struct with fields `c0`, `c1`, `c2` containing the user ID, event type, and amount.\n\nStruct fields can be accessed via `.` notation, for example `event_data.c0` for the user ID.\n\n</page>\n\n<page>\n---\ntitle: Manage streams · Cloudflare Pipelines Docs\ndescription: Create, configure, and manage streams for data ingestion\nlastUpdated: 2025-11-17T14:08:01.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pipelines/streams/manage-streams/\n  md: https://developers.cloudflare.com/pipelines/streams/manage-streams/index.md\n---\n\nLearn how to:\n\n* Create and configure streams for data ingestion\n* View and update stream settings\n* Delete streams when no longer needed\n\n## Create a stream\n\nStreams are made available to pipelines as SQL tables using the stream name (e.g., `SELECT * FROM my_stream`).\n\n### Dashboard\n\n1. In the Cloudflare dashboard, go to the **Pipelines** page.\n\n   [Go to **Pipelines**](https://dash.cloudflare.com/?to=/:account/pipelines/overview)\n\n2. Select **Create Pipeline** to launch the pipeline creation wizard.\n\n3. Complete the wizard to create your stream along with the associated sink and pipeline.\n\n### Wrangler CLI\n\nTo create a stream, run the [`pipelines streams create`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-streams-create) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "Alternatively, to use the interactive setup wizard that helps you configure a stream, sink, and pipeline, run the [`pipelines setup`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-setup) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Schema configuration\n\nStreams support two approaches for handling data:\n\n* **Structured streams**: Define a schema with specific fields and data types. Events are validated against the schema.\n* **Unstructured streams**: Accept any valid JSON without validation. These streams have a single `value` column containing the JSON data.\n\nTo create a structured stream, provide a schema file:",
+      "language": "unknown"
+    },
+    {
+      "code": "Example schema file:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Supported data types:**\n\n* `string` - Text values\n* `int32`, `int64` - Integer numbers\n* `float32`, `float64` - Floating-point numbers\n* `bool` - Boolean true/false\n* `timestamp` - RFC 3339 timestamps, or numeric values parsed as Unix seconds, milliseconds, or microseconds (depending on unit)\n* `json` - JSON objects\n* `binary` - Binary data (base64-encoded)\n* `list` - Arrays of values\n* `struct` - Nested objects with defined fields\n\nNote\n\nEvents that do not match the defined schema are accepted during ingestion but will be dropped during processing. Schema modifications are not supported after stream creation.\n\n## View stream configuration\n\n### Dashboard\n\n1. In the Cloudflare dashboard, go to **Pipelines** > **Streams**.\n\n2. Select a stream to view its associated configuration.\n\n### Wrangler CLI\n\nTo view a specific stream, run the [`pipelines streams get`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-streams-get) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "To list all streams in your account, run the [`pipelines streams list`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-streams-list) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Update HTTP ingest settings\n\nYou can update certain HTTP ingest settings after stream creation. Schema modifications are not supported once a stream is created.\n\n### Dashboard\n\n1. In the Cloudflare dashboard, go to **Pipelines** > **Streams**.\n\n2. Select the stream you want to update.\n\n3. In the **Settings** tab, navigate to **HTTP Ingest**.\n\n4. To enable or disable HTTP ingestion, select **Enable** or **Disable**.\n\n5. To update authentication and CORS settings, select **Edit** and modify.\n\n6. Save your changes.\n\nNote\n\nFor details on configuring authentication tokens and making authenticated requests, see [Writing to streams](https://developers.cloudflare.com/pipelines/streams/writing-to-streams/).\n\n## Delete a stream\n\n### Dashboard\n\n1. In the Cloudflare dashboard, go to **Pipelines** > **Streams**.\n\n2. Select the stream you want to delete.\n\n3. In the **Settings** tab, navigate to **General**, and select **Delete**.\n\n### Wrangler CLI\n\nTo delete a stream, run the [`pipelines streams delete`](https://developers.cloudflare.com/workers/wrangler/commands/#pipelines-streams-delete) command:",
+      "language": "unknown"
+    },
+    {
+      "code": "Warning\n\nDeleting a stream will permanently remove all buffered events that have not been processed and will delete any dependent pipelines. Ensure all data has been delivered to your sink before deletion.\n\n</page>\n\n<page>\n---\ntitle: Writing to streams · Cloudflare Pipelines Docs\ndescription: Send data to streams via Worker bindings or HTTP endpoints\nlastUpdated: 2025-09-25T04:07:16.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pipelines/streams/writing-to-streams/\n  md: https://developers.cloudflare.com/pipelines/streams/writing-to-streams/index.md\n---\n\nSend events to streams using [Worker bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/) or HTTP endpoints for client-side applications and external systems.\n\n## Send via Workers\n\nWorker bindings provide a secure way to send data to streams from [Workers](https://developers.cloudflare.com/workers/) without managing API tokens or credentials.\n\n### Configure pipeline binding\n\nAdd a pipeline binding to your Wrangler file that points to your stream:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "### Workers API\n\nThe pipeline binding exposes a method for sending data to your stream:\n\n#### `send(records)`\n\nSends an array of JSON-serializable records to the stream. Returns a Promise that resolves when records are confirmed as ingested.\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Send via HTTP\n\nEach stream provides an optional HTTP endpoint for ingesting data from external applications, browsers, or any system that can make HTTP requests.\n\n### Endpoint format\n\nHTTP endpoints follow this format:",
+      "language": "unknown"
+    },
+    {
+      "code": "Find your stream's endpoint URL in the Cloudflare dashboard under **Pipelines** > **Streams** or using the Wrangler CLI:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Making requests\n\nSend events as JSON arrays via POST requests:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Authentication\n\nWhen authentication is enabled for your stream, include the API token in the `Authorization` header:",
+      "language": "unknown"
+    },
+    {
+      "code": "The API token must have **Workers Pipeline Send** permission. To learn more, refer to the [Create API token](https://developers.cloudflare.com/fundamentals/api/get-started/create-token/) documentation.\n\n## Schema validation\n\nStreams handle validation differently based on their configuration:\n\n* **Structured streams**: Events must match the defined schema fields and types.\n* **Unstructured streams**: Accept any valid JSON structure. Data is stored in a single `value` column.\n\nFor structured streams, ensure your events match the schema definition. Invalid events will be accepted but dropped, so validate your data before sending to avoid dropped events.\n\n</page>\n\n<page>\n---\ntitle: Legal · Cloudflare Privacy Gateway docs\ndescription: Privacy Gateway is a managed gateway service deployed on\n  Cloudflare’s global network that implements the Oblivious HTTP IETF standard\n  to improve client privacy when connecting to an application backend.\nlastUpdated: 2024-08-13T19:56:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/privacy-gateway/reference/legal/\n  md: https://developers.cloudflare.com/privacy-gateway/reference/legal/index.md\n---\n\nPrivacy Gateway is a managed gateway service deployed on Cloudflare’s global network that implements the Oblivious HTTP IETF standard to improve client privacy when connecting to an application backend.\n\nOHTTP introduces a trusted third party (Cloudflare in this case), called a relay, between client and server. The relay’s purpose is to forward requests from client to server, and likewise to forward responses from server to client. These messages are encrypted between client and server such that the relay learns nothing of the application data, beyond the server the client is interacting with.\n\nThe Privacy Gateway service follows [Cloudflare’s privacy policy](https://www.cloudflare.com/privacypolicy/).\n\n## What Cloudflare sees\n\nWhile Cloudflare will never see the contents of the encrypted application HTTP request proxied through the Privacy Gateway service – because the client will first connect to the OHTTP relay server operated in Cloudflare’s global network– Cloudflare will see the following information: the connecting device’s IP address, the application service they are using, including its DNS name and IP address, and metadata associated with the request, including the type of browser, device operating system, hardware configuration, and timestamp of the request (\"Privacy Gateway Logs\").\n\n## What Cloudflare stores\n\nCloudflare retains the Privacy Gateway Logs information for the most recent quarter plus one month (approximately 124 days).\n\n## What Privacy Gateway customers see\n\n* The application content of requests.\n* The IP address and associated metadata of the Cloudflare Privacy Gateway server the request came from.\n\n</page>\n\n<page>\n---\ntitle: Limitations · Cloudflare Privacy Gateway docs\ndescription: End users should be aware that Cloudflare cannot ensure that\n  websites and services will not send identifying user data from requests\n  forwarded through the Privacy Gateway. This includes information such as\n  names, email addresses, and phone numbers.\nlastUpdated: 2024-08-13T19:56:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/privacy-gateway/reference/limitations/\n  md: https://developers.cloudflare.com/privacy-gateway/reference/limitations/index.md\n---\n\nEnd users should be aware that Cloudflare cannot ensure that websites and services will not send identifying user data from requests forwarded through the Privacy Gateway. This includes information such as names, email addresses, and phone numbers.\n\n</page>\n\n<page>\n---\ntitle: Privacy Gateway Metrics · Cloudflare Privacy Gateway docs\ndescription: \"Privacy Gateway now supports enhanced monitoring through our\n  GraphQL API, providing detailed insights into your gateway traffic and\n  performance. To access these metrics, ensure you have:\"\nlastUpdated: 2024-08-13T19:56:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/privacy-gateway/reference/metrics/\n  md: https://developers.cloudflare.com/privacy-gateway/reference/metrics/index.md\n---\n\nPrivacy Gateway now supports enhanced monitoring through our GraphQL API, providing detailed insights into your gateway traffic and performance. To access these metrics, ensure you have:\n\n* A relay gateway proxy implementation where Cloudflare acts as the oblivious relay party.\n* An API token with Analytics Read permissions. We offer two GraphQL nodes to retrieve metrics: `ohttpMetricsAdaptive` and `ohttpMetricsAdaptiveGroups`. The first node provides comprehensive request data, while the second facilitates grouped analytics.\n\n## ohttpMetricsAdaptive\n\nThe `ohttpMetricsAdaptive` node is designed for detailed insights into individual OHTTP requests with adaptive sampling. This node can help in understanding the performance and load on your server and client setup.\n\n### Key Arguments\n\n* `filter` required\n  * Apply filters to narrow down your data set. `accountTag` is a required filter.\n* `limit` optional\n  * Specify the maximum number of records to return.\n* `orderBy` optional\n  * Choose how to sort your data, with options for various dimensions and metrics.\n\n### Available Fields\n\n* `bytesToClient` int optional\n  * The number of bytes returned to the client.\n* `bytesToGateway` int optional\n  * Total bytes received from the client.\n* `colo` string optional\n  * Airport code of the Cloudflare data center that served the request.\n* `datetime` Time optional\n  * The date and time when the event was recorded.\n* `gatewayStatusCode` int optional\n  * Status code returned by the gateway.\n* `relayStatusCode` int optional\n  * Status code returned by the relay.\n\nThis node is useful for a granular view of traffic, helping you identify patterns, performance issues, or anomalies in your data flow.\n\n## ohttpMetricsAdaptiveGroups\n\nThe `ohttpMetricsAdaptiveGroups` node allows for aggregated analysis of OHTTP request metrics with adaptive sampling. This node is particularly useful for identifying trends and patterns across different dimensions of your traffic and operations.\n\n### Key Arguments\n\n* `filter` required\n  * Apply filters to narrow down your data set. `accountTag` is a required filter.\n* `limit` optional\n  * Specify the maximum number of records to return.\n* `orderBy` optional\n  * Choose how to sort your data, with options for various dimensions and metrics.\n\n### Available Fields\n\n* `count` int optional\n  * The number of records that meet the criteria.\n* `dimensions` optional\n  * Specifies the grouping dimensions for your data.\n* `sum` optional\n  * Aggregated totals for various metrics, per dimension.\n\n**Dimensions**\n\nYou can group your metrics by various dimensions to get a more segmented view of your data:\n\n* `colo` string optional\n  * The airport code of the Cloudflare data center.\n* `date` Date optional\n  * The date of OHTTP request metrics.\n* `datetimeFifteenMinutes` Time optional\n  * Timestamp truncated to fifteen minutes.\n* `datetimeFiveMinutes` Time optional\n  * Timestamp truncated to five minutes.\n* `datetimeHour` Time optional\n  * Timestamp truncated to the hour.\n* `datetimeMinute` Time optional\n  * Timestamp truncated to the minute.\n* `endpoint` string optional\n  * The appId that generated traffic.\n* `gatewayStatusCode` int optional\n  * Status code returned by the gateway.\n* `relayStatusCode` int optional\n  * Status code returned by the relay.\n\n**Sum Fields**\n\nSum fields offer a cumulative view of various metrics over your selected time period:\n\n* `bytesToClient` int optional\n  * Total bytes sent from the gateway to the client.\n* `bytesToGateway` int optional\n  * Total bytes from the client to the gateway.\n* `clientRequestErrors` int optional\n  * Total number of client request errors.\n* `gatewayResponseErrors` int optional\n  * Total number of gateway response errors.\n\nUtilize the ohttpMetricsAdaptiveGroups node to gain comprehensive, aggregated insights into your traffic patterns, helping you optimize performance and user experience.\n\n</page>\n\n<page>\n---\ntitle: Add a site · Pulumi docs\ndescription: This tutorial uses Pulumi infrastructure as code (IaC) to\n  familiarize yourself with the resource management lifecycle.\nlastUpdated: 2025-10-09T15:47:46.000Z\nchatbotDeprioritize: false\ntags: JavaScript,TypeScript,Python,Go,Java,.NET,YAML\nsource_url:\n  html: https://developers.cloudflare.com/pulumi/tutorial/add-site/\n  md: https://developers.cloudflare.com/pulumi/tutorial/add-site/index.md\n---\n\nIn this tutorial, you will follow step-by-step instructions to bring an existing site to Cloudflare using Pulumi infrastructure as code (IaC) to familiarize yourself with the resource management lifecycle. In particular, you will create a Zone and a DNS record to resolve your newly added site. This tutorial adopts the IaC principle to complete the steps listed in the [Add site tutorial](https://developers.cloudflare.com/fundamentals/manage-domains/add-site/).\n\nNote\n\nYou will provision resources that qualify under free tier offerings for both Pulumi Cloud and Cloudflare.\n\n## Before you begin\n\nEnsure you have:\n\n* A Cloudflare account and API Token with permission to edit the resources in this tutorial. If you need to, sign up for a [Cloudflare account](https://www.cloudflare.com/sign-up) before continuing. Your token must have:\n\n  * `Zone-Zone-Edit` permission\n  * `Zone-DNS-Edit` permission\n  * `include-All zones from an account-<your account>` zone resource\n\n* A Pulumi Cloud account. You can sign up for an [always-free individual tier](https://app.pulumi.com/signup).\n\n* The [Pulumi CLI](https://developers.cloudflare.com/pulumi/installing/) is installed on your machine.\n\n* A [Pulumi-supported programming language](https://github.com/pulumi/pulumi?tab=readme-ov-file#languages) is configured. (TypeScript, JavaScript, Python, Go, .NET, Java, or use YAML)\n\n* A domain name. You may use `example.com` to complete the tutorial.\n\n## 1. Initialize your project\n\nA Pulumi project is a collection of files in a dedicated folder that describes the infrastructure you want to create. The Pulumi project folder is identified by the required `Pulumi.yaml` file. You will use the Pulumi CLI to create and configure a new project.\n\n### a. Create a directory\n\nUse a new and empty directory for this tutorial.",
+      "language": "unknown"
+    },
+    {
+      "code": "### b. Login to Pulumi Cloud\n\n[Pulumi Cloud](https://www.pulumi.com/product/pulumi-cloud/) is a hosted service that provides a secure and scalable platform for managing your infrastructure as code. You will use it to store your Pulumi backend configurations.\n\nAt the prompt, press Enter to log into your Pulumi Cloud account via the browser. Alternatively, you may provide a [Pulumi Cloud access token](https://www.pulumi.com/docs/pulumi-cloud/access-management/access-tokens/).",
+      "language": "unknown"
+    },
+    {
+      "code": "### c. Create a new program\n\nA Pulumi program is code written in a [supported programming language](https://github.com/pulumi/pulumi?tab=readme-ov-file#languages) that defines infrastructure resources.\n\nTo create a program, select your language of choice and run the `pulumi` command:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* Python",
+      "language": "unknown"
+    },
+    {
+      "code": "* go",
+      "language": "unknown"
+    },
+    {
+      "code": "* Java",
+      "language": "unknown"
+    },
+    {
+      "code": "* .NET",
+      "language": "unknown"
+    },
+    {
+      "code": "* YAML",
+      "language": "unknown"
+    },
+    {
+      "code": "### d. Create a stack\n\nA Pulumi [stack](https://www.pulumi.com/docs/concepts/stack/) is an instance of a Pulumi program. Stacks are independently configurable and may represent different environments (development, staging, production) or feature branches. For this tutorial, you'll use the `dev` stack.\n\nTo instantiate your `dev` stack, run:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Bind R2 to Pages",
+      "id": "bind-r2-to-pages"
+    },
+    {
+      "level": "h2",
+      "text": "Serve R2 Assets From Pages",
+      "id": "serve-r2-assets-from-pages"
+    },
+    {
+      "level": "h2",
+      "text": "Deploy the blog",
+      "id": "deploy-the-blog"
+    },
+    {
+      "level": "h2",
+      "text": "**Related resources**",
+      "id": "**related-resources**"
+    },
+    {
+      "level": "h2",
+      "text": "Create a pipeline",
+      "id": "create-a-pipeline"
+    },
+    {
+      "level": "h3",
+      "text": "Dashboard",
+      "id": "dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Wrangler CLI",
+      "id": "wrangler-cli"
+    },
+    {
+      "level": "h3",
+      "text": "SQL transformations",
+      "id": "sql-transformations"
+    },
+    {
+      "level": "h2",
+      "text": "View pipeline configuration",
+      "id": "view-pipeline-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Dashboard",
+      "id": "dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Wrangler CLI",
+      "id": "wrangler-cli"
+    },
+    {
+      "level": "h2",
+      "text": "Delete a pipeline",
+      "id": "delete-a-pipeline"
+    },
+    {
+      "level": "h3",
+      "text": "Dashboard",
+      "id": "dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Wrangler CLI",
+      "id": "wrangler-cli"
+    },
+    {
+      "level": "h2",
+      "text": "Limitations",
+      "id": "limitations"
+    },
+    {
+      "level": "h2",
+      "text": "Notable changes",
+      "id": "notable-changes"
+    },
+    {
+      "level": "h2",
+      "text": "Moving to new pipelines",
+      "id": "moving-to-new-pipelines"
+    },
+    {
+      "level": "h2",
+      "text": "`pipelines setup`",
+      "id": "`pipelines-setup`"
+    },
+    {
+      "level": "h2",
+      "text": "`pipelines create`",
+      "id": "`pipelines-create`"
+    },
+    {
+      "level": "h2",
+      "text": "`pipelines list`",
+      "id": "`pipelines-list`"
+    },
+    {
+      "level": "h2",
+      "text": "`pipelines get`",
+      "id": "`pipelines-get`"
+    },
+    {
+      "level": "h2",
+      "text": "`pipelines update`",
+      "id": "`pipelines-update`"
+    },
+    {
+      "level": "h2",
+      "text": "`pipelines delete`",
+      "id": "`pipelines-delete`"
+    },
+    {
+      "level": "h2",
+      "text": "`pipelines streams create`",
+      "id": "`pipelines-streams-create`"
+    },
+    {
+      "level": "h2",
+      "text": "`pipelines streams list`",
+      "id": "`pipelines-streams-list`"
+    },
+    {
+      "level": "h2",
+      "text": "`pipelines streams get`",
+      "id": "`pipelines-streams-get`"
+    },
+    {
+      "level": "h2",
+      "text": "`pipelines streams delete`",
+      "id": "`pipelines-streams-delete`"
+    },
+    {
+      "level": "h2",
+      "text": "`pipelines sinks create`",
+      "id": "`pipelines-sinks-create`"
+    },
+    {
+      "level": "h2",
+      "text": "`pipelines sinks list`",
+      "id": "`pipelines-sinks-list`"
+    },
+    {
+      "level": "h2",
+      "text": "`pipelines sinks get`",
+      "id": "`pipelines-sinks-get`"
+    },
+    {
+      "level": "h2",
+      "text": "`pipelines sinks delete`",
+      "id": "`pipelines-sinks-delete`"
+    },
+    {
+      "level": "h2",
+      "text": "Create a sink",
+      "id": "create-a-sink"
+    },
+    {
+      "level": "h3",
+      "text": "Dashboard",
+      "id": "dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Wrangler CLI",
+      "id": "wrangler-cli"
+    },
+    {
+      "level": "h2",
+      "text": "View sink configuration",
+      "id": "view-sink-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Dashboard",
+      "id": "dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Wrangler CLI",
+      "id": "wrangler-cli"
+    },
+    {
+      "level": "h2",
+      "text": "Delete a sink",
+      "id": "delete-a-sink"
+    },
+    {
+      "level": "h3",
+      "text": "Dashboard",
+      "id": "dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Wrangler CLI",
+      "id": "wrangler-cli"
+    },
+    {
+      "level": "h2",
+      "text": "Limitations",
+      "id": "limitations"
+    },
+    {
+      "level": "h2",
+      "text": "WITH clause",
+      "id": "with-clause"
+    },
+    {
+      "level": "h2",
+      "text": "SELECT clause",
+      "id": "select-clause"
+    },
+    {
+      "level": "h2",
+      "text": "FROM clause",
+      "id": "from-clause"
+    },
+    {
+      "level": "h2",
+      "text": "WHERE clause",
+      "id": "where-clause"
+    },
+    {
+      "level": "h2",
+      "text": "UNNEST operator",
+      "id": "unnest-operator"
+    },
+    {
+      "level": "h2",
+      "text": "Primitive types",
+      "id": "primitive-types"
+    },
+    {
+      "level": "h2",
+      "text": "Composite types",
+      "id": "composite-types"
+    },
+    {
+      "level": "h3",
+      "text": "List types",
+      "id": "list-types"
+    },
+    {
+      "level": "h3",
+      "text": "Struct types",
+      "id": "struct-types"
+    },
+    {
+      "level": "h2",
+      "text": "Create a stream",
+      "id": "create-a-stream"
+    },
+    {
+      "level": "h3",
+      "text": "Dashboard",
+      "id": "dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Wrangler CLI",
+      "id": "wrangler-cli"
+    },
+    {
+      "level": "h3",
+      "text": "Schema configuration",
+      "id": "schema-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "View stream configuration",
+      "id": "view-stream-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Dashboard",
+      "id": "dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Wrangler CLI",
+      "id": "wrangler-cli"
+    },
+    {
+      "level": "h2",
+      "text": "Update HTTP ingest settings",
+      "id": "update-http-ingest-settings"
+    },
+    {
+      "level": "h3",
+      "text": "Dashboard",
+      "id": "dashboard"
+    },
+    {
+      "level": "h2",
+      "text": "Delete a stream",
+      "id": "delete-a-stream"
+    },
+    {
+      "level": "h3",
+      "text": "Dashboard",
+      "id": "dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Wrangler CLI",
+      "id": "wrangler-cli"
+    },
+    {
+      "level": "h2",
+      "text": "Send via Workers",
+      "id": "send-via-workers"
+    },
+    {
+      "level": "h3",
+      "text": "Configure pipeline binding",
+      "id": "configure-pipeline-binding"
+    },
+    {
+      "level": "h3",
+      "text": "Workers API",
+      "id": "workers-api"
+    },
+    {
+      "level": "h2",
+      "text": "Send via HTTP",
+      "id": "send-via-http"
+    },
+    {
+      "level": "h3",
+      "text": "Endpoint format",
+      "id": "endpoint-format"
+    },
+    {
+      "level": "h3",
+      "text": "Making requests",
+      "id": "making-requests"
+    },
+    {
+      "level": "h3",
+      "text": "Authentication",
+      "id": "authentication"
+    },
+    {
+      "level": "h2",
+      "text": "Schema validation",
+      "id": "schema-validation"
+    },
+    {
+      "level": "h2",
+      "text": "What Cloudflare sees",
+      "id": "what-cloudflare-sees"
+    },
+    {
+      "level": "h2",
+      "text": "What Cloudflare stores",
+      "id": "what-cloudflare-stores"
+    },
+    {
+      "level": "h2",
+      "text": "What Privacy Gateway customers see",
+      "id": "what-privacy-gateway-customers-see"
+    },
+    {
+      "level": "h2",
+      "text": "ohttpMetricsAdaptive",
+      "id": "ohttpmetricsadaptive"
+    },
+    {
+      "level": "h3",
+      "text": "Key Arguments",
+      "id": "key-arguments"
+    },
+    {
+      "level": "h3",
+      "text": "Available Fields",
+      "id": "available-fields"
+    },
+    {
+      "level": "h2",
+      "text": "ohttpMetricsAdaptiveGroups",
+      "id": "ohttpmetricsadaptivegroups"
+    },
+    {
+      "level": "h3",
+      "text": "Key Arguments",
+      "id": "key-arguments"
+    },
+    {
+      "level": "h3",
+      "text": "Available Fields",
+      "id": "available-fields"
+    },
+    {
+      "level": "h2",
+      "text": "Before you begin",
+      "id": "before-you-begin"
+    },
+    {
+      "level": "h2",
+      "text": "1. Initialize your project",
+      "id": "1.-initialize-your-project"
+    },
+    {
+      "level": "h3",
+      "text": "a. Create a directory",
+      "id": "a.-create-a-directory"
+    },
+    {
+      "level": "h3",
+      "text": "b. Login to Pulumi Cloud",
+      "id": "b.-login-to-pulumi-cloud"
+    },
+    {
+      "level": "h3",
+      "text": "c. Create a new program",
+      "id": "c.-create-a-new-program"
+    },
+    {
+      "level": "h3",
+      "text": "d. Create a stack",
+      "id": "d.-create-a-stack"
+    }
+  ],
+  "url": "llms-txt#npx-wrangler-r2-object-put-cat-media/videos/video1.mp4--f-~/downloads/videos/video1.mp4",
+  "links": []
+}

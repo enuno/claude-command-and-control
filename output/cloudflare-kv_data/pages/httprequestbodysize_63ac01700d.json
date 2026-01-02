@@ -1,0 +1,8 @@
+{
+  "title": "http.request.body.size",
+  "content": "`http.request.body.size` Number\n\nThe total size of the HTTP request body (in bytes).\n\nThis field may have a value larger than the one returned by `len(http.request.body.raw)`, since the [`http.request.body.raw`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.body.raw/) field only considers the request body up to a maximum size that varies according to your Cloudflare plan.\n\nRequires a Cloudflare Enterprise plan with a paid add-on.\n\n<page>\n---\ntitle: http.request.body.truncated · Cloudflare Ruleset Engine docs\ndescription: Indicates whether the HTTP request body is truncated.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.body.truncated/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.body.truncated/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#http.request.body.size",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "http.request.uri",
+  "content": "`http.request.uri` String\n\nThe URI path and query string of the request.\n\n<page>\n---\ntitle: http.request.uri.args · Cloudflare Ruleset Engine docs\ndescription: The HTTP URI arguments associated with a request represented as a\n  Map (associative array).\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.uri.args/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.uri.args/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"/articles/index?section=539061&expand=comments\"",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#http.request.uri",
+  "links": []
+}

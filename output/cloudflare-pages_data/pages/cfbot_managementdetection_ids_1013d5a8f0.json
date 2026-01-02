@@ -1,0 +1,13 @@
+{
+  "title": "cf.bot\\_management.detection\\_ids",
+  "content": "`cf.bot_management.detection_ids` Array\\<Number>\n\nList of IDs that correlate to the Bot Management heuristic detections made on a request.\n\nUse this field to explicitly match a specific heuristic or to exclude a heuristic in a rule. You can have multiple heuristic detections on the same request.\n\nRequires a Cloudflare Enterprise plan with [Bot Management](https://developers.cloudflare.com/bots/plans/bm-subscription/) enabled.\n\n<page>\n---\ntitle: cf.bot_management.ja3_hash · Cloudflare Ruleset Engine docs\ndescription: Provides an SSL/TLS fingerprint to help you identify potential bot requests.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.bot_management.ja3_hash/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.bot_management.ja3_hash/index.md\n---",
+  "code_samples": [
+    {
+      "code": "any(cf.bot_management.detection_ids[*] eq 33554817)",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#cf.bot\\_management.detection\\_ids",
+  "links": []
+}

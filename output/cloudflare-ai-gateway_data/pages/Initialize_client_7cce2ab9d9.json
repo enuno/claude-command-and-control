@@ -1,0 +1,24 @@
+{
+  "title": "Initialize client",
+  "content": "client = Cloudflare(api_token=api_token)\npython\nresult = client.workers.ai.run(\n    \"@cf/meta/llama-3-8b-instruct\" ,\n    account_id=account_id,\n    messages=[\n        {\"role\": \"system\", \"content\": \"\"\"\n            You are a productivity assistant for users of Jupyter notebooks for both Mac and Windows users.\n\nRespond in Markdown.\"\"\"\n        },\n        {\"role\": \"user\", \"content\": \"How do I use keyboard shortcuts to execute cells?\"}\n    ]\n)\n\ndisplay(Markdown(result[\"response\"]))\n```",
+  "code_samples": [
+    {
+      "code": "## Explore tasks available on the Workers AI Platform\n\n### Text Generation\n\nExplore all [Text Generation Models](https://developers.cloudflare.com/workers-ai/models)",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Explore tasks available on the Workers AI Platform",
+      "id": "explore-tasks-available-on-the-workers-ai-platform"
+    },
+    {
+      "level": "h3",
+      "text": "Text Generation",
+      "id": "text-generation"
+    }
+  ],
+  "url": "llms-txt#initialize-client",
+  "links": []
+}

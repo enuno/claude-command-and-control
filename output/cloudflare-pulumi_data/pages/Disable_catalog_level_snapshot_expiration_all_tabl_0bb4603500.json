@@ -1,0 +1,8 @@
+{
+  "title": "Disable catalog-level snapshot expiration (all tables)",
+  "content": "npx wrangler r2 bucket catalog snapshot-expiration disable <BUCKET_NAME>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#disable-catalog-level-snapshot-expiration-(all-tables)",
+  "links": []
+}

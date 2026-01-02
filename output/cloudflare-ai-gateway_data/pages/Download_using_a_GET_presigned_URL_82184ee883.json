@@ -1,0 +1,8 @@
+{
+  "title": "Download using a GET presigned URL",
+  "content": "curl \"https://my-bucket.<ACCOUNT_ID>.r2.cloudflarestorage.com/image.png?X-Amz-Algorithm=...\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#download-using-a-get-presigned-url",
+  "links": []
+}

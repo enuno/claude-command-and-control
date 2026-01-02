@@ -1,0 +1,8 @@
+{
+  "title": "http.request.version",
+  "content": "`http.request.version` String\n\nThe version of the HTTP protocol used. Use this field when different checks are needed for different versions.\n\n* `\"HTTP/1.1\"`\n* `\"HTTP/3\"`\n\n<page>\n---\ntitle: http.request.uri.query · Cloudflare Ruleset Engine docs\ndescription: The entire query string, without the `?` delimiter.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.uri.query/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.uri.query/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#http.request.version",
+  "links": []
+}

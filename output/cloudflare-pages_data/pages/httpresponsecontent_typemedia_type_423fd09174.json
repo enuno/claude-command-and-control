@@ -1,0 +1,8 @@
+{
+  "title": "http.response.content\\_type.media\\_type",
+  "content": "`http.response.content_type.media_type` String\n\nThe lowercased content type (including subtype and suffix) without any extra parameters, based on the response's `Content-Type` header.\n\nThe field value will not include parameters such as `charset`.\n\n| Content-Type header | Field value |\n| - | - |\n| `text/html` | `\"text/html\"` |\n| `text/html; charset=utf-8` | `\"text/html\"` |\n| `text/html+extra` | `\"text/html+extra\"` |\n| `text/html+extra; charset=utf-8` | `\"text/html+extra\"` |\n| `text/HTML` | `\"text/html\"` |\n| `text/html; charset=utf-8; other=value` | `\"text/html\"` |\n\n**Note**: The availability of HTTP response fields depends on the exact Cloudflare feature and your Cloudflare plan.\n\n<page>\n---\ntitle: http.response.headers · Cloudflare Ruleset Engine docs\ndescription: The HTTP response headers represented as a Map (or associative array).\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.response.headers/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.response.headers/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#http.response.content\\_type.media\\_type",
+  "links": []
+}

@@ -1,0 +1,218 @@
+{
+  "title": "Configure a ruleset at the zone level for the \"http_request_firewall_managed\" phase",
+  "content": "resource \"cloudflare_ruleset\" \"zone_level_managed_waf\" {\n  zone_id     = \"<ZONE_ID>\"\n  name        = \"Managed WAF entry point ruleset\"\n  description = \"Zone-level WAF Managed Rules config\"\n  kind        = \"zone\"\n  phase       = \"http_request_firewall_managed\"\n\n# Execute Cloudflare Managed Ruleset\n  rules {\n    ref         = \"execute_cloudflare_managed_ruleset\"\n    description = \"Execute Cloudflare Managed Ruleset on my zone-level phase entry point ruleset\"\n    expression  = \"true\"\n    action      = \"execute\"\n    action_parameters {\n      id = \"efb7b8c949ac4650a09736fc376e9aee\"\n    }\n  }\n\n# Execute Cloudflare OWASP Core Ruleset\n  rules {\n    ref         = \"execute_cloudflare_owasp_core_ruleset\"\n    description = \"Execute Cloudflare OWASP Core Ruleset on my zone-level phase entry point ruleset\"\n    expression  = \"true\"\n    action      = \"execute\"\n    action_parameters {\n      id = \"4814384a9e5d4991b9815dcfc25d2f1f\"\n    }\n  }\n}\ntf\nresource \"cloudflare_ruleset\" \"account_level_managed_waf\" {\n  account_id  = \"<ACCOUNT_ID>\"\n  name        = \"Managed WAF entry point ruleset\"\n  description = \"Account-level WAF Managed Rules config\"\n  kind        = \"root\"\n  phase       = \"http_request_firewall_managed\"\n\n# Execute Cloudflare Managed Ruleset\n  rules {\n    ref         = \"execute_cloudflare_managed_ruleset_api_store\"\n    description = \"Execute Cloudflare Managed Ruleset on my account-level phase entry point ruleset\"\n    expression  = \"http.host in {\\\"api.example.com\\\" \\\"store.example.com\\\"} and cf.zone.plan eq \\\"ENT\\\"\"\n    action      = \"execute\"\n    action_parameters {\n      id = \"efb7b8c949ac4650a09736fc376e9aee\"\n    }\n  }\n\n# Execute Cloudflare OWASP Core Ruleset\n  rules {\n    ref         = \"execute_owasp_core_ruleset_api_store\"\n    description = \"Execute Cloudflare OWASP Core Ruleset on my account-level phase entry point ruleset\"\n    expression  = \"http.host in {\\\"api.example.com\\\" \\\"store.example.com\\\"} and cf.zone.plan eq \\\"ENT\\\"\"\n    action      = \"execute\"\n    action_parameters {\n      id = \"4814384a9e5d4991b9815dcfc25d2f1f\"\n    }\n  }\n}\ntf\nresource \"cloudflare_ruleset\" \"zone_level_managed_waf\" {\n  # (...)\n\n# Skip execution of the entire Cloudflare Managed Ruleset for specific URLs\n  rules {\n    ref         = \"skip_cloudflare_managed_ruleset_example_com\"\n    description = \"Skip Cloudflare Managed Ruleset\"\n    expression  = \"(http.request.uri.path eq \\\"/status\\\" and http.request.uri.query contains \\\"skip=rulesets\\\")\"\n    action      = \"skip\"\n    action_parameters {\n      rulesets = [\"efb7b8c949ac4650a09736fc376e9aee\"]\n    }\n  }\n\n# Skip execution of two rules in the Cloudflare Managed Ruleset for specific URLs\n  rules {\n    ref         = \"skip_wordpress_sqli_rules_example_com\"\n    description = \"Skip WordPress and SQLi rules\"\n    expression  = \"(http.request.uri.path eq \\\"/status\\\" and http.request.uri.query contains \\\"skip=rules\\\")\"\n    action      = \"skip\"\n    action_parameters {\n      rules = {\n        # Format: \"<RULESET_ID>\" = \"<RULE_ID_1>,<RULE_ID_2>,...\"\n        \"efb7b8c949ac4650a09736fc376e9aee\" = \"5de7edfa648c4d6891dc3e7f84534ffa,e3a567afc347477d9702d9047e97d760\"\n      }\n    }\n  }\n\n# Execute Cloudflare Managed Ruleset\n  rules {\n    ref         = \"execute_cloudflare_managed_ruleset\"\n    description = \"Execute Cloudflare Managed Ruleset on my zone-level phase entry point ruleset\"\n    expression  = \"true\"\n    action      = \"execute\"\n    action_parameters {\n      id = \"efb7b8c949ac4650a09736fc376e9aee\"\n    }\n  }\n\n# (...)\n}\ntf\n  # (...)\n\n# Execute Cloudflare Managed Ruleset\n  rules {\n    ref         = \"execute_cloudflare_managed_ruleset\"\n    description = \"Execute Cloudflare Managed Ruleset on my zone-level phase entry point ruleset\"\n    expression  = \"true\"\n    action      = \"execute\"\n    action_parameters {\n      id = \"efb7b8c949ac4650a09736fc376e9aee\"\n      overrides {\n        rules {\n          id      = \"5de7edfa648c4d6891dc3e7f84534ffa\"\n          action  = \"log\"\n          enabled = true\n        }\n        rules {\n          id      = \"75a0060762034a6cb663fd51a02344cb\"\n          enabled = false\n        }\n        categories {\n          category = \"wordpress\"\n          action   = \"js_challenge\"\n          enabled  = true\n        }\n      }\n    }\n  }\n\n# Execute Cloudflare Managed Ruleset\n  rules {\n    ref         = \"execute_cloudflare_managed_ruleset\"\n    description = \"Execute Cloudflare Managed Ruleset on my zone-level phase entry point ruleset\"\n    expression  = \"true\"\n    action      = \"execute\"\n    action_parameters {\n      id = \"efb7b8c949ac4650a09736fc376e9aee\"\n      matched_data {\n         public_key = \"Ycig/Zr/pZmklmFUN99nr+taURlYItL91g+NcHGYpB8=\"\n      }\n    }\n  }\n\n# Execute Cloudflare OWASP Core Ruleset\n  rules {\n    ref         = \"execute_owasp_core_ruleset\"\n    description = \"Execute Cloudflare OWASP Core Ruleset\"\n    expression  = \"true\"\n    action      = \"execute\"\n    action_parameters {\n      id = \"4814384a9e5d4991b9815dcfc25d2f1f\"\n      overrides {\n        # By default, all PL1 to PL4 rules are enabled.\n        # Set the paranoia level to PL2 by disabling rules with\n        # tags \"paranoia-level-3\" and \"paranoia-level-4\".\n        categories {\n          category = \"paranoia-level-3\"\n          enabled  = false\n        }\n        categories {\n          category = \"paranoia-level-4\"\n          enabled  = false\n        }\n        rules {\n          id              = \"6179ae15870a4bb7b2d480d4843b323c\"\n          action          = \"log\"\n          score_threshold = 60\n        }\n      }\n    }\n  }\n\n# (...)\ntxt\nexample-tf/\n├── demo_account_a                  # per account segregation of resources\n│   ├── users                       # top level directory for account members as they are \"zoneless\"\n│   │   ├── provider.tf             # `provider.tf` is for configuring the providers\n│   │   ├── users.tf                # `<subject>.tf` (users.tf) is for managing the individual resources\n│   │   └── vars.tf                 # manage all variables for this component\n│   ├── zone_a                      # group all zone based features together\n│   │   ├── dns                     # individual (or grouped, your choice) of products or features to manage together\n│   │   │   ├── dns.tf              # `<subject>.tf` (dns.tf) is for managing the individual resources\n│   │   │   ├── provider.tf         # `provider.tf` is for configuring the providers\n│   │   │   └── vars.tf             # manage all variables for this component\n│   │   └── page_rules              # ... same as above but for Page Rules\n│   │       ├── page_rules.tf\n│   │       ├── provider.tf\n│   │       └── vars.tf\n│   ├── zone_b\n│   │   ├── dns\n│   │   │   ├── dns.tf\n│   │   │   ├── provider.tf\n│   │   │   └── vars.tf\n│   │   └── page_rules\n│   │       ├── page_rules.tf\n│   │       ├── provider.tf\n│   │       └── vars.tf\n│   └── zone_c\n│       ├── dns\n│       │   ├── dns.tf\n│       │   ├── provider.tf\n│       │   └── vars.tf\n│       └── page_rules\n│           ├── page_rules.tf\n│           ├── provider.tf\n│           └── vars.tf\n└── demo_account_b\n    ├── users\n    │   ├── provider.tf\n    │   ├── users.tf\n    │   └── vars.tf\n    ├── zone_a\n    │   ├── dns\n    │   │   ├── dns.tf\n    │   │   ├── provider.tf\n    │   │   └── vars.tf\n    │   └── page_rules\n    │       ├── page_rules.tf\n    │       ├── provider.tf\n    │       └── vars.tf\n    ├── zone_b\n    │   ├── dns\n    │   │   ├── dns.tf\n    │   │   ├── provider.tf\n    │   │   └── vars.tf\n    │   └── page_rules\n    │       ├── page_rules.tf\n    │       ├── provider.tf\n    │       └── vars.tf\n    └── zone_c\n        ├── dns\n        │   ├── dns.tf\n        │   ├── provider.tf\n        │   └── vars.tf\n        └── page_rules\n            ├── page_rules.tf\n            ├── provider.tf\n            └── vars.tf\nhcl\nmodule \"example\" \"an_example_site\" {\n  domain = \"example.com\"\n  origin_ip = \"192.168.0.1\"\n}\nhcl\nresource \"cloudflare_record\" \"example_1\" {\n  zone_id = var.cloudflare_zone_id\n  name    = \"terraform\"\n  value   = \"198.51.100.11\"\n  type    = \"A\"\n  ttl     = 3600\n}\n\nresource \"cloudflare_record\" \"example_2\" {\n  zone_id = var.cloudflare_zone_id\n  name    = \"terraform\"\n  value   = \"198.51.100.12\"\n  type    = \"A\"\n  ttl     = 3600\n}\n\nresource \"cloudflare_record\" \"example_3\" {\n  zone_id = var.cloudflare_zone_id\n  name    = \"terraform\"\n  value   = \"198.51.100.13\"\n  type    = \"A\"\n  ttl     = 3600\n}\n\nresource \"cloudflare_load_balancer\" \"bar\" {\n  zone_id          = var.cloudflare_zone_id\n  name             = \"example-load-balancer.example.com\"\n  fallback_pool_id = cloudflare_load_balancer_pool.foo.id\n  default_pool_ids = [cloudflare_load_balancer_pool.foo.id]\n  description      = \"example load balancer using geo-balancing\"\n  proxied          = true\n  steering_policy  = \"geo\"\n\npop_pools {\n    pop      = \"LAX\"\n    pool_ids = [cloudflare_load_balancer_pool.foo.id]\n  }\n\ncountry_pools {\n    country  = \"US\"\n    pool_ids = [cloudflare_load_balancer_pool.foo.id]\n  }\n\nregion_pools {\n    region   = \"WNAM\"\n    pool_ids = [cloudflare_load_balancer_pool.foo.id]\n  }\n\nrules {\n    name      = \"example rule\"\n    condition = \"http.request.uri.path contains \\\"testing\\\"\"\n    fixed_response {\n      message_body = \"hello\"\n      status_code  = 200\n      content_type = \"html\"\n      location     = \"www.example.com\"\n    }\n  }\n}\n\nresource \"cloudflare_load_balancer_pool\" \"example_lb_pool\" {\n  name = \"example-lb-pool\"\n  origins {\n    name    = \"example-1\"\n    address = \"198.51.100.1\"\n    enabled = true\n  }\n}\n\nresource \"cloudflare_page_rule\" \"example_page_rule\" {\n  zone_id = var.cloudflare_zone_id\n  target = \"sub.${var.cloudflare_zone}/page\"\n  priority = 1\n\nactions {\n    ssl = \"flexible\"\n    email_obfuscation = \"on\"\n  }\n}\nsh\nbrew tap cloudflare/cloudflare\nbrew install cloudflare/cloudflare/cf-terraforming\nhcl\nprovider 'cloudflare' {\n # Cloudflare email saved in $CLOUDFLARE_EMAIL\n # Cloudflare API token saved in $CLOUDFLARE_API_TOKEN\n}\nsh\ncf-terraforming generate --email $CLOUDFLARE_EMAIL --token $CLOUDFLARE_API_TOKEN -z 1109d899a5ff5fd74bc01e581693685b --resource-type cloudflare_record > importing-example.tf\ntf\nresource \"cloudflare_record\" \"terraform_managed_resource_3c0b456bc2aa443089c5f40f45f51b31\" {\n    name    = \"@\"\n    type    = \"A\"\n    ttl     = 1\n    proxied = true\n    value   = \"192.0.2.1\"\n    zone_id = \"1109d899a5ff5fd74bc01e581693685b\"\n}\n\nresource \"cloudflare_record\" \"terraform_managed_resource_5e10399a590a45279f09aa8fb1163354\" {\n    name    = \"www\"\n    type    = \"CNAME\"\n    ttl     = 1\n    proxied = true\n    value   = \"mitigateddos.net\"\n    zone_id = \"1109d899a5ff5fd74bc01e581693685b\"\n}\n\nresource \"cloudflare_record\" \"terraform_managed_resource_de1cb74bae184b569bb7f83fefe72248\" {\n    name    = \"a123\"\n    type    = \"NS\"\n    ttl     = 300\n    proxied = false\n    value   = \"rafe.ns.cloudflare.com\"\n    zone_id = \"1109d899a5ff5fd74bc01e581693685b\"\n}\n\nresource \"cloudflare_record\" \"terraform_managed_resource_5799bb01054843eea726758f935d2aa2\" {\n    name    = \"a123\"\n    type    = \"NS\"\n    ttl     = 300\n    proxied = false\n    value   = \"terin.ns.cloudflare.com\"\n    zone_id = \"1109d899a5ff5fd74bc01e581693685b\"\n}\nsh\nterraform plan\ntxt\nTerraform used the selected providers to generate the following execution plan.\nResource actions are indicated with the following symbols:\n  + create\n\nTerraform will perform the following actions:\n\n# cloudflare_record.terraform_managed_resource_3c0b456bc2aa443089c5f40f45f51b31 will be created\n  + resource \"cloudflare_record\" \"terraform_managed_resource_3c0b456bc2aa443089c5f40f45f51b31\" {\n      + id          = (known after apply)>\n      + created_on  = (known after apply)\n      + domain      = \"mitigateddos.net\"\n      + hostname    = (known after apply)\n      + metadata    = (known after apply)\n      + modified_on = (known after apply)\n      + name        = \"mitigateddos.net\"\n      + proxiable   = (known after apply)\n      + proxied     = true\n      + ttl         = 1\n      + type        = \"A\"\n      + value       = \"192.0.2.1\"\n      + zone_id     = \"1109d899a5ff5fd74bc01e581693685b\"\n    }\n\n# cloudflare_record.terraform_managed_resource_5e10399a590a45279f09aa8fb1163354 will be created\n  + resource \"cloudflare_record\" \"terraform_managed_resource_5e10399a590a45279f09aa8fb1163354\" {\n      + id          = (known after apply)\n      + created_on  = (known after apply)\n      + domain      = \"mitigateddos.net\"\n      + hostname    = (known after apply)\n      + metadata    = (known after apply)\n      + modified_on = (known after apply)\n      + name        = \"www.mitigateddos.net\"\n      + proxiable   = (known after apply)\n      + proxied     = true\n      + ttl         = 1\n      + type        = \"CNAME\"\n      + value       = \"mitigateddos.net\"\n      + zone_id     = \"1109d899a5ff5fd74bc01e581693685b\"\n    }\n\n# cloudflare_record.terraform_managed_resource_de1cb74bae184b569bb7f83fefe72248 will be created\n  + resource \"cloudflare_record\" \"terraform_managed_resource_de1cb74bae184b569bb7f83fefe72248\" {\n      + id          = (known after apply)\n      + created_on  = (known after apply)\n      + domain      = \"mitigateddos.net\"\n      + hostname    = (known after apply)\n      + metadata    = (known after apply)\n      + modified_on = (known after apply)\n      + name        = \"a123.mitigateddos.net\"\n      + proxiable   = (known after apply)\n      + proxied     = false\n      + ttl         = 300\n      + type        = \"NS\"\n      + value       = \"rafe.ns.cloudflare.com\"\n      + zone_id     = \"1109d899a5ff5fd74bc01e581693685b\"\n    }\n\n# cloudflare_record.terraform_managed_resource_5799bb01054843eea726758f935d2aa2 will be created\n  + resource \"cloudflare_record\" \"terraform_managed_resource_5799bb01054843eea726758f935d2aa2\" {\n      + id          = (known after apply)\n      + created_on  = (known after apply)\n      + domain      = \"mitigateddos.net\"\n      + hostname    = (known after apply)\n      + metadata    = (known after apply)\n      + modified_on = (known after apply)\n      + name        = \"a123.mitigateddos.net\"\n      + proxiable   = (known after apply)\n      + proxied     = false\n      + ttl         = 300\n      + type        = \"NS\"\n      + value       = \"terin.ns.cloudflare.com\"\n      + zone_id     = \"1109d899a5ff5fd74bc01e581693685b\"\n    }\n\nPlan: 4 to add, 0 to change, 0 to destroy.\n\n------------------------------------------------------------------------\n\nNote: You didn't use the -out option to save this plan, so Terraform can't\nguarantee to take exactly these actions if you run \"terraform apply\" now.\nsh\n   cf-terraforming import --resource-type \"cloudflare_record\" --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY --zone $CLOUDFLARE_ZONE_ID\n   txt\nterraform import cloudflare_record.terraform_managed_resource_3c0b456bc2aa443089c5f40f45f51b31 1109d899a5ff5fd74bc01e581693685b/3c0b456bc2aa443089c5f40f45f51b31\nterraform import cloudflare_record.terraform_managed_resource_5e10399a590a45279f09aa8fb1163354 1109d899a5ff5fd74bc01e581693685b/d09d916d059aa9fc8cb54bdd49deea5f\nterraform import cloudflare_record.terraform_managed_resource_de1cb74bae184b569bb7f83fefe72248 1109d899a5ff5fd74bc01e581693685b/8d6ec0d02c5b22212ff673782c816ef8\nterraform import cloudflare_record.terraform_managed_resource_5799bb01054843eea726758f935d2aa2 1109d899a5ff5fd74bc01e581693685b/3766b952a2dda4c47e71952aeef33c77\nsh\nterraform import cloudflare_record.terraform_managed_resource_3c0b456bc2aa443089c5f40f45f51b31 1109d899a5ff5fd74bc01e581693685b/3c0b456bc2aa443089c5f40f45f51b31\ntxt\ncloudflare_record.terraform_managed_resource_3c0b456bc2aa443089c5f40f45f51b31: Importing from ID \"1109d899a5ff5fd74bc01e581693685b/3c0b456bc2aa443089c5f40f45f51b31\"...\ncloudflare_record.terraform_managed_resource_3c0b456bc2aa443089c5f40f45f51b31: Import complete!\n  Imported cloudflare_record [id=3c0b456bc2aa443089c5f40f45f51b31]\ncloudflare_record.terraform_managed_resource_3c0b456bc2aa443089c5f40f45f51b31: Refreshing state... [id=3c0b456bc2aa443089c5f40f45f51b31]\n\nThe resources that were imported are shown above. These resources are now in\nyour Terraform state and will henceforth be managed by Terraform.\nsh\nterraform import cloudflare_record.terraform_managed_resource_5e10399a590a45279f09aa8fb1163354 1109d899a5ff5fd74bc01e581693685b/d09d916d059aa9fc8cb54bdd49deea5f\ntxt\ncloudflare_record.terraform_managed_resource_5e10399a590a45279f09aa8fb1163354: Importing from ID \"1109d899a5ff5fd74bc01e581693685b/d09d916d059aa9fc8cb54bdd49deea5f\"...\ncloudflare_record.terraform_managed_resource_5e10399a590a45279f09aa8fb1163354: Import complete!\n  Imported cloudflare_record [id=d09d916d059aa9fc8cb54bdd49deea5f]\ncloudflare_record.terraform_managed_resource_5e10399a590a45279f09aa8fb1163354: Refreshing state... [id=d09d916d059aa9fc8cb54bdd49deea5f]\n\nThe resources that were imported are shown above. These resources are now in\nyour Terraform state and will henceforth be managed by Terraform.\nsh\nterraform import cloudflare_record.terraform_managed_resource_de1cb74bae184b569bb7f83fefe72248 1109d899a5ff5fd74bc01e581693685b/8d6ec0d02c5b22212ff673782c816ef8\ntxt\ncloudflare_record.terraform_managed_resource_de1cb74bae184b569bb7f83fefe72248: Importing from ID \"1109d899a5ff5fd74bc01e581693685b/8d6ec0d02c5b22212ff673782c816ef8\"...\ncloudflare_record.terraform_managed_resource_de1cb74bae184b569bb7f83fefe72248: Import complete!\n  Imported cloudflare_record [id=8d6ec0d02c5b22212ff673782c816ef8]\ncloudflare_record.terraform_managed_resource_de1cb74bae184b569bb7f83fefe72248: Refreshing state... [id=8d6ec0d02c5b22212ff673782c816ef8]\n\nThe resources that were imported are shown above. These resources are now in\nyour Terraform state and will henceforth be managed by Terraform.\nsh\nterraform import cloudflare_record.terraform_managed_resource_5799bb01054843eea726758f935d2aa2 1109d899a5ff5fd74bc01e581693685b/3766b952a2dda4c47e71952aeef33c77\ntxt\ncloudflare_record.terraform_managed_resource_5799bb01054843eea726758f935d2aa2: Importing from ID \"1109d899a5ff5fd74bc01e581693685b/3766b952a2dda4c47e71952aeef33c77\"...\ncloudflare_record.terraform_managed_resource_5799bb01054843eea726758f935d2aa2: Import complete!\n  Imported cloudflare_record [id=3766b952a2dda4c47e71952aeef33c77]\ncloudflare_record.terraform_managed_resource_5799bb01054843eea726758f935d2aa2: Refreshing state... [id=3766b952a2dda4c47e71952aeef33c77]\n\nThe resources that were imported are shown above. These resources are now in\nyour Terraform state and will henceforth be managed by Terraform.\nsh\nterraform plan | grep changes\nsh\nNo changes. Infrastructure is up-to-date.\nsh",
+  "code_samples": [
+    {
+      "code": "## Deploy managed rulesets at the account level\n\nNotes\n\n* [Account-level WAF configuration](https://developers.cloudflare.com/waf/account/) requires an Enterprise plan with a paid add-on.\n\n* Managed rulesets deployed at the account level will only apply to incoming traffic of zones on an Enterprise plan. The expression of your `execute` rule must end with `and cf.zone.plan eq \"ENT\"`.\n\nThe following example deploys two managed rulesets to the account with ID `<ACCOUNT_ID>` using Terraform, using a `cloudflare_ruleset` resource with two rules that execute the managed rulesets for two hostnames belonging to Enterprise zones.\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Configure exceptions\n\nThe following example adds two [exceptions](https://developers.cloudflare.com/waf/managed-rules/waf-exceptions/) for the Cloudflare Managed Ruleset:\n\n* The first rule will skip the execution of the entire Cloudflare Managed Ruleset (with ID efb7b8c949ac4650a09736fc376e9aee ) for specific URLs, according to the rule expression.\n* The second rule will skip the execution of two rules belonging to the Cloudflare Managed Ruleset for specific URLs, according to the rule expression.\n\nAdd the two exceptions to the `cloudflare_ruleset` resource before the rule that deploys the Cloudflare Managed Ruleset:\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    },
+    {
+      "code": "Important\n\nEnsure that you place the exceptions **before** the rule that executes the managed ruleset (or some of its rules) that you wish to skip, as in the previous example.\n\n## Configure overrides\n\nThe following example adds three [overrides](https://developers.cloudflare.com/ruleset-engine/managed-rulesets/override-managed-ruleset/) for the Cloudflare Managed Ruleset:\n\n* A rule override for rule with ID `5de7edfa648c4d6891dc3e7f84534ffa` setting the action to `log`.\n* A rule override for rule with ID `75a0060762034a6cb663fd51a02344cb` disabling the rule.\n* A tag override for the `wordpress` tag, setting the action of all the rules with this tag to `js_challenge`.\n\nImportant\n\nRuleset overrides and tag overrides apply to both existing and **future** rules in the managed ruleset. If you want to override existing rules only, you must use rule overrides.\n\nThe following configuration includes the three overrides in the rule that executes the Cloudflare Managed Ruleset:\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Configure payload logging\n\nThis example enables [payload logging](https://developers.cloudflare.com/waf/managed-rules/payload-logging/) for matched rules of the Cloudflare Managed Ruleset, setting the public key used to encrypt the logged payload.\n\nBuilding upon the rule that deploys the Cloudflare Managed Ruleset, the following rule configuration adds the `matched_data` object with the public key used to encrypt the payload:\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Configure the OWASP paranoia level, score threshold, and action\n\nThe OWASP managed ruleset supports the following configurations:\n\n* Enable all the rules up to a specific paranoia level by creating tag overrides that disable all the rules associated with higher paranoia levels.\n\n* Set the action to perform when the calculated threat score is greater than the score threshold by creating a rule override for the last rule in the Cloudflare OWASP Core Ruleset (rule with ID 6179ae15870a4bb7b2d480d4843b323c ), and including the `action` property.\n\n* Set the score threshold by creating a rule override for the last rule in the Cloudflare OWASP Core Ruleset (rule with ID 6179ae15870a4bb7b2d480d4843b323c ), and including the `score_threshold` property.\n\nFor more information on the available configuration values, refer to the [Cloudflare OWASP Core Ruleset](https://developers.cloudflare.com/waf/managed-rules/reference/owasp-core-ruleset/) page in the WAF documentation.\n\nThe following example rule of a `cloudflare_ruleset` Terraform resource performs the following configuration:\n\n* Deploys the OWASP managed ruleset.\n* Sets the OWASP paranoia level to *PL2*.\n* Sets the score threshold to `60` (*Low*).\n* Sets the ruleset action to `log`.\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Best practices · Cloudflare Terraform docs\ndescription: Though all Terraform deployments are unique, follow these best\n  practices to set yourself up for success.\nlastUpdated: 2025-05-29T18:16:56.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/terraform/advanced-topics/best-practices/\n  md: https://developers.cloudflare.com/terraform/advanced-topics/best-practices/index.md\n---\n\nThough all Terraform deployments are unique, follow these best practices to set yourself up for success.\n\n## Manage Terraform resources in Terraform\n\nTerraform works best when it manages all changes to and the lifecycle of a resource.\n\nAfter any operation on the configuration, Terraform attempts to reconcile the differences by syncing the remote into the local state. If there are differences in the local and remote - caused by managing resources outside of Terraform - you may need to delete and recreate the resource in the state file (usually via importing) as not all resources support in-place updates.\n\n## Directory structure\n\nCloudflare recommends using a directory structure that relies on a combination of accounts, zones, and products for isolating changes. This setup lets you have fine-grained owners and scoped Terraform operations to a specific product in a zone. It also more closely aligns owners with Cloudflare's [default roles](https://developers.cloudflare.com/fundamentals/manage-members/roles/), as well as additional tools like AWS or GCP storage by permissioning separate state files.\n\nFor products that encompass many responsibilities such as Rulesets, you can extend this even further by partitioning at the phase level (WAF, redirects, origin rules).",
+      "language": "unknown"
+    },
+    {
+      "code": "## Avoid modules (or use them sparingly)\n\nTerraform modules are ways of encapsulating multiple resources with logic in an abstracted interface. Consider the example where a module sets up default load balancer with a pool, some DNS entries, and perhaps a page rule. The end user may use it like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "In terms of Terraform resources, however, the above example would be translated to:",
+      "language": "unknown"
+    },
+    {
+      "code": "While convenient, this setup can cause unanticipated issues. If this module is shared and then changes internally, the module may have resources out of sync or recreated.\n\nUsing modules also increases the difficulty of debugging or reproducing issues as you must then factor in potential logic bugs outside of Terraform core and the Cloudflare provider.\n\nWarning\n\nThis advice also applies to [Terraform dynamic blocks](https://www.terraform.io/language/expressions/dynamic-blocks) that allow you to do logic in your HCL. Since these dynamic blocks are always evaluated, you can get yourself into situations where you have logic bugs in your configuration (and making the end result unreproducible).\n\n## Migrate resources into Terraform\n\nCloudflare recommends using [`cf-terraforming`](https://developers.cloudflare.com/terraform/advanced-topics/import-cloudflare-resources/) to migrate existing resources into Cloudflare.\n\n## Manage some resources outside of Terraform\n\nIt is perfectly fine to manage some resources inside Terraform and others using a different tool, but make sure you are not [doing both for the same resource](#manage-terraform-resources-in-terraform).\n\n## Use separate environments\n\nTo safely manage separate environments (staging, QA, UAT, production), use separate Cloudflare accounts with separate domains (such as `example.com` and `example-staging.com`).\n\nThis is because some products defined at the account level are shared (such as Load Balancer monitors and pools) and you cannot make an isolated change to them if they are in the same account. Using separate accounts is also beneficial if you intend to test things like DNSSEC, which may affect your entire domain if configured incorrectly.\n\nTo minimize drift, use Terraform and a CI/CD pipeline that runs across both domains to keep them in sync as needed.\n\n## Store credentials safely\n\nWe do not recommend storing Cloudflare credentials as plaintext.\n\nLocally, you can use a third-party tool like [cf-vault](https://github.com/jacobbednarz/cf-vault/) to store your Cloudflare credentials.\n\nFor CI pipelines, use an internal or secret storage tool (such as [Vault](https://www.hashicorp.com/products/vault/secrets-management)).\n\n</page>\n\n<page>\n---\ntitle: Import Cloudflare resources · Cloudflare Terraform docs\ndescription: The Cloudflare Terraform tool is available in the Terraform ME\n  repository. To use it, you must first install the Terraform app on your Mac or\n  Linux system. You must then import Cloudflare resources individually by\n  providing their IDs and names.\nlastUpdated: 2025-10-09T15:47:46.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/terraform/advanced-topics/import-cloudflare-resources/\n  md: https://developers.cloudflare.com/terraform/advanced-topics/import-cloudflare-resources/index.md\n---\n\nAn important point to understand about Terraform is that it can only manage configuration it created or was explicitly told about after the fact. The reason for this limitation is that Terraform expects to be authoritative for the resources it manages. It relies on two types of files to understand what resources it controls and what state they are in. Terraform determines when and how to make changes from the following:\n\n* A [configuration file](https://developer.hashicorp.com/terraform/language) (ending in `.tf`) that defines the configuration of resources for Terraform to manage. This is what you worked with in the tutorial steps.\n* A local [state file](https://developer.hashicorp.com/terraform/language/state) that maps the resource names defined in your configuration file — for example, `cloudflare_load_balancer.www-lb` — to the resources that exist in Cloudflare.\n\nWhen Terraform makes calls to Cloudflare's API to create new resources as explained in the [tutorial](https://developers.cloudflare.com/terraform/tutorial/), it persists those IDs to a state file. By default, Terraform uses the `terraform.tfstate` file in your directory, but this can also be a [remote location](https://developer.hashicorp.com/terraform/language/state/remote). These IDs are later looked up and refreshed when you call `terraform plan` and `terraform apply`.\n\nIf you configured Cloudflare through other means, for example, by logging in to the Cloudflare dashboard or making `curl` calls to `api.cloudflare.com`, Terraform does not yet have these resource IDs in the state file. To manage this preexisting configuration, you will need to first reproduce the configuration in your config file and then import resources individually by providing their IDs and resource names.\n\n## `cf-terraforming`\n\n[`cf-terraforming`](https://github.com/cloudflare/cf-terraforming) helps existing Cloudflare customers get started with Terraform. Currently, `cf-terraforming` helps to generate the Terraform config state by fetching all the resources of a specified type from the account and/or zone of your choosing.\n\n### Installation\n\nBefore you start, you must install `cf-terraforming`.\n\nIf you use Homebrew on macOS, open a terminal and run the following commands:",
+      "language": "unknown"
+    },
+    {
+      "code": "If you are using a different OS, [download the latest release](https://github.com/cloudflare/cf-terraforming/releases) from the `cf-terraforming` GitHub repository.\n\nTo view the help file, run `cf-terraforming` or `cf-terraforming -h`.\n\n### Basic usage\n\nTo use `cf-terraforming`, specify the items below:\n\n1. The command to execute (for example, `generate` or `import`).\n2. Your Cloudflare user email - `--email` or `-e`.\n3. Your Cloudflare API token - `--token` or `-t`.\n4. The account and/or zone to pull resources from - `--account`/`--zone` or `-a`/`-z`.\n5. The Cloudflare resources to generate config.\n\nThe list of supported resources is available in the [Terraform README](https://github.com/cloudflare/cf-terraforming#supported-resources).\n\n## Import existing Cloudflare resources\n\nTo start managing existing Cloudflare resources in Terraform, for example, DNS records, you need:\n\n* The Terraform configuration of that resource (defined in a `.tf` file)\n* An accompanying Terraform state file of that resources state (defined in a `.tfstate` file)\n\n### Generate Terraform configuration with `cf-terraforming`\n\nIf you do not have a Terraform configuration file defined, you need the `provider` block defined as follows:\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    },
+    {
+      "code": "Remember to keep your credentials saved in environment variables or terraform autovars that are not checked into your source files.\n\nStart by making a call to `cf-terraforming generate` to generate the Terraform configuration for the DNS records in the zone you want to manage with Terraform.",
+      "language": "unknown"
+    },
+    {
+      "code": "If you had not redirected the output to the `importing-example.tf` file, the result displayed in the standard output (your terminal window) would look like the following:\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    },
+    {
+      "code": "Calling `terraform plan` at this point will try to create these resources as if they did not exist, since they are not present in the local state file:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "To fix this, you must import the real state of those resources from Cloudflare into the Terraform state file (`.tfstate`).\n\n### Import resources into Terraform state\n\n`cf-terraforming` allows you to import local state (`.tfstate` file) for the same resources you imported during configuration.\n\nWhen you run `cf-terraforming import ...`, you will obtain a list of `terraform import ...` commands that you must run manually afterward to import those resources into Terraform state. This is currently a manual process, but it may be automated in the future.\n\n1. Run the following command:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Copy each `terraform import ...` command included in the output and run it. Terraform will import each resource individually into Terraform state.\n\nFor example, if the output of the first command (`cf-terraforming import ...`) contained the following `terraform` commands:",
+      "language": "unknown"
+    },
+    {
+      "code": "You would run each command individually in the terminal:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "If you now run `terraform plan`, you will notice that Terraform will no longer try to re-create the `cloudflare_record` resources:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Provider customization · Cloudflare Terraform docs\ndescription: Terraform communicates with cloud and global network provider APIs\n  such as Cloudflare through modules known as providers. These providers are\n  installed automatically when you run terraform init in a directory that has a\n  .tf file containing a provider.\nlastUpdated: 2024-08-20T21:10:02.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/terraform/advanced-topics/provider-customization/\n  md: https://developers.cloudflare.com/terraform/advanced-topics/provider-customization/index.md\n---\n\nTerraform communicates with cloud and global network provider APIs such as Cloudflare through modules known as providers. These providers are [installed automatically](https://developers.cloudflare.com/terraform/tutorial/initialize-terraform/#2-initialize-terraform-and-the-cloudflare-provider) when you run `terraform init` in a directory that has a `.tf` file containing a provider.\n\nTypically, the only required parameters to the provider are those required to authenticate. However, you may want to customize the provider to your needs. The following section covers some [optional settings](https://www.terraform.io/docs/providers/cloudflare/#argument-reference) that you can pass to the Cloudflare Terraform provider.\n\n## Adjust the default Cloudflare provider settings\n\nNote\n\nThe examples below build on the [Cloudflare Terraform tutorial](https://developers.cloudflare.com/terraform/tutorial/).\n\nYou can customize the Cloudflare Terraform provider using configuration parameters, specified either in your `.tf` configuration files or via environment variables, such as `$CLOUDFLARE_RPS`. Using environment variables may make sense when running Terraform from a CI/CD system or when the change is temporary and does not need to be persisted in your configuration history.\n\n### Increase the frequency of API requests\n\nThe `api.cloudflare.com` endpoint has a default rate limit of 1,200 calls per five minute period, or four requests per second (refer to [API Rate Limits](https://developers.cloudflare.com/fundamentals/api/reference/limits/)). Terraform will need to stay below the defined threshold or the Cloudflare API will respond with `HTTP 429 - Too Many Requests` responses. When this happens, the Cloudflare Terraform provider will back off before retrying.\n\nEnterprise customers may request a limit increase by contacting their account team. You can then configure the Cloudflare Terraform provider to make API calls at a faster rate. For example, you can increase the API request frequency by setting environment variables:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Deploy managed rulesets at the account level",
+      "id": "deploy-managed-rulesets-at-the-account-level"
+    },
+    {
+      "level": "h2",
+      "text": "Configure exceptions",
+      "id": "configure-exceptions"
+    },
+    {
+      "level": "h2",
+      "text": "Configure overrides",
+      "id": "configure-overrides"
+    },
+    {
+      "level": "h2",
+      "text": "Configure payload logging",
+      "id": "configure-payload-logging"
+    },
+    {
+      "level": "h2",
+      "text": "Configure the OWASP paranoia level, score threshold, and action",
+      "id": "configure-the-owasp-paranoia-level,-score-threshold,-and-action"
+    },
+    {
+      "level": "h2",
+      "text": "Manage Terraform resources in Terraform",
+      "id": "manage-terraform-resources-in-terraform"
+    },
+    {
+      "level": "h2",
+      "text": "Directory structure",
+      "id": "directory-structure"
+    },
+    {
+      "level": "h2",
+      "text": "Avoid modules (or use them sparingly)",
+      "id": "avoid-modules-(or-use-them-sparingly)"
+    },
+    {
+      "level": "h2",
+      "text": "Migrate resources into Terraform",
+      "id": "migrate-resources-into-terraform"
+    },
+    {
+      "level": "h2",
+      "text": "Manage some resources outside of Terraform",
+      "id": "manage-some-resources-outside-of-terraform"
+    },
+    {
+      "level": "h2",
+      "text": "Use separate environments",
+      "id": "use-separate-environments"
+    },
+    {
+      "level": "h2",
+      "text": "Store credentials safely",
+      "id": "store-credentials-safely"
+    },
+    {
+      "level": "h2",
+      "text": "`cf-terraforming`",
+      "id": "`cf-terraforming`"
+    },
+    {
+      "level": "h3",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h3",
+      "text": "Basic usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Import existing Cloudflare resources",
+      "id": "import-existing-cloudflare-resources"
+    },
+    {
+      "level": "h3",
+      "text": "Generate Terraform configuration with `cf-terraforming`",
+      "id": "generate-terraform-configuration-with-`cf-terraforming`"
+    },
+    {
+      "level": "h3",
+      "text": "Import resources into Terraform state",
+      "id": "import-resources-into-terraform-state"
+    },
+    {
+      "level": "h2",
+      "text": "Adjust the default Cloudflare provider settings",
+      "id": "adjust-the-default-cloudflare-provider-settings"
+    },
+    {
+      "level": "h3",
+      "text": "Increase the frequency of API requests",
+      "id": "increase-the-frequency-of-api-requests"
+    }
+  ],
+  "url": "llms-txt#configure-a-ruleset-at-the-zone-level-for-the-\"http_request_firewall_managed\"-phase",
+  "links": []
+}

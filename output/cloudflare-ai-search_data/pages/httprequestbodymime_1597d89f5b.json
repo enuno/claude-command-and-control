@@ -1,0 +1,17 @@
+{
+  "title": "http.request.body.mime",
+  "content": "`http.request.body.mime` String\n\nThe MIME type of the request detected from the request body.\n\nSupports the most common MIME types of the following general categories: video, audio, image, application, text.\n\nAll `http.request.body.*` fields (except [`http.request.body.size`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.body.size/)) handle a given maximum body size, which varies per plan. For Enterprise customers, the maximum body size is 128 KB. For other paid plans, the limit is lower by default — reach out to your account team or to Cloudflare Support to increase the limit. For users in the Free plan, the limit is 1 MB.\n\nYou cannot define expressions that rely on request body data beyond the maximum size set for your plan. If the request body is larger, the body fields will contain a truncated value and the [`http.request.body.truncated`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.body.truncated/) field will be set to `true`. The [`http.request.body.size`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.body.size/) field will contain the full size of the request without any truncation.\n\nThe maximum body size applies only to the values of HTTP body fields — the origin server will still receive the complete request body.\n\n<page>\n---\ntitle: http.request.body.form.values · Cloudflare Ruleset Engine docs\ndescription: The values of the form fields in an HTTP request.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.body.form.values/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.body.form.values/index.md\n---",
+  "code_samples": [
+    {
+      "code": "\"image/jpeg\"",
+      "language": "txt"
+    },
+    {
+      "code": "http.request.body.mime in {\"image/bmp\" \"image/gif\" \"image/jpeg\" \"image/png\" \"image/tiff\"}",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#http.request.body.mime",
+  "links": []
+}

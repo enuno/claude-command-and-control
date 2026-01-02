@@ -1,0 +1,17 @@
+{
+  "title": "Confirm we are using wrangler v3.89.0+",
+  "content": "npx wrangler --version\nsh\n⛅️ wrangler 3.89.0\nsh",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "Start a local dev session",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#confirm-we-are-using-wrangler-v3.89.0+",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "If reachable, check nameserver identity",
+  "content": "nslookup -class=chaos -type=txt id.server 1.1.1.1\nnslookup -class=chaos -type=txt id.server 1.0.0.1",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#if-reachable,-check-nameserver-identity",
+  "links": []
+}

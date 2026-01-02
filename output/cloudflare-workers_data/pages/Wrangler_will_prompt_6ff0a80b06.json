@@ -1,0 +1,8 @@
+{
+  "title": "Wrangler will prompt:",
+  "content": "✔ It looks like you are trying to deploy a directory of static assets only. Is this correct? … yes\n✔ What do you want to name your project? … my-astro-site",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#wrangler-will-prompt:",
+  "links": []
+}

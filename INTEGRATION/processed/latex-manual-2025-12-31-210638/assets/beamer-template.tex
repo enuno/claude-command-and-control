@@ -1,0 +1,199 @@
+% Beamer Presentation Template
+% For conference talks, lectures, and presentations
+
+\documentclass{beamer}
+
+% ===== THEME SELECTION =====
+\usetheme{Madrid}         % Try: Warsaw, Berlin, Copenhagen, Singapore
+\usecolortheme{default}   % Try: dove, seahorse, whale, dolphin
+
+% ===== PACKAGES =====
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{listings}
+\usepackage{hyperref}
+
+% ===== PRESENTATION INFORMATION =====
+\title[Short Title]{Full Presentation Title}
+\subtitle{Subtitle if needed}
+\author[Author]{Full Author Name}
+\institute[Institution]{
+    Department Name\\
+    Institution Name\\
+    \medskip
+    \texttt{email@example.com}
+}
+\date[\today]{Conference Name, \today}
+
+% ===== CUSTOM COMMANDS =====
+% Add your custom commands here
+
+% ===== DOCUMENT START =====
+\begin{document}
+
+% ===== TITLE SLIDE =====
+\frame{\titlepage}
+
+% ===== OUTLINE SLIDE =====
+\begin{frame}{Outline}
+    \tableofcontents
+\end{frame}
+
+% ===== INTRODUCTION =====
+\section{Introduction}
+
+\begin{frame}{Introduction}
+    \begin{itemize}
+        \item First point
+        \item Second point
+        \item Third point
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Motivation}
+    Why is this work important?
+    
+    \begin{block}{Key Question}
+        What problem are we trying to solve?
+    \end{block}
+    
+    \pause
+    
+    \begin{alertblock}{Challenge}
+        What makes this problem difficult?
+    \end{alertblock}
+\end{frame}
+
+% ===== BACKGROUND =====
+\section{Background}
+
+\begin{frame}{Background}
+    \begin{columns}
+        \column{0.5\textwidth}
+        Left column content:
+        \begin{itemize}
+            \item Point 1
+            \item Point 2
+        \end{itemize}
+        
+        \column{0.5\textwidth}
+        Right column content:
+        \begin{figure}
+            % \includegraphics[width=\textwidth]{figure.pdf}
+            \caption{Example figure}
+        \end{figure}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Mathematical Notation}
+    Display equations clearly:
+    
+    \begin{equation}
+        E = mc^2
+    \end{equation}
+    
+    Or inline math: $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
+\end{frame}
+
+% ===== METHODOLOGY =====
+\section{Methodology}
+
+\begin{frame}{Approach}
+    \begin{enumerate}
+        \item<1-> First step (appears first)
+        \item<2-> Second step (appears second)
+        \item<3-> Third step (appears third)
+    \end{enumerate}
+    
+    \onslide<4->{
+        All steps complete!
+    }
+\end{frame}
+
+\begin{frame}[fragile]{Code Example}
+    \begin{lstlisting}[language=Python]
+def hello_world():
+    print("Hello, World!")
+    return True
+    \end{lstlisting}
+    
+    Use \texttt{[fragile]} option for frames with code.
+\end{frame}
+
+% ===== RESULTS =====
+\section{Results}
+
+\begin{frame}{Key Results}
+    \begin{table}
+        \caption{Example results table}
+        \begin{tabular}{lcc}
+            \hline
+            Method & Accuracy & Time \\
+            \hline
+            Method 1 & 85\% & 10s \\
+            Method 2 & 90\% & 15s \\
+            \textbf{Our Method} & \textbf{95\%} & \textbf{12s} \\
+            \hline
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Visualization}
+    \begin{figure}
+        \centering
+        % \includegraphics[width=0.8\textwidth]{results.pdf}
+        \caption{Results visualization}
+    \end{figure}
+\end{frame}
+
+% ===== CONCLUSION =====
+\section{Conclusion}
+
+\begin{frame}{Summary}
+    \begin{itemize}
+        \item Main finding 1
+        \item Main finding 2
+        \item Main finding 3
+    \end{itemize}
+    
+    \vspace{1cm}
+    
+    \begin{block}{Key Takeaway}
+        One sentence summary of the most important result.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Future Work}
+    Next steps:
+    \begin{itemize}
+        \item Extension 1
+        \item Extension 2
+        \item Application areas
+    \end{itemize}
+\end{frame}
+
+% ===== THANK YOU SLIDE =====
+\begin{frame}[plain]
+    \begin{center}
+        {\Huge Thank You!}
+        
+        \vspace{1cm}
+        
+        {\large Questions?}
+        
+        \vspace{1cm}
+        
+        \texttt{email@example.com}
+    \end{center}
+\end{frame}
+
+% ===== BACKUP SLIDES =====
+\appendix
+
+\begin{frame}{Backup Slide 1}
+    Additional details for questions.
+\end{frame}
+
+\end{document}

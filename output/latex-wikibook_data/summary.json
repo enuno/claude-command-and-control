@@ -1,0 +1,289 @@
+{
+  "name": "latex-wikibook",
+  "total_pages": 70,
+  "base_url": "https://en.wikibooks.org/",
+  "llms_txt_detected": false,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "LaTeX/Introduction - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Introduction"
+    },
+    {
+      "title": "LaTeX/Installation - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Installation"
+    },
+    {
+      "title": "LaTeX/Installing Extra Packages - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Installing_Extra_Packages"
+    },
+    {
+      "title": "LaTeX/Basics - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Basics"
+    },
+    {
+      "title": "LaTeX/How to get help - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/How_to_get_help"
+    },
+    {
+      "title": "LaTeX/Document Structure - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Document_Structure"
+    },
+    {
+      "title": "LaTeX/Title Creation - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Title_Creation"
+    },
+    {
+      "title": "LaTeX/Page Layout - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Page_Layout"
+    },
+    {
+      "title": "LaTeX/Modular Documents - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Modular_Documents"
+    },
+    {
+      "title": "LaTeX/Text Formatting - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Text_Formatting"
+    },
+    {
+      "title": "LaTeX/Paragraph Formatting - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Paragraph_Formatting"
+    },
+    {
+      "title": "LaTeX/Colors - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Colors"
+    },
+    {
+      "title": "LaTeX/Fonts - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Fonts"
+    },
+    {
+      "title": "LaTeX/List Structures - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/List_Structures"
+    },
+    {
+      "title": "LaTeX/Special Characters - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Special_Characters"
+    },
+    {
+      "title": "LaTeX/Internationalization - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Internationalization"
+    },
+    {
+      "title": "LaTeX/Rotations - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Rotations"
+    },
+    {
+      "title": "LaTeX/Tables - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Tables"
+    },
+    {
+      "title": "LaTeX/Importing Graphics - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics"
+    },
+    {
+      "title": "LaTeX/Floats, Figures and Captions - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions"
+    },
+    {
+      "title": "LaTeX/Footnotes and Margin Notes - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Footnotes_and_Margin_Notes"
+    },
+    {
+      "title": "LaTeX/Hyperlinks - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Hyperlinks"
+    },
+    {
+      "title": "LaTeX/Labels and Cross-referencing - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Labels_and_Cross-referencing"
+    },
+    {
+      "title": "LaTeX/Indexing - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Indexing"
+    },
+    {
+      "title": "LaTeX/Glossary - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Glossary"
+    },
+    {
+      "title": "LaTeX/Bibliography Management - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management"
+    },
+    {
+      "title": "LaTeX/More Bibliographies - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/More_Bibliographies"
+    },
+    {
+      "title": "LaTeX/Mathematics - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Mathematics"
+    },
+    {
+      "title": "LaTeX/Advanced Mathematics - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Advanced_Mathematics"
+    },
+    {
+      "title": "LaTeX/Theorems - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Theorems"
+    },
+    {
+      "title": "LaTeX/Chemical Graphics - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Chemical_Graphics"
+    },
+    {
+      "title": "LaTeX/Algorithms - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Algorithms"
+    },
+    {
+      "title": "LaTeX/Source Code Listings - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings"
+    },
+    {
+      "title": "LaTeX/Linguistics - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Linguistics"
+    },
+    {
+      "title": "LaTeX/Scientific Reports - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Scientific_Reports"
+    },
+    {
+      "title": "LaTeX/Letters - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Letters"
+    },
+    {
+      "title": "LaTeX/Presentations - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Presentations"
+    },
+    {
+      "title": "LaTeX/Teacher's Corner - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Teacher%27s_Corner"
+    },
+    {
+      "title": "LaTeX/Curriculum Vitae - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Curriculum_Vitae"
+    },
+    {
+      "title": "LaTeX/Academic Journals - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Academic_Journals"
+    },
+    {
+      "title": "LaTeX/Introducing Procedural Graphics - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Introducing_Procedural_Graphics"
+    },
+    {
+      "title": "LaTeX/MetaPost - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/MetaPost"
+    },
+    {
+      "title": "LaTeX/Picture - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Picture"
+    },
+    {
+      "title": "LaTeX/PGF/TikZ - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/PGF/TikZ"
+    },
+    {
+      "title": "LaTeX/PSTricks - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/PSTricks"
+    },
+    {
+      "title": "LaTeX/Xy-pic - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Xy-pic"
+    },
+    {
+      "title": "LaTeX/Creating 3D graphics - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Creating_3D_graphics"
+    },
+    {
+      "title": "LaTeX/Macros - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Macros"
+    },
+    {
+      "title": "LaTeX/Plain TeX - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Plain_TeX"
+    },
+    {
+      "title": "LaTeX/Creating Packages - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Creating_Packages"
+    },
+    {
+      "title": "LaTeX/Creating Package Documentation - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Creating_Package_Documentation"
+    },
+    {
+      "title": "LaTeX/Themes - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Themes"
+    },
+    {
+      "title": "LaTeX/Errors and Warnings - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Errors_and_Warnings"
+    },
+    {
+      "title": "LaTeX/Lengths - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Lengths"
+    },
+    {
+      "title": "LaTeX/Counters - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Counters"
+    },
+    {
+      "title": "LaTeX/Boxes - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Boxes"
+    },
+    {
+      "title": "LaTeX/Rules and Struts - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Rules_and_Struts"
+    },
+    {
+      "title": "LaTeX/Initials - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Initials"
+    },
+    {
+      "title": "LaTeX/Customizing Page Headers and Footers - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Customizing_Page_Headers_and_Footers"
+    },
+    {
+      "title": "LaTeX/FAQ - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/FAQ"
+    },
+    {
+      "title": "LaTeX/Tips and Tricks - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Tips_and_Tricks"
+    },
+    {
+      "title": "LaTeX/Q&A - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Q%26A"
+    },
+    {
+      "title": "LaTeX/Authors - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Authors"
+    },
+    {
+      "title": "LaTeX/Links - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Links"
+    },
+    {
+      "title": "LaTeX/Package Reference - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Package_Reference"
+    },
+    {
+      "title": "LaTeX/Sample LaTeX documents - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Sample_LaTeX_documents"
+    },
+    {
+      "title": "LaTeX/Index - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Index"
+    },
+    {
+      "title": "LaTeX/Command Glossary - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Command_Glossary"
+    },
+    {
+      "title": "LaTeX/Export To Other Formats - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Export_To_Other_Formats"
+    },
+    {
+      "title": "LaTeX/Collaborative Writing of LaTeX Documents - Wikibooks, open books for an open world",
+      "url": "https://en.wikibooks.org/wiki/LaTeX/Collaborative_Writing_of_LaTeX_Documents"
+    }
+  ]
+}

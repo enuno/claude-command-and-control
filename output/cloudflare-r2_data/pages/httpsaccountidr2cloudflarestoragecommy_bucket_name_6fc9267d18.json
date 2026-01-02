@@ -1,0 +1,192 @@
+{
+  "title": "https://<accountid>.r2.cloudflarestorage.com/my-bucket-name/cat.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<credential>&X-Amz-Date=<timestamp>&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=<signature>",
+  "content": "typescript\n  interface Environment {\n    R2: R2Bucket\n    /**\n     * In this example, your SSE-C is stored as a hexadecimal string (preferably a secret).\n     * The R2 API also supports providing an ArrayBuffer directly, if you want to generate/\n     * store your keys dynamically.\n    */\n    SSEC_KEY: string\n  }\n  export default {\n    async fetch(req: Request, env: Env) {\n      const { SSEC_KEY, R2 } = env;\n      const { pathname: filename } = new URL(req.url);\n      switch(req.method) {\n        case \"GET\": {\n          const maybeObj = await env.BUCKET.get(filename, {\n            onlyIf: req.headers,\n            ssecKey: SSEC_KEY,\n          });\n          if(!maybeObj) {\n            return new Response(\"Not Found\", {\n              status: 404\n            });\n          }\n          const headers = new Headers();\n          maybeObj.writeHttpMetadata(headers);\n          return new Response(body, {\n            headers\n          });\n        }\n        case 'POST': {\n          const multipartUpload = await env.BUCKET.createMultipartUpload(filename, {\n            httpMetadata: req.headers,\n            ssecKey: SSEC_KEY,\n          });\n          /**\n           * This example only provides a single-part \"multipart\" upload.\n           * For multiple parts, the process is the same(the key must be provided)\n           * for every part.\n          */\n          const partOne = await multipartUpload.uploadPart(1, req.body, ssecKey);\n          const obj = await multipartUpload.complete([partOne]);\n          const headers = new Headers();\n          obj.writeHttpMetadata(headers);\n          return new Response(null, {\n            headers,\n            status: 201\n          });\n        }\n        case 'PUT': {\n          const obj = await env.BUCKET.put(filename, req.body, {\n            httpMetadata: req.headers,\n            ssecKey: SSEC_KEY,\n          });\n          const headers = new Headers();\n          maybeObj.writeHttpMetadata(headers);\n          return new Response(null, {\n            headers,\n            status: 201\n          });\n        }\n        default: {\n          return new Response(\"Method not allowed\", {\n            status: 405\n          });\n        }\n      }\n    }\n  }\n  javascript\n  /**\n     * In this example, your SSE-C is stored as a hexadecimal string(preferably a secret).\n     * The R2 API also supports providing an ArrayBuffer directly, if you want to generate/\n     * store your keys dynamically.\n  */\n  export default {\n    async fetch(req, env) {\n      const { SSEC_KEY, R2 } = env;\n      const { pathname: filename } = new URL(req.url);\n      switch(req.method) {\n        case \"GET\": {\n          const maybeObj = await env.BUCKET.get(filename, {\n            onlyIf: req.headers,\n            ssecKey: SSEC_KEY,\n          });\n          if(!maybeObj) {\n            return new Response(\"Not Found\", {\n              status: 404\n            });\n          }\n          const headers = new Headers();\n          maybeObj.writeHttpMetadata(headers);\n          return new Response(body, {\n            headers\n          });\n        }\n        case 'POST': {\n          const multipartUpload = await env.BUCKET.createMultipartUpload(filename, {\n            httpMetadata: req.headers,\n            ssecKey: SSEC_KEY,\n          });\n          /**\n           * This example only provides a single-part \"multipart\" upload.\n           * For multiple parts, the process is the same(the key must be provided)\n           * for every part.\n          */\n          const partOne = await multipartUpload.uploadPart(1, req.body, ssecKey);\n          const obj = await multipartUpload.complete([partOne]);\n          const headers = new Headers();\n          obj.writeHttpMetadata(headers);\n          return new Response(null, {\n            headers,\n            status: 201\n          });\n        }\n        case 'PUT': {\n          const obj = await env.BUCKET.put(filename, req.body, {\n            httpMetadata: req.headers,\n            ssecKey: SSEC_KEY,\n          });\n          const headers = new Headers();\n          maybeObj.writeHttpMetadata(headers);\n          return new Response(null, {\n            headers,\n            status: 201\n          });\n        }\n        default: {\n          return new Response(\"Method not allowed\", {\n            status: 405\n          });\n        }\n      }\n    }\n  }\n  typescript\n  import {\n    UploadPartCommand,\n    PutObjectCommand, S3Client,\n    CompleteMultipartUploadCommand,\n    CreateMultipartUploadCommand,\n    type UploadPartCommandOutput\n  } from \"@aws-sdk/client-s3\";\n\nconst s3 = new S3Client({\n    endpoint: process.env.R2_ENDPOINT,\n    credentials: {\n      accessKeyId: process.env.R2_ACCESS_KEY_ID,\n      secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,\n    },\n  });\n\nconst SSECustomerAlgorithm = \"AES256\";\n  const SSECustomerKey = process.env.R2_SSEC_KEY;\n  const SSECustomerKeyMD5 = process.env.R2_SSEC_KEY_MD5;\n\nawait s3.send(\n    new PutObjectCommand({\n      Bucket: \"your-bucket\",\n      Key: \"single-part\",\n      Body: \"BeepBoop\",\n      SSECustomerAlgorithm,\n      SSECustomerKey,\n      SSECustomerKeyMD5,\n    }),\n  );\n\nconst multi = await s3.send(\n    new CreateMultipartUploadCommand({\n      Bucket: \"your-bucket\",\n      Key: \"multi-part\",\n      SSECustomerAlgorithm,\n      SSECustomerKey,\n      SSECustomerKeyMD5,\n    }),\n  );\n  const UploadId = multi.UploadId;\n\nconst parts: UploadPartCommandOutput[] = [];\n\nparts.push(\n    await s3.send(\n      new UploadPartCommand({\n        Bucket: \"your-bucket\",\n        Key: \"multi-part\",\n        UploadId,\n        //   filledBuf()` generates some random data.\n        // Replace with a function/body of your choice.\n        Body: filledBuf(),\n        PartNumber: 1,\n        SSECustomerAlgorithm,\n        SSECustomerKey,\n        SSECustomerKeyMD5,\n      }),\n    ),\n  );\n  parts.push(\n    await s3.send(\n      new UploadPartCommand({\n        Bucket: \"your-bucket\",\n        Key: \"multi-part\",\n        UploadId,\n        //   filledBuf()` generates some random data.\n        // Replace with a function/body of your choice.\n        Body: filledBuf(),\n        PartNumber: 2,\n        SSECustomerAlgorithm,\n        SSECustomerKey,\n        SSECustomerKeyMD5,\n      }),\n    ),\n  );\n  await s3.send(\n    new CompleteMultipartUploadCommand({\n      Bucket: \"your-bucket\",\n      Key: \"multi-part\",\n      UploadId,\n      MultipartUpload: {\n        Parts: parts.map(({ ETag }, PartNumber) => ({\n          ETag,\n          PartNumber: PartNumber + 1,\n        })),\n      },\n      SSECustomerAlgorithm,\n      SSECustomerKey,\n      SSECustomerKeyMD5,\n    }),\n  );\n\nconst HeadObjectOutput = await s3.send(\n    new HeadObjectCommand({\n      Bucket: \"your-bucket\",\n      Key: \"multi-part\",\n      SSECustomerAlgorithm,\n      SSECustomerKey,\n      SSECustomerKeyMD5,\n    }),\n  );\n\nconst GetObjectOutput = await s3.send(\n    new GetObjectCommand({\n      Bucket: \"your-bucket\",\n      Key: \"single-part\",\n      SSECustomerAlgorithm,\n      SSECustomerKey,\n      SSECustomerKeyMD5,\n    }),\n  );\n  hcl\nterraform {\n  required_providers {\n    cloudflare = {\n      source = \"cloudflare/cloudflare\"\n      version = \"~> 4\"\n    }\n  }\n}\n\nprovider \"cloudflare\" {\n  api_token = \"<YOUR_API_TOKEN>\"\n}\n\nresource \"cloudflare_r2_bucket\" \"cloudflare-bucket\" {\n  account_id = \"<YOUR_ACCOUNT_ID>\"\n  name       = \"my-tf-test-bucket\"\n  location   = \"WEUR\"\n}\nhcl\nterraform {\n  required_providers {\n    aws = {\n      source = \"hashicorp/aws\"\n      version = \"~> 5\"\n    }\n  }\n}\n\nprovider \"aws\" {\n  region = \"us-east-1\"\n\naccess_key = <R2 Access Key>\n  secret_key = <R2 Secret Key>\n\n# Required for R2.\n  # These options disable S3-specific validation on the client (Terraform) side.\n  skip_credentials_validation = true\n  skip_region_validation      = true\n  skip_requesting_account_id  = true\n\nendpoints {\n    s3 = \"https://<account id>.r2.cloudflarestorage.com\"\n  }\n}\n\nresource \"aws_s3_bucket\" \"default\" {\n  bucket = \"<org>-test\"\n}\n\nresource \"aws_s3_bucket_cors_configuration\" \"default\" {\n  bucket   = aws_s3_bucket.default.id\n\ncors_rule {\n    allowed_methods = [\"GET\"]\n    allowed_origins = [\"*\"]\n  }\n}\n\nresource \"aws_s3_bucket_lifecycle_configuration\" \"default\" {\n  bucket = aws_s3_bucket.default.id\n\nrule {\n    id     = \"expire-bucket\"\n    status = \"Enabled\"\n    expiration {\n      days = 1\n    }\n  }\n\nrule {\n    id     = \"abort-multipart-upload\"\n    status = \"Enabled\"\n    abort_incomplete_multipart_upload {\n      days_after_initiation = 1\n    }\n  }\n}\nts\nexport default {\n  async fetch(request: Request, env: Env, ctx: ExecutionContext) {\n    const object = await env.MY_BUCKET.get(\"image.png\");\n    return new Response(object.body);\n  },\n} satisfies ExportedHandler<Env>;\nts\n  import { S3Client, GetObjectCommand } from \"@aws-sdk/client-s3\";\n\nconst S3 = new S3Client({\n    region: \"auto\", // Required by SDK but not used by R2\n    // Provide your Cloudflare account ID\n    endpoint: `https://<ACCOUNT_ID>.r2.cloudflarestorage.com`,\n    // Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n    credentials: {\n      accessKeyId: '<ACCESS_KEY_ID>',\n      secretAccessKey: '<SECRET_ACCESS_KEY>',\n    },\n  });\n\nconst response = await S3.send(\n    new GetObjectCommand({\n      Bucket: \"my-bucket\",\n      Key: \"image.png\",\n    }),\n  );\n  python\n  import boto3\n\ns3 = boto3.client(\n    service_name=\"s3\",\n    # Provide your Cloudflare account ID\n    endpoint_url=f\"https://{ACCOUNT_ID}.r2.cloudflarestorage.com\",\n    # Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n    aws_access_key_id=ACCESS_KEY_ID,\n    aws_secret_access_key=SECRET_ACCESS_KEY,\n    region_name=\"auto\", # Required by SDK but not used by R2\n  )\n\nresponse = s3.get_object(Bucket=\"my-bucket\", Key=\"image.png\")\n  image_data = response[\"Body\"].read()\n  sh\nwrangler r2 object get test-bucket/image.png\nts\nexport default {\n  async fetch(request: Request, env: Env, ctx: ExecutionContext) {\n    await env.MY_BUCKET.delete(\"image.png\");\n    return new Response(\"Deleted\");\n  },\n} satisfies ExportedHandler<Env>;\nts\n  import { S3Client, DeleteObjectCommand } from \"@aws-sdk/client-s3\";\n\nconst S3 = new S3Client({\n    region: \"auto\", // Required by SDK but not used by R2\n    // Provide your Cloudflare account ID\n    endpoint: `https://<ACCOUNT_ID>.r2.cloudflarestorage.com`,\n    // Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n    credentials: {\n      accessKeyId: '<ACCESS_KEY_ID>',\n      secretAccessKey: '<SECRET_ACCESS_KEY>',\n    },\n  });\n\nawait S3.send(\n    new DeleteObjectCommand({\n      Bucket: \"my-bucket\",\n      Key: \"image.png\",\n    }),\n  );\n  python\n  import boto3\n\ns3 = boto3.client(\n    service_name=\"s3\",\n    # Provide your Cloudflare account ID\n    endpoint_url=f\"https://{ACCOUNT_ID}.r2.cloudflarestorage.com\",\n    # Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n    aws_access_key_id=ACCESS_KEY_ID,\n    aws_secret_access_key=SECRET_ACCESS_KEY,\n    region_name=\"auto\", # Required by SDK but not used by R2\n  )\n\ns3.delete_object(Bucket=\"my-bucket\", Key=\"image.png\")\n  sh\nwrangler r2 object delete test-bucket/image.png\nplaintext\necho -n $(echo -n bce6bf66aeb76c7040fdd5f4eccb78e6 | xxd -r -p -)\\\n$(echo -n 8165449fc15bbf43d3b674595cbcc406 | xxd -r -p -) | md5sum\nts\nexport default {\n  async fetch(request: Request, env: Env, ctx: ExecutionContext) {\n    await env.MY_BUCKET.put(\"image.png\", request.body);\n    return new Response(\"Uploaded\");\n  },\n} satisfies ExportedHandler<Env>;\nts\n  import { S3Client, PutObjectCommand } from \"@aws-sdk/client-s3\";\n\nconst S3 = new S3Client({\n    region: \"auto\", // Required by SDK but not used by R2\n    // Provide your Cloudflare account ID\n    endpoint: `https://<ACCOUNT_ID>.r2.cloudflarestorage.com`,\n    // Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n    credentials: {\n      accessKeyId: '<ACCESS_KEY_ID>',\n      secretAccessKey: '<SECRET_ACCESS_KEY>',\n    },\n  });\n\nawait S3.send(\n    new PutObjectCommand({\n      Bucket: \"my-bucket\",\n      Key: \"image.png\",\n      Body: fileContent,\n    }),\n  );\n  python\n  import boto3\n\ns3 = boto3.client(\n    service_name=\"s3\",\n    # Provide your Cloudflare account ID\n    endpoint_url=f\"https://{ACCOUNT_ID}.r2.cloudflarestorage.com\",\n    # Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n    aws_access_key_id=ACCESS_KEY_ID,\n    aws_secret_access_key=SECRET_ACCESS_KEY,\n    region_name=\"auto\", # Required by SDK but not used by R2\n  )\n\ns3.put_object(Bucket=\"my-bucket\", Key=\"image.png\", Body=file_content)\n  sh",
+  "code_samples": [
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Use SSE-C · Cloudflare R2 docs\ndescription: The following tutorial shows some snippets for how to use\n  Server-Side Encryption with Customer-Provided Keys (SSE-C) on Cloudflare R2.\nlastUpdated: 2025-10-09T15:47:46.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/examples/ssec/\n  md: https://developers.cloudflare.com/r2/examples/ssec/index.md\n---\n\nThe following tutorial shows some snippets for how to use Server-Side Encryption with Customer-Provided Keys (SSE-C) on R2.\n\n## Before you begin\n\n* When using SSE-C, make sure you store your encryption key(s) in a safe place. In the event you misplace them, Cloudflare will be unable to recover the body of any objects encrypted using those keys.\n* While SSE-C does provide MD5 hashes, this hash can be used for identification of keys only. The MD5 hash is not used in the encryption process itself.\n\n## Workers\n\n* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## S3-API\n\n* @aws-sdk/client-s3",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: S3 SDKs · Cloudflare R2 docs\nlastUpdated: 2024-09-29T02:09:56.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/r2/examples/aws/\n  md: https://developers.cloudflare.com/r2/examples/aws/index.md\n---\n\n* [aws CLI](https://developers.cloudflare.com/r2/examples/aws/aws-cli/)\n* [aws-sdk-go](https://developers.cloudflare.com/r2/examples/aws/aws-sdk-go/)\n* [aws-sdk-java](https://developers.cloudflare.com/r2/examples/aws/aws-sdk-java/)\n* [aws-sdk-js](https://developers.cloudflare.com/r2/examples/aws/aws-sdk-js/)\n* [aws-sdk-js-v3](https://developers.cloudflare.com/r2/examples/aws/aws-sdk-js-v3/)\n* [aws-sdk-net](https://developers.cloudflare.com/r2/examples/aws/aws-sdk-net/)\n* [aws-sdk-php](https://developers.cloudflare.com/r2/examples/aws/aws-sdk-php/)\n* [aws-sdk-ruby](https://developers.cloudflare.com/r2/examples/aws/aws-sdk-ruby/)\n* [aws-sdk-rust](https://developers.cloudflare.com/r2/examples/aws/aws-sdk-rust/)\n* [aws4fetch](https://developers.cloudflare.com/r2/examples/aws/aws4fetch/)\n* [boto3](https://developers.cloudflare.com/r2/examples/aws/boto3/)\n* [Configure custom headers](https://developers.cloudflare.com/r2/examples/aws/custom-header/)\n\n</page>\n\n<page>\n---\ntitle: Terraform · Cloudflare R2 docs\ndescription: You must generate an Access Key before getting started. All\n  examples will utilize access_key_id and access_key_secret variables which\n  represent the Access Key ID and Secret Access Key values you generated.\nlastUpdated: 2025-08-20T18:25:25.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/examples/terraform/\n  md: https://developers.cloudflare.com/r2/examples/terraform/index.md\n---\n\nYou must [generate an Access Key](https://developers.cloudflare.com/r2/api/tokens/) before getting started. All examples will utilize `access_key_id` and `access_key_secret` variables which represent the **Access Key ID** and **Secret Access Key** values you generated.\n\n\n\nThis example shows how to configure R2 with Terraform using the [Cloudflare provider](https://github.com/cloudflare/terraform-provider-cloudflare).\n\nNote for using AWS provider\n\nWhen using the Cloudflare Terraform provider, you can only manage buckets. To configure items such as CORS and object lifecycles, you will need to use the [AWS Provider](https://developers.cloudflare.com/r2/examples/terraform-aws/).\n\nWith [`terraform`](https://developer.hashicorp.com/terraform/downloads) installed, create `main.tf` and copy the content below replacing with your API Token.",
+      "language": "unknown"
+    },
+    {
+      "code": "You can then use `terraform plan` to view the changes and `terraform apply` to apply changes.\n\n</page>\n\n<page>\n---\ntitle: Terraform (AWS) · Cloudflare R2 docs\ndescription: You must generate an Access Key before getting started. All\n  examples will utilize access_key_id and access_key_secret variables which\n  represent the Access Key ID and Secret Access Key values you generated.\nlastUpdated: 2025-08-20T18:25:25.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/examples/terraform-aws/\n  md: https://developers.cloudflare.com/r2/examples/terraform-aws/index.md\n---\n\nYou must [generate an Access Key](https://developers.cloudflare.com/r2/api/tokens/) before getting started. All examples will utilize `access_key_id` and `access_key_secret` variables which represent the **Access Key ID** and **Secret Access Key** values you generated.\n\n\n\nThis example shows how to configure R2 with Terraform using the [AWS provider](https://github.com/hashicorp/terraform-provider-aws).\n\nNote for using AWS provider\n\nFor using only the Cloudflare provider, see [Terraform](https://developers.cloudflare.com/r2/examples/terraform/).\n\nWith [`terraform`](https://developer.hashicorp.com/terraform/downloads) installed:\n\n1. Create `main.tf` file, or edit your existing Terraform configuration\n2. Populate the endpoint URL at `endpoints.s3` with your [Cloudflare account ID](https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/)\n3. Populate `access_key` and `secret_key` with the corresponding [R2 API credentials](https://developers.cloudflare.com/r2/api/tokens/).\n4. Ensure that `skip_region_validation = true`, `skip_requesting_account_id = true`, and `skip_credentials_validation = true` are set in the provider configuration.",
+      "language": "unknown"
+    },
+    {
+      "code": "You can then use `terraform plan` to view the changes and `terraform apply` to apply changes.\n\n</page>\n\n<page>\n---\ntitle: Download objects · Cloudflare R2 docs\ndescription: You can download objects from R2 using the dashboard, Workers API,\n  S3 API, or command-line tools.\nlastUpdated: 2025-12-02T15:31:53.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/objects/download-objects/\n  md: https://developers.cloudflare.com/r2/objects/download-objects/index.md\n---\n\nYou can download objects from R2 using the dashboard, Workers API, S3 API, or command-line tools.\n\n## Download via dashboard\n\n1. In the Cloudflare dashboard, go to the **R2 object storage** page.\n\n   [Go to **Overview**](https://dash.cloudflare.com/?to=/:account/r2/overview)\n\n2. Select your bucket.\n\n3. Locate the object you want to download.\n\n4. Select **...** for the object and click **Download**.\n\n## Download via Workers API\n\nUse R2 [bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/) in Workers to download objects:",
+      "language": "unknown"
+    },
+    {
+      "code": "For complete documentation, refer to [Workers API](https://developers.cloudflare.com/r2/api/workers/workers-api-usage/).\n\n## Download via S3 API\n\nUse S3-compatible SDKs to download objects. You'll need your [account ID](https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/) and [R2 API token](https://developers.cloudflare.com/r2/api/tokens/).\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* Python",
+      "language": "unknown"
+    },
+    {
+      "code": "Refer to R2's [S3 API documentation](https://developers.cloudflare.com/r2/api/s3/api/) for all S3 API methods.\n\n### Presigned URLs\n\nFor client-side downloads where users download directly from R2, use presigned URLs. Your server generates a temporary download URL that clients can use without exposing your API credentials.\n\n1. Your application generates a presigned GET URL using an S3 SDK\n2. Send the URL to your client\n3. Client downloads directly from R2 using the presigned URL\n\nFor details on generating and using presigned URLs, refer to [Presigned URLs](https://developers.cloudflare.com/r2/api/s3/presigned-urls/).\n\n## Download via Wrangler\n\nUse [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) to download objects. Run the [`r2 object get` command](https://developers.cloudflare.com/workers/wrangler/commands/#r2-object-get):",
+      "language": "unknown"
+    },
+    {
+      "code": "The file will be downloaded into the current working directory. You can also use the `--file` flag to set a new name for the object as it is downloaded, and the `--pipe` flag to pipe the download to standard output (stdout).\n\n</page>\n\n<page>\n---\ntitle: Delete objects · Cloudflare R2 docs\ndescription: You can delete objects from R2 using the dashboard, Workers API, S3\n  API, or command-line tools.\nlastUpdated: 2025-12-02T15:31:53.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/objects/delete-objects/\n  md: https://developers.cloudflare.com/r2/objects/delete-objects/index.md\n---\n\nYou can delete objects from R2 using the dashboard, Workers API, S3 API, or command-line tools.\n\n## Delete via dashboard\n\n1. In the Cloudflare dashboard, go to the **R2 object storage** page.\n\n   [Go to **Overview**](https://dash.cloudflare.com/?to=/:account/r2/overview)\n\n2. Locate and select your bucket.\n\n3. Locate the object you want to delete. You can select multiple objects to delete at one time.\n\n4. Select your objects and select **Delete**.\n\n5. Confirm your choice by selecting **Delete**.\n\n## Delete via Workers API\n\nUse R2 [bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/) in Workers to delete objects:",
+      "language": "unknown"
+    },
+    {
+      "code": "For complete documentation, refer to [Workers API](https://developers.cloudflare.com/r2/api/workers/workers-api-usage/).\n\n## Delete via S3 API\n\nUse S3-compatible SDKs to delete objects. You'll need your [account ID](https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/) and [R2 API token](https://developers.cloudflare.com/r2/api/tokens/).\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* Python",
+      "language": "unknown"
+    },
+    {
+      "code": "For complete S3 API documentation, refer to [S3 API](https://developers.cloudflare.com/r2/api/s3/api/).\n\n## Delete via Wrangler\n\nWarning\n\nDeleting objects from a bucket is irreversible.\n\nUse [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) to delete objects. Run the [`r2 object delete` command](https://developers.cloudflare.com/workers/wrangler/commands/#r2-object-delete):",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Multipart upload · Cloudflare R2 docs\ndescription: R2 supports S3 API's Multipart Upload with some limitations.\nlastUpdated: 2025-12-02T15:31:53.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/objects/multipart-objects/\n  md: https://developers.cloudflare.com/r2/objects/multipart-objects/index.md\n---\n\nR2 supports [S3 API's Multipart Upload](https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html) with some limitations.\n\n## Limitations\n\nObject part sizes must be at least 5MiB but no larger than 5GiB. All parts except the last one must be the same size. The last part has no minimum size, but must be the same or smaller than the other parts.\n\nThe maximum number of parts is 10,000.\n\nMost S3 clients conform to these expectations.\n\n## Lifecycles\n\nThe default object lifecycle policy for multipart uploads is that incomplete uploads will be automatically aborted after 7 days. This can be changed by [configuring a custom lifecycle policy](https://developers.cloudflare.com/r2/buckets/object-lifecycles/).\n\n## ETags\n\nThe ETags for objects uploaded via multipart are different than those uploaded with PutObject.\n\nFor uploads created after June 21, 2023, R2's multipart ETags now mimic the behavior of S3. The ETag of each individual part is the MD5 hash of the contents of the part. The ETag of the completed multipart object is the hash of the MD5 sums of each of the constituent parts concatenated together followed by a hyphen and the number of parts uploaded.\n\nFor example, consider a multipart upload with two parts. If they have the ETags `bce6bf66aeb76c7040fdd5f4eccb78e6` and `8165449fc15bbf43d3b674595cbcc406` respectively, the ETag of the completed multipart upload will be `f77dc0eecdebcd774a2a22cb393ad2ff-2`.\n\nNote that the binary MD5 sums themselves are concatenated and then summed, not the hexadecimal representation. For example, in order to validate the above example on the command line, you would need do the following:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Other resources\n\nFor information on R2 Workers Binding API, refer to [R2 Workers API reference](https://developers.cloudflare.com/r2/api/workers/workers-api-reference/).\n\n</page>\n\n<page>\n---\ntitle: Upload objects · Cloudflare R2 docs\ndescription: \"There are several ways to upload objects to R2:\"\nlastUpdated: 2025-12-02T15:31:53.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/objects/upload-objects/\n  md: https://developers.cloudflare.com/r2/objects/upload-objects/index.md\n---\n\nThere are several ways to upload objects to R2:\n\n1. Using the [S3 API](https://developers.cloudflare.com/r2/api/s3/api/), which is supported by a wide range of tools and libraries (recommended)\n2. Directly from within a Worker using R2's [Workers API](https://developers.cloudflare.com/r2/api/workers/)\n3. Using the [Cloudflare dashboard](https://dash.cloudflare.com/?to=/:account/r2/overview)\n4. Using the [Wrangler](https://developers.cloudflare.com/r2/reference/wrangler-commands/) command-line (`wrangler r2`)\n\n## Upload via dashboard\n\nTo upload objects to your bucket from the Cloudflare dashboard:\n\n1. In the Cloudflare dashboard, go to the **R2 object storage** page.\n\n   [Go to **Overview**](https://dash.cloudflare.com/?to=/:account/r2/overview)\n\n2. Select your bucket.\n\n3. Select **Upload**.\n\n4. Drag and drop your file into the upload area or **select from computer**.\n\nYou will receive a confirmation message after a successful upload.\n\n## Upload via Workers API\n\nUse R2 [bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/) in Workers to upload objects server-side:",
+      "language": "unknown"
+    },
+    {
+      "code": "For complete documentation, refer to [Workers API](https://developers.cloudflare.com/r2/api/workers/workers-api-usage/).\n\n## Upload via S3 API\n\nUse S3-compatible SDKs to upload objects. You'll need your [account ID](https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/) and [R2 API token](https://developers.cloudflare.com/r2/api/tokens/).\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* Python",
+      "language": "unknown"
+    },
+    {
+      "code": "Refer to R2's [S3 API documentation](https://developers.cloudflare.com/r2/api/s3/api/) for all S3 API methods.\n\n### Presigned URLs\n\nFor client-side uploads where users upload directly to R2, use presigned URLs. Your server generates a temporary upload URL that clients can use without exposing your API credentials.\n\n1. Your application generates a presigned PUT URL using an S3 SDK\n2. Send the URL to your client\n3. Client uploads directly to R2 using the presigned URL\n\nFor details on generating and using presigned URLs, refer to [Presigned URLs](https://developers.cloudflare.com/r2/api/s3/presigned-urls/).\n\n## Upload via CLI\n\n### Rclone\n\n[Rclone](https://rclone.org/) is a command-line tool for managing files on cloud storage. Rclone works well for uploading multiple files from your local machine or copying data from other cloud storage providers.\n\nTo use rclone, install it onto your machine using their official documentation - [Install rclone](https://rclone.org/install/).\n\nUpload files with the `rclone copy` command:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Before you begin",
+      "id": "before-you-begin"
+    },
+    {
+      "level": "h2",
+      "text": "Workers",
+      "id": "workers"
+    },
+    {
+      "level": "h2",
+      "text": "S3-API",
+      "id": "s3-api"
+    },
+    {
+      "level": "h2",
+      "text": "Download via dashboard",
+      "id": "download-via-dashboard"
+    },
+    {
+      "level": "h2",
+      "text": "Download via Workers API",
+      "id": "download-via-workers-api"
+    },
+    {
+      "level": "h2",
+      "text": "Download via S3 API",
+      "id": "download-via-s3-api"
+    },
+    {
+      "level": "h3",
+      "text": "Presigned URLs",
+      "id": "presigned-urls"
+    },
+    {
+      "level": "h2",
+      "text": "Download via Wrangler",
+      "id": "download-via-wrangler"
+    },
+    {
+      "level": "h2",
+      "text": "Delete via dashboard",
+      "id": "delete-via-dashboard"
+    },
+    {
+      "level": "h2",
+      "text": "Delete via Workers API",
+      "id": "delete-via-workers-api"
+    },
+    {
+      "level": "h2",
+      "text": "Delete via S3 API",
+      "id": "delete-via-s3-api"
+    },
+    {
+      "level": "h2",
+      "text": "Delete via Wrangler",
+      "id": "delete-via-wrangler"
+    },
+    {
+      "level": "h2",
+      "text": "Limitations",
+      "id": "limitations"
+    },
+    {
+      "level": "h2",
+      "text": "Lifecycles",
+      "id": "lifecycles"
+    },
+    {
+      "level": "h2",
+      "text": "ETags",
+      "id": "etags"
+    },
+    {
+      "level": "h2",
+      "text": "Other resources",
+      "id": "other-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Upload via dashboard",
+      "id": "upload-via-dashboard"
+    },
+    {
+      "level": "h2",
+      "text": "Upload via Workers API",
+      "id": "upload-via-workers-api"
+    },
+    {
+      "level": "h2",
+      "text": "Upload via S3 API",
+      "id": "upload-via-s3-api"
+    },
+    {
+      "level": "h3",
+      "text": "Presigned URLs",
+      "id": "presigned-urls"
+    },
+    {
+      "level": "h2",
+      "text": "Upload via CLI",
+      "id": "upload-via-cli"
+    },
+    {
+      "level": "h3",
+      "text": "Rclone",
+      "id": "rclone"
+    }
+  ],
+  "url": "llms-txt#https://<accountid>.r2.cloudflarestorage.com/my-bucket-name/cat.png?x-amz-algorithm=aws4-hmac-sha256&x-amz-credential=<credential>&x-amz-date=<timestamp>&x-amz-expires=3600&x-amz-signedheaders=host&x-amz-signature=<signature>",
+  "links": []
+}

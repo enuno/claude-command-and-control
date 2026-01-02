@@ -1,0 +1,133 @@
+{
+  "name": "latex-overleaf",
+  "total_pages": 31,
+  "base_url": "https://www.overleaf.com/",
+  "llms_txt_detected": false,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "Learn LaTeX in 30 minutes - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes"
+    },
+    {
+      "title": "LaTeX tutorials | Overleaf docs",
+      "url": "https://www.overleaf.com/learn/latex/Tutorials"
+    },
+    {
+      "title": "Free online introduction to LaTeX (part 1) - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Free_online_introduction_to_LaTeX_(part_1)"
+    },
+    {
+      "title": "Learn LaTeX in 30 minutes - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Creating_a_document_in_LaTeX"
+    },
+    {
+      "title": "Sections and chapters - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Sections_and_chapters"
+    },
+    {
+      "title": "Mathematical expressions - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Mathematical_expressions"
+    },
+    {
+      "title": "Subscripts and superscripts - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Subscripts_and_superscripts"
+    },
+    {
+      "title": "Brackets and Parentheses - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Brackets_and_Parentheses"
+    },
+    {
+      "title": "Fractions and Binomials - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Fractions_and_Binomials"
+    },
+    {
+      "title": "Aligning equations with amsmath - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Aligning_equations"
+    },
+    {
+      "title": "Operators - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Operators"
+    },
+    {
+      "title": "Spacing in math mode - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Spacing_in_math_mode"
+    },
+    {
+      "title": "Integrals, sums and limits - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Integrals,_sums_and_limits"
+    },
+    {
+      "title": "Display style in math mode - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Display_style_in_math_mode"
+    },
+    {
+      "title": "List of Greek letters and math symbols - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/List_of_Greek_letters_and_math_symbols"
+    },
+    {
+      "title": "Tables - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Tables"
+    },
+    {
+      "title": "Inserting images | Overleaf docs",
+      "url": "https://www.overleaf.com/learn/latex/Inserting_Images"
+    },
+    {
+      "title": "Positioning images and tables - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Positioning_images_and_tables"
+    },
+    {
+      "title": "Lists - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Lists"
+    },
+    {
+      "title": "How to change paragraph spacing in LaTeX - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Paragraph_formatting"
+    },
+    {
+      "title": "Text alignment - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Text_alignment"
+    },
+    {
+      "title": "Bold, italics and underlining - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Bold,_italics_and_underlining"
+    },
+    {
+      "title": "Bibliography management with bibtex - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Bibliography_management_with_bibtex"
+    },
+    {
+      "title": "Bibliography management with biblatex - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Bibliography_management_with_biblatex"
+    },
+    {
+      "title": "Cross referencing sections, equations and floats - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Cross_referencing_sections,_equations_and_floats"
+    },
+    {
+      "title": "Hyperlinks - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Hyperlinks"
+    },
+    {
+      "title": "Page size and margins - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Page_size_and_margins"
+    },
+    {
+      "title": "Headers and footers - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Headers_and_footers"
+    },
+    {
+      "title": "Table of contents - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Table_of_contents"
+    },
+    {
+      "title": "Beamer - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/Beamer"
+    },
+    {
+      "title": "TikZ package - Overleaf, Online LaTeX Editor",
+      "url": "https://www.overleaf.com/learn/latex/TikZ_package"
+    }
+  ]
+}

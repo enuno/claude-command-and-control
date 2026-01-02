@@ -1,0 +1,51 @@
+{
+  "title": "phoenix-1.0",
+  "content": "Text-to-Image • Leonardo\n\n@cf/leonardo/phoenix-1.0\n\nPhoenix 1.0 is a model by Leonardo.Ai that generates images with exceptional prompt adherence and coherent text.\n\n| Model Info | |\n| - | - |\n| Terms and License | [link](https://leonardo.ai/terms-of-service/) |\n| Partner | Yes |\n| Unit Pricing | $0.0058 per 512 by 512 tile, $0.00011 per step |\n\n\\* indicates a required field\n\n* `prompt` string required min 1\n\nA text description of the image you want to generate.\n\n* `guidance` number default 2 min 2 max 10\n\nControls how closely the generated image should adhere to the prompt; higher values make the image more aligned with the prompt\n\n* `seed` integer min 0\n\nRandom seed for reproducibility of the image generation\n\n* `height` integer default 1024 min 0 max 2048\n\nThe height of the generated image in pixels\n\n* `width` integer default 1024 min 0 max 2048\n\nThe width of the generated image in pixels\n\n* `num_steps` integer default 25 min 1 max 50\n\nThe number of diffusion steps; higher values can improve quality but take longer\n\n* `negative_prompt` string min 1\n\nSpecify what to exclude from the generated images\n\nThe binding returns a `ReadableStream` with the image in JPEG or PNG format (check the model's output schema).\n\nThe following schemas are based on JSON Schema\n\n<page>\n---\ntitle: plamo-embedding-1b · Cloudflare Workers AI docs\ndescription: >-\n  PLaMo-Embedding-1B is a Japanese text embedding model developed by Preferred\n  Networks, Inc.\n\nIt can convert Japanese text input into numerical vectors and can be used for\n  a wide range of applications, including information retrieval, text\n  classification, and clustering.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers-ai/models/plamo-embedding-1b/\n  md: https://developers.cloudflare.com/workers-ai/models/plamo-embedding-1b/index.md\n---",
+  "code_samples": [
+    {
+      "code": "export interface Env {\n  AI: Ai;\n}\n\n\nexport default {\n  async fetch(request, env): Promise<Response> {\n\n\n    const inputs = {\n      prompt: \"cyberpunk cat\",\n    };\n\n\n    const response = await env.AI.run(\n      \"@cf/leonardo/phoenix-1.0\",\n      inputs\n    );\n\n\n    return new Response(response, {\n      headers: {\n        \"content-type\": \"image/jpg\",\n      },\n    });\n  },\n} satisfies ExportedHandler<Env>;",
+      "language": "ts"
+    },
+    {
+      "code": "curl https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/ai/run/@cf/leonardo/phoenix-1.0  \\\n  -X POST  \\\n  -H \"Authorization: Bearer $CLOUDFLARE_API_TOKEN\"  \\\n  -d '{ \"prompt\": \"cyberpunk cat\" }'",
+      "language": "sh"
+    },
+    {
+      "code": "{\n      \"type\": \"object\",\n      \"properties\": {\n          \"prompt\": {\n              \"type\": \"string\",\n              \"minLength\": 1,\n              \"description\": \"A text description of the image you want to generate.\"\n          },\n          \"guidance\": {\n              \"type\": \"number\",\n              \"default\": 2,\n              \"minimum\": 2,\n              \"maximum\": 10,\n              \"description\": \"Controls how closely the generated image should adhere to the prompt; higher values make the image more aligned with the prompt\"\n          },\n          \"seed\": {\n              \"type\": \"integer\",\n              \"minimum\": 0,\n              \"description\": \"Random seed for reproducibility of the image generation\"\n          },\n          \"height\": {\n              \"type\": \"integer\",\n              \"minimum\": 0,\n              \"maximum\": 2048,\n              \"default\": 1024,\n              \"description\": \"The height of the generated image in pixels\"\n          },\n          \"width\": {\n              \"type\": \"integer\",\n              \"minimum\": 0,\n              \"maximum\": 2048,\n              \"default\": 1024,\n              \"description\": \"The width of the generated image in pixels\"\n          },\n          \"num_steps\": {\n              \"type\": \"integer\",\n              \"default\": 25,\n              \"minimum\": 1,\n              \"maximum\": 50,\n              \"description\": \"The number of diffusion steps; higher values can improve quality but take longer\"\n          },\n          \"negative_prompt\": {\n              \"type\": \"string\",\n              \"minLength\": 1,\n              \"description\": \"Specify what to exclude from the generated images\"\n          }\n      },\n      \"required\": [\n          \"prompt\"\n      ]\n  }",
+      "language": "json"
+    },
+    {
+      "code": "{\n      \"type\": \"string\",\n      \"contentType\": \"image/jpeg\",\n      \"format\": \"binary\",\n      \"description\": \"The generated image in JPEG format\"\n  }",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Input",
+      "id": "input"
+    },
+    {
+      "level": "h3",
+      "text": "Output",
+      "id": "output"
+    },
+    {
+      "level": "h2",
+      "text": "API Schemas",
+      "id": "api-schemas"
+    }
+  ],
+  "url": "llms-txt#phoenix-1.0",
+  "links": []
+}

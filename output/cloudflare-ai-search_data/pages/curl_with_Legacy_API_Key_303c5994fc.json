@@ -1,0 +1,8 @@
+{
+  "title": "curl with Legacy API Key",
+  "content": "curl https://api.cloudflare.com/client/v4/graphql \\\n--header \"X-Auth-Email: <EMAIL>\" \\\n--header \"X-Auth-Key: <API_KEY>\" \\\n--header \"Accept: application/json\" \\\n--header \"Content-Type: application/json\" \\\n--data \"$(echo $PAYLOAD)\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#curl-with-legacy-api-key",
+  "links": []
+}

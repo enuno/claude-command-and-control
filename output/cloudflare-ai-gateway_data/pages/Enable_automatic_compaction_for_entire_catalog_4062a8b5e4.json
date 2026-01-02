@@ -1,0 +1,24 @@
+{
+  "title": "Enable automatic compaction for entire catalog",
+  "content": "npx wrangler r2 bucket catalog compaction enable my-bucket \\\n  --target-size 256\npy",
+  "code_samples": [
+    {
+      "code": "More information can be found in the [table maintenance](https://developers.cloudflare.com/r2/data-catalog/table-maintenance/) and [manage catalogs](https://developers.cloudflare.com/r2/data-catalog/manage-catalogs/) documentation.\n\n## Examples of deleting data from R2 Data Catalog using PySpark\n\nThe following are basic examples using PySpark but similar operations can be performed using other Iceberg-compatible engines. To configure PySpark, refer to our [example](https://developers.cloudflare.com/r2/data-catalog/config-examples/spark-python/) or the official [PySpark documentation](https://spark.apache.org/docs/latest/api/python/getting_started/index.html).\n\n### Deleting rows from a table",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Examples of deleting data from R2 Data Catalog using PySpark",
+      "id": "examples-of-deleting-data-from-r2-data-catalog-using-pyspark"
+    },
+    {
+      "level": "h3",
+      "text": "Deleting rows from a table",
+      "id": "deleting-rows-from-a-table"
+    }
+  ],
+  "url": "llms-txt#enable-automatic-compaction-for-entire-catalog",
+  "links": []
+}

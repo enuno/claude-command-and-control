@@ -1,0 +1,8 @@
+{
+  "title": "Deploy to the production environment using CLOUDFLARE_ENV",
+  "content": "CLOUDFLARE_ENV=production wrangler deploy",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#deploy-to-the-production-environment-using-cloudflare_env",
+  "links": []
+}

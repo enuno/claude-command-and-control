@@ -1,0 +1,47 @@
+{
+  "title": "llava-1.5-7b-hf Beta",
+  "content": "Image-to-Text • llava-hf\n\n@cf/llava-hf/llava-1.5-7b-hf\n\nLLaVA is an open-source chatbot trained by fine-tuning LLaMA/Vicuna on GPT-generated multimodal instruction-following data. It is an auto-regressive language model, based on the transformer architecture.\n\n| Model Info | |\n| - | - |\n| Beta | Yes |\n\n\\* indicates a required field\n\nBinary string representing the image contents.\n\n* `image` one of required\n\nAn array of integers that represent the image data constrained to 8-bit unsigned integer values\n\nA value between 0 and 255\n\nBinary string representing the image contents.\n\n* `temperature` number\n\nControls the randomness of the output; higher values produce more random results.\n\nThe input text prompt for the model to generate a response.\n\nIf true, a chat template is not applied and you must adhere to the specific model's expected formatting.\n\nControls the creativity of the AI's responses by adjusting how many possible words it considers. Lower values make outputs more predictable; higher values allow for more varied and creative responses.\n\nLimits the AI to choose from the top 'k' most probable words. Lower values make responses more focused; higher values introduce more variety and potential surprises.\n\nRandom seed for reproducibility of the generation.\n\n* `repetition_penalty` number\n\nPenalty for repeated tokens; higher values discourage repetition.\n\n* `frequency_penalty` number\n\nDecreases the likelihood of the model repeating the same lines verbatim.\n\n* `presence_penalty` number\n\nIncreases the likelihood of the model introducing new topics.\n\n* `max_tokens` integer default 512\n\nThe maximum number of tokens to generate in the response.\n\n* `description` string\n\nThe following schemas are based on JSON Schema\n\n<page>\n---\ntitle: lucid-origin · Cloudflare Workers AI docs\ndescription: >\n  Lucid Origin from Leonardo.AI is their most adaptable and prompt-responsive\n  model to date. Whether you're generating images with sharp graphic design,\n  stunning full-HD renders, or highly specific creative direction, it adheres\n  closely to your prompts, renders text with accuracy, and supports a wide array\n  of visual styles and aesthetics – from stylized concept art to crisp product\n  mockups.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers-ai/models/lucid-origin/\n  md: https://developers.cloudflare.com/workers-ai/models/lucid-origin/index.md\n---\n\n![Leonardo logo](https://developers.cloudflare.com/_astro/leonardo.OdhR6aP9.svg)",
+  "code_samples": [
+    {
+      "code": "export interface Env {\n  AI: Ai;\n}\n\n\n\n\nexport default {\n  async fetch(request: Request, env: Env): Promise<Response> {\n    const res = await fetch(\"https://cataas.com/cat\");\n    const blob = await res.arrayBuffer();\n    const input = {\n      image: [...new Uint8Array(blob)],\n      prompt: \"Generate a caption for this image\",\n      max_tokens: 512,\n    };\n    const response = await env.AI.run(\n      \"@cf/llava-hf/llava-1.5-7b-hf\",\n      input\n      );\n    return new Response(JSON.stringify(response));\n  },\n} satisfies ExportedHandler<Env>;",
+      "language": "ts"
+    },
+    {
+      "code": "{\n      \"oneOf\": [\n          {\n              \"type\": \"string\",\n              \"format\": \"binary\",\n              \"description\": \"Binary string representing the image contents.\"\n          },\n          {\n              \"type\": \"object\",\n              \"properties\": {\n                  \"image\": {\n                      \"oneOf\": [\n                          {\n                              \"type\": \"array\",\n                              \"description\": \"An array of integers that represent the image data constrained to 8-bit unsigned integer values\",\n                              \"items\": {\n                                  \"type\": \"number\",\n                                  \"description\": \"A value between 0 and 255\"\n                              }\n                          },\n                          {\n                              \"type\": \"string\",\n                              \"format\": \"binary\",\n                              \"description\": \"Binary string representing the image contents.\"\n                          }\n                      ]\n                  },\n                  \"temperature\": {\n                      \"type\": \"number\",\n                      \"description\": \"Controls the randomness of the output; higher values produce more random results.\"\n                  },\n                  \"prompt\": {\n                      \"type\": \"string\",\n                      \"description\": \"The input text prompt for the model to generate a response.\"\n                  },\n                  \"raw\": {\n                      \"type\": \"boolean\",\n                      \"default\": false,\n                      \"description\": \"If true, a chat template is not applied and you must adhere to the specific model's expected formatting.\"\n                  },\n                  \"top_p\": {\n                      \"type\": \"number\",\n                      \"description\": \"Controls the creativity of the AI's responses by adjusting how many possible words it considers. Lower values make outputs more predictable; higher values allow for more varied and creative responses.\"\n                  },\n                  \"top_k\": {\n                      \"type\": \"number\",\n                      \"description\": \"Limits the AI to choose from the top 'k' most probable words. Lower values make responses more focused; higher values introduce more variety and potential surprises.\"\n                  },\n                  \"seed\": {\n                      \"type\": \"number\",\n                      \"description\": \"Random seed for reproducibility of the generation.\"\n                  },\n                  \"repetition_penalty\": {\n                      \"type\": \"number\",\n                      \"description\": \"Penalty for repeated tokens; higher values discourage repetition.\"\n                  },\n                  \"frequency_penalty\": {\n                      \"type\": \"number\",\n                      \"description\": \"Decreases the likelihood of the model repeating the same lines verbatim.\"\n                  },\n                  \"presence_penalty\": {\n                      \"type\": \"number\",\n                      \"description\": \"Increases the likelihood of the model introducing new topics.\"\n                  },\n                  \"max_tokens\": {\n                      \"type\": \"integer\",\n                      \"default\": 512,\n                      \"description\": \"The maximum number of tokens to generate in the response.\"\n                  }\n              },\n              \"required\": [\n                  \"image\"\n              ]\n          }\n      ]\n  }",
+      "language": "json"
+    },
+    {
+      "code": "{\n      \"type\": \"object\",\n      \"contentType\": \"application/json\",\n      \"properties\": {\n          \"description\": {\n              \"type\": \"string\"\n          }\n      }\n  }",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Input",
+      "id": "input"
+    },
+    {
+      "level": "h3",
+      "text": "Output",
+      "id": "output"
+    },
+    {
+      "level": "h2",
+      "text": "API Schemas",
+      "id": "api-schemas"
+    }
+  ],
+  "url": "llms-txt#llava-1.5-7b-hf-beta",
+  "links": []
+}

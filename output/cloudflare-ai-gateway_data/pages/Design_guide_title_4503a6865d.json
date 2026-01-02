@@ -1,0 +1,93 @@
+{
+  "title": "Design guide title",
+  "content": "## Introduction\nProvide context to what this guide is going to cover. Ensure you describe the end state of the solution this guide will detail.\n\n### Who is this for?\nThis reference architecture is designed for IT or security professionals with some responsibility over or familiarity with their organization’s existing infrastructure. It is useful to have some experience with technologies important to securing hybrid work, including identity providers (IdPs), user directories, single sign on (SSO), endpoint security or management (EPP, XDR, UEM, MDM), firewalls, routers, and point solutions like packet or content inspection hardware, threat prevention, and data loss prevention technologies.\n\n## Heading 1\n### Subheading 1\n\n## Heading 2\n### Subheading 2\n\n## Heading 3\n### Subheading 4\n\n## Summary\nyaml\npcx_content_type: get-started\nplaintext\n---\nweight: xx\npcx_content_type: get-started\n---",
+  "code_samples": [
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Get started · Cloudflare Style Guide\ndescription: The purpose of Get started content is to help users go from not\n  using a product to successfully configuring and setting up.\nlastUpdated: 2025-06-24T21:05:23.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/style-guide/documentation-content-strategy/content-types/get-started/\n  md: https://developers.cloudflare.com/style-guide/documentation-content-strategy/content-types/get-started/index.md\n---\n\n## Purpose\n\nThe purpose of Get started content is to help users go from not using a product to successfully configuring and setting up.\n\n## content\\_type",
+      "language": "unknown"
+    },
+    {
+      "code": "For more details, refer to [`pcx_content_type`](https://developers.cloudflare.com/style-guide/frontmatter/custom-properties/#pcx_content_type).\n\n## Structure\n\n### Required components\n\n[**Title**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/titles/): Should be \"Get started\"\n\n[**Prerequisites**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/prerequisites/): Which may include:\n\n* An active zone\n* Certain subscription / enabled product / plan\n* Other tasks you might need to do to set up other things (your origin) outside of CF\n* Do you need to make certain decisions before you start?\n\n[**Steps**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/steps-tasks-procedures/): Steps that lead someone to whatever would be considered Product Adoption.\n\n* Often, these can be partialized files from your How-to pages.\n* This is usually the bare minimum (a single Bot Management FW rule) + the most general use case for a product.\n* This may at times contradict the flow in the Cloudflare dashboard at times. If it does, consider raising it up to the Product team.\n\n### Optional components\n\n**Next steps**: Point someone towards additional configuration options.\n\n## Template",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Introduction",
+      "id": "introduction"
+    },
+    {
+      "level": "h3",
+      "text": "Who is this for?",
+      "id": "who-is-this-for?"
+    },
+    {
+      "level": "h2",
+      "text": "Heading 1",
+      "id": "heading-1"
+    },
+    {
+      "level": "h3",
+      "text": "Subheading 1",
+      "id": "subheading-1"
+    },
+    {
+      "level": "h2",
+      "text": "Heading 2",
+      "id": "heading-2"
+    },
+    {
+      "level": "h3",
+      "text": "Subheading 2",
+      "id": "subheading-2"
+    },
+    {
+      "level": "h2",
+      "text": "Heading 3",
+      "id": "heading-3"
+    },
+    {
+      "level": "h3",
+      "text": "Subheading 4",
+      "id": "subheading-4"
+    },
+    {
+      "level": "h2",
+      "text": "Summary",
+      "id": "summary"
+    },
+    {
+      "level": "h2",
+      "text": "Purpose",
+      "id": "purpose"
+    },
+    {
+      "level": "h2",
+      "text": "content\\_type",
+      "id": "content\\_type"
+    },
+    {
+      "level": "h2",
+      "text": "Structure",
+      "id": "structure"
+    },
+    {
+      "level": "h3",
+      "text": "Required components",
+      "id": "required-components"
+    },
+    {
+      "level": "h3",
+      "text": "Optional components",
+      "id": "optional-components"
+    },
+    {
+      "level": "h2",
+      "text": "Template",
+      "id": "template"
+    }
+  ],
+  "url": "llms-txt#design-guide-title",
+  "links": []
+}

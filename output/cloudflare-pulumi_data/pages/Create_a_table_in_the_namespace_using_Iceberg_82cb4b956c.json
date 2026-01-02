@@ -1,0 +1,8 @@
+{
+  "title": "Create a table in the namespace using Iceberg",
+  "content": "spark.sql(\"\"\"\n    CREATE TABLE IF NOT EXISTS default.my_table (\n        id BIGINT,\n        name STRING\n    )\n    USING iceberg\n\"\"\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#create-a-table-in-the-namespace-using-iceberg",
+  "links": []
+}

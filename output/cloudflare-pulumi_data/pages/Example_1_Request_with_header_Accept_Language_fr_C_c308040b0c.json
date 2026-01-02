@@ -1,0 +1,8 @@
+{
+  "title": "Example 1: Request with header \"Accept-Language: fr-CH, fr;q=0.8, en;q=0.9, de;q=0.7, *;q=0.5\".",
+  "content": "",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#example-1:-request-with-header-\"accept-language:-fr-ch,-fr;q=0.8,-en;q=0.9,-de;q=0.7,-*;q=0.5\".",
+  "links": []
+}

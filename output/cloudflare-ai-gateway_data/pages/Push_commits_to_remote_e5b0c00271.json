@@ -1,0 +1,145 @@
+{
+  "title": "Push commit(s) to remote",
+  "content": "git push -u origin main\nsh\n  npm create cloudflare@latest -- i18n-example\n  sh\n  yarn create cloudflare i18n-example\n  sh\n  pnpm create cloudflare@latest i18n-example\n  sh\ncd i18n-example\nls\nsh\npublic src package.json\nsh\nmkdir functions\ncd functions\ntouch index.js\nhtml\n<!-- source clipped from i18n-example site -->\n\n<div class=\"inner\">\n  <h1 data-i18n-key=\"headline\">Example Site</h1>\n  <p data-i18n-key=\"subtitle\">This is my example site. Depending o...</p>\n  <p data-i18n-key=\"disclaimer\">Disclaimer: the initial translations...</p>\n</div>\njs\nexport function onRequest(context) {\n  return new Response(\"Hello, world!\");\n}\njs\nexport async function onRequest(context) {\n  const { request, env } = context;\n  const response = await env.ASSETS.fetch(request);\n  return new HTMLRewriter()\n    .on(\"[data-i18n-key]\", new ElementHandler(countryStrings))\n    .transform(response);\n}\njs\nclass ElementHandler {\n  element(element) {\n    const i18nKey = element.getAttribute(\"data-i18n-key\");\n  }\n}\njs\nconst strings = {\n  headline: \"Beispielseite\",\n};\n\nclass ElementHandler {\n  element(element) {\n    const i18nKey = element.getAttribute(\"data-i18n-key\");\n    const string = strings[i18nKey];\n  }\n}\njs\nconst strings = {\n  headline: \"Beispielseite\",\n};\n\nclass ElementHandler {\n  element(element) {\n    const i18nKey = element.getAttribute(\"data-i18n-key\");\n    const string = strings[i18nKey];\n    if (string) {\n      element.setInnerContent(string);\n    }\n  }\n}\nsh\nnpm i accept-language-parser\njs\nimport parser from \"accept-language-parser\";\n\n// do not set to true in production!\nconst DEBUG = false;\n\nconst strings = {\n  de: {\n    title: \"Beispielseite\",\n    headline: \"Beispielseite\",\n    subtitle:\n      \"Dies ist meine Beispielseite. Abhängig davon, wo auf der Welt Sie diese Site besuchen, wird dieser Text in die entsprechende Sprache übersetzt.\",\n    disclaimer:\n      \"Haftungsausschluss: Die anfänglichen Übersetzungen stammen von Google Translate, daher sind sie möglicherweise nicht perfekt!\",\n    tutorial:\n      \"Das Tutorial für dieses Projekt finden Sie in der Cloudflare Workers-Dokumentation.\",\n    copyright: \"Design von HTML5 UP.\",\n  },\n  ja: {\n    title: \"サンプルサイト\",\n    headline: \"サンプルサイト\",\n    subtitle:\n      \"これは私の例のサイトです。 このサイトにアクセスする世界の場所に応じて、このテキストは対応する言語に翻訳されます。\",\n    disclaimer:\n      \"免責事項：最初の翻訳はGoogle翻訳からのものですので、完璧ではないかもしれません！\",\n    tutorial:\n      \"Cloudflare Workersのドキュメントでこのプロジェクトのチュートリアルを見つけてください。\",\n    copyright: \"HTML5 UPによる設計。\",\n  },\n};\n\nclass ElementHandler {\n  constructor(countryStrings) {\n    this.countryStrings = countryStrings;\n  }\n\nelement(element) {\n    const i18nKey = element.getAttribute(\"data-i18n-key\");\n    if (i18nKey) {\n      const translation = this.countryStrings[i18nKey];\n      if (translation) {\n        element.setInnerContent(translation);\n      }\n    }\n  }\n}\n\nexport async function onRequest(context) {\n  const { request, env } = context;\n  try {\n    let options = {};\n    if (DEBUG) {\n      options = {\n        cacheControl: {\n          bypassCache: true,\n        },\n      };\n    }\n    const languageHeader = request.headers.get(\"Accept-Language\");\n    const language = parser.pick([\"de\", \"ja\"], languageHeader);\n    const countryStrings = strings[language] || {};\n\nconst response = await env.ASSETS.fetch(request);\n    return new HTMLRewriter()\n      .on(\"[data-i18n-key]\", new ElementHandler(countryStrings))\n      .transform(response);\n  } catch (e) {\n    if (DEBUG) {\n      return new Response(e.message || e.toString(), {\n        status: 404,\n      });\n    } else {\n      return env.ASSETS.fetch(request);\n    }\n  }\n}\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"i18n-example\",\n    \"pages_build_output_dir\": \"./public\",\n    \"compatibility_date\": \"2024-01-29\"\n  }\n  toml\n  name = \"i18n-example\"\n  pages_build_output_dir = \"./public\"\n  compatibility_date = \"2024-01-29\"\n  json\n\"scripts\": {\n  \"dev\": \"wrangler pages dev\",\n  \"deploy\": \"wrangler pages deploy\"\n}\nsh\nnpm run deploy\nplaintext\n.\n├── public\n│   ├── index.html\n│   ├── static\n│   │   ├── favicon.ico\n│   │   └── logo.png\n│   └── style.css\n└── wrangler.toml\nsh\nnpx wrangler r2 bucket create <bucket_name>",
+  "code_samples": [
+    {
+      "code": "Your work now resides within the GitHub repository, which means that Pages is able to access it too.\n\nIf this is your first Cloudflare Pages project, refer to the [Get started guide](https://developers.cloudflare.com/pages/get-started/) for a complete walkthrough. After selecting the appropriate GitHub repository, you must configure your project with the following build settings:\n\n* **Project name** – Your choice\n* **Production branch** – `main`\n* **Framework preset** – None\n* **Build command** – None / Empty\n* **Build output directory** – `public`\n\nAfter clicking the **Save and Deploy** button, your Pages project will begin its first deployment. When successful, you will be presented with a unique `*.pages.dev` subdomain and a link to your live demo.\n\nIn this tutorial, you built and deployed a website and its back-end logic using Cloudflare Pages with its Workers integration. You created a static HTML document with a form that communicates with a Worker handler to parse the submission request(s).\n\nIf you would like to review the full source code for this application, you can find it on [GitHub](https://github.com/cloudflare/submit.pages.dev).\n\n## Related resources\n\n* [Build an API for your front end using Cloudflare Workers](https://developers.cloudflare.com/pages/tutorials/build-an-api-with-pages-functions/)\n* [Handle form submissions with Airtable](https://developers.cloudflare.com/workers/tutorials/handle-form-submissions-with-airtable/)\n\n</page>\n\n<page>\n---\ntitle: Localize a website with HTMLRewriter · Cloudflare Pages docs\ndescription: This tutorial uses the HTMLRewriter functionality in the Cloudflare\n  Workers platform to overlay an i18n layer, automatically translating the site\n  based on the user’s language.\nlastUpdated: 2025-10-09T15:47:46.000Z\nchatbotDeprioritize: false\ntags: JavaScript\nsource_url:\n  html: https://developers.cloudflare.com/pages/tutorials/localize-a-website/\n  md: https://developers.cloudflare.com/pages/tutorials/localize-a-website/index.md\n---\n\nIn this tutorial, you will build an example internationalization and localization engine (commonly referred to as **i18n** and **l10n**) for your application, serve the content of your site, and automatically translate the content based on your visitors’ location in the world.\n\nThis tutorial uses the [`HTMLRewriter`](https://developers.cloudflare.com/workers/runtime-apis/html-rewriter/) class built into the Cloudflare Workers runtime, which allows for parsing and rewriting of HTML on the Cloudflare global network. This gives developers the ability to efficiently and transparently customize their Workers applications.\n\n![An example site that has been successfully localized in Japanese, German and English](https://developers.cloudflare.com/_astro/i18n.DfrXtRlL_HOv9z.webp)\n\n***\n\n## Before you continue\n\nAll of the framework guides assume you already have a fundamental understanding of [Git](https://git-scm.com/). If you are new to Git, refer to this [summarized Git handbook](https://guides.github.com/introduction/git-handbook/) on how to set up Git on your local machine.\n\nIf you clone with SSH, you must [generate SSH keys](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) on each computer you use to push or pull from GitHub.\n\nRefer to the [GitHub documentation](https://guides.github.com/introduction/git-handbook/) and [Git documentation](https://git-scm.com/book/en/v2) for more information.\n\n## Prerequisites\n\nThis tutorial is designed to use an existing website. To simplify this process, you will use a free HTML5 template from [HTML5 UP](https://html5up.net). With this website as the base, you will use the `HTMLRewriter` functionality in the Workers platform to overlay an i18n layer, automatically translating the site based on the user’s language.\n\nIf you would like to deploy your own version of the site, you can find the source [on GitHub](https://github.com/lauragift21/i18n-example-workers). Instructions on how to deploy this application can be found in the project’s README.\n\n## Create a new application\n\nCreate a new application using the [`create-cloudflare`](https://developers.cloudflare.com/pages/get-started/c3), a CLI for creating and deploying new applications to Cloudflare.\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "For setup, select the following options:\n\n* For *What would you like to start with*?, select `Framework Starter`.\n* For *Which development framework do you want to use?*, select `React`.\n* For, *Do you want to deploy your application?*, select `No`.\n\nThe newly generated `i18n-example` project will contain two folders: `public` and `src` these contain files for a React application:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "We have to make a few adjustments to the generated project, first we want to the replace the content inside of the `public` directory, with the default generated HTML code for the HTML5 UP template seen in the demo screenshot: download a [release](https://github.com/signalnerve/i18n-example-workers/archive/v1.0.zip) (ZIP file) of the code for this project and copy the `public` folder to your own project to get started.\n\nNext, let's create a functions directory with an `index.js` file, this will be where the logic of the application will be written.",
+      "language": "unknown"
+    },
+    {
+      "code": "Additionally, we'll remove the `src/` directory since its content isn't necessary for this project. With the static HTML for this project updated, you can focus on the script inside of the `functions` folder, at `index.js`.\n\n## Understanding `data-i18n-key`\n\nThe `HTMLRewriter` class provided in the Workers runtime allows developers to parse HTML and write JavaScript to query and transform every element of the page.\n\nThe example website in this tutorial is a basic single-page HTML project that lives in the `public` directory. It includes an `h1` element with the text `Example Site` and a number of `p` elements with different text:\n\n![Demo code shown in Chrome DevTools with the elements described above](https://developers.cloudflare.com/_astro/code-example.Csjrvc1w_xNHcU.webp)\n\nWhat is unique about this page is the addition of [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes) in the HTML – custom attributes defined on a number of elements on this page. The `data-i18n-key` on the `h1` tag on this page, as well as many of the `p` tags, indicates that there is a corresponding internationalization key, which should be used to look up a translation for this text:",
+      "language": "unknown"
+    },
+    {
+      "code": "Using `HTMLRewriter`, you will parse the HTML within the `./public/index.html` page. When a `data-i18n-key` attribute is found, you should use the attribute's value to retrieve a matching translation from the `strings` object. With `HTMLRewriter`, you can query elements to accomplish tasks like finding a data attribute. However, as the name suggests, you can also rewrite elements by taking a translated string and directly inserting it into the HTML.\n\nAnother feature of this project is based on the `Accept-Language` header, which exists on incoming requests. You can set the translation language per request, allowing users from around the world to see a locally relevant and translated page.\n\n## Using the HTML Rewriter API\n\nBegin with the `functions/index.js` file. Your application in this tutorial will live entirely in this file.\n\nInside of this file, start by adding the default code for running a [Pages Function](https://developers.cloudflare.com/pages/functions/get-started/#create-a-function).",
+      "language": "unknown"
+    },
+    {
+      "code": "The important part of the code lives in the `onRequest` function. To implement translations on the site, take the HTML response retrieved from `env.ASSETS.fetch(request)` this allows you to fetch a static asset from your Pages project and pass it into a new instance of `HTMLRewriter`. When instantiating `HTMLRewriter`, you can attach handlers using the `on` function. For this tutorial, you will use the `[data-i18n-key]` selector (refer to the [HTMLRewriter documentation](https://developers.cloudflare.com/workers/runtime-apis/html-rewriter/) for more advanced usage) to locate all elements with the `data-i18n-key` attribute, which means that they must be translated. Any matching element will be passed to an instance of your `ElementHandler` class, which will contain the translation logic. With the created instance of `HTMLRewriter`, the `transform` function takes a `response` and can be returned to the client:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Transforming HTML\n\nYour `ElementHandler` will receive every element parsed by the `HTMLRewriter` instance, and due to the expressive API, you can query each incoming element for information.\n\nIn [How it works](#understanding-data-i18n-key), the documentation describes `data-i18n-key`, a custom data attribute that could be used to find a corresponding translated string for the website’s user interface. In `ElementHandler`, you can define an `element` function, which will be called as each element is parsed. Inside of the `element` function, you can query for the custom data attribute using `getAttribute`:",
+      "language": "unknown"
+    },
+    {
+      "code": "With `i18nKey` defined, you can use it to search for a corresponding translated string. You will now set up a `strings` object with key-value pairs corresponding to the `data-i18n-key` value. For now, you will define a single example string, `headline`, with a German `string`, `\"Beispielseite\"` (`\"Example Site\"`), and retrieve it in the `element` function:",
+      "language": "unknown"
+    },
+    {
+      "code": "Take your translated `string` and insert it into the original element, using the `setInnerContent` function:",
+      "language": "unknown"
+    },
+    {
+      "code": "To review that everything looks as expected, use the preview functionality built into Wrangler. Call [`wrangler pages dev ./public`](https://developers.cloudflare.com/workers/wrangler/commands/#dev) to open up a live preview of your project. The command is refreshed after every code change that you make.\n\nYou can expand on this translation functionality to provide country-specific translations, based on the incoming request’s `Accept-Language` header. By taking this header, parsing it, and passing the parsed language into your `ElementHandler`, you can retrieve a translated string in your user’s home language, provided that it is defined in `strings`.\n\nTo implement this:\n\n1. Update the `strings` object, adding a second layer of key-value pairs and allowing strings to be looked up in the format `strings[country][key]`.\n2. Pass a `countryStrings` object into our `ElementHandler`, so that it can be used during the parsing process.\n3. Grab the `Accept-Language` header from an incoming request, parse it, and pass the parsed language to `ElementHandler`.\n\nTo parse the `Accept-Language` header, install the [`accept-language-parser`](https://www.npmjs.com/package/accept-language-parser) npm package:",
+      "language": "unknown"
+    },
+    {
+      "code": "Once imported into your code, use the package to parse the most relevant language for a client based on `Accept-Language` header, and pass it to `ElementHandler`. Your final code for the project, with an included sample translation for Germany and Japan (using Google Translate) looks like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Deploy\n\nYour i18n tool built on Cloudflare Pages is complete and it is time to deploy it to your domain.\n\nTo deploy your application to a `*.pages.dev` subdomain, you need to specify a directory of static assets to serve, configure the `pages_build_output_dir` in your project’s Wrangler file and set the value to `./public`:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Next, you need to configure a deploy script in `package.json` file in your project. Add a deploy script with the value `wrangler pages deploy`:",
+      "language": "unknown"
+    },
+    {
+      "code": "Using `wrangler`, deploy to Cloudflare’s network, using the `deploy` command:",
+      "language": "unknown"
+    },
+    {
+      "code": "![An example site that has been successfully localized in Japanese, German and English](https://developers.cloudflare.com/_astro/i18n.DfrXtRlL_HOv9z.webp)\n\n## Related resources\n\nIn this tutorial, you built and deployed an i18n tool using `HTMLRewriter`. To review the full source code for this application, refer to the [repository on GitHub](https://github.com/lauragift21/i18n-example-workers).\n\nIf you want to get started building your own projects, review the existing list of [Quickstart templates](https://developers.cloudflare.com/workers/get-started/quickstarts/).\n\n</page>\n\n<page>\n---\ntitle: Use R2 as static asset storage with Cloudflare Pages · Cloudflare Pages docs\ndescription: This tutorial will teach you how to use R2 as a static asset\n  storage bucket for your Pages app.\nlastUpdated: 2025-10-13T13:40:40.000Z\nchatbotDeprioritize: false\ntags: Hono,JavaScript\nsource_url:\n  html: https://developers.cloudflare.com/pages/tutorials/use-r2-as-static-asset-storage-for-pages/\n  md: https://developers.cloudflare.com/pages/tutorials/use-r2-as-static-asset-storage-for-pages/index.md\n---\n\nThis tutorial will teach you how to use [R2](https://developers.cloudflare.com/r2/) as a static asset storage bucket for your [Pages](https://developers.cloudflare.com/pages/) app. This is especially helpful if you're hitting the [file limit](https://developers.cloudflare.com/pages/platform/limits/#files) or the [max file size limit](https://developers.cloudflare.com/pages/platform/limits/#file-size) on Pages.\n\nTo illustrate how this is done, we will use R2 as a static asset storage for a fictional cat blog.\n\n## The Cat blog\n\nImagine you run a static cat blog containing funny cat videos and helpful tips for cat owners. Your blog is growing and you need to add more content with cat images and videos.\n\nThe blog is hosted on Pages and currently has the following directory structure:",
+      "language": "unknown"
+    },
+    {
+      "code": "Adding more videos and images to the blog would be great, but our asset size is above the [file limit on Pages](https://developers.cloudflare.com/pages/platform/limits/#file-size). Let us fix this with R2.\n\n## Create an R2 bucket\n\nThe first step is creating an R2 bucket to store the static assets. A new bucket can be created with the dashboard or via Wrangler.\n\nUsing the dashboard, navigate to the R2 tab, then click on *Create bucket.* We will name the bucket for our blog *cat-media*. Always remember to give your buckets descriptive names:\n\n![Dashboard](https://developers.cloudflare.com/_astro/dash.B3yWT1et_2u1sYS.webp)\n\nWith the bucket created, we can upload media files to R2. I’ll drag and drop two folders with a few cat images and videos into the R2 bucket:\n\n![Upload](https://developers.cloudflare.com/images/pages/tutorials/pages-r2/upload.gif)\n\nAlternatively, an R2 bucket can be created with Wrangler from the command line by running:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Before you continue",
+      "id": "before-you-continue"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Create a new application",
+      "id": "create-a-new-application"
+    },
+    {
+      "level": "h2",
+      "text": "Understanding `data-i18n-key`",
+      "id": "understanding-`data-i18n-key`"
+    },
+    {
+      "level": "h2",
+      "text": "Using the HTML Rewriter API",
+      "id": "using-the-html-rewriter-api"
+    },
+    {
+      "level": "h2",
+      "text": "Transforming HTML",
+      "id": "transforming-html"
+    },
+    {
+      "level": "h2",
+      "text": "Deploy",
+      "id": "deploy"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "The Cat blog",
+      "id": "the-cat-blog"
+    },
+    {
+      "level": "h2",
+      "text": "Create an R2 bucket",
+      "id": "create-an-r2-bucket"
+    }
+  ],
+  "url": "llms-txt#push-commit(s)-to-remote",
+  "links": []
+}

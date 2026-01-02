@@ -1,0 +1,366 @@
+{
+  "title": "Skip the following three commands if you have built your application",
+  "content": "# using C3 or already committed your changes\ngit init\ngit add .\ngit commit -m \"Initial commit\"\n\ngit branch -M main\ngit remote add origin https://github.com/<YOUR_GH_USERNAME>/<REPOSITORY_NAME>\ngit push -u origin main\nsh\n  npm create cloudflare@latest -- my-astro-app --framework=astro --platform=pages\n  sh\n  yarn create cloudflare my-astro-app --framework=astro --platform=pages\n  sh\n  pnpm create cloudflare@latest my-astro-app --framework=astro --platform=pages\n  sh\nnpm run astro add cloudflare\nsh\ngit init\ngit remote add origin https://github.com/<your-gh-username>/<repository-name>\ngit add .\ngit commit -m \"Initial commit\"\ngit branch -M main\ngit push -u origin main\njs\nimport { defineConfig } from \"astro/config\";\nimport cloudflare from \"@astrojs/cloudflare\";\n\nexport default defineConfig({\n  adapter: cloudflare({\n    platformProxy: {\n      enabled: true,\n    },\n  }),\n});\ntypescript\n/// <reference types=\"astro/client\" />\n\ntype ENV = {\n  // replace `MY_KV` with your KV namespace\n  MY_KV: KVNamespace;\n};\n\n// use a default runtime configuration (advanced mode).\ntype Runtime = import(\"@astrojs/cloudflare\").Runtime<ENV>;\ndeclare namespace App {\n  interface Locals extends Runtime {}\n}\ntypescript\nimport type { APIContext } from \"astro\";\n\nexport async function get({ locals }: APIContext) {\n  const { MY_KV } = locals.runtime.env;\n\nreturn {\n    // ...\n  };\n}\ntypescript\n---\nconst myKV = Astro.locals.runtime.env.MY_KV;\nconst value = await myKV.get(\"key\");\n---\n<div>{value}</div>\nsh\nnpx degit Elderjs/template elderjs-app\ncd elderjs-app\nsh\ngit init\ngit remote add origin https://github.com/<your-gh-username>/<repository-name>\ngit add .\ngit commit -m \"Initial commit\"\ngit branch -M main\ngit push -u origin main\nsh\nnpm install -g @11ty/eleventy\nsh\ngit clone https://github.com/11ty/eleventy-base-blog.git my-blog-name\ncd my-blog-name\nnpm install\nsh\ngit remote set-url origin https://github.com/yourgithubusername/githubrepo\ngit branch -M main\ngit push -u origin main\nsh\nnpm install -g ember-cli\nsh\nnpx ember new ember-quickstart --lang en\nsh\ncd ember-quickstart\nnpm start\nsh\ngit remote add origin https://github.com/<your-gh-username>/<repository-name>\ngit branch -M main\ngit push -u origin main\nsh\npip install mkdocs\nsh\nmkdocs new <PROJECT_NAME>\nsh\npip freeze > requirements.txt\nsh\ngit init\ngit remote add origin https://github.com/<your-gh-username>/<repository-name>\ngit add .\ngit commit -m \"Initial commit\"\ngit branch -M main\ngit push -u origin main\nsh\ngit init\ngit remote add origin https://github.com/<your-gh-username>/<repository-name>\ngit add .\ngit commit -m \"Initial commit\"\ngit branch -M main\ngit push -u origin main\njs\nexport default {\n  async fetch(request) {\n    // This proxies your Pages application under the condition that your Worker script is deployed on the same custom domain as your Pages project\n    const response = await fetch(request);\n\n// Clone the response so that it is no longer immutable\n    const newResponse = new Response(response.body, response);\n\n// Add a custom header with a value\n    newResponse.headers.append(\n      \"x-workers-hello\",\n      \"Hello from Cloudflare Workers\",\n    );\n\n// Delete headers\n    newResponse.headers.delete(\"x-header-to-delete\");\n    newResponse.headers.delete(\"x-header2-to-delete\");\n\n// Adjust the value for an existing header\n    newResponse.headers.set(\"x-header-to-change\", \"NewValue\");\n\nreturn newResponse;\n  },\n};\nsh\ngit clone https://github.com/cloudflare/custom-headers-example\ncd custom-headers-example\nnpm install\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"name\": \"custom-headers-example\",\n    \"account_id\": \"FILL-IN-YOUR-ACCOUNT-ID\",\n    \"workers_dev\": false,\n    \"route\": \"FILL-IN-YOUR-WEBSITE.com/*\",\n    \"zone_id\": \"FILL-IN-YOUR-ZONE-ID\"\n  }\n  toml\n  name = \"custom-headers-example\"\n\naccount_id = \"FILL-IN-YOUR-ACCOUNT-ID\"\n  workers_dev = false\n  route = \"FILL-IN-YOUR-WEBSITE.com/*\"\n  zone_id = \"FILL-IN-YOUR-ZONE-ID\"\n  sh\nnpx wrangler deploy\nbash",
+  "code_samples": [
+    {
+      "code": "### Create a Pages project\n\n## Learn more\n\nBy completing this guide, you have successfully deployed your site to Cloudflare Pages. To get started with other frameworks, [refer to the list of Framework guides](https://developers.cloudflare.com/pages/framework-guides/).\n\n| Configuration option | Value |\n| - | - |\n| Production branch | `main` |\n| Build command | `npm run build` |\n| Build directory | `dist/cloudflare` |\n\nOn some versions of Angular, you may need to:\n\nChange the `Build command` to `npx ng build --output-path dist/cloudflare`\\\nChange the `Build directory` to `dist/cloudflare/browser`\n\nOptionally, you can customize the **Project name** field. It defaults to the GitHub repository's name, but it does not need to match. The **Project name** value is assigned as your `*.pages.dev` subdomain.\n\n1. After completing configuration, select the **Save and Deploy**.\n\nReview your first deploy pipeline in progress. Pages installs all dependencies and builds the project as specified. Cloudflare Pages will automatically rebuild your project and deploy it on every new pushed commit.\n\nAdditionally, you will have access to [preview deployments](https://developers.cloudflare.com/pages/configuration/preview-deployments/), which repeat the build-and-deploy process for pull requests. With these, you can preview changes to your project with a real URL before deploying your changes to production.\n\n## Learn more\n\nBy completing this guide, you have successfully deployed your Angular site to Cloudflare Pages. To get started with other frameworks, [refer to the list of Framework guides](https://developers.cloudflare.com/pages/framework-guides/).\n\n</page>\n\n<page>\n---\ntitle: Astro · Cloudflare Pages docs\ndescription: Astro is an all-in-one web framework for building fast,\n  content-focused websites. By default, Astro builds websites that have zero\n  JavaScript runtime code.\nlastUpdated: 2025-09-15T21:45:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/framework-guides/deploy-an-astro-site/\n  md: https://developers.cloudflare.com/pages/framework-guides/deploy-an-astro-site/index.md\n---\n\n[Astro](https://astro.build) is an all-in-one web framework for building fast, content-focused websites. By default, Astro builds websites that have zero JavaScript runtime code.\n\nRefer to the [Astro Docs](https://docs.astro.build/) to learn more about Astro or for assistance with an Astro project.\n\nIn this guide, you will create a new Astro application and deploy it using Cloudflare Pages.\n\n### Video Tutorial\n\n## Set up a new project\n\nTo use `create-cloudflare` to create a new Astro project, run the following command:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Astro will ask:\n\n1. Which project type you would like to set up. Your answers will not affect the rest of this tutorial. Select an answer ideal for your project.\n\n2. If you want to initialize a Git repository. We recommend you to select `No` and follow this guide's [Git instructions](https://developers.cloudflare.com/pages/framework-guides/deploy-an-astro-site/#create-a-github-repository) below. If you select `Yes`, do not follow the below Git instructions precisely but adjust them to your needs.\n\n`create-cloudflare` will then install dependencies, including the [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/#check-your-wrangler-version) CLI and the `@astrojs/cloudflare` adapter, and ask you setup questions.\n\n### Astro configuration\n\nYou can deploy an Astro Server-side Rendered (SSR) site to Cloudflare Pages using the [`@astrojs/cloudflare` adapter](https://github.com/withastro/adapters/tree/main/packages/cloudflare#readme). SSR sites render on Pages Functions and allow for dynamic functionality and customizations.\n\nNote\n\nIf using [`create-cloudflare` (C3)](https://www.npmjs.com/package/create-cloudflare), you can bypass adding an adapter as C3 automatically installs any necessary adapters and configures them when creating your project.\n\nAdd the [`@astrojs/cloudflare` adapter](https://github.com/withastro/adapters/tree/main/packages/cloudflare#readme) to your project's `package.json` by running:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Before you continue\n\nAll of the framework guides assume you already have a fundamental understanding of [Git](https://git-scm.com/). If you are new to Git, refer to this [summarized Git handbook](https://guides.github.com/introduction/git-handbook/) on how to set up Git on your local machine.\n\nIf you clone with SSH, you must [generate SSH keys](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) on each computer you use to push or pull from GitHub.\n\nRefer to the [GitHub documentation](https://guides.github.com/introduction/git-handbook/) and [Git documentation](https://git-scm.com/book/en/v2) for more information.\n\n## Create a GitHub repository\n\nCreate a new GitHub repository by visiting [repo.new](https://repo.new). After creating a new repository, go to your newly created project directory to prepare and push your local application to GitHub by running the following commands in your terminal:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Deploy with Cloudflare Pages\n\n### Deploy via the `create-cloudflare` CLI (C3)\n\nIf you use [`create-cloudflare`(C3)](https://www.npmjs.com/package/create-cloudflare) to create your new Astro project, C3 will install all dependencies needed for your project and prompt you to deploy your project via the CLI. If you deploy, your site will be live and you will be provided with a deployment URL.\n\n### Deploy via the Cloudflare dashboard\n\n## Learn more\n\nBy completing this guide, you have successfully deployed your site to Cloudflare Pages. To get started with other frameworks, [refer to the list of Framework guides](https://developers.cloudflare.com/pages/framework-guides/).\n\n| Configuration option | Value |\n| - | - |\n| Production branch | `main` |\n| Build command | `npm run build` |\n| Build directory | `dist` |\n\nOptionally, you can customize the **Project name** field. It defaults to the GitHub repository's name, but it does not need to match. The **Project name** value is assigned as your `*.pages.dev` subdomain.\n\nAfter completing configuration, select **Save and Deploy**.\n\nYou will see your first deployment in progress. Pages installs all dependencies and builds the project as specified.\n\nCloudflare Pages will automatically rebuild your project and deploy it on every new pushed commit.\n\nAdditionally, you will have access to [preview deployments](https://developers.cloudflare.com/pages/configuration/preview-deployments/), which repeat the build-and-deploy process for pull requests. With these, you can preview changes to your project with a real URL before deploying them to production.\n\nNote\n\nFor the complete guide to deploying your first site to Cloudflare Pages, refer to the [Get started guide](https://developers.cloudflare.com/pages/get-started/).\n\n### Local runtime\n\nLocal runtime support is configured via the `platformProxy` option:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Use bindings in your Astro application\n\nA [binding](https://developers.cloudflare.com/pages/functions/bindings/) allows your application to interact with Cloudflare developer products, such as [KV](https://developers.cloudflare.com/kv/concepts/how-kv-works/), [Durable Object](https://developers.cloudflare.com/durable-objects/), [R2](https://developers.cloudflare.com/r2/), and [D1](https://blog.cloudflare.com/introducing-d1/).\n\nUse bindings in Astro components and API routes by using `context.locals` from [Astro Middleware](https://docs.astro.build/en/guides/middleware/) to access the Cloudflare runtime which amongst other fields contains the Cloudflare's environment and consecutively any bindings set for your application.\n\nRefer to the following example of how to access a KV namespace with TypeScript.\n\nFirst, you need to define Cloudflare runtime and KV type by updating the `env.d.ts`. Make sure you have generated Cloudflare runtime types by running [`wrangler types`](https://developers.cloudflare.com/pages/functions/typescript/).",
+      "language": "unknown"
+    },
+    {
+      "code": "You can then access your KV from an API endpoint in the following way:",
+      "language": "unknown"
+    },
+    {
+      "code": "Besides endpoints, you can also use bindings directly from your Astro components:",
+      "language": "unknown"
+    },
+    {
+      "code": "To learn more about the Astro Cloudflare runtime, refer to the [Access to the Cloudflare runtime](https://docs.astro.build/en/guides/integrations-guide/cloudflare/#access-to-the-cloudflare-runtime) in the Astro documentation.\n\n## Learn more\n\nBy completing this guide, you have successfully deployed your Astro site to Cloudflare Pages. To get started with other frameworks, [refer to the list of Framework guides](https://developers.cloudflare.com/pages/framework-guides/).\n\n</page>\n\n<page>\n---\ntitle: Elder.js · Cloudflare Pages docs\ndescription: Elder.js is an SEO-focused framework for building static sites with SvelteKit.\nlastUpdated: 2025-09-15T21:45:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/framework-guides/deploy-an-elderjs-site/\n  md: https://developers.cloudflare.com/pages/framework-guides/deploy-an-elderjs-site/index.md\n---\n\n[Elder.js](https://elderguide.com/tech/elderjs/) is an SEO-focused framework for building static sites with [SvelteKit](https://developers.cloudflare.com/pages/framework-guides/deploy-a-svelte-kit-site/).\n\nIn this guide, you will create a new Elder.js application and deploy it using Cloudflare Pages.\n\n## Setting up a new project\n\nCreate a new project using [`npx degit Elderjs/template`](https://docs.npmjs.com/cli/v6/commands/npm-init), giving it a project name:",
+      "language": "unknown"
+    },
+    {
+      "code": "The Elder.js template includes a number of pages and examples showing how to build your static site, but by simply generating the project, it is already ready to be deployed to Cloudflare Pages.\n\n## Before you continue\n\nAll of the framework guides assume you already have a fundamental understanding of [Git](https://git-scm.com/). If you are new to Git, refer to this [summarized Git handbook](https://guides.github.com/introduction/git-handbook/) on how to set up Git on your local machine.\n\nIf you clone with SSH, you must [generate SSH keys](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) on each computer you use to push or pull from GitHub.\n\nRefer to the [GitHub documentation](https://guides.github.com/introduction/git-handbook/) and [Git documentation](https://git-scm.com/book/en/v2) for more information.\n\n## Create a GitHub repository\n\nCreate a new GitHub repository by visiting [repo.new](https://repo.new). After creating a new repository, go to your newly created project directory to prepare and push your local application to GitHub by running the following commands in your terminal:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Deploy with Cloudflare Pages\n\nTo deploy your site to Pages:\n\n1. In the Cloudflare dashboard, go to the **Workers & Pages** page.\n\n   [Go to **Workers & Pages**](https://dash.cloudflare.com/?to=/:account/workers-and-pages)\n\n2. Select **Create application**.\n\n3. Select the **Pages** tab.\n\n4. Select **Import an existing Git repository**.\n\n5. Select the new GitHub repository that you created and then select **Begin setup**.\n\n6. In the **Build settings** section, select *Elder.js* as your **Framework preset**. Your selection will provide the following information:\n\n| Configuration option | Value |\n| - | - |\n| Production branch | `main` |\n| Build command | `npm run build` |\n| Build directory | `public` |\n\nOptionally, you can customize the **Project name** field. It defaults to the GitHub repository's name, but it does not need to match. The **Project name** value is assigned as your `*.pages.dev` subdomain.\n\n### Finalize Setup\n\nAfter completing configuration, click the **Save and Deploy** button.\n\nYou will see your first deploy pipeline in progress. Pages installs all dependencies and builds the project as specified.\n\nCloudflare Pages will automatically rebuild your project and deploy it on every new pushed commit.\n\nAdditionally, you will have access to [preview deployments](https://developers.cloudflare.com/pages/configuration/preview-deployments/), which repeat the build-and-deploy process for pull requests. With these, you can preview changes to your project with a real URL before deploying them to production.\n\nNote\n\nFor the complete guide to deploying your first site to Cloudflare Pages, refer to the [Get started guide](https://developers.cloudflare.com/pages/get-started/).\n\n## Learn more\n\nBy completing this guide, you have successfully deployed your Elder.js site to Cloudflare Pages. To get started with other frameworks, [refer to the list of Framework guides](https://developers.cloudflare.com/pages/framework-guides/).\n\n</page>\n\n<page>\n---\ntitle: Eleventy · Cloudflare Pages docs\ndescription: Eleventy is a simple static site generator. In this guide, you will\n  create a new Eleventy site and deploy it using Cloudflare Pages. You will be\n  using the eleventy CLI to create a new Eleventy site.\nlastUpdated: 2025-09-15T21:45:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/framework-guides/deploy-an-eleventy-site/\n  md: https://developers.cloudflare.com/pages/framework-guides/deploy-an-eleventy-site/index.md\n---\n\n[Eleventy](https://www.11ty.dev/) is a simple static site generator. In this guide, you will create a new Eleventy site and deploy it using Cloudflare Pages. You will be using the `eleventy` CLI to create a new Eleventy site.\n\n## Installing Eleventy\n\nInstall the `eleventy` CLI by running the following command in your terminal:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Creating a new project\n\nThere are a lot of [starter projects](https://www.11ty.dev/docs/starter/) available on the Eleventy website. As an example, use the `eleventy-base-blog` project by running the following commands in your terminal:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Before you continue\n\nAll of the framework guides assume you already have a fundamental understanding of [Git](https://git-scm.com/). If you are new to Git, refer to this [summarized Git handbook](https://guides.github.com/introduction/git-handbook/) on how to set up Git on your local machine.\n\nIf you clone with SSH, you must [generate SSH keys](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) on each computer you use to push or pull from GitHub.\n\nRefer to the [GitHub documentation](https://guides.github.com/introduction/git-handbook/) and [Git documentation](https://git-scm.com/book/en/v2) for more information.\n\n## Creating a GitHub repository\n\nCreate a new GitHub repository by visiting [repo.new](https://repo.new). After creating a new repository, prepare and push your local application to GitHub by running the following command in your terminal:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Deploy with Cloudflare Pages\n\nTo deploy your site to Pages:\n\n1. In the Cloudflare dashboard, go to the **Workers & Pages** page.\n\n   [Go to **Workers & Pages**](https://dash.cloudflare.com/?to=/:account/workers-and-pages)\n\n2. Select **Create application**.\n\n3. Select the **Pages** tab.\n\n4. Select **Import an existing Git repository**.\n\n5. Select the new GitHub repository that you created and then select **Begin setup**.\n\n6. In the **Build settings** section, select *Eleventy* as your **Framework preset**. Your selection will provide the following information:\n\n| Configuration option | Value |\n| - | - |\n| Production branch | `main` |\n| Build command | `npx @11ty/eleventy` |\n| Build directory | `_site` |\n\nNote\n\nFor the complete guide to deploying your first site to Cloudflare Pages, refer to the [Get started guide](https://developers.cloudflare.com/pages/get-started/).\n\nAfter deploying your site, you will receive a unique subdomain for your project on `*.pages.dev`. Every time you commit new code to your Eleventy site, Cloudflare Pages will automatically rebuild your project and deploy it. You will also get access to [preview deployments](https://developers.cloudflare.com/pages/configuration/preview-deployments/) on new pull requests, so you can preview how changes look to your site before deploying them to production.\n\n## Learn more\n\nBy completing this guide, you have successfully deployed your Eleventy site to Cloudflare Pages. To get started with other frameworks, [refer to the list of Framework guides](https://developers.cloudflare.com/pages/framework-guides/).\n\n</page>\n\n<page>\n---\ntitle: Ember · Cloudflare Pages docs\ndescription: Ember.js is a productive, battle-tested JavaScript framework for\n  building modern web applications. It includes everything you need to build\n  rich UIs that work on any device.\nlastUpdated: 2025-09-15T21:45:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/framework-guides/deploy-an-emberjs-site/\n  md: https://developers.cloudflare.com/pages/framework-guides/deploy-an-emberjs-site/index.md\n---\n\n[Ember.js](https://emberjs.com) is a productive, battle-tested JavaScript framework for building modern web applications. It includes everything you need to build rich UIs that work on any device.\n\n## Install Ember\n\nTo begin, install Ember:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Create an Ember project\n\nUse the `ember new` command to create a new application:",
+      "language": "unknown"
+    },
+    {
+      "code": "After the application is generated, change the directory to your project and run your project by running the following commands:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Before you continue\n\nAll of the framework guides assume you already have a fundamental understanding of [Git](https://git-scm.com/). If you are new to Git, refer to this [summarized Git handbook](https://guides.github.com/introduction/git-handbook/) on how to set up Git on your local machine.\n\nIf you clone with SSH, you must [generate SSH keys](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) on each computer you use to push or pull from GitHub.\n\nRefer to the [GitHub documentation](https://guides.github.com/introduction/git-handbook/) and [Git documentation](https://git-scm.com/book/en/v2) for more information.\n\n## Create a GitHub repository\n\nCreate a new GitHub repository by visiting [repo.new](https://repo.new). After creating a new repository, go to your newly created project directory to prepare and push your local application to GitHub by running the following commands in your terminal:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Deploy with Cloudflare Pages\n\nTo deploy your site to Pages:\n\n1. In the Cloudflare dashboard, go to the **Workers & Pages** page.\n\n   [Go to **Workers & Pages**](https://dash.cloudflare.com/?to=/:account/workers-and-pages)\n\n2. Select **Create application**.\n\n3. Select the **Pages** tab.\n\n4. Select **Import an existing Git repository**.\n\n5. Select the new GitHub repository that you created and then select **Begin setup**.\n\n6. In the **Build settings** section, select *Ember.js* as your **Framework preset**. Your selection will provide the following information:\n\n| Configuration option | Value |\n| - | - |\n| Production branch | `main` |\n| Build command | `npx ember-cli build` |\n| Build directory | `dist` |\n\nAfter deploying your site, you will receive a unique subdomain for your project on `*.pages.dev`.\n\nEvery time you commit new code to your Ember site, Cloudflare Pages will automatically rebuild your project and deploy it. You will also get access to [preview deployments](https://developers.cloudflare.com/pages/configuration/preview-deployments/) on new pull requests and be able to preview how changes to your site look before deploying them to production.\n\nFor the complete guide to deploying your first site to Cloudflare Pages, refer to the [Get started guide](https://developers.cloudflare.com/pages/get-started/).\n\n## Learn more\n\nBy completing this guide, you have successfully deployed your Ember site to Cloudflare Pages. To get started with other frameworks, [refer to the list of Framework guides](https://developers.cloudflare.com/pages/framework-guides/).\n\n</page>\n\n<page>\n---\ntitle: MkDocs · Cloudflare Pages docs\ndescription: MkDocs is a modern documentation platform where teams can document\n  products, internal knowledge bases and APIs.\nlastUpdated: 2025-09-15T21:45:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/framework-guides/deploy-an-mkdocs-site/\n  md: https://developers.cloudflare.com/pages/framework-guides/deploy-an-mkdocs-site/index.md\n---\n\n[MkDocs](https://www.mkdocs.org/) is a modern documentation platform where teams can document products, internal knowledge bases and APIs.\n\n## Install MkDocs\n\nMkDocs requires a recent version of Python and the Python package manager, pip, to be installed on your system. To install pip, refer to the [MkDocs Installation guide](https://www.mkdocs.org/user-guide/installation/). With pip installed, run:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Create an MkDocs project\n\nUse the `mkdocs new` command to create a new application:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then `cd` into your project, take MkDocs and its dependencies and put them into a `requirements.txt` file:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Before you continue\n\nAll of the framework guides assume you already have a fundamental understanding of [Git](https://git-scm.com/). If you are new to Git, refer to this [summarized Git handbook](https://guides.github.com/introduction/git-handbook/) on how to set up Git on your local machine.\n\nIf you clone with SSH, you must [generate SSH keys](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) on each computer you use to push or pull from GitHub.\n\nRefer to the [GitHub documentation](https://guides.github.com/introduction/git-handbook/) and [Git documentation](https://git-scm.com/book/en/v2) for more information.\n\n## Create a GitHub repository\n\nCreate a new GitHub repository by visiting [repo.new](https://repo.new). After creating a new repository, go to your newly created project directory to prepare and push your local application to GitHub by running the following commands in your terminal:",
+      "language": "unknown"
+    },
+    {
+      "code": "You have successfully created a GitHub repository and pushed your MkDocs project to that repository.\n\n## Deploy with Cloudflare Pages\n\n## Learn more\n\nBy completing this guide, you have successfully deployed your site to Cloudflare Pages. To get started with other frameworks, [refer to the list of Framework guides](https://developers.cloudflare.com/pages/framework-guides/).\n\n| Configuration option | Value |\n| - | - |\n| Production branch | `main` |\n| Build command | `mkdocs build` |\n| Build directory | `site` |\n\n1. Go to **Environment variables (advanced)** > **Add variable** > and add the variable `PYTHON_VERSION` with a value of `3.7`.\n\nAfter deploying your site, you will receive a unique subdomain for your project on `*.pages.dev`.\n\nEvery time you commit new code to your MkDocs site, Cloudflare Pages will automatically rebuild your project and deploy it. You will also get access to [preview deployments](https://developers.cloudflare.com/pages/configuration/preview-deployments/) on new pull requests and be able to preview how changes to your site look before deploying them to production.\n\nFor the complete guide to deploying your first site to Cloudflare Pages, refer to the [Get started guide](https://developers.cloudflare.com/pages/get-started/).\n\n## Learn more\n\nBy completing this guide, you have successfully deployed your MkDocs site to Cloudflare Pages. To get started with other frameworks, [refer to the list of Framework guides](https://developers.cloudflare.com/pages/framework-guides/).\n\n</page>\n\n<page>\n---\ntitle: Static HTML · Cloudflare Pages docs\ndescription: Cloudflare supports deploying any static HTML website to Cloudflare\n  Pages. If you manage your website without using a framework or static site\n  generator, or if your framework is not listed in Framework guides, you can\n  still deploy it using this guide.\nlastUpdated: 2025-09-15T21:45:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/framework-guides/deploy-anything/\n  md: https://developers.cloudflare.com/pages/framework-guides/deploy-anything/index.md\n---\n\nCloudflare supports deploying any static HTML website to Cloudflare Pages. If you manage your website without using a framework or static site generator, or if your framework is not listed in [Framework guides](https://developers.cloudflare.com/pages/framework-guides/), you can still deploy it using this guide.\n\n## Before you continue\n\nAll of the framework guides assume you already have a fundamental understanding of [Git](https://git-scm.com/). If you are new to Git, refer to this [summarized Git handbook](https://guides.github.com/introduction/git-handbook/) on how to set up Git on your local machine.\n\nIf you clone with SSH, you must [generate SSH keys](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) on each computer you use to push or pull from GitHub.\n\nRefer to the [GitHub documentation](https://guides.github.com/introduction/git-handbook/) and [Git documentation](https://git-scm.com/book/en/v2) for more information.\n\n## Create a GitHub repository\n\nCreate a new GitHub repository by visiting [repo.new](https://repo.new). After creating a new repository, go to your newly created project directory to prepare and push your local application to GitHub by running the following commands in your terminal:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Deploy with Cloudflare Pages\n\nTo deploy your site to Pages:\n\n1. In the Cloudflare dashboard, go to the **Workers & Pages** page.\n\n   [Go to **Workers & Pages**](https://dash.cloudflare.com/?to=/:account/workers-and-pages)\n\n2. Select **Create application**.\n\n3. Select the **Pages** tab.\n\n4. Select **Import an existing Git repository**.\n\n5. Select the new GitHub repository that you created and then select **Begin setup**.\n\n6. In the **Set up builds and deployments** section, provide the following information:\n\n| Configuration option | Value |\n| - | - |\n| Production branch | `main` |\n| Build command (optional) | `exit 0` |\n| Build output directory | `<YOUR_BUILD_DIR>` |\n\nUnlike many of the framework guides, the build command and build output directory for your site are going to be completely custom. If you are not using a preset and do not need to build your site, use `exit 0` as your **Build command**. Cloudflare recommends using `exit 0` as your **Build command** to access features such as Pages Functions. The **Build output directory** is where your application's content lives.\n\nAfter configuring your site, you can begin your first deploy. Your custom build command (if provided) will run, and Pages will deploy your static site.\n\nNote\n\nFor the complete guide to deploying your first site to Cloudflare Pages, refer to the [Get started guide](https://developers.cloudflare.com/pages/get-started/).\n\nAfter you have deployed your site, you will receive a unique subdomain for your project on `*.pages.dev`. Cloudflare Pages will automatically rebuild your project and deploy it. You will also get access to [preview deployments](https://developers.cloudflare.com/pages/configuration/preview-deployments/) on new pull requests, so you can preview how changes look to your site before deploying them to production.\n\nGetting 404 errors on \\*.pages.dev?\n\nIf you are getting `404` errors when visiting your `*.pages.dev` domain, make sure your website has a top-level file for `index.html`. This `index.html` is what Pages will serve on your apex with no page specified.\n\n## Learn more\n\nBy completing this guide, you have successfully deployed your site to Cloudflare Pages. To get started with other frameworks, [refer to the list of Framework guides](https://developers.cloudflare.com/pages/framework-guides/).\n\n</page>\n\n<page>\n---\ntitle: Next.js · Cloudflare Pages docs\ndescription: React framework for building full-stack web applications.\nlastUpdated: 2025-09-17T18:05:52.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/framework-guides/nextjs/\n  md: https://developers.cloudflare.com/pages/framework-guides/nextjs/index.md\n---\n\n[Next.js](https://nextjs.org) is an open-source React framework for creating websites and applications.\n\nIf you want to deploy a full stack Server Side Rendered Next.js application please refer to the [Next.js Workers guide](https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs).\n\nTo instead deploy a static Next.js site using Pages see the [static Next.js Pages guide](https://developers.cloudflare.com/pages/framework-guides/nextjs/deploy-a-static-nextjs-site).\n\n</page>\n\n<page>\n---\ntitle: Add custom HTTP headers · Cloudflare Pages docs\ndescription: More advanced customization of HTTP headers is available through\n  Cloudflare Workers serverless functions.\nlastUpdated: 2025-09-15T21:45:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/how-to/add-custom-http-headers/\n  md: https://developers.cloudflare.com/pages/how-to/add-custom-http-headers/index.md\n---\n\nNote\n\nCloudflare provides HTTP header customization for Pages projects by adding a `_headers` file to your project. Refer to the [documentation](https://developers.cloudflare.com/pages/configuration/headers/) for more information.\n\nMore advanced customization of HTTP headers is available through Cloudflare Workers [serverless functions](https://www.cloudflare.com/learning/serverless/what-is-serverless/).\n\nIf you have not deployed a Worker before, get started with our [tutorial](https://developers.cloudflare.com/workers/get-started/guide/). For the purpose of this tutorial, accomplish steps one (Sign up for a Workers account) through four (Generate a new project) before returning to this page.\n\nBefore continuing, ensure that your Cloudflare Pages project is connected to a [custom domain](https://developers.cloudflare.com/pages/configuration/custom-domains/#add-a-custom-domain).\n\n## Writing a Workers function\n\nWorkers functions are written in [JavaScript](https://www.cloudflare.com/learning/serverless/serverless-javascript/). When a Worker makes a request to a Cloudflare Pages application, it will receive a response. The response a Worker receives is immutable, meaning it cannot be changed. In order to add, delete, or alter headers, clone the response and modify the headers on a new `Response` instance. Return the new response to the browser with your desired header changes. An example of this is shown below:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Deploying a Workers function in the dashboard\n\nThe easiest way to start deploying your Workers function is by typing [workers.new](https://workers.new/) in the browser. Log in to your account to be automatically directed to the Workers & Pages dashboard. From the Workers & Pages dashboard, write your function or use one of the [examples from the Workers documentation](https://developers.cloudflare.com/workers/examples/).\n\nSelect **Save and Deploy** when your script is ready and set a [route](https://developers.cloudflare.com/workers/configuration/routing/routes/) in your domain's zone settings.\n\nFor example, [here is a Workers script](https://developers.cloudflare.com/workers/examples/security-headers/) you can copy and paste into the Workers dashboard that sets common security headers whenever a request hits your Pages URL, such as X-XSS-Protection, X-Frame-Options, X-Content-Type-Options, Strict-Transport-Security, Content-Security-Policy (CSP), and more.\n\n## Deploying a Workers function using the CLI\n\nIf you would like to skip writing this file yourself, you can use our `custom-headers-example` [template](https://github.com/kristianfreeman/custom-headers-example) to generate a new Workers function with [wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/), the Workers CLI tool.",
+      "language": "unknown"
+    },
+    {
+      "code": "To operate your Workers function alongside your Pages application, deploy it to the same custom domain as your Pages application. To do this, update the Wrangler file in your project with your account and zone details:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "If you do not know how to find your Account ID and Zone ID, refer to [our guide](https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/).\n\nOnce you have configured your [Wrangler configuration file](https://developers.cloudflare.com/pages/functions/wrangler-configuration/) , run `npx wrangler deploy` in your terminal to deploy your Worker:",
+      "language": "unknown"
+    },
+    {
+      "code": "After you have deployed your Worker, your desired HTTP header adjustments will take effect. While the Worker is deployed, you should continue to see the content from your Pages application as normal.\n\n</page>\n\n<page>\n---\ntitle: Set build commands per branch · Cloudflare Pages docs\ndescription: This guide will instruct you how to set build commands on specific\n  branches. You will use the CF_PAGES_BRANCH environment variable to run a\n  script on a specified branch as opposed to your Production branch. This guide\n  assumes that you have a Cloudflare account and a Pages project.\nlastUpdated: 2025-09-15T21:45:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/how-to/build-commands-branches/\n  md: https://developers.cloudflare.com/pages/how-to/build-commands-branches/index.md\n---\n\nThis guide will instruct you how to set build commands on specific branches. You will use the `CF_PAGES_BRANCH` environment variable to run a script on a specified branch as opposed to your Production branch. This guide assumes that you have a Cloudflare account and a Pages project.\n\n## Set up\n\nCreate a `.sh` file in your project directory. You can choose your file's name, but we recommend you name the file `build.sh`.\n\nIn the following script, you will use the `CF_PAGES_BRANCH` environment variable to check which branch is currently being built. Populate your `.sh` file with the following:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Create a Pages project",
+      "id": "create-a-pages-project"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    },
+    {
+      "level": "h3",
+      "text": "Video Tutorial",
+      "id": "video-tutorial"
+    },
+    {
+      "level": "h2",
+      "text": "Set up a new project",
+      "id": "set-up-a-new-project"
+    },
+    {
+      "level": "h3",
+      "text": "Astro configuration",
+      "id": "astro-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Before you continue",
+      "id": "before-you-continue"
+    },
+    {
+      "level": "h2",
+      "text": "Create a GitHub repository",
+      "id": "create-a-github-repository"
+    },
+    {
+      "level": "h2",
+      "text": "Deploy with Cloudflare Pages",
+      "id": "deploy-with-cloudflare-pages"
+    },
+    {
+      "level": "h3",
+      "text": "Deploy via the `create-cloudflare` CLI (C3)",
+      "id": "deploy-via-the-`create-cloudflare`-cli-(c3)"
+    },
+    {
+      "level": "h3",
+      "text": "Deploy via the Cloudflare dashboard",
+      "id": "deploy-via-the-cloudflare-dashboard"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    },
+    {
+      "level": "h3",
+      "text": "Local runtime",
+      "id": "local-runtime"
+    },
+    {
+      "level": "h2",
+      "text": "Use bindings in your Astro application",
+      "id": "use-bindings-in-your-astro-application"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    },
+    {
+      "level": "h2",
+      "text": "Setting up a new project",
+      "id": "setting-up-a-new-project"
+    },
+    {
+      "level": "h2",
+      "text": "Before you continue",
+      "id": "before-you-continue"
+    },
+    {
+      "level": "h2",
+      "text": "Create a GitHub repository",
+      "id": "create-a-github-repository"
+    },
+    {
+      "level": "h2",
+      "text": "Deploy with Cloudflare Pages",
+      "id": "deploy-with-cloudflare-pages"
+    },
+    {
+      "level": "h3",
+      "text": "Finalize Setup",
+      "id": "finalize-setup"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    },
+    {
+      "level": "h2",
+      "text": "Installing Eleventy",
+      "id": "installing-eleventy"
+    },
+    {
+      "level": "h2",
+      "text": "Creating a new project",
+      "id": "creating-a-new-project"
+    },
+    {
+      "level": "h2",
+      "text": "Before you continue",
+      "id": "before-you-continue"
+    },
+    {
+      "level": "h2",
+      "text": "Creating a GitHub repository",
+      "id": "creating-a-github-repository"
+    },
+    {
+      "level": "h2",
+      "text": "Deploy with Cloudflare Pages",
+      "id": "deploy-with-cloudflare-pages"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    },
+    {
+      "level": "h2",
+      "text": "Install Ember",
+      "id": "install-ember"
+    },
+    {
+      "level": "h2",
+      "text": "Create an Ember project",
+      "id": "create-an-ember-project"
+    },
+    {
+      "level": "h2",
+      "text": "Before you continue",
+      "id": "before-you-continue"
+    },
+    {
+      "level": "h2",
+      "text": "Create a GitHub repository",
+      "id": "create-a-github-repository"
+    },
+    {
+      "level": "h2",
+      "text": "Deploy with Cloudflare Pages",
+      "id": "deploy-with-cloudflare-pages"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    },
+    {
+      "level": "h2",
+      "text": "Install MkDocs",
+      "id": "install-mkdocs"
+    },
+    {
+      "level": "h2",
+      "text": "Create an MkDocs project",
+      "id": "create-an-mkdocs-project"
+    },
+    {
+      "level": "h2",
+      "text": "Before you continue",
+      "id": "before-you-continue"
+    },
+    {
+      "level": "h2",
+      "text": "Create a GitHub repository",
+      "id": "create-a-github-repository"
+    },
+    {
+      "level": "h2",
+      "text": "Deploy with Cloudflare Pages",
+      "id": "deploy-with-cloudflare-pages"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    },
+    {
+      "level": "h2",
+      "text": "Before you continue",
+      "id": "before-you-continue"
+    },
+    {
+      "level": "h2",
+      "text": "Create a GitHub repository",
+      "id": "create-a-github-repository"
+    },
+    {
+      "level": "h2",
+      "text": "Deploy with Cloudflare Pages",
+      "id": "deploy-with-cloudflare-pages"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    },
+    {
+      "level": "h2",
+      "text": "Writing a Workers function",
+      "id": "writing-a-workers-function"
+    },
+    {
+      "level": "h2",
+      "text": "Deploying a Workers function in the dashboard",
+      "id": "deploying-a-workers-function-in-the-dashboard"
+    },
+    {
+      "level": "h2",
+      "text": "Deploying a Workers function using the CLI",
+      "id": "deploying-a-workers-function-using-the-cli"
+    },
+    {
+      "level": "h2",
+      "text": "Set up",
+      "id": "set-up"
+    }
+  ],
+  "url": "llms-txt#skip-the-following-three-commands-if-you-have-built-your-application",
+  "links": []
+}

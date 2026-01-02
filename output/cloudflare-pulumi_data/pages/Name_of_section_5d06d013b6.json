@@ -1,0 +1,63 @@
+{
+  "title": "Name of section",
+  "content": "<DirectoryListing />\nyaml\npcx_content_type: overview\nplaintext\n---\ntitle: Overview\nweight: xx\nlayout: overview\npcx_content_type: overview\n---",
+  "code_samples": [
+    {
+      "code": "## Examples\n\n[Logs: Enable destinations](https://developers.cloudflare.com/logs/logpush/logpush-job/enable-destinations/)\n\n[Cloudflare Tunnel: Get Started](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/get-started/)\n\n</page>\n\n<page>\n---\ntitle: Overview · Cloudflare Style Guide\ndescription: The purpose of a landing page is to welcome users and provide an\n  overview of the product.\nlastUpdated: 2025-08-20T21:45:15.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/style-guide/documentation-content-strategy/content-types/overview/\n  md: https://developers.cloudflare.com/style-guide/documentation-content-strategy/content-types/overview/index.md\n---\n\n## Purpose\n\nThe purpose of a landing page is to welcome users and provide an overview of the product.\n\n## Tone\n\nAccessible, welcoming, conversational, outspoken\n\n## content\\_type",
+      "language": "unknown"
+    },
+    {
+      "code": "For more details, refer to [`pcx_content_type`](https://developers.cloudflare.com/style-guide/frontmatter/custom-properties/#pcx_content_type).\n\n## Structure\n\n### Most used components\n\n* [`PublicStats`](https://developers.cloudflare.com/style-guide/components/public-stats/):\n\n  The `PublicStats` component allows you to reference specific values about Cloudflare's network without maintaining those values in multiple files.\n\n### Required components\n\n**Metadata title**: Overview\n\n**Title**: Name of the product, group of products, or conceptual content area. H1. Usually a noun. Do not add \"documentation\" to the title. Do not use gerund phrases.\n\n**Intro/overview**: Brief welcoming introductory content. May be combined with product description.\n\n**Product description**: What does this product do? Why would you use it?\n\n**Product availability**: What plan(s) is this available to? Review [available plan types](https://github.com/cloudflare/cloudflare-docs/blob/production/src/components/Plan.astro).\n\n**Product attributes**: What is included with this product? (Specific actions, protections, etc.)\n\n### Optional components\n\n**Features**: A few main features specific to product. Includes a link to relevant documentation on feature.\n\n**Related products**: Links to documentation for products used or configured together with current product. For product icons, refer to this [icon library](https://cfdata.lol/icons/).\n\n**More resources**: External links to related resources, such as plans, pricing. Do not duplicate the information from the footer. Also, if the product is free to use or there are not any useful links, feel free to skip this section. Review [available icons on Starlight](https://starlight.astro.build/reference/icons/#all-icons).\n\n**Visual**: Graphic or image that enhances the landing page. It should be something relatively static that will not require much (if any) updating in the future.\n\n**Integration information**\n\n## Template",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "Purpose",
+      "id": "purpose"
+    },
+    {
+      "level": "h2",
+      "text": "Tone",
+      "id": "tone"
+    },
+    {
+      "level": "h2",
+      "text": "content\\_type",
+      "id": "content\\_type"
+    },
+    {
+      "level": "h2",
+      "text": "Structure",
+      "id": "structure"
+    },
+    {
+      "level": "h3",
+      "text": "Most used components",
+      "id": "most-used-components"
+    },
+    {
+      "level": "h3",
+      "text": "Required components",
+      "id": "required-components"
+    },
+    {
+      "level": "h3",
+      "text": "Optional components",
+      "id": "optional-components"
+    },
+    {
+      "level": "h2",
+      "text": "Template",
+      "id": "template"
+    }
+  ],
+  "url": "llms-txt#name-of-section",
+  "links": []
+}

@@ -1,0 +1,92 @@
+{
+  "title": "Second-person imperative verb phrase",
+  "content": "Context for procedures on page (optional)\n\n## 1. Second-person imperative verb phrase\n\n1. Step one\n1. Step two\n1. Step three\n1. ...\n\nNext steps sentence - what users should see as the end result and/or actionable next steps.\n\n## 2. Second-person imperative verb phrase\n\n1. Step one\n1. Step two\n1. Step three\n1. ...\n\nNext steps sentence - what users should see as the end result and/or actionable next steps.\n\n## 3. Second-person imperative verb phrase\n\n1. Step one\n1. Step two\n1. Step three\n1. ...\n\nNext steps sentence - what users should see as the end result and/or actionable next steps.\nyaml\npcx_content_type: implementation-guide\nyaml\npcx_content_type: navigation\nmdx\n---\nweight: xx\npcx_content_type: navigation\n---\n\nimport { DirectoryListing } from \"~/components\";",
+  "code_samples": [
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Implementation guide · Cloudflare Style Guide\ndescription: Walk the reader through best practices for the implementation of a\n  solution using Cloudflare.\nlastUpdated: 2025-06-24T21:05:23.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/style-guide/documentation-content-strategy/content-types/implementation-guide/\n  md: https://developers.cloudflare.com/style-guide/documentation-content-strategy/content-types/implementation-guide/index.md\n---\n\n## Purpose\n\nWalk the reader through best practices for the [implementation](https://developers.cloudflare.com/reference-architecture/implementation-guides/) of a solution using Cloudflare.\n\nDisambiguation\n\nThis page describes the content strategy for an implementation guide. For help with Cloudflare products, refer to [Implementation guides](https://developers.cloudflare.com/reference-architecture/implementation-guides/).\n\n## Tone\n\ninstructional, straightforward\n\n## content\\_type",
+      "language": "unknown"
+    },
+    {
+      "code": "For more details, refer to [`pcx_content_type`](https://developers.cloudflare.com/style-guide/frontmatter/custom-properties/#pcx_content_type).\n\n## Components\n\n### Required\n\n[**Title**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/titles/): Short verb phrase in second-person imperative. Do not use gerund phrases.\n\n[**Steps**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/steps-tasks-procedures/): Numbered steps that complete a task.\n\n[**Next steps**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/next-steps/): What users should see as the end result of the steps and/or actionable next steps.\n\n### Optional\n\n[**Prerequisites**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/prerequisites/): Tasks or conditions that must be completed before a user can complete a series of steps.\n\n[**Notes/warnings**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/notes-tips-warnings/)\n\n[**Examples**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/examples/)\n\n[**Diagrams**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/diagrams/)\n\n**Screenshots**\n\n[**Related links**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/links/): Bulleted list of links to associated resources.\n\n## Template\n\n</page>\n\n<page>\n---\ntitle: Navigation · Cloudflare Style Guide\ndescription: The purpose of a navigation page is to direct users deeper into the\n  doc set and act as a sub-landing page for a specific area of the docs.\nlastUpdated: 2025-10-21T14:33:19.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/style-guide/documentation-content-strategy/content-types/navigation/\n  md: https://developers.cloudflare.com/style-guide/documentation-content-strategy/content-types/navigation/index.md\n---\n\n## Purpose\n\nThe purpose of a navigation page is to direct users deeper into the doc set and act as a sub-landing page for a specific area of the docs.\n\n## content\\_type",
+      "language": "unknown"
+    },
+    {
+      "code": "For more details, refer to [`pcx_content_type`](https://developers.cloudflare.com/style-guide/frontmatter/custom-properties/#pcx_content_type).\n\n## Components\n\n[`DirectoryListing`](https://developers.cloudflare.com/style-guide/components/directory-listing/):\n\nUse `<DirectoryListing />` to display the directory of a specific folder, which appears as a list of links.\n\n## Template",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "1. Second-person imperative verb phrase",
+      "id": "1.-second-person-imperative-verb-phrase"
+    },
+    {
+      "level": "h2",
+      "text": "2. Second-person imperative verb phrase",
+      "id": "2.-second-person-imperative-verb-phrase"
+    },
+    {
+      "level": "h2",
+      "text": "3. Second-person imperative verb phrase",
+      "id": "3.-second-person-imperative-verb-phrase"
+    },
+    {
+      "level": "h2",
+      "text": "Purpose",
+      "id": "purpose"
+    },
+    {
+      "level": "h2",
+      "text": "Tone",
+      "id": "tone"
+    },
+    {
+      "level": "h2",
+      "text": "content\\_type",
+      "id": "content\\_type"
+    },
+    {
+      "level": "h2",
+      "text": "Components",
+      "id": "components"
+    },
+    {
+      "level": "h3",
+      "text": "Required",
+      "id": "required"
+    },
+    {
+      "level": "h3",
+      "text": "Optional",
+      "id": "optional"
+    },
+    {
+      "level": "h2",
+      "text": "Template",
+      "id": "template"
+    },
+    {
+      "level": "h2",
+      "text": "Purpose",
+      "id": "purpose"
+    },
+    {
+      "level": "h2",
+      "text": "content\\_type",
+      "id": "content\\_type"
+    },
+    {
+      "level": "h2",
+      "text": "Components",
+      "id": "components"
+    },
+    {
+      "level": "h2",
+      "text": "Template",
+      "id": "template"
+    }
+  ],
+  "url": "llms-txt#second-person-imperative-verb-phrase",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Enable automatic snapshot expiration for entire catalog",
+  "content": "npx wrangler r2 bucket catalog snapshot-expiration enable my-bucket \\\n  --older-than-days 30 \\\n  --retain-last 5",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#enable-automatic-snapshot-expiration-for-entire-catalog",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Removes unreferenced data files from R2 storage (orphan files)",
+  "content": "spark.sql(\"\"\"\n  CALL r2dc.system.remove_orphan_files(\n    table => 'namespace.table_name'\n  )\n\"\"\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#removes-unreferenced-data-files-from-r2-storage-(orphan-files)",
+  "links": []
+}

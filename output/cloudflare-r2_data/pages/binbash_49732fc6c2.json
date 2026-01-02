@@ -1,0 +1,64 @@
+{
+  "title": "!/bin/bash",
+  "content": "if [ \"$CF_PAGES_BRANCH\" == \"production\" ]; then\n  # Run the \"production\" script in `package.json` on the \"production\" branch\n  # \"production\" should be replaced with the name of your Production branch\n\nelif [ \"$CF_PAGES_BRANCH\" == \"staging\" ]; then\n  # Run the \"staging\" script in `package.json` on the \"staging\" branch\n  # \"staging\" should be replaced with the name of your specific branch\n\nelse\n  # Else run the dev script\n  npm run dev\nfi\nsh",
+  "code_samples": [
+    {
+      "code": "## Publish your changes\n\nTo put your changes into effect:\n\n1. In the Cloudflare dashboard, go to the **Workers & Pages** page.\n\n   [Go to **Workers & Pages**](https://dash.cloudflare.com/?to=/:account/workers-and-pages)\n\n2. Select your Pages project.\n\n3. Go to **Settings** > **Build & deployments** > **Build configurations** > **Edit configurations**.\n\n4. Update the **Build command** field value to `bash build.sh` and select **Save**.\n\nTo test that your build is successful, deploy your project.\n\n</page>\n\n<page>\n---\ntitle: Add a custom domain to a branch · Cloudflare Pages docs\ndescription: In this guide, you will learn how to add a custom domain\n  (staging.example.com) that will point to a specific branch (staging) on your\n  Pages project.\nlastUpdated: 2025-09-15T21:45:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/how-to/custom-branch-aliases/\n  md: https://developers.cloudflare.com/pages/how-to/custom-branch-aliases/index.md\n---\n\nIn this guide, you will learn how to add a custom domain (`staging.example.com`) that will point to a specific branch (`staging`) on your Pages project.\n\nThis will allow you to have a custom domain that will always show the latest build for a specific branch on your Pages project.\n\nNote\n\nThis setup is only supported when using a proxied Cloudflare DNS record.\n\nIf you attempt to follow this guide using an external DNS provider or an unproxied DNS record, your custom alias will be sent to the production branch of your Pages project.\n\nFirst, make sure that you have a successful deployment on the branch you would like to set up a custom domain for.\n\nNext, add a custom domain under your Pages project for your desired custom domain, for example, `staging.example.com`.\n\n![Follow the instructions below to access the custom domains overview in the Pages dashboard.](https://developers.cloudflare.com/_astro/pages_custom_domain-1.CiOZm32-_1hDrtY.webp)\n\nTo do this:\n\n1. In the Cloudflare dashboard, go to the **Workers & Pages** page.\n\n   [Go to **Workers & Pages**](https://dash.cloudflare.com/?to=/:account/workers-and-pages)\n\n2. Select your Pages project.\n\n3. Select **Custom domains** > **Setup a custom domain**.\n\n4. Input the domain you would like to use, such as `staging.example.com`\n\n5. Select **Continue** > **Activate domain**\n\n![After selecting your custom domain, you will be asked to activate it.](https://developers.cloudflare.com/_astro/pages_custom_domain-2.BTtd80-v_Z2tx6JW.webp)\n\nAfter activating your custom domain, go to [DNS](https://dash.cloudflare.com/?to=/:account/:zone/dns) for the `example.com` zone and find the `CNAME` record with the name `staging` and change the target to include your branch alias.\n\nIn this instance, change `your-project.pages.dev` to `staging.your-project.pages.dev`.\n\n![After activating your custom domain, change the CNAME target to include your branch name.](https://developers.cloudflare.com/_astro/pages_custom_domain-3.DhnYG8VS_Z2cp0T8.webp)\n\nNow the `staging` branch of your Pages project will be available on `staging.example.com`.\n\n</page>\n\n<page>\n---\ntitle: Deploy a static WordPress site · Cloudflare Pages docs\ndescription: Learn how to deploy a static WordPress site using Cloudflare Pages.\nlastUpdated: 2025-10-09T15:47:46.000Z\nchatbotDeprioritize: false\ntags: WordPress\nsource_url:\n  html: https://developers.cloudflare.com/pages/how-to/deploy-a-wordpress-site/\n  md: https://developers.cloudflare.com/pages/how-to/deploy-a-wordpress-site/index.md\n---\n\n## Overview\n\nIn this guide, you will use a WordPress plugin, [Simply Static](https://wordpress.org/plugins/simply-static/), to convert your existing WordPress site to a static website deployed with Cloudflare Pages.\n\n## Prerequisites\n\nThis guide assumes that you are:\n\n* The Administrator account on your WordPress site.\n* Able to install WordPress plugins on the site.\n\n## Setup\n\nTo start, install the [Simply Static](https://wordpress.org/plugins/simply-static/) plugin to export your WordPress site. In your WordPress dashboard, go to **Plugins** > **Add New**.\n\nSearch for `Simply Static` and confirm that the resulting plugin that you will be installing matches the plugin below.\n\n![Simply Static plugin](https://developers.cloudflare.com/_astro/simply-static.B1STKlmC_ZDt3bU.webp)\n\nSelect **Install** on the plugin. After it has finished installing, select **Activate**.\n\n### Export your WordPress site\n\nAfter you have installed the plugin, go to your WordPress dashboard > **Simply Static** > **GENERATE STATIC FILES**.\n\nIn the **Activity Log**, find the **ZIP archive created** message and select **Click here to download** to download your ZIP file.\n\n### Deploy your WordPress site with Pages\n\nWith your ZIP file downloaded, deploy your site to Pages:\n\n1. In the Cloudflare dashboard, go to the **Workers & Pages** page.\n\n   [Go to **Workers & Pages**](https://dash.cloudflare.com/?to=/:account/workers-and-pages)\n\n2. Select **Create application** > **Pages** > **Use direct upload**.\n\n3. Name your project, then select **Create project**.\n\n4. Drag and drop your ZIP file (or unzipped folder of assets) or select it from your computer.\n\n5. After your files have been uploaded, select **Deploy site**.\n\nYour WordPress site will now be live on Pages.\n\nEvery time you make a change to your WordPress site, you will need to download a new ZIP file from the WordPress dashboard and redeploy to Cloudflare Pages. Automatic updates are not available with the free version of Simply Static.\n\n## Limitations\n\nThere are some features available in WordPress sites that will not be supported in a static site environment:\n\n* WordPress Forms.\n* WordPress Comments.\n* Any links to `/wp-admin` or similar internal WordPress routes.\n\n## Conclusion\n\nBy following this guide, you have successfully deployed a static version of your WordPress site to Cloudflare Pages.\n\nWith a static version of your site being served, you can:\n\n* Move your WordPress site to a custom domain or subdomain. Refer to [Custom domains](https://developers.cloudflare.com/pages/configuration/custom-domains/) to learn more.\n* Run your WordPress instance locally, or put your WordPress site behind [Cloudflare Access](https://developers.cloudflare.com/pages/configuration/preview-deployments/#customize-preview-deployments-access) to only give access to your contributors. This has a significant effect on the number of attack vectors for your WordPress site and its content.\n* Downgrade your WordPress hosting plan to a cheaper plan. Because the memory and bandwidth requirements for your WordPress instance are now smaller, you can often host it on a cheaper plan, or moving to shared hosting.\n\nConnect with the [Cloudflare Developer community on Discord](https://discord.cloudflare.com) to ask questions and discuss the platform with other developers.\n\n</page>\n\n<page>\n---\ntitle: Enable Zaraz · Cloudflare Pages docs\ndescription: Cloudflare Zaraz gives you complete control over third-party tools\n  and services for your website, and allows you to offload them to Cloudflare's\n  edge, improving the speed and security of your website. With Cloudflare Zaraz\n  you can load tools such as analytics tools, advertising pixels and scripts,\n  chatbots, marketing automation tools, and more, in the most optimized way.\nlastUpdated: 2025-09-15T21:45:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/how-to/enable-zaraz/\n  md: https://developers.cloudflare.com/pages/how-to/enable-zaraz/index.md\n---\n\nCloudflare Zaraz gives you complete control over third-party tools and services for your website, and allows you to offload them to Cloudflare's edge, improving the speed and security of your website. With Cloudflare Zaraz you can load tools such as analytics tools, advertising pixels and scripts, chatbots, marketing automation tools, and more, in the most optimized way.\n\nCloudflare Zaraz is built for speed, privacy, and security, and you can use it to load as many tools as you need, with a near-zero performance hit.\n\n## Enable\n\nTo enable Zaraz on Cloudflare Pages, you need a [custom domain](https://developers.cloudflare.com/pages/configuration/custom-domains/) associated with your project.\n\nAfter that, [set up Zaraz](https://developers.cloudflare.com/zaraz/get-started/) on the custom domain.\n\n</page>\n\n<page>\n---\ntitle: Install private packages · Cloudflare Pages docs\ndescription: Cloudflare Pages supports custom package registries, allowing you\n  to include private dependencies in your application. While this walkthrough\n  focuses specifically on npm, the Node package manager and registry, the same\n  approach can be applied to other registry tools.\nlastUpdated: 2025-09-17T11:00:27.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/pages/how-to/npm-private-registry/\n  md: https://developers.cloudflare.com/pages/how-to/npm-private-registry/index.md\n---\n\nCloudflare Pages supports custom package registries, allowing you to include private dependencies in your application. While this walkthrough focuses specifically on [npm](https://www.npmjs.com/), the Node package manager and registry, the same approach can be applied to other registry tools.\n\nYou will be be adjusting the [environment variables](https://developers.cloudflare.com/pages/configuration/build-configuration/#environment-variables) in your Pages project's **Settings**. An existing website can be modified at any time, but new projects can be initialized with these settings, too. Either way, altering the project settings will not be reflected until its next deployment.\n\nWarning\n\nBe sure to trigger a new deployment after changing any settings.\n\n## Registry Access Token\n\nEvery package registry should have a means of issuing new access tokens. Ideally, you should create a new token specifically for Pages, as you would with any other CI/CD platform.\n\nWith npm, you can [create and view tokens through its website](https://docs.npmjs.com/creating-and-viewing-access-tokens) or you can use the `npm` CLI. If you have the CLI set up locally and are authenticated, run the following commands in your terminal:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Publish your changes",
+      "id": "publish-your-changes"
+    },
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    },
+    {
+      "level": "h3",
+      "text": "Export your WordPress site",
+      "id": "export-your-wordpress-site"
+    },
+    {
+      "level": "h3",
+      "text": "Deploy your WordPress site with Pages",
+      "id": "deploy-your-wordpress-site-with-pages"
+    },
+    {
+      "level": "h2",
+      "text": "Limitations",
+      "id": "limitations"
+    },
+    {
+      "level": "h2",
+      "text": "Conclusion",
+      "id": "conclusion"
+    },
+    {
+      "level": "h2",
+      "text": "Enable",
+      "id": "enable"
+    },
+    {
+      "level": "h2",
+      "text": "Registry Access Token",
+      "id": "registry-access-token"
+    }
+  ],
+  "url": "llms-txt#!/bin/bash",
+  "links": []
+}

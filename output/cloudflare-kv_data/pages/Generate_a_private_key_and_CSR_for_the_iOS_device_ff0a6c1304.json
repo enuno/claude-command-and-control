@@ -1,0 +1,8 @@
+{
+  "title": "Generate a private key and CSR for the iOS device.",
+  "content": "$ cat <<'EOF' | tee -a csr.json\n{\n    \"hosts\": [\n        \"ios-bootstrap.devices.upinatoms.com\"\n    ],\n    \"CN\": \"ios-bootstrap.devices.upinatoms.com\",\n    \"key\": {\n        \"algo\": \"rsa\",\n        \"size\": 2048\n    },\n    \"names\": [{\n        \"C\": \"US\",\n        \"L\": \"Austin\",\n        \"O\": \"Temperature Testers, Inc.\",\n        \"OU\": \"Tech Operations\",\n        \"ST\": \"Texas\"\n    }]\n}\nEOF\n\n$ cfssl genkey csr.json | cfssljson -bare certificate\n\n2020/09/27 21:28:46 [INFO] generate received request\n2020/09/27 21:28:46 [INFO] received CSR\n2020/09/27 21:28:46 [INFO] generating key: rsa-2048\n2020/09/27 21:28:47 [INFO] encoded CSR\n\n$ mv certificate-key.pem ios-key.pem\n$ mv certificate.csr ios.csr",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#generate-a-private-key-and-csr-for-the-ios-device.",
+  "links": []
+}

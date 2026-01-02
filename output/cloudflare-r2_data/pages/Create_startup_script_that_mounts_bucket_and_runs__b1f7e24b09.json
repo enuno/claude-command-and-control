@@ -1,0 +1,942 @@
+{
+  "title": "Create startup script that mounts bucket and runs a command",
+  "content": "RUN printf '#!/bin/sh\\n\\\n    set -e\\n\\\n    \\n\\\n    mkdir -p /mnt/r2\\n\\\n    \\n\\\n    R2_ENDPOINT=\"https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com\"\\n\\\n    echo \"Mounting bucket ${R2_BUCKET_NAME}...\"\\n\\\n    /usr/local/bin/tigrisfs --endpoint \"${R2_ENDPOINT}\" -f \"${R2_BUCKET_NAME}\" /mnt/r2 &\\n\\\n    sleep 3\\n\\\n    \\n\\\n    echo \"Contents of mounted bucket:\"\\n\\\n    ls -lah /mnt/r2\\n\\\n    ' > /startup.sh && chmod +x /startup.sh\n\nEXPOSE 8080\nCMD [\"/startup.sh\"]\njs\n  import { Container, getContainer } from \"@cloudflare/containers\";\n\nexport class FUSEDemo extends Container {\n    defaultPort = 8080;\n    sleepAfter = \"10m\";\n    envVars = {\n      AWS_ACCESS_KEY_ID: this.env.AWS_ACCESS_KEY_ID,\n      AWS_SECRET_ACCESS_KEY: this.env.AWS_SECRET_ACCESS_KEY,\n      R2_BUCKET_NAME: this.env.R2_BUCKET_NAME,\n      R2_ACCOUNT_ID: this.env.R2_ACCOUNT_ID,\n    };\n  }\n  ts\n  import { Container, getContainer } from \"@cloudflare/containers\";\n\ninterface Env {\n    FUSEDemo: DurableObjectNamespace<FUSEDemo>;\n    AWS_ACCESS_KEY_ID: string;\n    AWS_SECRET_ACCESS_KEY: string;\n    R2_BUCKET_NAME: string;\n    R2_ACCOUNT_ID: string;\n  }\n\nexport class FUSEDemo extends Container<Env> {\n    defaultPort = 8080;\n    sleepAfter = \"10m\";\n    envVars = {\n      AWS_ACCESS_KEY_ID: this.env.AWS_ACCESS_KEY_ID,\n      AWS_SECRET_ACCESS_KEY: this.env.AWS_SECRET_ACCESS_KEY,\n      R2_BUCKET_NAME: this.env.R2_BUCKET_NAME,\n      R2_ACCOUNT_ID: this.env.R2_ACCOUNT_ID,\n    };\n  }\n  json\n{\n  \"vars\": {\n    \"R2_BUCKET_NAME\": \"my-bucket\",\n    \"R2_ACCOUNT_ID\": \"your-account-id\"\n  }\n}\ndockerfile\nRUN printf '#!/bin/sh\\n\\\n    set -e\\n\\\n    \\n\\\n    mkdir -p /mnt/r2\\n\\\n    \\n\\\n    R2_ENDPOINT=\"https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com\"\\n\\\n    /usr/local/bin/tigrisfs --endpoint \"${R2_ENDPOINT}\" -f \"${R2_BUCKET_NAME}\" /mnt/r2 &\\n\\\n    sleep 3\\n\\\n    \\n\\\n    echo \"Accessing prefix: ${BUCKET_PREFIX}\"\\n\\\n    ls -lah \"/mnt/r2/${BUCKET_PREFIX}\"\\n\\\n    ' > /startup.sh && chmod +x /startup.sh\ndockerfile\nRUN printf '#!/bin/sh\\n\\\n    set -e\\n\\\n    \\n\\\n    mkdir -p /mnt/r2\\n\\\n    \\n\\\n    R2_ENDPOINT=\"https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com\"\\n\\\n    /usr/local/bin/tigrisfs --endpoint \"${R2_ENDPOINT}\" -o ro -f \"${R2_BUCKET_NAME}\" /mnt/r2 &\\n\\\n    sleep 3\\n\\\n    \\n\\\n    ls -lah /mnt/r2\\n\\\n    ' > /startup.sh && chmod +x /startup.sh\nts\nimport { Container, getRandom } from \"@cloudflare/containers\";\n\nconst INSTANCE_COUNT = 3;\n\nclass Backend extends Container {\n  defaultPort = 8080;\n  sleepAfter = \"2h\";\n}\n\nexport default {\n  async fetch(request: Request, env: Env): Promise<Response> {\n    // note: \"getRandom\" to be replaced with latency-aware routing in the near future\n    const containerInstance = await getRandom(env.BACKEND, INSTANCE_COUNT);\n    return containerInstance.fetch(request);\n  },\n};\njs\nimport { Container } from '@cloudflare/containers';\n\nexport class MyContainer extends Container {\n  defaultPort = 4000;\n  sleepAfter = '5m';\n\noverride onStart() {\n    console.log('Container successfully started');\n  }\n\noverride onStop(stopParams) {\n    if (stopParams.exitCode === 0) {\n      console.log('Container stopped gracefully');\n    } else {\n      console.log('Container stopped with exit code:', stopParams.exitCode);\n    }\n\nconsole.log('Container stop reason:', stopParams.reason);\n  }\n\noverride onError(error: string) {\n    console.log('Container error:', error);\n  }\n}\njs\nimport { Container, getContainer } from \"@cloudflare/containers\";\n\nexport class MyContainer extends Container {\n  defaultPort = 8080;\n  sleepAfter = \"2m\";\n}\n\nexport default {\n  async fetch(request, env) {\n    // gets default instance and forwards websocket from outside Worker\n    return getContainer(env.MY_CONTAINER).fetch(request);\n  },\n};\njavascript\nclass MyContainer extends Container {\n  defaultPort = 4000;\n  envVars = {\n    MY_CUSTOM_VAR: \"value\",\n    ANOTHER_VAR: \"another_value\",\n  };\n}\njsonc\n  {\n    \"containers\": {\n      \"image\": \"./Dockerfile\"\n      // ...rest of config...\n    }\n  }\n  toml\n  [containers]\n  image = \"./Dockerfile\"\n  plaintext\ndocker pull <public-image>\ndocker tag <public-image> <image>:<tag>\nsh\n  npx wrangler containers push <image>:<tag>\n  sh\n  yarn wrangler containers push <image>:<tag>\n  sh\n  pnpm wrangler containers push <image>:<tag>\n  sh\n  npx wrangler containers build -p -t <tag> .\n  sh\n  yarn wrangler containers build -p -t <tag> .\n  sh\n  pnpm wrangler containers build -p -t <tag> .\n  jsonc\n  {\n    \"containers\": {\n      \"image\": \"registry.cloudflare.com/your-account-id/your-image:tag\"\n      // ...rest of config...\n    }\n  }\n  toml\n  [containers]\n  image = \"registry.cloudflare.com/your-account-id/your-image:tag\"\n  json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Action\": [\"ecr:GetAuthorizationToken\"],\n      \"Effect\": \"Allow\",\n      \"Resource\": \"*\"\n    },\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"ecr:BatchCheckLayerAvailability\",\n        \"ecr:GetDownloadUrlForLayer\",\n        \"ecr:BatchGetImage\"\n      ],\n      // arn:${Partition}:ecr:${Region}:${Account}:repository/${Repository-name}\n      \"Resource\": [\n        \"arn:aws:ecr:us-east-1:123456789012:repository/*\"\n        // \"arn:aws:ecr:us-east-1:123456789012:repository/example-repo\"\n      ]\n    }\n  ]\n}\nsh\n  npx wrangler containers registries configure 123456789012.dkr.ecr.us-east-1.amazonaws.com --aws-access-key-id=AKIAIOSFODNN7EXAMPLE\n  sh\n  yarn wrangler containers registries configure 123456789012.dkr.ecr.us-east-1.amazonaws.com --aws-access-key-id=AKIAIOSFODNN7EXAMPLE\n  sh\n  pnpm wrangler containers registries configure 123456789012.dkr.ecr.us-east-1.amazonaws.com --aws-access-key-id=AKIAIOSFODNN7EXAMPLE\n  jsonc\n  {\n    \"containers\": {\n      \"image\": \"123456789012.dkr.ecr.us-east-1.amazonaws.com/example-repo:tag\"\n      // ...rest of config...\n    }\n  }\n  toml\n  [containers]\n  image = \"123456789012.dkr.ecr.us-east-1.amazonaws.com/example-repo:tag\"\n  jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"containers\": [\n      {\n        \"max_instances\": 10,\n        \"class_name\": \"MyContainer\",\n        \"image\": \"./Dockerfile\",\n        \"rollout_active_grace_period\": 300,\n        \"rollout_step_percentage\": [\n          10,\n          100\n        ]\n      }\n    ],\n    \"durable_objects\": {\n      \"bindings\": [\n        {\n          \"name\": \"MY_CONTAINER\",\n          \"class_name\": \"MyContainer\"\n        }\n      ]\n    },\n    \"migrations\": [\n      {\n        \"tag\": \"v1\",\n        \"new_sqlite_classes\": [\n          \"MyContainer\"\n        ]\n      }\n    ]\n  }\n  toml\n  [[containers]]\n  max_instances = 10\n  class_name = \"MyContainer\"\n  image = \"./Dockerfile\"\n  rollout_active_grace_period = 300\n  rollout_step_percentage = [10, 100]\n\n[[durable_objects.bindings]]\n  name = \"MY_CONTAINER\"\n  class_name = \"MyContainer\"\n\n[[migrations]]\n  tag = \"v1\"\n  new_sqlite_classes = [\"MyContainer\"]\n  sh\n  npx wrangler deploy --containers-rollout=immediate\n  sh\n  yarn wrangler deploy --containers-rollout=immediate\n  sh\n  pnpm wrangler deploy --containers-rollout=immediate\n  typescript\n// get and start two container instances\nconst containerOne = getContainer(\n  env.MY_CONTAINER,\n  idOne,\n).startAndWaitForPorts();\n\nconst containerTwo = getContainer(\n  env.MY_CONTAINER,\n  idTwo,\n).startAndWaitForPorts();\njavascript\nimport { Container, getRandom } from \"@cloudflare/containers\";\n\nconst INSTANCE_COUNT = 3;\n\nclass Backend extends Container {\n  defaultPort = 8080;\n  sleepAfter = \"2h\";\n}\n\nexport default {\n  async fetch(request: Request, env: Env): Promise<Response> {\n    // note: \"getRandom\" to be replaced with latency-aware routing in the near future\n    const containerInstance = getRandom(env.BACKEND, INSTANCE_COUNT)\n    return containerInstance.fetch(request);\n  },\n};\njavascript\nclass MyBackend extends Container {\n  autoscale = true;\n  defaultPort = 8080;\n}\njavascript\nexport default {\n  async fetch(request, env) {\n    return getContainer(env.MY_BACKEND).fetch(request);\n  },\n};\nsql\nCREATE TABLE IF NOT EXISTS users (\n  id VARCHAR(50),\n  full_name VARCHAR(50),\n  created_on DATE\n);\nINSERT INTO users (id, full_name, created_on) VALUES ('01GREFXCN9519NRVXWTPG0V0BF', 'Catlaina Harbar', '2022-08-20 05:39:52');\nINSERT INTO users (id, full_name, created_on) VALUES ('01GREFXCNBYBGX2GC6ZGY9FMP4', 'Hube Bilverstone', '2022-12-15 21:56:13');\nINSERT INTO users (id, full_name, created_on) VALUES ('01GREFXCNCWAJWRQWC2863MYW4', 'Christin Moss', '2022-07-28 04:13:37');\nINSERT INTO users (id, full_name, created_on) VALUES ('01GREFXCNDGQNBQAJG1AP0TYXZ', 'Vlad Koche', '2022-11-29 17:40:57');\nINSERT INTO users (id, full_name, created_on) VALUES ('01GREFXCNF67KV7FPPSEJVJMEW', 'Riane Zamora', '2022-12-24 06:49:04');\nsh\nnpx wrangler d1 execute example-db --remote --file=users_export.sql\nsh\nnpx wrangler d1 execute example-db --remote --command \"SELECT name FROM sqlite_schema WHERE type='table' ORDER BY name;\"\nsh\n...\n🌀 To execute on your local development database, remove the --remote flag from your wrangler command.\n🚣 Executed 1 commands in 0.3165ms\n┌────────┐\n│ name   │\n├────────┤\n│ _cf_KV │\n├────────┤\n│ users  │\n└────────┘\nsh\nsqlite3 db_dump.sqlite3 .dump > db.sql\nsql\n   CREATE TABLE _cf_KV (\n      key TEXT PRIMARY KEY,\n      value BLOB\n   ) WITHOUT ROWID;\n   sh\nnpx wrangler d1 export <database_name> --remote --output=./database.sql\nsh\nnpx wrangler d1 export <database_name> --remote --table=<table_name> --output=./table.sql\nsh\nnpx wrangler d1 export <database_name> --remote --output=./schema.sql --no-data\nsh\nnpx wrangler d1 export <database_name> --remote --table=<table_name> --output=./schema.sql --no-data\nsh\nnpx wrangler d1 export <database_name> --remote --output=./data.sql --no-schema\nsh\nnpx wrangler d1 export <database_name> --remote --table=<table_name> --output=./data.sql --no-schema\nsql\nINSERT INTO users (id, full_name, created_on)\nVALUES\n  ('1', 'Jacquelin Elara', '2022-08-20 05:39:52'),\n  ('2', 'Hubert Simmons', '2022-12-15 21:56:13'),\n  ...\n  ('1000', 'Boris Pewter', '2022-12-24 07:59:54');\nsql\nINSERT INTO users (id, full_name, created_on)\nVALUES\n  ('1', 'Jacquelin Elara', '2022-08-20 05:39:52'),\n  ...\n  ('100', 'Eddy Orelo', '2022-12-15 22:16:15');\n...\nINSERT INTO users (id, full_name, created_on)\nVALUES\n  ('901', 'Roran Eroi', '2022-08-20 05:39:52'),\n  ...\n  ('1000', 'Boris Pewter', '2022-12-15 22:16:15');\nsh\n   wrangler --version\n   sh\n   ⛅️ wrangler 3.0.0\n   sh\n   wrangler dev\n   sh\n   ------------------\n   wrangler dev now uses local mode by default, powered by 🔥 Miniflare and 👷 workerd.\n   To run an edge preview session for your Worker, use wrangler dev --remote\n   Your worker has access to the following bindings:\n   - D1 Databases:\n     - DB: test-db (c020574a-5623-407b-be0c-cd192bab9545)\n   ⎔ Starting local server...\n\n[mf:inf] Ready on http://127.0.0.1:8787/\n   [b] open a browser, [d] open Devtools, [l] turn off local mode, [c] clear console, [x] to exit\n   jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"d1_databases\": [\n      {\n        \"binding\": \"DB\",\n        \"database_name\": \"test-db\",\n        \"database_id\": \"c020574a-5623-407b-be0c-cd192bab9545\"\n      }\n    ]\n  }\n  toml\n  [[d1_databases]]\n  binding = \"DB\"\n  database_name = \"test-db\"\n  database_id = \"c020574a-5623-407b-be0c-cd192bab9545\"\n  jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"d1_databases\": [\n      {\n        \"binding\": \"DB\",\n        \"database_name\": \"YOUR_DATABASE_NAME\",\n        \"database_id\": \"the-id-of-your-D1-database-goes-here\",\n        \"preview_database_id\": \"DB\"\n      }\n    ]\n  }\n  toml\n  # If you are only using Pages + D1, you only need the below in your Wrangler config file to interact with D1 locally.\n  [[d1_databases]]\n  binding = \"DB\" # Should match preview_database_id\n  database_name = \"YOUR_DATABASE_NAME\"\n  database_id = \"the-id-of-your-D1-database-goes-here\" # wrangler d1 info YOUR_DATABASE_NAME\n  preview_database_id = \"DB\" # Required for Pages local development\n  bash\nwrangler d1 execute YOUR_DATABASE_NAME \\\n  --local --command \"CREATE TABLE IF NOT EXISTS users ( user_id INTEGER PRIMARY KEY, email_address TEXT, created_at INTEGER, deleted INTEGER, settings TEXT);\"\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"d1_databases\": [\n      {\n        \"binding\": \"DB\",\n        \"database_name\": \"test-db\",\n        \"database_id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\n      }\n    ]\n  }\n  toml\n  [[d1_databases]]\n  binding = \"DB\"\n  database_name = \"test-db\"\n  database_id = \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\n  js\nconst mf = new Miniflare({\n  d1Databases: {\n    DB: \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n  },\n});\njs\nconst db = await mf.getD1Database(\"DB\");\n\nconst stmt = db.prepare(\"SELECT name, age FROM users LIMIT 3\");\nconst { results } = await stmt.run();\n\nconsole.log(results);\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"d1_databases\": [\n      {\n        \"binding\": \"DB\",\n        \"database_name\": \"your-database\",\n        \"database_id\": \"<UUID>\",\n        \"preview_database_id\": \"local-test-db\"\n      }\n    ]\n  }\n  toml\n  [[ d1_databases ]]\n  binding = \"DB\" # i.e. if you set this to \"DB\", it will be available in your Worker at `env.DB`\n  database_name = \"your-database\" # the name of your D1 database, set when created\n  database_id = \"<UUID>\" # The unique ID of your D1 database, returned when you create your database or run `\n  preview_database_id = \"local-test-db\" # A user-defined ID for your local test database.\n  sh\nwrangler d1 migrations apply your-database --local\nts\nimport { unstable_dev } from \"wrangler\";\nimport type { UnstableDevWorker } from \"wrangler\";\n\ndescribe(\"Test D1 Worker endpoint\", () => {\n  let worker: UnstableDevWorker;\n\nbeforeAll(async () => {\n    // Optional: Run any migrations to set up your `--local` database\n    // By default, this will default to the preview_database_id\n    execSync(`NO_D1_WARNING=true wrangler d1 migrations apply db --local`);\n\nworker = await unstable_dev(\"src/index.ts\", {\n      experimental: { disableExperimentalWarning: true },\n    });\n  });\n\nafterAll(async () => {\n    await worker.stop();\n  });\n\nit(\"should return an array of users\", async () => {\n    // Our expected results\n    const expectedResults = `{\"results\": [{\"user_id\": 1234, \"email\": \"foo@example.com\"},{\"user_id\": 6789, \"email\": \"bar@example.com\"}]}`;\n    // Pass an optional URL to fetch to trigger any routing within your Worker\n    const resp = await worker.fetch(\"/api/users/?limit=2\");\n    if (resp) {\n      // https://jestjs.io/docs/expect#tobevalue\n      expect(resp.status).toBe(200);\n      const data = await resp.json();\n      // https://jestjs.io/docs/expect#tomatchobjectobject\n      expect(data).toMatchObject(expectedResults);\n    }\n  });\n});\nsql\nCREATE TABLE users (\n    user_id INTEGER PRIMARY KEY,\n    email_address TEXT,\n    name TEXT,\n    metadata TEXT\n)\n\nCREATE TABLE orders (\n    order_id INTEGER PRIMARY KEY,\n    status INTEGER,\n    item_desc TEXT,\n    shipped_date INTEGER,\n    user_who_ordered INTEGER,\n    FOREIGN KEY(user_who_ordered) REFERENCES users(user_id)\n)\njson\n{\n    \"measurement\": {\n        \"temp_f\": \"77.4\",\n        \"aqi\": [21, 42, 58],\n        \"o3\": [18, 500],\n        \"wind_mph\": \"13\",\n        \"location\": \"US-NY\"\n    }\n}\nsql\n-- Extract the temperature value\nSELECT json_extract(sensor_reading, '$.measurement.temp_f')-- returns \"77.4\" as TEXT\njs\nexport default {\n    async fetch(request, env) {\n        const {pathname} = new URL(request.url);\n        const companyName1 = `Bs Beverages`;\n        const companyName2 = `Around the Horn`;\n        const stmt = env.DB.prepare(`SELECT * FROM Customers WHERE CompanyName = ?`);\n\nif (pathname === `/RUN`) {\n            const returnValue = await stmt.bind(companyName1).run();\n            return Response.json(returnValue);\n        }\n\nreturn new Response(\n            `Welcome to the D1 API Playground!\n            \\nChange the URL to test the various methods inside your index.js file.`,\n        );\n    },\n};\nsh\nnpx wrangler d1 execute prod-d1-tutorial --command=\"SELECT * FROM Customers\"\nsh\n🌀 Mapping SQL input into an array of statements\n🌀 Executing on local database production-db-backend (<DATABASE_ID>) from .wrangler/state/v3/d1:\n┌────────────┬─────────────────────┬───────────────────┐\n│ CustomerId │ CompanyName         │ ContactName       │\n├────────────┼─────────────────────┼───────────────────┤\n│ 1          │ Alfreds Futterkiste │ Maria Anders      │\n├────────────┼─────────────────────┼───────────────────┤\n│ 4          │ Around the Horn     │ Thomas Hardy      │\n├────────────┼─────────────────────┼───────────────────┤\n│ 11         │ Bs Beverages        │ Victoria Ashworth │\n├────────────┼─────────────────────┼───────────────────┤\n│ 13         │ Bs Beverages        │ Random Name       │\n└────────────┴─────────────────────┴───────────────────┘\njs\n  export default {\n    async fetch(request, env, ctx) {\n      const url = new URL(request.url);\n\n// A. Create the Session.\n      // When we create a D1 Session, we can continue where we left off from a previous\n      // Session if we have that Session's last bookmark or use a constraint.\n      const bookmark =\n        request.headers.get(\"x-d1-bookmark\") ?? \"first-unconstrained\";\n      const session = env.DB01.withSession(bookmark);\n\ntry {\n        // Use this Session for all our Workers' routes.\n        const response = await withTablesInitialized(\n          request,\n          session,\n          handleRequest,\n        );\n\n// B. Return the bookmark so we can continue the Session in another request.\n        response.headers.set(\"x-d1-bookmark\", session.getBookmark() ?? \"\");\n\nreturn response;\n      } catch (e) {\n        console.error({\n          message: \"Failed to handle request\",\n          error: String(e),\n          errorProps: e,\n          url,\n          bookmark,\n        });\n        return Response.json(\n          { error: String(e), errorDetails: e },\n          { status: 500 },\n        );\n      }\n    },\n  };\n  ts\n  export default {\n    async fetch(request, env, ctx): Promise<Response> {\n      const url = new URL(request.url);\n\n// A. Create the Session.\n      // When we create a D1 Session, we can continue where we left off from a previous\n      // Session if we have that Session's last bookmark or use a constraint.\n      const bookmark =\n        request.headers.get(\"x-d1-bookmark\") ?? \"first-unconstrained\";\n      const session = env.DB01.withSession(bookmark);\n\ntry {\n        // Use this Session for all our Workers' routes.\n        const response = await withTablesInitialized(\n          request,\n          session,\n          handleRequest,\n        );\n\n// B. Return the bookmark so we can continue the Session in another request.\n        response.headers.set(\"x-d1-bookmark\", session.getBookmark() ?? \"\");\n\nreturn response;\n      } catch (e) {\n        console.error({\n          message: \"Failed to handle request\",\n          error: String(e),\n          errorProps: e,\n          url,\n          bookmark,\n        });\n        return Response.json(\n          { error: String(e), errorDetails: e },\n          { status: 500 },\n        );\n      }\n    },\n  } satisfies ExportedHandler<Env>;\n  ts\nconst session = env.DB.withSession() // synchronous\n// query executes on either primary database or a read replica\nconst result = await session\n  .prepare(`SELECT * FROM Customers WHERE CompanyName = 'Bs Beverages'`)\n  .run()\nts\nconst session = env.DB.withSession(`first-primary`) // synchronous\n// query executes on primary database\nconst result = await session\n  .prepare(`SELECT * FROM Customers WHERE CompanyName = 'Bs Beverages'`)\n  .run()\nts\n// retrieve bookmark from previous session stored in HTTP header\nconst bookmark = request.headers.get('x-d1-bookmark') ?? 'first-unconstrained';\n\nconst session = env.DB.withSession(bookmark)\nconst result = await session\n  .prepare(`SELECT * FROM Customers WHERE CompanyName = 'Bs Beverages'`)\n  .run()\n// store bookmark for a future session\nresponse.headers.set('x-d1-bookmark', session.getBookmark() ?? \"\")\nts\nconst result = await env.DB.withSession()\n  .prepare(`SELECT * FROM Customers WHERE CompanyName = 'Bs Beverages'`)\n  .run();\nconsole.log({\n  servedByRegion: result.meta.served_by_region ?? \"\",\n  servedByPrimary: result.meta.served_by_primary ?? \"\",\n});\nsh\n  curl -X PUT \"https://api.cloudflare.com/client/v4/accounts/{account_id}/d1/database/{database_id}\" \\\n    -H \"Authorization: Bearer $TOKEN\" \\\n    -H \"Content-Type: application/json\" \\\n    -d '{\"read_replication\": {\"mode\": \"auto\"}}'\n  ts\n  const headers = new Headers({\n    \"Authorization\": `Bearer ${TOKEN}`\n  });\n\nawait fetch (\"/v4/accounts/{account_id}/d1/database/{database_id}\", {\n    method: \"PUT\",\n    headers: headers,\n    body: JSON.stringify(\n      { \"read_replication\": { \"mode\": \"auto\" } }\n    )\n   }\n  )\n  sh\n  curl -X PUT \"https://api.cloudflare.com/client/v4/accounts/{account_id}/d1/database/{database_id}\" \\\n    -H \"Authorization: Bearer $TOKEN\" \\\n    -H \"Content-Type: application/json\" \\\n    -d '{\"read_replication\": {\"mode\": \"disabled\"}}'\n  ts\n  const headers = new Headers({\n    \"Authorization\": `Bearer ${TOKEN}`\n  });\n\nawait fetch (\"/v4/accounts/{account_id}/d1/database/{database_id}\", {\n    method: \"PUT\",\n    headers: headers,\n    body: JSON.stringify(\n      { \"read_replication\": { \"mode\": \"disabled\" } }\n    )\n   }\n  )\n  sh\n  curl -X GET \"https://api.cloudflare.com/client/v4/accounts/{account_id}/d1/database/{database_id}\" \\\n    -H \"Authorization: Bearer $TOKEN\"\n  ts\n  const headers = new Headers({\n    \"Authorization\": `Bearer ${TOKEN}`\n  });\n\nconst response = await fetch(\"/v4/accounts/{account_id}/d1/database/{database_id}\", {\n    method: \"GET\",\n    headers: headers\n  });\n\nconst data = await response.json();\n  console.log(data.read_replication.mode);\n  js\nexport default {\n  async fetch(request, env, ctx) {\n    const res = await env.DB.prepare(\"SELECT 1;\").run();\n    return new Response(JSON.stringify(res, null, 2));\n  },\n};\nts\nimport { tryWhile } from \"@cloudflare/actors\";\n\nfunction queryD1Example(d1: D1Database, sql: string) {\n  return await tryWhile(async () => {\n    return await d1.prepare(sql).run();\n  }, shouldRetry);\n}\n\nfunction shouldRetry(err: unknown, nextAttempt: number) {\n  const errMsg = String(err);\n  const isRetryableError =\n    errMsg.includes(\"Network connection lost\") ||\n    errMsg.includes(\"storage caused object to be reset\") ||\n    errMsg.includes(\"reset because its code was updated\");\n  if (nextAttempt <= 5 && isRetryableError) {\n    return true;\n  }\n  return false;\n}\nsql\nCREATE TABLE IF NOT EXISTS orders (\n    order_id INTEGER PRIMARY KEY,\n    customer_id STRING NOT NULL, -- for example, a unique ID aba0e360-1e04-41b3-91a0-1f2263e1e0fb\n    order_date STRING NOT NULL,\n    status INTEGER NOT NULL,\n    last_updated_date STRING NOT NULL\n)\nsql\nCREATE INDEX IF NOT EXISTS idx_orders_customer_id ON orders(customer_id)\nsql\n-- Uses the index: the indexed column is referenced by the query.\nSELECT * FROM orders WHERE customer_id = ?\n\n-- Does not use the index: customer_id is not in the query.\nSELECT * FROM orders WHERE order_date = '2023-05-01'\nsql\nSELECT name, type, sql FROM sqlite_schema WHERE type IN ('index');\ntxt\n┌──────────────────────────────────┬───────┬────────────────────────────────────────┐\n│ name                             │ type  │ sql                                    │\n├──────────────────────────────────┼───────┼────────────────────────────────────────┤\n│ idx_users_id                     │ index │ CREATE INDEX idx_users_id ON users(id) │\n└──────────────────────────────────┴───────┴────────────────────────────────────────┘\nsql\nEXPLAIN QUERY PLAN SELECT * FROM users WHERE email_address = 'foo@example.com';\nQUERY PLAN\n`--SEARCH users USING INDEX idx_email_address (email_address=?)\nsql\nCREATE INDEX idx_order_status_not_complete ON orders(order_status) WHERE order_status != 6\nsh\nnpx wrangler@latest d1 create db-with-jurisdiction --jurisdiction=eu\ncurl\ncurl -X POST \"https://api.cloudflare.com/client/v4/accounts/<account_id>/d1/database\" \\\n     -H \"Authorization: Bearer $TOKENn\" \\\n     -H \"Content-Type: application/json\" \\\n     --data '{\"name\": \"db-wth-jurisdiction\", \"jurisdiction\": \"eu\" }'\nsh\nwrangler d1 create new-database --location=weur\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"env\": {\n      \"staging\": {\n        \"d1_databases\": [\n          {\n            \"binding\": \"<BINDING_NAME_1>\",\n            \"database_name\": \"<DATABASE_NAME_1>\",\n            \"database_id\": \"<UUID1>\"\n          }\n        ]\n      },\n      \"production\": {\n        \"d1_databases\": [\n          {\n            \"binding\": \"<BINDING_NAME_2>\",\n            \"database_name\": \"<DATABASE_NAME_2>\",\n            \"database_id\": \"<UUID2>\"\n          }\n        ]\n      }\n    }\n  }\n  toml\n  # This is a staging environment\n  [env.staging]\n  d1_databases = [\n      { binding = \"<BINDING_NAME_1>\", database_name = \"<DATABASE_NAME_1>\", database_id = \"<UUID1>\" },\n  ]\n\n# This is a production environment\n  [env.production]\n  d1_databases = [\n      { binding = \"<BINDING_NAME_2>\", database_name = \"<DATABASE_NAME_2>\", database_id = \"<UUID2>\" },\n  ]\n  jsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"production\": {\n      \"d1_databases\": [\n        {\n          \"binding\": \"DB\",\n          \"database_name\": \"DATABASE_NAME\",\n          \"database_id\": \"DATABASE_ID\"\n        }\n      ]\n    }\n  }\n  toml\n  [[production.d1_databases]]\n  binding = \"DB\"\n  database_name = \"DATABASE_NAME\"\n  database_id = \"DATABASE_ID\"\n  json\n{\n  \"production\": {\n    \"d1_databases\": [\n      {\n        \"binding\": \"DB\",\n        \"database_name\": \"DATABASE_NAME\",\n        \"database_id\": \"DATABASE_ID\"\n      }\n    ]\n  }\n}\njsonc\n  {\n    \"$schema\": \"./node_modules/wrangler/config-schema.json\",\n    \"env\": {\n      \"staging\": {\n        \"d1_databases\": [\n          {\n            \"binding\": \"BINDING_NAME_1\",\n            \"database_name\": \"DATABASE_NAME_1\",\n            \"database_id\": \"UUID_1\"\n          }\n        ]\n      },\n      \"production\": {\n        \"d1_databases\": [\n          {\n            \"binding\": \"BINDING_NAME_2\",\n            \"database_name\": \"DATABASE_NAME_2\",\n            \"database_id\": \"UUID_2\"\n          }\n        ]\n      }\n    }\n  }\n  toml\n  [[env.staging.d1_databases]]\n  binding = \"BINDING_NAME_1\"\n  database_name = \"DATABASE_NAME_1\"\n  database_id = \"UUID_1\"\n\n[[env.production.d1_databases]]\n  binding = \"BINDING_NAME_2\"\n  database_name = \"DATABASE_NAME_2\"\n  database_id = \"UUID_2\"\n  json\n{\n  \"env\": {\n    \"production\": {\n      \"d1_databases\": [\n        {\n          \"binding\": \"BINDING_NAME_2\",\n          \"database_id\": \"UUID_2\",\n          \"database_name\": \"DATABASE_NAME_2\"\n        }\n      ]\n    },\n    \"staging\": {\n      \"d1_databases\": [\n        {\n          \"binding\": \"BINDING_NAME_1\",\n          \"database_id\": \"UUID_1\",\n          \"database_name\": \"DATABASE_NAME_1\"\n        }\n      ]\n    }\n  }\n}\nts\n  import { Hono } from \"hono\";\n\n// This ensures c.env.DB is correctly typed\n  type Bindings = {\n    DB: D1Database;\n  };\n\nconst app = new Hono<{ Bindings: Bindings }>();\n\n// Accessing D1 is via the c.env.YOUR_BINDING property\n  app.get(\"/query/users/:id\", async (c) => {\n    const userId = c.req.param(\"id\");\n    try {\n      let { results } = await c.env.DB.prepare(\n        \"SELECT * FROM users WHERE user_id = ?\",\n      )\n        .bind(userId)\n        .run();\n      return c.json(results);\n    } catch (e) {\n      return c.json({ err: e.message }, 500);\n    }\n  });\n\n// Export our Hono app: Hono automatically exports a\n  // Workers 'fetch' handler for you\n  export default app;\n  ts\n  import { Hono } from \"hono\";\n  import { handle } from \"hono/cloudflare-pages\";\n\nconst app = new Hono().basePath(\"/api\");\n\n// Accessing D1 is via the c.env.YOUR_BINDING property\n  app.get(\"/query/users/:id\", async (c) => {\n    const userId = c.req.param(\"id\");\n    try {\n      let { results } = await c.env.DB.prepare(\n        \"SELECT * FROM users WHERE user_id = ?\",\n      )\n        .bind(userId)\n        .run();\n      return c.json(results);\n    } catch (e) {\n      return c.json({ err: e.message }, 500);\n    }\n  });\n\n// Export the Hono instance as a Pages onRequest function\n  export const onRequest = handle(app);\n  ts\n  import type { LoaderFunction } from \"@remix-run/cloudflare\";\n  import { json } from \"@remix-run/cloudflare\";\n  import { useLoaderData } from \"@remix-run/react\";\n\ninterface Env {\n    DB: D1Database;\n  }\n\nexport const loader: LoaderFunction = async ({ context, params }) => {\n    let env = context.cloudflare.env as Env;\n\nlet { results } = await env.DB.prepare(\"SELECT * FROM users LIMIT 5\").run();\n    return json(results);\n  };\n\nexport default function Index() {\n    const results = useLoaderData<typeof loader>();\n    return (\n      <div style={{ fontFamily: \"system-ui, sans-serif\", lineHeight: \"1.8\" }}>\n        <h1>Welcome to Remix</h1>\n        <div>\n          A value from D1:\n          <pre>{JSON.stringify(results)}</pre>\n        </div>\n      </div>\n    );\n  }\n  ts\n  import type { RequestHandler } from \"@sveltejs/kit\";\n\n/** @type {import('@sveltejs/kit').RequestHandler} */\n  export async function GET({ request, platform }) {\n    let result = await platform.env.DB.prepare(\n      \"SELECT * FROM users LIMIT 5\",\n    ).run();\n    return new Response(JSON.stringify(result));\n  }\n  ts\n  // See https://kit.svelte.dev/docs/types#app\n  // for information about these interfaces\n  declare global {\n    namespace App {\n      // interface Error {}\n      // interface Locals {}\n      // interface PageData {}\n      interface Platform {\n        env: {\n          DB: D1Database;\n        };\n        context: {\n          waitUntil(promise: Promise<any>): void;\n        };\n        caches: CacheStorage & { default: Cache };\n      }\n    }\n  }\n\nexport {};\n  js\n  import adapter from \"@sveltejs/adapter-cloudflare\";\n\nexport default {\n    kit: {\n      adapter: adapter({\n        // See below for an explanation of these options\n        routes: {\n          include: [\"/*\"],\n          exclude: [\"<all>\"],\n        },\n      }),\n    },\n  };\n  sh\nnpx wrangler d1 create my-first-db\nsh\nnpx wrangler d1 info some-existing-db\nsh",
+  "code_samples": [
+    {
+      "code": "The startup script creates a mount point, starts tigrisfs in the background to mount the bucket, and then lists the mounted directory contents.\n\n### Passing credentials to the container\n\nYour Container needs [R2 credentials](https://developers.cloudflare.com/r2/api/tokens/) and configuration passed as environment variables. Store credentials as [Worker secrets](https://developers.cloudflare.com/workers/configuration/secrets/), then pass them through the `envVars` property:\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "The `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` should be stored as secrets, while `R2_BUCKET_NAME` and `R2_ACCOUNT_ID` can be configured as variables in your `wrangler.jsonc`:\n\nCreating your R2 AWS API keys\n\nTo get your `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, [head to your R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/overview) and create a new R2 Access API key. Use the generated the `Access Key ID` as your `AWS_ACCESS_KEY_ID` and `Secret Access Key` is the `AWS_SECRET_ACCESS_KEY`.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Other S3-compatible storage providers\n\nOther S3-compatible storage providers, including AWS S3 and Google Cloud Storage, can be mounted using the same approach as R2. You will need to provide the appropriate endpoint URL and access credentials for the storage provider.\n\n## Mounting bucket prefixes\n\nTo mount a specific prefix (subdirectory) within a bucket, most FUSE adapters require mounting the entire bucket and then accessing the prefix path within the mount.\n\nWith tigrisfs, mount the bucket and access the prefix via the filesystem path:",
+      "language": "unknown"
+    },
+    {
+      "code": "Your application can then read from `/mnt/r2/${BUCKET_PREFIX}` to access only the files under that prefix. Pass `BUCKET_PREFIX` as an environment variable alongside your other R2 configuration.\n\n## Mounting buckets as read-only\n\nTo prevent applications from writing to the mounted bucket, add the `-o ro` flag to mount the filesystem as read-only:",
+      "language": "unknown"
+    },
+    {
+      "code": "This is useful for shared assets or configuration files where you want to ensure applications only read data.\n\n## Related resources\n\n* [Container environment variables](https://developers.cloudflare.com/containers/examples/env-vars-and-secrets/) - Learn how to pass secrets and variables to Containers\n* [tigrisfs](https://github.com/tigrisdata/tigrisfs) - FUSE adapter for S3-compatible storage including R2\n* [s3fs](https://github.com/s3fs-fuse/s3fs-fuse) - Alternative FUSE adapter for S3-compatible storage\n* [gcsfuse](https://github.com/GoogleCloudPlatform/gcsfuse) - FUSE adapter for Google Cloud Storage buckets\n\n</page>\n\n<page>\n---\ntitle: Stateless Instances · Cloudflare Containers docs\ndescription: Run multiple instances across Cloudflare's network\nlastUpdated: 2025-11-20T16:12:21.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/containers/examples/stateless/\n  md: https://developers.cloudflare.com/containers/examples/stateless/index.md\n---\n\nTo simply proxy requests to one of multiple instances of a container, you can use the `getRandom` function:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nThis example uses the `getRandom` function, which is a temporary helper that will randomly select one of N instances of a Container to route requests to.\n\nIn the future, we will provide improved latency-aware load balancing and autoscaling.\n\nThis will make scaling stateless instances simple and routing more efficient. See the [autoscaling documentation](https://developers.cloudflare.com/containers/platform-details/scaling-and-routing) for more details.\n\n</page>\n\n<page>\n---\ntitle: Status Hooks · Cloudflare Containers docs\ndescription: Execute Workers code in reaction to Container status changes\nlastUpdated: 2025-09-22T15:52:17.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/containers/examples/status-hooks/\n  md: https://developers.cloudflare.com/containers/examples/status-hooks/index.md\n---\n\nWhen a Container starts, stops, and errors, it can trigger code execution in a Worker that has defined status hooks on the `Container` class. Refer to the [Container package docs](https://github.com/cloudflare/containers/blob/main/README.md#lifecycle-hooks) for more details.",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Websocket to Container · Cloudflare Containers docs\ndescription: Forwarding a Websocket request to a Container\nlastUpdated: 2025-09-22T15:52:17.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/containers/examples/websocket/\n  md: https://developers.cloudflare.com/containers/examples/websocket/index.md\n---\n\nWebSocket requests are automatically forwarded to a container using the default `fetch` method on the `Container` class:",
+      "language": "unknown"
+    },
+    {
+      "code": "View a full example in the [Container class repository](https://github.com/cloudflare/containers/tree/main/examples/websocket).\n\n</page>\n\n<page>\n---\ntitle: Durable Object Interface · Cloudflare Containers docs\nlastUpdated: 2025-09-22T15:52:17.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/containers/platform-details/durable-object-methods/\n  md: https://developers.cloudflare.com/containers/platform-details/durable-object-methods/index.md\n---\n\n\n</page>\n\n<page>\n---\ntitle: Lifecycle of a Container · Cloudflare Containers docs\ndescription: >-\n  After you deploy an application with a Container, your image is uploaded to\n\n  Cloudflare's Registry and distributed globally to Cloudflare's Network.\n\n  Cloudflare will pre-schedule instances and pre-fetch images across the globe\n  to ensure quick start\n\n  times when scaling up the number of concurrent container instances.\nlastUpdated: 2025-10-10T20:42:18.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/containers/platform-details/architecture/\n  md: https://developers.cloudflare.com/containers/platform-details/architecture/index.md\n---\n\n## Deployment\n\nAfter you deploy an application with a Container, your image is uploaded to [Cloudflare's Registry](https://developers.cloudflare.com/containers/platform-details/image-management) and distributed globally to Cloudflare's Network. Cloudflare will pre-schedule instances and pre-fetch images across the globe to ensure quick start times when scaling up the number of concurrent container instances.\n\nUnlike Workers, which are updated immediately on deploy, container instances are updated using a rolling deploy strategy. This allows you to gracefully shutdown any running instances during a rollout. Refer to [rollouts](https://developers.cloudflare.com/containers/platform-details/rollouts/) for more details.\n\n## Lifecycle of a Request\n\n### Client to Worker\n\nRecall that Containers are backed by [Durable Objects](https://developers.cloudflare.com/durable-objects/) and [Workers](https://developers.cloudflare.com/workers/). Requests are first routed through a Worker, which is generally handled by a datacenter in a location with the best latency between itself and the requesting user. A different datacenter may be selected to optimize overall latency, if [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement/) is on, or if the nearest location is under heavy load.\n\nBecause all Container requests are passed through a Worker, end-users cannot make non-HTTP TCP or UDP requests to a Container instance. If you have a use case that requires inbound TCP or UDP from an end-user, please [let us know](https://forms.gle/AGSq54VvUje6kmKu8).\n\n### Worker to Durable Object\n\nFrom the Worker, a request passes through a Durable Object instance (the [Container package](https://developers.cloudflare.com/containers/container-package) extends a Durable Object class). Each Durable Object instance is a globally routable isolate that can execute code and store state. This allows developers to easily address and route to specific container instances (no matter where they are placed), define and run hooks on container status changes, execute recurring checks on the instance, and store persistent state associated with each instance.\n\n### Starting a Container\n\nWhen a Durable Object instance requests to start a new container instance, the **nearest location with a pre-fetched image** is selected.\n\nNote\n\nCurrently, Durable Objects may be co-located with their associated Container instance, but often are not.\n\nCloudflare is currently working on expanding the number of locations in which a Durable Object can run, which will allow container instances to always run in the same location as their Durable Object.\n\nStarting additional container instances will use other locations with pre-fetched images, and Cloudflare will automatically begin prepping additional machines behind the scenes for additional scaling and quick cold starts. Because there are a finite number of pre-warmed locations, some container instances may be started in locations that are farther away from the end-user. This is done to ensure that the container instance starts quickly. You are only charged for actively running instances and not for any unused pre-warmed images.\n\n#### Cold starts\n\nA cold start is when a container instance is started from a completely stopped state. If you call `env.MY_CONTAINER.get(id)` with a completely novel ID and launch this instance for the first time, it will result in a cold start. This will start the container image from its entrypoint for the first time. Depending on what this entrypoint does, it will take a variable amount of time to start.\n\nContainer cold starts can often be the 2-3 second range, but this is dependent on image size and code execution time, among other factors.\n\n### Requests to running Containers\n\nWhen a request *starts* a new container instance, the nearest location with a pre-fetched image is selected. Subsequent requests to a particular instance, regardless of where they originate, will be routed to this location as long as the instance stays alive.\n\nHowever, once that container instance stops and restarts, future requests could be routed to a *different* location. This location will again be the nearest location to the originating request with a pre-fetched image.\n\n### Container runtime\n\nEach container instance runs inside its own VM, which provides strong isolation from other workloads running on Cloudflare's network. Containers should be built for the `linux/amd64` architecture, and should stay within [size limits](https://developers.cloudflare.com/containers/platform-details/limits).\n\n[Logging](https://developers.cloudflare.com/containers/faq/#how-do-container-logs-work), metrics collection, and [networking](https://developers.cloudflare.com/containers/faq/#how-do-i-allow-or-disallow-egress-from-my-container) are automatically set up on each container, as configured by the developer.\n\n### Container shutdown\n\nIf you do not set [`sleepAfter`](https://github.com/cloudflare/containers/blob/main/README.md#properties) on your Container class, or stop the instance manually, the container will shut down soon after the container stops receiving requests. By setting `sleepAfter`, the container will stay alive for approximately the specified duration.\n\nYou can manually shutdown a container instance by calling `stop()` or `destroy()` on it - refer to the [Container package docs](https://github.com/cloudflare/containers/blob/main/README.md#container-methods) for more details.\n\nWhen a container instance is going to be shut down, it is sent a `SIGTERM` signal, and then a `SIGKILL` signal after 15 minutes. You should perform any necessary cleanup to ensure a graceful shutdown in this time.\n\n#### Persistent disk\n\nAll disk is ephemeral. When a Container instance goes to sleep, the next time it is started, it will have a fresh disk as defined by its container image. Persistent disk is something the Cloudflare team is exploring in the future, but is not slated for the near term.\n\n## An example request\n\n* A developer deploys a Container. Cloudflare automatically readies instances across its Network.\n* A request is made from a client in Bariloche, Argentina. It reaches the Worker in a nearby Cloudflare location in Neuquen, Argentina.\n* This Worker request calls `getContainer(env.MY_CONTAINER, \"session-1337\")`. Under the hood, this brings up a Durable Object, which then calls `this.ctx.container.start`.\n* This requests the nearest free Container instance. Cloudflare recognizes that an instance is free in Buenos Aires, Argentina, and starts it there.\n* A different user needs to route to the same container. This user's request reaches the Worker running in Cloudflare's location in San Diego, US.\n* The Worker again calls `getContainer(env.MY_CONTAINER, \"session-1337\")`.\n* If the initial container instance is still running, the request is routed to the original location in Buenos Aires. If the initial container has gone to sleep, Cloudflare will once again try to find the nearest \"free\" instance of the Container, likely one in North America, and start an instance there.\n\n</page>\n\n<page>\n---\ntitle: Environment Variables · Cloudflare Containers docs\ndescription: \"The container runtime automatically sets the following variables:\"\nlastUpdated: 2025-09-22T15:52:17.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/containers/platform-details/environment-variables/\n  md: https://developers.cloudflare.com/containers/platform-details/environment-variables/index.md\n---\n\n## Runtime environment variables\n\nThe container runtime automatically sets the following variables:\n\n* `CLOUDFLARE_APPLICATION_ID` - the ID of the Containers application\n* `CLOUDFLARE_COUNTRY_A2` - the [ISO 3166-1 Alpha 2 code](https://www.iso.org/obp/ui/#search/code/) of a country the container is placed in\n* `CLOUDFLARE_LOCATION` - a name of a location the container is placed in\n* `CLOUDFLARE_REGION` - a region name\n* `CLOUDFLARE_DURABLE_OBJECT_ID` - the ID of the Durable Object instance that the container is bound to. You can use this to identify particular container instances on the dashboard.\n\n## User-defined environment variables\n\nYou can set environment variables when defining a Container in your Worker, or when starting a container instance.\n\nFor example:",
+      "language": "unknown"
+    },
+    {
+      "code": "More details about defining environment variables and secrets can be found in [this example](https://developers.cloudflare.com/containers/examples/env-vars-and-secrets).\n\n</page>\n\n<page>\n---\ntitle: Image Management · Cloudflare Containers docs\ndescription: >-\n  When running wrangler deploy, if you set the image attribute in your Wrangler\n  configuration to a path to a Dockerfile, Wrangler will build your container\n  image locally using Docker, then push it to a registry run by Cloudflare.\n\n  This registry is integrated with your Cloudflare account and is backed by R2.\n  All authentication is handled automatically by\n\n  Cloudflare both when pushing and pulling images.\nlastUpdated: 2025-12-15T16:24:25.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/containers/platform-details/image-management/\n  md: https://developers.cloudflare.com/containers/platform-details/image-management/index.md\n---\n\n## Pushing images during `wrangler deploy`\n\nWhen running `wrangler deploy`, if you set the `image` attribute in your [Wrangler configuration](https://developers.cloudflare.com/workers/wrangler/configuration/#containers) to a path to a Dockerfile, Wrangler will build your container image locally using Docker, then push it to a registry run by Cloudflare. This registry is integrated with your Cloudflare account and is backed by [R2](https://developers.cloudflare.com/r2/). All authentication is handled automatically by Cloudflare both when pushing and pulling images.\n\nJust provide the path to your Dockerfile:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "And deploy your Worker with `wrangler deploy`. No other image management is necessary.\n\nOn subsequent deploys, Wrangler will only push image layers that have changed, which saves space and time.\n\nNote\n\nDocker or a Docker-compatible CLI tool must be running for Wrangler to build and push images. This is not necessary if you are using a pre-built image, as described below.\n\n## Using pre-built container images\n\nCurrently, we support images stored in the Cloudflare managed registry at `registry.cloudflare.com` and in [Amazon ECR](https://aws.amazon.com/ecr/). Support for additional external registries is coming soon.\n\nIf you wish to use a pre-built image from another registry provider, first, make sure it exists locally, then push it to the Cloudflare Registry:",
+      "language": "unknown"
+    },
+    {
+      "code": "Wrangler provides a command to push images to the Cloudflare Registry:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Or, you can use the `-p` flag with `wrangler containers build` to build and push an image in one step:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "This will output an image registry URI that you can then use in your Wrangler configuration:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "### Using Amazon ECR container images\n\nTo use container images stored in [Amazon ECR](https://aws.amazon.com/ecr/), you will need to configure the ECR registry domain with credentials. These credentials get stored in [Secrets Store](https://developers.cloudflare.com/secrets-store) under the `containers` scope. When we prepare your container, these credentials will be used to generate an ephemeral token that can pull your image. We do not currently support public ECR images. To generate the necessary credentials for ECR, you will need to create an IAM user with a read-only policy. The following example grants access to all image repositories under AWS account `123456789012` in `us-east-1`.",
+      "language": "unknown"
+    },
+    {
+      "code": "You can then use the credentials for the IAM User to [configure a registry in Wrangler](https://developers.cloudflare.com/workers/wrangler/commands/#containers-registries). Wrangler will prompt you to create a Secrets Store store if one does not already exist, and then create your secret.\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Once this is setup, you will be able to use ECR images in your wrangler config.\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nCurrently, the Cloudflare Vite-plugin does not support registry links in local development, unlike `wrangler dev`. As a workaround, you can create a minimal Dockerfile that uses `FROM <registry-link>`. Make sure to `EXPOSE` a port in local dev as well.\n\n## Pushing images with CI\n\nTo use an image built in a continuous integration environment, install `wrangler` then build and push images using either `wrangler containers build` with the `--push` flag, or using the `wrangler containers push` command.\n\n## Registry Limits\n\nImages are limited in size by available disk of the configured [instance type](https://developers.cloudflare.com/containers/platform-details/limits/#instance-types) for a Container.\n\nDelete images with `wrangler containers images delete` to free up space, but reverting a Worker to a previous version that uses a deleted image will then error.\n\n</page>\n\n<page>\n---\ntitle: Limits and Instance Types · Cloudflare Containers docs\ndescription: >-\n  The memory, vCPU, and disk space for Containers are set through predefined\n  instance types.\n\n  Six instance types are currently available:\nlastUpdated: 2025-10-07T17:35:44.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/containers/platform-details/limits/\n  md: https://developers.cloudflare.com/containers/platform-details/limits/index.md\n---\n\n## Instance Types\n\nThe memory, vCPU, and disk space for Containers are set through predefined instance types. Six instance types are currently available:\n\n| Instance Type | vCPU | Memory | Disk |\n| - | - | - | - |\n| lite | 1/16 | 256 MiB | 2 GB |\n| basic | 1/4 | 1 GiB | 4 GB |\n| standard-1 | 1/2 | 4 GiB | 8 GB |\n| standard-2 | 1 | 6 GiB | 12 GB |\n| standard-3 | 2 | 8 GiB | 16 GB |\n| standard-4 | 4 | 12 GiB | 20 GB |\n\nThese are specified using the [`instance_type` property](https://developers.cloudflare.com/workers/wrangler/configuration/#containers) in your Worker's Wrangler configuration file. Looking for larger instances? [Give us feedback here](https://developers.cloudflare.com/containers/beta-info/#feedback-wanted) and tell us what size instances you need, and what you want to use them for.\n\nNote\n\nThe `dev` and `standard` instance types are preserved for backward compatibility and are aliases for `lite` and `standard-1`, respectively.\n\n## Limits\n\nWhile in open beta, the following limits are currently in effect:\n\n| Feature | Workers Paid |\n| - | - |\n| GiB Memory for all concurrent live Container instances | 400GiB |\n| vCPU for all concurrent live Container instances | 100 |\n| TB Disk for all concurrent live Container instances | 2TB |\n| Image size | Same as [instance disk space](#instance-types) |\n| Total image storage per account | 50 GB [1](#user-content-fn-1) |\n\n## Footnotes\n\n1. Delete container images with `wrangler containers delete` to free up space. Note that if you delete a container image and then [roll back](https://developers.cloudflare.com/workers/configuration/versions-and-deployments/rollbacks/) your Worker to a previous version, this version may no longer work. [↩](#user-content-fnref-1)\n\n</page>\n\n<page>\n---\ntitle: Rollouts · Cloudflare Containers docs\ndescription: >-\n  When you run wrangler deploy, the Worker code is updated immediately and\n  Container\n\n  instances are updated using a rolling deploy strategy. The default rollout\n  configuration is two steps,\n\n  where the first step updates 10% of the instances, and the second step updates\n  the remaining 90%.\n\n  This can be configured in your Wrangler config file using the\n  rollout_step_percentage property.\nlastUpdated: 2025-11-26T14:23:54.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/containers/platform-details/rollouts/\n  md: https://developers.cloudflare.com/containers/platform-details/rollouts/index.md\n---\n\n## How rollouts work\n\nWhen you run `wrangler deploy`, the Worker code is updated immediately and Container instances are updated using a rolling deploy strategy. The default rollout configuration is two steps, where the first step updates 10% of the instances, and the second step updates the remaining 90%. This can be configured in your Wrangler config file using the [`rollout_step_percentage`](https://developers.cloudflare.com/workers/wrangler/configuration#containers) property.\n\nWhen deploying a change, you can also configure a [`rollout_active_grace_period`](https://developers.cloudflare.com/workers/wrangler/configuration#containers), which is the minimum number of seconds to wait before an active container instance becomes eligible for updating during a rollout. At that point, the container will be sent at `SIGTERM`, and still has 15 minutes to shut down gracefully. If the instance does not stop within 15 minutes, it is forcefully stopped with a `SIGKILL` signal. If you have cleanup that must occur before a Container instance is stopped, you should do it during this 15 minute period.\n\nOnce stopped, the instance is replaced with a new instance running the updated code. Requests may hang while the container is starting up again.\n\nHere is an example configuration that sets a 5 minute grace period and a two step rollout where the first step updates 10% of instances and the second step updates 100% of instances:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "## Immediate rollouts\n\nIf you need to do a one-off deployment that rolls out to 100% of container instances in one step, you can deploy with:\n\n* npm",
+      "language": "unknown"
+    },
+    {
+      "code": "* yarn",
+      "language": "unknown"
+    },
+    {
+      "code": "* pnpm",
+      "language": "unknown"
+    },
+    {
+      "code": "Note that `rollout_active_grace_period`, if configured, will still apply.\n\n</page>\n\n<page>\n---\ntitle: Scaling and Routing · Cloudflare Containers docs\ndescription: >-\n  Currently, Containers are only scaled manually by getting containers with a\n  unique ID, then\n\n  starting the container. Note that that getting a container does not\n  automatically start it.\nlastUpdated: 2025-09-22T15:52:17.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/containers/platform-details/scaling-and-routing/\n  md: https://developers.cloudflare.com/containers/platform-details/scaling-and-routing/index.md\n---\n\n### Scaling container instances with `get()`\n\nNote\n\nThis section uses helpers from the [Container package](https://developers.cloudflare.com/containers/container-package).\n\nCurrently, Containers are only scaled manually by getting containers with a unique ID, then starting the container. Note that that getting a container does not automatically start it.",
+      "language": "unknown"
+    },
+    {
+      "code": "Each instance will run until its `sleepAfter` time has elapsed, or until it is manually stopped.\n\nThis behavior is very useful when you want explicit control over the lifecycle of container instances. For instance, you may want to spin up a container backend instance for a specific user, or you may briefly run a code sandbox to isolate AI-generated code, or you may want to run a short-lived batch job.\n\n#### The `getRandom` helper function\n\nHowever, sometimes you want to run multiple instances of a container and easily route requests to them.\n\nCurrently, the best way to achieve this is with the *temporary* `getRandom` helper function:",
+      "language": "unknown"
+    },
+    {
+      "code": "We have provided the getRandom function as a stopgap solution to route to multiple stateless container instances. It will randomly select one of N instances for each request and route to it. Unfortunately, it has two major downsides:\n\n* It requires that the user set a fixed number of instances to route to.\n* It will randomly select each instance, regardless of location.\n\nWe plan to fix these issues with built-in autoscaling and routing features in the near future.\n\n### Autoscaling and routing (unreleased)\n\nNote\n\nThis is an unreleased feature. It is subject to change.\n\nYou will be able to turn autoscaling on for a Container, by setting the `autoscale` property to on the Container class:",
+      "language": "unknown"
+    },
+    {
+      "code": "This instructs the platform to automatically scale instances based on incoming traffic and resource usage (memory, CPU).\n\nContainer instances will be launched automatically to serve local traffic, and will be stopped when they are no longer needed.\n\nTo route requests to the correct instance, you will use the `getContainer()` helper function to get a container instance, then pass requests to it:",
+      "language": "unknown"
+    },
+    {
+      "code": "This will send traffic to the nearest ready instance of a container. If a container is overloaded or has not yet launched, requests will be routed to potentially more distant container. Container readiness can be automatically determined based on resource use, but will also be configurable with custom readiness checks.\n\nAutoscaling and latency-aware routing will be available in the near future, and will be documented in more detail when released. Until then, you can use the `getRandom` helper function to route requests to multiple container instances.\n\n</page>\n\n<page>\n---\ntitle: Import and export data · Cloudflare D1 docs\ndescription: D1 allows you to import existing SQLite tables and their data\n  directly, enabling you to migrate existing data into D1 quickly and easily.\n  This can be useful when migrating applications to use Workers and D1, or when\n  you want to prototype a schema locally before importing it to your D1\n  database(s).\nlastUpdated: 2025-04-16T16:17:28.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/d1/best-practices/import-export-data/\n  md: https://developers.cloudflare.com/d1/best-practices/import-export-data/index.md\n---\n\nD1 allows you to import existing SQLite tables and their data directly, enabling you to migrate existing data into D1 quickly and easily. This can be useful when migrating applications to use Workers and D1, or when you want to prototype a schema locally before importing it to your D1 database(s).\n\nD1 also allows you to export a database. This can be useful for [local development](https://developers.cloudflare.com/d1/best-practices/local-development/) or testing.\n\n## Import an existing database\n\nTo import an existing SQLite database into D1, you must have:\n\n1. The Cloudflare [Wrangler CLI installed](https://developers.cloudflare.com/workers/wrangler/install-and-update/).\n2. A database to use as the target.\n3. An existing SQLite (version 3.0+) database file to import.\n\nNote\n\nYou cannot import a raw SQLite database (`.sqlite3` files) directly. Refer to [how to convert an existing SQLite file](#convert-sqlite-database-files) first.\n\nFor example, consider the following `users_export.sql` schema & values, which includes a `CREATE TABLE IF NOT EXISTS` statement:",
+      "language": "unknown"
+    },
+    {
+      "code": "With your `users_export.sql` file in the current working directory, you can pass the `--file=users_export.sql` flag to `d1 execute` to execute (import) our table schema and values:",
+      "language": "unknown"
+    },
+    {
+      "code": "To confirm your table was imported correctly and is queryable, execute a `SELECT` statement to fetch all the tables from your D1 database:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nThe `_cf_KV` table is a reserved table used by D1's underlying storage system. It cannot be queried and does not incur read/write operations charges against your account.\n\nFrom here, you can now query our new table from our Worker [using the D1 Workers Binding API](https://developers.cloudflare.com/d1/worker-api/).\n\nKnown limitations\n\nFor imports, `wrangler d1 execute --file` is limited to 5GiB files, the same as the [R2 upload limit](https://developers.cloudflare.com/r2/platform/limits/). For imports larger than 5GiB, we recommend splitting the data into multiple files.\n\n### Convert SQLite database files\n\nNote\n\nIn order to convert a raw SQLite3 database dump (a `.sqlite3` file) you will need the [sqlite command-line tool](https://sqlite.org/cli.html) installed on your system.\n\nIf you have an existing SQLite database from another system, you can import its tables into a D1 database. Using the `sqlite` command-line tool, you can convert an `.sqlite3` file into a series of SQL statements that can be imported (executed) against a D1 database.\n\nFor example, if you have a raw SQLite dump called `db_dump.sqlite3`, run the following `sqlite` command to convert it:",
+      "language": "unknown"
+    },
+    {
+      "code": "Once you have run the above command, you will need to edit the output SQL file to be compatible with D1:\n\n1. Remove `BEGIN TRANSACTION` and `COMMIT;` from the file\n\n2. Remove the following table creation statement (if present):",
+      "language": "unknown"
+    },
+    {
+      "code": "You can then follow the steps to [import an existing database](#import-an-existing-database) into D1 by using the `.sql` file you generated from the database dump as the input to `wrangler d1 execute`.\n\n## Export an existing D1 database\n\nIn addition to importing existing SQLite databases, you might want to export a D1 database for local development or testing. You can export a D1 database to a `.sql` file using [wrangler d1 export](https://developers.cloudflare.com/workers/wrangler/commands/#d1-export) and then execute (import) with `d1 execute --file`.\n\nTo export full D1 database schema and data:",
+      "language": "unknown"
+    },
+    {
+      "code": "To export single table schema and data:",
+      "language": "unknown"
+    },
+    {
+      "code": "To export only D1 database schema:",
+      "language": "unknown"
+    },
+    {
+      "code": "To export only D1 table schema:",
+      "language": "unknown"
+    },
+    {
+      "code": "To export only D1 database data:",
+      "language": "unknown"
+    },
+    {
+      "code": "To export only D1 table data:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Known limitations\n\n* Export is not supported for virtual tables, including databases with virtual tables. D1 supports virtual tables for full-text search using SQLite's [FTS5 module](https://www.sqlite.org/fts5.html). As a workaround, delete any virtual tables, export, and then recreate virtual tables.\n* A running export will block other database requests.\n* Any numeric value in a column is affected by JavaScript's 52-bit precision for numbers. If you store a very large number (in `int64`), then retrieve the same value, the returned value may be less precise than your original number.\n\n## Troubleshooting\n\nIf you receive an error when trying to import an existing schema and/or dataset into D1:\n\n* Ensure you are importing data in SQL format (typically with a `.sql` file extension). Refer to [how to convert SQLite files](#convert-sqlite-database-files) if you have a `.sqlite3` database dump.\n* Make sure the schema is [SQLite3](https://www.sqlite.org/docs.html) compatible. You cannot import data from a MySQL or PostgreSQL database into D1, as the types and SQL syntax are not directly compatible.\n* If you have foreign key relationships between tables, ensure you are importing the tables in the right order. You cannot refer to a table that does not yet exist.\n* If you receive a `\"cannot start a transaction within a transaction\"` error, make sure you have removed `BEGIN TRANSACTION` and `COMMIT` from your dumped SQL statements.\n\n### Resolve `Statement too long` error\n\nIf you encounter a `Statement too long` error when trying to import a large SQL file into D1, it means that one of the SQL statements in your file exceeds the maximum allowed length.\n\nTo resolve this issue, convert the single large `INSERT` statement into multiple smaller `INSERT` statements. For example, instead of inserting 1,000 rows in one statement, split it into four groups of 250 rows, as illustrated in the code below.\n\nBefore:",
+      "language": "unknown"
+    },
+    {
+      "code": "After:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Foreign key constraints\n\nWhen importing data, you may need to temporarily disable [foreign key constraints](https://developers.cloudflare.com/d1/sql-api/foreign-keys/). To do so, call `PRAGMA defer_foreign_keys = true` before making changes that would violate foreign keys.\n\nRefer to the [foreign key documentation](https://developers.cloudflare.com/d1/sql-api/foreign-keys/) to learn more about how to work with foreign keys and D1.\n\n## Next Steps\n\n* Read the SQLite [`CREATE TABLE`](https://www.sqlite.org/lang_createtable.html) documentation.\n* Learn how to [use the D1 Workers Binding API](https://developers.cloudflare.com/d1/worker-api/) from within a Worker.\n* Understand how [database migrations work](https://developers.cloudflare.com/d1/reference/migrations/) with D1.\n\n</page>\n\n<page>\n---\ntitle: Local development · Cloudflare D1 docs\ndescription: D1 has fully-featured support for local development, running the\n  same version of D1 as Cloudflare runs globally. Local development uses\n  Wrangler, the command-line interface for Workers, to manage local development\n  sessions and state.\nlastUpdated: 2025-09-30T16:36:58.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/d1/best-practices/local-development/\n  md: https://developers.cloudflare.com/d1/best-practices/local-development/index.md\n---\n\nD1 has fully-featured support for local development, running the same version of D1 as Cloudflare runs globally. Local development uses [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/), the command-line interface for Workers, to manage local development sessions and state.\n\n## Start a local development session\n\nNote\n\nThis guide assumes you are using [Wrangler v3.0](https://blog.cloudflare.com/wrangler3/) or later.\n\nUsers new to D1 and/or Cloudflare Workers should visit the [D1 tutorial](https://developers.cloudflare.com/d1/get-started/) to install `wrangler` and deploy their first database.\n\nLocal development sessions create a standalone, local-only environment that mirrors the production environment D1 runs in so that you can test your Worker and D1 *before* you deploy to production.\n\nAn existing [D1 binding](https://developers.cloudflare.com/workers/wrangler/configuration/#d1-databases) of `DB` would be available to your Worker when running locally.\n\nTo start a local development session:\n\n1. Confirm you are using wrangler v3.0+.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Start a local development session",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "In this example, the Worker has access to local-only D1 database. The corresponding D1 binding in your [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/) would resemble the following:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Note that `wrangler dev` separates local and production (remote) data. A local session does not have access to your production data by default. To access your production (remote) database, set `\"remote\" : true` in the D1 binding configuration. Refer to the [remote bindings documentation](https://developers.cloudflare.com/workers/development-testing/#remote-bindings) for more information. Any changes you make when running against a remote database cannot be undone.\n\nRefer to the [`wrangler dev` documentation](https://developers.cloudflare.com/workers/wrangler/commands/#dev) to learn more about how to configure a local development session.\n\n## Develop locally with Pages\n\nYou can only develop against a *local* D1 database when using [Cloudflare Pages](https://developers.cloudflare.com/pages/) by creating a minimal [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/) in the root of your Pages project. This can be useful when creating schemas, seeding data or otherwise managing a D1 database directly, without adding to your application logic.\n\nLocal development for remote databases\n\nIt is currently not possible to develop against a *remote* D1 database when using [Cloudflare Pages](https://developers.cloudflare.com/pages/).\n\nYour [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/) should resemble the following:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "You can then execute queries and/or run migrations against a local database as part of your local development process by passing the `--local` flag to wrangler:",
+      "language": "unknown"
+    },
+    {
+      "code": "The preceding command would execute queries the **local only** version of your D1 database. Without the `--local` flag, the commands are executed against the remote version of your D1 database running on Cloudflare's network.\n\n## Persist data\n\nNote\n\nBy default, in Wrangler v3 and above, data is persisted across each run of `wrangler dev`. If your local development and testing requires or assumes an empty database, you should start with a `DROP TABLE <tablename>` statement to delete existing tables before using `CREATE TABLE` to re-create them.\n\nUse `wrangler dev --persist-to=/path/to/file` to persist data to a specific location. This can be useful when working in a team (allowing you to share) the same copy, when deploying via CI/CD (to ensure the same starting state), or as a way to keep data when migrating across machines.\n\nUsers of wrangler `2.x` must use the `--persist` flag: previous versions of wrangler did not persist data by default.\n\n## Test programmatically\n\n### Miniflare\n\n[Miniflare](https://miniflare.dev/) allows you to simulate a Workers and resources like D1 using the same underlying runtime and code as used in production.\n\nYou can use Miniflare's [support for D1](https://miniflare.dev/storage/d1) to create D1 databases you can use for testing:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "You can then use the `getD1Database()` method to retrieve the simulated database and run queries against it as if it were your real production D1 database:",
+      "language": "unknown"
+    },
+    {
+      "code": "### `unstable_dev`\n\nWrangler exposes an [`unstable_dev()`](https://developers.cloudflare.com/workers/wrangler/api/) that allows you to run a local HTTP server for testing Workers and D1. Run [migrations](https://developers.cloudflare.com/d1/reference/migrations/) against a local database by setting a `preview_database_id` in your Wrangler configuration.\n\nGiven the below Wrangler configuration:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "Migrations can be run locally as part of your CI/CD setup by passing the `--local` flag to `wrangler`:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Usage example\n\nThe following example shows how to use Wrangler's `unstable_dev()` API to:\n\n* Run migrations against your local test database, as defined by `preview_database_id`.\n* Make a request to an endpoint defined in your Worker. This example uses `/api/users/?limit=2`.\n* Validate the returned results match, including the `Response.status` and the JSON our API returns.",
+      "language": "unknown"
+    },
+    {
+      "code": "Review the [`unstable_dev()`](https://developers.cloudflare.com/workers/wrangler/api/#usage) documentation for more details on how to use the API within your tests.\n\n## Related resources\n\n* Use [`wrangler dev`](https://developers.cloudflare.com/workers/wrangler/commands/#dev) to run your Worker and D1 locally and debug issues before deploying.\n* Learn [how to debug D1](https://developers.cloudflare.com/d1/observability/debug-d1/).\n* Understand how to [access logs](https://developers.cloudflare.com/workers/observability/logs/) generated from your Worker and D1.\n\n</page>\n\n<page>\n---\ntitle: Query a database · Cloudflare D1 docs\ndescription: D1 is compatible with most SQLite's SQL convention since it\n  leverages SQLite's query engine. You can use SQL commands to query D1.\nlastUpdated: 2025-03-07T11:07:33.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/d1/best-practices/query-d1/\n  md: https://developers.cloudflare.com/d1/best-practices/query-d1/index.md\n---\n\nD1 is compatible with most SQLite's SQL convention since it leverages SQLite's query engine. You can use SQL commands to query D1.\n\nThere are a number of ways you can interact with a D1 database:\n\n1. Using [D1 Workers Binding API](https://developers.cloudflare.com/d1/worker-api/) in your code.\n2. Using [D1 REST API](https://developers.cloudflare.com/api/resources/d1/subresources/database/methods/create/).\n3. Using [D1 Wrangler commands](https://developers.cloudflare.com/d1/wrangler-commands/).\n\n## Use SQL to query D1\n\nD1 understands SQLite semantics, which allows you to query a database using SQL statements via Workers BindingAPI or REST API (including Wrangler commands). Refer to [D1 SQL API](https://developers.cloudflare.com/d1/sql-api/sql-statements/) to learn more about supported SQL statements.\n\n### Use foreign key relationships\n\nWhen using SQL with D1, you may wish to define and enforce foreign key constraints across tables in a database. Foreign key constraints allow you to enforce relationships across tables, or prevent you from deleting rows that reference rows in other tables. An example of a foreign key relationship is shown below.",
+      "language": "unknown"
+    },
+    {
+      "code": "Refer to [Define foreign keys](https://developers.cloudflare.com/d1/sql-api/foreign-keys/) for more information.\n\n### Query JSON\n\nD1 allows you to query and parse JSON data stored within a database. For example, you can extract a value inside a JSON object.\n\nGiven the following JSON object (`type:blob`) in a column named `sensor_reading`, you can extract values from it directly.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "Refer to [Query JSON](https://developers.cloudflare.com/d1/sql-api/query-json/) to learn more about querying JSON objects.\n\n## Query D1 with Workers Binding API\n\nWorkers Binding API primarily interacts with the data plane, and allows you to query your D1 database from your Worker.\n\nThis requires you to:\n\n1. Bind your D1 database to your Worker.\n2. Prepare a statement.\n3. Run the statement.",
+      "language": "unknown"
+    },
+    {
+      "code": "Refer to [Workers Binding API](https://developers.cloudflare.com/d1/worker-api/) for more information.\n\n## Query D1 with REST API\n\nREST API primarily interacts with the control plane, and allows you to create/manage your D1 database.\n\nRefer to [D1 REST API](https://developers.cloudflare.com/api/resources/d1/subresources/database/methods/create/) for D1 REST API documentation.\n\n## Query D1 with Wrangler commands\n\nYou can use Wrangler commands to query a D1 database. Note that Wrangler commands use REST APIs to perform its operations.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Global read replication · Cloudflare D1 docs\ndescription: D1 read replication can lower latency for read queries and scale\n  read throughput by adding read-only database copies, called read replicas,\n  across regions globally closer to clients.\nlastUpdated: 2025-09-08T09:38:20.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/d1/best-practices/read-replication/\n  md: https://developers.cloudflare.com/d1/best-practices/read-replication/index.md\n---\n\nD1 read replication can lower latency for read queries and scale read throughput by adding read-only database copies, called read replicas, across regions globally closer to clients.\n\nTo use read replication, you must use the [D1 Sessions API](https://developers.cloudflare.com/d1/worker-api/d1-database/#withsession), otherwise all queries will continue to be executed only by the primary database.\n\nA session encapsulates all the queries from one logical session for your application. For example, a session may correspond to all queries coming from a particular web browser session. All queries within a session read from a database instance which is as up-to-date as your query needs it to be. Sessions API ensures [sequential consistency](https://developers.cloudflare.com/d1/best-practices/read-replication/#replica-lag-and-consistency-model) for all queries in a session.\n\nTo checkout D1 read replication, deploy the following Worker code using Sessions API, which will prompt you to create a D1 database and enable read replication on said database.\n\n[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/d1-starter-sessions-api-template)\n\nTip: Place your database further away for the read replication demo\n\nTo simulate how read replication can improve a worst case latency scenario, set your D1 database location hint to be in a farther away region. For example, if you are in Europe create your database in Western North America (WNAM).\n\n* JavaScript",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "## Primary database instance vs read replicas\n\n![D1 read replication concept](https://developers.cloudflare.com/images/d1/d1-read-replication-concept.png)\n\nWhen using D1 without read replication, D1 routes all queries (both read and write) to a specific database instance in [one location in the world](https://developers.cloudflare.com/d1/configuration/data-location/), known as the primary database instance . D1 request latency is dependent on the physical proximity of a user to the primary database instance. Users located further away from the primary database instance experience longer request latency due to [network round-trip time](https://www.cloudflare.com/learning/cdn/glossary/round-trip-time-rtt/).\n\nWhen using read replication, D1 creates multiple asynchronously replicated copies of the primary database instance, which only serve read requests, called read replicas . D1 creates the read replicas in [multiple regions](https://developers.cloudflare.com/d1/best-practices/read-replication/#read-replica-locations) throughout the world across Cloudflare's network.\n\nEven though a user may be located far away from the primary database instance, they could be close to a read replica. When D1 routes read requests to the read replica instead of the primary database instance, the user enjoys faster responses for their read queries.\n\nD1 asynchronously replicates changes from the primary database instance to all read replicas. This means that at any given time, a read replica may be arbitrarily out of date. The time it takes for the latest committed data in the primary database instance to be replicated to the read replica is known as the replica lag . Replica lag and non-deterministic routing to individual replicas can lead to application data consistency issues. The D1 Sessions API solves this by ensuring sequential consistency. For more information, refer to [replica lag and consistency model](https://developers.cloudflare.com/d1/best-practices/read-replication/#replica-lag-and-consistency-model).\n\nNote\n\nAll write queries are still forwarded to the primary database instance. Read replication only improves the response time for read query requests.\n\n| Type of database instance | Description | How it handles write queries | How it handles read queries |\n| - | - | - | - |\n| Primary database instance | The database instance containing the “original” copy of the database | Can serve write queries | Can serve read queries |\n| Read replica database instance | A database instance containing a copy of the original database which asynchronously receives updates from the primary database instance | Forwards any write queries to the primary database instance | Can serve read queries using its own copy of the database |\n\n## Benefits of read replication\n\nA system with multiple read replicas located around the world improves the performance of databases:\n\n* The query latency decreases for users located close to the read replicas. By shortening the physical distance between a the database instance and the user, read query latency decreases, resulting in a faster application.\n* The read throughput increases by distributing load across multiple replicas. Since multiple database instances are able to serve read-only requests, your application can serve a larger number of queries at any given time.\n\n## Use Sessions API\n\nBy using [Sessions API](https://developers.cloudflare.com/d1/worker-api/d1-database/#withsession) for read replication, all of your queries from a single session read from a version of the database which ensures sequential consistency. This ensures that the version of the database you are reading is logically consistent even if the queries are handled by different read replicas.\n\nD1 read replication achieves this by attaching a bookmark to each query within a session. For more information, refer to [Bookmarks](https://developers.cloudflare.com/d1/reference/time-travel/#bookmarks).\n\n### Enable read replication\n\nRead replication can be enabled at the database level in the Cloudflare dashboard. Check **Settings** for your D1 database to view if read replication is enabled.\n\n1. In the Cloudflare dashboard, go to the **D1** page.\n\n   [Go to **D1 SQL database**](https://dash.cloudflare.com/?to=/:account/workers/d1)\n\n2. Select an existing database > **Settings** > **Enable Read Replication**.\n\n### Start a session without constraints\n\nTo create a session from any available database version, use `withSession()` without any parameters, which will route the first query to any database instance, either the primary database instance or a read replica.",
+      "language": "unknown"
+    },
+    {
+      "code": "* `withSession()` is the same as `withSession(\"first-unconstrained\")`\n* This approach is best when your application does not require the latest database version. All queries in a session ensure sequential consistency.\n* Refer to the [D1 Workers Binding API documentation](https://developers.cloudflare.com/d1/worker-api/d1-database#withsession).\n\n### Start a session with all latest data\n\nTo create a session from the latest database version, use `withSession(\"first-primary\")`, which will route the first query to the primary database instance.",
+      "language": "unknown"
+    },
+    {
+      "code": "* This approach is best when your application requires the latest database version. All queries in a session ensure sequential consistency.\n* Refer to the [D1 Workers Binding API documentation](https://developers.cloudflare.com/d1/worker-api/d1-database#withsession).\n\n### Start a session from previous context (bookmark)\n\nTo create a new session from the context of a previous session, pass a `bookmark` parameter to guarantee that the session starts with a database version that is at least as up-to-date as the provided `bookmark`.",
+      "language": "unknown"
+    },
+    {
+      "code": "* Starting a session with a `bookmark` ensures the new session will be at least as up-to-date as the previous session that generated the given `bookmark`.\n* Refer to the [D1 Workers Binding API documentation](https://developers.cloudflare.com/d1/worker-api/d1-database#withsession).\n\n### Check where D1 request was processed\n\nTo see how D1 requests are processed by the addition of read replicas, `served_by_region` and `served_by_primary` fields are returned in the `meta` object of [D1 Result](https://developers.cloudflare.com/d1/worker-api/return-object/#d1result).",
+      "language": "unknown"
+    },
+    {
+      "code": "* `served_by_region` and `served_by_primary` fields are present for all D1 remote requests, regardless of whether read replication is enabled or if the Sessions API is used. On local development, `npx wrangler dev`, these fields are `undefined`.\n\n### Enable read replication via REST API\n\nWith the REST API, set `read_replication.mode: auto` to enable read replication on a D1 database.\n\nFor this REST endpoint, you need to have an API token with `D1:Edit` permission. If you do not have an API token, follow the guide: [Create API token](https://developers.cloudflare.com/fundamentals/api/get-started/create-token/).\n\n* cURL",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "### Disable read replication via REST API\n\nWith the REST API, set `read_replication.mode: disabled` to disable read replication on a D1 database.\n\nFor this REST endpoint, you need to have an API token with `D1:Edit` permission. If you do not have an API token, follow the guide: [Create API token](https://developers.cloudflare.com/fundamentals/api/get-started/create-token/).\n\nNote\n\nDisabling read replication takes up to 24 hours for replicas to stop processing requests. Sessions API works with databases that do not have read replication enabled, so it is safe to run code with Sessions API even after disabling read replication.\n\n* cURL",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "### Check if read replication is enabled\n\nOn the Cloudflare dashboard, check **Settings** for your D1 database to view if read replication is enabled.\n\nAlternatively, `GET` D1 database REST endpoint returns if read replication is enabled or disabled.\n\nFor this REST endpoint, you need to have an API token with `D1:Read` permission. If you do not have an API token, follow the guide: [Create API token](https://developers.cloudflare.com/fundamentals/api/get-started/create-token/).\n\n* cURL",
+      "language": "unknown"
+    },
+    {
+      "code": "* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "- Check the `read_replication` property of the `result` object\n\n  * `\"mode\": \"auto\"` indicates read replication is enabled\n  * `\"mode\": \"disabled\"` indicates read replication is disabled\n\n## Read replica locations\n\nCurrently, D1 automatically creates a read replica in [every supported region](https://developers.cloudflare.com/d1/configuration/data-location/#available-location-hints), including the region where the primary database instance is located. These regions are:\n\n* ENAM\n* WNAM\n* WEUR\n* EEUR\n* APAC\n* OC\n\nNote\n\nRead replica locations are subject to change at Cloudflare's discretion.\n\n## Observability\n\nTo see the impact of read replication and check the how D1 requests are processed by additional database instances, you can use:\n\n* The `meta` object within the [`D1Result`](https://developers.cloudflare.com/d1/worker-api/return-object/#d1result) return object, which includes new fields:\n\n  * `served_by_region`\n  * `served_by_primary`\n\n* The Cloudflare dashboard, where you can view your database metrics breakdown by region that processed D1 requests.\n\n## Pricing\n\nD1 read replication is built into D1, so you don’t pay extra storage or compute costs for read replicas. You incur the exact same D1 [usage billing](https://developers.cloudflare.com/d1/platform/pricing/#billing-metrics) with or without replicas, based on `rows_read` and `rows_written` by your queries.\n\n## Known limitations\n\nThere are some known limitations for D1 read replication.\n\n* Sessions API is only available via the [D1 Worker Binding](https://developers.cloudflare.com/d1/worker-api/d1-database/#withsession) and not yet available via the REST API.\n\n## Background information\n\n### Replica lag and consistency model\n\nTo account for replica lag, it is important to consider the consistency model for D1. A consistency model is a logical framework that governs how a database system serves user queries (how the data is updated and accessed) when there are multiple database instances. Different models can be useful in different use cases. Most database systems provide [read committed](https://jepsen.io/consistency/models/read-committed), [snapshot isolation](https://jepsen.io/consistency/models/snapshot-isolation), or [serializable](https://jepsen.io/consistency/models/serializable) consistency models, depending on their configuration.\n\n#### Without Sessions API\n\nConsider what could happen in a distributed database system.\n\n![Distributed replicas could cause inconsistencies without Sessions API](https://developers.cloudflare.com/images/d1/consistency-without-sessions-api.png)\n\n1. Your SQL write query is processed by the primary database instance.\n2. You obtain a response acknowledging the write query.\n3. Your subsequent SQL read query goes to a read replica.\n4. The read replica has not yet been updated, so does not contain changes from your SQL write query. The returned results are inconsistent from your perspective.\n\n#### With Sessions API\n\nWhen using D1 Sessions API, your queries obtain bookmarks which allows the read replica to only serve sequentially consistent data.\n\n![D1 offers sequential consistency when using Sessions API](https://developers.cloudflare.com/images/d1/consistency-with-sessions-api.png)\n\n1. SQL write query is processed by the primary database instance.\n2. You obtain a response acknowledging the write query. You also obtain a bookmark (100) which identifies the state of the database after the write query.\n3. Your subsequent SQL read query goes to a read replica, and also provides the bookmark (100).\n4. The read replica will wait until it has been updated to be at least as up-to-date as the provided bookmark (100).\n5. Once the read replica has been updated (bookmark 104), it serves your read query, which is now sequentially consistent.\n\nIn the diagram, the returned bookmark is bookmark 104, which is different from the one provided in your read query (bookmark 100). This can happen if there were other writes from other client requests that also got replicated to the read replica in between the two write/read queries you executed.\n\n#### Sessions API provides sequential consistency\n\nD1 read replication offers [sequential consistency](https://jepsen.io/consistency/models/sequential). D1 creates a global order of all operations which have taken place on the database, and can identify the latest version of the database that a query has seen, using [bookmarks](https://developers.cloudflare.com/d1/reference/time-travel/#bookmarks). It then serves the query with a database instance that is at least as up-to-date as the bookmark passed along with the query to execute.\n\nSequential consistency has properties such as:\n\n* **Monotonic reads**: If you perform two reads one after the other (read-1, then read-2), read-2 cannot read a version of the database prior to read-1.\n* **Monotonic writes**: If you perform write-1 then write-2, all processes observe write-1 before write-2.\n* **Writes follow reads**: If you read a value, then perform a write, the subsequent write must be based on the value that was just read.\n* **Read my own writes**: If you write to the database, all subsequent reads will see the write.\n\n## Supplementary information\n\nYou may wish to refer to the following resources:\n\n* Blog: [Sequential consistency without borders: How D1 implements global read replication](https://blog.cloudflare.com/d1-read-replication-beta/)\n* Blog: [Building D1: a Global Database](https://blog.cloudflare.com/building-d1-a-global-database/)\n* [D1 Sessions API documentation](https://developers.cloudflare.com/d1/worker-api/d1-database#withsession)\n* [Starter code for D1 Sessions API demo](https://github.com/cloudflare/templates/tree/main/d1-starter-sessions-api-template)\n* [E-commerce store read replication tutorial](https://developers.cloudflare.com/d1/tutorials/using-read-replication-for-e-com)\n\n</page>\n\n<page>\n---\ntitle: Remote development · Cloudflare D1 docs\ndescription: D1 supports remote development using the dashboard playground. The\n  dashboard playground uses a browser version of Visual Studio Code, allowing\n  you to rapidly iterate on your Worker entirely in your browser.\nlastUpdated: 2025-09-03T16:40:54.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/d1/best-practices/remote-development/\n  md: https://developers.cloudflare.com/d1/best-practices/remote-development/index.md\n---\n\nD1 supports remote development using the [dashboard playground](https://developers.cloudflare.com/workers/playground/#use-the-playground). The dashboard playground uses a browser version of Visual Studio Code, allowing you to rapidly iterate on your Worker entirely in your browser.\n\n## 1. Bind a D1 database to a Worker\n\nNote\n\nThis guide assumes you have previously created a Worker, and a D1 database.\n\nUsers new to D1 and/or Cloudflare Workers should read the [D1 tutorial](https://developers.cloudflare.com/d1/get-started/) to install `wrangler` and deploy their first database.\n\n1. In the Cloudflare dashboard, go to the **Workers & Pages** page.\n\n   [Go to **Workers & Pages**](https://dash.cloudflare.com/?to=/:account/workers-and-pages)\n\n2. Select an existing Worker.\n\n3. Go to the **Bindings** tab.\n\n4. Select **Add binding**.\n\n5. Select **D1 database** > **Add binding**.\n\n6. Enter a variable name, such as `DB`, and select the D1 database you wish to access from this Worker.\n\n7. Select **Add binding**.\n\n## 2. Start a remote development session\n\n1. On the Worker's page on the Cloudflare dashboard, select **Edit Code** at the top of the page.\n2. Your Worker now has access to D1.\n\nUse the following Worker script to verify that the Worker has access to the bound D1 database:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Related resources\n\n* Learn [how to debug D1](https://developers.cloudflare.com/d1/observability/debug-d1/).\n* Understand how to [access logs](https://developers.cloudflare.com/workers/observability/logs/) generated from your Worker and D1.\n\n</page>\n\n<page>\n---\ntitle: Retry queries · Cloudflare D1 docs\ndescription: It is useful to retry write queries from your application when you\n  encounter a transient error. From the list of D1_ERRORs, refer to the\n  Recommended action column to determine if a query should be retried.\nlastUpdated: 2025-09-11T13:59:52.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/d1/best-practices/retry-queries/\n  md: https://developers.cloudflare.com/d1/best-practices/retry-queries/index.md\n---\n\nIt is useful to retry write queries from your application when you encounter a transient [error](https://developers.cloudflare.com/d1/observability/debug-d1/#error-list). From the list of `D1_ERROR`s, refer to the Recommended action column to determine if a query should be retried.\n\nNote\n\nD1 automatically retries read-only queries up to two more times when it encounters a retryable error.\n\n## Example of retrying queries\n\nConsider the following example of a `shouldRetry(...)` function, taken from the [D1 read replication starter template](https://github.com/cloudflare/templates/blob/main/d1-starter-sessions-api-template/src/index.ts#L108).\n\nYou should make sure your retries apply an exponential backoff with jitter strategy for more successful retries. You can use libraries abstracting that already like [`@cloudflare/actors`](https://github.com/cloudflare/actors), or [copy the retry logic](https://github.com/cloudflare/actors/blob/9ba112503132ddf6b5cef37ff145e7a2dd5ffbfc/packages/core/src/retries.ts#L18) in your own code directly.",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Use D1 from Pages · Cloudflare D1 docs\nlastUpdated: 2024-12-11T09:43:45.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/d1/best-practices/use-d1-from-pages/\n  md: https://developers.cloudflare.com/d1/best-practices/use-d1-from-pages/index.md\n---\n\n\n</page>\n\n<page>\n---\ntitle: Use indexes · Cloudflare D1 docs\ndescription: Indexes enable D1 to improve query performance over the indexed\n  columns for common (popular) queries by reducing the amount of data (number of\n  rows) the database has to scan when running a query.\nlastUpdated: 2025-02-24T09:30:25.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/d1/best-practices/use-indexes/\n  md: https://developers.cloudflare.com/d1/best-practices/use-indexes/index.md\n---\n\nIndexes enable D1 to improve query performance over the indexed columns for common (popular) queries by reducing the amount of data (number of rows) the database has to scan when running a query.\n\n## When is an index useful?\n\nIndexes are useful:\n\n* When you want to improve the read performance over columns that are regularly used in predicates - for example, a `WHERE email_address = ?` or `WHERE user_id = 'a793b483-df87-43a8-a057-e5286d3537c5'` - email addresses, usernames, user IDs and/or dates are good choices for columns to index in typical web applications or services.\n* For enforcing uniqueness constraints on a column or columns - for example, an email address or user ID via the `CREATE UNIQUE INDEX`.\n* In cases where you query over multiple columns together - `(customer_id, transaction_date)`.\n\nIndexes are automatically updated when the table and column(s) they reference are inserted, updated or deleted. You do not need to manually update an index after you write to the table it references.\n\n## Create an index\n\nNote\n\nTables that use the default primary key (an `INTEGER` based `ROWID`), or that define their own `INTEGER PRIMARY KEY`, do not need to create an index for that column.\n\nTo create an index on a D1 table, use the `CREATE INDEX` SQL command and specify the table and column(s) to create the index over.\n\nFor example, given the following `orders` table, you may want to create an index on `customer_id`. Nearly all of your queries against that table filter on `customer_id`, and you would see a performance improvement by creating an index for it.",
+      "language": "unknown"
+    },
+    {
+      "code": "To create the index on the `customer_id` column, execute the below statement against your database:\n\nNote\n\nA common naming format for indexes is `idx_TABLE_NAME_COLUMN_NAMES`, so that you can identify the table and column(s) your indexes are for when managing your database.",
+      "language": "unknown"
+    },
+    {
+      "code": "Queries that reference the `customer_id` column will now benefit from the index:",
+      "language": "unknown"
+    },
+    {
+      "code": "In more complex cases, you can confirm whether an index was used by D1 by [analyzing a query](#test-an-index) directly.\n\n### Run `PRAGMA optimize`\n\nAfter creating an index, run the `PRAGMA optimize` command to improve your database performance.\n\n`PRAGMA optimize` runs `ANALYZE` command on each table in the database, which collects statistics on the tables and indices. These statistics allows the query planner to generate the most efficient query plan when executing the user query.\n\nFor more information, refer to [`PRAGMA optimize`](https://developers.cloudflare.com/d1/sql-api/sql-statements/#pragma-optimize).\n\n## List indexes\n\nList the indexes on a database, as well as the SQL definition, by querying the `sqlite_schema` system table:",
+      "language": "unknown"
+    },
+    {
+      "code": "This will return output resembling the below:",
+      "language": "unknown"
+    },
+    {
+      "code": "Note that you cannot modify this table, or an existing index. To modify an index, [delete it first](#remove-indexes) and [create a new index](#create-an-index) with the updated definition.\n\n## Test an index\n\nValidate that an index was used for a query by prepending a query with [`EXPLAIN QUERY PLAN`](https://www.sqlite.org/eqp.html). This will output a query plan for the succeeding statement, including which (if any) indexes were used.\n\nFor example, if you assume the `users` table has an `email_address TEXT` column and you created an index `CREATE UNIQUE INDEX idx_email_address ON users(email_address)`, any query with a predicate on `email_address` should use your index.",
+      "language": "unknown"
+    },
+    {
+      "code": "Review the `USING INDEX <INDEX_NAME>` output from the query planner, confirming the index was used.\n\nThis is also a fairly common use-case for an index. Finding a user based on their email address is often a very common query type for login (authentication) systems.\n\nUsing an index can reduce the number of rows read by a query. Use the `meta` object to estimate your usage. Refer to [\"Can I use an index to reduce the number of rows read by a query?\"](https://developers.cloudflare.com/d1/platform/pricing/#can-i-use-an-index-to-reduce-the-number-of-rows-read-by-a-query) and [\"How can I estimate my (eventual) bill?\"](https://developers.cloudflare.com/d1/platform/pricing/#how-can-i-estimate-my-eventual-bill).\n\n## Multi-column indexes\n\nFor a multi-column index (an index that specifies multiple columns), queries will only use the index if they specify either *all* of the columns, or a subset of the columns provided all columns to the \"left\" are also within the query.\n\nGiven an index of `CREATE INDEX idx_customer_id_transaction_date ON transactions(customer_id, transaction_date)`, the following table shows when the index is used (or not):\n\n| Query | Index Used? |\n| - | - |\n| `SELECT * FROM transactions WHERE customer_id = '1234' AND transaction_date = '2023-03-25'` | Yes: specifies both columns in the index. |\n| `SELECT * FROM transactions WHERE transaction_date = '2023-03-28'` | No: only specifies `transaction_date`, and does not include other leftmost columns from the index. |\n| `SELECT * FROM transactions WHERE customer_id = '56789'` | Yes: specifies `customer_id`, which is the leftmost column in the index. |\n\nNotes:\n\n* If you created an index over three columns instead — `customer_id`, `transaction_date` and `shipping_status` — a query that uses both `customer_id` and `transaction_date` would use the index, as you are including all columns \"to the left\".\n* With the same index, a query that uses only `transaction_date` and `shipping_status` would *not* use the index, as you have not used `customer_id` (the leftmost column) in the query.\n\n## Partial indexes\n\nPartial indexes are indexes over a subset of rows in a table. Partial indexes are defined by the use of a `WHERE` clause when creating the index. A partial index can be useful to omit certain rows, such as those where values are `NULL` or where rows with a specific value are present across queries.\n\n* A concrete example of a partial index would be on a table with a `order_status INTEGER` column, where `6` might represent `\"order complete\"` in your application code.\n* This would allow queries against orders that are yet to be fulfilled, shipped or are in-progress, which are likely to be some of the most common users (users checking their order status).\n* Partial indexes also keep the index from growing unbounded over time. The index does not need to keep a row for every completed order, and completed orders are likely to be queried far fewer times than in-progress orders.\n\nA partial index that filters out completed orders from the index would resemble the following:",
+      "language": "unknown"
+    },
+    {
+      "code": "Partial indexes can be faster at read time (less rows in the index) and at write time (fewer writes to the index) than full indexes. You can also combine a partial index with a [multi-column index](#multi-column-indexes).\n\n## Remove indexes\n\nUse `DROP INDEX` to remove an index. Dropped indexes cannot be restored.\n\n## Considerations\n\nTake note of the following considerations when creating indexes:\n\n* Indexes are not always a free performance boost. You should create indexes only on columns that reflect your most-queried columns. Indexes themselves need to be maintained. When you write to an indexed column, the database needs to write to the table and the index. The performance benefit of an index and reduction in rows read will, in nearly all cases, offset this additional write.\n* You cannot create indexes that reference other tables or use non-deterministic functions, since the index would not be stable.\n* Indexes cannot be updated. To add or remove a column from an index, [remove](#remove-indexes) the index and then [create a new index](#create-an-index) with the new columns.\n* Indexes contribute to the overall storage required by your database: an index is effectively a table itself.\n\n</page>\n\n<page>\n---\ntitle: Data location · Cloudflare D1 docs\ndescription: Learn how the location of data stored in D1 is determined,\n  including where the database runs and how you optimize that location based on\n  your needs.\nlastUpdated: 2025-11-05T14:19:08.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/d1/configuration/data-location/\n  md: https://developers.cloudflare.com/d1/configuration/data-location/index.md\n---\n\nLearn how the location of data stored in D1 is determined, including where the database runs and how you optimize that location based on your needs.\n\n## Automatic (recommended)\n\nBy default, D1 will automatically create your primary database instance in a location close to where you issued the request to create a database. In most cases this allows D1 to choose the optimal location for your database on your behalf.\n\n## Restrict database to a jurisdiction\n\nJurisdictions are used to create D1 databases that only run and store data within a region to help comply with data locality regulations such as the [GDPR](https://gdpr-info.eu/) or [FedRAMP](https://blog.cloudflare.com/cloudflare-achieves-fedramp-authorization/).\n\nWorkers may still access the database constrained to a jurisdiction from anywhere in the world. The jurisdiction constraint only controls where the database itself runs and persists data. Consider using [Regional Services](https://developers.cloudflare.com/data-localization/regional-services/) to control the regions from which Cloudflare responds to requests.\n\nNote\n\nJurisdictions can only be set on database creation and cannot be added or updated after the database exists. If a jurisdiction and a location hint are both provided, the jurisdiction takes precedence and the location hint is ignored.\n\n### Supported jurisdictions\n\n| Parameter | Location |\n| - | - |\n| eu | The European Union |\n| fedramp | FedRAMP-compliant data centers |\n\n### Use the dashboard\n\n1. In the Cloudflare dashboard, go to the **D1 SQL Database** page.\n\n   [Go to **D1 SQL database**](https://dash.cloudflare.com/?to=/:account/workers/d1)\n\n2. Select **Create Database**.\n\n3. Under **Data location**, select **Specify jurisdiction** and choose a jurisdiction from the list.\n\n4. Select **Create** to create your database.\n\n### Use wrangler",
+      "language": "unknown"
+    },
+    {
+      "code": "### Use REST API",
+      "language": "unknown"
+    },
+    {
+      "code": "## Provide a location hint\n\nLocation hint is an optional parameter you can provide to indicate your desired geographical location for your primary database instance.\n\nYou may want to explicitly provide a location hint in cases where the majority of your writes to a specific database come from a different location than where you are creating the database from. Location hints can be useful when:\n\n* Working in a distributed team.\n* Creating databases specific to users in specific locations.\n* Using continuous deployment (CD) or Infrastructure as Code (IaC) systems to programmatically create your databases.\n\nProvide a location hint when creating a D1 database when:\n\n* Using [`wrangler d1`](https://developers.cloudflare.com/workers/wrangler/commands/#d1) to create a database.\n* Creating a database [via the Cloudflare dashboard](https://dash.cloudflare.com/?to=/:account/workers/d1).\n\nWarning\n\nProviding a location hint does not guarantee that D1 runs in your preferred location. Instead, it will run in the nearest possible location (by latency) to your preference.\n\n### Use wrangler\n\nNote\n\nTo install wrangler, the command-line interface for D1 and Workers, refer to [Install and Update Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/).\n\nTo provide a location hint when creating a new database, pass the `--location` flag with a valid location hint:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Use the dashboard\n\nTo provide a location hint when creating a database via the dashboard:\n\n1. In the Cloudflare dashboard, go to the **D1 SQL Database** page.\n\n   [Go to **D1 SQL database**](https://dash.cloudflare.com/?to=/:account/workers/d1)\n\n2. Select **Create database**.\n\n3. Provide a database name and an optional **Location**.\n\n4. Select **Create** to create your database.\n\n### Available location hints\n\nD1 supports the following location hints:\n\n| Hint | Hint description |\n| - | - |\n| wnam | Western North America |\n| enam | Eastern North America |\n| weur | Western Europe |\n| eeur | Eastern Europe |\n| apac | Asia-Pacific |\n| oc | Oceania |\n\nWarning\n\nD1 location hints are not currently supported for South America (`sam`), Africa (`afr`), and the Middle East (`me`). D1 databases do not run in these locations.\n\n## Read replica locations\n\nWith read replication enabled, D1 creates and distributes read-only copies of the primary database instance around the world. This reduces the query latency for users located far away from the primary database instance.\n\nWhen using D1 read replication, D1 automatically creates a read replica in [every available region](https://developers.cloudflare.com/d1/configuration/data-location#available-location-hints), including the region where the primary database instance is located.\n\nIf a jurisdiction is configured, read replicas are only created within the jurisdiction set on database creation.\n\nRefer to [D1 read replication](https://developers.cloudflare.com/d1/best-practices/read-replication/) for more information.\n\n</page>\n\n<page>\n---\ntitle: Environments · Cloudflare D1 docs\ndescription: Environments are different contexts that your code runs in.\n  Cloudflare Developer Platform allows you to create and manage different\n  environments. Through environments, you can deploy the same project to\n  multiple places under multiple names.\nlastUpdated: 2025-02-12T13:41:31.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/d1/configuration/environments/\n  md: https://developers.cloudflare.com/d1/configuration/environments/index.md\n---\n\n[Environments](https://developers.cloudflare.com/workers/wrangler/environments/) are different contexts that your code runs in. Cloudflare Developer Platform allows you to create and manage different environments. Through environments, you can deploy the same project to multiple places under multiple names.\n\nTo specify different D1 databases for different environments, use the following syntax in your Wrangler file:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "In the code above, the `staging` environment is using a different database (`DATABASE_NAME_1`) than the `production` environment (`DATABASE_NAME_2`).\n\n## Anatomy of Wrangler file\n\nIf you need to specify different D1 databases for different environments, your [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/) may contain bindings that resemble the following:\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "In the above configuration:\n\n* `[[production.d1_databases]]` creates an object `production` with a property `d1_databases`, where `d1_databases` is an array of objects, since you can create multiple D1 bindings in case you have more than one database.\n* Any property below the line in the form `<key> = <value>` is a property of an object within the `d1_databases` array.\n\nTherefore, the above binding is equivalent to:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Example\n\n* wrangler.jsonc",
+      "language": "unknown"
+    },
+    {
+      "code": "* wrangler.toml",
+      "language": "unknown"
+    },
+    {
+      "code": "The above is equivalent to the following structure in JSON:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Query D1 from Hono · Cloudflare D1 docs\ndescription: Query D1 from the Hono web framework\nlastUpdated: 2025-08-18T14:27:42.000Z\nchatbotDeprioritize: false\ntags: Hono\nsource_url:\n  html: https://developers.cloudflare.com/d1/examples/d1-and-hono/\n  md: https://developers.cloudflare.com/d1/examples/d1-and-hono/index.md\n---\n\nHono is a fast web framework for building API-first applications, and it includes first-class support for both [Workers](https://developers.cloudflare.com/workers/) and [Pages](https://developers.cloudflare.com/pages/).\n\nWhen using Workers:\n\n* Ensure you have configured your [Wrangler configuration file](https://developers.cloudflare.com/d1/get-started/#3-bind-your-worker-to-your-d1-database) to bind your D1 database to your Worker.\n* You can access your D1 databases via Hono's [`Context`](https://hono.dev/api/context) parameter: [bindings](https://hono.dev/getting-started/cloudflare-workers#bindings) are exposed on `context.env`. If you configured a [binding](https://developers.cloudflare.com/pages/functions/bindings/#d1-databases) named `DB`, then you would access [D1 Workers Binding API](https://developers.cloudflare.com/d1/worker-api/prepared-statements/) methods via `c.env.DB`.\n* Refer to the Hono documentation for [Cloudflare Workers](https://hono.dev/getting-started/cloudflare-workers).\n\nIf you are using [Pages Functions](https://developers.cloudflare.com/pages/functions/):\n\n1. Bind a D1 database to your [Pages Function](https://developers.cloudflare.com/pages/functions/bindings/#d1-databases).\n2. Pass the `--d1 BINDING_NAME=DATABASE_ID` flag to `wrangler dev` when developing locally. `BINDING_NAME` should match what call in your code, and `DATABASE_ID` should match the `database_id` defined in your Wrangler configuration file: for example, `--d1 DB=xxxx-xxxx-xxxx-xxxx-xxxx`.\n3. Refer to the Hono guide for [Cloudflare Pages](https://hono.dev/getting-started/cloudflare-pages).\n\nThe following examples show how to access a D1 database bound to `DB` from both a Workers script and a Pages Function:\n\n* workers",
+      "language": "unknown"
+    },
+    {
+      "code": "* pages",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Query D1 from Remix · Cloudflare D1 docs\ndescription: Query your D1 database from a Remix application.\nlastUpdated: 2025-08-18T14:27:42.000Z\nchatbotDeprioritize: false\ntags: Remix\nsource_url:\n  html: https://developers.cloudflare.com/d1/examples/d1-and-remix/\n  md: https://developers.cloudflare.com/d1/examples/d1-and-remix/index.md\n---\n\nRemix is a full-stack web framework that operates on both client and server. You can query your D1 database(s) from Remix using Remix's [data loading](https://remix.run/docs/en/main/guides/data-loading) API with the [`useLoaderData`](https://remix.run/docs/en/main/hooks/use-loader-data) hook.\n\nTo set up a new Remix site on Cloudflare Pages that can query D1:\n\n1. **Refer to [the Remix guide](https://developers.cloudflare.com/pages/framework-guides/deploy-a-remix-site/)**.\n2. Bind a D1 database to your [Pages Function](https://developers.cloudflare.com/pages/functions/bindings/#d1-databases).\n3. Pass the `--d1 BINDING_NAME=DATABASE_ID` flag to `wrangler dev` when developing locally. `BINDING_NAME` should match what call in your code, and `DATABASE_ID` should match the `database_id` defined in your [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/): for example, `--d1 DB=xxxx-xxxx-xxxx-xxxx-xxxx`.\n\nThe following example shows you how to define a Remix [`loader`](https://remix.run/docs/en/main/route/loader) that has a binding to a D1 database.\n\n* Bindings are passed through on the `context.env` parameter passed to a `LoaderFunction`.\n* If you configured a [binding](https://developers.cloudflare.com/pages/functions/bindings/#d1-databases) named `DB`, then you would access [D1 Workers Binding API](https://developers.cloudflare.com/d1/worker-api/prepared-statements/) methods via `context.env.DB`.\n\n- TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Query D1 from SvelteKit · Cloudflare D1 docs\ndescription: Query a D1 database from a SvelteKit application.\nlastUpdated: 2025-08-18T14:27:42.000Z\nchatbotDeprioritize: false\ntags: SvelteKit,Svelte\nsource_url:\n  html: https://developers.cloudflare.com/d1/examples/d1-and-sveltekit/\n  md: https://developers.cloudflare.com/d1/examples/d1-and-sveltekit/index.md\n---\n\n[SvelteKit](https://kit.svelte.dev/) is a full-stack framework that combines the Svelte front-end framework with Vite for server-side capabilities and rendering. You can query D1 from SvelteKit by configuring a [server endpoint](https://kit.svelte.dev/docs/routing#server) with a binding to your D1 database(s).\n\nTo set up a new SvelteKit site on Cloudflare Pages that can query D1:\n\n1. **Refer to [the SvelteKit guide](https://developers.cloudflare.com/pages/framework-guides/deploy-a-svelte-kit-site/) and Svelte's [Cloudflare adapter](https://kit.svelte.dev/docs/adapter-cloudflare)**.\n2. Install the Cloudflare adapter within your SvelteKit project: `npm i -D @sveltejs/adapter-cloudflare`.\n3. Bind a D1 database [to your Pages Function](https://developers.cloudflare.com/pages/functions/bindings/#d1-databases).\n4. Pass the `--d1 BINDING_NAME=DATABASE_ID` flag to `wrangler dev` when developing locally. `BINDING_NAME` should match what call in your code, and `DATABASE_ID` should match the `database_id` defined in your [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/): for example, `--d1 DB=xxxx-xxxx-xxxx-xxxx-xxxx`.\n\nThe following example shows you how to create a server endpoint configured to query D1.\n\n* Bindings are available on the `platform` parameter passed to each endpoint, via `platform.env.BINDING_NAME`.\n* With SvelteKit's [file-based routing](https://kit.svelte.dev/docs/routing), the server endpoint defined in `src/routes/api/users/+server.ts` is available at `/api/users` within your SvelteKit app.\n\nThe example also shows you how to configure both your app-wide types within `src/app.d.ts` to recognize your `D1Database` binding, import the `@sveltejs/adapter-cloudflare` adapter into `svelte.config.js`, and configure it to apply to all of your routes.\n\n* TypeScript",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Export and save D1 database · Cloudflare D1 docs\nlastUpdated: 2025-02-19T10:27:52.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/d1/examples/export-d1-into-r2/\n  md: https://developers.cloudflare.com/d1/examples/export-d1-into-r2/index.md\n---\n\n\n</page>\n\n<page>\n---\ntitle: Query D1 from Python Workers · Cloudflare D1 docs\ndescription: Learn how to query D1 from a Python Worker\nlastUpdated: 2025-09-01T10:19:51.000Z\nchatbotDeprioritize: false\ntags: Python\nsource_url:\n  html: https://developers.cloudflare.com/d1/examples/query-d1-from-python-workers/\n  md: https://developers.cloudflare.com/d1/examples/query-d1-from-python-workers/index.md\n---\n\nThe Cloudflare Workers platform supports [multiple languages](https://developers.cloudflare.com/workers/languages/), including TypeScript, JavaScript, Rust and Python. This guide shows you how to query a D1 database from [Python](https://developers.cloudflare.com/workers/languages/python/) and deploy your application globally.\n\nNote\n\nSupport for Python in Cloudflare Workers is in beta. Review the [documentation on Python support](https://developers.cloudflare.com/workers/languages/python/) to understand how Python works within the Workers platform.\n\n## Prerequisites\n\nBefore getting started, you should:\n\n1. Review the [D1 tutorial](https://developers.cloudflare.com/d1/get-started/) for TypeScript and JavaScript to learn how to **create a D1 database and configure a Workers project**.\n2. Refer to the [Python language guide](https://developers.cloudflare.com/workers/languages/python/) to understand how Python support works on the Workers platform.\n3. Have basic familiarity with the Python language.\n\nIf you are new to Cloudflare Workers, refer to the [Get started guide](https://developers.cloudflare.com/workers/get-started/guide/) first before continuing with this example.\n\n## Query from Python\n\nThis example assumes you have an existing D1 database. To allow your Python Worker to query your database, you first need to create a [binding](https://developers.cloudflare.com/workers/runtime-apis/bindings/) between your Worker and your D1 database and define this in your [Wrangler configuration file](https://developers.cloudflare.com/workers/wrangler/configuration/).\n\nYou will need the `database_name` and `database_id` for a D1 database. You can use the `wrangler` CLI to create a new database or fetch the ID for an existing database as follows:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Passing credentials to the container",
+      "id": "passing-credentials-to-the-container"
+    },
+    {
+      "level": "h3",
+      "text": "Other S3-compatible storage providers",
+      "id": "other-s3-compatible-storage-providers"
+    },
+    {
+      "level": "h2",
+      "text": "Mounting bucket prefixes",
+      "id": "mounting-bucket-prefixes"
+    },
+    {
+      "level": "h2",
+      "text": "Mounting buckets as read-only",
+      "id": "mounting-buckets-as-read-only"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Deployment",
+      "id": "deployment"
+    },
+    {
+      "level": "h2",
+      "text": "Lifecycle of a Request",
+      "id": "lifecycle-of-a-request"
+    },
+    {
+      "level": "h3",
+      "text": "Client to Worker",
+      "id": "client-to-worker"
+    },
+    {
+      "level": "h3",
+      "text": "Worker to Durable Object",
+      "id": "worker-to-durable-object"
+    },
+    {
+      "level": "h3",
+      "text": "Starting a Container",
+      "id": "starting-a-container"
+    },
+    {
+      "level": "h3",
+      "text": "Requests to running Containers",
+      "id": "requests-to-running-containers"
+    },
+    {
+      "level": "h3",
+      "text": "Container runtime",
+      "id": "container-runtime"
+    },
+    {
+      "level": "h3",
+      "text": "Container shutdown",
+      "id": "container-shutdown"
+    },
+    {
+      "level": "h2",
+      "text": "An example request",
+      "id": "an-example-request"
+    },
+    {
+      "level": "h2",
+      "text": "Runtime environment variables",
+      "id": "runtime-environment-variables"
+    },
+    {
+      "level": "h2",
+      "text": "User-defined environment variables",
+      "id": "user-defined-environment-variables"
+    },
+    {
+      "level": "h2",
+      "text": "Pushing images during `wrangler deploy`",
+      "id": "pushing-images-during-`wrangler-deploy`"
+    },
+    {
+      "level": "h2",
+      "text": "Using pre-built container images",
+      "id": "using-pre-built-container-images"
+    },
+    {
+      "level": "h3",
+      "text": "Using Amazon ECR container images",
+      "id": "using-amazon-ecr-container-images"
+    },
+    {
+      "level": "h2",
+      "text": "Pushing images with CI",
+      "id": "pushing-images-with-ci"
+    },
+    {
+      "level": "h2",
+      "text": "Registry Limits",
+      "id": "registry-limits"
+    },
+    {
+      "level": "h2",
+      "text": "Instance Types",
+      "id": "instance-types"
+    },
+    {
+      "level": "h2",
+      "text": "Limits",
+      "id": "limits"
+    },
+    {
+      "level": "h2",
+      "text": "Footnotes",
+      "id": "footnotes"
+    },
+    {
+      "level": "h2",
+      "text": "How rollouts work",
+      "id": "how-rollouts-work"
+    },
+    {
+      "level": "h2",
+      "text": "Immediate rollouts",
+      "id": "immediate-rollouts"
+    },
+    {
+      "level": "h3",
+      "text": "Scaling container instances with `get()`",
+      "id": "scaling-container-instances-with-`get()`"
+    },
+    {
+      "level": "h3",
+      "text": "Autoscaling and routing (unreleased)",
+      "id": "autoscaling-and-routing-(unreleased)"
+    },
+    {
+      "level": "h2",
+      "text": "Import an existing database",
+      "id": "import-an-existing-database"
+    },
+    {
+      "level": "h3",
+      "text": "Convert SQLite database files",
+      "id": "convert-sqlite-database-files"
+    },
+    {
+      "level": "h2",
+      "text": "Export an existing D1 database",
+      "id": "export-an-existing-d1-database"
+    },
+    {
+      "level": "h3",
+      "text": "Known limitations",
+      "id": "known-limitations"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Resolve `Statement too long` error",
+      "id": "resolve-`statement-too-long`-error"
+    },
+    {
+      "level": "h2",
+      "text": "Foreign key constraints",
+      "id": "foreign-key-constraints"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "Start a local development session",
+      "id": "start-a-local-development-session"
+    },
+    {
+      "level": "h2",
+      "text": "Develop locally with Pages",
+      "id": "develop-locally-with-pages"
+    },
+    {
+      "level": "h2",
+      "text": "Persist data",
+      "id": "persist-data"
+    },
+    {
+      "level": "h2",
+      "text": "Test programmatically",
+      "id": "test-programmatically"
+    },
+    {
+      "level": "h3",
+      "text": "Miniflare",
+      "id": "miniflare"
+    },
+    {
+      "level": "h3",
+      "text": "`unstable_dev`",
+      "id": "`unstable_dev`"
+    },
+    {
+      "level": "h3",
+      "text": "Usage example",
+      "id": "usage-example"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Use SQL to query D1",
+      "id": "use-sql-to-query-d1"
+    },
+    {
+      "level": "h3",
+      "text": "Use foreign key relationships",
+      "id": "use-foreign-key-relationships"
+    },
+    {
+      "level": "h3",
+      "text": "Query JSON",
+      "id": "query-json"
+    },
+    {
+      "level": "h2",
+      "text": "Query D1 with Workers Binding API",
+      "id": "query-d1-with-workers-binding-api"
+    },
+    {
+      "level": "h2",
+      "text": "Query D1 with REST API",
+      "id": "query-d1-with-rest-api"
+    },
+    {
+      "level": "h2",
+      "text": "Query D1 with Wrangler commands",
+      "id": "query-d1-with-wrangler-commands"
+    },
+    {
+      "level": "h2",
+      "text": "Primary database instance vs read replicas",
+      "id": "primary-database-instance-vs-read-replicas"
+    },
+    {
+      "level": "h2",
+      "text": "Benefits of read replication",
+      "id": "benefits-of-read-replication"
+    },
+    {
+      "level": "h2",
+      "text": "Use Sessions API",
+      "id": "use-sessions-api"
+    },
+    {
+      "level": "h3",
+      "text": "Enable read replication",
+      "id": "enable-read-replication"
+    },
+    {
+      "level": "h3",
+      "text": "Start a session without constraints",
+      "id": "start-a-session-without-constraints"
+    },
+    {
+      "level": "h3",
+      "text": "Start a session with all latest data",
+      "id": "start-a-session-with-all-latest-data"
+    },
+    {
+      "level": "h3",
+      "text": "Start a session from previous context (bookmark)",
+      "id": "start-a-session-from-previous-context-(bookmark)"
+    },
+    {
+      "level": "h3",
+      "text": "Check where D1 request was processed",
+      "id": "check-where-d1-request-was-processed"
+    },
+    {
+      "level": "h3",
+      "text": "Enable read replication via REST API",
+      "id": "enable-read-replication-via-rest-api"
+    },
+    {
+      "level": "h3",
+      "text": "Disable read replication via REST API",
+      "id": "disable-read-replication-via-rest-api"
+    },
+    {
+      "level": "h3",
+      "text": "Check if read replication is enabled",
+      "id": "check-if-read-replication-is-enabled"
+    },
+    {
+      "level": "h2",
+      "text": "Read replica locations",
+      "id": "read-replica-locations"
+    },
+    {
+      "level": "h2",
+      "text": "Observability",
+      "id": "observability"
+    },
+    {
+      "level": "h2",
+      "text": "Pricing",
+      "id": "pricing"
+    },
+    {
+      "level": "h2",
+      "text": "Known limitations",
+      "id": "known-limitations"
+    },
+    {
+      "level": "h2",
+      "text": "Background information",
+      "id": "background-information"
+    },
+    {
+      "level": "h3",
+      "text": "Replica lag and consistency model",
+      "id": "replica-lag-and-consistency-model"
+    },
+    {
+      "level": "h2",
+      "text": "Supplementary information",
+      "id": "supplementary-information"
+    },
+    {
+      "level": "h2",
+      "text": "1. Bind a D1 database to a Worker",
+      "id": "1.-bind-a-d1-database-to-a-worker"
+    },
+    {
+      "level": "h2",
+      "text": "2. Start a remote development session",
+      "id": "2.-start-a-remote-development-session"
+    },
+    {
+      "level": "h2",
+      "text": "Related resources",
+      "id": "related-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Example of retrying queries",
+      "id": "example-of-retrying-queries"
+    },
+    {
+      "level": "h2",
+      "text": "When is an index useful?",
+      "id": "when-is-an-index-useful?"
+    },
+    {
+      "level": "h2",
+      "text": "Create an index",
+      "id": "create-an-index"
+    },
+    {
+      "level": "h3",
+      "text": "Run `PRAGMA optimize`",
+      "id": "run-`pragma-optimize`"
+    },
+    {
+      "level": "h2",
+      "text": "List indexes",
+      "id": "list-indexes"
+    },
+    {
+      "level": "h2",
+      "text": "Test an index",
+      "id": "test-an-index"
+    },
+    {
+      "level": "h2",
+      "text": "Multi-column indexes",
+      "id": "multi-column-indexes"
+    },
+    {
+      "level": "h2",
+      "text": "Partial indexes",
+      "id": "partial-indexes"
+    },
+    {
+      "level": "h2",
+      "text": "Remove indexes",
+      "id": "remove-indexes"
+    },
+    {
+      "level": "h2",
+      "text": "Considerations",
+      "id": "considerations"
+    },
+    {
+      "level": "h2",
+      "text": "Automatic (recommended)",
+      "id": "automatic-(recommended)"
+    },
+    {
+      "level": "h2",
+      "text": "Restrict database to a jurisdiction",
+      "id": "restrict-database-to-a-jurisdiction"
+    },
+    {
+      "level": "h3",
+      "text": "Supported jurisdictions",
+      "id": "supported-jurisdictions"
+    },
+    {
+      "level": "h3",
+      "text": "Use the dashboard",
+      "id": "use-the-dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Use wrangler",
+      "id": "use-wrangler"
+    },
+    {
+      "level": "h3",
+      "text": "Use REST API",
+      "id": "use-rest-api"
+    },
+    {
+      "level": "h2",
+      "text": "Provide a location hint",
+      "id": "provide-a-location-hint"
+    },
+    {
+      "level": "h3",
+      "text": "Use wrangler",
+      "id": "use-wrangler"
+    },
+    {
+      "level": "h3",
+      "text": "Use the dashboard",
+      "id": "use-the-dashboard"
+    },
+    {
+      "level": "h3",
+      "text": "Available location hints",
+      "id": "available-location-hints"
+    },
+    {
+      "level": "h2",
+      "text": "Read replica locations",
+      "id": "read-replica-locations"
+    },
+    {
+      "level": "h2",
+      "text": "Anatomy of Wrangler file",
+      "id": "anatomy-of-wrangler-file"
+    },
+    {
+      "level": "h3",
+      "text": "Example",
+      "id": "example"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Query from Python",
+      "id": "query-from-python"
+    }
+  ],
+  "url": "llms-txt#create-startup-script-that-mounts-bucket-and-runs-a-command",
+  "links": []
+}

@@ -1,0 +1,96 @@
+{
+  "title": "List the first 20 items in a bucket",
+  "content": "puts @r2.list_objects(bucket:\"your-bucket\", max_keys:20)\n\n#=> {\n#=>   :is_truncated => false,\n#=>   :marker => nil,\n#=>   :next_marker => nil,\n#=>   :name => \"your-bucket\",\n#=>   :prefix => nil,\n#=>   :delimiter =>nil,\n#=>   :max_keys => 20,\n#=>   :common_prefixes => [],\n#=>   :encoding_type => nil\n#=>   :contents => [\n#=>     …,\n#=>     …,\n#=>     …,\n#=>   ]\n#=> }\nrust\nuse aws_sdk_s3 as s3;\nuse aws_smithy_types::date_time::Format::DateTime;\n\n#[tokio::main]\nasync fn main() -> Result<(), s3::Error> {\n    let bucket_name = \"sdk-example\";\n    // Provide your Cloudflare account ID\n    let account_id = \"<ACCOUNT_ID>\";\n    // Retrieve your S3 API credentials for your R2 bucket via API tokens\n    // (see: https://developers.cloudflare.com/r2/api/tokens)\n    let access_key_id = \"<ACCESS_KEY_ID>\";\n    let access_key_secret = \"<SECRET_ACCESS_KEY>\";\n\n// Configure the client\n    let config = aws_config::from_env()\n        .endpoint_url(format!(\"https://{}.r2.cloudflarestorage.com\", account_id))\n        .credentials_provider(aws_sdk_s3::config::Credentials::new(\n            access_key_id,\n            access_key_secret,\n            None, // session token is not used with R2\n            None,\n            \"R2\",\n        ))\n        .region(\"auto\") // Required by SDK but not used by R2\n        .load()\n        .await;\n\nlet client = s3::Client::new(&config);\n\n// List buckets\n    let list_buckets_output = client.list_buckets().send().await?;\n\nprintln!(\"Buckets:\");\n    for bucket in list_buckets_output.buckets() {\n        println!(\"  - {}: {}\",\n            bucket.name().unwrap_or_default(),\n            bucket.creation_date().map_or_else(\n                || \"Unknown creation date\".to_string(),\n                |date| date.fmt(DateTime).unwrap()\n            )\n        );\n    }\n\n// List objects in a specific bucket\n    let list_objects_output = client\n        .list_objects_v2()\n        .bucket(bucket_name)\n        .send()\n        .await?;\n\nprintln!(\"\\nObjects in {}:\", bucket_name);\n    for object in list_objects_output.contents() {\n        println!(\"  - {}: {} bytes, last modified: {}\",\n            object.key().unwrap_or_default(),\n            object.size().unwrap_or_default(),\n            object.last_modified().map_or_else(\n                || \"Unknown\".to_string(),\n                |date| date.fmt(DateTime).unwrap()\n            )\n        );\n    }\n\nOk(())\n}\nrust\nuse aws_sdk_s3::primitives::ByteStream;\nuse std::path::Path;\n\nasync fn upload_object(\n    client: &s3::Client,\n    bucket: &str,\n    key: &str,\n    file_path: &str,\n) -> Result<(), s3::Error> {\n    let body = ByteStream::from_path(Path::new(file_path)).await.unwrap();\n\nclient\n        .put_object()\n        .bucket(bucket)\n        .key(key)\n        .body(body)\n        .send()\n        .await?;\n\nprintln!(\"Uploaded {} to {}/{}\", file_path, bucket, key);\n    Ok(())\n}\nrust\nuse std::fs;\nuse std::io::Write;\n\nasync fn download_object(\n    client: &s3::Client,\n    bucket: &str,\n    key: &str,\n    output_path: &str,\n) -> Result<(), Box<dyn std::error::Error>> {\n    let resp = client\n        .get_object()\n        .bucket(bucket)\n        .key(key)\n        .send()\n        .await?;\n\nlet data = resp.body.collect().await?;\n    let bytes = data.into_bytes();\n\nlet mut file = fs::File::create(output_path)?;\n    file.write_all(&bytes)?;\n\nprintln!(\"Downloaded {}/{} to {}\", bucket, key, output_path);\n    Ok(())\n}\nrust\nuse aws_sdk_s3::presigning::PresigningConfig;\nuse std::time::Duration;\n\nasync fn generate_get_presigned_url(\n    client: &s3::Client,\n    bucket: &str,\n    key: &str,\n    expires_in: Duration,\n) -> Result<String, s3::Error> {\n    let presigning_config = PresigningConfig::expires_in(expires_in)?;\n\n// Generate a presigned URL for GET (download)\n    let presigned_get_request = client\n        .get_object()\n        .bucket(bucket)\n        .key(key)\n        .presigned(presigning_config)\n        .await?;\n\nOk(presigned_get_request.uri().to_string())\n}\n\nasync fn generate_upload_presigned_url(\n    client: &s3::Client,\n    bucket: &str,\n    key: &str,\n    expires_in: Duration,\n) -> Result<String, s3::Error> {\n    let presigning_config = PresigningConfig::expires_in(expires_in)?;\n\n// Generate a presigned URL for PUT (upload)\n    let presigned_put_request = client\n        .put_object()\n        .bucket(bucket)\n        .key(key)\n        .presigned(presigning_config)\n        .await?;\n\nOk(presigned_put_request.uri().to_string())\n}\nbash\ncurl -X PUT \"https://<your-presigned-put-url>\" -H \"Content-Type: application/octet-stream\" --data-binary \"@local-file.txt\"\nbash\ncurl -X GET \"https://<your-presigned-get-url>\" -o downloaded-file.txt\nts\nimport { AwsClient } from \"aws4fetch\";\n\n// Provide your Cloudflare account ID\nconst R2_URL = `https://${ACCOUNT_ID}.r2.cloudflarestorage.com`;\n\nconst client = new AwsClient({\n  // Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n  accessKeyId: ACCESS_KEY_ID,\n  secretAccessKey: SECRET_ACCESS_KEY,\n});\n\nconst ListBucketsResult = await client.fetch(R2_URL);\nconsole.log(await ListBucketsResult.text());\n// <ListAllMyBucketsResult>\n//     <Buckets>\n//         <Bucket>\n//             <CreationDate>2022-04-13T21:23:47.102Z</CreationDate>\n//             <Name>user-uploads</Name>\n//         </Bucket>\n//         <Bucket>\n//             <CreationDate>2022-05-07T02:46:49.218Z</CreationDate>\n//             <Name>my-bucket</Name>\n//         </Bucket>\n//     </Buckets>\n//     <Owner>\n//         <DisplayName>...</DisplayName>\n//         <ID>...</ID>\n//     </Owner>\n// </ListAllMyBucketsResult>\n\nconst ListObjectsV2Result = await client.fetch(\n  `${R2_URL}/my-bucket?list-type=2`,\n);\nconsole.log(await ListObjectsV2Result.text());\n// <ListBucketResult>\n//   <Name>my-bucket</Name>\n//   <Contents>\n//     <Key>cat.png</Key>\n//     <Size>751832</Size>\n//     <LastModified>2022-05-07T02:50:45.616Z</LastModified>\n//     <ETag>\"c4da329b38467509049e615c11b0c48a\"</ETag>\n//     <StorageClass>STANDARD</StorageClass>\n//   </Contents>\n//   <Contents>\n//     <Key>todos.txt</Key>\n//     <Size>278</Size>\n//     <LastModified> 2022-05-07T21:37:17.150Z</LastModified>\n//     <ETag>\"29d911f495d1ba7cb3a4d7d15e63236a\"</ETag>\n//     <StorageClass>STANDARD</StorageClass>\n//   </Contents>\n//   <IsTruncated>false</IsTruncated>\n//   <MaxKeys>1000</MaxKeys>\n//   <KeyCount>2</KeyCount>\n// </ListBucketResult>\nts\nimport { AwsClient } from \"aws4fetch\";\n\nconst client = new AwsClient({\n  service: \"s3\", // Required by SDK but not used by R2\n  region: \"auto\", // Required by SDK but not used by R2\n  // Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n  accessKeyId: ACCESS_KEY_ID,\n  secretAccessKey: SECRET_ACCESS_KEY,\n});\n\n// Provide your Cloudflare account ID\nconst R2_URL = `https://${ACCOUNT_ID}.r2.cloudflarestorage.com`;\n\n// Use the `X-Amz-Expires` query param to determine how long the presigned link is valid.\nconsole.log(\n  (\n    await client.sign(\n      new Request(`${R2_URL}/my-bucket/dog.png?X-Amz-Expires=${3600}`),\n      {\n        aws: { signQuery: true },\n      },\n    )\n  ).url.toString(),\n);\n// You can also create links for operations such as PutObject to allow temporary write access to a specific key.\n// Specify Content-Type header to restrict uploads to a specific file type.\nconsole.log(\n  (\n    await client.sign(\n      new Request(`${R2_URL}/my-bucket/dog.png?X-Amz-Expires=${3600}`, {\n        method: \"PUT\",\n        headers: {\n          \"Content-Type\": \"image/png\",\n        },\n      }),\n      {\n        aws: { signQuery: true },\n      },\n    )\n  ).url.toString(),\n);\nsh\nhttps://<ACCOUNT_ID>.r2.cloudflarestorage.com/my-bucket/dog.png?X-Amz-Expires=3600&X-Amz-Date=<timestamp>&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<credential>&X-Amz-SignedHeaders=host&X-Amz-Signature=<signature>\nhttps://<ACCOUNT_ID>.r2.cloudflarestorage.com/my-bucket/dog.png?X-Amz-Expires=3600&X-Amz-Date=<timestamp>&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<credential>&X-Amz-SignedHeaders=content-type%3Bhost&X-Amz-Signature=<signature>\nsh\ncurl -X PUT \"https://<ACCOUNT_ID>.r2.cloudflarestorage.com/my-bucket/dog.png?X-Amz-Expires=3600&X-Amz-Date=<timestamp>&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=<credential>&X-Amz-SignedHeaders=content-type%3Bhost&X-Amz-Signature=<signature>\" \\\n  -H \"Content-Type: image/png\" \\\n  --data-binary @dog.png\njson\n[\n  {\n    \"AllowedOrigins\": [\"https://example.com\"],\n    \"AllowedMethods\": [\"PUT\"],\n    \"AllowedHeaders\": [\"Content-Type\"],\n    \"ExposeHeaders\": [\"ETag\"],\n    \"MaxAgeSeconds\": 3600\n  }\n]\nts\nconst signedRequest = await client.sign(\n  new Request(`${R2_URL}/my-bucket/user-upload.png?X-Amz-Expires=${3600}`, {\n    method: \"PUT\",\n    headers: {\n      \"Content-Type\": \"image/png\",\n    },\n  }),\n  {\n    aws: { signQuery: true },\n  },\n);\nconst putUrl = signedRequest.url.toString();\npython\nimport boto3\n\ns3 = boto3.resource('s3',\n  # Provide your Cloudflare account ID\n  endpoint_url = 'https://<ACCOUNT_ID>.r2.cloudflarestorage.com',\n  # Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n  aws_access_key_id = '<ACCESS_KEY_ID>',\n  aws_secret_access_key = '<SECRET_ACCESS_KEY>'\n)\npython\nimport boto3\n\ns3 = boto3.client(\n    service_name=\"s3\",\n    # Provide your Cloudflare account ID\n    endpoint_url='https://<ACCOUNT_ID>.r2.cloudflarestorage.com',\n    # Retrieve your S3 API credentials for your R2 bucket via API tokens (see: https://developers.cloudflare.com/r2/api/tokens)\n    aws_access_key_id='<ACCESS_KEY_ID>',\n    aws_secret_access_key='<SECRET_ACCESS_KEY>',\n    region_name=\"auto\", # Required by SDK but not used by R2\n)",
+  "code_samples": [
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: aws-sdk-rust · Cloudflare R2 docs\ndescription: You must generate an Access Key before getting started. All\n  examples will utilize access_key_id and access_key_secret variables which\n  represent the Access Key ID and Secret Access Key values you generated.\nlastUpdated: 2025-12-02T15:31:53.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-rust/\n  md: https://developers.cloudflare.com/r2/examples/aws/aws-sdk-rust/index.md\n---\n\nYou must [generate an Access Key](https://developers.cloudflare.com/r2/api/tokens/) before getting started. All examples will utilize `access_key_id` and `access_key_secret` variables which represent the **Access Key ID** and **Secret Access Key** values you generated.\n\n\n\nThis example uses the [aws-sdk-s3](https://crates.io/crates/aws-sdk-s3) crate from the [AWS SDK for Rust](https://github.com/awslabs/aws-sdk-rust). You must pass in the R2 configuration credentials when instantiating your `S3` client:\n\n## Basic Usage",
+      "language": "unknown"
+    },
+    {
+      "code": "## Upload Objects\n\nTo upload an object to R2:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Download Objects\n\nTo download an object from R2:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Generate Presigned URLs\n\nYou can also generate presigned links that can be used to temporarily share public read or write access to a bucket.",
+      "language": "unknown"
+    },
+    {
+      "code": "You can use these presigned URLs with any HTTP client. For example, to upload a file using the PUT URL:",
+      "language": "unknown"
+    },
+    {
+      "code": "To download a file using the GET URL:",
+      "language": "unknown"
+    },
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: aws4fetch · Cloudflare R2 docs\ndescription: You must generate an Access Key before getting started. All\n  examples will utilize access_key_id and access_key_secret variables which\n  represent the Access Key ID and Secret Access Key values you generated.\nlastUpdated: 2025-12-02T15:31:53.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/examples/aws/aws4fetch/\n  md: https://developers.cloudflare.com/r2/examples/aws/aws4fetch/index.md\n---\n\nYou must [generate an Access Key](https://developers.cloudflare.com/r2/api/tokens/) before getting started. All examples will utilize `access_key_id` and `access_key_secret` variables which represent the **Access Key ID** and **Secret Access Key** values you generated.\n\n\n\nJavaScript or TypeScript users may continue to use the [`aws4fetch`](https://www.npmjs.com/package/aws4fetch) npm package as per normal. This package uses the `fetch` and `SubtleCrypto` APIs which you will be familiar with when working in browsers or with Cloudflare Workers.\n\nYou must pass in the R2 configuration credentials when instantiating your `S3` service client:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Generate presigned URLs\n\nYou can also generate presigned links that can be used to share public read or write access to a bucket temporarily.",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "You can use the link generated by the `PutObject` example to upload to the specified bucket and key, until the presigned link expires. When using a presigned URL with `Content-Type`, the client must include a matching `Content-Type` header in the request.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Restrict uploads with CORS and Content-Type\n\nWhen generating presigned URLs for uploads, you can limit abuse and misuse by:\n\n1. **Restricting Content-Type**: Specify the `Content-Type` header in the request when signing. The upload will fail if the client sends a different `Content-Type` header.\n\n2. **Configuring CORS**: Set up [CORS rules](https://developers.cloudflare.com/r2/buckets/cors/#add-cors-policies-from-the-dashboard) on your bucket to control which origins can upload files. Configure CORS via the [Cloudflare dashboard](https://dash.cloudflare.com/?to=/:account/r2/overview) by adding a JSON policy to your bucket settings:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then generate a presigned URL with a Content-Type restriction:",
+      "language": "unknown"
+    },
+    {
+      "code": "When a client uses this presigned URL, they must:\n\n* Make the request from an allowed origin (enforced by CORS)\n* Include the `Content-Type: image/png` header (enforced by the signature)\n\n</page>\n\n<page>\n---\ntitle: boto3 · Cloudflare R2 docs\ndescription: You must generate an Access Key before getting started. All\n  examples will utilize access_key_id and access_key_secret variables which\n  represent the Access Key ID and Secret Access Key values you generated.\nlastUpdated: 2025-12-02T15:31:53.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/r2/examples/aws/boto3/\n  md: https://developers.cloudflare.com/r2/examples/aws/boto3/index.md\n---\n\nYou must [generate an Access Key](https://developers.cloudflare.com/r2/api/tokens/) before getting started. All examples will utilize `access_key_id` and `access_key_secret` variables which represent the **Access Key ID** and **Secret Access Key** values you generated.\n\n\n\nYou must configure [`boto3`](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) to use a preconstructed `endpoint_url` value. This can be done through any `boto3` usage that accepts connection arguments; for example:",
+      "language": "unknown"
+    },
+    {
+      "code": "You may, however, omit the `aws_access_key_id` and `aws_secret_access_key `arguments and allow `boto3` to rely on the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` [environment variables](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/configuration.html#using-environment-variables) instead.\n\nAn example script may look like the following:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Upload Objects",
+      "id": "upload-objects"
+    },
+    {
+      "level": "h2",
+      "text": "Download Objects",
+      "id": "download-objects"
+    },
+    {
+      "level": "h2",
+      "text": "Generate Presigned URLs",
+      "id": "generate-presigned-urls"
+    },
+    {
+      "level": "h2",
+      "text": "Generate presigned URLs",
+      "id": "generate-presigned-urls"
+    },
+    {
+      "level": "h2",
+      "text": "Restrict uploads with CORS and Content-Type",
+      "id": "restrict-uploads-with-cors-and-content-type"
+    }
+  ],
+  "url": "llms-txt#list-the-first-20-items-in-a-bucket",
+  "links": []
+}

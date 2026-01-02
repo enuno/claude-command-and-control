@@ -1,0 +1,13 @@
+{
+  "title": "cf.edge.client\\_tcp",
+  "content": "`cf.edge.client_tcp` Boolean\n\nIndicates if the request was made over TCP.\n\n<page>\n---\ntitle: cf.edge.server_ip · Cloudflare Ruleset Engine docs\ndescription: Represents the global network's IP address to which the HTTP\n  request has resolved.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.edge.server_ip/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.edge.server_ip/index.md\n---",
+  "code_samples": [
+    {
+      "code": "true",
+      "language": "txt"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#cf.edge.client\\_tcp",
+  "links": []
+}

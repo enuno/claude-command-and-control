@@ -1,0 +1,8 @@
+{
+  "title": "Check if an HTTP request header exists:",
+  "content": "has_key(http.request.headers, \"x-my-header\")",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#check-if-an-http-request-header-exists:",
+  "links": []
+}

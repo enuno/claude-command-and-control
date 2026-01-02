@@ -1,0 +1,24 @@
+{
+  "title": "Optional: Network information",
+  "content": "nslookup -type=txt whoami.cloudflare.com ns3.cloudflare.com\nsh",
+  "code_samples": [
+    {
+      "code": "**Note:** The network information command reveals your IP address. Only include this in reports to Cloudflare if you are comfortable sharing this information.\n\nFor additional analysis, you can generate a [DNSViz](http://dnsviz.net/) report for the domain in question.\n\n## Connectivity and routing issues\n\nBefore reporting connectivity issues:\n\n1. Search for existing reports from your country and ISP.\n2. Run traceroutes to both Cloudflare DNS resolvers.\n\n### Linux/macOS",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Connectivity and routing issues",
+      "id": "connectivity-and-routing-issues"
+    },
+    {
+      "level": "h3",
+      "text": "Linux/macOS",
+      "id": "linux/macos"
+    }
+  ],
+  "url": "llms-txt#optional:-network-information",
+  "links": []
+}

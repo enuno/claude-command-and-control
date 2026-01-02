@@ -1,0 +1,38 @@
+{
+  "title": "aura-2-es",
+  "content": "Text-to-Speech • Deepgram\n\n@cf/deepgram/aura-2-es\n\nAura-2 is a context-aware text-to-speech (TTS) model that applies natural pacing, expressiveness, and fillers based on the context of the provided text. The quality of your text input directly impacts the naturalness of the audio output.\n\n| Model Info | |\n| - | - |\n| Terms and License | [link](https://deepgram.com/terms) |\n| Batch | Yes |\n| Partner | Yes |\n| Real-time | Yes |\n| Unit Pricing | $0.03 per 1k characters |\n\n\\* indicates a required field\n\n* `speaker` string default aquila\n\nSpeaker used to produce the audio.\n\nEncoding of the output audio.\n\nContainer specifies the file format wrapper for the output audio. The available options depend on the encoding type..\n\n* `text` string required\n\nThe text content to be converted to speech\n\n* `sample_rate` number\n\nSample Rate specifies the sample rate for the output audio. Based on the encoding, different sample rates are supported. For some encodings, the sample rate is not configurable\n\nThe bitrate of the audio in bits per second. Choose from predefined ranges or specific values based on the encoding type.\n\nThe binding returns a `ReadableStream` with the image in JPEG or PNG format (check the model's output schema).\n\nThe following schemas are based on JSON Schema\n\n<page>\n---\ntitle: bart-large-cnn · Cloudflare Workers AI docs\ndescription: BART is a transformer encoder-encoder (seq2seq) model with a\n  bidirectional (BERT-like) encoder and an autoregressive (GPT-like) decoder.\n  You can use this model for text summarization.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers-ai/models/bart-large-cnn/\n  md: https://developers.cloudflare.com/workers-ai/models/bart-large-cnn/index.md\n---",
+  "code_samples": [
+    {
+      "code": "{\n      \"type\": \"object\",\n      \"properties\": {\n          \"speaker\": {\n              \"type\": \"string\",\n              \"enum\": [\n                  \"sirio\",\n                  \"nestor\",\n                  \"carina\",\n                  \"celeste\",\n                  \"alvaro\",\n                  \"diana\",\n                  \"aquila\",\n                  \"selena\",\n                  \"estrella\",\n                  \"javier\"\n              ],\n              \"default\": \"aquila\",\n              \"description\": \"Speaker used to produce the audio.\"\n          },\n          \"encoding\": {\n              \"type\": \"string\",\n              \"enum\": [\n                  \"linear16\",\n                  \"flac\",\n                  \"mulaw\",\n                  \"alaw\",\n                  \"mp3\",\n                  \"opus\",\n                  \"aac\"\n              ],\n              \"description\": \"Encoding of the output audio.\"\n          },\n          \"container\": {\n              \"type\": \"string\",\n              \"enum\": [\n                  \"none\",\n                  \"wav\",\n                  \"ogg\"\n              ],\n              \"description\": \"Container specifies the file format wrapper for the output audio. The available options depend on the encoding type..\"\n          },\n          \"text\": {\n              \"type\": \"string\",\n              \"description\": \"The text content to be converted to speech\"\n          },\n          \"sample_rate\": {\n              \"type\": \"number\",\n              \"description\": \"Sample Rate specifies the sample rate for the output audio. Based on the encoding, different sample rates are supported. For some encodings, the sample rate is not configurable\"\n          },\n          \"bit_rate\": {\n              \"type\": \"number\",\n              \"description\": \"The bitrate of the audio in bits per second. Choose from predefined ranges or specific values based on the encoding type.\"\n          }\n      },\n      \"required\": [\n          \"text\"\n      ]\n  }",
+      "language": "json"
+    },
+    {
+      "code": "{\n      \"type\": \"string\",\n      \"contentType\": \"audio/mpeg\",\n      \"format\": \"binary\",\n      \"description\": \"The generated audio in MP3 format\"\n  }",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Input",
+      "id": "input"
+    },
+    {
+      "level": "h3",
+      "text": "Output",
+      "id": "output"
+    },
+    {
+      "level": "h2",
+      "text": "API Schemas",
+      "id": "api-schemas"
+    }
+  ],
+  "url": "llms-txt#aura-2-es",
+  "links": []
+}

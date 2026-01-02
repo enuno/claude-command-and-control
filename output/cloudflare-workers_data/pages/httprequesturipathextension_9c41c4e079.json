@@ -1,0 +1,8 @@
+{
+  "title": "http.request.uri.path.extension",
+  "content": "`http.request.uri.path.extension` String\n\nThe lowercased file extension in the URI path without the dot (`.`) character.\n\nThis corresponds to the string after the last dot in the URI path, excluding the query string.\n\nIf the first character of the last path segment is a dot and the segment does not contain other dot characters, the field value will be an empty string (`\"\"`). Having a dot as the first character does not represent a file extension and is commonly used in UNIX-like systems to denote a hidden file or directory.\n\n* If the URI path is `/articles/index.html`, the field value will be `\"html\"`.\n* If the URI path is `/articles/index.`, the field value will be an empty string (`\"\"`).\n\n| URI path | Field value |\n| - | - |\n| `/foo` | `\"\"` |\n| `/foo.mp3` | `\"mp3\"` |\n| `/.mp3` | `\"\"` |\n| `/.foo.mp3` | `\"mp3\"` |\n| `/foo.tar.bz2` | `\"bz2\"` |\n| `/foo.` | `\"\"` |\n| `/foo.MP3` | `\"mp3\"` |\n\n<page>\n---\ntitle: http.request.version · Cloudflare Ruleset Engine docs\ndescription: The version of the HTTP protocol used. Use this field when\n  different checks are needed for different versions.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.version/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.version/index.md\n---",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#http.request.uri.path.extension",
+  "links": []
+}

@@ -1,0 +1,78 @@
+{
+  "title": "Get started",
+  "content": "All the things you need to do before you start configuring your product, both within Cloudflare and outside.\n\n## 1. Step description\n\n## 2. Steps until you get to activation\n\nPoint to more complex setup options.\nyaml\npcx_content_type: how-to\nplaintext\n---\nweight: xx\npcx_content_type: how-to\n---",
+  "code_samples": [
+    {
+      "code": "## Example\n\n[Waiting Room: Get started](https://developers.cloudflare.com/waiting-room/get-started/)\n\n</page>\n\n<page>\n---\ntitle: How to · Cloudflare Style Guide\ndescription: The purpose of a how to is to explain how to complete a task within\n  the product.\nlastUpdated: 2025-08-20T21:45:15.000Z\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/style-guide/documentation-content-strategy/content-types/how-to/\n  md: https://developers.cloudflare.com/style-guide/documentation-content-strategy/content-types/how-to/index.md\n---\n\n## Purpose\n\nThe purpose of a how to is to explain how to complete a task within the product.\n\nNote\n\nIf you are unsure about when to categorize something as a how-to or tutorial, remember:\n\nTutorials are typically longer form and contain multiple steps, usually involving multiple products, and help users connect products to real-world scenarios.\n\nA how-to helps a user complete a singular task within a single product.\n\n## Tone\n\ninstructional, straightforward\n\n## content\\_type",
+      "language": "unknown"
+    },
+    {
+      "code": "For more details, refer to [`pcx_content_type`](https://developers.cloudflare.com/style-guide/frontmatter/custom-properties/#pcx_content_type).\n\n## Structure\n\n### Required components\n\n[**Title**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/titles/): Short verb phrase in second-person imperative. Do not use gerund phrases.\n\n[**Steps**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/steps-tasks-procedures/): Numbered steps that complete a task.\n\n[**Next steps**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/next-steps/): What users should see as the end result of the steps and/or actionable next steps.\n\n### Optional components\n\n[**Context**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/context/): An introductory paragraph on the following steps and what they will accomplish.\n\nProvide context to the reader that is not in the section heading.\n\nEnd with a colon or a period. Use a colon if it immediately precedes the steps. Use a period if there is more material (such as a note) between the context and the procedure.\n\nDo not provide context for steps with a partial sentence that is completed by the numbered steps.\n\n[**Prerequisites**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/prerequisites/): Tasks or conditions that must be completed before a user can complete a series of steps.\n\n[**Notes/warnings**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/notes-tips-warnings/)\n\n[**Examples**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/examples/)\n\n**Screenshots**\n\n[**Related links**](https://developers.cloudflare.com/style-guide/documentation-content-strategy/component-attributes/links/): Bulleted list of links to associated resources.\n\n## Template\n\nSingle procedure how-to",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Before you begin",
+      "id": "before-you-begin"
+    },
+    {
+      "level": "h2",
+      "text": "1. Step description",
+      "id": "1.-step-description"
+    },
+    {
+      "level": "h2",
+      "text": "2. Steps until you get to activation",
+      "id": "2.-steps-until-you-get-to-activation"
+    },
+    {
+      "level": "h2",
+      "text": "Next steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "Example",
+      "id": "example"
+    },
+    {
+      "level": "h2",
+      "text": "Purpose",
+      "id": "purpose"
+    },
+    {
+      "level": "h2",
+      "text": "Tone",
+      "id": "tone"
+    },
+    {
+      "level": "h2",
+      "text": "content\\_type",
+      "id": "content\\_type"
+    },
+    {
+      "level": "h2",
+      "text": "Structure",
+      "id": "structure"
+    },
+    {
+      "level": "h3",
+      "text": "Required components",
+      "id": "required-components"
+    },
+    {
+      "level": "h3",
+      "text": "Optional components",
+      "id": "optional-components"
+    },
+    {
+      "level": "h2",
+      "text": "Template",
+      "id": "template"
+    }
+  ],
+  "url": "llms-txt#get-started",
+  "links": []
+}

@@ -1,0 +1,75 @@
+{
+  "title": "Maximum backoff period in seconds after failed API calls (default: 30).",
+  "content": "export CLOUDFLARE_MAX_BACKOFF=20\nsh\n  wrangler r2 bucket create <YOUR_BUCKET_NAME>\n  bash\n   curl https://api.cloudflare.com/client/v4/accounts/{account_id}/r2/buckets \\\n  --header \"Authorization: Bearer <API_TOKEN>\" \\\n  --header \"Content-Type: application/json\" \\\n  --data '{\"name\": \"<YOUR_BUCKET_NAME>\"}'\n  tf\nterraform {\n  backend \"s3\" {\n    bucket = \"<YOUR_BUCKET_NAME>\"\n    key    = \"/some/key/terraform.tfstate\"\n    region                      = \"auto\"\n    skip_credentials_validation = true\n    skip_metadata_api_check     = true\n    skip_region_validation      = true\n    skip_requesting_account_id  = true\n    skip_s3_checksum            = true\n    use_path_style              = true\n    access_key = \"<YOUR_R2_ACCESS_KEY>\"\n    secret_key = \"<YOUR_R2_ACCESS_SECRET>\"\n    endpoints = { s3 = \"https://<YOUR_ACCOUNT_ID>.r2.cloudflarestorage.com\" }\n  }\n  required_providers {\n    cloudflare = {\n      source = \"cloudflare/cloudflare\"\n      version = \"~> 4\"\n    }\n  }\n}\nprovider \"cloudflare\" {\n  # token pulled from $CLOUDFLARE_API_TOKEN\n}\nvariable \"account_id\" { default = \"<YOUR_ACCOUNT_ID>\" }\nbash\ngit checkout -b step3-zone-setings\nhcl",
+  "code_samples": [
+    {
+      "code": "</page>\n\n<page>\n---\ntitle: Remote R2 backend · Cloudflare Terraform docs\ndescription: Cloudflare R2 and Terraform remote backends can interact with each\n  other to provide a seamless experience for Terraform state management.\nlastUpdated: 2025-11-07T20:47:17.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/terraform/advanced-topics/remote-backend/\n  md: https://developers.cloudflare.com/terraform/advanced-topics/remote-backend/index.md\n---\n\n[Cloudflare R2](https://developers.cloudflare.com/r2/) and [Terraform remote backends](https://developer.hashicorp.com/terraform/language/settings/backends/remote) can interact with each other to provide a seamless experience for Terraform state management.\n\nCloudflare R2 is an object storage service that provides a highly available, scalable, and secure way to store and serve static assets, such as images, videos, and static websites. R2 has [S3 API compatibility](https://developers.cloudflare.com/r2/api/s3/api/) making it easy to integrate with existing cloud infrastructure and applications.\n\n## Prerequisites\n\n### Create R2 bucket\n\nUsing [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/), [API](https://developers.cloudflare.com/api/resources/r2/subresources/buckets/methods/create/), or [Account View Dashboard](https://dash.cloudflare.com/?to=/:account/r2/new) create an [R2 Bucket](https://developers.cloudflare.com/r2/buckets/create-buckets/).\n\n* Wrangler",
+      "language": "unknown"
+    },
+    {
+      "code": "* API",
+      "language": "unknown"
+    },
+    {
+      "code": "Note\n\nBucket names can only contain lowercase letters (`a-z`), numbers (`0-9`), and hyphens (`-`).\n\n### Create scoped bucket API keys\n\nNext you will need to create a [bucket scoped R2 API token](https://developers.cloudflare.com/r2/api/tokens/) with `Object Read & Write` permissions. To create an API token, do the following:\n\n1. In **Account Home**, select **R2**.\n2. Under **Account details**, select **Manage R2 API tokens**.\n3. Select [**Create API token**](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).\n4. Select the **R2 Token** text to edit your API token name.\n5. Under **Permissions**, select the **Object Read and Write** permissions, then scope your token to your `<YOUR_BUCKET_NAME>` bucket.\n6. Select **Create API Token**.\n\nAfter your token has been successfully created, review your **Secret Access Key** and **Access Key ID** values.\n\n## Define R2 backend\n\nUpdate your [`cloudflare.tf`](https://developers.cloudflare.com/terraform/tutorial/initialize-terraform/) file to include a [backend](https://developer.hashicorp.com/terraform/language/backend) for the `<YOUR_BUCKET_NAME>` bucket you created above.\n\nNote\n\nTerraform code snippets below refer to the v4 SDK only.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Migrate state file to R2 backend\n\nAfter updating your `cloudflare.tf` file you can issue the `terraform init -reconfigure` command to migrate from a local state to [remote state](https://developer.hashicorp.com/terraform/language/state/remote).\n\n</page>\n\n<page>\n---\ntitle: Rule IDs change when I modify a ruleset · Cloudflare Terraform docs\ndescription: For cloudflare_ruleset resources, the Cloudflare provider may\n  delete a rule and create a new one when you modify a ruleset in your Terraform\n  configuration. This happens because the API cannot match rules in your new\n  Terraform configuration with existing rules in your Cloudflare configuration.\n  Modifying a ruleset in your Terraform configuration and applying the changes\n  will create new rules with different rule IDs in your Cloudflare account or\n  zone.\nlastUpdated: 2024-12-09T20:51:36.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/terraform/troubleshooting/rule-id-changes/\n  md: https://developers.cloudflare.com/terraform/troubleshooting/rule-id-changes/index.md\n---\n\nFor [`cloudflare_ruleset`](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/ruleset) resources, the Cloudflare provider may delete a rule and create a new one when you modify a ruleset in your Terraform configuration. This happens because the API cannot match rules in your new Terraform configuration with existing rules in your Cloudflare configuration. Modifying a ruleset in your Terraform configuration and applying the changes will create new rules with different rule IDs in your Cloudflare account or zone.\n\nThis behavior may have an impact on any automation or monitoring systems you may have configured that rely on having immutable rule IDs between rule modifications.\n\n## How to keep the same rule ID between modifications\n\nTo keep existing rule IDs when making changes to a ruleset through Terraform, add a `ref` field to each rule.\n\nThe `ref` field is a user-defined external identifier that must be unique for each rule in a ruleset. When you provide a `ref` value, the provider will match the rule in your updated Terraform configuration with the existing rule with the same `ref` external identifier, and the rule ID will be preserved.\n\n`ref` values have a string data type with a minimum length of one character. For example, `my_ref`.\n\nOnce you set the `ref` field of a rule, changing the `ref` field value will make Terraform create a new rule.\n\n## `cf-terraforming` support for `ref` field values\n\nBy default, when you create a rule, its `ref` value will be equal to the rule ID. You can set `ref` values via Cloudflare API.\n\nWhen you [import your existing Cloudflare configuration to Terraform](https://developers.cloudflare.com/terraform/advanced-topics/import-cloudflare-resources/) using [`cf-terraforming`](https://github.com/cloudflare/cf-terraforming), the generated Terraform configuration will have `ref` values for each rule, with the same value as the rule ID.\n\nIf you manually created your Terraform configuration and your rules' configuration does not have a `ref` field, add a `ref` field to each rule so that each ruleset modification does not generate new rule IDs.\n\n</page>\n\n<page>\n---\ntitle: Configure HTTPS settings · Cloudflare Terraform docs\ndescription: This tutorial shows how to enable TLS 1.3, Automatic HTTPS\n  Rewrites, and Strict SSL mode using the updated v5 provider.\nlastUpdated: 2025-10-09T15:47:46.000Z\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/terraform/tutorial/configure-https-settings/\n  md: https://developers.cloudflare.com/terraform/tutorial/configure-https-settings/index.md\n---\n\nAfter setting up basic DNS records, you can configure zone settings using Terraform. This tutorial shows how to enable [TLS 1.3](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/tls-13/), [Automatic HTTPS Rewrites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/automatic-https-rewrites/), and [Strict SSL mode](https://developers.cloudflare.com/ssl/origin-configuration/ssl-modes/full-strict/) using the updated v5 provider.\n\n## Prerequisites\n\n* Completed tutorials [1](https://developers.cloudflare.com/terraform/tutorial/initialize-terraform/) and [2](https://developers.cloudflare.com/terraform/tutorial/track-history/)\n* Valid SSL certificate on your origin server (use the [Cloudflare Origin CA](https://developers.cloudflare.com/ssl/origin-configuration/origin-ca/) to generate one for strict SSL mode)\n\nNote\n\nTerraform code snippets below refer to the v5 SDK only.\n\n## 1. Create zone setting configuration\n\nCreate a new branch and add zone settings:",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the following to your `main.tf` file:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h3",
+      "text": "Create R2 bucket",
+      "id": "create-r2-bucket"
+    },
+    {
+      "level": "h3",
+      "text": "Create scoped bucket API keys",
+      "id": "create-scoped-bucket-api-keys"
+    },
+    {
+      "level": "h2",
+      "text": "Define R2 backend",
+      "id": "define-r2-backend"
+    },
+    {
+      "level": "h2",
+      "text": "Migrate state file to R2 backend",
+      "id": "migrate-state-file-to-r2-backend"
+    },
+    {
+      "level": "h2",
+      "text": "How to keep the same rule ID between modifications",
+      "id": "how-to-keep-the-same-rule-id-between-modifications"
+    },
+    {
+      "level": "h2",
+      "text": "`cf-terraforming` support for `ref` field values",
+      "id": "`cf-terraforming`-support-for-`ref`-field-values"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "1. Create zone setting configuration",
+      "id": "1.-create-zone-setting-configuration"
+    }
+  ],
+  "url": "llms-txt#maximum-backoff-period-in-seconds-after-failed-api-calls-(default:-30).",
+  "links": []
+}

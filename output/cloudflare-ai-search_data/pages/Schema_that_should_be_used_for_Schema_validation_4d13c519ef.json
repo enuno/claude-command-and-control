@@ -1,0 +1,8 @@
+{
+  "title": "Schema that should be used for Schema validation",
+  "content": "resource \"cloudflare_schema_validation_schemas\" \"example_schema\" {\n  zone_id            = var.zone_id\n  kind               = \"openapi_v3\"\n  name               = \"example-schema.yaml\"\n  # In this example, we assume that the `example-schema.yaml` includes `get_image` and `post_image` operations from above\n  source             = file(\"./schemas/example-schema.yaml\")\n  validation_enabled = true\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#schema-that-should-be-used-for-schema-validation",
+  "links": []
+}

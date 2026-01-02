@@ -1,0 +1,8 @@
+{
+  "title": "Upload a single file",
+  "content": "rclone copy /path/to/local/image.png r2:bucket_name",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#upload-a-single-file",
+  "links": []
+}

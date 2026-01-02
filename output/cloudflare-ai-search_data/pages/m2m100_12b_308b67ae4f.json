@@ -1,0 +1,55 @@
+{
+  "title": "m2m100-1.2b",
+  "content": "Multilingual encoder-decoder (seq-to-seq) model trained for Many-to-Many multilingual translation\n\n| Model Info | |\n| - | - |\n| Terms and License | [link](https://github.com/facebookresearch/fairseq/blob/main/LICENSE) |\n| More information | [link](https://github.com/facebookresearch/fairseq/tree/main/examples/m2m_100) |\n| Batch | Yes |\n| Unit Pricing | $0.34 per M input tokens, $0.34 per M output tokens |\n\n\\* indicates a required field\n\n* `text` string required min 1\n\nThe text to be translated\n\n* `source_lang` string default en\n\nThe language code of the source text (e.g., 'en' for English). Defaults to 'en' if not specified\n\n* `target_lang` string required\n\nThe language code to translate the text into (e.g., 'es' for Spanish)\n\n* `requests` array required\n\nBatch of the embeddings requests to run using async-queue\n\n* `text` string required min 1\n\nThe text to be translated\n\n* `source_lang` string default en\n\nThe language code of the source text (e.g., 'en' for English). Defaults to 'en' if not specified\n\n* `target_lang` string required\n\nThe language code to translate the text into (e.g., 'es' for Spanish)\n\n* `translated_text` string\n\nThe translated text in the target language\n\n* `request_id` string\n\nThe async request id that can be used to obtain the results.\n\nThe following schemas are based on JSON Schema\n\n<page>\n---\ntitle: melotts · Cloudflare Workers AI docs\ndescription: MeloTTS is a high-quality multi-lingual text-to-speech library by MyShell.ai.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/workers-ai/models/melotts/\n  md: https://developers.cloudflare.com/workers-ai/models/melotts/index.md\n---",
+  "code_samples": [
+    {
+      "code": "export interface Env {\n  AI: Ai;\n}\n\n\nexport default {\n  async fetch(request, env): Promise<Response> {\n\n\n    const response = await env.AI.run(\n      \"@cf/meta/m2m100-1.2b\",\n      {\n        text: \"I'll have an order of the moule frites\",\n        source_lang: \"english\", // defaults to english\n        target_lang: \"french\",\n      }\n    );\n\n\n    return new Response(JSON.stringify(response));\n  },\n} satisfies ExportedHandler<Env>;",
+      "language": "ts"
+    },
+    {
+      "code": "import requests\n\n\nAPI_BASE_URL = \"https://api.cloudflare.com/client/v4/accounts/{ACCOUNT_ID}/ai/run/\"\nheaders = {\"Authorization\": \"Bearer {API_TOKEN}\"}\n\n\ndef run(model, input):\n    response = requests.post(f\"{API_BASE_URL}{model}\", headers=headers, json=input)\n    return response.json()\n\n\noutput = run('@cf/meta/m2m100-1.2b', {\n  \"text\": \"I'll have an order of the moule frites\",\n  \"source_lang\": \"english\",\n  \"target_lang\": \"french\"\n})\n\n\nprint(output)",
+      "language": "py"
+    },
+    {
+      "code": "curl https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/ai/run/@cf/meta/m2m100-1.2b  \\\n    -X POST  \\\n    -H \"Authorization: Bearer $CLOUDFLARE_API_TOKEN\"  \\\n    -d '{ \"text\": \"Ill have an order of the moule frites\", \"source_lang\": \"english\", \"target_lang\": \"french\" }'",
+      "language": "sh"
+    },
+    {
+      "code": "{\n      \"type\": \"object\",\n      \"oneOf\": [\n          {\n              \"properties\": {\n                  \"text\": {\n                      \"type\": \"string\",\n                      \"minLength\": 1,\n                      \"description\": \"The text to be translated\"\n                  },\n                  \"source_lang\": {\n                      \"type\": \"string\",\n                      \"default\": \"en\",\n                      \"description\": \"The language code of the source text (e.g., 'en' for English). Defaults to 'en' if not specified\"\n                  },\n                  \"target_lang\": {\n                      \"type\": \"string\",\n                      \"description\": \"The language code to translate the text into (e.g., 'es' for Spanish)\"\n                  }\n              },\n              \"required\": [\n                  \"text\",\n                  \"target_lang\"\n              ]\n          },\n          {\n              \"properties\": {\n                  \"requests\": {\n                      \"type\": \"array\",\n                      \"description\": \"Batch of the embeddings requests to run using async-queue\",\n                      \"items\": {\n                          \"type\": \"object\",\n                          \"properties\": {\n                              \"text\": {\n                                  \"type\": \"string\",\n                                  \"minLength\": 1,\n                                  \"description\": \"The text to be translated\"\n                              },\n                              \"source_lang\": {\n                                  \"type\": \"string\",\n                                  \"default\": \"en\",\n                                  \"description\": \"The language code of the source text (e.g., 'en' for English). Defaults to 'en' if not specified\"\n                              },\n                              \"target_lang\": {\n                                  \"type\": \"string\",\n                                  \"description\": \"The language code to translate the text into (e.g., 'es' for Spanish)\"\n                              }\n                          },\n                          \"required\": [\n                              \"text\",\n                              \"target_lang\"\n                          ]\n                      }\n                  }\n              },\n              \"required\": [\n                  \"requests\"\n              ]\n          }\n      ]\n  }",
+      "language": "json"
+    },
+    {
+      "code": "{\n      \"type\": \"object\",\n      \"contentType\": \"application/json\",\n      \"oneOf\": [\n          {\n              \"properties\": {\n                  \"translated_text\": {\n                      \"type\": \"string\",\n                      \"description\": \"The translated text in the target language\"\n                  }\n              }\n          },\n          {\n              \"type\": \"object\",\n              \"contentType\": \"application/json\",\n              \"title\": \"Async response\",\n              \"properties\": {\n                  \"request_id\": {\n                      \"type\": \"string\",\n                      \"description\": \"The async request id that can be used to obtain the results.\"\n                  }\n              }\n          }\n      ]\n  }",
+      "language": "json"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Parameters",
+      "id": "parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Input",
+      "id": "input"
+    },
+    {
+      "level": "h3",
+      "text": "Output",
+      "id": "output"
+    },
+    {
+      "level": "h2",
+      "text": "API Schemas",
+      "id": "api-schemas"
+    }
+  ],
+  "url": "llms-txt#m2m100-1.2b",
+  "links": []
+}

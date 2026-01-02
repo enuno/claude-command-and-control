@@ -1,0 +1,8 @@
+{
+  "title": "Bulk redirect list item (URL redirect)",
+  "content": "variable \"bulk_redirects\" {\n  type = map(object({\n    source_url  = string\n    target_url  = string\n    status_code = number\n  }))\n\ndefault = {\n    \"redirect1\" = {\n      source_url = \"https://source.url/redirect/1\"\n      target_url = \"https://target.url/?redirect=1\"\n      status_code = 301\n    }\n    \"redirect2\" = {\n      source_url = \"https://source.url/redirect/2\"\n      target_url = \"https://target.url/?redirect=2\"\n      status_code = 302\n    }\n    \"redirect3\" = {\n      source_url = \"https://source.url/redirect/3\"\n      target_url = \"https://target.url/?redirect=3\"\n      status_code = 307\n    }\n  }\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#bulk-redirect-list-item-(url-redirect)",
+  "links": []
+}
