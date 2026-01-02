@@ -1079,6 +1079,7 @@ version: 1.0.0
 | **[just](skills-templates/just/)** | Just command runner for project task automation | Creating justfile recipes, replacing Make/shell scripts, cross-platform command execution |
 | **[langflow](skills-templates/ai-workflow/langflow/)** | Visual AI workflow platform with MCP integration | Building AI agent workflows visually, integrating MCP servers, deploying production AI agents |
 | **[latex-manual](skills-templates/documentation/latex-manual/)** | Comprehensive LaTeX reference with templates and troubleshooting | Writing LaTeX documents, creating equations, formatting papers, making presentations, debugging compilation |
+| **[latex-wikibook](skills-templates/documentation/latex-wikibook/)** | Comprehensive LaTeX tutorials from WikiBooks | Learning LaTeX best practices, LaTeX formatting, document preparation |
 | **[lead-research-assistant](skills-templates/lead-research-assistant/)** | Lead identification and qualification | Sales, business development, or marketing research |
 | **[mcp-builder](skills-templates/mcp-builder/)** | MCP server development guide | Building Model Context Protocol servers |
 | **[meeting-insights-analyzer](skills-templates/meeting-insights-analyzer/)** | Meeting transcript analysis | Improving communication or leadership skills |
@@ -1100,6 +1101,7 @@ version: 1.0.0
 | **using-git-worktrees** | Isolated workspace management | Feature work needing isolation |
 | **using-superpowers** | Meta-skill for skill discovery | Starting any conversation, ensuring skill usage |
 | **[video-downloader](skills-templates/video-downloader/)** | Video downloads from YouTube and platforms | Downloading videos for offline viewing or archival |
+| **[weavedb](skills-templates/data-services/weavedb/)** | Decentralized database protocol with zero-knowledge proofs | Building with WeaveDB, implementing decentralized databases, permanent storage solutions |
 | **[webapp-testing](skills-templates/webapp-testing/)** | Playwright-based web app testing | Testing local web applications or debugging UI |
 
 #### Orchestration Skills (NEW)

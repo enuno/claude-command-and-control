@@ -82,10 +82,16 @@ This directory contains production-ready skill templates and examples for Claude
 | **[document-skills/xlsx](document-skills/xlsx/)** | Excel spreadsheet toolkit with formulas, formatting, data analysis, and visualization |
 | **[video-downloader](video-downloader/)** | Downloads videos from YouTube and other platforms for offline viewing or archival |
 
-### Documentation & Typesetting (1 skill)
+### Data Services (1 skill)
+| Skill | Description |
+|-------|-------------|
+| **[data-services/weavedb](data-services/weavedb/)** | Decentralized database protocol with zero-knowledge proofs and permanent storage on Arweave - comprehensive documentation (398 KB) covering database setup, API usage, and best practices |
+
+### Documentation & Typesetting (2 skills)
 | Skill | Description |
 |-------|-------------|
 | **[documentation/latex-manual](documentation/latex-manual/)** | Comprehensive LaTeX reference with 6 guides (quick-start, mathematics, formatting, tables/graphics, bibliography, troubleshooting), 5 production templates (article, report, beamer, letter, IEEE), and 3 helper scripts for compilation workflow - covers 90%+ of LaTeX use cases |
+| **[documentation/latex-wikibook](documentation/latex-wikibook/)** | Comprehensive LaTeX tutorials from WikiBooks - covers LaTeX fundamentals, best practices, formatting, and document preparation |
 
 ### Infrastructure (1 skill)
 | Skill | Description |
