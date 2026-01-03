@@ -1,0 +1,202 @@
+# Repository File Structure
+
+Total items: 196
+
+```
+📄 .c8rc
+📄 .env.test
+📄 .eslintignore
+📄 .eslintrc
+📁 .github
+📄 .gitignore
+📁 .husky
+📄 .nvmrc
+📄 .prettierignore
+📄 .prettierrc
+📄 .releaserc
+📁 .vscode
+📄 .yarnrc
+📄 CHANGELOG.md
+📄 CODEOWNERS
+📄 CONTRIBUTING.md
+📄 LICENSE.md
+📄 README.md
+📄 bundle.mjs
+📄 codecov.yml
+📄 commitlint.config.cjs
+📄 docker-compose.yml
+📁 examples
+📄 package.json
+📄 register.mjs
+📁 resources
+📄 run-tests.sh
+📁 src
+📁 tests
+📄 tsconfig.cjs.json
+📄 tsconfig.json
+📄 tsconfig.types.json
+📄 tsconfig.web.json
+📄 update-version.sh
+📄 yarn.lock
+  📁 ISSUE_TEMPLATE
+  📄 pull_request_template.md
+  📁 workflows
+  📄 commit-msg
+  📄 settings.json
+  📁 cjs
+  📁 esm
+  📁 files
+  📁 next
+  📁 typescript
+  📁 vite
+  📁 web
+  📄 license.header.js
+  📁 cli
+  📁 common
+  📄 global.d.ts
+  📁 node
+  📄 types.ts
+  📁 utils
+  📄 version.ts
+  📁 web
+  📄 creditSharing.node.test.ts
+  📁 files
+  📄 helpers.ts
+  📄 turbo.node.test.ts
+  📄 turbo.web.test.ts
+  📁 wallets
+    📄 BUG_REPORT.yml
+    📄 FEATURE_REQUEST.yml
+    📄 config.yml
+    📄 build.yml
+    📄 pr.yml
+    📄 release.yml
+    📄 index.cjs
+    📄 package.json
+    📄 yarn.lock
+    📄 index.mjs
+    📄 package.json
+    📄 yarn.lock
+    📄 1KB_file
+    📄 .gitignore
+    📄 README.md
+    📁 app
+    📄 next.config.js
+    📄 package.json
+    📁 public
+    📄 tsconfig.json
+    📄 yarn.lock
+    📁 cjs
+    📁 esm
+    📄 .gitignore
+    📄 README.md
+    📄 index.html
+    📄 package.json
+    📁 public
+    📁 src
+    📄 tsconfig.json
+    📄 vite.config.js
+    📄 yarn.lock
+    📄 index.html
+    📄 cli.ts
+    📁 commands
+    📄 constants.ts
+    📄 errors.ts
+    📄 options.ts
+    📄 progress.ts
+    📄 types.ts
+    📄 utils.ts
+    📄 chunked.ts
+    📄 currency.ts
+    📄 events.test.ts
+    📄 events.ts
+    📄 factory.ts
+    📄 http.ts
+    📄 index.ts
+    📄 jwk.ts
+    📄 logger.ts
+    📄 payment.ts
+    📄 signer.ts
+    📁 token
+    📄 turbo.ts
+    📄 upload.ts
+    📄 factory.ts
+    📄 index.ts
+    📄 signer.ts
+    📄 upload.ts
+    📄 axiosClient.ts
+    📄 base64.ts
+    📄 common.ts
+    📄 errors.ts
+    📄 readableStream.test.ts
+    📄 readableStream.ts
+    📄 factory.ts
+    📄 index.ts
+    📄 signer.test.ts
+    📄 signer.ts
+    📄 upload.ts
+    📄 1KB_file
+    📄 1MB_file
+    📁 stubFolder
+    📁 stubFolderWithIndexFile
+    📄 0x20c1DF6f3310600c8396111EB5182af9213828Dc.eth.pk.txt
+    📄 BTV1zY7njS5an91v9nphCK48d2vnMuecEgHLYiP25ycj.sol.sk.json
+    📄 ByQEA5jhJvzlhfI4sFgB23kjGpxDK6OIE0i3sSnmTGU.json
+    📄 sYFSpEH7Gls-5Spq5FjuP85JCZj6QYzNvCm9BdKEJs4.json
+      📄 globals.css
+      📄 layout.tsx
+      📄 page.test.tsx
+      📄 page.tsx
+      📄 favicon.ico
+      📄 index.ts
+      📄 package.json
+      📄 tsconfig.json
+      📄 yarn.lock
+      📄 index.ts
+      📄 package.json
+      📄 tsconfig.json
+      📄 yarn.lock
+      📄 favicon.ico
+      📄 screenshot.png
+      📄 App.css
+      📄 App.test.tsx
+      📄 App.tsx
+      📄 index.css
+      📄 index.tsx
+      📄 balance.ts
+      📄 cryptoFund.ts
+      📄 fiatEstimate.ts
+      📄 index.ts
+      📄 listShares.ts
+      📄 price.ts
+      📄 revokeCredits.ts
+      📄 shareCredits.ts
+      📄 tokenPrice.ts
+      📄 topUp.ts
+      📄 uploadFile.ts
+      📄 uploadFolder.ts
+      📄 ario.ts
+      📄 arweave.ts
+      📄 baseEth.ts
+      📄 erc20.ts
+      📄 ethereum.ts
+      📄 index.ts
+      📄 kyve.ts
+      📄 polygon.ts
+      📄 solana.ts
+      📄 usdc.ts
+      📄 1.txt
+      📄 2.txt
+      📄 3.txt
+      📄 4
+      📄 5.txt
+      📁 nested
+      📄 3.txt
+      📄 404.html
+      📁 content
+      📄 index.html
+        📄 1.txt
+        📄 2.txt
+        📄 4.txt
+        📄 5.txt
+```

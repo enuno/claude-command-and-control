@@ -1101,6 +1101,8 @@ version: 1.0.0
 | **subagent-driven-development** | Execute plans with fresh subagents per task | Plan execution with quality gates |
 | **[theme-factory](skills-templates/theme-factory/)** | 10 pre-set themes for artifact styling | Applying professional themes to slides, docs, or HTML |
 | **[terraform](skills-templates/infrastructure/terraform/)** | HashiCorp Terraform Infrastructure as Code (IaC) | Managing cloud infrastructure, writing .tf files, state management, multi-cloud provisioning |
+| **[turbo-python-sdk](skills/turbo-python-sdk/SKILL.md)** | Python SDK for Ardrive Turbo Upload and Payment Service | Arweave uploads with Python, companion to turbo-sdk |
+| **[turbo-sdk](skills/turbo-sdk/SKILL.md)** | Complete Arweave Turbo ecosystem including client SDKs, core upload infrastructure, payment service backend, and CLI tools | Arweave uploads, permanent storage, ANS-104 bundling, multi-signature support, AWS-scale infrastructure |
 | **[twilio-voice](skills-templates/communication/twilio-voice/)** | Comprehensive Twilio Voice API assistance with AI integration patterns | Voice assistants, OpenAI Realtime API, function-calling agents, Conversational Intelligence |
 | **[ui-ux-pro-max](skills/ui-ux-pro-max/SKILL.md)** | UI/UX design intelligence with 50+ styles, color palettes, font pairings, and 8 framework stacks | Frontend design, component styling, accessibility |
 | **using-git-worktrees** | Isolated workspace management | Feature work needing isolation |

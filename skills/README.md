@@ -11,7 +11,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 ---
 
-## Available Skills (21 Total)
+## Available Skills (23 Total)
 
 ### Bitcoin Mining Skills
 
@@ -54,6 +54,13 @@ This directory contains the repository's skill library. Each skill is a reusable
 | Skill | Description | Key Use Cases |
 |-------|-------------|---------------|
 | **[content-research-writer](content-research-writer/SKILL.md)** | Assists in writing high-quality content by conducting research, adding citations, improving hooks | Writing blog posts, articles, newsletters, educational content, tutorials |
+
+### Data Storage & Upload Skills
+
+| Skill | Description | Key Use Cases |
+|-------|-------------|---------------|
+| **[turbo-python-sdk](turbo-python-sdk/SKILL.md)** | Python SDK for Ardrive Turbo Upload and Payment Service | Arweave uploads with Python, permanent storage, companion to TypeScript SDK |
+| **[turbo-sdk](turbo-sdk/SKILL.md)** | Complete Arweave Turbo ecosystem including client SDKs, core upload infrastructure, payment service backend, and CLI tools | Arweave uploads, permanent storage, ANS-104 bundling, multi-signature support, AWS-scale infrastructure |
 
 ### Contribution & Sharing Skills
 
@@ -168,6 +175,11 @@ Skills for automating repository maintenance:
 Skills for content creation:
 - Research-backed writing (content-research-writer)
 
+### Data Storage & Upload Skills
+Skills for permanent data storage and uploads to Arweave:
+- Python uploads (turbo-python-sdk)
+- TypeScript uploads (turbo-sdk)
+
 ### Contribution & Sharing Skills
 Skills for community engagement:
 - Upstream contributions (sharing-skills)
@@ -245,12 +257,13 @@ All skills in this repository meet these criteria:
 
 ## Statistics
 
-**Total Skills**: 21
+**Total Skills**: 23
 - Bitcoin Mining: 8
 - Development Workflow: 4
 - Design & UI/UX: 1
 - Integration & Automation: 2
 - Content & Documentation: 1
+- Data Storage & Upload: 2
 - Contribution & Sharing: 1
 - Meta Skills: 1
 - Skill Development: 3
@@ -262,6 +275,15 @@ All skills in this repository meet these criteria:
 ---
 
 ## Recent Additions
+
+**January 2026**:
+- 🔄 **turbo-sdk v1.3.0** (2026-01-03) - Enhanced with complete infrastructure coverage
+  - Added turbo-upload-service core infrastructure component
+  - Complete Turbo ecosystem: client SDKs + core upload infrastructure + payment backend + CLI tools
+  - Comprehensive infrastructure documentation (AWS, Docker, multi-signature, AGPL-3.0)
+- ✨ **Arweave/Turbo SDK Skills** (2026-01-03) - 2 new skills
+  - turbo-sdk - TypeScript SDK with 51KB README, 144 releases, Apache 2.0 license
+  - turbo-python-sdk - Python SDK companion, MIT license
 
 **December 2025**:
 - ✨ **Braiins Bitcoin Mining Ecosystem** (2025-12-28) - 8 new skills
@@ -288,6 +310,6 @@ All skills in this repository meet these criteria:
 
 ---
 
-**Last Updated**: December 28, 2025
+**Last Updated**: January 3, 2026
 **Maintained By**: Claude Command and Control Repository
-**Version**: 2.1.0
+**Version**: 2.2.0
