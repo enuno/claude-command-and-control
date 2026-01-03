@@ -1,0 +1,78 @@
+# Repository File Structure
+
+Total items: 72
+
+```
+📄 .editorconfig
+📄 .env
+📄 .gitattributes
+📁 .github
+📄 .gitignore
+📁 .husky
+📄 CONTRIBUTING.md
+📄 LICENSE.txt
+📄 LICENSE_BITWARDEN.txt
+📄 LICENSE_GPL.txt
+📄 README.md
+📄 SECURITY.md
+📁 bitwarden_license
+📄 eslint.config.js
+📄 index.html
+📄 package-lock.json
+📄 package.json
+📁 public
+📁 src
+📄 tsconfig.app.json
+📄 tsconfig.json
+📄 tsconfig.node.json
+📄 vite.config.ts
+  📄 CODEOWNERS
+  📁 ISSUE_TEMPLATE
+  📄 PULL_REQUEST_TEMPLATE.md
+  📄 renovate.json
+  📁 workflows
+  📄 pre-commit
+  📄 README.md
+  📄 vite.svg
+  📄 App.css
+  📄 App.tsx
+  📁 assets
+  📁 auth
+  📁 components
+  📁 hooks
+  📄 index.css
+  📄 main.tsx
+  📁 pages
+  📁 services
+  📄 vite-env.d.ts
+    📄 config.yml
+    📄 ci.yml
+    📄 enforce-labels.yml
+    📄 react.svg
+    📄 AuthProvider.tsx
+    📄 JwtToken.ts
+    📄 RequireAuth.tsx
+    📄 RequireGuest.tsx
+    📄 Session.ts
+    📄 TokenUtility.ts
+    📄 Layout.module.css
+    📄 Layout.tsx
+    📄 Menu.module.css
+    📄 Menu.tsx
+    📄 UseAuth.ts
+    📄 LoginPage.tsx
+    📄 ProfilePage.tsx
+    📄 PublicPage.tsx
+    📄 RegisterPage.tsx
+    📄 UnauthorizedPage.tsx
+    📁 your-backend
+      📄 YourBackendClient.ts
+      📁 contracts
+        📄 AddCredentialRequest.ts
+        📄 AddCredentialResponse.ts
+        📄 CredentialResponse.ts
+        📄 RegisterTokenResponse.ts
+        📄 UserLoginRequest.ts
+        📄 UserRegisterRequest.ts
+        📄 VerifiedUserResponse.ts
+```

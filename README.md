@@ -1038,6 +1038,7 @@ version: 1.0.0
 | **agent-skill-bridge** | Integrates agents and skills | Coordinating agents with skills |
 | **[ar-io-build](skills-templates/ar-io-build/)** | Comprehensive AR.IO build documentation | Building with AR.IO, implementing AR.IO solutions, debugging AR.IO code |
 | **[arweave-ao-cookbook](skills-templates/arweave-ao-cookbook/)** | Build decentralized applications on AO | Building decentralized apps on Arweave with permanent storage |
+| **[arweave-standards](skills-templates/arweave-standards/)** | Arweave standards, specifications and best practices | Working with Arweave standards, implementing protocol specifications, checking compliance |
 | **[artifacts-builder](skills-templates/artifacts-builder/)** | React/Tailwind/shadcn UI artifact builder | Complex artifacts requiring state management or shadcn/ui components |
 | **[braiins-ecosystem](skills/braiins-ecosystem/SKILL.md)** | Unified Braiins Bitcoin mining ecosystem | Complete mining stack (firmware, pool, tools, proxy, dashboard, calculator) |
 | **[braiins-insights](skills/braiins-insights/SKILL.md)** | Bitcoin mining profitability calculator | Evaluating mining profitability, ROI analysis, cash flow projections |
@@ -1081,13 +1082,16 @@ version: 1.0.0
 | **[latex-manual](skills-templates/documentation/latex-manual/)** | Comprehensive LaTeX reference with templates and troubleshooting | Writing LaTeX documents, creating equations, formatting papers, making presentations, debugging compilation |
 | **[latex-wikibook](skills-templates/documentation/latex-wikibook/)** | Comprehensive LaTeX tutorials from WikiBooks | Learning LaTeX best practices, LaTeX formatting, document preparation |
 | **[lead-research-assistant](skills-templates/lead-research-assistant/)** | Lead identification and qualification | Sales, business development, or marketing research |
+| **[mailgun](skills-templates/mailgun/)** | Email sending, receiving, and tracking API | Working with Mailgun, implementing email solutions, debugging email code |
 | **[mcp-builder](skills-templates/mcp-builder/)** | MCP server development guide | Building Model Context Protocol servers |
 | **[meeting-insights-analyzer](skills-templates/meeting-insights-analyzer/)** | Meeting transcript analysis | Improving communication or leadership skills |
 | **[openrouter](skills-templates/openrouter/)** | Unified API gateway for 100+ AI models | Working with OpenRouter, multi-provider routing, cost optimization, model comparison |
+| **[passwordless-docs](skills-templates/passwordless-docs/)** | Bitwarden Passwordless.dev documentation, SDKs, and React examples | Implementing passwordless authentication, integrating FIDO2/WebAuthn, building React passwordless auth |
 | **[pict-test-designer](skills-templates/pict-test-designer/)** | PICT pairwise test case design | Designing comprehensive test cases with minimal coverage |
 | **[prompt-engineering](skills-templates/prompt-engineering/)** | Advanced prompt engineering patterns | Writing commands, hooks, skills, or optimizing LLM interactions |
 | **[raffle-winner-picker](skills-templates/raffle-winner-picker/)** | Random winner selection | Running giveaways, raffles, or contests |
 | **root-cause-tracing** | Systematic debugging through call stack | Tracing bugs deep in execution |
+| **[sdk-sm](skills-templates/sdk-sm/)** | Bitwarden Secrets Manager SDK | Using Bitwarden Secrets Manager, working with multi-language SDK (Rust, Python, C#, Go, Java), secrets management API |
 | **sharing-skills** | Contribute skills upstream via PR | Sharing broadly useful patterns |
 | **[skill-creator](skills-templates/skill-creator/)** | Guide for creating effective skills | Building new skills with specialized knowledge |
 | **skill-orchestrator** | Coordinates multiple skills | Complex multi-skill workflows |
@@ -1103,6 +1107,7 @@ version: 1.0.0
 | **using-superpowers** | Meta-skill for skill discovery | Starting any conversation, ensuring skill usage |
 | **[venice-ai](skills-templates/venice-ai/)** | Privacy-focused AI platform assistance | Working with Venice.ai, privacy-focused AI implementations, platform features |
 | **[video-downloader](skills-templates/video-downloader/)** | Video downloads from YouTube and platforms | Downloading videos for offline viewing or archival |
+| **[wao](skills-templates/wao/)** | Wizard AO SDK & Testing framework | Working with WAO SDK, testing AO applications, understanding AO development |
 | **[weavedb](skills-templates/data-services/weavedb/)** | Decentralized database protocol with zero-knowledge proofs | Building with WeaveDB, implementing decentralized databases, permanent storage solutions |
 | **[webapp-testing](skills-templates/webapp-testing/)** | Playwright-based web app testing | Testing local web applications or debugging UI |
 

@@ -1,0 +1,72 @@
+# Repository File Structure
+
+Total items: 66
+
+```
+📁 .github
+📄 .gitignore
+📄 LICENSE
+📄 README.md
+📄 babel.config.js
+📄 eslint.config.mjs
+📁 examples
+📄 jest.config.js
+📄 package-lock.json
+📄 package.json
+📄 rollup.config.js
+📁 src
+📁 tests
+📄 tsconfig.json
+  📄 CODEOWNERS
+  📄 pull_request_template.md
+  📄 renovate.json
+  📁 workflows
+  📁 simple-example
+  📄 Converters.ts
+  📄 IPasswordlessClient.ts
+  📄 PasswordlessClient.ts
+  📄 PasswordlessOptions.ts
+  📁 exceptions
+  📄 index.ts
+  📁 models
+  📄 Converters.test.ts
+    📄 cd.yml
+    📄 ci.yml
+    📄 .dockerignore
+    📄 .env.example
+    📄 .gitignore
+    📄 package.json
+    📁 public
+    📄 readme.md
+    📁 src
+    📄 tsconfig.json
+    📄 ApiException.ts
+    📄 AliasPointer.ts
+    📄 AuditLog.ts
+    📄 Credential.ts
+    📄 CredentialDescriptor.ts
+    📄 DeleteCredentialRequest.ts
+    📄 DeleteUserRequest.ts
+    📄 GenerateAuthenticationTokenRequest.ts
+    📄 GeneratedAuthenticationTokenResponse.ts
+    📄 ListResponse.ts
+    📄 ProblemDetails.ts
+    📄 RegisterOptions.ts
+    📄 RegisterTokenResponse.ts
+    📄 SendMagicLinkRequest.ts
+    📄 SetAliasRequest.ts
+    📄 VerifiedUser.ts
+    📄 VerifyTokenRequest.ts
+    📁 enums
+      📄 index.html
+      📄 SigninRequest.ts
+      📄 SignupRequest.ts
+      📄 index.ts
+      📁 repositories
+      📄 Attestation.ts
+      📄 AuthenticatorAttachment.ts
+      📄 UserVerification.ts
+        📄 UserRepository.ts
+        📁 entities
+          📄 User.ts
+```
