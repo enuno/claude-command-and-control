@@ -1,8 +1,0 @@
-{
-  "title": "http.request.jwt.claims.aud",
-  "content": "`http.request.jwt.claims.aud` Map\\<Array\\<String>>\n\nThe `aud` (audience) claim identifies the recipients that the JSON Web Token (JWT) is intended for.\n\nEach principal intended to process the JWT must identify itself with a value in the audience claim. In the general case, the `aud` value is an array of case-sensitive strings, each containing a `StringOrURI` value. For details, refer to the [Registered Claim Names](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1) in RFC 7519.\n\nRequires a Cloudflare Enterprise plan with a paid add-on.\n\nFor more information on validating JSON Web Tokens, refer to [JSON Web Tokens Validation](https://developers.cloudflare.com/api-shield/security/jwt-validation/) in the API Shield documentation.\n\n* Request\n* JWT validation\n\n<page>\n---\ntitle: http.request.jwt.claims.aud.names · Cloudflare Ruleset Engine docs\ndescription: The `aud` (audience) claim identifies the recipients that the JSON\n  Web Token (JWT) is intended for.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.jwt.claims.aud.names/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.jwt.claims.aud.names/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#http.request.jwt.claims.aud",
-  "links": []
-}

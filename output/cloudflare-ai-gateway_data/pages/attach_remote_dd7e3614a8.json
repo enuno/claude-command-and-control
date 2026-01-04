@@ -1,8 +1,0 @@
-{
-  "title": "attach remote",
-  "content": "git remote add origin git@github.com:<username>/<repo>.git",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#attach-remote",
-  "links": []
-}

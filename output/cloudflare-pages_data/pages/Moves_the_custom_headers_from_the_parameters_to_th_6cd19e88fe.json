@@ -1,8 +1,0 @@
-{
-  "title": "Moves the custom headers from the parameters to the request context",
-  "content": "def process_custom_arguments(params, context, **kwargs):\n    if (custom_headers := params.pop(\"custom_headers\", None)):\n        context[\"custom_headers\"] = custom_headers",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#moves-the-custom-headers-from-the-parameters-to-the-request-context",
-  "links": []
-}

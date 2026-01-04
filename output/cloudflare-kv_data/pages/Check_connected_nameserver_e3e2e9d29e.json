@@ -1,8 +1,0 @@
-{
-  "title": "Check connected nameserver",
-  "content": "nslookup -class=chaos -type=txt id.server 1.1.1.1\nnslookup -class=chaos -type=txt id.server 1.0.0.1",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#check-connected-nameserver",
-  "links": []
-}

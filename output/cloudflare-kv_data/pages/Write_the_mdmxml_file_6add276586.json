@@ -1,8 +1,0 @@
-{
-  "title": "Write the mdm.xml file",
-  "content": "touch /var/lib/cloudflare-warp/mdm.xml\necho -e \"<dict>\\n   <key>organization</key>\\n   <string>your-team-name</string>\\n</dict>\n\" > /var/lib/cloudflare-warp/mdm.xml",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#write-the-mdm.xml-file",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Create user service",
-  "content": "npx wrangler vpc service create user-service \\\n  --type http \\\n  --tunnel-id <YOUR_TUNNEL_ID> \\\n  --hostname user-api.internal.example.com",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#create-user-service",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Create a bridge network called demo",
-  "content": "❯ docker network create demo\ne1e1943a6995a7e8c115a1c60357fe64f87a3ae90074ce6e4c3f0d2bba3fa892",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#create-a-bridge-network-called-demo",
-  "links": []
-}

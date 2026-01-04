@@ -1,8 +1,0 @@
-{
-  "title": "cf.edge.server\\_port",
-  "content": "`cf.edge.server_port` IP address\n\nRepresents the port number at which the Cloudflare global network received the request.\n\nUse this field to filter traffic on a specific port. The value is a port number in the range 1–65535.\n\n<page>\n---\ntitle: cf.edge.server_ip · Cloudflare Ruleset Engine docs\ndescription: Represents the global network's IP address to which the HTTP\n  request has resolved.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.edge.server_ip/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.edge.server_ip/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.edge.server\\_port",
-  "links": []
-}

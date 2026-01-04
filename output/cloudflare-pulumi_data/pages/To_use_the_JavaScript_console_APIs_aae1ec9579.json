@@ -1,8 +1,0 @@
-{
-  "title": "To use the JavaScript console APIs",
-  "content": "from js import console\nfrom workers import WorkerEntrypoint, Response",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#to-use-the-javascript-console-apis",
-  "links": []
-}

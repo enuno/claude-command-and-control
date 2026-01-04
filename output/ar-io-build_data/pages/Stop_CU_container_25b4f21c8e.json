@@ -1,8 +1,0 @@
-{
-  "title": "Stop CU container",
-  "content": "docker compose -f docker-compose.ao.yaml down",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#stop-cu-container",
-  "links": []
-}

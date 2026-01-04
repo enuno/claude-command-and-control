@@ -1,8 +1,0 @@
-{
-  "title": "Remove the old (deprecated) package",
-  "content": "npm uninstall agents-sdk",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#remove-the-old-(deprecated)-package",
-  "links": []
-}

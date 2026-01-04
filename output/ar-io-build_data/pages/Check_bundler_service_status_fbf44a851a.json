@@ -1,8 +1,0 @@
-{
-  "title": "Check bundler service status",
-  "content": "docker compose --file docker-compose.bundler.yaml ps",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#check-bundler-service-status",
-  "links": []
-}

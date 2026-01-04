@@ -1,8 +1,0 @@
-{
-  "title": "default value.",
-  "content": "PubkeyAuthentication yes\nTrustedUserCAKeys /etc/ssh/ca.pub\n\nInclude /etc/ssh/sshd_config.d/*.conf",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#default-value.",
-  "links": []
-}

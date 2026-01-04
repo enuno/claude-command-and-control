@@ -1,8 +1,0 @@
-{
-  "title": "Stop Grafana sidecar",
-  "content": "docker compose -f docker-compose.grafana.yaml down",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#stop-grafana-sidecar",
-  "links": []
-}

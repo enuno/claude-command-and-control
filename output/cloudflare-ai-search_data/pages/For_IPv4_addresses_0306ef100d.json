@@ -1,8 +1,0 @@
-{
-  "title": "For IPv4 addresses",
-  "content": "iptables -A INPUT -p tcp -m multiport --dports http,https -j DROP",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#for-ipv4-addresses",
-  "links": []
-}

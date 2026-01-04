@@ -1,8 +1,0 @@
-{
-  "title": "Get object information",
-  "content": "object_information = s3.head_object(Bucket='my-bucket', Key='dog.png')",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#get-object-information",
-  "links": []
-}

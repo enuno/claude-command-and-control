@@ -1,8 +1,0 @@
-{
-  "title": "Enable compaction for a specific table (no token required)",
-  "content": "npx wrangler r2 bucket catalog compaction enable <BUCKET> <NAMESPACE> <TABLE> --target-size 256\n```\n\n* Apply different target file sizes per table\n* Disable compaction for specific tables\n* Optimize based on table-specific access patterns\n\nLearn more at [Manage catalogs](https://developers.cloudflare.com/r2/data-catalog/manage-catalogs/).\n\n<page>\n---\ntitle: New Overview Page for Cloudflare Workers · Changelog\ndescription: A new Overview page gives you a quick view of your Worker’s\n  activity, recent versions, and bindings.\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/changelog/2025-10-06-new-worker-overview-page/\n  md: https://developers.cloudflare.com/changelog/2025-10-06-new-worker-overview-page/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#enable-compaction-for-a-specific-table-(no-token-required)",
-  "links": []
-}

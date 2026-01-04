@@ -1,8 +1,0 @@
-{
-  "title": "https://example.com/?filter=waf&filter=botm&filter=cdn",
-  "content": "http.request.uri.args[\"filter\"]          # ==> [\"waf\", \"botm\", \"cdn\"]\n\nlen(http.request.uri.args[\"filter\"][1])  # ==> 4",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#https://example.com/?filter=waf&filter=botm&filter=cdn",
-  "links": []
-}

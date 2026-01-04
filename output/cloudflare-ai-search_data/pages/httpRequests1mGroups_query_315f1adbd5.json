@@ -1,8 +1,0 @@
-{
-  "title": "httpRequests1mGroups query.",
-  "content": "type httpRequestsGroup {\n    date: Date!\n    timeslot: DateTime!\n    requests: UInt64!\n    contentTypeMap: [ContentTypeMapElem!]!\n    # ... other fields\n}\n\nenum TrustedClientCategory {\n    UNKNOWN\n    REAL_BROWSER\n    HONEST_BOT\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#httprequests1mgroups-query.",
-  "links": []
-}

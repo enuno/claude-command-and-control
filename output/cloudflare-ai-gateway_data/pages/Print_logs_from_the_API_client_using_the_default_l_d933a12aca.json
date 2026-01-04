@@ -1,8 +1,0 @@
-{
-  "title": "Print logs from the API client using the default log library logger (default: false).",
-  "content": "export CLOUDFLARE_API_CLIENT_LOGGING=true",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#print-logs-from-the-api-client-using-the-default-log-library-logger-(default:-false).",
-  "links": []
-}

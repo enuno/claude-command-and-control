@@ -1,8 +1,0 @@
-{
-  "title": "Enable compaction for a specific table",
-  "content": "npx wrangler r2 bucket catalog compaction enable my-bucket my-namespace my-table \\\n  --target-size 256",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#enable-compaction-for-a-specific-table",
-  "links": []
-}

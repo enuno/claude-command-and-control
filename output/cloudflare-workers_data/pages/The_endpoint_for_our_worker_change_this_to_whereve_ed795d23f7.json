@@ -1,8 +1,0 @@
-{
-  "title": "The endpoint for our worker, change this to wherever you deploy your worker",
-  "content": "worker_endpoint = \"https://myworker.myzone.workers.dev/\"",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#the-endpoint-for-our-worker,-change-this-to-wherever-you-deploy-your-worker",
-  "links": []
-}

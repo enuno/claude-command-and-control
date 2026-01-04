@@ -1,8 +1,0 @@
-{
-  "title": "cf.api\\_gateway.auth\\_id\\_present",
-  "content": "`cf.api_gateway.auth_id_present` Boolean\n\nIndicates whether the request contained an API session authentication token, as defined by API Shield's saved [session identifiers](https://developers.cloudflare.com/api-shield/get-started/#session-identifiers).\n\n<page>\n---\ntitle: cf.api_gateway.request_violates_schema · Cloudflare Ruleset Engine docs\ndescription: Indicates whether the request [violated the\n  schema](/api-shield/security/schema-validation/) assigned to the respective\n  saved endpoint.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.api_gateway.request_violates_schema/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.api_gateway.request_violates_schema/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.api\\_gateway.auth\\_id\\_present",
-  "links": []
-}

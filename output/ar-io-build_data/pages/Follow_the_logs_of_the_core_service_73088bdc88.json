@@ -1,8 +1,0 @@
-{
-  "title": "Follow the logs of the core service",
-  "content": "docker compose logs core -f -n 10",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#follow-the-logs-of-the-core-service",
-  "links": []
-}

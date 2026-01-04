@@ -1,8 +1,0 @@
-{
-  "title": "The ExpiresIn parameter determines how long the presigned link is valid (in seconds)",
-  "content": "get_url = s3.generate_presigned_url(\n    'get_object',\n    Params={'Bucket': 'my-bucket', 'Key': 'dog.png'},\n    ExpiresIn=3600  # Valid for 1 hour\n)",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#the-expiresin-parameter-determines-how-long-the-presigned-link-is-valid-(in-seconds)",
-  "links": []
-}

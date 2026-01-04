@@ -1,8 +1,0 @@
-{
-  "title": "Keep id of the new job",
-  "content": "id = r.json()[\"result\"][\"id\"]",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#keep-id-of-the-new-job",
-  "links": []
-}

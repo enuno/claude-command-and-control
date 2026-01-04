@@ -1,8 +1,0 @@
-{
-  "title": "raw\\.http.request.full\\_uri",
-  "content": "`raw.http.request.full_uri` String\n\nThe raw full URI as received by the web server without any transformation.\n\nThe value will not include the `#fragment` part, which is not sent to web servers.\n\nThis is the raw field version of the [`http.request.full_uri`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.full_uri/) field. Raw fields, prefixed with `raw.`, preserve original request values for later evaluations. These fields are immutable during the entire request evaluation workflow, and they are not affected by the actions of previously matched rules.\n\n**Note**: This raw field may include some basic normalization done by Cloudflare's HTTP server. However, this can change in the future.\n\n* Request\n* URI\n* Raw fields\n\n<page>\n---\ntitle: raw.http.request.uri · Cloudflare Ruleset Engine docs\ndescription: The URI path and query string of the request without any transformation.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/raw.http.request.uri/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/raw.http.request.uri/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#raw\\.http.request.full\\_uri",
-  "links": []
-}

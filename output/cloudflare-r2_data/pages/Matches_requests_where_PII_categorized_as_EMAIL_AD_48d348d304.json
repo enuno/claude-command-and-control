@@ -1,8 +1,0 @@
-{
-  "title": "Matches requests where PII categorized as \"EMAIL_ADDRESS\" or \"IBAN_CODE\" was detected:",
-  "content": "(cf.llm.prompt.pii_detected and any(cf.llm.prompt.pii_categories[*] in {\"EMAIL_ADDRESS\" \"IBAN_CODE\"}))\n```\n\n<page>\n---\ntitle: cf.llm.prompt.pii_detected · Cloudflare Ruleset Engine docs\ndescription: Indicates whether any personally identifiable information (PII) has\n  been detected in the LLM prompt included in the request.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.pii_detected/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.pii_detected/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#matches-requests-where-pii-categorized-as-\"email_address\"-or-\"iban_code\"-was-detected:",
-  "links": []
-}

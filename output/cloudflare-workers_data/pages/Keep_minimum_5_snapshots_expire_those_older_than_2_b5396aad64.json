@@ -1,8 +1,0 @@
-{
-  "title": "Keep minimum 5 snapshots, expire those older than 2 days",
-  "content": "npx wrangler r2 bucket catalog snapshot-expiration enable my-bucket my-namespace my-table \\\n  --token $R2_CATALOG_TOKEN \\\n  --older-than-days 2 \\\n  --retain-last 5",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#keep-minimum-5-snapshots,-expire-those-older-than-2-days",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Goodies",
-  "content": "1. **Ansible Dokploy**: Ansible role to deploy Dokploy [Ansible Role](https://github.com/jacobtipp/ansible-dokploy)\n2. **Dokploy Oracle infrastructure**: Deploy Dokploy on Oracle infrastructure [Github](https://github.com/statickidz/dokploy-oci-free)\n3. **Dokploy Deploy Action 1**: Automatic Dokploy deployments on Github [Github](https://github.com/benbristow/dokploy-deploy-action)\n4. **Dokploy Deploy Action 2**: Automatic Dokploy deployments on Github [Github](https://github.com/jmischler72/dokploy-deploy-action)\n5. **Dokploy Deploy Action 3**: Automatic Dokploy deployments on Github (Support both `application` and `compose` deployment) [Github](https://github.com/nhridoy/dokploy-deploy-action)\n6. **Dokploy JS Sdk**: Dokploy JS SDK [Github](https://github.com/quiint/dokploy.js)\n7. **Templates Collection** : Docker compose collection for Dokploy [Github](https://github.com/benbristow/dokploy-compose-templates)\n8. **Dokploy Port Updater**: Dokploy Port Updater [Github](https://github.com/clockradios/dokploy-port-updater)\n9. **Dokli TUI**: Dokli TUI [Github](https://github.com/jonykalavera/dokli)\n\nWant to submit your own? [Submit a PR](https://github.com/Dokploy/website/blob/main/README.md)",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#goodies",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "export ANTHROPIC_FOUNDRY_BASE_URL=https://{resource}.services.ai.azure.com",
-  "content": "",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#export-anthropic_foundry_base_url=https://{resource}.services.ai.azure.com",
-  "links": []
-}

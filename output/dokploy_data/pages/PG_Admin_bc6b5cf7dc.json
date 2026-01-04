@@ -1,8 +1,0 @@
-{
-  "title": "PG Admin",
-  "content": "1. Download and install pgAdmin [pgAdmin](https://www.pgadmin.org/download/).\n2. Go to your `postgres` databases.\n3. In External Credentials, enter the `External Port (Internet)` make sure the port is not in use by another service eg. `5433` and click `Save`.\n4. It will display the `External Connection URL` eg. `postgres://user:password@1.2.4.5:5433/database`.\n\nOpen pgAdmin and follow the steps:\n\n1. Click on `Add New Server`.\n2. Enter the `Server Name` eg. `dokploy`.\n3. Enter to `Connection`.\n4. In Hostname/Address enter the IP from the server where the database is hosted eg. `1.2.4.5`.\n5. In Port enter the port where the database is running eg. `5433`.\n6. In Database enter the name of the database eg. `database`.\n7. In Username enter the username eg. `user`.\n8. In Password enter the password eg. `password`.\n9. Click on `Save`.\n\nDone! now you can manage the database from pgAdmin.",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#pg-admin",
-  "links": []
-}

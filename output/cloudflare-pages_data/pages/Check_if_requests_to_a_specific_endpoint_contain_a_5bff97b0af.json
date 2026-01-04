@@ -1,8 +1,0 @@
-{
-  "title": "Check if requests to a specific endpoint contain any suspicious or infected content objects",
-  "content": "any(cf.waf.content_scan.obj_results[*] in {\"suspicious\" \"infected\"}) and http.request.uri.path eq \"/upload\"\n```\n\n<page>\n---\ntitle: cf.waf.content_scan.obj_sizes · Cloudflare Ruleset Engine docs\ndescription: An array of file sizes in bytes, in the order the content objects\n  were detected in the request.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.content_scan.obj_sizes/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.content_scan.obj_sizes/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#check-if-requests-to-a-specific-endpoint-contain-any-suspicious-or-infected-content-objects",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "cf.bot\\_management.score",
-  "content": "`cf.bot_management.score` Number\n\nRepresents the likelihood that a request originates from a bot using a score from 1–99.\n\nA low score indicates that the request comes from a bot or an automated agent. A high score indicates that a human issued the request.\n\nRequires a Cloudflare Enterprise plan with [Bot Management](https://developers.cloudflare.com/bots/plans/bm-subscription/) enabled.\n\n<page>\n---\ntitle: cf.bot_management.static_resource · Cloudflare Ruleset Engine docs\ndescription: Indicates whether static resources should be included when you\n  create a rule using\n  [`cf.bot_management.score`](/ruleset-engine/rules-language/fields/reference/cf.bot_management.score/).\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.bot_management.static_resource/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.bot_management.static_resource/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.bot\\_management.score",
-  "links": []
-}

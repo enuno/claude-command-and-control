@@ -1,8 +1,0 @@
-{
-  "title": "Stop bundler service",
-  "content": "docker compose --file docker-compose.bundler.yaml down",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#stop-bundler-service",
-  "links": []
-}

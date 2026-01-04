@@ -1,8 +1,0 @@
-{
-  "title": "Attempt to read object called \"foo\"",
-  "content": "curl https://your-worker.dev/foo\n#=> Forbidden",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#attempt-to-read-object-called-\"foo\"",
-  "links": []
-}

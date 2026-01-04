@@ -1,8 +1,0 @@
-{
-  "title": "cf.llm.prompt.injection\\_score",
-  "content": "`cf.llm.prompt.injection_score` Number\n\nA score from 1–99 that represents the likelihood that the LLM prompt in the request is trying to perform a prompt injection attack.\n\nA low score (for example, below `20`) indicates that there is a high probability that the LLM prompt in the request is trying to perform a prompt injection attack.\n\nThe special score `100` indicates that Cloudflare did not score the request.\n\nRequires a Cloudflare Enterprise plan. You must also enable [Firewall for AI](https://developers.cloudflare.com/waf/detections/firewall-for-ai/).\n\n<page>\n---\ntitle: cf.llm.prompt.pii_categories · Cloudflare Ruleset Engine docs\ndescription: Array of string values with the personally identifiable information\n  (PII) categories found in the LLM prompt included in the request.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.pii_categories/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.pii_categories/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.llm.prompt.injection\\_score",
-  "links": []
-}

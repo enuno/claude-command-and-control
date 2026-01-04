@@ -1,8 +1,0 @@
-{
-  "title": "Setting up JWT validation with specific keying material and location of the token",
-  "content": "resource \"cloudflare_token_validation_config\" \"example_es256_config\" {\n  zone_id       = var.zone_id\n  token_type    = \"JWT\"\n  title         = \"ES256 Example\"\n  description   = \"An example configuration that validates ES256 JWTs with `b0078548-c9bc-46e5-a678-06fb72443427` key ID in the authorization header\"\n  token_sources = [\"http.request.headers[\\\"authorization\\\"][0]\"]\n  credentials   = {\n    keys = [\n      {\n        alg = \"ES256\"\n        kid = \"b0078548-c9bc-46e5-a678-06fb72443427\"\n        kty = \"EC\"\n        crv = \"P-256\"\n        x   = \"yl_BZSxUG5II7kJCMxDfWImiU6zkcJcBYaTgzV3Jgnk\"\n        y   = \"0qAzLQe_YGEdotb54qWq00k74QdiTOiWnuw_YzuIqr0\"\n      }\n    ]\n  }\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#setting-up-jwt-validation-with-specific-keying-material-and-location-of-the-token",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "List all buckets on your account",
-  "content": "puts @r2.list_buckets\n\n#=> {\n#=>   :buckets => [{\n#=>     :name => \"your-bucket\",\n#=>     :creation_date => \"…\",\n#=>   }],\n#=>   :owner => {\n#=>     :display_name => \"…\",\n#=>     :id => \"…\"\n#=>   }\n#=> }",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#list-all-buckets-on-your-account",
-  "links": []
-}

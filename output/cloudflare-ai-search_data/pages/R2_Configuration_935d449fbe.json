@@ -1,8 +1,0 @@
-{
-  "title": "R2 Configuration",
-  "content": "fs.native-s3.enabled=true\ns3.region=auto\ns3.aws-access-key=<Your R2 access key>\ns3.aws-secret-key=<Your R2 secret>\ns3.endpoint=<Your R2 endpoint>\ns3.path-style-access=true",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#r2-configuration",
-  "links": []
-}

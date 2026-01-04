@@ -1,8 +1,0 @@
-{
-  "title": "Tanstack",
-  "content": "This example will deploy a simple Tanstack application.\n\n1. **Use Git Provider in Your Application**:\n   * Repository: `https://github.com/Dokploy/examples.git`\n   * Branch: `main`\n   * Build path: `/tanstack`\n   * use `Nixpacks` as build type\n\n2. **Click on Deploy**:\n   * Deploy your application by clicking the deploy button.\n\n3. **Generate a Domain**:\n   * Click on generate domain button.\n   * A new domain will be generated for you.\n   * Set Port `3000`\n   * You can use this domain to access your application.\n\nIf you need further assistance, join our [Discord server](https://discord.com/invite/2tBnJ3jDJc).",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#tanstack",
-  "links": []
-}

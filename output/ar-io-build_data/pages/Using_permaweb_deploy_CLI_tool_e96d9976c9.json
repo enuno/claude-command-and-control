@@ -1,8 +1,0 @@
-{
-  "title": "Using permaweb-deploy (CLI tool)",
-  "content": "npm install permaweb-deploy --save-dev\nnpx permaweb-deploy --deploy-folder ./build --arns-name your-domain",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#using-permaweb-deploy-(cli-tool)",
-  "links": []
-}

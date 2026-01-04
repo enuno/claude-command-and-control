@@ -1060,6 +1060,7 @@ version: 1.0.0
 | **[competitive-ads-extractor](skills-templates/competitive-ads-extractor/)** | Analyze competitors' ads from ad libraries | Understanding competitor messaging and creative approaches |
 | **[conductor](skills-templates/conductor/)** | Build and deployment orchestration | Working with conductor, implementing conductor solutions, debugging conductor code |
 | **content-research-writer** | Writing assistance with research and citations | Writing articles, documentation, blog posts |
+| **[create-llmstxt-py](skills/create-llmstxt-py/SKILL.md)** | Python script generating llms.txt files using Firecrawl and OpenAI | Making websites LLM-accessible, automated content indexing, documentation extraction |
 | **[developer-growth-analysis](skills-templates/developer-growth-analysis/)** | Coding pattern analysis from Claude Code history | Identifying development gaps and curating learning resources |
 | **[docling](skills-templates/document-processing/docling/)** | IBM Research document processing library for AI | Parsing PDFs/DOCX, extracting tables/layouts, building RAG pipelines, MCP server for documents |
 | **[document-skills/docx](skills-templates/document-skills/docx/)** | Word document creation and editing | Working with .docx files, tracked changes, or comments |
@@ -1092,6 +1093,7 @@ version: 1.0.0
 | **[raffle-winner-picker](skills-templates/raffle-winner-picker/)** | Random winner selection | Running giveaways, raffles, or contests |
 | **root-cause-tracing** | Systematic debugging through call stack | Tracing bugs deep in execution |
 | **[sdk-sm](skills-templates/sdk-sm/)** | Bitwarden Secrets Manager SDK | Using Bitwarden Secrets Manager, working with multi-language SDK (Rust, Python, C#, Go, Java), secrets management API |
+| **[seo](skills/seo/SKILL.md)** | Google SEO research and web traffic monetization | SEO best practices, tool comparisons (Semrush, Moz, Ahrefs), search engine optimization, marketing |
 | **sharing-skills** | Contribute skills upstream via PR | Sharing broadly useful patterns |
 | **[skill-creator](skills-templates/skill-creator/)** | Guide for creating effective skills | Building new skills with specialized knowledge |
 | **skill-orchestrator** | Coordinates multiple skills | Complex multi-skill workflows |

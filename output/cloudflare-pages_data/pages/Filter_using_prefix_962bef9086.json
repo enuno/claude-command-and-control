@@ -1,8 +1,0 @@
-{
-  "title": "Filter using prefix",
-  "content": "$ npx wrangler r2 bucket notification create <BUCKET_NAME> --event-type <EVENT_TYPE> --queue <QUEUE_NAME> --prefix \"<PREFIX_VALUE>\"",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#filter-using-prefix",
-  "links": []
-}

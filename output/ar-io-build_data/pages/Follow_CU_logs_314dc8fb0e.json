@@ -1,8 +1,0 @@
-{
-  "title": "Follow CU logs",
-  "content": "docker compose -f docker-compose.ao.yaml logs -f --tail=20",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#follow-cu-logs",
-  "links": []
-}

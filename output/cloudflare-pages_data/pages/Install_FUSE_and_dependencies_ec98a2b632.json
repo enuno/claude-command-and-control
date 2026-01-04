@@ -1,8 +1,0 @@
-{
-  "title": "Install FUSE and dependencies",
-  "content": "RUN apk add --no-cache \\\n    --repository http://dl-cdn.alpinelinux.org/alpine/v3.20/main \\\n    ca-certificates fuse curl bash",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#install-fuse-and-dependencies",
-  "links": []
-}

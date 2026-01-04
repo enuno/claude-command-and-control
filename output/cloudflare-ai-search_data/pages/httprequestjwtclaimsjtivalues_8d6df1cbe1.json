@@ -1,8 +1,0 @@
-{
-  "title": "http.request.jwt.claims.jti.values",
-  "content": "`http.request.jwt.claims.jti.values` Array\\<String>\n\nThe `jti` (JWT ID) claim provides a unique identifier for the JWT.\n\nFor details, refer to the [Registered Claim Names](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1) in RFC 7519.\n\nRequires a Cloudflare Enterprise plan with a paid add-on.\n\nFor more information on validating JSON Web Tokens, refer to [JSON Web Tokens Validation](https://developers.cloudflare.com/api-shield/security/jwt-validation/) in the API Shield documentation.\n\n* Request\n* JWT validation\n\n<page>\n---\ntitle: http.request.jwt.claims.nbf.sec · Cloudflare Ruleset Engine docs\ndescription: The `nbf` (not before) claim identifies the time (number of\n  seconds) before which the JWT must not be accepted for processing.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.jwt.claims.nbf.sec/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.jwt.claims.nbf.sec/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#http.request.jwt.claims.jti.values",
-  "links": []
-}

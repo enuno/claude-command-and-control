@@ -1,8 +1,0 @@
-{
-  "title": ".env.development",
-  "content": "TURNSTILE_SITEKEY=1x00000000000000000000AA\nTURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#.env.development",
-  "links": []
-}

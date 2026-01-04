@@ -1,8 +1,0 @@
-{
-  "title": "The following is effectively a TRUNCATE operation",
-  "content": "spark.sql(\"DELETE FROM r2dc.namespace.table_name\")",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#the-following-is-effectively-a-truncate-operation",
-  "links": []
-}

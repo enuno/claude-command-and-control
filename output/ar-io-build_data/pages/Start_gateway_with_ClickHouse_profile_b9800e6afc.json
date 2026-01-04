@@ -1,8 +1,0 @@
-{
-  "title": "Start gateway with ClickHouse profile",
-  "content": "docker compose --profile clickhouse up -d",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#start-gateway-with-clickhouse-profile",
-  "links": []
-}

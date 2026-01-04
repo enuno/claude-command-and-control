@@ -1,8 +1,0 @@
-{
-  "title": "ArNS configuration",
-  "content": "ARNS_ROOT_HOST=your-domain.com\nARNS_CACHE_TYPE=redis\n```\n\nThis comprehensive reference should help you configure your AR.IO Gateway with the appropriate environment variables for your specific use case.",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#arns-configuration",
-  "links": []
-}

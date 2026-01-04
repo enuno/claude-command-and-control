@@ -1,8 +1,0 @@
-{
-  "title": "cf.ray\\_id",
-  "content": "The Ray ID of the current request.\n\nA [Ray ID](https://developers.cloudflare.com/fundamentals/reference/cloudflare-ray-id/) is an identifier given to every request that goes through Cloudflare.\n\n<page>\n---\ntitle: cf.response.error_type · Cloudflare Ruleset Engine docs\ndescription: A string with the type of error in the response being returned.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.response.error_type/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.response.error_type/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.ray\\_id",
-  "links": []
-}

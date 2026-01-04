@@ -1,8 +1,0 @@
-{
-  "title": "BEGIN Cloudflare Managed content",
-  "content": "User-Agent: *\nContent-signal: search=yes, ai-train=no\nAllow: /\n\nUser-agent: Amazonbot\nDisallow: /\n\nUser-agent: Applebot-Extended\nDisallow: /\n\nUser-agent: Bytespider\nDisallow: /\n\nUser-agent: CCBot\nDisallow: /\n\nUser-agent: ClaudeBot\nDisallow: /\n\nUser-agent: Google-Extended\nDisallow: /\n\nUser-agent: GPTBot\nDisallow: /\n\nUser-agent: meta-externalagent\nDisallow: /",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#begin-cloudflare-managed-content",
-  "links": []
-}

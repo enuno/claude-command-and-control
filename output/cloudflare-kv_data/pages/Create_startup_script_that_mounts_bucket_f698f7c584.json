@@ -1,8 +1,0 @@
-{
-  "title": "Create startup script that mounts bucket",
-  "content": "RUN printf '#!/bin/sh\\n\\\n    set -e\\n\\\n    mkdir -p /mnt/r2\\n\\\n    R2_ENDPOINT=\"https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com\"\\n\\\n    /usr/local/bin/tigrisfs --endpoint \"${R2_ENDPOINT}\" -f \"${BUCKET_NAME}\" /mnt/r2 &\\n\\\n    sleep 3\\n\\\n    ls -lah /mnt/r2\\n\\\n    ' > /startup.sh && chmod +x /startup.sh\n\nCMD [\"/startup.sh\"]\n```\n\nSee the [Mount R2 buckets with FUSE](https://developers.cloudflare.com/containers/examples/r2-fuse-mount/) example for a complete guide on mounting R2 buckets and/or other S3-compatible storage buckets within your containers.\n\n<page>\n---\ntitle: New CPU Pricing for Containers and Sandboxes · Changelog\ndescription: New Container pricing changes CPU billing to be based on active\n  usage, rather than provisioned CPU resources\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/changelog/2025-11-21-new-cpu-pricing/\n  md: https://developers.cloudflare.com/changelog/2025-11-21-new-cpu-pricing/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#create-startup-script-that-mounts-bucket",
-  "links": []
-}

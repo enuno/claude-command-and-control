@@ -1,8 +1,0 @@
-{
-  "title": "Connect to R2 Data Catalog",
-  "content": "catalog = RestCatalog(\n    name=\"my_catalog\",\n    warehouse=WAREHOUSE,\n    uri=CATALOG_URI,\n    token=TOKEN,\n)",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#connect-to-r2-data-catalog",
-  "links": []
-}

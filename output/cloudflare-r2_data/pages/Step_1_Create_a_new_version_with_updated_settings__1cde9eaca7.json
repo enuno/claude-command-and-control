@@ -1,8 +1,0 @@
-{
-  "title": "Step 1: Create a new version with updated settings (doesn't affect live traffic)",
-  "content": "POST /workers/workers/{id}/versions\n{\n  \"compatibility_date\": \"$today\",\n  \"bindings\": [\n    {\n      \"name\": \"MY_NEW_ENV_VAR\",\n      \"text\": \"new_value\",\n      \"type\": \"plain_text\"\n    }\n  ],\n  \"modules\": [...]\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#step-1:-create-a-new-version-with-updated-settings-(doesn't-affect-live-traffic)",
-  "links": []
-}

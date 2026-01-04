@@ -1,8 +1,0 @@
-{
-  "title": "Attempt to write an object without providing the \"X-Custom-Auth-Key\" header",
-  "content": "curl https://your-worker.dev/cat-pic.jpg -X PUT --data-binary 'test'\n#=> Forbidden",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#attempt-to-write-an-object-without-providing-the-\"x-custom-auth-key\"-header",
-  "links": []
-}

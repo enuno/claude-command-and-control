@@ -1,8 +1,0 @@
-{
-  "title": "cf.waf.score.xss",
-  "content": "`cf.waf.score.xss` Number\n\nAn attack score from 1–99 classifying the cross-site scripting (XSS) attack vector.\n\nRequires a Cloudflare Enterprise plan. You must also enable [attack score detection](https://developers.cloudflare.com/waf/detections/attack-score/).\n\n<page>\n---\ntitle: cf.worker.upstream_zone · Cloudflare Ruleset Engine docs\ndescription: Identifies whether a request comes from a worker or not.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.worker.upstream_zone/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.worker.upstream_zone/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.waf.score.xss",
-  "links": []
-}

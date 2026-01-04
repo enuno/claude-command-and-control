@@ -1,8 +1,0 @@
-{
-  "title": "http.request.version",
-  "content": "`http.request.version` String\n\nThe version of the HTTP protocol used. Use this field when different checks are needed for different versions.\n\n* `\"HTTP/1.1\"`\n* `\"HTTP/3\"`\n\n<page>\n---\ntitle: http.response.code · Cloudflare Ruleset Engine docs\ndescription: The HTTP status code returned to the client, either set by a\n  Cloudflare product or returned by the origin server.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.response.code/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.response.code/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#http.request.version",
-  "links": []
-}

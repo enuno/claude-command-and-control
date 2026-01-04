@@ -1,8 +1,0 @@
-{
-  "title": "Use CASCADE to drop all tables within the namespace",
-  "content": "spark.sql(\"DROP NAMESPACE r2dc.namespace_name CASCADE\")",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#use-cascade-to-drop-all-tables-within-the-namespace",
-  "links": []
-}

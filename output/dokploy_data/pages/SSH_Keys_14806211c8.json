@@ -1,8 +1,0 @@
-{
-  "title": "SSH Keys",
-  "content": "import { Callout } from 'fumadocs-ui/components/callout';\n\nDokploy provides a section exclusively for SSH keys, allowing you to manage your SSH keys in a centralized location.\n\nSSH Keys can be used for two purposes:\n\n* **Private Repositories**: You can use SSH Keys, to access to private repositories, this is only for `Git` provider\n  in your application or docker compose.\n* **Multi Server**: You can use SSH Keys, to access remotely to your servers via SSH.\n\nTo create a SSH Key, is a very easy process, just click on `Create SSH Key`\n\nWe offer two SSH Keys Generation types:\n\n1. **RSA Key**: This is the most commonly used key type, and generates a 2048-bit RSA key.\n2. **Ed25519 Key**: This is a newer key type that generates a 256-bit Ed25519 key.\n\n<Callout>\n  You can also create or paste your own SSH Key, you can edit the `Private Key` and `Public Key` fields without restrictions,\n  make sure to use the correct format for the key type you are using.\n</Callout>\n\n<Callout type=\"warn\">\n  Once you create a SSH Key you will not be able to read the `Private Key` anymore.\n</Callout>",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#ssh-keys",
-  "links": []
-}

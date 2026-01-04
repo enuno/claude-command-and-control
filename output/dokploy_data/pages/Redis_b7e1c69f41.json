@@ -1,8 +1,0 @@
-{
-  "title": "Redis",
-  "content": "1. Download and install RedisInsight [RedisInsight](https://redis.io/insight/).\n2. Go to your `redis` databases.\n3. In External Credentials, enter the `External Port (Internet)` make sure the port is not in use by another service eg. `6379` and click `Save`.\n4. It will display the `External Connection URL` eg. `redis://user:password@1.2.4.5:6379/database`.\n\nOpen RedisInsight and follow the steps:\n\n1. Add Redis Database.\n2. Enter the `Host` eg. `1.2.4.5`.\n3. Enter the `Port` eg. `6379`.\n4. Enter the username eg. `default`.\n5. Enter the `Password` eg. `password`.\n6. Click on `Save`.\n\nDone! now you can manage the database from RedisInsight.",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#redis",
-  "links": []
-}

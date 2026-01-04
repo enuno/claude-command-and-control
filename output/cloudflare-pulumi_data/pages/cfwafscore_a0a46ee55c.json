@@ -1,8 +1,0 @@
-{
-  "title": "cf.waf.score",
-  "content": "`cf.waf.score` Number\n\nA global score from 1–99 that combines the score of each WAF attack vector into a single score.\n\nThe special score `100` indicates that Cloudflare did not score the request.\n\nThis is the standard [WAF attack score](https://developers.cloudflare.com/waf/detections/attack-score/) to detect variants of attack patterns.\n\nRequires a Cloudflare Enterprise plan. You must also enable [attack score detection](https://developers.cloudflare.com/waf/detections/attack-score/).\n\n<page>\n---\ntitle: cf.waf.score.class · Cloudflare Ruleset Engine docs\ndescription: The attack score class of the current request, based on the WAF attack score.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.score.class/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.score.class/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.waf.score",
-  "links": []
-}

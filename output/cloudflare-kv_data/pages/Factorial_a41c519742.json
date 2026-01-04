@@ -1,8 +1,0 @@
-{
-  "title": "Factorial",
-  "content": "curl -X POST https://ai-code-executor.YOUR_SUBDOMAIN.workers.dev/execute \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"question\": \"Calculate the factorial of 5\"}'",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#factorial",
-  "links": []
-}

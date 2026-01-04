@@ -1,8 +1,0 @@
-{
-  "title": "Paste your R2 Access Key ID",
-  "content": "npx wrangler secret put AWS_SECRET_ACCESS_KEY",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#paste-your-r2-access-key-id",
-  "links": []
-}

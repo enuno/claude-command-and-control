@@ -1,8 +1,0 @@
-{
-  "title": "cf.api\\_gateway.fallthrough\\_detected",
-  "content": "`cf.api_gateway.fallthrough_detected` Boolean\n\nIndicates whether the request matched a saved endpoint in [Endpoint Management](https://developers.cloudflare.com/api-shield/management-and-monitoring/).\n\n<page>\n---\ntitle: cf.api_gateway.auth_id_present · Cloudflare Ruleset Engine docs\ndescription: Indicates whether the request contained an API session\n  authentication token, as defined by API Shield's saved [session\n  identifiers](/api-shield/get-started/#session-identifiers).\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.api_gateway.auth_id_present/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.api_gateway.auth_id_present/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.api\\_gateway.fallthrough\\_detected",
-  "links": []
-}

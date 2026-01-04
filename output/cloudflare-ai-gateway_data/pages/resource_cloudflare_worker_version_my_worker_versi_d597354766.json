@@ -1,8 +1,0 @@
-{
-  "title": "resource \"cloudflare_worker_version\" \"my_worker_version\" {}",
-  "content": "",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#resource-\"cloudflare_worker_version\"-\"my_worker_version\"-{}",
-  "links": []
-}

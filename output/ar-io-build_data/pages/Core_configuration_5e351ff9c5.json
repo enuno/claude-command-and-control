@@ -1,8 +1,0 @@
-{
-  "title": "Core configuration",
-  "content": "NODE_ENV=production\nLOG_LEVEL=info\nPORT=4000\nADMIN_API_KEY=your-admin-key-here",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#core-configuration",
-  "links": []
-}

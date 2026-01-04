@@ -1,8 +1,0 @@
-{
-  "title": "Limitations (/sdks/(clis)/ardrive-cli/limitations)",
-  "content": "**Number of files in a bulk upload:** Theoretically unlimited\n\n**Max individual file size**: 2GB (Node.js limitation)\n\n**Max file name length**: 255 bytes\n\n**Max ANS-104 bundled transaction size:** 500 MiB per bundle. App will handle creating multiple bundles.\n\n**Max ANS-104 data item counts per bundled transaction:** 250 Files per bundle (500 Data Items).",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#limitations-(/sdks/(clis)/ardrive-cli/limitations)",
-  "links": []
-}

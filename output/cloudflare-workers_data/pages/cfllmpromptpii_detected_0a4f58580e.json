@@ -1,8 +1,0 @@
-{
-  "title": "cf.llm.prompt.pii\\_detected",
-  "content": "`cf.llm.prompt.pii_detected` Boolean\n\nIndicates whether any personally identifiable information (PII) has been detected in the LLM prompt included in the request.\n\nEquivalent to checking if the [`cf.llm.prompt.pii_categories`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.pii_categories/) field is not empty.\n\nRequires a Cloudflare Enterprise plan. You must also enable [Firewall for AI](https://developers.cloudflare.com/waf/detections/firewall-for-ai/).\n\n<page>\n---\ntitle: cf.llm.prompt.unsafe_topic_detected · Cloudflare Ruleset Engine docs\ndescription: Indicates whether the incoming request includes any unsafe topic\n  category in the LLM prompt.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.unsafe_topic_detected/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.unsafe_topic_detected/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.llm.prompt.pii\\_detected",
-  "links": []
-}

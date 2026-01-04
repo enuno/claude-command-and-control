@@ -1,8 +1,0 @@
-{
-  "title": "ssl",
-  "content": "Returns `true` when the HTTP connection to the client is encrypted.\n\n<page>\n---\ntitle: raw.http.response.headers.values · Cloudflare Ruleset Engine docs\ndescription: The values of the headers in the HTTP response without any transformation.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/raw.http.response.headers.values/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/raw.http.response.headers.values/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#ssl",
-  "links": []
-}

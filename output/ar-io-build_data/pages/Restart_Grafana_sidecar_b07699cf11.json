@@ -1,8 +1,0 @@
-{
-  "title": "Restart Grafana sidecar",
-  "content": "docker compose -f docker-compose.grafana.yaml restart",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#restart-grafana-sidecar",
-  "links": []
-}

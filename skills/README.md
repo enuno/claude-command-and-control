@@ -11,7 +11,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 ---
 
-## Available Skills (23 Total)
+## Available Skills (25 Total)
 
 ### Bitcoin Mining Skills
 
@@ -54,6 +54,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 | Skill | Description | Key Use Cases |
 |-------|-------------|---------------|
 | **[content-research-writer](content-research-writer/SKILL.md)** | Assists in writing high-quality content by conducting research, adding citations, improving hooks | Writing blog posts, articles, newsletters, educational content, tutorials |
+| **[create-llmstxt-py](create-llmstxt-py/SKILL.md)** | Python script for generating llms.txt and llms-full.txt files using Firecrawl and OpenAI APIs | Making websites LLM-accessible, automated content indexing, documentation extraction, website summaries |
 
 ### Data Storage & Upload Skills
 
@@ -61,6 +62,12 @@ This directory contains the repository's skill library. Each skill is a reusable
 |-------|-------------|---------------|
 | **[turbo-python-sdk](turbo-python-sdk/SKILL.md)** | Python SDK for Ardrive Turbo Upload and Payment Service | Arweave uploads with Python, permanent storage, companion to TypeScript SDK |
 | **[turbo-sdk](turbo-sdk/SKILL.md)** | Complete Arweave Turbo ecosystem including client SDKs, core upload infrastructure, payment service backend, and CLI tools | Arweave uploads, permanent storage, ANS-104 bundling, multi-signature support, AWS-scale infrastructure |
+
+### Marketing & SEO Skills
+
+| Skill | Description | Key Use Cases |
+|-------|-------------|---------------|
+| **[seo](seo/SKILL.md)** | Google SEO research and web traffic monetization with curated resources | SEO best practices, tool comparisons (Semrush, Moz, Ahrefs), search engine optimization, marketing strategies |
 
 ### Contribution & Sharing Skills
 
@@ -172,13 +179,18 @@ Skills for automating repository maintenance:
 - Documentation maintenance (documentation-update)
 
 ### Content & Documentation Skills
-Skills for content creation:
+Skills for content creation and documentation:
 - Research-backed writing (content-research-writer)
+- LLM-accessible website indexing (create-llmstxt-py)
 
 ### Data Storage & Upload Skills
 Skills for permanent data storage and uploads to Arweave:
 - Python uploads (turbo-python-sdk)
 - TypeScript uploads (turbo-sdk)
+
+### Marketing & SEO Skills
+Skills for search engine optimization and web marketing:
+- SEO best practices and tools (seo)
 
 ### Contribution & Sharing Skills
 Skills for community engagement:
@@ -257,13 +269,14 @@ All skills in this repository meet these criteria:
 
 ## Statistics
 
-**Total Skills**: 23
+**Total Skills**: 25
 - Bitcoin Mining: 8
 - Development Workflow: 4
 - Design & UI/UX: 1
 - Integration & Automation: 2
-- Content & Documentation: 1
+- Content & Documentation: 2
 - Data Storage & Upload: 2
+- Marketing & SEO: 1
 - Contribution & Sharing: 1
 - Meta Skills: 1
 - Skill Development: 3
@@ -277,6 +290,9 @@ All skills in this repository meet these criteria:
 ## Recent Additions
 
 **January 2026**:
+- ✨ **SEO & Content Indexing Skills** (2026-01-03) - 2 new skills
+  - seo - Google SEO research with 2,571 GitHub stars, MIT license, covers Semrush/Moz/Ahrefs
+  - create-llmstxt-py - Python tool for llms.txt generation, 257 stars, Firecrawl/OpenAI integration
 - 🔄 **turbo-sdk v1.3.0** (2026-01-03) - Enhanced with complete infrastructure coverage
   - Added turbo-upload-service core infrastructure component
   - Complete Turbo ecosystem: client SDKs + core upload infrastructure + payment backend + CLI tools

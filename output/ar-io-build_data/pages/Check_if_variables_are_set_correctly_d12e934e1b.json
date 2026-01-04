@@ -1,8 +1,0 @@
-{
-  "title": "Check if variables are set correctly",
-  "content": "grep -E \"APEX_(TX_ID|ARNS_NAME)\" .env",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#check-if-variables-are-set-correctly",
-  "links": []
-}

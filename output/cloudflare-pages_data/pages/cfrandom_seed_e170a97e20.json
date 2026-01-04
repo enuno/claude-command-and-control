@@ -1,8 +1,0 @@
-{
-  "title": "cf.random\\_seed",
-  "content": "`cf.random_seed` Bytes\n\nReturns per-request random bytes that you can use in the [`uuidv4()`](https://developers.cloudflare.com/ruleset-engine/rules-language/functions/#uuidv4) function.\n\n<page>\n---\ntitle: cf.ray_id · Cloudflare Ruleset Engine docs\ndescription: The Ray ID of the current request.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.ray_id/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.ray_id/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.random\\_seed",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "cf.hostname.metadata",
-  "content": "`cf.hostname.metadata` String\n\nReturns the string representation of the per-hostname [custom metadata](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/domain-support/custom-metadata/) JSON object set by SSL for SaaS customers.\n\n<page>\n---\ntitle: cf.llm.prompt.detected · Cloudflare Ruleset Engine docs\ndescription: Indicates whether Cloudflare detected an LLM prompt in the incoming request.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.detected/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.detected/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.hostname.metadata",
-  "links": []
-}

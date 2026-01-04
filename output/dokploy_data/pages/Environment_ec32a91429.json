@@ -1,8 +1,0 @@
-{
-  "title": "Environment",
-  "content": "<APIPage document={\"./public/openapi.json\"} operations={[{\"method\":\"post\",\"path\":\"/environment.create\"},{\"method\":\"get\",\"path\":\"/environment.one\"},{\"method\":\"get\",\"path\":\"/environment.byProjectId\"},{\"method\":\"post\",\"path\":\"/environment.remove\"},{\"method\":\"post\",\"path\":\"/environment.update\"},{\"method\":\"post\",\"path\":\"/environment.duplicate\"}]} hasHead={true} />",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#environment",
-  "links": []
-}

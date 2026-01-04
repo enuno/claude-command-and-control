@@ -1,8 +1,0 @@
-{
-  "title": "Upload a version to the staging environment",
-  "content": "CLOUDFLARE_ENV=staging wrangler versions upload",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#upload-a-version-to-the-staging-environment",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Check if the length of 'filter' values (if any) is never 3 or 4",
-  "content": "all(not len(http.request.uri.args[\"filter\"][*])[*] in {3 4})  # ==> false",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#check-if-the-length-of-'filter'-values-(if-any)-is-never-3-or-4",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Caching (/sdks/wayfinder/wayfinder-core/(installation-notes)/caching)",
-  "content": "Wayfinder supports intelligent caching:\n\n- **In browsers**: Uses localStorage for persistent caching across page reloads\n- **In Node.js**: Uses in-memory caching\n- **What's cached**: Gateway lists, routing decisions, and more\n- **Cache configuration**:\n  - `cache: true` - Enable with default 5-minute TTL\n  - `cache: { ttlSeconds: 3600 }` - Enable with custom TTL (in seconds)\n  - `cache: false` - Disable caching (default)",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#caching-(/sdks/wayfinder/wayfinder-core/(installation-notes)/caching)",
-  "links": []
-}

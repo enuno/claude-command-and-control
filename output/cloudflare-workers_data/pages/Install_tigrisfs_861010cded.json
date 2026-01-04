@@ -1,8 +1,0 @@
-{
-  "title": "Install tigrisfs",
-  "content": "RUN ARCH=$(uname -m) && \\\n    if [ \"$ARCH\" = \"x86_64\" ]; then ARCH=\"amd64\"; fi && \\\n    if [ \"$ARCH\" = \"aarch64\" ]; then ARCH=\"arm64\"; fi && \\\n    VERSION=$(curl -s https://api.github.com/repos/tigrisdata/tigrisfs/releases/latest | grep -o '\"tag_name\": \"[^\"]*' | cut -d'\"' -f4) && \\\n    curl -L \"https://github.com/tigrisdata/tigrisfs/releases/download/${VERSION}/tigrisfs_${VERSION#v}_linux_${ARCH}.tar.gz\" -o /tmp/tigrisfs.tar.gz && \\\n    tar -xzf /tmp/tigrisfs.tar.gz -C /usr/local/bin/ && \\\n    rm /tmp/tigrisfs.tar.gz && \\\n    chmod +x /usr/local/bin/tigrisfs",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#install-tigrisfs",
-  "links": []
-}

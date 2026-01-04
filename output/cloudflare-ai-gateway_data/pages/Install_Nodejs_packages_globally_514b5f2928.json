@@ -1,8 +1,0 @@
-{
-  "title": "Install Node.js packages globally",
-  "content": "RUN npm install -g typescript ts-node prettier",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#install-node.js-packages-globally",
-  "links": []
-}

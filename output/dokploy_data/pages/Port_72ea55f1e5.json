@@ -1,8 +1,0 @@
-{
-  "title": "Port",
-  "content": "<APIPage document={\"./public/openapi.json\"} operations={[{\"method\":\"post\",\"path\":\"/port.create\"},{\"method\":\"get\",\"path\":\"/port.one\"},{\"method\":\"post\",\"path\":\"/port.delete\"},{\"method\":\"post\",\"path\":\"/port.update\"}]} hasHead={true} />",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#port",
-  "links": []
-}

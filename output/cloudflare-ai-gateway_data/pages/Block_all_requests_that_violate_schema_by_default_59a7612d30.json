@@ -1,8 +1,0 @@
-{
-  "title": "Block all requests that violate schema by default",
-  "content": "resource \"cloudflare_schema_validation_settings\" \"zone_level_settings\" {\n  zone_id                              = var.zone_id\n  validation_default_mitigation_action = \"block\"\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#block-all-requests-that-violate-schema-by-default",
-  "links": []
-}

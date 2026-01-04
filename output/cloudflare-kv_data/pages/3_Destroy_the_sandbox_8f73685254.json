@@ -1,8 +1,0 @@
-{
-  "title": "3. Destroy the sandbox",
-  "content": "curl -X POST https://YOUR_WORKER_URL/destroy",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#3.-destroy-the-sandbox",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "NextJS + Vercel",
-  "content": "Source: https://docs.conductor.build/quickstart/nextjs\n\nConductor works well with NextJS apps. Here's a basic [conductor.json](/core/conductor.json) to add to the root directory of your project.\n\nOnce added, every new workspace will automatically copy your `.env.local` and `.vercel` configuration, and then install dependencies.",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#nextjs-+-vercel",
-  "links": []
-}

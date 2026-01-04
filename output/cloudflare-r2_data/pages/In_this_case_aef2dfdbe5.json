@@ -1,8 +1,0 @@
-{
-  "title": "In this case:",
-  "content": "concat(\"/\", http.request.accepted_languages[0], http.request.uri.path) ==> \"//my-path\"\n```\n\n<page>\n---\ntitle: http.request.body.form · Cloudflare Ruleset Engine docs\ndescription: The HTTP request body of a form represented as a Map (or associative array).\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.body.form/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.body.form/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#in-this-case:",
-  "links": []
-}

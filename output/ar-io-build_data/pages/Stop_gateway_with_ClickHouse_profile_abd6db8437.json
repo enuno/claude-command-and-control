@@ -1,8 +1,0 @@
-{
-  "title": "Stop gateway with ClickHouse profile",
-  "content": "docker compose --profile clickhouse down",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#stop-gateway-with-clickhouse-profile",
-  "links": []
-}

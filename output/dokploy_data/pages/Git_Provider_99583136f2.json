@@ -1,8 +1,0 @@
-{
-  "title": "Git Provider",
-  "content": "<APIPage document={\"./public/openapi.json\"} operations={[{\"method\":\"get\",\"path\":\"/gitProvider.getAll\"},{\"method\":\"post\",\"path\":\"/gitProvider.remove\"}]} hasHead={true} />",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#git-provider",
-  "links": []
-}

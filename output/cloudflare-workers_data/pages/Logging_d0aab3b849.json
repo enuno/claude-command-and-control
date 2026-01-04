@@ -1,8 +1,0 @@
-{
-  "title": "Logging",
-  "content": "#SyslogFacility AUTH\nLogLevel DEBUG3",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#logging",
-  "links": []
-}

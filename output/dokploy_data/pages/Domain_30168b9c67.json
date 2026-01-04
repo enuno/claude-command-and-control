@@ -1,8 +1,0 @@
-{
-  "title": "Domain",
-  "content": "<APIPage document={\"./public/openapi.json\"} operations={[{\"method\":\"post\",\"path\":\"/domain.create\"},{\"method\":\"get\",\"path\":\"/domain.byApplicationId\"},{\"method\":\"get\",\"path\":\"/domain.byComposeId\"},{\"method\":\"post\",\"path\":\"/domain.generateDomain\"},{\"method\":\"get\",\"path\":\"/domain.canGenerateTraefikMeDomains\"},{\"method\":\"post\",\"path\":\"/domain.update\"},{\"method\":\"get\",\"path\":\"/domain.one\"},{\"method\":\"post\",\"path\":\"/domain.delete\"},{\"method\":\"post\",\"path\":\"/domain.validateDomain\"}]} hasHead={true} />",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#domain",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "View Grafana logs without following",
-  "content": "docker compose -f docker-compose.grafana.yaml logs --tail=50",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#view-grafana-logs-without-following",
-  "links": []
-}

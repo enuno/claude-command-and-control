@@ -1,8 +1,0 @@
-{
-  "title": "Basic connectivity tests",
-  "content": "tracert 1.1.1.1\ntracert 1.0.0.1",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#basic-connectivity-tests",
-  "links": []
-}

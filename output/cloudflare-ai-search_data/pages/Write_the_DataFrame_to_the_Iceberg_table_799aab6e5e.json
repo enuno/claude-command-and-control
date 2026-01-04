@@ -1,8 +1,0 @@
-{
-  "title": "Write the DataFrame to the Iceberg table",
-  "content": "df.write \\\n    .format(\"iceberg\") \\\n    .mode(\"append\") \\\n    .save(\"default.my_table\")",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#write-the-dataframe-to-the-iceberg-table",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "cf.waf.content\\_scan.has\\_obj",
-  "content": "`cf.waf.content_scan.has_obj` Boolean\n\nIndicates whether the request contains at least one content object.\n\nRequires a Cloudflare Enterprise plan with [malicious uploads detection](https://developers.cloudflare.com/waf/detections/malicious-uploads/).",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.waf.content\\_scan.has\\_obj",
-  "links": []
-}

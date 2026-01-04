@@ -1,8 +1,0 @@
-{
-  "title": "Diff viewer",
-  "content": "Source: https://docs.conductor.build/core/diff-viewer\n\nSee the changes Claude made to your codebase and sync with GitHub\n\nOnce Claude has finished working, you can see the changes it made to your codebase in the Diff Viewer.\n\nConductor will recommend each action to take on the way to merging your PR.\n\n<img alt=\"Conductor Diff Viewer\" />\n\n<img alt=\"Conductor Diff Viewer - Merge\" />",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#diff-viewer",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "ipsec.conf - strongSwan IPsec configuration file",
-  "content": "config setup\n    charondebug=\"all\"\n    uniqueids = yes\n\nconn %default\n    ikelifetime=24h\n    rekey=yes\n    reauth=no\n    keyexchange=ikev2\n    authby=secret\n    dpdaction=restart\n    closeaction=restart",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#ipsec.conf---strongswan-ipsec-configuration-file",
-  "links": []
-}

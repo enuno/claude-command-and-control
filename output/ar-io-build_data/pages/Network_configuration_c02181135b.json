@@ -1,8 +1,0 @@
-{
-  "title": "Network configuration",
-  "content": "TRUSTED_NODE_URL=https://arweave.net\nTRUSTED_GATEWAY_URL=https://arweave.net",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#network-configuration",
-  "links": []
-}

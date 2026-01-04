@@ -1,8 +1,0 @@
-{
-  "title": "Follow gateway logs",
-  "content": "docker compose logs core -f -n 10",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#follow-gateway-logs",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "cf.llm.prompt.detected",
-  "content": "`cf.llm.prompt.detected` Boolean\n\nIndicates whether Cloudflare detected an LLM prompt in the incoming request.\n\nWhen a prompt is not present, the other LLM-related fields will have default values.\n\nRequires a Cloudflare Enterprise plan. You must also enable [Firewall for AI](https://developers.cloudflare.com/waf/detections/firewall-for-ai/).\n\n<page>\n---\ntitle: cf.llm.prompt.injection_score · Cloudflare Ruleset Engine docs\ndescription: A score from 1–99 that represents the likelihood that the LLM\n  prompt in the request is trying to perform a prompt injection attack.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.injection_score/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.injection_score/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.llm.prompt.detected",
-  "links": []
-}

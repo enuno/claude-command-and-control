@@ -1,8 +1,0 @@
-{
-  "title": "Bulk redirect list name",
-  "content": "variable \"bulk_redirect_list_name\" {\n  default = \"my_bulk_redirect_list_name\"\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#bulk-redirect-list-name",
-  "links": []
-}

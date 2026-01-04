@@ -1,8 +1,0 @@
-{
-  "title": "You can pass the --expire flag to determine how long the presigned link is valid. The --unlink flag isn't supported by R2.",
-  "content": "rclone link r2:my-bucket-name/cat.png --expire 3600",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#you-can-pass-the---expire-flag-to-determine-how-long-the-presigned-link-is-valid.-the---unlink-flag-isn't-supported-by-r2.",
-  "links": []
-}

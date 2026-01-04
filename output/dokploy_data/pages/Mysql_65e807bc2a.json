@@ -1,8 +1,0 @@
-{
-  "title": "MySQL",
-  "content": "1. Download and install Beekeeper Studio [Beekeeper Studio](https://www.beekeeperstudio.io/get).\n2. Go to your `mysql` databases.\n3. In External Credentials, enter the `External Port (Internet)` make sure the port is not in use by another service eg. `3306` and click `Save`.\n4. It will display the `External Connection URL` eg. `mysql://user:password@1.2.4.5:3306/database`.\n\nOpen Beekeeper Studio and follow the steps:\n\n1. Click on `Add New Server`.\n2. Select `MySQL` as the `Database Type`.\n3. Use `Import URL` to enter the `External Connection URL` from Dokploy eg. `mysql://user:password@1.2.4.5:3306/database`.\n4. Click on `Connect`.\n5. Click on `Save`.\n\nDone! now you can manage the database from Beekeeper Studio.",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#mysql",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Maximum number of data items to queue for indexing",
-  "content": "MAX_DATA_ITEM_QUEUE_SIZE=100000",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#maximum-number-of-data-items-to-queue-for-indexing",
-  "links": []
-}

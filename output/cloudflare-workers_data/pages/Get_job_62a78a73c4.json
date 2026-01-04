@@ -1,8 +1,0 @@
-{
-  "title": "Get job",
-  "content": "r = requests.get(logpush_url + \"/jobs/%s\" % id, headers=headers)\nprint(r.status_code, r.text)\nassert r.status_code == 200",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#get-job",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "reserved values",
-  "content": "#\n255 local\n254 main\n253 default\n0   unspec\n200 viatunicmp\n#",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#reserved-values",
-  "links": []
-}

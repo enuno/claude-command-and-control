@@ -1,8 +1,0 @@
-{
-  "title": "Here we extract the headers from the request context and actually set them",
-  "content": "def add_custom_headers(params, context, **kwargs):\n    if (custom_headers := context.get(\"custom_headers\")):\n        params[\"headers\"].update(custom_headers)\n\nevent_system.register('before-parameter-build.s3.PutObject', process_custom_arguments)\nevent_system.register('before-call.s3.PutObject', add_custom_headers)\n\ncustom_headers = {'If-Match' : '\"29d911f495d1ba7cb3a4d7d15e63236a\"'}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#here-we-extract-the-headers-from-the-request-context-and-actually-set-them",
-  "links": []
-}

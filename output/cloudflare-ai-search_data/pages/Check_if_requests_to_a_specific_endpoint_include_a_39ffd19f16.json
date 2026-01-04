@@ -1,8 +1,0 @@
-{
-  "title": "Check if requests to a specific endpoint include any malicious content objects",
-  "content": "cf.waf.content_scan.has_malicious_obj and http.request.uri.path eq \"/upload\"\n```\n\n<page>\n---\ntitle: cf.waf.content_scan.has_obj · Cloudflare Ruleset Engine docs\ndescription: Indicates whether the request contains at least one content object.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.content_scan.has_obj/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.waf.content_scan.has_obj/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#check-if-requests-to-a-specific-endpoint-include-any-malicious-content-objects",
-  "links": []
-}

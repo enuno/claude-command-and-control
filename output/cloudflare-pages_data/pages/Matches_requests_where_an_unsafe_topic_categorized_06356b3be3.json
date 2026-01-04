@@ -1,8 +1,0 @@
-{
-  "title": "Matches requests where an unsafe topic categorized as \"S2\" (Non-Violent Crimes) or \"S10\" (Hate) was detected in the LLM prompt:",
-  "content": "(cf.llm.prompt.unsafe_topic_detected and any(cf.llm.prompt.unsafe_topic_categories[*] in {\"S2\" \"S10\"}))\n```\n\n<page>\n---\ntitle: cf.llm.prompt.pii_detected · Cloudflare Ruleset Engine docs\ndescription: Indicates whether any personally identifiable information (PII) has\n  been detected in the LLM prompt included in the request.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.pii_detected/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.pii_detected/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#matches-requests-where-an-unsafe-topic-categorized-as-\"s2\"-(non-violent-crimes)-or-\"s10\"-(hate)-was-detected-in-the-llm-prompt:",
-  "links": []
-}

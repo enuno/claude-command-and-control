@@ -1,8 +1,0 @@
-{
-  "title": "cf.edge.server\\_port",
-  "content": "`cf.edge.server_port` IP address\n\nRepresents the port number at which the Cloudflare global network received the request.\n\nUse this field to filter traffic on a specific port. The value is a port number in the range 1–65535.\n\n<page>\n---\ntitle: cf.llm.prompt.detected · Cloudflare Ruleset Engine docs\ndescription: Indicates whether Cloudflare detected an LLM prompt in the incoming request.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.detected/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.detected/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.edge.server\\_port",
-  "links": []
-}

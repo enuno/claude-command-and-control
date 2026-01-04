@@ -1,8 +1,0 @@
-{
-  "title": "cf.threat\\_score",
-  "content": "`cf.threat_score` Number\n\nRepresents a Cloudflare threat score.\n\nPreviously, a threat score represented a Cloudflare threat score from 0–100, where 0 indicated low risk. Now, the threat score is always `0` (zero).\n\n<page>\n---\ntitle: cf.timings.client_tcp_rtt_msec · Cloudflare Ruleset Engine docs\ndescription: The smoothed TCP round-trip time from client to Cloudflare in milliseconds.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.timings.client_tcp_rtt_msec/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.timings.client_tcp_rtt_msec/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.threat\\_score",
-  "links": []
-}

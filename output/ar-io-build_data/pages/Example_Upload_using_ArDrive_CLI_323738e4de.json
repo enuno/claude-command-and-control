@@ -1,8 +1,0 @@
-{
-  "title": "Example: Upload using ArDrive CLI",
-  "content": "ardrive upload-file --file-path ./my-website.html",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#example:-upload-using-ardrive-cli",
-  "links": []
-}

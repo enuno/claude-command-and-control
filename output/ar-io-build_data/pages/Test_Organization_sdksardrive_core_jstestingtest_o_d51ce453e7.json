@@ -1,8 +1,0 @@
-{
-  "title": "Test Organization (/sdks/ardrive-core-js/(testing)/test-organization)",
-  "content": "- Unit tests: Located next to source files (`*.test.ts`)\n- Integration tests: Located in `/tests` directory",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#test-organization-(/sdks/ardrive-core-js/(testing)/test-organization)",
-  "links": []
-}

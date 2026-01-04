@@ -1,8 +1,0 @@
-{
-  "title": "Create simple PyArrow table",
-  "content": "df = pa.table({\n    \"id\": [1, 2, 3],\n    \"name\": [\"Alice\", \"Bob\", \"Charlie\"],\n})",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#create-simple-pyarrow-table",
-  "links": []
-}

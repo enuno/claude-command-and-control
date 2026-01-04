@@ -1,8 +1,0 @@
-{
-  "title": "Data Portability (/sdks/(clis)/ardrive-cli/data-portability)",
-  "content": "Data uploaded via the ArDrive CLI, once indexed by Arweave's Gateways and sufficiently seeded across enough nodes on the network, can be accessed via all other ArDrive applications including the [ArDrive Web application][ardrive-web-app] at https://app.ardrive.io.\n\nAll transactions successfully executed by ArDrive can always be inspected in the [Viewblock blockchain explorer].",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#data-portability-(/sdks/(clis)/ardrive-cli/data-portability)",
-  "links": []
-}

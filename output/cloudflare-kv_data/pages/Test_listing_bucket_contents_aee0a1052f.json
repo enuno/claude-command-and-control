@@ -1,8 +1,0 @@
-{
-  "title": "Test listing bucket contents",
-  "content": "curl -i https://s3.us-west-2.amazonaws.com/your-bucket-name/",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#test-listing-bucket-contents",
-  "links": []
-}

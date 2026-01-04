@@ -1,8 +1,0 @@
-{
-  "title": "cf.edge.server\\_ip",
-  "content": "`cf.edge.server_ip` IP address\n\nRepresents the global network's IP address to which the HTTP request has resolved.\n\nThis field is only meaningful for [BYOIP customers](https://developers.cloudflare.com/byoip/).\n\n<page>\n---\ntitle: cf.hostname.metadata · Cloudflare Ruleset Engine docs\ndescription: Returns the string representation of the per-hostname [custom\n  metadata](/cloudflare-for-platforms/cloudflare-for-saas/domain-support/custom-metadata/)\n  JSON object set by SSL for SaaS customers.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.hostname.metadata/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.hostname.metadata/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.edge.server\\_ip",
-  "links": []
-}

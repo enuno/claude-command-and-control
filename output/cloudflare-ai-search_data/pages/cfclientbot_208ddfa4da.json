@@ -1,8 +1,0 @@
-{
-  "title": "cf.client.bot",
-  "content": "`cf.client.bot` Boolean\n\nIndicates whether the request originated from a known good bot or crawler.\n\nProvides the same information as [`cf.bot_management.verified_bot`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.bot_management.verified_bot/).\n\n<page>\n---\ntitle: cf.edge.client_tcp · Cloudflare Ruleset Engine docs\ndescription: Indicates if the request was made over TCP.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.edge.client_tcp/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.edge.client_tcp/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.client.bot",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "This operation cannot be undone",
-  "content": "spark.sql(\"DROP TABLE r2dc.namespace.table_name PURGE\")",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#this-operation-cannot-be-undone",
-  "links": []
-}

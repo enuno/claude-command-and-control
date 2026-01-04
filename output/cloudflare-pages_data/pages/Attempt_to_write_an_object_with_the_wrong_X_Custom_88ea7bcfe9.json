@@ -1,8 +1,0 @@
-{
-  "title": "Attempt to write an object with the wrong \"X-Custom-Auth-Key\" header value",
-  "content": "curl https://your-worker.dev/cat-pic.jpg -X PUT --header \"X-Custom-Auth-Key: hotdog\" --data-binary 'test'\n#=> Forbidden",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#attempt-to-write-an-object-with-the-wrong-\"x-custom-auth-key\"-header-value",
-  "links": []
-}

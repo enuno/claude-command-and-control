@@ -1,8 +1,0 @@
-{
-  "title": "Stop only ClickHouse container",
-  "content": "docker compose --profile clickhouse down clickhouse",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#stop-only-clickhouse-container",
-  "links": []
-}

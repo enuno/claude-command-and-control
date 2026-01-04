@@ -1,8 +1,0 @@
-{
-  "title": "Import new snapshot",
-  "content": "mv 2025-04-23-sqlite/* data/sqlite/",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#import-new-snapshot",
-  "links": []
-}

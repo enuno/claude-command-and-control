@@ -1,8 +1,0 @@
-{
-  "title": "2. Verify data is accessible",
-  "content": "curl https://YOUR_WORKER_URL/results",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#2.-verify-data-is-accessible",
-  "links": []
-}

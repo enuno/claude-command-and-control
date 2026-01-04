@@ -1,8 +1,0 @@
-{
-  "title": "Deploy to main site",
-  "content": "npx permaweb-deploy --arns-name myapp --deploy-folder ./v2-build",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#deploy-to-main-site",
-  "links": []
-}

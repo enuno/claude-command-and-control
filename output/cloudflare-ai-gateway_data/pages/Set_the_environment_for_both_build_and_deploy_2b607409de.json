@@ -1,8 +1,0 @@
-{
-  "title": "Set the environment for both build and deploy",
-  "content": "CLOUDFLARE_ENV=production npm run build & wrangler deploy\n```\n\nWhen using `@cloudflare/vite-plugin`, the build process generates a [\"redirected deploy config\"](https://developers.cloudflare.com/workers/wrangler/configuration/#generated-wrangler-configuration) that is flattened to only contain the active environment. Wrangler will validate that the environment specified matches the environment used during the build to prevent accidentally deploying a Worker built for one environment to a different environment.\n\n* [System environment variables](https://developers.cloudflare.com/workers/wrangler/system-environment-variables/)\n* [Environments](https://developers.cloudflare.com/workers/wrangler/environments/)\n\n<page>\n---\ntitle: WAF Release - 2025-11-10 · Changelog\ndescription: Cloudflare WAF managed rulesets 2025-11-10 release\nchatbotDeprioritize: true\nsource_url:\n  html: https://developers.cloudflare.com/changelog/2025-11-10-waf-release/\n  md: https://developers.cloudflare.com/changelog/2025-11-10-waf-release/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#set-the-environment-for-both-build-and-deploy",
-  "links": []
-}

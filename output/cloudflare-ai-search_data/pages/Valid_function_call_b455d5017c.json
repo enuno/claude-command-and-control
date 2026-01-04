@@ -1,8 +1,0 @@
-{
-  "title": "Valid function call",
-  "content": "ends_with(http.request.uri.path, \".html\")",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#valid-function-call",
-  "links": []
-}

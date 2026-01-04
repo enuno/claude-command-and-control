@@ -1,8 +1,0 @@
-{
-  "title": "http.request.jwt.claims.iat.sec.names",
-  "content": "`http.request.jwt.claims.iat.sec.names` Array\\<String>\n\nThe `iat` (issued at) claim identifies the time (number of seconds) at which the JWT was issued.\n\nFor details, refer to the [Registered Claim Names](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1) in RFC 7519.\n\nRequires a Cloudflare Enterprise plan with a paid add-on.\n\nFor more information on validating JSON Web Tokens, refer to [JSON Web Tokens Validation](https://developers.cloudflare.com/api-shield/security/jwt-validation/) in the API Shield documentation.\n\n* Request\n* JWT validation\n\n<page>\n---\ntitle: http.request.jwt.claims.iat.sec.values · Cloudflare Ruleset Engine docs\ndescription: The `iat` (issued at) claim identifies the time (number of seconds)\n  at which the JWT was issued.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.jwt.claims.iat.sec.values/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.request.jwt.claims.iat.sec.values/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#http.request.jwt.claims.iat.sec.names",
-  "links": []
-}

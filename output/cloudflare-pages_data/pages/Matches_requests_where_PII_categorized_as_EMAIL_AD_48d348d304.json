@@ -1,8 +1,0 @@
-{
-  "title": "Matches requests where PII categorized as \"EMAIL_ADDRESS\" or \"IBAN_CODE\" was detected:",
-  "content": "(cf.llm.prompt.pii_detected and any(cf.llm.prompt.pii_categories[*] in {\"EMAIL_ADDRESS\" \"IBAN_CODE\"}))\n```\n\n<page>\n---\ntitle: cf.llm.prompt.unsafe_topic_categories · Cloudflare Ruleset Engine docs\ndescription: Array of string values with the type of unsafe topics detected in\n  the LLM prompt.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.unsafe_topic_categories/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.llm.prompt.unsafe_topic_categories/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#matches-requests-where-pii-categorized-as-\"email_address\"-or-\"iban_code\"-was-detected:",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Maximum time between flushes (in seconds)",
-  "content": "MAX_FLUSH_INTERVAL_SECONDS=600",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#maximum-time-between-flushes-(in-seconds)",
-  "links": []
-}

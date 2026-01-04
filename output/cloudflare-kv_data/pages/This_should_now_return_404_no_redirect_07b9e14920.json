@@ -1,8 +1,0 @@
-{
-  "title": "This should now return 404 (no redirect)",
-  "content": "curl -I https://www.example.com/old-location.php",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#this-should-now-return-404-(no-redirect)",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Intended Audience (/sdks/(clis)/ardrive-cli/intended-audience)",
-  "content": "This tool is intended for use by:\n\n- ArDrive power users with advanced workflows and resource efficiency in mind: bulk uploaders, those with larger storage demand, game developers, nft creators, storage/db admins, etc.\n- Automation tools\n- Services\n- Terminal aficionados\n- Extant and aspiring cypherpunks\n\nFor deeper integrations with the [ArDrive] platform, consider using the [ArDrive Core][ardrive-core] (Node) library's configurable and intuitive class interfaces directly within your application.\n\nTo simply install the latest version of the CLI to your local system and get started, follow the [Quick Start](#quick-start) instructions. To build and/or develop the CLI from source, follow the [Build and Run from Source](#build-and-run-from-source) instructions. In either case, be sure to satisfy the requirements in the [Prerequisites](#prerequisites) section.",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#intended-audience-(/sdks/(clis)/ardrive-cli/intended-audience)",
-  "links": []
-}

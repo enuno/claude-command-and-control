@@ -1,8 +1,0 @@
-{
-  "title": "Creates new snapshots and marks old files for cleanup",
-  "content": "spark.sql(\"\"\"\n  DELETE FROM r2dc.namespace.table_name\n  WHERE column_name = 'value'\n\"\"\")",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#creates-new-snapshots-and-marks-old-files-for-cleanup",
-  "links": []
-}

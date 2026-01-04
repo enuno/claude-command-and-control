@@ -1,8 +1,0 @@
-{
-  "title": "Expect .ssh/authorized_keys2 to be disregarded by default in future.",
-  "content": "#AuthorizedKeysFile    .ssh/authorized_keys .ssh/authorized_keys2\n\n#AuthorizedPrincipalsFile none\n\n#AuthorizedKeysCommand none\n#AuthorizedKeysCommandUser nobody",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#expect-.ssh/authorized_keys2-to-be-disregarded-by-default-in-future.",
-  "links": []
-}

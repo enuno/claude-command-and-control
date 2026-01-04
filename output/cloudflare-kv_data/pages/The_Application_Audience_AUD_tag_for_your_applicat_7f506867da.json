@@ -1,8 +1,0 @@
-{
-  "title": "The Application Audience (AUD) tag for your application",
-  "content": "POLICY_AUD = os.getenv(\"POLICY_AUD\")",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#the-application-audience-(aud)-tag-for-your-application",
-  "links": []
-}

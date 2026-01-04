@@ -1,8 +1,0 @@
-{
-  "title": "cf.worker.upstream\\_zone",
-  "content": "`cf.worker.upstream_zone` String\n\nIdentifies whether a request comes from a worker or not.\n\nWhen a request comes from a worker, this field will hold the name of the zone for that worker. Otherwise, `cf.worker.upstream_zone` is empty.\n\n<page>\n---\ntitle: http.cookie · Cloudflare Ruleset Engine docs\ndescription: The entire cookie as a string.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.cookie/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/http.cookie/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.worker.upstream\\_zone",
-  "links": []
-}

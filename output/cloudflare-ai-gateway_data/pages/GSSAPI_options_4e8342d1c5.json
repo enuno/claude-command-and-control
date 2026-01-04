@@ -1,8 +1,0 @@
-{
-  "title": "GSSAPI options",
-  "content": "#GSSAPIAuthentication no\n#GSSAPICleanupCredentials yes\n#GSSAPIStrictAcceptorCheck yes\n#GSSAPIKeyExchange no",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#gssapi-options",
-  "links": []
-}

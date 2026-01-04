@@ -1,8 +1,0 @@
-{
-  "title": "Note: Assume that \"*********\" is the value of your AUTH_KEY_SECRET Wrangler secret",
-  "content": "curl https://your-worker.dev/cat-pic.jpg -X PUT --header \"X-Custom-Auth-Key: *********\" --data-binary 'test'\n#=> Put cat-pic.jpg successfully!",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#note:-assume-that-\"*********\"-is-the-value-of-your-auth_key_secret-wrangler-secret",
-  "links": []
-}

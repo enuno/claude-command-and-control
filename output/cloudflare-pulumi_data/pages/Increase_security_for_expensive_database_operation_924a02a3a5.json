@@ -1,8 +1,0 @@
-{
-  "title": "Increase security for expensive database operations",
-  "content": "resource \"cloudflare_page_rule\" \"expensive_endpoint_security\" {\n  zone_id  = var.zone_id\n  target   = \"${var.domain}/expensive-db-call\"\n  priority = 1\n\nactions = {\n    security_level = \"under_attack\"\n  }\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#increase-security-for-expensive-database-operations",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Create namespace if it does not exist",
-  "content": "spark.sql(\"CREATE NAMESPACE IF NOT EXISTS default\")",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#create-namespace-if-it-does-not-exist",
-  "links": []
-}

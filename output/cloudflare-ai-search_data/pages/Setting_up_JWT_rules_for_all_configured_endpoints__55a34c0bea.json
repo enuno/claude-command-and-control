@@ -1,8 +1,0 @@
-{
-  "title": "Setting up JWT rules for all configured endpoints on `example.com` except for `get_image`",
-  "content": "resource \"cloudflare_token_validation_rules\" \"example_com\" {\n zone_id      = var.zone_id\n title        = \"Validate JWTs on example.com\"\n description  = \"This actions JWT validation results for requests to example.com except for the get_image endpoint\"\n action       = \"block\"\n enabled      = true\n # Require that the JWT described through the example_es256_config is valid.\n # Reference the ID of the generated token config, this constructs: is_jwt_valid(\"<id>\")\n # If the expression is >not true<, Cloudflare will perform the configured action on the request\n expression   = format(\"(is_jwt_valid(%q))\", cloudflare_token_validation_config.example_es256_config.id)\n selector     = {\n    # all current and future operations matching this include selector will perform the described action when the expression fails to match\n    include = [\n      {\n        host          = [\"example.com\"]\n      }\n    ]\n    exclude = [\n      {\n        # reference the ID of the get_image operation to exclude it\n        operation_ids = [\"${cloudflare_api_shield_operation.get_image.id}\"]\n      }\n    ]\n }\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#setting-up-jwt-rules-for-all-configured-endpoints-on-`example.com`-except-for-`get_image`",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "and KbdInteractiveAuthentication to 'no'.",
-  "content": "#AllowAgentForwarding yes\n#AllowTcpForwarding yes\n#GatewayPorts no\nX11Forwarding yes\n#X11DisplayOffset 10\n#X11UseLocalhost yes\n#PermitTTY yes\nPrintMotd no\n#PrintLastLog yes\n#TCPKeepAlive yes\n#PermitUserEnvironment no\n#Compression delayed\n#ClientAliveInterval 0\n#ClientAliveCountMax 3\n#UseDNS no\n#PidFile /run/sshd.pid\n#MaxStartups 10:30:100\n#PermitTunnel no\n#ChrootDirectory none\n#VersionAddendum none",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#and-kbdinteractiveauthentication-to-'no'.",
-  "links": []
-}

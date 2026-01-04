@@ -61,3 +61,11 @@ logs/
 # Project-specific
 WARP.md
 SESSION_LOG.md
+
+# Integration system - processed files (audit trail, not versioned)
+INTEGRATION/processed/
+INTEGRATION/failed/
+
+# Output directories (temporary skill generation files)
+output/
+*.backup-*

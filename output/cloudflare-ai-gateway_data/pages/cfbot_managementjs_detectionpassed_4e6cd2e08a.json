@@ -1,8 +1,0 @@
-{
-  "title": "cf.bot\\_management.js\\_detection.passed",
-  "content": "`cf.bot_management.js_detection.passed` Boolean\n\nIndicates whether the visitor has previously passed a JS Detection.\n\nFor more details, refer to [JavaScript detections](https://developers.cloudflare.com/bots/additional-configurations/javascript-detections/).\n\nRequires a Cloudflare Enterprise plan with [Bot Management](https://developers.cloudflare.com/bots/plans/bm-subscription/) enabled.\n\n<page>\n---\ntitle: cf.bot_management.score · Cloudflare Ruleset Engine docs\ndescription: Represents the likelihood that a request originates from a bot\n  using a score from 1–99.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.bot_management.score/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.bot_management.score/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.bot\\_management.js\\_detection.passed",
-  "links": []
-}

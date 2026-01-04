@@ -1,8 +1,0 @@
-{
-  "title": "frozen_string_literal: true",
-  "content": "source \"https://rubygems.org\"\n\ngit_source(:github) { |repo_name| \"https://github.com/#{repo_name}\" }",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#frozen_string_literal:-true",
-  "links": []
-}

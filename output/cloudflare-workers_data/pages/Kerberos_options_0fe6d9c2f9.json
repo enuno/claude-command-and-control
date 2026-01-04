@@ -1,8 +1,0 @@
-{
-  "title": "Kerberos options",
-  "content": "#KerberosAuthentication no\n#KerberosOrLocalPasswd yes\n#KerberosTicketCleanup yes\n#KerberosGetAFSToken no",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#kerberos-options",
-  "links": []
-}

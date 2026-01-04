@@ -1,8 +1,0 @@
-{
-  "title": "cf.bot\\_management.ja4",
-  "content": "`cf.bot_management.ja4` String\n\nProvides an SSL/TLS fingerprint to help you identify potential bot requests.\n\nFor more details, refer to [JA3/JA4 Fingerprint](https://developers.cloudflare.com/bots/additional-configurations/ja3-ja4-fingerprint/).\n\nRequires a Cloudflare Enterprise plan with [Bot Management](https://developers.cloudflare.com/bots/plans/bm-subscription/) enabled.\n\n<page>\n---\ntitle: cf.bot_management.js_detection.passed · Cloudflare Ruleset Engine docs\ndescription: Indicates whether the visitor has previously passed a JS Detection.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.bot_management.js_detection.passed/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.bot_management.js_detection.passed/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.bot\\_management.ja4",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Deployment",
-  "content": "<APIPage document={\"./public/openapi.json\"} operations={[{\"method\":\"get\",\"path\":\"/deployment.all\"},{\"method\":\"get\",\"path\":\"/deployment.allByCompose\"},{\"method\":\"get\",\"path\":\"/deployment.allByServer\"},{\"method\":\"get\",\"path\":\"/deployment.allByType\"},{\"method\":\"post\",\"path\":\"/deployment.killProcess\"}]} hasHead={true} />",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#deployment",
-  "links": []
-}

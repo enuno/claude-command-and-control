@@ -1,8 +1,0 @@
-{
-  "title": "cf.response.error\\_type",
-  "content": "`cf.response.error_type` String\n\nA string with the type of error in the response being returned.\n\nThe default value is an empty string (`\"\"`).\n\nThe available values are the following:\n\n* `\"managed_challenge\"`\n* `\"iuam\"`\n* `\"legacy_challenge\"`\n* `\"ip_ban\"`\n* `\"waf\"`\n* `\"5xx\"`\n* `\"1xxx\"`\n* `\"always_online\"`\n* `\"country_challenge\"`\n* `\"ratelimit\"`\n\nYou can use this field to customize the response for a specific type of error (for example, all 1XXX errors or all WAF block actions).\n\n**Note**: This field is only available in [Response Header Transform Rules](https://developers.cloudflare.com/rules/transform/response-header-modification/) and [Custom Errors](https://developers.cloudflare.com/rules/custom-errors/).\n\n<page>\n---\ntitle: cf.threat_score · Cloudflare Ruleset Engine docs\ndescription: Represents a Cloudflare threat score.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.threat_score/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.threat_score/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.response.error\\_type",
-  "links": []
-}

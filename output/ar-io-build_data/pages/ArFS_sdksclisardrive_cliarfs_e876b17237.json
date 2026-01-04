@@ -1,8 +1,0 @@
-{
-  "title": "ArFS (/sdks/(clis)/ardrive-cli/arfs)",
-  "content": "[ArFS] is a data modeling, storage, and retrieval protocol designed to emulate common file system operations and to provide aspects of mutability to your data hierarchy on [Arweave]'s otherwise permanent, immutable data storage blockweave.",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#arfs-(/sdks/(clis)/ardrive-cli/arfs)",
-  "links": []
-}

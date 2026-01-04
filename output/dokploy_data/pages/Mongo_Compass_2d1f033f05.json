@@ -1,8 +1,0 @@
-{
-  "title": "Mongo Compass",
-  "content": "1. Download and install Mongo Compass [Mongo Compass](https://www.mongodb.com/try/download/compass).\n2. Go to your `MongoDB` databases.\n3. In External Credentials, enter the `External Port (Internet)` make sure the port is not in use by another service eg. `27017` and click `Save`.\n4. It will display the `External Connection URL` eg. `mongodb://user:password@1.2.4.5:27017/database`.\n\nOpen Mongo Compass and follow the steps:\n\n1. Click on `Add Connection`.\n2. Copy and paste the `External Connection URL` eg. `mongodb://user:password@1.2.4.5:27017/database`.\n3. Click on `Connect`.\n\nDone! now you can manage the database from Mongo Compass.",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#mongo-compass",
-  "links": []
-}

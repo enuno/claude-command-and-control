@@ -1,8 +1,0 @@
-{
-  "title": "cf.tls\\_client\\_auth.cert\\_verified",
-  "content": "`cf.tls_client_auth.cert_verified` Boolean\n\nReturns `true` when a request presents a valid client certificate.\n\nAlso returns `true` when a request includes a valid certificate that was revoked (refer to [`cf.tls_client_auth.cert_revoked`](https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_client_auth.cert_revoked/)).\n\nThis field is only filled in if the request includes a client certificate for [mTLS authentication](https://developers.cloudflare.com/ssl/client-certificates/enable-mtls/).\n\n<page>\n---\ntitle: cf.tls_client_extensions_sha1 · Cloudflare Ruleset Engine docs\ndescription: The SHA-1 fingerprint of TLS client extensions, encoded in Base64\n  using big-endian format.\nchatbotDeprioritize: false\nsource_url:\n  html: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_client_extensions_sha1/\n  md: https://developers.cloudflare.com/ruleset-engine/rules-language/fields/reference/cf.tls_client_extensions_sha1/index.md\n---",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cf.tls\\_client\\_auth.cert\\_verified",
-  "links": []
-}
