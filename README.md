@@ -1113,6 +1113,7 @@ version: 1.0.0
 | **[video-downloader](skills-templates/video-downloader/)** | Video downloads from YouTube and platforms | Downloading videos for offline viewing or archival |
 | **[wao](skills-templates/wao/)** | Wizard AO SDK & Testing framework | Working with WAO SDK, testing AO applications, understanding AO development |
 | **[weavedb](skills-templates/data-services/weavedb/)** | Decentralized database protocol with zero-knowledge proofs | Building with WeaveDB, implementing decentralized databases, permanent storage solutions |
+| **[x402](skills-templates/x402/)** | HTTP 402 payment protocol for crypto-native API monetization | Implementing paid APIs, AI agent payments, micropayments, USDC integration, MCP server payments |
 | **[webapp-testing](skills-templates/webapp-testing/)** | Playwright-based web app testing | Testing local web applications or debugging UI |
 
 #### Orchestration Skills (NEW)

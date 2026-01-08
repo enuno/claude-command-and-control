@@ -47,11 +47,12 @@ This directory contains production-ready skill templates and examples for Claude
 | **[slack-gif-creator](slack-gif-creator/)** | Creates animated GIFs optimized for Slack with validators for size constraints |
 | **[theme-factory](theme-factory/)** | Applies professional font and color themes to artifacts (10 pre-set themes included) |
 
-### Cryptocurrency & Payments (2 skills)
+### Cryptocurrency & Payments (3 skills)
 | Skill | Description |
 |-------|-------------|
 | **[cryptocurrency/bitcoin-mining](cryptocurrency/bitcoin-mining/)** | Comprehensive Bitcoin mining knowledge from 4 industry reports covering 2024 market analysis, mining economics, operational procedures, and heat reuse strategies for sustainable mining |
 | **[cryptocurrency/btcpayserver-doc](cryptocurrency/btcpayserver-doc/)** | BTCPay Server documentation - self-hosted Bitcoin payment gateway with 767 files covering setup, integrations (WooCommerce, Shopify, etc.), Lightning Network, wallets, and deployment |
+| **[x402](x402/)** | HTTP 402 payment protocol for crypto-native API monetization - implements USDC payments on Base/Solana, AI agent payments, micropayments, Bazaar service discovery, and MCP server integration |
 
 ### Development (10 skills)
 | Skill | Description |

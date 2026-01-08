@@ -1,0 +1,37 @@
+{
+  "name": "x402",
+  "description": "x402 open payment standard for HTTP-native crypto payments. Use for API monetization, AI agent payments, micropayments, and USDC integration using HTTP 402 status code.",
+  "base_url": "https://x402.gitbook.io/",
+  "start_urls": [
+    "https://x402.gitbook.io/x402",
+    "https://x402.gitbook.io/x402/getting-started/quickstart-for-sellers",
+    "https://x402.gitbook.io/x402/getting-started/quickstart-for-buyers",
+    "https://x402.gitbook.io/x402/core-concepts/http-402",
+    "https://x402.gitbook.io/x402/core-concepts/client-server",
+    "https://x402.gitbook.io/x402/core-concepts/facilitator",
+    "https://x402.gitbook.io/x402/core-concepts/wallet",
+    "https://x402.gitbook.io/x402/core-concepts/bazaar-discovery-layer",
+    "https://x402.gitbook.io/x402/guides/mcp-server-with-x402",
+    "https://x402.gitbook.io/x402/guides/migration-guide-v1-to-v2",
+    "https://x402.gitbook.io/x402/faq"
+  ],
+  "selectors": {
+    "main_content": "main, article, .gitbook-root",
+    "title": "h1",
+    "code_blocks": "pre code"
+  },
+  "url_patterns": {
+    "include": ["/x402/", "/getting-started/", "/core-concepts/", "/guides/"],
+    "exclude": ["/changelog/", "/blog/"]
+  },
+  "categories": {
+    "getting_started": ["quickstart", "intro", "welcome"],
+    "seller": ["seller", "server", "middleware"],
+    "buyer": ["buyer", "client", "fetch", "axios"],
+    "protocol": ["http-402", "specification", "headers"],
+    "infrastructure": ["facilitator", "bazaar", "wallet"],
+    "guides": ["mcp", "migration", "guide"]
+  },
+  "rate_limit": 1.0,
+  "max_pages": 50
+}
