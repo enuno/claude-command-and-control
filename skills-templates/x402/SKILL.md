@@ -1,6 +1,6 @@
 ---
 name: x402
-version: "1.4.0"
+version: "1.5.0"
 description: x402 open payment standard for HTTP-native crypto payments. Use for API monetization, AI agent payments, micropayments, and integrating USDC payments into web services using HTTP 402 status code.
 ---
 
@@ -41,6 +41,8 @@ This skill should be triggered when:
 - Monetizing APIs without traditional payment processors
 - Building Cloudflare Workers with x402 payments
 - Implementing deferred payment schemes
+- Installing Coinbase Payments MCP for AI agents (Claude, Gemini, Codex)
+- Using x402-mcp for Vercel AI SDK integration
 
 ## Quick Reference
 
@@ -90,6 +92,23 @@ go get github.com/coinbase/x402/go
 pip install x402
 ```
 
+**Payments MCP (AI Agents):**
+```bash
+# Interactive installation
+npx @coinbase/payments-mcp
+
+# Auto-configure for specific client
+npx @coinbase/payments-mcp --client claude --auto-config
+npx @coinbase/payments-mcp --client claude-code --auto-config
+npx @coinbase/payments-mcp --client codex --auto-config
+npx @coinbase/payments-mcp --client gemini --auto-config
+```
+
+**x402-mcp (Vercel AI SDK):**
+```bash
+npm install x402-mcp
+```
+
 ### Package Reference
 
 | Package | Purpose |
@@ -104,6 +123,8 @@ pip install x402
 | `@x402/next` | Next.js integration |
 | `@x402/paywall` | Paywall utilities |
 | `@x402/extensions` | Additional protocol extensions |
+| `@coinbase/payments-mcp` | AI agent payments for Claude, Gemini, Codex |
+| `x402-mcp` | Vercel AI SDK MCP integration |
 
 ### Network Identifiers (CAIP-2)
 
@@ -311,6 +332,7 @@ This skill includes comprehensive documentation in `references/`:
 - **cloudflare-agents.md** - Cloudflare Agents SDK with withX402 and paidTool
 - **github-repo.md** - Official Coinbase x402 repository structure and examples
 - **cdp-documentation.md** - CDP facilitator API, Bazaar discovery, and SDK integration
+- **payments-mcp.md** - Coinbase Payments MCP for AI agents and x402-mcp integration
 
 ## Key Concepts
 
@@ -676,6 +698,104 @@ app.get("/api/premium/data", (c) => c.json({ data: "Premium content" }));
 export default app;
 ```
 
+## Coinbase Payments MCP
+
+Coinbase's Payments MCP is the easiest way to enable AI agents (Claude, Gemini, Codex) with x402 payment capabilities. It combines wallets, onramps, and payments into a single solution requiring no API keys.
+
+### Installation
+
+```bash
+# Interactive setup (prompts for client)
+npx @coinbase/payments-mcp
+
+# Auto-configure for Claude Desktop
+npx @coinbase/payments-mcp --client claude --auto-config
+
+# Auto-configure for Claude Code
+npx @coinbase/payments-mcp --client claude-code --auto-config
+
+# Check status
+npx @coinbase/payments-mcp status
+```
+
+### Supported Clients
+
+| Client | Auto-Config | Command |
+|--------|-------------|---------|
+| Claude Desktop | Yes | `--client claude` |
+| Claude Code | Yes | `--client claude-code` |
+| Codex CLI | Yes | `--client codex` |
+| Gemini CLI | Yes | `--client gemini` |
+| Cherry Studio | Yes | - |
+| Other | Manual | `--client other` |
+
+### Manual Configuration
+
+```json
+{
+  "mcpServers": {
+    "payments-mcp": {
+      "command": "node",
+      "args": ["/Users/your-home-dir/.payments-mcp/bundle.js"]
+    }
+  }
+}
+```
+
+### Features
+
+- **Email-based wallet creation**: No seed phrases or API keys
+- **Integrated Bazaar Explorer**: Discover paid services in the UI
+- **Spend limits**: Agents have dedicated funds with explicit caps
+- **Local execution**: Runs on desktop for security
+- **Built-in onramp**: Add funds via Coinbase in supported regions
+
+### Security Model
+
+Agents have isolated wallets with explicit funding limits. No access to your main wallet, and impossible to accumulate unexpected charges.
+
+## x402-mcp (Vercel)
+
+Vercel's `x402-mcp` integrates x402 payments with MCP servers and the AI SDK.
+
+### Creating Paid MCP Tools
+
+```typescript
+import { createPaidMcpHandler } from "x402-mcp";
+import z from "zod";
+
+const handler = createPaidMcpHandler(
+  (server) => {
+    server.paidTool(
+      "premium_analysis",
+      { price: 0.01 },  // $0.01 per call
+      { data: z.string() },
+      async (args) => {
+        const result = await analyzeData(args.data);
+        return { content: [{ type: "text", text: result }] };
+      }
+    );
+  },
+  { recipient: process.env.WALLET_ADDRESS }
+);
+
+export { handler as GET, handler as POST };
+```
+
+### Client Integration with AI SDK
+
+```typescript
+import { experimental_createMCPClient as createMCPClient } from "ai";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+import { withPayment } from "x402-mcp";
+
+const mcpClient = await createMCPClient({
+  transport: new StreamableHTTPClientTransport(url),
+}).then((client) => withPayment(client, { account }));
+
+const tools = await mcpClient.tools();
+```
+
 ## AI Agent Integration
 
 x402 was designed from the ground up to enable autonomous AI agent payments:
@@ -825,6 +945,10 @@ try {
 - [CDP Wallet API](https://docs.cdp.coinbase.com)
 - [Cloudflare x402 Foundation Announcement](https://blog.cloudflare.com/x402/)
 - [Zuplo x402 MCP Tutorial](https://zuplo.com/blog/mcp-api-payments-with-x402)
+- [Payments MCP Documentation](https://docs.cdp.coinbase.com/payments-mcp/welcome)
+- [Payments MCP GitHub](https://github.com/coinbase/payments-mcp)
+- [x402-mcp (Vercel)](https://vercel.com/blog/introducing-x402-mcp-open-protocol-payments-for-mcp-tools)
+- [x402 AI Starter Template](https://vercel.com/templates/ai/x402-ai-starter)
 
 ## x402 Foundation
 
@@ -844,9 +968,18 @@ The x402 Foundation was established by Coinbase and Cloudflare to promote adopti
 - MCP integration enables Claude and other AI assistants to make payments
 - Cloudflare proposed deferred payment scheme for aggregated settlement
 - Partners include AWS, Anthropic, Circle, NEAR, and Cloudflare
+- Payments MCP provides no-code x402 integration for AI agents
+- x402 is being included in Google's Agents Payment Protocol (AP2) initiative
 
 ## Version History
 
+- **1.5.0** (2026-01-08): Enhanced with Payments MCP documentation
+  - Added Coinbase Payments MCP section with installation and configuration
+  - Added x402-mcp (Vercel) section for AI SDK integration
+  - Added supported MCP clients table (Claude, Codex, Gemini)
+  - Added payments-mcp.md comprehensive reference file
+  - Added installation commands for Payments MCP and x402-mcp packages
+  - Updated package reference table
 - **1.4.0** (2026-01-08): Enhanced with CDP documentation
   - Added CDP Facilitator API section with verify/settle/discovery endpoints
   - Added authentication requirements and request/response schemas
