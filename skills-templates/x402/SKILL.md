@@ -1,6 +1,6 @@
 ---
 name: x402
-version: "1.3.0"
+version: "1.4.0"
 description: x402 open payment standard for HTTP-native crypto payments. Use for API monetization, AI agent payments, micropayments, and integrating USDC payments into web services using HTTP 402 status code.
 ---
 
@@ -310,6 +310,7 @@ This skill includes comprehensive documentation in `references/`:
 - **deferred-payments.md** - Cloudflare deferred payment scheme
 - **cloudflare-agents.md** - Cloudflare Agents SDK with withX402 and paidTool
 - **github-repo.md** - Official Coinbase x402 repository structure and examples
+- **cdp-documentation.md** - CDP facilitator API, Bazaar discovery, and SDK integration
 
 ## Key Concepts
 
@@ -358,6 +359,61 @@ x402 activates the previously reserved HTTP `402 Payment Required` status code f
 - Pre-funded usage-based payments
 - For APIs where cost is unknown upfront (LLM tokens, compute)
 - Lock funds, consume as needed, refund remainder
+
+### CDP Facilitator API
+
+The Coinbase Developer Platform (CDP) hosts the primary x402 facilitator with fee-free USDC settlement.
+
+**Base URL:** `https://api.cdp.coinbase.com/platform/v2/x402`
+
+**Endpoints:**
+
+| Endpoint | Method | Auth | Description |
+|----------|--------|------|-------------|
+| `/verify` | POST | Required | Verify payment payload (~100ms) |
+| `/settle` | POST | Required | Submit to blockchain (~2s on Base) |
+| `/discovery/resources` | GET | Optional | Query x402 Bazaar |
+
+**Verify Request:**
+```json
+{
+  "x402Version": 1,
+  "paymentPayload": {
+    "scheme": "exact",
+    "network": "eip155:8453",
+    "payload": { /* signed authorization */ }
+  },
+  "paymentRequirements": {
+    "scheme": "exact",
+    "network": "eip155:8453",
+    "payTo": "0xRecipient",
+    "maxAmountRequired": "1000000",
+    "resource": "/api/endpoint"
+  }
+}
+```
+
+**Verify Response:**
+```json
+{ "isValid": true, "invalidReason": null }
+```
+
+**Settle Response:**
+```json
+{ "success": true, "txID": "0x1234..." }
+```
+
+**Bazaar Discovery:**
+```bash
+curl "https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources?limit=10"
+```
+
+**Authentication:**
+```bash
+# Environment variables for CDP API
+CDP_API_KEY_ID=your_key_id
+CDP_API_KEY_SECRET=your_key_secret
+```
 
 ### Multi-Network Configuration
 
@@ -791,6 +847,11 @@ The x402 Foundation was established by Coinbase and Cloudflare to promote adopti
 
 ## Version History
 
+- **1.4.0** (2026-01-08): Enhanced with CDP documentation
+  - Added CDP Facilitator API section with verify/settle/discovery endpoints
+  - Added authentication requirements and request/response schemas
+  - Added cdp-documentation.md comprehensive reference file
+  - Added Bazaar discovery query examples
 - **1.3.0** (2026-01-08): Enhanced with GitHub repository details
   - Added comprehensive package reference table
   - Added multi-network configuration examples
