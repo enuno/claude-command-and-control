@@ -79,6 +79,12 @@ This directory contains production-ready skill templates and examples for Claude
 | **[openrouter](openrouter/)** | Unified API gateway for 100+ AI models from multiple providers (OpenAI, Anthropic, Google, Meta, Mistral) - comprehensive documentation (331 KB) covering multi-provider routing, cost optimization, and model comparison |
 | **[venice-ai](venice-ai/)** | Privacy-focused AI platform assistance with 49 pages of comprehensive documentation (248 KB) covering platform features, API integration, authentication, and best practices |
 
+### AI Agent Platforms (2 skills)
+| Skill | Description |
+|-------|-------------|
+| **[agentkit](agentkit/)** | Coinbase CDP AgentKit for building AI agents with crypto wallets - 50+ TypeScript actions, 30+ Python actions, multi-chain support (Base, Ethereum, Arbitrum, Optimism, Polygon, Solana), framework integrations (LangChain, Vercel AI SDK, MCP, OpenAI Agents SDK) |
+| **[cloudflare-agents](cloudflare-agents/)** | Cloudflare Agents SDK for building AI-powered agents on edge infrastructure - Agent, AIChatAgent, McpAgent classes, WebSocket communication, persistent state management, SQLite database (up to 1GB), task scheduling, human-in-the-loop workflows, MCP server/client integration |
+
 ### Document Processing (6 skills)
 | Skill | Description |
 |-------|-------------|
@@ -244,14 +250,15 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 43
-- **Individual Skills**: 35
+- **Total Skills**: 45
+- **Individual Skills**: 37
+- **AI Agent Platform Skills**: 2 (AgentKit, Cloudflare Agents)
 - **Cloud Infrastructure Skills**: 7 (Cloudflare Developer Platform)
 - **Document Processing Suite**: 6
 - **Orchestration Skills**: 4
 - **Average Quality Score**: 97.2/100 (from integration validation)
-- **Total Content**: ~820K of skill documentation (including 378 MB Cloudflare platform docs)
-- **Supporting Files**: 367 (scripts, themes, examples, references, 53 new reference files)
+- **Total Content**: ~964K of skill documentation (including 378 MB Cloudflare platform docs)
+- **Supporting Files**: 375 (scripts, themes, examples, references)
 
 ## 🔗 Resources
 
@@ -286,6 +293,6 @@ Individual skills may have different licenses. Check each skill's directory for 
 
 ---
 
-**Last Updated**: 2026-01-01
-**Total Skills**: 43
+**Last Updated**: 2026-01-08
+**Total Skills**: 45
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)
