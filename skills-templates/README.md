@@ -47,9 +47,10 @@ This directory contains production-ready skill templates and examples for Claude
 | **[slack-gif-creator](slack-gif-creator/)** | Creates animated GIFs optimized for Slack with validators for size constraints |
 | **[theme-factory](theme-factory/)** | Applies professional font and color themes to artifacts (10 pre-set themes included) |
 
-### Cryptocurrency & Payments (3 skills)
+### Cryptocurrency & Payments (4 skills)
 | Skill | Description |
 |-------|-------------|
+| **[arweave-bridge](arweave-bridge/)** | ZigZag Exchange Arweave Bridge - pay with zkSync stablecoins (USDC/USDT/DAI) for permanent Arweave storage at $1/MB, with ECDSA signature authentication and complete Node.js/Python upload examples |
 | **[cryptocurrency/bitcoin-mining](cryptocurrency/bitcoin-mining/)** | Comprehensive Bitcoin mining knowledge from 4 industry reports covering 2024 market analysis, mining economics, operational procedures, and heat reuse strategies for sustainable mining |
 | **[cryptocurrency/btcpayserver-doc](cryptocurrency/btcpayserver-doc/)** | BTCPay Server documentation - self-hosted Bitcoin payment gateway with 767 files covering setup, integrations (WooCommerce, Shopify, etc.), Lightning Network, wallets, and deployment |
 | **[x402](x402/)** | HTTP 402 payment protocol for crypto-native API monetization - implements USDC payments on Base/Solana, AI agent payments, micropayments, Bazaar service discovery, and MCP server integration |
@@ -79,11 +80,18 @@ This directory contains production-ready skill templates and examples for Claude
 | **[openrouter](openrouter/)** | Unified API gateway for 100+ AI models from multiple providers (OpenAI, Anthropic, Google, Meta, Mistral) - comprehensive documentation (331 KB) covering multi-provider routing, cost optimization, and model comparison |
 | **[venice-ai](venice-ai/)** | Privacy-focused AI platform assistance with 49 pages of comprehensive documentation (248 KB) covering platform features, API integration, authentication, and best practices |
 
-### AI Agent Platforms (2 skills)
+### AI Agent Platforms (3 skills)
 | Skill | Description |
 |-------|-------------|
 | **[agentkit](agentkit/)** | Coinbase CDP AgentKit for building AI agents with crypto wallets - 50+ TypeScript actions, 30+ Python actions, multi-chain support (Base, Ethereum, Arbitrum, Optimism, Polygon, Solana), framework integrations (LangChain, Vercel AI SDK, MCP, OpenAI Agents SDK) |
 | **[cloudflare-agents](cloudflare-agents/)** | Cloudflare Agents SDK for building AI-powered agents on edge infrastructure - Agent, AIChatAgent, McpAgent classes, WebSocket communication, persistent state management, SQLite database (up to 1GB), task scheduling, human-in-the-loop workflows, MCP server/client integration |
+| **[virtuals-protocol](virtuals-protocol/)** | Virtuals Protocol for tokenized AI agents on Base/Solana - GAME Framework SDK (Python/TypeScript), Agent Tokenization Platform (bonding curves, Prototype→Sentient lifecycle), Agent Commerce Protocol (ACP), $VIRTUAL token economics, and comprehensive code examples |
+
+### AI Integration Protocols (2 skills)
+| Skill | Description |
+|-------|-------------|
+| **[agent-client-protocol](agent-client-protocol/)** | Agent Client Protocol (ACP) - standardized communication between code editors and AI coding agents (JSON-RPC 2.0), supports 18 agents (Claude Code, Gemini CLI, Goose), 15 clients (Zed, JetBrains, Neovim), with TypeScript/Python SDKs for tool calls, file operations, and session management |
+| **[model-context-protocol](model-context-protocol/)** | Model Context Protocol (MCP) - open standard for connecting AI applications to external data sources, tools, and systems with Host→Client→Server architecture, 10 official SDKs (TypeScript, Python, Go, Kotlin, Swift, Java, C#, Ruby, Rust, PHP), and server primitives (Tools, Resources, Prompts) |
 
 ### Document Processing (6 skills)
 | Skill | Description |
@@ -250,15 +258,17 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 45
-- **Individual Skills**: 37
-- **AI Agent Platform Skills**: 2 (AgentKit, Cloudflare Agents)
+- **Total Skills**: 49
+- **Individual Skills**: 41
+- **AI Agent Platform Skills**: 3 (AgentKit, Cloudflare Agents, Virtuals Protocol)
+- **AI Integration Protocol Skills**: 2 (Agent Client Protocol, Model Context Protocol)
 - **Cloud Infrastructure Skills**: 7 (Cloudflare Developer Platform)
+- **Cryptocurrency & Payments Skills**: 4 (Arweave Bridge, Bitcoin Mining, BTCPayServer, x402)
 - **Document Processing Suite**: 6
 - **Orchestration Skills**: 4
 - **Average Quality Score**: 97.2/100 (from integration validation)
-- **Total Content**: ~964K of skill documentation (including 378 MB Cloudflare platform docs)
-- **Supporting Files**: 375 (scripts, themes, examples, references)
+- **Total Content**: ~1.13 MB of skill documentation (including 378 MB Cloudflare platform docs)
+- **Supporting Files**: 377 (scripts, themes, examples, references)
 
 ## 🔗 Resources
 
@@ -293,6 +303,6 @@ Individual skills may have different licenses. Check each skill's directory for 
 
 ---
 
-**Last Updated**: 2026-01-08
-**Total Skills**: 45
+**Last Updated**: 2026-01-10
+**Total Skills**: 49
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)
