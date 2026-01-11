@@ -87,10 +87,11 @@ This directory contains production-ready skill templates and examples for Claude
 | **[cloudflare-agents](cloudflare-agents/)** | Cloudflare Agents SDK for building AI-powered agents on edge infrastructure - Agent, AIChatAgent, McpAgent classes, WebSocket communication, persistent state management, SQLite database (up to 1GB), task scheduling, human-in-the-loop workflows, MCP server/client integration |
 | **[virtuals-protocol](virtuals-protocol/)** | Virtuals Protocol for tokenized AI agents on Base/Solana - GAME Framework SDK (Python/TypeScript), Agent Tokenization Platform (bonding curves, Prototype→Sentient lifecycle), Agent Commerce Protocol (ACP), $VIRTUAL token economics, and comprehensive code examples |
 
-### AI Integration Protocols (2 skills)
+### AI Integration Protocols (3 skills)
 | Skill | Description |
 |-------|-------------|
 | **[agent-client-protocol](agent-client-protocol/)** | Agent Client Protocol (ACP) - standardized communication between code editors and AI coding agents (JSON-RPC 2.0), supports 18 agents (Claude Code, Gemini CLI, Goose), 15 clients (Zed, JetBrains, Neovim), with TypeScript/Python SDKs for tool calls, file operations, and session management |
+| **[language-server-protocol](language-server-protocol/)** | Language Server Protocol (LSP) - Microsoft's open standard for IDE-language server communication (JSON-RPC 2.0), supports 18+ language servers, 15+ editor integrations, with TypeScript/Python/Java/Rust SDKs for completion, diagnostics, navigation, and code intelligence features |
 | **[model-context-protocol](model-context-protocol/)** | Model Context Protocol (MCP) - open standard for connecting AI applications to external data sources, tools, and systems with Host→Client→Server architecture, 10 official SDKs (TypeScript, Python, Go, Kotlin, Swift, Java, C#, Ruby, Rust, PHP), and server primitives (Tools, Resources, Prompts) |
 
 ### Document Processing (6 skills)
@@ -258,17 +259,17 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 49
-- **Individual Skills**: 41
+- **Total Skills**: 50
+- **Individual Skills**: 42
 - **AI Agent Platform Skills**: 3 (AgentKit, Cloudflare Agents, Virtuals Protocol)
-- **AI Integration Protocol Skills**: 2 (Agent Client Protocol, Model Context Protocol)
+- **AI Integration Protocol Skills**: 3 (Agent Client Protocol, Language Server Protocol, Model Context Protocol)
 - **Cloud Infrastructure Skills**: 7 (Cloudflare Developer Platform)
 - **Cryptocurrency & Payments Skills**: 4 (Arweave Bridge, Bitcoin Mining, BTCPayServer, x402)
 - **Document Processing Suite**: 6
 - **Orchestration Skills**: 4
 - **Average Quality Score**: 97.2/100 (from integration validation)
-- **Total Content**: ~1.13 MB of skill documentation (including 378 MB Cloudflare platform docs)
-- **Supporting Files**: 377 (scripts, themes, examples, references)
+- **Total Content**: ~1.21 MB of skill documentation (including 378 MB Cloudflare platform docs)
+- **Supporting Files**: 379 (scripts, themes, examples, references)
 
 ## 🔗 Resources
 
@@ -303,6 +304,6 @@ Individual skills may have different licenses. Check each skill's directory for 
 
 ---
 
-**Last Updated**: 2026-01-10
-**Total Skills**: 49
+**Last Updated**: 2026-01-11
+**Total Skills**: 50
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)
