@@ -1,6 +1,6 @@
 ---
 name: language-server-protocol
-version: "1.0.0"
+version: "1.2.0"
 description: Language Server Protocol (LSP) - Microsoft's open standard for IDE-language server communication. Use for building language servers, implementing LSP clients, understanding protocol architecture, and integrating code intelligence features.
 specification_version: "3.17"
 ---
@@ -934,6 +934,403 @@ Client-initiated diagnostics (alternative to push):
 
 ---
 
+## Development Tools
+
+### LSP DevTools
+
+LSP DevTools is a collection of CLI utilities for inspecting and visualizing language server interactions. Essential for debugging protocol issues.
+
+**Installation:**
+```bash
+pipx install lsp-devtools
+```
+
+**Architecture:** The LSP Agent acts as a proxy between client and server, forwarding messages while copying them to a monitoring application.
+
+```
+┌────────────────┐      ┌─────────────┐      ┌─────────────────┐
+│ Language Client│◄────►│  LSP Agent  │◄────►│ Language Server │
+└────────────────┘      └──────┬──────┘      └─────────────────┘
+                               │
+                               ▼ TCP (localhost:8765)
+                        ┌──────────────┐
+                        │ lsp-devtools │
+                        │   record /   │
+                        │   inspect    │
+                        └──────────────┘
+```
+
+#### Agent Command
+
+Wrap your language server to enable inspection:
+
+```bash
+# Basic usage - wrap server command
+lsp-devtools agent -- <server-cmd>
+
+# Custom host/port
+lsp-devtools agent --host 127.0.0.1 --port 1234 -- python -m my_server
+
+# Example: wrap esbonio server
+lsp-devtools agent -- esbonio
+```
+
+**Neovim Configuration:**
+```lua
+-- In nvim-lspconfig setup
+require('lspconfig').esbonio.setup {
+  cmd = { "lsp-devtools", "agent", "--", "esbonio" }
+}
+```
+
+**VS Code Configuration:**
+```json
+{
+  "myLanguage.server.path": "lsp-devtools",
+  "myLanguage.server.args": ["agent", "--", "my-server"]
+}
+```
+
+#### Record Command
+
+Capture LSP sessions to various destinations:
+
+```bash
+# Record to console (pretty-printed JSON)
+lsp-devtools record
+
+# Record to file (JSON-RPC, one message per line)
+lsp-devtools record --to-file session.jsonl
+
+# Record to SQLite database (for analysis)
+lsp-devtools record --to-sqlite session.db
+
+# Save console output as HTML/SVG
+lsp-devtools record --save-output session.html
+```
+
+**Filtering Options:**
+```bash
+# Filter by source
+lsp-devtools record --message-source client
+lsp-devtools record --message-source server
+
+# Filter by message type
+lsp-devtools record --include-message-type request
+lsp-devtools record --include-message-type notification
+
+# Filter by method
+lsp-devtools record --include-method textDocument/completion
+lsp-devtools record --exclude-method textDocument/didChange
+
+# Custom format
+lsp-devtools record -f "{message.method}: {message.params.position.line}"
+```
+
+#### Inspect Command
+
+Interactive TUI for real-time LSP message inspection:
+
+```bash
+# Launch inspector
+lsp-devtools inspect
+
+# Custom port
+lsp-devtools inspect --port 1234
+```
+
+**Features:**
+- Browse all messages between client and server
+- Hierarchical capability display (30+ capability types)
+- Real-time message flow visualization
+- Detailed message content inspection
+
+### pytest-lsp
+
+End-to-end testing framework for language servers, built on pygls.
+
+**Installation:**
+```bash
+pip install pytest-lsp
+```
+
+**Key Features:**
+- Run language servers in subprocesses
+- Communicate via stdio (mimics real clients)
+- Language-agnostic (test servers in any language)
+- Async test support
+
+#### Basic Test Setup
+
+```python
+import pytest
+import pytest_lsp
+from pytest_lsp import ClientServerConfig, LanguageClient
+from lsprotocol.types import (
+    InitializeParams,
+    CompletionParams,
+    TextDocumentIdentifier,
+    Position,
+)
+
+@pytest_lsp.fixture(
+    config=ClientServerConfig(
+        server_command=["python", "-m", "my_server"],
+    ),
+)
+async def client(lsp_client: LanguageClient):
+    # Setup: Initialize the LSP session
+    await lsp_client.initialize_session(
+        InitializeParams(
+            capabilities={},
+            root_uri="file:///workspace",
+        )
+    )
+
+    yield
+
+    # Teardown: Shutdown gracefully
+    await lsp_client.shutdown_session()
+
+@pytest.mark.asyncio
+async def test_completions(client: LanguageClient):
+    """Test that completion returns expected items."""
+    result = await client.text_document_completion_async(
+        CompletionParams(
+            text_document=TextDocumentIdentifier(uri="file:///test.py"),
+            position=Position(line=0, character=0),
+        )
+    )
+
+    labels = [item.label for item in result.items]
+    assert "hello" in labels
+    assert "world" in labels
+```
+
+#### Parameterized Client Testing
+
+Test against multiple client configurations:
+
+```python
+@pytest.fixture(params=["neovim", "vscode", "emacs"])
+def client_name(request):
+    return request.param
+
+@pytest_lsp.fixture(
+    config=ClientServerConfig(
+        server_command=["python", "-m", "my_server"],
+    ),
+)
+async def client(lsp_client: LanguageClient, client_name: str):
+    # Get capabilities for specific client
+    capabilities = client_capabilities(client_name)
+
+    await lsp_client.initialize_session(
+        InitializeParams(
+            capabilities=capabilities,
+            client_info={"name": client_name},
+        )
+    )
+    yield
+    await lsp_client.shutdown_session()
+```
+
+#### Testing Diagnostics
+
+```python
+@pytest.mark.asyncio
+async def test_diagnostics(client: LanguageClient):
+    """Test diagnostic publishing."""
+    # Open a document with errors
+    client.text_document_did_open(
+        TextDocumentItem(
+            uri="file:///test.py",
+            language_id="python",
+            version=1,
+            text="def foo(\n  invalid syntax",
+        )
+    )
+
+    # Wait for diagnostics
+    await client.wait_for_notification("textDocument/publishDiagnostics")
+
+    # Check diagnostics were received
+    diagnostics = client.diagnostics["file:///test.py"]
+    assert len(diagnostics) > 0
+    assert diagnostics[0].severity == DiagnosticSeverity.Error
+```
+
+#### Common Pitfall
+
+Servers must explicitly start I/O handling:
+
+```python
+# In your server's __main__.py
+if __name__ == "__main__":
+    server = MyLanguageServer()
+    server.start_io()  # Don't forget this!
+```
+
+### Monaco Editor Integration
+
+When building browser-based LSP clients with Monaco Editor, use `monaco-languageserver-types` for bidirectional type conversion.
+
+**Installation:**
+```bash
+npm install monaco-languageserver-types
+```
+
+**Key Concept:** Monaco Editor and LSP use different type representations. This library provides `from*` and `to*` functions for seamless conversion:
+
+- **`from*`** - Convert Monaco types → LSP types
+- **`to*`** - Convert LSP types → Monaco types
+
+#### Type Conversion Examples
+
+**Position & Range:**
+```typescript
+import { fromRange, toRange, fromPosition, toPosition } from 'monaco-languageserver-types';
+
+// Monaco uses 1-based lines, LSP uses 0-based
+const monacoRange = {
+  startLineNumber: 1,
+  startColumn: 2,
+  endLineNumber: 3,
+  endColumn: 4
+};
+
+// Convert to LSP format
+const lspRange = fromRange(monacoRange);
+// { start: { line: 0, character: 1 }, end: { line: 2, character: 3 } }
+
+// Convert back to Monaco format
+const backToMonaco = toRange(lspRange);
+// { startLineNumber: 1, startColumn: 2, endLineNumber: 3, endColumn: 4 }
+```
+
+**Diagnostics:**
+```typescript
+import { fromMarkerData, toMarkerData, fromMarkerSeverity } from 'monaco-languageserver-types';
+
+// Convert Monaco marker to LSP diagnostic
+const monacoMarker = {
+  severity: monaco.MarkerSeverity.Error,
+  message: "Unexpected token",
+  startLineNumber: 5,
+  startColumn: 10,
+  endLineNumber: 5,
+  endColumn: 15
+};
+
+const lspDiagnostic = fromMarkerData(monacoMarker);
+// Ready to send to language server
+
+// Convert LSP diagnostic to Monaco marker
+const marker = toMarkerData(lspDiagnostic);
+monaco.editor.setModelMarkers(model, 'lsp', [marker]);
+```
+
+**Completion Items:**
+```typescript
+import { fromCompletionItem, toCompletionItem, toCompletionList } from 'monaco-languageserver-types';
+
+// Handle LSP completion response for Monaco
+connection.onCompletion(async (params) => {
+  const lspCompletions = await languageServer.getCompletions(params);
+  return lspCompletions;
+});
+
+// In Monaco provider
+const monacoProvider: monaco.languages.CompletionItemProvider = {
+  provideCompletionItems: async (model, position) => {
+    const lspPosition = fromPosition(position);
+    const lspResult = await client.sendRequest('textDocument/completion', {
+      textDocument: { uri: model.uri.toString() },
+      position: lspPosition
+    });
+
+    return toCompletionList(lspResult);
+  }
+};
+```
+
+**Hover:**
+```typescript
+import { fromPosition, toHover } from 'monaco-languageserver-types';
+
+const hoverProvider: monaco.languages.HoverProvider = {
+  provideHover: async (model, position) => {
+    const lspHover = await client.sendRequest('textDocument/hover', {
+      textDocument: { uri: model.uri.toString() },
+      position: fromPosition(position)
+    });
+
+    return lspHover ? toHover(lspHover) : null;
+  }
+};
+```
+
+#### Available Conversions
+
+| Category | Functions |
+|----------|-----------|
+| **Structural** | `fromPosition`, `toPosition`, `fromRange`, `toRange`, `fromLocation`, `toLocation` |
+| **Diagnostics** | `fromMarkerData`, `toMarkerData`, `fromMarkerSeverity`, `toMarkerSeverity` |
+| **Completion** | `fromCompletionItem`, `toCompletionItem`, `toCompletionList`, `fromCompletionItemKind` |
+| **Code Actions** | `fromCodeAction`, `toCodeAction`, `fromCodeActionContext` |
+| **Navigation** | `fromDefinition`, `toDefinition`, `fromDocumentHighlight`, `toDocumentHighlight` |
+| **Symbols** | `fromDocumentSymbol`, `toDocumentSymbol`, `fromSymbolKind`, `toSymbolKind` |
+| **Formatting** | `fromTextEdit`, `toTextEdit`, `fromFormattingOptions` |
+| **Semantic** | `fromSemanticTokens`, `toSemanticTokens`, `fromInlayHint`, `toInlayHint` |
+| **Workspace** | `fromWorkspaceEdit`, `toWorkspaceEdit` |
+
+#### Full Monaco LSP Client Example
+
+```typescript
+import * as monaco from 'monaco-editor';
+import {
+  fromPosition, fromRange, toCompletionList, toHover,
+  toMarkerData, toDocumentHighlight, toCodeAction
+} from 'monaco-languageserver-types';
+import { createLanguageClient } from './lsp-client';
+
+// Create LSP client connection
+const client = createLanguageClient('ws://localhost:3000/lsp');
+
+// Register Monaco providers that bridge to LSP
+monaco.languages.registerCompletionItemProvider('typescript', {
+  triggerCharacters: ['.', '"', "'", '/'],
+  provideCompletionItems: async (model, position) => {
+    const result = await client.textDocumentCompletion({
+      textDocument: { uri: model.uri.toString() },
+      position: fromPosition(position)
+    });
+    return toCompletionList(result);
+  }
+});
+
+monaco.languages.registerHoverProvider('typescript', {
+  provideHover: async (model, position) => {
+    const result = await client.textDocumentHover({
+      textDocument: { uri: model.uri.toString() },
+      position: fromPosition(position)
+    });
+    return result ? toHover(result) : null;
+  }
+});
+
+// Handle diagnostics from server
+client.onNotification('textDocument/publishDiagnostics', (params) => {
+  const model = monaco.editor.getModel(monaco.Uri.parse(params.uri));
+  if (model) {
+    const markers = params.diagnostics.map(toMarkerData);
+    monaco.editor.setModelMarkers(model, 'lsp', markers);
+  }
+});
+```
+
+---
+
 ## Resources
 
 ### Official Documentation
@@ -946,6 +1343,11 @@ Client-initiated diagnostics (alternative to push):
 - [Client Implementations](https://microsoft.github.io/language-server-protocol/implementors/tools/)
 - [SDKs](https://microsoft.github.io/language-server-protocol/implementors/sdks/)
 
+### Development Tools
+- [LSP DevTools](https://lsp-devtools.readthedocs.io/) - CLI utilities for inspecting LSP interactions
+- [pytest-lsp](https://lsp-devtools.readthedocs.io/en/latest/pytest-lsp/) - End-to-end testing framework
+- [monaco-languageserver-types](https://github.com/remcohaszing/monaco-languageserver-types) - Type conversion for Monaco Editor
+
 ### Tutorials
 - [VS Code LSP Tutorial](https://code.visualstudio.com/api/language-extensions/language-server-extension-guide)
 - [pygls Documentation](https://pygls.readthedocs.io/)
@@ -954,6 +1356,21 @@ Client-initiated diagnostics (alternative to push):
 ---
 
 ## Version History
+
+- **1.2.0** (2026-01-11): Added Monaco Editor integration
+  - monaco-languageserver-types library documentation
+  - Bidirectional type conversion (from*/to* functions)
+  - Position, Range, Diagnostic conversions
+  - Completion, Hover, Code Action examples
+  - Full Monaco LSP client example
+  - Available conversions reference table
+
+- **1.1.0** (2026-01-11): Added Development Tools section
+  - LSP DevTools integration (agent, record, inspect commands)
+  - pytest-lsp testing framework with examples
+  - Architecture diagrams for debugging workflow
+  - Parameterized client testing patterns
+  - Diagnostic testing examples
 
 - **1.0.0** (2026-01-10): Initial skill release
   - Complete protocol overview (architecture, lifecycle, capabilities)
