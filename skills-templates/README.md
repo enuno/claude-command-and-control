@@ -81,11 +81,12 @@ This directory contains production-ready skill templates and examples for Claude
 | **[openrouter](openrouter/)** | Unified API gateway for 100+ AI models from multiple providers (OpenAI, Anthropic, Google, Meta, Mistral) - comprehensive documentation (331 KB) covering multi-provider routing, cost optimization, and model comparison |
 | **[venice-ai](venice-ai/)** | Privacy-focused AI platform assistance with 49 pages of comprehensive documentation (248 KB) covering platform features, API integration, authentication, and best practices |
 
-### AI Agent Platforms (3 skills)
+### AI Agent Platforms (4 skills)
 | Skill | Description |
 |-------|-------------|
 | **[agentkit](agentkit/)** | Coinbase CDP AgentKit for building AI agents with crypto wallets - 50+ TypeScript actions, 30+ Python actions, multi-chain support (Base, Ethereum, Arbitrum, Optimism, Polygon, Solana), framework integrations (LangChain, Vercel AI SDK, MCP, OpenAI Agents SDK) |
 | **[cloudflare-agents](cloudflare-agents/)** | Cloudflare Agents SDK for building AI-powered agents on edge infrastructure - Agent, AIChatAgent, McpAgent classes, WebSocket communication, persistent state management, SQLite database (up to 1GB), task scheduling, human-in-the-loop workflows, MCP server/client integration |
+| **[elizaos](elizaos/)** | ElizaOS TypeScript framework for autonomous AI agents - multi-platform support (Discord, Telegram, Twitter, Farcaster), blockchain integration (EVM, Solana DeFi), 90+ plugins, character configuration, memory system, multi-agent orchestration, REST API, and deployment options (Docker, AWS ECS, TEE) |
 | **[virtuals-protocol](virtuals-protocol/)** | Virtuals Protocol for tokenized AI agents on Base/Solana - GAME Framework SDK (Python/TypeScript), Agent Tokenization Platform (bonding curves, Prototype→Sentient lifecycle), Agent Commerce Protocol (ACP), $VIRTUAL token economics, and comprehensive code examples |
 
 ### AI Integration Protocols (3 skills)
@@ -260,9 +261,9 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 51
-- **Individual Skills**: 43
-- **AI Agent Platform Skills**: 3 (AgentKit, Cloudflare Agents, Virtuals Protocol)
+- **Total Skills**: 52
+- **Individual Skills**: 44
+- **AI Agent Platform Skills**: 4 (AgentKit, Cloudflare Agents, ElizaOS, Virtuals Protocol)
 - **AI Integration Protocol Skills**: 3 (Agent Client Protocol, Language Server Protocol, Model Context Protocol)
 - **Cloud Infrastructure Skills**: 7 (Cloudflare Developer Platform)
 - **Cryptocurrency & Payments Skills**: 4 (Arweave Bridge, Bitcoin Mining, BTCPayServer, x402)
@@ -306,5 +307,5 @@ Individual skills may have different licenses. Check each skill's directory for 
 ---
 
 **Last Updated**: 2026-01-11
-**Total Skills**: 51
+**Total Skills**: 52
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)
