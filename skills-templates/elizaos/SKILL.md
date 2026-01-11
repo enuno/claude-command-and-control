@@ -1,6 +1,6 @@
 ---
 name: elizaos
-version: "1.1.0"
+version: "1.2.0"
 description: ElizaOS - TypeScript framework for building autonomous AI agents with multi-platform support (Discord, Telegram, Twitter, Farcaster), blockchain integration (EVM, Solana), plugin architecture, multi-agent orchestration, and 90+ community plugins
 ---
 
@@ -855,6 +855,153 @@ The ElizaOS organization maintains 56+ repositories for specialized use cases:
 
 ---
 
+## Spartan: DeFi Trading Agent
+
+Spartan is a production-ready DeFi trading agent built on ElizaOS, demonstrating advanced multi-chain trading capabilities with AI-driven decision-making.
+
+### Spartan Features
+
+| Feature | Description |
+|---------|-------------|
+| **Multi-Chain Trading** | Solana, Ethereum, Base with Jupiter and 0x integration |
+| **Technical Analysis** | 14+ indicators (RSI, MACD, Bollinger Bands, Stochastic, ATR, ADX) |
+| **Autonomous Trading** | AI-driven position management with risk controls |
+| **Multi-Wallet** | User-specific custody with cross-wallet transfers |
+| **Market Intelligence** | Real-time sentiment, whale tracking, trending tokens |
+| **Community Investing** | Trust-scored recommendations with leaderboards |
+
+### Spartan Plugin Architecture
+
+```
+spartan/src/plugins/
+├── account/          # User registration and notifications
+├── analytics/        # Token analysis with 14+ technical indicators
+├── autofunTrader/    # auto.fun protocol with 5-min buy/sell signals
+├── autonomous-trader/ # Core trading utilities, holder verification
+├── coin_marketing/   # Promotion and campaign tools
+├── communityInvestor/ # Trust scoring, leaderboards, recommendations
+├── degenIntel/       # Sentiment analysis, whale tracking, trending
+├── kol/              # Key Opinion Leader framework
+├── multiwallet/      # Jupiter swaps, wallet consolidation, transfers
+└── trading/          # Multi-strategy engine (LLM, copy trading, manual)
+```
+
+### Spartan Trading Strategies
+
+```typescript
+// Spartan supports multiple trading strategy types:
+
+// 1. LLM-Based Strategy - AI-powered decision making
+const llmStrategy = {
+  type: "llm",
+  model: "anthropic", // or "openai"
+  riskLevel: "medium",
+  positionSize: "dynamic" // based on confidence
+};
+
+// 2. Copy Trading - Mirror established traders
+const copyStrategy = {
+  type: "copy",
+  targetWallets: ["whale-address-1", "whale-address-2"],
+  mirrorDelay: 30, // seconds
+  maxPositionRatio: 0.5
+};
+
+// 3. Manual Strategy - User-directed with agent execution
+const manualStrategy = {
+  type: "manual",
+  confirmationRequired: true,
+  slippage: 0.01 // 1%
+};
+```
+
+### Spartan Environment Configuration
+
+```bash
+# Spartan-specific environment variables
+
+# AI Models (at least one required)
+ANTHROPIC_API_KEY=sk-ant-...
+OPENAI_API_KEY=sk-...
+
+# Blockchain RPC
+SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
+SOLANA_PRIVATE_KEY=<base58-encoded-key>
+EVM_PROVIDER_URL=https://eth-mainnet.g.alchemy.com/v2/...
+
+# Market Data Providers
+BIRDEYE_API_KEY=...
+COINMARKETCAP_API_KEY=...
+
+# DEX Integration
+JUPITER_API_KEY=...
+ZEROEX_API_KEY=...
+
+# Database
+MYSQL_HOST=localhost
+MYSQL_USER=spartan
+MYSQL_PASSWORD=...
+MYSQL_DATABASE=spartan
+```
+
+### Spartan Quick Start
+
+```bash
+# Clone and install
+git clone https://github.com/elizaOS/spartan.git
+cd spartan
+npm install
+
+# Configure environment
+cp .env.example .env
+# Edit .env with your API keys
+
+# Run with Docker (recommended)
+docker-compose up -d
+
+# Or run directly
+elizaos start
+
+# Development mode with debug
+DEBUG=elizaos:* npm run dev
+```
+
+### Spartan Character Example
+
+```typescript
+// Spartan agent personality configuration
+{
+  "name": "Spartan",
+  "bio": [
+    "DeFi trading warlord with no-BS attitude",
+    "Combines alpha with tactical precision",
+    "Result-oriented, direct communication style"
+  ],
+  "lore": [
+    "Forged in the DeFi trenches of multiple market cycles",
+    "Known for calling out rug pulls before they happen"
+  ],
+  "knowledge": [
+    "Jupiter DEX aggregation mechanics",
+    "On-chain whale activity patterns",
+    "Technical analysis with 14+ indicators"
+  ],
+  "topics": ["trading", "DeFi", "analytics", "market intelligence"],
+  "style": {
+    "all": ["direct", "tactical", "analytical"],
+    "chat": ["concise", "actionable", "data-driven"],
+    "post": ["alpha-focused", "no-fluff"]
+  },
+  "plugins": [
+    "@elizaos/plugin-bootstrap",
+    "@elizaos/plugin-sql",
+    "@elizaos/plugin-solana"
+  ]
+}
+```
+
+---
+
 ## Monorepo Structure
 
 ```
@@ -902,6 +1049,15 @@ packages/
 ---
 
 ## Version History
+
+- **1.2.0** (2026-01-11): Added Spartan DeFi trading agent documentation
+  - Complete Spartan plugin architecture (10 plugins)
+  - Trading strategies: LLM-based, copy trading, manual
+  - Technical analysis with 14+ indicators
+  - Multi-wallet management and Jupiter/0x DEX integration
+  - Spartan-specific environment configuration
+  - Character configuration example for trading agents
+  - Quick start guide with Docker deployment
 
 - **1.1.0** (2026-01-11): Enhanced with GitHub ecosystem details
   - Added Bootstrap plugin component details (14 actions, 18 providers, 2 evaluators, 3 services)
