@@ -55,10 +55,11 @@ This directory contains production-ready skill templates and examples for Claude
 | **[cryptocurrency/btcpayserver-doc](cryptocurrency/btcpayserver-doc/)** | BTCPay Server documentation - self-hosted Bitcoin payment gateway with 767 files covering setup, integrations (WooCommerce, Shopify, etc.), Lightning Network, wallets, and deployment |
 | **[x402](x402/)** | HTTP 402 payment protocol for crypto-native API monetization - implements USDC payments on Base/Solana, AI agent payments, micropayments, Bazaar service discovery, and MCP server integration |
 
-### Development (10 skills)
+### Development (11 skills)
 | Skill | Description |
 |-------|-------------|
 | **[development/ansible](development/ansible/)** | Ansible community documentation - infrastructure automation platform with 786 files covering RST documentation sources, build system (nox/Sphinx), contribution guidelines, and development workflows |
+| **[dotenvx](dotenvx/)** | Secure environment variable management with AES-256 encryption - encrypt .env files for safe git commits, multi-environment configuration (dev/staging/production), CLI commands (run/encrypt/decrypt/set/get), and integrations for Node.js, Next.js, Docker, GitHub Actions, and Vercel |
 | **[development/building-bitcoin-rust](development/building-bitcoin-rust/)** | Comprehensive 419-page technical guide to building Bitcoin protocol implementation in Rust, covering cryptographic primitives, blockchain architecture, consensus mechanisms, P2P networking, and wallet development |
 | **[ar-io-build](ar-io-build/)** | Comprehensive AR.IO build documentation with 398 sections covering AR.IO features, APIs, and best practices |
 | **[changelog-generator](changelog-generator/)** | Automatically creates user-facing changelogs from git commits by analyzing history |
@@ -259,8 +260,8 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 50
-- **Individual Skills**: 42
+- **Total Skills**: 51
+- **Individual Skills**: 43
 - **AI Agent Platform Skills**: 3 (AgentKit, Cloudflare Agents, Virtuals Protocol)
 - **AI Integration Protocol Skills**: 3 (Agent Client Protocol, Language Server Protocol, Model Context Protocol)
 - **Cloud Infrastructure Skills**: 7 (Cloudflare Developer Platform)
@@ -305,5 +306,5 @@ Individual skills may have different licenses. Check each skill's directory for 
 ---
 
 **Last Updated**: 2026-01-11
-**Total Skills**: 50
+**Total Skills**: 51
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)
