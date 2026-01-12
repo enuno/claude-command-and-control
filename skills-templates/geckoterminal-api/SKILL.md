@@ -1,6 +1,6 @@
 ---
 name: geckoterminal-api
-version: "1.0.0"
+version: "1.1.0"
 description: GeckoTerminal API - DeFi and DEX aggregator providing real-time cryptocurrency prices, trading volumes, OHLCV charts, and liquidity data across 250+ blockchain networks and 1,800+ decentralized exchanges
 ---
 
@@ -185,6 +185,11 @@ curl -X GET 'https://api.geckoterminal.com/api/v2/networks/eth/dexes' \
   -H 'accept: application/json'
 ```
 
+**Query Parameters:**
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `page` | Page number for pagination | 1 |
+
 ---
 
 ### Token Prices (Simple Endpoint)
@@ -253,6 +258,28 @@ curl -X GET 'https://api.geckoterminal.com/api/v2/networks/eth/tokens/multi/0xc0
 GET /networks/{network}/tokens/{address}/info
 ```
 
+Returns token information including name, symbol, image URL, social links, and description.
+
+**Get recently updated tokens:**
+
+```bash
+GET /tokens/info_recently_updated
+```
+
+```bash
+# Get 100 most recently updated tokens with network info
+curl -X GET 'https://api.geckoterminal.com/api/v2/tokens/info_recently_updated?include=network' \
+  -H 'accept: application/json'
+```
+
+**Query Parameters:**
+| Parameter | Description | Values |
+|-----------|-------------|--------|
+| `include` | Include related resources | `network` |
+| `network` | Filter by specific network | e.g., `eth`, `solana` |
+
+Response includes `image_url` and decimal places for each token.
+
 ---
 
 ### Pools
@@ -293,7 +320,14 @@ GET /networks/{network}/pools/multi/{addresses}
     "address": "0x88e6...",
     "base_token_price_usd": "3245.67",
     "quote_token_price_usd": "1.00",
+    "base_token_price_quote_token": "3245.67",
+    "quote_token_price_base_token": "0.000308",
+    "base_token_price_native_currency": "1.0",
+    "quote_token_price_native_currency": "0.000308",
     "reserve_in_usd": "450000000",
+    "fdv_usd": "12000000000",
+    "market_cap_usd": "8000000000",
+    "pool_created_at": "2023-05-01T12:00:00Z",
     "volume_usd": {
       "h24": "125000000",
       "h6": "32000000",
@@ -307,12 +341,38 @@ GET /networks/{network}/pools/multi/{addresses}
       "m5": "0.05"
     },
     "transactions": {
-      "h24": { "buys": 1250, "sells": 980 },
-      "h1": { "buys": 52, "sells": 41 }
+      "h24": { "buys": 1250, "sells": 980, "buyers": 890, "sellers": 720 },
+      "h6": { "buys": 320, "sells": 280, "buyers": 210, "sellers": 180 },
+      "h1": { "buys": 52, "sells": 41, "buyers": 38, "sellers": 29 },
+      "m5": { "buys": 5, "sells": 3, "buyers": 4, "sellers": 2 }
     }
   }
 }
 ```
+
+**Include Parameters:**
+
+When querying pools, use `include` to get related token/DEX data:
+
+```bash
+# Include base token, quote token, and DEX info
+curl -X GET 'https://api.geckoterminal.com/api/v2/networks/eth/pools/0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640?include=base_token,quote_token,dex' \
+  -H 'accept: application/json'
+```
+
+| Include Value | Returns |
+|---------------|---------|
+| `base_token` | Base token metadata (name, symbol, coingecko_coin_id) |
+| `quote_token` | Quote token metadata |
+| `dex` | DEX information |
+
+**Get pool token info:**
+
+```bash
+GET /networks/{network}/pools/{pool_address}/info
+```
+
+Returns detailed token information for tokens in a specific pool.
 
 ---
 
@@ -362,10 +422,27 @@ GET /networks/{network}/pools
 |-----------|-------------|--------|
 | `page` | Page number | Integer |
 | `sort` | Sort order | `h24_volume_usd_desc`, `h24_tx_count_desc` |
+| `include` | Include related data | `base_token`, `quote_token`, `dex` |
 
 ```bash
 # Top pools by 24h volume
 curl -X GET 'https://api.geckoterminal.com/api/v2/networks/eth/pools?sort=h24_volume_usd_desc&page=1' \
+  -H 'accept: application/json'
+
+# Top pools by transaction count
+curl -X GET 'https://api.geckoterminal.com/api/v2/networks/solana/pools?order=h24_tx_count_desc&page=1' \
+  -H 'accept: application/json'
+```
+
+**Top pools on a specific DEX:**
+
+```bash
+GET /networks/{network}/dexes/{dex}/pools
+```
+
+```bash
+# Top pools on Uniswap V3
+curl -X GET 'https://api.geckoterminal.com/api/v2/networks/eth/dexes/uniswap_v3/pools?include=base_token,quote_token' \
   -H 'accept: application/json'
 ```
 
@@ -393,7 +470,9 @@ GET /networks/{network}/pools/{pool_address}/ohlcv/{timeframe}
 | `before_timestamp` | Unix epoch seconds | Now |
 | `limit` | Number of candles | 100 (max 1000) |
 | `currency` | Price currency | `usd` or `token` |
-| `token` | Which token price | `base` or `quote` |
+| `token` | Which token price | `base` or `quote` (can also pass token address) |
+
+**Note:** The `token` parameter can now accept a token address directly (as long as it exists in the pool being queried), allowing you to specify exactly which token's price data you want returned.
 
 ```bash
 # 15-minute candles
@@ -440,7 +519,18 @@ curl -X GET 'https://api.geckoterminal.com/api/v2/networks/solana/pools/69grLw4P
   -H 'accept: application/json'
 ```
 
-Returns the latest 300 trades for the pool.
+Returns the latest 300 trades in the past 24 hours for the pool.
+
+**Query Parameters:**
+| Parameter | Description | Values |
+|-----------|-------------|--------|
+| `trade_volume_in_usd_greater_than` | Filter by minimum trade size | Number (e.g., `1000`) |
+
+```bash
+# Get trades with minimum $1000 volume
+curl -X GET 'https://api.geckoterminal.com/api/v2/networks/eth/pools/0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640/trades?trade_volume_in_usd_greater_than=1000' \
+  -H 'accept: application/json'
+```
 
 ---
 
@@ -456,7 +546,47 @@ GET /search/pools?query={query}
 # Search by token symbol, name, or address
 curl -X GET 'https://api.geckoterminal.com/api/v2/search/pools?query=PEPE' \
   -H 'accept: application/json'
+
+# Search within a specific network
+curl -X GET 'https://api.geckoterminal.com/api/v2/search/pools?query=PEPE&network=eth' \
+  -H 'accept: application/json'
 ```
+
+**Query Parameters:**
+| Parameter | Description | Values |
+|-----------|-------------|--------|
+| `query` | Search term (symbol, name, or address) | String |
+| `network` | Filter by network | e.g., `eth`, `solana` |
+| `include` | Include related data | `base_token`, `quote_token`, `dex` |
+
+Returns top 5 matching pools by default.
+
+---
+
+## Complete Endpoint Reference
+
+| Category | Endpoint | Method | Description |
+|----------|----------|--------|-------------|
+| **Networks** | `/networks` | GET | List all supported networks |
+| **Networks** | `/networks/{network}/dexes` | GET | List DEXes on a network |
+| **Simple** | `/simple/networks/{network}/token_price/{addresses}` | GET | Get token prices (up to 30) |
+| **Tokens** | `/networks/{network}/tokens/{address}` | GET | Get specific token info |
+| **Tokens** | `/networks/{network}/tokens/multi/{addresses}` | GET | Get multiple tokens (up to 30) |
+| **Tokens** | `/networks/{network}/tokens/{address}/info` | GET | Get token metadata |
+| **Tokens** | `/tokens/info_recently_updated` | GET | Get 100 recently updated tokens |
+| **Pools** | `/networks/{network}/pools` | GET | Top pools on network |
+| **Pools** | `/networks/{network}/pools/{pool_address}` | GET | Get specific pool |
+| **Pools** | `/networks/{network}/pools/multi/{addresses}` | GET | Get multiple pools (up to 30) |
+| **Pools** | `/networks/{network}/pools/{pool_address}/info` | GET | Get pool token info |
+| **Pools** | `/networks/{network}/tokens/{address}/pools` | GET | Get pools for a token |
+| **Pools** | `/networks/{network}/dexes/{dex}/pools` | GET | Top pools on a DEX |
+| **Trending** | `/networks/{network}/trending_pools` | GET | Trending pools on network |
+| **Trending** | `/networks/trending_pools` | GET | Trending pools (all networks) |
+| **New** | `/networks/{network}/new_pools` | GET | New pools on network |
+| **New** | `/networks/new_pools` | GET | New pools (all networks) |
+| **OHLCV** | `/networks/{network}/pools/{pool}/ohlcv/{timeframe}` | GET | Candlestick data |
+| **Trades** | `/networks/{network}/pools/{pool}/trades` | GET | Recent trades (up to 300) |
+| **Search** | `/search/pools` | GET | Search pools by query |
 
 ---
 
@@ -749,6 +879,19 @@ def rate_limited_request(func, *args, **kwargs):
 ---
 
 ## Version History
+
+- **1.1.0** (2026-01-12): Enhanced with complete API reference
+  - Added complete endpoint reference table (21 endpoints)
+  - Enhanced pool response with all available fields (FDV, market cap, pool_created_at, native currency prices)
+  - Added transaction statistics with buyer/seller counts for all time intervals
+  - Added `/tokens/info_recently_updated` endpoint with network filtering
+  - Added `/networks/{network}/dexes/{dex}/pools` endpoint for DEX-specific pools
+  - Added `/networks/{network}/pools/{pool_address}/info` for pool token info
+  - Added trade size filtering parameter for trades endpoint
+  - Added network parameter for search endpoint
+  - Enhanced `include` parameter documentation for all endpoints
+  - Added note about token address support in OHLCV token parameter
+  - Updated with API changelog updates through October 2024
 
 - **1.0.0** (2026-01-12): Initial skill release
   - Complete GeckoTerminal API v2 documentation
