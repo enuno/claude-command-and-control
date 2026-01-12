@@ -33,10 +33,11 @@ This directory contains production-ready skill templates and examples for Claude
 | **[cloudflare-r2](cloudflare-r2/)** | S3-compatible object storage with zero egress fees - provides blob storage with complete S3 API compatibility, bucket management, lifecycle policies, public buckets, presigned URLs, and data migration tools |
 | **[cloudflare-workers](cloudflare-workers/)** | Serverless edge computing platform with V8 runtime - provides runtime APIs, fetch handlers, Durable Objects for stateful applications, KV bindings, and Workers AI integration for deploying code globally |
 
-### Communication (1 skill)
+### Communication & Email (2 skills)
 | Skill | Description |
 |-------|-------------|
 | **[communication/twilio-voice](communication/twilio-voice/)** | Comprehensive Twilio Voice API assistance with AI integration patterns including OpenAI Realtime API, function-calling voice agents, Conversational Intelligence analytics, and production-ready implementation examples |
+| **[mailgun](mailgun/)** | Mailgun email API service - transactional email, email validation, routing, and deliverability optimization for developers |
 
 ### Creative & Media (5 skills)
 | Skill | Description |
@@ -47,19 +48,23 @@ This directory contains production-ready skill templates and examples for Claude
 | **[slack-gif-creator](slack-gif-creator/)** | Creates animated GIFs optimized for Slack with validators for size constraints |
 | **[theme-factory](theme-factory/)** | Applies professional font and color themes to artifacts (10 pre-set themes included) |
 
-### Cryptocurrency & Payments (4 skills)
+### Cryptocurrency & Payments (7 skills)
 | Skill | Description |
 |-------|-------------|
+| **[aos-sqlite](aos-sqlite/)** | AO SQLite module for permanent, decentralized database on Arweave - SQL queries in AO processes with permanent storage |
+| **[arweave-ao-cookbook](arweave-ao-cookbook/)** | Build decentralized applications on AO - permanent compute platform using actor model for parallel processes with native message-passing and permanent storage on Arweave |
 | **[arweave-bridge](arweave-bridge/)** | ZigZag Exchange Arweave Bridge - pay with zkSync stablecoins (USDC/USDT/DAI) for permanent Arweave storage at $1/MB, with ECDSA signature authentication and complete Node.js/Python upload examples |
+| **[arweave-standards](arweave-standards/)** | Arweave network standards and specifications for building interoperable permaweb applications |
 | **[cryptocurrency/bitcoin-mining](cryptocurrency/bitcoin-mining/)** | Comprehensive Bitcoin mining knowledge from 4 industry reports covering 2024 market analysis, mining economics, operational procedures, and heat reuse strategies for sustainable mining |
 | **[cryptocurrency/btcpayserver-doc](cryptocurrency/btcpayserver-doc/)** | BTCPay Server documentation - self-hosted Bitcoin payment gateway with 767 files covering setup, integrations (WooCommerce, Shopify, etc.), Lightning Network, wallets, and deployment |
 | **[x402](x402/)** | HTTP 402 payment protocol for crypto-native API monetization - implements USDC payments on Base/Solana, AI agent payments, micropayments, Bazaar service discovery, and MCP server integration |
 
-### Development (11 skills)
+### Development (12 skills)
 | Skill | Description |
 |-------|-------------|
 | **[development/ansible](development/ansible/)** | Ansible community documentation - infrastructure automation platform with 786 files covering RST documentation sources, build system (nox/Sphinx), contribution guidelines, and development workflows |
 | **[dotenvx](dotenvx/)** | Secure environment variable management with AES-256 encryption - encrypt .env files for safe git commits, multi-environment configuration (dev/staging/production), CLI commands (run/encrypt/decrypt/set/get), and integrations for Node.js, Next.js, Docker, GitHub Actions, and Vercel |
+| **[t4-stack](t4-stack/)** | T4 Stack full-stack TypeScript starter for React Native + Web - universal apps (iOS, Android, Web, Desktop) with Tamagui UI, tRPC + Hono API, Cloudflare edge deployment, Drizzle ORM + D1 database, Supabase authentication, and Expo + Next.js monorepo structure |
 | **[development/building-bitcoin-rust](development/building-bitcoin-rust/)** | Comprehensive 419-page technical guide to building Bitcoin protocol implementation in Rust, covering cryptographic primitives, blockchain architecture, consensus mechanisms, P2P networking, and wallet development |
 | **[ar-io-build](ar-io-build/)** | Comprehensive AR.IO build documentation with 398 sections covering AR.IO features, APIs, and best practices |
 | **[changelog-generator](changelog-generator/)** | Automatically creates user-facing changelogs from git commits by analyzing history |
@@ -75,9 +80,10 @@ This directory contains production-ready skill templates and examples for Claude
 |-------|-------------|
 | **[ai-workflow/langflow](ai-workflow/langflow/)** | Visual AI workflow platform with drag-and-drop interface, 200+ components, MCP client/server support, and enterprise deployment options (142k GitHub stars) |
 
-### AI Platforms & APIs (2 skills)
+### AI Platforms & APIs (3 skills)
 | Skill | Description |
 |-------|-------------|
+| **[agentskb](agentskb/)** | AgentsKB - Knowledge Base API for AI Agents with 32K+ technical Q&As from official documentation for grounded, accurate AI responses |
 | **[openrouter](openrouter/)** | Unified API gateway for 100+ AI models from multiple providers (OpenAI, Anthropic, Google, Meta, Mistral) - comprehensive documentation (331 KB) covering multi-provider routing, cost optimization, and model comparison |
 | **[venice-ai](venice-ai/)** | Privacy-focused AI platform assistance with 49 pages of comprehensive documentation (248 KB) covering platform features, API integration, authentication, and best practices |
 
@@ -106,20 +112,25 @@ This directory contains production-ready skill templates and examples for Claude
 | **[document-skills/xlsx](document-skills/xlsx/)** | Excel spreadsheet toolkit with formulas, formatting, data analysis, and visualization |
 | **[video-downloader](video-downloader/)** | Downloads videos from YouTube and other platforms for offline viewing or archival |
 
-### Data Services (1 skill)
+### Data Services & Analytics (3 skills)
 | Skill | Description |
 |-------|-------------|
 | **[data-services/weavedb](data-services/weavedb/)** | Decentralized database protocol with zero-knowledge proofs and permanent storage on Arweave - comprehensive documentation (398 KB) covering database setup, API usage, and best practices |
+| **[geckoterminal-api](geckoterminal-api/)** | GeckoTerminal DeFi/DEX aggregator API - real-time on-chain prices, OHLCV candlestick data, pool analytics, trade history, and trending tokens across 250+ networks and 1,800+ DEXes with Python/Node.js clients (30 calls/min free tier) |
+| **[matomo-api](matomo-api/)** | Matomo (Piwik) analytics platform API - web analytics, tracking implementation, reporting API integration, plugin development, PHP/JavaScript tracking clients, and database schema documentation |
 
-### Documentation & Typesetting (2 skills)
+### Documentation & Typesetting (3 skills)
 | Skill | Description |
 |-------|-------------|
 | **[documentation/latex-manual](documentation/latex-manual/)** | Comprehensive LaTeX reference with 6 guides (quick-start, mathematics, formatting, tables/graphics, bibliography, troubleshooting), 5 production templates (article, report, beamer, letter, IEEE), and 3 helper scripts for compilation workflow - covers 90%+ of LaTeX use cases |
 | **[documentation/latex-wikibook](documentation/latex-wikibook/)** | Comprehensive LaTeX tutorials from WikiBooks - covers LaTeX fundamentals, best practices, formatting, and document preparation |
+| **[starlight](starlight/)** | Starlight documentation theme built on Astro - full-featured docs framework with built-in search (Pagefind), i18n support (20+ languages), MDX components (Tabs, Cards, Steps, FileTree), customizable styling (CSS/Tailwind), and sidebar navigation for creating beautiful documentation websites |
 
-### Infrastructure (1 skill)
+### Infrastructure & DevOps (3 skills)
 | Skill | Description |
 |-------|-------------|
+| **[dokploy](dokploy/)** | Open-source PaaS alternative to Vercel/Netlify/Heroku - deploy applications, databases, and Docker Compose stacks with Traefik routing, Let's Encrypt SSL, and Docker Swarm orchestration |
+| **[dokploy-mcp](dokploy-mcp/)** | AI-driven deployment management using Dokploy MCP server - manage projects, applications, databases (PostgreSQL, MySQL, MongoDB, Redis), domains, and deployments via Model Context Protocol |
 | **[infrastructure/terraform](infrastructure/terraform/)** | HashiCorp Terraform Infrastructure as Code (IaC) tool for provisioning, managing, and versioning cloud infrastructure across AWS, Azure, GCP, and other providers - comprehensive 33KB guide with state management, modules, and production examples |
 
 ### Productivity & Organization (6 skills)
@@ -131,6 +142,12 @@ This directory contains production-ready skill templates and examples for Claude
 | **[invoice-organizer](invoice-organizer/)** | Automatically organizes invoices and receipts for tax preparation |
 | **[meeting-insights-analyzer](meeting-insights-analyzer/)** | Analyzes meeting transcripts to uncover behavioral patterns and communication insights |
 | **[raffle-winner-picker](raffle-winner-picker/)** | Randomly selects winners from lists or spreadsheets using cryptographically secure randomness |
+
+### Security & Authentication (2 skills)
+| Skill | Description |
+|-------|-------------|
+| **[passwordless-docs](passwordless-docs/)** | Bitwarden Passwordless.dev documentation - WebAuthn/FIDO2 authentication, SDKs (JavaScript, .NET, Python), React examples, and passkey implementation patterns |
+| **[sdk-sm](sdk-sm/)** | Bitwarden Secrets Manager SDK - programmatic secrets management for applications with secure key storage and retrieval |
 
 ### Testing/QA (1 skill)
 | Skill | Description |
@@ -261,17 +278,20 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 52
-- **Individual Skills**: 44
+- **Total Skills**: 66
+- **Individual Skills**: 58
 - **AI Agent Platform Skills**: 4 (AgentKit, Cloudflare Agents, ElizaOS, Virtuals Protocol)
+- **AI Platforms & APIs**: 3 (AgentsKB, OpenRouter, Venice AI)
 - **AI Integration Protocol Skills**: 3 (Agent Client Protocol, Language Server Protocol, Model Context Protocol)
 - **Cloud Infrastructure Skills**: 7 (Cloudflare Developer Platform)
-- **Cryptocurrency & Payments Skills**: 4 (Arweave Bridge, Bitcoin Mining, BTCPayServer, x402)
+- **Cryptocurrency & Payments Skills**: 7 (AO SQLite, Arweave AO Cookbook, Arweave Bridge, Arweave Standards, Bitcoin Mining, BTCPayServer, x402)
+- **Infrastructure & DevOps**: 3 (Dokploy, Dokploy MCP, Terraform)
+- **Security & Authentication**: 2 (Passwordless, Secrets Manager SDK)
 - **Document Processing Suite**: 6
 - **Orchestration Skills**: 4
 - **Average Quality Score**: 97.2/100 (from integration validation)
-- **Total Content**: ~1.21 MB of skill documentation (including 378 MB Cloudflare platform docs)
-- **Supporting Files**: 379 (scripts, themes, examples, references)
+- **Total Content**: ~1.5 MB of skill documentation (including 378 MB Cloudflare platform docs)
+- **Supporting Files**: 400+ (scripts, themes, examples, references)
 
 ## 🔗 Resources
 
@@ -306,6 +326,6 @@ Individual skills may have different licenses. Check each skill's directory for 
 
 ---
 
-**Last Updated**: 2026-01-11
-**Total Skills**: 52
+**Last Updated**: 2026-01-12
+**Total Skills**: 66
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)
