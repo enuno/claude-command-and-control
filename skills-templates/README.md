@@ -39,12 +39,13 @@ This directory contains production-ready skill templates and examples for Claude
 | **[communication/twilio-voice](communication/twilio-voice/)** | Comprehensive Twilio Voice API assistance with AI integration patterns including OpenAI Realtime API, function-calling voice agents, Conversational Intelligence analytics, and production-ready implementation examples |
 | **[mailgun](mailgun/)** | Mailgun email API service - transactional email, email validation, routing, and deliverability optimization for developers |
 
-### Creative & Media (5 skills)
+### Creative & Media (6 skills)
 | Skill | Description |
 |-------|-------------|
 | **[artifacts-builder](artifacts-builder/)** | Suite of tools for creating elaborate React/Tailwind/shadcn UI artifacts with build pipeline |
 | **[canvas-design](canvas-design/)** | Creates beautiful visual art in PNG and PDF using design philosophy principles |
 | **[image-enhancer](image-enhancer/)** | Improves image quality by enhancing resolution, sharpness, and clarity for professional use |
+| **[lobe-vidol](lobe-vidol/)** | LobeVidol virtual idol creation platform - VRM character customization, MMD dance choreography (VMD/PMX), 22+ AI provider integrations, TTS/STT voice conversation, touch responses, and self-hosting via Vercel/Docker |
 | **[slack-gif-creator](slack-gif-creator/)** | Creates animated GIFs optimized for Slack with validators for size constraints |
 | **[theme-factory](theme-factory/)** | Applies professional font and color themes to artifacts (10 pre-set themes included) |
 
@@ -281,8 +282,8 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 69
-- **Individual Skills**: 61
+- **Total Skills**: 70
+- **Individual Skills**: 62
 - **AI Agent Platform Skills**: 4 (AgentKit, Cloudflare Agents, ElizaOS, Virtuals Protocol)
 - **AI Platforms & APIs**: 5 (AgentsKB, LobeChat, Moonshot AI, OpenRouter, Venice AI)
 - **AI Integration Protocol Skills**: 3 (Agent Client Protocol, Language Server Protocol, Model Context Protocol)
@@ -330,5 +331,5 @@ Individual skills may have different licenses. Check each skill's directory for 
 ---
 
 **Last Updated**: 2026-01-13
-**Total Skills**: 69
+**Total Skills**: 70
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)
