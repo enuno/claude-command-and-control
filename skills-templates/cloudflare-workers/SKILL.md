@@ -1,12 +1,12 @@
 ---
 name: cloudflare-workers
-version: 1.1.0
-description: Cloudflare Workers serverless platform for edge computing with V8 runtime, Wrangler CLI, Miniflare local simulator, and C3 scaffolding
+version: 1.2.0
+description: Cloudflare Workers serverless platform for edge computing with V8 runtime, Wrangler CLI, Miniflare local simulator, C3 scaffolding, and official templates
 ---
 
 # Cloudflare Workers Skill
 
-Comprehensive assistance with Cloudflare Workers development, including the Wrangler CLI, Miniflare local development, and C3 project scaffolding.
+Comprehensive assistance with Cloudflare Workers development, including the Wrangler CLI, Miniflare local development, C3 project scaffolding, and official starter templates.
 
 ## When to Use This Skill
 
@@ -921,6 +921,231 @@ export default {
 
 ---
 
+## Official Templates
+
+Cloudflare provides production-ready templates at [github.com/cloudflare/templates](https://github.com/cloudflare/templates).
+
+### Using Templates
+
+```bash
+# Clone any template with C3
+npm create cloudflare@latest my-app -- --template cloudflare/templates/<template-name>
+
+# Examples
+npm create cloudflare@latest my-db -- --template cloudflare/templates/d1-template
+npm create cloudflare@latest my-chat -- --template cloudflare/templates/durable-chat-template
+npm create cloudflare@latest my-ai -- --template cloudflare/templates/llm-chat-app-template
+```
+
+### Full-Stack & Framework Templates
+
+| Template | Description |
+|----------|-------------|
+| `next-starter-template` | Next.js starter application |
+| `remix-starter-template` | Remix framework starter |
+| `astro-blog-starter-template` | Blog platform using Astro |
+| `vite-react-template` | Vite with React configuration |
+| `react-router-starter-template` | React Router basic setup |
+| `react-router-hono-fullstack-template` | Full-stack React Router + Hono backend |
+| `react-router-postgres-ssr-template` | SSR with PostgreSQL integration |
+| `react-postgres-fullstack-template` | React frontend with PostgreSQL backend |
+
+### Data & Storage Templates
+
+| Template | Description |
+|----------|-------------|
+| `d1-template` | D1 SQL database starter with migrations |
+| `d1-starter-sessions-api-template` | Session management using D1 |
+| `to-do-list-kv-template` | Key-Value storage demonstration |
+| `postgres-hyperdrive-template` | PostgreSQL via Hyperdrive connection pooling |
+| `mysql-hyperdrive-template` | MySQL via Hyperdrive |
+| `r2-explorer-template` | R2 object storage interface |
+
+### Real-Time & Durable Objects Templates
+
+| Template | Description |
+|----------|-------------|
+| `durable-chat-template` | Real-time chat with WebSockets and PartyKit |
+| `hello-world-do-template` | Durable Objects introduction |
+| `multiplayer-globe-template` | Real-time collaborative mapping |
+
+### AI & LLM Templates
+
+| Template | Description |
+|----------|-------------|
+| `llm-chat-app-template` | AI chatbot with Workers AI streaming |
+| `text-to-image-template` | Image generation with Workers AI |
+
+### Enterprise & SaaS Templates
+
+| Template | Description |
+|----------|-------------|
+| `saas-admin-template` | SaaS dashboard with Astro, D1, and Workflows |
+| `openauth-template` | Authentication implementation |
+| `workers-for-platforms-template` | Platform-as-a-service architecture |
+
+### Advanced Patterns
+
+| Template | Description |
+|----------|-------------|
+| `workflows-starter-template` | Workflow orchestration with Durable Objects |
+| `microfrontend-template` | Micro frontend architecture |
+| `containers-template` | Containerized deployment |
+| `chanfana-openapi-template` | OpenAPI documentation generation |
+| `worker-publisher-template` | Publishing service pattern |
+
+### Template Deep Dives
+
+#### D1 Database Template
+
+```javascript
+// Query D1 database
+export default {
+  async fetch(request, env) {
+    const { results } = await env.DB.prepare(
+      "SELECT * FROM comments LIMIT 3"
+    ).all();
+
+    return Response.json(results);
+  }
+};
+```
+
+Setup steps:
+1. `npm install`
+2. `wrangler d1 create d1-template-database`
+3. Update `wrangler.json` with database ID
+4. `wrangler d1 migrations apply d1-template-database`
+5. `wrangler deploy`
+
+#### Durable Chat Template (Real-Time)
+
+Uses PartyKit Server API with Durable Objects:
+
+```javascript
+// Chat room Durable Object
+export class ChatRoom {
+  connections = new Set();
+
+  async onConnect(connection, ctx) {
+    this.connections.add(connection);
+    // Load chat history from SQL storage
+    const history = await this.ctx.storage.sql.exec(
+      "SELECT * FROM messages ORDER BY timestamp DESC LIMIT 50"
+    );
+    connection.send(JSON.stringify({ type: 'history', messages: history }));
+  }
+
+  async onMessage(message, connection) {
+    // Store message
+    await this.ctx.storage.sql.exec(
+      "INSERT INTO messages (author, text, timestamp) VALUES (?, ?, ?)",
+      [message.author, message.text, Date.now()]
+    );
+    // Broadcast to all connections
+    for (const conn of this.connections) {
+      conn.send(JSON.stringify(message));
+    }
+  }
+}
+```
+
+#### LLM Chat App Template (Workers AI)
+
+```javascript
+// Streaming AI responses with SSE
+export default {
+  async fetch(request, env) {
+    if (request.method === 'POST' && new URL(request.url).pathname === '/api/chat') {
+      const { messages } = await request.json();
+
+      const stream = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
+        messages: [
+          { role: 'system', content: 'You are a helpful assistant.' },
+          ...messages
+        ],
+        stream: true
+      });
+
+      return new Response(stream, {
+        headers: { 'Content-Type': 'text/event-stream' }
+      });
+    }
+  }
+};
+```
+
+Customization points:
+- `MODEL_ID`: Swap between Workers AI models
+- `SYSTEM_PROMPT`: Adjust AI behavior
+- Optional AI Gateway for rate limiting and analytics
+
+#### Workflows Starter Template
+
+```javascript
+// Define a workflow with steps
+export class MyWorkflow extends WorkflowEntrypoint {
+  async run(event, step) {
+    // Step 1: Process input
+    const processed = await step.do('process', async () => {
+      return processData(event.payload);
+    });
+
+    // Step 2: Wait for time or event
+    await step.sleep('wait', '1 hour');
+
+    // Step 3: Continue processing
+    const result = await step.do('finalize', async () => {
+      return finalizeData(processed);
+    });
+
+    return result;
+  }
+}
+```
+
+Features:
+- Time-based execution with delays
+- Event-driven pauses
+- Real-time status via WebSockets
+- Durable state management
+
+#### SaaS Admin Template
+
+Stack: Astro + Shadcn UI + D1 + Workflows
+
+```javascript
+// API with token authentication
+export default {
+  async fetch(request, env) {
+    const token = request.headers.get('Authorization')?.replace('Bearer ', '');
+
+    if (token !== env.API_TOKEN) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Handle customer/subscription management
+    const url = new URL(request.url);
+
+    if (url.pathname === '/api/customers') {
+      const customers = await env.DB.prepare(
+        "SELECT * FROM customers"
+      ).all();
+      return Response.json(customers.results);
+    }
+  }
+};
+```
+
+Features:
+- Token-based authentication
+- Customer management
+- Subscription tracking
+- Zod validation
+- Background task processing with Workflows
+
+---
+
 ## Reference Files
 
 This skill includes comprehensive documentation in `references/`:
@@ -941,13 +1166,16 @@ Use `view` to read specific reference files when detailed information is needed.
 - [Wrangler Configuration](https://developers.cloudflare.com/workers/wrangler/configuration/)
 - [Workers Examples](https://developers.cloudflare.com/workers/examples/)
 - [Workers SDK GitHub](https://github.com/cloudflare/workers-sdk)
+- [Official Templates](https://github.com/cloudflare/templates)
 - [Miniflare](https://miniflare.dev/)
+- [Workers AI Models](https://developers.cloudflare.com/workers-ai/models/)
 
 ---
 
 ## Notes
 
-- Enhanced from workers-sdk repository documentation
-- Includes Wrangler CLI, Miniflare local development, and C3 scaffolding
+- Enhanced from workers-sdk and templates repositories
+- Includes Wrangler CLI, Miniflare, C3 scaffolding, and official templates
 - Code examples use ES modules format (recommended)
 - wrangler.toml examples can also use wrangler.jsonc format
+- Templates cover full-stack, databases, real-time, AI, and enterprise patterns
