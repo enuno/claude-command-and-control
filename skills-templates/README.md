@@ -28,7 +28,7 @@ This directory contains production-ready skill templates and examples for Claude
 | **[cloudflare-ai-gateway](cloudflare-ai-gateway/)** | Unified interface to AI providers (OpenAI, Azure OpenAI, Anthropic, HuggingFace, Cloudflare Workers AI) with caching, rate limiting, request/response logging, and analytics dashboard for cost tracking and performance monitoring |
 | **[cloudflare-ai-search](cloudflare-ai-search/)** | Semantic search and vector embeddings in Cloudflare Workers for building AI-powered search experiences with vector-based retrieval and embedding model integration |
 | **[cloudflare-kv](cloudflare-kv/)** | Low-latency key-value storage at the edge with Workers KV - provides get/put/delete/list operations for persistent data access in edge computing environments |
-| **[cloudflare-pages](cloudflare-pages/)** | JAMstack deployment platform for static sites and full-stack applications with 13 framework guides (Next.js, React, Vue, Gatsby, Hugo, Nuxt, SvelteKit), Pages Functions for serverless backend, and preview deployments |
+| **[cloudflare-pages](cloudflare-pages/)** | Full-stack JAMstack platform with global CDN, serverless Pages Functions (routing, middleware, TypeScript), native bindings (KV, R2, D1, Durable Objects, Queues, AI), 31+ framework presets, Git/Wrangler deployment, and preview deployments |
 | **[cloudflare-pulumi](cloudflare-pulumi/)** | Infrastructure as Code for Cloudflare resources with multi-language support (TypeScript, Python, Go) - automates deployment and management of Workers, Pages, DNS, Firewall, R2, and other Cloudflare services |
 | **[cloudflare-r2](cloudflare-r2/)** | S3-compatible object storage with zero egress fees - provides blob storage with complete S3 API compatibility, bucket management, lifecycle policies, public buckets, presigned URLs, and data migration tools |
 | **[cloudflare-workers](cloudflare-workers/)** | Serverless edge computing platform with V8 runtime - provides runtime APIs, fetch handlers, Durable Objects for stateful applications, KV bindings, and Workers AI integration for deploying code globally |
@@ -59,7 +59,7 @@ This directory contains production-ready skill templates and examples for Claude
 | **[cryptocurrency/btcpayserver-doc](cryptocurrency/btcpayserver-doc/)** | BTCPay Server documentation - self-hosted Bitcoin payment gateway with 767 files covering setup, integrations (WooCommerce, Shopify, etc.), Lightning Network, wallets, and deployment |
 | **[x402](x402/)** | HTTP 402 payment protocol for crypto-native API monetization - implements USDC payments on Base/Solana, AI agent payments, micropayments, Bazaar service discovery, and MCP server integration |
 
-### Development (12 skills)
+### Development (13 skills)
 | Skill | Description |
 |-------|-------------|
 | **[development/ansible](development/ansible/)** | Ansible community documentation - infrastructure automation platform with 786 files covering RST documentation sources, build system (nox/Sphinx), contribution guidelines, and development workflows |
@@ -72,6 +72,7 @@ This directory contains production-ready skill templates and examples for Claude
 | **[fastapi](fastapi/)** | FastAPI modern Python web framework guide with 102 pages covering APIs, async endpoints, dependency injection, and backend development |
 | **[just](just/)** | Just command runner for project task automation with 50+ built-in functions and multi-language support |
 | **[mcp-builder](mcp-builder/)** | Guide for creating high-quality MCP (Model Context Protocol) servers for external service integration |
+| **[opencode](opencode/)** | OpenCode open source AI coding agent - terminal TUI, desktop app, and IDE extension with multi-provider LLM support, custom agents (Build/Plan/General/Explore), 12 built-in tools, granular permissions, MCP integration, and custom commands |
 | **[software-architecture](software-architecture/)** | Clean Architecture and Domain Driven Design principles for quality-focused software development |
 | **[webapp-testing](webapp-testing/)** | Toolkit for testing local web applications using Playwright for verifying frontend functionality |
 
@@ -80,10 +81,11 @@ This directory contains production-ready skill templates and examples for Claude
 |-------|-------------|
 | **[ai-workflow/langflow](ai-workflow/langflow/)** | Visual AI workflow platform with drag-and-drop interface, 200+ components, MCP client/server support, and enterprise deployment options (142k GitHub stars) |
 
-### AI Platforms & APIs (3 skills)
+### AI Platforms & APIs (4 skills)
 | Skill | Description |
 |-------|-------------|
 | **[agentskb](agentskb/)** | AgentsKB - Knowledge Base API for AI Agents with 32K+ technical Q&As from official documentation for grounded, accurate AI responses |
+| **[moonshot-ai](moonshot-ai/)** | Moonshot AI Kimi API - trillion-parameter MoE model (1T total, 32B active) with 256K context, OpenAI-compatible API, native tool calling, streaming, LiteLLM integration, and competitive pricing for agentic AI applications |
 | **[openrouter](openrouter/)** | Unified API gateway for 100+ AI models from multiple providers (OpenAI, Anthropic, Google, Meta, Mistral) - comprehensive documentation (331 KB) covering multi-provider routing, cost optimization, and model comparison |
 | **[venice-ai](venice-ai/)** | Privacy-focused AI platform assistance with 49 pages of comprehensive documentation (248 KB) covering platform features, API integration, authentication, and best practices |
 
@@ -278,10 +280,10 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 66
-- **Individual Skills**: 58
+- **Total Skills**: 68
+- **Individual Skills**: 60
 - **AI Agent Platform Skills**: 4 (AgentKit, Cloudflare Agents, ElizaOS, Virtuals Protocol)
-- **AI Platforms & APIs**: 3 (AgentsKB, OpenRouter, Venice AI)
+- **AI Platforms & APIs**: 4 (AgentsKB, Moonshot AI, OpenRouter, Venice AI)
 - **AI Integration Protocol Skills**: 3 (Agent Client Protocol, Language Server Protocol, Model Context Protocol)
 - **Cloud Infrastructure Skills**: 7 (Cloudflare Developer Platform)
 - **Cryptocurrency & Payments Skills**: 7 (AO SQLite, Arweave AO Cookbook, Arweave Bridge, Arweave Standards, Bitcoin Mining, BTCPayServer, x402)
@@ -326,6 +328,6 @@ Individual skills may have different licenses. Check each skill's directory for 
 
 ---
 
-**Last Updated**: 2026-01-12
-**Total Skills**: 66
+**Last Updated**: 2026-01-13
+**Total Skills**: 68
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)
