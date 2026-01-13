@@ -60,11 +60,14 @@ This directory contains production-ready skill templates and examples for Claude
 | **[cryptocurrency/btcpayserver-doc](cryptocurrency/btcpayserver-doc/)** | BTCPay Server documentation - self-hosted Bitcoin payment gateway with 767 files covering setup, integrations (WooCommerce, Shopify, etc.), Lightning Network, wallets, and deployment |
 | **[x402](x402/)** | HTTP 402 payment protocol for crypto-native API monetization - implements USDC payments on Base/Solana, AI agent payments, micropayments, Bazaar service discovery, and MCP server integration |
 
-### Development (13 skills)
+### Development (16 skills)
 | Skill | Description |
 |-------|-------------|
 | **[development/ansible](development/ansible/)** | Ansible community documentation - infrastructure automation platform with 786 files covering RST documentation sources, build system (nox/Sphinx), contribution guidelines, and development workflows |
 | **[dotenvx](dotenvx/)** | Secure environment variable management with AES-256 encryption - encrypt .env files for safe git commits, multi-environment configuration (dev/staging/production), CLI commands (run/encrypt/decrypt/set/get), and integrations for Node.js, Next.js, Docker, GitHub Actions, and Vercel |
+| **[ink](ink/)** | Ink - React for CLI applications, build interactive command-line interfaces using React components with Flexbox layout (Box, Text), hooks for input/focus (useInput, useFocus), testing support, and accessibility features |
+| **[lobe-cli-toolbox](lobe-cli-toolbox/)** | LobeHub CLI Toolbox - AI-powered command-line tools including lobe-commit (ChatGPT Git commits with Gitmoji), lobe-i18n (automated internationalization), and lobe-label (GitHub label management) |
+| **[lobe-tts](lobe-tts/)** | LobeTTS - High-quality TypeScript TTS/STT toolkit with EdgeSpeech, Microsoft, OpenAI engines, React hooks, audio visualization components, and both server and browser support |
 | **[t4-stack](t4-stack/)** | T4 Stack full-stack TypeScript starter for React Native + Web - universal apps (iOS, Android, Web, Desktop) with Tamagui UI, tRPC + Hono API, Cloudflare edge deployment, Drizzle ORM + D1 database, Supabase authentication, and Expo + Next.js monorepo structure |
 | **[development/building-bitcoin-rust](development/building-bitcoin-rust/)** | Comprehensive 419-page technical guide to building Bitcoin protocol implementation in Rust, covering cryptographic primitives, blockchain architecture, consensus mechanisms, P2P networking, and wallet development |
 | **[ar-io-build](ar-io-build/)** | Comprehensive AR.IO build documentation with 398 sections covering AR.IO features, APIs, and best practices |
@@ -82,10 +85,12 @@ This directory contains production-ready skill templates and examples for Claude
 |-------|-------------|
 | **[ai-workflow/langflow](ai-workflow/langflow/)** | Visual AI workflow platform with drag-and-drop interface, 200+ components, MCP client/server support, and enterprise deployment options (142k GitHub stars) |
 
-### AI Platforms & APIs (5 skills)
+### AI Platforms & APIs (7 skills)
 | Skill | Description |
 |-------|-------------|
 | **[agentskb](agentskb/)** | AgentsKB - Knowledge Base API for AI Agents with 32K+ technical Q&As from official documentation for grounded, accurate AI responses |
+| **[langchainjs](langchainjs/)** | LangChain.js - TypeScript framework for building LLM-powered applications with agents, chains, RAG, tools, memory, and integrations for OpenAI, Anthropic, Google, and hundreds of other providers |
+| **[langsmith-agent-builder](langsmith-agent-builder/)** | LangSmith Agent Builder - No-code platform for creating AI agents with built-in tools (Gmail, Slack, GitHub, Linear), OAuth integrations, MCP server support, Slack deployment, and programmatic invocation via LangGraph SDK |
 | **[lobe-chat](lobe-chat/)** | LobeChat open-source AI agent workspace (70k+ GitHub stars) - multi-provider LLM support (OpenAI, Claude, Gemini, Ollama, 20+ providers), 505+ pre-built agents, 40+ plugins, knowledge base with RAG, MCP integration, and self-hosting via Docker/Vercel |
 | **[moonshot-ai](moonshot-ai/)** | Moonshot AI Kimi API - trillion-parameter MoE model (1T total, 32B active) with 256K context, OpenAI-compatible API, native tool calling, streaming, LiteLLM integration, and competitive pricing for agentic AI applications |
 | **[openrouter](openrouter/)** | Unified API gateway for 100+ AI models from multiple providers (OpenAI, Anthropic, Google, Meta, Mistral) - comprehensive documentation (331 KB) covering multi-provider routing, cost optimization, and model comparison |
@@ -282,10 +287,11 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 70
-- **Individual Skills**: 62
+- **Total Skills**: 75
+- **Individual Skills**: 67
 - **AI Agent Platform Skills**: 4 (AgentKit, Cloudflare Agents, ElizaOS, Virtuals Protocol)
-- **AI Platforms & APIs**: 5 (AgentsKB, LobeChat, Moonshot AI, OpenRouter, Venice AI)
+- **AI Platforms & APIs**: 7 (AgentsKB, LangChain.js, LangSmith Agent Builder, LobeChat, Moonshot AI, OpenRouter, Venice AI)
+- **Development Skills**: 16 (including Ink, Lobe CLI Toolbox, Lobe TTS)
 - **AI Integration Protocol Skills**: 3 (Agent Client Protocol, Language Server Protocol, Model Context Protocol)
 - **Cloud Infrastructure Skills**: 7 (Cloudflare Developer Platform)
 - **Cryptocurrency & Payments Skills**: 7 (AO SQLite, Arweave AO Cookbook, Arweave Bridge, Arweave Standards, Bitcoin Mining, BTCPayServer, x402)
@@ -331,5 +337,5 @@ Individual skills may have different licenses. Check each skill's directory for 
 ---
 
 **Last Updated**: 2026-01-13
-**Total Skills**: 70
+**Total Skills**: 75
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)
