@@ -1,12 +1,12 @@
 ---
 name: cloudflare-workers
-version: 1.2.0
-description: Cloudflare Workers serverless platform for edge computing with V8 runtime, Wrangler CLI, Miniflare local simulator, C3 scaffolding, and official templates
+version: 1.4.0
+description: Cloudflare Workers serverless platform for edge computing with workerd runtime, Wrangler CLI, Miniflare, Rust SDK (workers-rs), and official templates
 ---
 
 # Cloudflare Workers Skill
 
-Comprehensive assistance with Cloudflare Workers development, including the Wrangler CLI, Miniflare local development, C3 project scaffolding, and official starter templates.
+Comprehensive assistance with Cloudflare Workers development, including the workerd runtime, Wrangler CLI, Miniflare local development, C3 project scaffolding, Rust SDK (workers-rs), and official starter templates.
 
 ## When to Use This Skill
 
@@ -18,6 +18,10 @@ This skill should be triggered when:
 - Configuring Workers KV, Durable Objects, R2, D1, or Queues
 - Debugging and testing Workers
 - Setting up CI/CD for Workers
+- Writing Workers in Rust with workers-rs
+- Building WebAssembly-based Workers
+- Self-hosting Workers with workerd runtime
+- Understanding the Workers runtime architecture
 
 ## Quick Start
 
@@ -1146,6 +1150,1160 @@ Features:
 
 ---
 
+## Rust SDK (workers-rs)
+
+The `workers-rs` crate provides ergonomic Rust bindings for building Cloudflare Workers compiled to WebAssembly.
+
+### Quick Start (Rust)
+
+```bash
+# Install prerequisites
+rustup target add wasm32-unknown-unknown
+cargo install cargo-generate
+
+# Generate new Rust Worker project
+cargo generate cloudflare/workers-rs
+
+# Development
+npx wrangler dev
+
+# Deploy
+npx wrangler deploy
+```
+
+### Project Structure
+
+```
+my-rust-worker/
+├── Cargo.toml          # Rust dependencies
+├── wrangler.toml       # Wrangler configuration
+└── src/
+    └── lib.rs          # Worker entry point
+```
+
+### Cargo.toml Configuration
+
+```toml
+[package]
+name = "my-worker"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+worker = "0.4"
+worker-macros = "0.4"
+console_error_panic_hook = "0.1"
+
+# Optional features
+[dependencies.worker]
+version = "0.4"
+features = ["http", "d1", "queue"]
+
+[profile.release]
+opt-level = "s"      # Optimize for size
+lto = true           # Link-time optimization
+strip = true         # Strip symbols
+codegen-units = 1    # Single codegen unit
+```
+
+### Basic Fetch Handler
+
+```rust
+use worker::*;
+
+#[event(fetch)]
+async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    Response::ok("Hello from Rust Worker!")
+}
+```
+
+### Router Pattern
+
+```rust
+use worker::*;
+
+#[event(fetch)]
+async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    let router = Router::new();
+
+    router
+        .get("/", |_, _| Response::ok("Home"))
+        .get_async("/users/:id", handle_user)
+        .post_async("/users", create_user)
+        .run(req, env)
+        .await
+}
+
+async fn handle_user(req: Request, ctx: RouteContext<()>) -> Result<Response> {
+    let id = ctx.param("id").unwrap();
+    Response::ok(format!("User ID: {}", id))
+}
+
+async fn create_user(mut req: Request, ctx: RouteContext<()>) -> Result<Response> {
+    let body: serde_json::Value = req.json().await?;
+    Response::from_json(&body)
+}
+```
+
+### Request/Response Handling
+
+```rust
+use worker::*;
+
+#[event(fetch)]
+async fn main(mut req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    // Request info
+    let method = req.method();
+    let path = req.path();
+    let url = req.url()?;
+
+    // Headers
+    let headers = req.headers();
+    let auth = headers.get("Authorization")?.unwrap_or_default();
+
+    // Query parameters
+    let query: HashMap<String, String> = url.query_pairs().into_owned().collect();
+
+    // Body parsing
+    let json_body: serde_json::Value = req.json().await?;
+    let text_body = req.text().await?;
+    let bytes = req.bytes().await?;
+
+    // Build response
+    let mut headers = Headers::new();
+    headers.set("Content-Type", "application/json")?;
+    headers.set("X-Custom-Header", "value")?;
+
+    Ok(Response::ok("Hello")?
+        .with_headers(headers)
+        .with_status(200))
+}
+```
+
+### JSON API
+
+```rust
+use serde::{Deserialize, Serialize};
+use worker::*;
+
+#[derive(Serialize, Deserialize)]
+struct User {
+    id: u32,
+    name: String,
+    email: String,
+}
+
+#[event(fetch)]
+async fn main(mut req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    match req.method() {
+        Method::Get => {
+            let user = User {
+                id: 1,
+                name: "Alice".into(),
+                email: "alice@example.com".into(),
+            };
+            Response::from_json(&user)
+        }
+        Method::Post => {
+            let user: User = req.json().await?;
+            Response::from_json(&user)
+        }
+        _ => Response::error("Method not allowed", 405),
+    }
+}
+```
+
+### KV Storage
+
+```rust
+use worker::*;
+
+#[event(fetch)]
+async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    let kv = env.kv("MY_KV")?;
+
+    // Put value
+    kv.put("key", "value")?.execute().await?;
+
+    // Put with expiration (seconds)
+    kv.put("temp_key", "value")?
+        .expiration_ttl(3600)
+        .execute()
+        .await?;
+
+    // Put JSON
+    let data = serde_json::json!({"foo": "bar"});
+    kv.put("json_key", data)?.execute().await?;
+
+    // Get value
+    let value = kv.get("key").text().await?;
+
+    // Get as JSON
+    let json_value: Option<serde_json::Value> = kv.get("json_key").json().await?;
+
+    // List keys
+    let list = kv.list().prefix("user:").execute().await?;
+    for key in list.keys {
+        console_log!("Key: {}", key.name);
+    }
+
+    // Delete
+    kv.delete("key").await?;
+
+    Response::ok("KV operations complete")
+}
+```
+
+### Durable Objects
+
+```rust
+use worker::*;
+
+// Define the Durable Object
+#[durable_object]
+pub struct Counter {
+    state: State,
+    env: Env,
+}
+
+#[durable_object]
+impl DurableObject for Counter {
+    fn new(state: State, env: Env) -> Self {
+        Self { state, env }
+    }
+
+    async fn fetch(&mut self, req: Request) -> Result<Response> {
+        // Get current count from storage
+        let mut count: u64 = self.state.storage().get("count").await.unwrap_or(0);
+
+        match req.method() {
+            Method::Post => {
+                count += 1;
+                self.state.storage().put("count", count).await?;
+            }
+            Method::Delete => {
+                count = 0;
+                self.state.storage().put("count", count).await?;
+            }
+            _ => {}
+        }
+
+        Response::from_json(&serde_json::json!({ "count": count }))
+    }
+}
+
+// Worker entry point
+#[event(fetch)]
+async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    let namespace = env.durable_object("COUNTER")?;
+    let id = namespace.id_from_name("global")?;
+    let stub = id.get_stub()?;
+
+    stub.fetch_with_request(req).await
+}
+```
+
+**wrangler.toml for Durable Objects:**
+
+```toml
+[durable_objects]
+bindings = [
+  { name = "COUNTER", class_name = "Counter" }
+]
+
+[[migrations]]
+tag = "v1"
+new_classes = ["Counter"]
+```
+
+### Durable Objects with SQLite Storage
+
+```rust
+#[durable_object]
+impl DurableObject for MyObject {
+    async fn fetch(&mut self, req: Request) -> Result<Response> {
+        let sql = self.state.storage().sql();
+
+        // Create table
+        sql.exec(
+            "CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY, name TEXT)",
+            vec![],
+        )?;
+
+        // Insert
+        sql.exec(
+            "INSERT INTO items (name) VALUES (?)",
+            vec![JsValue::from_str("item1")],
+        )?;
+
+        // Query
+        let cursor = sql.exec("SELECT * FROM items", vec![])?;
+        let rows: Vec<serde_json::Value> = cursor.to_array()?;
+
+        Response::from_json(&rows)
+    }
+}
+```
+
+**wrangler.toml for SQLite in Durable Objects:**
+
+```toml
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["MyObject"]
+```
+
+### D1 Database
+
+Enable with `features = ["d1"]`:
+
+```rust
+use worker::*;
+
+#[derive(Deserialize, Serialize)]
+struct User {
+    id: i32,
+    name: String,
+    email: String,
+}
+
+#[event(fetch)]
+async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    let db = env.d1("DB")?;
+
+    // Query all
+    let stmt = db.prepare("SELECT * FROM users");
+    let result = stmt.all().await?;
+    let users: Vec<User> = result.results()?;
+
+    // Query with parameters
+    let stmt = db.prepare("SELECT * FROM users WHERE id = ?1");
+    let user: Option<User> = stmt.bind(&[1.into()])?.first(None).await?;
+
+    // Insert
+    let stmt = db.prepare("INSERT INTO users (name, email) VALUES (?1, ?2)");
+    stmt.bind(&["Alice".into(), "alice@example.com".into()])?
+        .run()
+        .await?;
+
+    // Batch operations
+    let results = db.batch(vec![
+        db.prepare("INSERT INTO users (name) VALUES (?1)").bind(&["Bob".into()])?,
+        db.prepare("INSERT INTO users (name) VALUES (?1)").bind(&["Charlie".into()])?,
+    ]).await?;
+
+    Response::from_json(&users)
+}
+```
+
+### Queues
+
+Enable with `features = ["queue"]`:
+
+```rust
+use worker::*;
+
+#[derive(Serialize, Deserialize)]
+struct Task {
+    task_type: String,
+    payload: String,
+}
+
+// Producer
+#[event(fetch)]
+async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    let queue = env.queue("MY_QUEUE")?;
+
+    let task = Task {
+        task_type: "email".into(),
+        payload: "user@example.com".into(),
+    };
+
+    queue.send(task).await?;
+
+    Response::ok("Task queued")
+}
+
+// Consumer
+#[event(queue)]
+async fn queue_handler(batch: MessageBatch<Task>, env: Env, _ctx: Context) -> Result<()> {
+    for message in batch.messages()? {
+        let task = message.body();
+        console_log!("Processing: {:?}", task.task_type);
+
+        // Process the task...
+
+        message.ack();  // Acknowledge successful processing
+        // or message.retry(); // Retry later
+    }
+
+    // Or acknowledge all at once
+    // batch.ack_all();
+
+    Ok(())
+}
+```
+
+**wrangler.toml for Queues:**
+
+```toml
+[[queues.producers]]
+queue = "my-queue"
+binding = "MY_QUEUE"
+
+[[queues.consumers]]
+queue = "my-queue"
+max_batch_size = 10
+max_batch_timeout = 30
+```
+
+### R2 Object Storage
+
+```rust
+use worker::*;
+
+#[event(fetch)]
+async fn main(mut req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    let bucket = env.bucket("MY_BUCKET")?;
+    let url = req.url()?;
+    let key = url.path().trim_start_matches('/');
+
+    match req.method() {
+        Method::Put => {
+            let body = req.bytes().await?;
+            bucket.put(key, body)
+                .http_metadata(HttpMetadata {
+                    content_type: Some("application/octet-stream".into()),
+                    ..Default::default()
+                })
+                .execute()
+                .await?;
+            Response::ok("Uploaded")
+        }
+        Method::Get => {
+            match bucket.get(key).execute().await? {
+                Some(object) => {
+                    let body = object.body().unwrap().bytes().await?;
+                    Ok(Response::from_bytes(body)?)
+                }
+                None => Response::error("Not found", 404),
+            }
+        }
+        Method::Delete => {
+            bucket.delete(key).await?;
+            Response::ok("Deleted")
+        }
+        _ => Response::error("Method not allowed", 405),
+    }
+}
+```
+
+### Scheduled Events (Cron)
+
+```rust
+use worker::*;
+
+#[event(scheduled)]
+async fn scheduled(_event: ScheduledEvent, env: Env, _ctx: ScheduleContext) -> Result<()> {
+    console_log!("Cron job executed!");
+
+    let kv = env.kv("MY_KV")?;
+    kv.put("last_run", chrono::Utc::now().to_rfc3339())?
+        .execute()
+        .await?;
+
+    Ok(())
+}
+
+// Can combine with fetch handler
+#[event(fetch)]
+async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    Response::ok("Worker with scheduled event")
+}
+```
+
+### HTTP Feature (Standard http Crate Compatibility)
+
+Enable with `features = ["http"]` for compatibility with Axum, Hyper, etc:
+
+```rust
+use worker::*;
+
+#[event(fetch)]
+async fn main(req: HttpRequest, env: Env, _ctx: Context) -> Result<HttpResponse> {
+    // req is now http::Request<worker::Body>
+    let method = req.method();
+    let uri = req.uri();
+    let headers = req.headers();
+
+    // Build standard http response
+    let response = http::Response::builder()
+        .status(200)
+        .header("Content-Type", "application/json")
+        .body(worker::Body::from(r#"{"status":"ok"}"#))?;
+
+    Ok(response)
+}
+```
+
+### Axum Integration
+
+```rust
+use axum::{routing::get, Router};
+use tower_service::Service;
+use worker::*;
+
+fn router() -> Router {
+    Router::new()
+        .route("/", get(|| async { "Hello from Axum on Workers!" }))
+        .route("/users/:id", get(get_user))
+}
+
+async fn get_user(axum::extract::Path(id): axum::extract::Path<String>) -> String {
+    format!("User: {}", id)
+}
+
+#[event(fetch)]
+async fn main(req: HttpRequest, env: Env, _ctx: Context) -> Result<HttpResponse> {
+    Ok(router().call(req).await?)
+}
+```
+
+### Environment Variables & Secrets
+
+```rust
+use worker::*;
+
+#[event(fetch)]
+async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    // Environment variables from wrangler.toml [vars]
+    let api_url = env.var("API_URL")?.to_string();
+
+    // Secrets (wrangler secret put)
+    let api_key = env.secret("API_KEY")?.to_string();
+
+    // Use in fetch
+    let mut headers = Headers::new();
+    headers.set("Authorization", &format!("Bearer {}", api_key))?;
+
+    let mut init = RequestInit::new();
+    init.with_headers(headers);
+
+    let response = Fetch::Request(Request::new_with_init(&api_url, &init)?)
+        .send()
+        .await?;
+
+    Ok(response)
+}
+```
+
+### Error Handling
+
+```rust
+use worker::*;
+
+#[event(fetch)]
+async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    // Set up panic hook for better error messages
+    console_error_panic_hook::set_once();
+
+    match handle_request(req, env).await {
+        Ok(response) => Ok(response),
+        Err(e) => {
+            console_error!("Error: {:?}", e);
+            Response::error(format!("Internal error: {}", e), 500)
+        }
+    }
+}
+
+async fn handle_request(req: Request, env: Env) -> Result<Response> {
+    let kv = env.kv("MY_KV")?;
+
+    let value = kv.get("key").text().await?
+        .ok_or_else(|| Error::from("Key not found"))?;
+
+    Response::ok(value)
+}
+```
+
+### Form Data & File Uploads
+
+```rust
+use worker::*;
+
+#[event(fetch)]
+async fn main(mut req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    let form = req.form_data().await?;
+
+    for (name, entry) in form.entries() {
+        match entry {
+            FormEntry::Field(value) => {
+                console_log!("Field {}: {}", name, value);
+            }
+            FormEntry::File(file) => {
+                console_log!("File {}: {} bytes", file.name(), file.size());
+                let bytes = file.bytes().await?;
+                // Process file...
+            }
+        }
+    }
+
+    Response::ok("Form processed")
+}
+```
+
+### WebSockets
+
+```rust
+use worker::*;
+
+#[event(fetch)]
+async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    let upgrade = req.headers().get("Upgrade")?;
+
+    if upgrade.as_deref() == Some("websocket") {
+        let pair = WebSocketPair::new()?;
+        let server = pair.server;
+        let client = pair.client;
+
+        server.accept()?;
+
+        wasm_bindgen_futures::spawn_local(async move {
+            let mut event_stream = server.events().unwrap();
+
+            while let Some(event) = event_stream.next().await {
+                match event.unwrap() {
+                    WebsocketEvent::Message(msg) => {
+                        if let Some(text) = msg.text() {
+                            server.send_with_str(&format!("Echo: {}", text)).unwrap();
+                        }
+                    }
+                    WebsocketEvent::Close(_) => break,
+                }
+            }
+        });
+
+        Response::from_websocket(client)
+    } else {
+        Response::ok("WebSocket endpoint")
+    }
+}
+```
+
+### Testing Rust Workers with Miniflare
+
+```javascript
+// test.mjs
+import { Miniflare } from "miniflare";
+
+const mf = new Miniflare({
+  scriptPath: "./build/worker/shim.mjs",
+  modules: true,
+  modulesRules: [
+    { type: "CompiledWasm", include: ["**/*.wasm"] }
+  ],
+  kvNamespaces: ["MY_KV"],
+  d1Databases: ["DB"],
+});
+
+// Run tests
+const response = await mf.dispatchFetch("http://localhost/api/users");
+console.log(await response.json());
+
+await mf.dispose();
+```
+
+### Rust Worker Limitations
+
+- **No threading**: Tokio/async_std not supported (no multi-threaded runtimes)
+- **WASM target**: All dependencies must compile to `wasm32-unknown-unknown`
+- **Bundle size limits**: Optimize with release profile settings
+- **Edition 2021+**: Required for workers-rs v0.0.18+
+
+### Debugging Tips
+
+```rust
+use worker::*;
+
+#[event(fetch)]
+async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    // Console logging
+    console_log!("Request path: {}", req.path());
+    console_error!("This is an error message");
+
+    // Debug with serde_json
+    console_log!("Request: {:?}", serde_json::to_string(&req.headers()));
+
+    Response::ok("Debug complete")
+}
+```
+
+---
+
+## workerd Runtime
+
+workerd is the open-source JavaScript/WebAssembly runtime that powers Cloudflare Workers. It can be self-hosted for local development, testing, or running Workers outside Cloudflare's network.
+
+### What is workerd?
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    workerd Runtime                       │
+├─────────────────────────────────────────────────────────┤
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────┐ │
+│  │     V8      │  │   WASM      │  │   Cap'n Proto   │ │
+│  │  JavaScript │  │   Runtime   │  │  Configuration  │ │
+│  │   Engine    │  │             │  │                 │ │
+│  └──────┬──────┘  └──────┬──────┘  └────────┬────────┘ │
+│         │                │                   │          │
+│  ┌──────┴────────────────┴───────────────────┴────────┐ │
+│  │              Service Mesh / Bindings                │ │
+│  │    (KV, D1, R2, Queues, External Services, etc.)   │ │
+│  └────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Use Cases
+
+| Use Case | Description |
+|----------|-------------|
+| **Application Server** | Self-host Workers in your own infrastructure |
+| **Development Tool** | Local testing with production-identical runtime |
+| **HTTP Proxy** | Programmable request interception and routing |
+| **Edge Computing** | Deploy Workers to your own edge locations |
+
+### Installation
+
+```bash
+# macOS (Homebrew)
+brew install workerd
+
+# From source (requires Bazel)
+git clone https://github.com/cloudflare/workerd
+cd workerd
+bazel build //src/workerd/server:workerd
+
+# Binary releases available for:
+# - Linux x86-64, ARM64 (glibc 2.35+)
+# - macOS x86-64, ARM64 (13.5+)
+# - Windows x86-64
+```
+
+### Configuration (Cap'n Proto)
+
+workerd uses Cap'n Proto text format for configuration:
+
+```capnp
+# workerd.capnp
+using Workerd = import "/workerd/workerd.capnp";
+
+const config :Workerd.Config = (
+  services = [
+    (name = "main", worker = .mainWorker),
+  ],
+
+  sockets = [
+    (name = "http", address = "*:8080", http = (), service = "main"),
+  ],
+);
+
+const mainWorker :Workerd.Worker = (
+  modules = [
+    (name = "worker", esModule = embed "worker.js"),
+  ],
+  compatibilityDate = "2024-01-01",
+);
+```
+
+### Running workerd
+
+```bash
+# Start with configuration file
+workerd serve config.capnp
+
+# With socket activation (systemd)
+workerd serve config.capnp --socket-fd http=3
+
+# Validate configuration
+workerd validate config.capnp
+
+# Compile configuration (for deployment)
+workerd compile config.capnp > compiled.bin
+```
+
+### Worker Configuration
+
+```capnp
+const myWorker :Workerd.Worker = (
+  # ES Modules (recommended)
+  modules = [
+    (name = "main", esModule = embed "src/index.js"),
+    (name = "utils", esModule = embed "src/utils.js"),
+  ],
+
+  # Or Service Worker syntax
+  # serviceWorkerScript = embed "worker.js",
+
+  # Compatibility settings
+  compatibilityDate = "2024-01-01",
+  compatibilityFlags = ["nodejs_compat"],
+
+  # Bindings
+  bindings = [
+    (name = "MY_KV", kvNamespace = "kv-namespace-id"),
+    (name = "MY_VAR", text = "hello"),
+    (name = "MY_SECRET", text = "secret-value"),
+    (name = "BACKEND", service = "backend-service"),
+  ],
+
+  # Durable Objects
+  durableObjectNamespaces = [
+    (className = "Counter", uniqueKey = "counter-ns"),
+  ],
+  durableObjectStorage = (localDisk = "do-storage"),
+);
+```
+
+### Service Types
+
+```capnp
+const config :Workerd.Config = (
+  services = [
+    # Worker service
+    (name = "api", worker = .apiWorker),
+
+    # External HTTP backend
+    (name = "backend", external = (
+      address = "backend.example.com:443",
+      http = (style = host),
+      tls = (certificateAuthority = embed "ca.pem"),
+    )),
+
+    # Network access
+    (name = "internet", network = (
+      allow = ["public"],
+      deny = ["10.0.0.0/8", "192.168.0.0/16"],
+    )),
+
+    # Disk directory
+    (name = "static", disk = (
+      path = "./public",
+      writable = false,
+    )),
+  ],
+);
+```
+
+### Socket Configuration
+
+```capnp
+const config :Workerd.Config = (
+  sockets = [
+    # HTTP socket
+    (
+      name = "http",
+      address = "*:8080",
+      http = (),
+      service = "main",
+    ),
+
+    # HTTPS socket with TLS
+    (
+      name = "https",
+      address = "*:8443",
+      http = (),
+      service = "main",
+      tls = (
+        certificateChain = embed "cert.pem",
+        privateKey = embed "key.pem",
+      ),
+    ),
+
+    # Unix socket
+    (
+      name = "unix",
+      address = "unix:/var/run/workerd.sock",
+      http = (),
+      service = "main",
+    ),
+  ],
+);
+```
+
+### Binding Types
+
+```capnp
+bindings = [
+  # Text/string binding
+  (name = "API_URL", text = "https://api.example.com"),
+
+  # JSON binding
+  (name = "CONFIG", json = "{\"debug\": true}"),
+
+  # Binary data
+  (name = "WASM_MODULE", wasmModule = embed "module.wasm"),
+
+  # Cryptographic key
+  (name = "SIGNING_KEY", cryptoKey = (
+    raw = embed "key.bin",
+    algorithm = (name = "HMAC", hash = "SHA-256"),
+    usages = ["sign", "verify"],
+  )),
+
+  # Service binding (inter-worker communication)
+  (name = "AUTH_SERVICE", service = "auth"),
+
+  # KV namespace
+  (name = "CACHE", kvNamespace = "cache-ns-id"),
+
+  # R2 bucket
+  (name = "STORAGE", r2Bucket = "my-bucket"),
+
+  # D1 database
+  (name = "DB", d1Database = "database-id"),
+
+  # Queue
+  (name = "TASK_QUEUE", queue = "tasks"),
+
+  # Analytics Engine
+  (name = "ANALYTICS", analyticsEngine = "my-dataset"),
+],
+```
+
+### Durable Objects (Self-Hosted)
+
+```capnp
+const myWorker :Workerd.Worker = (
+  modules = [
+    (name = "main", esModule = embed "worker.js"),
+  ],
+
+  # Define DO classes
+  durableObjectNamespaces = [
+    (className = "Counter", uniqueKey = "counter"),
+    (className = "ChatRoom", uniqueKey = "chat"),
+  ],
+
+  # Local disk storage for DO state
+  durableObjectStorage = (
+    localDisk = "./do-data",
+  ),
+
+  compatibilityDate = "2024-01-01",
+);
+```
+
+**worker.js with Durable Object:**
+
+```javascript
+export class Counter {
+  constructor(state, env) {
+    this.state = state;
+  }
+
+  async fetch(request) {
+    let count = (await this.state.storage.get("count")) || 0;
+    count++;
+    await this.state.storage.put("count", count);
+    return new Response(JSON.stringify({ count }));
+  }
+}
+
+export default {
+  async fetch(request, env) {
+    const id = env.COUNTER.idFromName("global");
+    const stub = env.COUNTER.get(id);
+    return stub.fetch(request);
+  }
+};
+```
+
+### Network Configuration
+
+```capnp
+# Allow outbound to public internet only
+(name = "internet", network = (
+  allow = ["public"],
+)),
+
+# Allow specific CIDRs
+(name = "internal", network = (
+  allow = ["10.0.0.0/8", "172.16.0.0/12"],
+  deny = ["10.0.0.1/32"],  # Except this IP
+)),
+
+# Allow all (not recommended for production)
+(name = "all", network = (
+  allow = ["0.0.0.0/0", "::/0"],
+)),
+```
+
+### TLS Configuration
+
+```capnp
+# Client TLS (for external services)
+(name = "secure-backend", external = (
+  address = "api.example.com:443",
+  http = (),
+  tls = (
+    certificateAuthority = embed "ca-bundle.pem",
+    minVersion = "TLSv1.3",
+  ),
+)),
+
+# Server TLS (for sockets)
+(
+  name = "https",
+  address = "*:443",
+  http = (),
+  service = "main",
+  tls = (
+    certificateChain = embed "fullchain.pem",
+    privateKey = embed "privkey.pem",
+    minVersion = "TLSv1.2",
+    # OCSP stapling
+    ocspResponse = embed "ocsp.der",
+  ),
+),
+```
+
+### Using with Wrangler (Local Dev)
+
+```bash
+# Set workerd path for wrangler dev
+export MINIFLARE_WORKERD_PATH="/usr/local/bin/workerd"
+
+# Run local development
+wrangler dev
+
+# Or explicitly use local mode
+wrangler dev --local
+```
+
+### systemd Integration
+
+```ini
+# /etc/systemd/system/workerd.socket
+[Unit]
+Description=workerd HTTP Socket
+
+[Socket]
+ListenStream=80
+ListenStream=443
+
+[Install]
+WantedBy=sockets.target
+```
+
+```ini
+# /etc/systemd/system/workerd.service
+[Unit]
+Description=workerd Server
+Requires=workerd.socket
+
+[Service]
+Type=simple
+User=workerd
+Group=workerd
+ExecStart=/usr/local/bin/workerd serve /etc/workerd/config.capnp \
+  --socket-fd http=3 --socket-fd https=4
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```bash
+# Enable and start
+sudo systemctl enable workerd.socket
+sudo systemctl start workerd.socket
+```
+
+### Docker Deployment
+
+```dockerfile
+FROM ghcr.io/cloudflare/workerd:latest
+
+COPY config.capnp /etc/workerd/
+COPY src/ /app/src/
+
+EXPOSE 8080
+
+CMD ["serve", "/etc/workerd/config.capnp"]
+```
+
+```yaml
+# docker-compose.yml
+services:
+  workerd:
+    image: ghcr.io/cloudflare/workerd:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./config.capnp:/etc/workerd/config.capnp:ro
+      - ./src:/app/src:ro
+      - ./do-data:/var/lib/workerd/do
+    command: serve /etc/workerd/config.capnp
+```
+
+### Compatibility Dates
+
+workerd maintains backward compatibility through date-based versioning:
+
+```capnp
+const myWorker :Workerd.Worker = (
+  # Use APIs as they existed on this date
+  compatibilityDate = "2024-01-01",
+
+  # Enable specific compatibility flags
+  compatibilityFlags = [
+    "nodejs_compat",           # Node.js API compatibility
+    "streams_enable_constructors",
+    "transformstream_enable_standard_constructor",
+  ],
+);
+```
+
+### Runtime APIs
+
+workerd implements web-standard APIs:
+
+| Category | APIs |
+|----------|------|
+| **Fetch** | fetch(), Request, Response, Headers |
+| **Streams** | ReadableStream, WritableStream, TransformStream |
+| **Crypto** | crypto.subtle, crypto.getRandomValues() |
+| **Encoding** | TextEncoder, TextDecoder, atob(), btoa() |
+| **Timers** | setTimeout(), setInterval(), scheduler.wait() |
+| **URL** | URL, URLSearchParams, URLPattern |
+| **Cache** | caches.default, caches.open() |
+| **WebSocket** | WebSocket, WebSocketPair |
+| **Console** | console.log(), console.error(), etc. |
+
+### Limitations (Self-Hosted)
+
+- **Single-threaded**: One event loop per process; scale with multiple instances
+- **Durable Objects**: Local disk only (no distributed storage)
+- **No hardened sandbox**: Run in VM for untrusted code
+- **Feature parity**: Some Cloudflare-specific features unavailable
+
+### Security Considerations
+
+```
+⚠️  workerd provides logical isolation but is NOT a security sandbox.
+
+For untrusted code:
+- Run inside a VM (firecracker, gVisor, etc.)
+- Use container isolation (Docker with seccomp)
+- Network namespace isolation
+- Resource limits (cgroups)
+```
+
+---
+
 ## Reference Files
 
 This skill includes comprehensive documentation in `references/`:
@@ -1169,13 +2327,21 @@ Use `view` to read specific reference files when detailed information is needed.
 - [Official Templates](https://github.com/cloudflare/templates)
 - [Miniflare](https://miniflare.dev/)
 - [Workers AI Models](https://developers.cloudflare.com/workers-ai/models/)
+- [workers-rs (Rust SDK)](https://github.com/cloudflare/workers-rs)
+- [Rust Workers Guide](https://developers.cloudflare.com/workers/languages/rust/)
+- [workerd Runtime](https://github.com/cloudflare/workerd)
+- [Runtime APIs Reference](https://developers.cloudflare.com/workers/runtime-apis/)
 
 ---
 
 ## Notes
 
-- Enhanced from workers-sdk and templates repositories
-- Includes Wrangler CLI, Miniflare, C3 scaffolding, and official templates
-- Code examples use ES modules format (recommended)
+- Enhanced from workers-sdk, templates, workers-rs, and workerd repositories
+- Includes Wrangler CLI, Miniflare, C3 scaffolding, Rust SDK, workerd runtime, and official templates
+- JavaScript/TypeScript examples use ES modules format (recommended)
+- Rust examples use async/await with workers-rs macros
+- workerd configuration uses Cap'n Proto text format
 - wrangler.toml examples can also use wrangler.jsonc format
 - Templates cover full-stack, databases, real-time, AI, and enterprise patterns
+- Rust Workers compile to WASM and require `wasm32-unknown-unknown` target
+- workerd can be self-hosted for local development or production deployment

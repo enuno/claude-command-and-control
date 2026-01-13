@@ -1040,6 +1040,7 @@ version: 1.0.0
 | **[arweave-ao-cookbook](skills-templates/arweave-ao-cookbook/)** | Build decentralized applications on AO | Building decentralized apps on Arweave with permanent storage |
 | **[arweave-standards](skills-templates/arweave-standards/)** | Arweave standards, specifications and best practices | Working with Arweave standards, implementing protocol specifications, checking compliance |
 | **[artifacts-builder](skills-templates/artifacts-builder/)** | React/Tailwind/shadcn UI artifact builder | Complex artifacts requiring state management or shadcn/ui components |
+| **[astro](skills-templates/astro/)** | Astro web framework with Islands architecture | Content-focused websites, partial hydration, content collections, multi-framework support |
 | **[braiins-ecosystem](skills/braiins-ecosystem/SKILL.md)** | Unified Braiins Bitcoin mining ecosystem | Complete mining stack (firmware, pool, tools, proxy, dashboard, calculator) |
 | **[braiins-insights](skills/braiins-insights/SKILL.md)** | Bitcoin mining profitability calculator | Evaluating mining profitability, ROI analysis, cash flow projections |
 | **[braiins-manager](skills/braiins-manager/SKILL.md)** | Web-based mining operations dashboard | Fleet monitoring, multi-user access, real-time metrics |
@@ -1086,6 +1087,7 @@ version: 1.0.0
 | **[mailgun](skills-templates/mailgun/)** | Email sending, receiving, and tracking API | Working with Mailgun, implementing email solutions, debugging email code |
 | **[mcp-builder](skills-templates/mcp-builder/)** | MCP server development guide | Building Model Context Protocol servers |
 | **[meeting-insights-analyzer](skills-templates/meeting-insights-analyzer/)** | Meeting transcript analysis | Improving communication or leadership skills |
+| **[neon](skills-templates/neon/)** | Neon serverless Postgres with branching | Serverless database, autoscaling, scale-to-zero, pgvector, edge-compatible drivers |
 | **[openrouter](skills-templates/openrouter/)** | Unified API gateway for 100+ AI models | Working with OpenRouter, multi-provider routing, cost optimization, model comparison |
 | **[passwordless-docs](skills-templates/passwordless-docs/)** | Bitwarden Passwordless.dev documentation, SDKs, and React examples | Implementing passwordless authentication, integrating FIDO2/WebAuthn, building React passwordless auth |
 | **[pict-test-designer](skills-templates/pict-test-designer/)** | PICT pairwise test case design | Designing comprehensive test cases with minimal coverage |
