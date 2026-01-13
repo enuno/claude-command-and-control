@@ -81,10 +81,11 @@ This directory contains production-ready skill templates and examples for Claude
 |-------|-------------|
 | **[ai-workflow/langflow](ai-workflow/langflow/)** | Visual AI workflow platform with drag-and-drop interface, 200+ components, MCP client/server support, and enterprise deployment options (142k GitHub stars) |
 
-### AI Platforms & APIs (4 skills)
+### AI Platforms & APIs (5 skills)
 | Skill | Description |
 |-------|-------------|
 | **[agentskb](agentskb/)** | AgentsKB - Knowledge Base API for AI Agents with 32K+ technical Q&As from official documentation for grounded, accurate AI responses |
+| **[lobe-chat](lobe-chat/)** | LobeChat open-source AI agent workspace (70k+ GitHub stars) - multi-provider LLM support (OpenAI, Claude, Gemini, Ollama, 20+ providers), 505+ pre-built agents, 40+ plugins, knowledge base with RAG, MCP integration, and self-hosting via Docker/Vercel |
 | **[moonshot-ai](moonshot-ai/)** | Moonshot AI Kimi API - trillion-parameter MoE model (1T total, 32B active) with 256K context, OpenAI-compatible API, native tool calling, streaming, LiteLLM integration, and competitive pricing for agentic AI applications |
 | **[openrouter](openrouter/)** | Unified API gateway for 100+ AI models from multiple providers (OpenAI, Anthropic, Google, Meta, Mistral) - comprehensive documentation (331 KB) covering multi-provider routing, cost optimization, and model comparison |
 | **[venice-ai](venice-ai/)** | Privacy-focused AI platform assistance with 49 pages of comprehensive documentation (248 KB) covering platform features, API integration, authentication, and best practices |
@@ -280,10 +281,10 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 68
-- **Individual Skills**: 60
+- **Total Skills**: 69
+- **Individual Skills**: 61
 - **AI Agent Platform Skills**: 4 (AgentKit, Cloudflare Agents, ElizaOS, Virtuals Protocol)
-- **AI Platforms & APIs**: 4 (AgentsKB, Moonshot AI, OpenRouter, Venice AI)
+- **AI Platforms & APIs**: 5 (AgentsKB, LobeChat, Moonshot AI, OpenRouter, Venice AI)
 - **AI Integration Protocol Skills**: 3 (Agent Client Protocol, Language Server Protocol, Model Context Protocol)
 - **Cloud Infrastructure Skills**: 7 (Cloudflare Developer Platform)
 - **Cryptocurrency & Payments Skills**: 7 (AO SQLite, Arweave AO Cookbook, Arweave Bridge, Arweave Standards, Bitcoin Mining, BTCPayServer, x402)
@@ -329,5 +330,5 @@ Individual skills may have different licenses. Check each skill's directory for 
 ---
 
 **Last Updated**: 2026-01-13
-**Total Skills**: 68
+**Total Skills**: 69
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)
