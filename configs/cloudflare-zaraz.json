@@ -1,0 +1,40 @@
+{
+  "name": "cloudflare-zaraz",
+  "description": "Server-side tag management for third-party tools with edge execution, privacy controls, and near-zero performance impact",
+  "base_url": "https://developers.cloudflare.com/zaraz/",
+  "start_urls": [
+    "https://developers.cloudflare.com/zaraz/",
+    "https://developers.cloudflare.com/zaraz/get-started/",
+    "https://developers.cloudflare.com/zaraz/web-api/",
+    "https://developers.cloudflare.com/zaraz/consent-management/",
+    "https://developers.cloudflare.com/zaraz/reference/triggers/",
+    "https://developers.cloudflare.com/zaraz/reference/properties-reference/",
+    "https://developers.cloudflare.com/zaraz/advanced/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/zaraz/"
+    ],
+    "exclude": [
+      "/changelog/",
+      "/_images/",
+      "/_static/"
+    ]
+  },
+  "categories": {
+    "setup": ["get-started/", "add-tool/"],
+    "web-api": ["web-api/", "track/", "set/", "ecommerce/"],
+    "consent": ["consent-management/"],
+    "triggers": ["reference/triggers/"],
+    "properties": ["reference/properties-reference/"],
+    "advanced": ["advanced/", "blocking-triggers", "datalayer-compatibility", "context-enricher"],
+    "monitoring": ["monitoring/"],
+    "tools": ["reference/supported-tools/"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 75,
+  "selectors": {
+    "content": "main, article, .content",
+    "exclude": "nav, footer, .sidebar, .navigation"
+  }
+}

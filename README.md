@@ -1059,6 +1059,9 @@ version: 1.0.0
 | **[cloudflare-pulumi](skills-templates/cloudflare-pulumi/)** | Infrastructure as Code for Cloudflare resources | Multi-language IaC (TypeScript, Python, Go) |
 | **[cloudflare-r2](skills-templates/cloudflare-r2/)** | S3-compatible object storage with zero egress fees | S3 API, bucket management, data access |
 | **[cloudflare-workers](skills-templates/cloudflare-workers/)** | Serverless edge computing with V8 runtime | Runtime APIs, fetch handlers, Durable Objects, KV bindings |
+| **[cloudflare-zaraz](skills-templates/cloudflare-zaraz/)** | Server-side tag management with edge execution | Web API, consent management, GTM migration, 34+ tools |
+| **[cloudflare-web-analytics](skills-templates/cloudflare-web-analytics/)** | Privacy-first web analytics with Core Web Vitals | Free analytics, SPA tracking, RUM beacon, no cookies |
+| **[coinmarketcap-api](skills-templates/coinmarketcap-api/)** | Enterprise-grade cryptocurrency market data API | Crypto prices, market caps, exchanges, historical data, 40+ endpoints |
 | **[competitive-ads-extractor](skills-templates/competitive-ads-extractor/)** | Analyze competitors' ads from ad libraries | Understanding competitor messaging and creative approaches |
 | **[conductor](skills-templates/conductor/)** | Build and deployment orchestration | Working with conductor, implementing conductor solutions, debugging conductor code |
 | **content-research-writer** | Writing assistance with research and citations | Writing articles, documentation, blog posts |
@@ -1092,7 +1095,10 @@ version: 1.0.0
 | **[openrouter](skills-templates/openrouter/)** | Unified API gateway for 100+ AI models | Working with OpenRouter, multi-provider routing, cost optimization, model comparison |
 | **[passwordless-docs](skills-templates/passwordless-docs/)** | Bitwarden Passwordless.dev documentation, SDKs, and React examples | Implementing passwordless authentication, integrating FIDO2/WebAuthn, building React passwordless auth |
 | **[pict-test-designer](skills-templates/pict-test-designer/)** | PICT pairwise test case design | Designing comprehensive test cases with minimal coverage |
+| **[powerdns-authoritative](skills-templates/powerdns-authoritative/)** | PowerDNS authoritative nameserver with DNSSEC, REST API, multiple backends | Authoritative DNS setup, zone management, dynamic DNS, Lua records |
+| **[powerdns-recursor](skills-templates/powerdns-recursor/)** | High-performance recursive DNS resolver with DNSSEC validation and Lua scripting | Recursive DNS, RPZ, Lua hooks, DNSSEC validation |
 | **[prompt-engineering](skills-templates/prompt-engineering/)** | Advanced prompt engineering patterns | Writing commands, hooks, skills, or optimizing LLM interactions |
+| **[quiche](skills-templates/quiche/)** | Cloudflare QUIC/HTTP3 Rust library | QUIC connections, HTTP/3 clients/servers, connection management |
 | **[raffle-winner-picker](skills-templates/raffle-winner-picker/)** | Random winner selection | Running giveaways, raffles, or contests |
 | **root-cause-tracing** | Systematic debugging through call stack | Tracing bugs deep in execution |
 | **[sdk-sm](skills-templates/sdk-sm/)** | Bitwarden Secrets Manager SDK | Using Bitwarden Secrets Manager, working with multi-language SDK (Rust, Python, C#, Go, Java), secrets management API |

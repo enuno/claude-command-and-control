@@ -1,0 +1,35 @@
+{
+  "name": "powerdns-authoritative",
+  "description": "Versatile authoritative nameserver supporting multiple backends with DNSSEC, dynamic updates, and REST API",
+  "base_url": "https://doc.powerdns.com/authoritative/",
+  "start_urls": [
+    "https://doc.powerdns.com/authoritative/",
+    "https://doc.powerdns.com/authoritative/settings.html",
+    "https://doc.powerdns.com/authoritative/backends/",
+    "https://doc.powerdns.com/authoritative/dnssec/",
+    "https://doc.powerdns.com/authoritative/http-api/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/authoritative/"
+    ],
+    "exclude": [
+      "/changelog",
+      "/_images/",
+      "/_static/"
+    ]
+  },
+  "categories": {
+    "core": ["settings", "backends", "running"],
+    "dnssec": ["dnssec/", "operational", "migration"],
+    "api": ["http-api/", "dnsupdate"],
+    "backends": ["generic-sql", "bind", "lmdb", "geoip"],
+    "advanced": ["lua-records/", "performance", "modes-of-operation"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 150,
+  "selectors": {
+    "content": ".document, .body, main, article",
+    "exclude": ".sidebar, .sphinxsidebar, nav, .navigation"
+  }
+}

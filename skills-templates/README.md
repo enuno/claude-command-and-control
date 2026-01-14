@@ -22,7 +22,7 @@ This directory contains production-ready skill templates and examples for Claude
 | **[internal-comms](internal-comms/)** | Resources for writing internal communications (status reports, newsletters, FAQs) using company formats |
 | **[lead-research-assistant](lead-research-assistant/)** | Identifies and qualifies high-quality leads by analyzing your product and target companies |
 
-### Cloud Infrastructure (7 skills)
+### Cloud Infrastructure (9 skills)
 | Skill | Description |
 |-------|-------------|
 | **[cloudflare-ai-gateway](cloudflare-ai-gateway/)** | Unified interface to AI providers (OpenAI, Azure OpenAI, Anthropic, HuggingFace, Cloudflare Workers AI) with caching, rate limiting, request/response logging, and analytics dashboard for cost tracking and performance monitoring |
@@ -31,7 +31,9 @@ This directory contains production-ready skill templates and examples for Claude
 | **[cloudflare-pages](cloudflare-pages/)** | Full-stack JAMstack platform with global CDN, serverless Pages Functions (routing, middleware, TypeScript), native bindings (KV, R2, D1, Durable Objects, Queues, AI), 31+ framework presets, Git/Wrangler deployment, and preview deployments |
 | **[cloudflare-pulumi](cloudflare-pulumi/)** | Infrastructure as Code for Cloudflare resources with multi-language support (TypeScript, Python, Go) - automates deployment and management of Workers, Pages, DNS, Firewall, R2, and other Cloudflare services |
 | **[cloudflare-r2](cloudflare-r2/)** | S3-compatible object storage with zero egress fees - provides blob storage with complete S3 API compatibility, bucket management, lifecycle policies, public buckets, presigned URLs, and data migration tools |
+| **[cloudflare-web-analytics](cloudflare-web-analytics/)** | Privacy-first web analytics with Core Web Vitals, SPA tracking, RUM beacon - no cookies, 6-month retention, automatic injection for proxied sites, GraphQL API |
 | **[cloudflare-workers](cloudflare-workers/)** | Serverless edge computing platform with V8 runtime - provides runtime APIs, fetch handlers, Durable Objects for stateful applications, KV bindings, and Workers AI integration for deploying code globally |
+| **[cloudflare-zaraz](cloudflare-zaraz/)** | Server-side tag management with edge execution - Web API (track, set, ecommerce), consent management platform, GTM dataLayer migration, triggers, 34+ third-party tools, Context Enricher for Workers |
 
 ### Communication & Email (2 skills)
 | Skill | Description |
@@ -60,7 +62,7 @@ This directory contains production-ready skill templates and examples for Claude
 | **[cryptocurrency/btcpayserver-doc](cryptocurrency/btcpayserver-doc/)** | BTCPay Server documentation - self-hosted Bitcoin payment gateway with 767 files covering setup, integrations (WooCommerce, Shopify, etc.), Lightning Network, wallets, and deployment |
 | **[x402](x402/)** | HTTP 402 payment protocol for crypto-native API monetization - implements USDC payments on Base/Solana, AI agent payments, micropayments, Bazaar service discovery, and MCP server integration |
 
-### Development (17 skills)
+### Development (20 skills)
 | Skill | Description |
 |-------|-------------|
 | **[chezmoi](chezmoi/)** | Dotfiles manager for cross-machine configuration - 56 CLI commands, Go templates with sprig functions, 15+ password manager integrations (1Password, Bitwarden, pass), age/GPG encryption, source state attributes, and script automation (run_once_, run_onchange_) |
@@ -78,6 +80,9 @@ This directory contains production-ready skill templates and examples for Claude
 | **[just](just/)** | Just command runner for project task automation with 50+ built-in functions and multi-language support |
 | **[mcp-builder](mcp-builder/)** | Guide for creating high-quality MCP (Model Context Protocol) servers for external service integration |
 | **[opencode](opencode/)** | OpenCode open source AI coding agent - terminal TUI, desktop app, and IDE extension with multi-provider LLM support, custom agents (Build/Plan/General/Explore), 12 built-in tools, granular permissions, MCP integration, and custom commands |
+| **[powerdns-authoritative](powerdns-authoritative/)** | PowerDNS Authoritative Server - versatile DNS with multiple backends (MySQL, PostgreSQL, SQLite, BIND, LMDB, GeoIP), DNSSEC, REST API, dynamic DNS updates (RFC 2136), Lua records for health checks and geographic routing, primary/secondary replication |
+| **[powerdns-recursor](powerdns-recursor/)** | PowerDNS Recursor - high-performance recursive DNS resolver with DNSSEC validation, Lua scripting hooks (preresolve, postresolve, nxdomain), Response Policy Zones (RPZ), HTTP API, and extensive configuration options |
+| **[quiche](quiche/)** | Cloudflare quiche - Rust implementation of QUIC transport protocol and HTTP/3, connection management, stream operations, DATAGRAM support, congestion control (Reno, CUBIC, BBR, BBR2), 0-RTT early data, comprehensive client/server examples |
 | **[software-architecture](software-architecture/)** | Clean Architecture and Domain Driven Design principles for quality-focused software development |
 | **[webapp-testing](webapp-testing/)** | Toolkit for testing local web applications using Playwright for verifying frontend functionality |
 
@@ -122,9 +127,10 @@ This directory contains production-ready skill templates and examples for Claude
 | **[document-skills/xlsx](document-skills/xlsx/)** | Excel spreadsheet toolkit with formulas, formatting, data analysis, and visualization |
 | **[video-downloader](video-downloader/)** | Downloads videos from YouTube and other platforms for offline viewing or archival |
 
-### Data Services & Analytics (3 skills)
+### Data Services & Analytics (4 skills)
 | Skill | Description |
 |-------|-------------|
+| **[coinmarketcap-api](coinmarketcap-api/)** | Enterprise-grade cryptocurrency market data API with 40+ endpoints - prices, market caps, exchanges, OHLCV historical data, global metrics, price conversion, Python library support |
 | **[data-services/weavedb](data-services/weavedb/)** | Decentralized database protocol with zero-knowledge proofs and permanent storage on Arweave - comprehensive documentation (398 KB) covering database setup, API usage, and best practices |
 | **[geckoterminal-api](geckoterminal-api/)** | GeckoTerminal DeFi/DEX aggregator API - real-time on-chain prices, OHLCV candlestick data, pool analytics, trade history, and trending tokens across 250+ networks and 1,800+ DEXes with Python/Node.js clients (30 calls/min free tier) |
 | **[matomo-api](matomo-api/)** | Matomo (Piwik) analytics platform API - web analytics, tracking implementation, reporting API integration, plugin development, PHP/JavaScript tracking clients, and database schema documentation |
@@ -288,13 +294,13 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 76
-- **Individual Skills**: 68
+- **Total Skills**: 82
+- **Individual Skills**: 72
 - **AI Agent Platform Skills**: 4 (AgentKit, Cloudflare Agents, ElizaOS, Virtuals Protocol)
 - **AI Platforms & APIs**: 7 (AgentsKB, LangChain.js, LangSmith Agent Builder, LobeChat, Moonshot AI, OpenRouter, Venice AI)
-- **Development Skills**: 17 (including chezmoi, Ink, Lobe CLI Toolbox, Lobe TTS)
+- **Development Skills**: 20 (including chezmoi, Ink, Lobe CLI Toolbox, Lobe TTS, PowerDNS Authoritative/Recursor, quiche)
 - **AI Integration Protocol Skills**: 3 (Agent Client Protocol, Language Server Protocol, Model Context Protocol)
-- **Cloud Infrastructure Skills**: 7 (Cloudflare Developer Platform)
+- **Cloud Infrastructure Skills**: 9 (Cloudflare Developer Platform including Web Analytics, Zaraz)
 - **Cryptocurrency & Payments Skills**: 7 (AO SQLite, Arweave AO Cookbook, Arweave Bridge, Arweave Standards, Bitcoin Mining, BTCPayServer, x402)
 - **Infrastructure & DevOps**: 3 (Dokploy, Dokploy MCP, Terraform)
 - **Security & Authentication**: 2 (Passwordless, Secrets Manager SDK)
@@ -338,5 +344,5 @@ Individual skills may have different licenses. Check each skill's directory for 
 ---
 
 **Last Updated**: 2026-01-14
-**Total Skills**: 76
+**Total Skills**: 82
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)

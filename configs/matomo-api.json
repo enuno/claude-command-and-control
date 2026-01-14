@@ -1,0 +1,43 @@
+{
+  "name": "matomo-api",
+  "description": "Matomo (Piwik) analytics platform API. Use for web analytics, tracking implementation, reporting API integration, plugin development, and WordPress integration.",
+  "base_url": "https://developer.matomo.org/",
+  "start_urls": [
+    "https://developer.matomo.org/api-reference/api-reference-introduction",
+    "https://developer.matomo.org/api-reference/reporting-api",
+    "https://developer.matomo.org/api-reference/tracking-api",
+    "https://developer.matomo.org/api-reference/tracking-javascript",
+    "https://developer.matomo.org/api-reference/PHP-Piwik-Tracker",
+    "https://developer.matomo.org/api-reference/reporting-api-metadata",
+    "https://developer.matomo.org/api-reference/reporting-api-segmentation",
+    "https://developer.matomo.org/api-reference/Piwik/API/Request",
+    "https://developer.matomo.org/api-reference/Piwik/Plugin",
+    "https://developer.matomo.org/api-reference/events",
+    "https://developer.matomo.org/api-reference/classes",
+    "https://developer.matomo.org/api-reference/tagmanager/javascript-api",
+    "https://developer.matomo.org/integration/wordpress/classes",
+    "https://developer.matomo.org/integration/wordpress/hooks",
+    "https://developer.matomo.org/integration/wordpress/rest-api",
+    "https://developer.matomo.org/guides/database-schema"
+  ],
+  "selectors": {
+    "main_content": "article, .content, main, .documentation-content",
+    "title": "h1",
+    "code_blocks": "pre code, .highlight code"
+  },
+  "url_patterns": {
+    "include": ["/api-reference/", "/guides/", "/integration/"],
+    "exclude": ["/blog/", "/changelog/", "/forum/", "/faq/"]
+  },
+  "categories": {
+    "getting_started": ["introduction", "overview", "getting-started"],
+    "tracking_api": ["tracking-api", "tracking-javascript", "PHP-Piwik-Tracker", "java-tracker"],
+    "reporting_api": ["reporting-api", "metadata", "segmentation", "Request"],
+    "plugin_development": ["Plugin", "events", "classes", "hooks"],
+    "tag_manager": ["tagmanager", "javascript-api"],
+    "wordpress": ["wordpress", "rest-api"],
+    "database": ["database-schema", "schema"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 300
+}

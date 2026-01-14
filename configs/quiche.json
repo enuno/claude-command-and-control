@@ -1,0 +1,31 @@
+{
+  "name": "quiche",
+  "description": "Rust implementation of QUIC transport protocol and HTTP/3 by Cloudflare",
+  "base_url": "https://docs.quic.tech/quiche/",
+  "start_urls": [
+    "https://docs.quic.tech/quiche/",
+    "https://docs.quic.tech/quiche/all.html",
+    "https://docs.quic.tech/quiche/h3/index.html"
+  ],
+  "url_patterns": {
+    "include": [
+      "/quiche/"
+    ],
+    "exclude": [
+      "/src/",
+      "/implementors/"
+    ]
+  },
+  "categories": {
+    "core": ["struct.Connection", "struct.Config", "fn.connect", "fn.accept"],
+    "http3": ["h3/index", "h3/struct.Connection", "h3/struct.Config"],
+    "types": ["struct.", "enum.", "type."],
+    "functions": ["fn."]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 100,
+  "selectors": {
+    "content": ".rustdoc, .docblock, main",
+    "exclude": ".sidebar, .sidebar-elems, nav"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "agentskb",
+  "description": "AgentsKB - Knowledge Base API for AI Agents with 32K+ technical Q&As",
+  "base_url": "https://agentskb.com/",
+  "start_urls": [
+    "https://agentskb.com/docs/"
+  ],
+  "url_patterns": {
+    "include": ["/docs/", "/docs"],
+    "exclude": ["/playground/", "/signin", "/login", "/signup", "/pricing"]
+  },
+  "categories": {
+    "getting_started": ["introduction", "getting-started", "quickstart", "overview"],
+    "api": ["api", "endpoint", "request", "response", "base-url"],
+    "knowledge_base": ["knowledge", "kb", "stats", "search"],
+    "integration": ["mcp", "cli", "sdk", "integration"],
+    "examples": ["example", "code", "curl", "python", "javascript", "go"]
+  },
+  "selectors": {
+    "content": "main, article, .docs-content, .markdown-body",
+    "title": "h1, .page-title",
+    "navigation": "nav, .sidebar, .toc"
+  },
+  "rate_limit": 0.5,
+  "max_pages": 50,
+  "metadata": {
+    "author": "AgentsKB Team",
+    "domain": "AI/ML, Knowledge Base, API",
+    "use_cases": ["AI agent augmentation", "Technical Q&A", "Knowledge retrieval"]
+  }
+}

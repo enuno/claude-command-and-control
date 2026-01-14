@@ -1,0 +1,32 @@
+{
+  "name": "coinmarketcap-api",
+  "description": "Enterprise-grade cryptocurrency market data API with 40+ endpoints covering prices, market caps, exchanges, and historical data",
+  "base_url": "https://coinmarketcap.com/api/documentation/v1/",
+  "start_urls": [
+    "https://coinmarketcap.com/api/documentation/v1/",
+    "https://coinmarketcap.com/api/faq/",
+    "https://coinmarketcap.com/api/pricing/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/api/"
+    ],
+    "exclude": [
+      "/blog/",
+      "/news/"
+    ]
+  },
+  "categories": {
+    "cryptocurrency": ["cryptocurrency/", "quotes", "listings"],
+    "exchange": ["exchange/"],
+    "global": ["global-metrics/"],
+    "tools": ["tools/"],
+    "fiat": ["fiat/"]
+  },
+  "rate_limit": 1.0,
+  "max_pages": 50,
+  "selectors": {
+    "content": "main, .documentation, article",
+    "exclude": "nav, footer, .sidebar"
+  }
+}

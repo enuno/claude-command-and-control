@@ -1,0 +1,35 @@
+{
+  "name": "powerdns-recursor",
+  "description": "High-performance recursive DNS resolver with DNSSEC validation, Lua scripting, and RPZ",
+  "base_url": "https://doc.powerdns.com/recursor/",
+  "start_urls": [
+    "https://doc.powerdns.com/recursor/",
+    "https://doc.powerdns.com/recursor/settings.html",
+    "https://doc.powerdns.com/recursor/dnssec.html",
+    "https://doc.powerdns.com/recursor/lua-scripting/index.html",
+    "https://doc.powerdns.com/recursor/lua-config/rpz.html"
+  ],
+  "url_patterns": {
+    "include": [
+      "/recursor/"
+    ],
+    "exclude": [
+      "/changelog",
+      "/_images/",
+      "/_static/"
+    ]
+  },
+  "categories": {
+    "core": ["getting-started", "running", "settings"],
+    "dnssec": ["dnssec"],
+    "lua": ["lua-scripting/", "lua-config/"],
+    "performance": ["performance"],
+    "api": ["http-api/"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 120,
+  "selectors": {
+    "content": ".document, .body, main, article",
+    "exclude": ".sidebar, .sphinxsidebar, nav, .navigation"
+  }
+}

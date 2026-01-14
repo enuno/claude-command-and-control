@@ -1,0 +1,35 @@
+{
+  "name": "cloudflare-web-analytics",
+  "description": "Privacy-first, free web analytics with Core Web Vitals, real user monitoring, and automatic SPA support",
+  "base_url": "https://developers.cloudflare.com/web-analytics/",
+  "start_urls": [
+    "https://developers.cloudflare.com/web-analytics/",
+    "https://developers.cloudflare.com/web-analytics/get-started/",
+    "https://developers.cloudflare.com/web-analytics/data-metrics/",
+    "https://developers.cloudflare.com/web-analytics/configuration-options/",
+    "https://developers.cloudflare.com/web-analytics/faq/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/web-analytics/"
+    ],
+    "exclude": [
+      "/changelog/",
+      "/_images/",
+      "/_static/"
+    ]
+  },
+  "categories": {
+    "setup": ["get-started/"],
+    "metrics": ["data-metrics/", "core-web-vitals"],
+    "configuration": ["configuration-options/", "rules", "filters"],
+    "spa": ["web-analytics-spa"],
+    "api": ["graphql-api/"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 50,
+  "selectors": {
+    "content": "main, article, .content",
+    "exclude": "nav, footer, .sidebar, .navigation"
+  }
+}
