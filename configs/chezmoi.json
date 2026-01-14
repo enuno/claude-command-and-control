@@ -1,0 +1,34 @@
+{
+  "name": "chezmoi",
+  "description": "Manage your dotfiles across multiple machines securely",
+  "base_url": "https://www.chezmoi.io/",
+  "start_urls": [
+    "https://www.chezmoi.io/quick-start/",
+    "https://www.chezmoi.io/user-guide/",
+    "https://www.chezmoi.io/reference/"
+  ],
+  "url_patterns": {
+    "include": [
+      "/quick-start/",
+      "/user-guide/",
+      "/reference/",
+      "/install/"
+    ],
+    "exclude": [
+      "/blog/",
+      "/links/",
+      "/comparison-table/"
+    ]
+  },
+  "categories": {
+    "getting_started": ["quick-start", "install"],
+    "user_guide": ["setup", "command-overview", "templating", "encryption", "password-managers", "manage-different-types", "use-scripts"],
+    "reference": ["commands", "configuration-file", "target-types", "special-files"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 100,
+  "selectors": {
+    "content": "article, .content, main",
+    "exclude": "nav, footer, .sidebar"
+  }
+}

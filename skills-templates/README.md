@@ -60,9 +60,10 @@ This directory contains production-ready skill templates and examples for Claude
 | **[cryptocurrency/btcpayserver-doc](cryptocurrency/btcpayserver-doc/)** | BTCPay Server documentation - self-hosted Bitcoin payment gateway with 767 files covering setup, integrations (WooCommerce, Shopify, etc.), Lightning Network, wallets, and deployment |
 | **[x402](x402/)** | HTTP 402 payment protocol for crypto-native API monetization - implements USDC payments on Base/Solana, AI agent payments, micropayments, Bazaar service discovery, and MCP server integration |
 
-### Development (16 skills)
+### Development (17 skills)
 | Skill | Description |
 |-------|-------------|
+| **[chezmoi](chezmoi/)** | Dotfiles manager for cross-machine configuration - 56 CLI commands, Go templates with sprig functions, 15+ password manager integrations (1Password, Bitwarden, pass), age/GPG encryption, source state attributes, and script automation (run_once_, run_onchange_) |
 | **[development/ansible](development/ansible/)** | Ansible community documentation - infrastructure automation platform with 786 files covering RST documentation sources, build system (nox/Sphinx), contribution guidelines, and development workflows |
 | **[dotenvx](dotenvx/)** | Secure environment variable management with AES-256 encryption - encrypt .env files for safe git commits, multi-environment configuration (dev/staging/production), CLI commands (run/encrypt/decrypt/set/get), and integrations for Node.js, Next.js, Docker, GitHub Actions, and Vercel |
 | **[ink](ink/)** | Ink - React for CLI applications, build interactive command-line interfaces using React components with Flexbox layout (Box, Text), hooks for input/focus (useInput, useFocus), testing support, and accessibility features |
@@ -287,11 +288,11 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 75
-- **Individual Skills**: 67
+- **Total Skills**: 76
+- **Individual Skills**: 68
 - **AI Agent Platform Skills**: 4 (AgentKit, Cloudflare Agents, ElizaOS, Virtuals Protocol)
 - **AI Platforms & APIs**: 7 (AgentsKB, LangChain.js, LangSmith Agent Builder, LobeChat, Moonshot AI, OpenRouter, Venice AI)
-- **Development Skills**: 16 (including Ink, Lobe CLI Toolbox, Lobe TTS)
+- **Development Skills**: 17 (including chezmoi, Ink, Lobe CLI Toolbox, Lobe TTS)
 - **AI Integration Protocol Skills**: 3 (Agent Client Protocol, Language Server Protocol, Model Context Protocol)
 - **Cloud Infrastructure Skills**: 7 (Cloudflare Developer Platform)
 - **Cryptocurrency & Payments Skills**: 7 (AO SQLite, Arweave AO Cookbook, Arweave Bridge, Arweave Standards, Bitcoin Mining, BTCPayServer, x402)
@@ -336,6 +337,6 @@ Individual skills may have different licenses. Check each skill's directory for 
 
 ---
 
-**Last Updated**: 2026-01-13
-**Total Skills**: 75
+**Last Updated**: 2026-01-14
+**Total Skills**: 76
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)

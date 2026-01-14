@@ -1051,6 +1051,7 @@ version: 1.0.0
 | **[brand-guidelines](skills-templates/brand-guidelines/)** | Anthropic brand colors and typography | Applying brand standards to artifacts |
 | **[canvas-design](skills-templates/canvas-design/)** | Visual art creation using design philosophy | Creating posters, art, or static visual pieces |
 | **[changelog-generator](skills-templates/changelog-generator/)** | Git commits to user-friendly changelogs | Preparing release notes or product updates |
+| **[chezmoi](skills-templates/chezmoi/)** | Dotfiles manager with 56 commands, templates, password managers, encryption | Cross-machine dotfiles, machine-specific configs, encrypted secrets |
 | **[cloudflare-ai-gateway](skills-templates/cloudflare-ai-gateway/)** | Unified interface to AI providers (OpenAI, Anthropic, Azure, HuggingFace) | Multi-provider AI proxy, caching, rate limiting, analytics |
 | **[cloudflare-ai-search](skills-templates/cloudflare-ai-search/)** | Semantic search and vector embeddings in Workers | Vector-based search, embedding models |
 | **[cloudflare-kv](skills-templates/cloudflare-kv/)** | Low-latency key-value storage at the edge | Edge storage, get/put/delete/list operations |
