@@ -62,12 +62,13 @@ This directory contains production-ready skill templates and examples for Claude
 | **[cryptocurrency/btcpayserver-doc](cryptocurrency/btcpayserver-doc/)** | BTCPay Server documentation - self-hosted Bitcoin payment gateway with 767 files covering setup, integrations (WooCommerce, Shopify, etc.), Lightning Network, wallets, and deployment |
 | **[x402](x402/)** | HTTP 402 payment protocol for crypto-native API monetization - implements USDC payments on Base/Solana, AI agent payments, micropayments, Bazaar service discovery, and MCP server integration |
 
-### Development (20 skills)
+### Development (21 skills)
 | Skill | Description |
 |-------|-------------|
 | **[chezmoi](chezmoi/)** | Dotfiles manager for cross-machine configuration - 56 CLI commands, Go templates with sprig functions, 15+ password manager integrations (1Password, Bitwarden, pass), age/GPG encryption, source state attributes, and script automation (run_once_, run_onchange_) |
 | **[development/ansible](development/ansible/)** | Ansible community documentation - infrastructure automation platform with 786 files covering RST documentation sources, build system (nox/Sphinx), contribution guidelines, and development workflows |
 | **[dotenvx](dotenvx/)** | Secure environment variable management with AES-256 encryption - encrypt .env files for safe git commits, multi-environment configuration (dev/staging/production), CLI commands (run/encrypt/decrypt/set/get), and integrations for Node.js, Next.js, Docker, GitHub Actions, and Vercel |
+| **[dnsdist](dnsdist/)** | dnsdist - DNS load balancer from PowerDNS with DoS protection, multi-protocol support (DoH, DoT, DoQ, DNSCrypt), dynamic blocking, eBPF filtering, response caching, server pools, Lua configuration, and REST API/Prometheus metrics |
 | **[ink](ink/)** | Ink - React for CLI applications, build interactive command-line interfaces using React components with Flexbox layout (Box, Text), hooks for input/focus (useInput, useFocus), testing support, and accessibility features |
 | **[lobe-cli-toolbox](lobe-cli-toolbox/)** | LobeHub CLI Toolbox - AI-powered command-line tools including lobe-commit (ChatGPT Git commits with Gitmoji), lobe-i18n (automated internationalization), and lobe-label (GitHub label management) |
 | **[lobe-tts](lobe-tts/)** | LobeTTS - High-quality TypeScript TTS/STT toolkit with EdgeSpeech, Microsoft, OpenAI engines, React hooks, audio visualization components, and both server and browser support |
@@ -294,11 +295,11 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 82
-- **Individual Skills**: 72
+- **Total Skills**: 83
+- **Individual Skills**: 73
 - **AI Agent Platform Skills**: 4 (AgentKit, Cloudflare Agents, ElizaOS, Virtuals Protocol)
 - **AI Platforms & APIs**: 7 (AgentsKB, LangChain.js, LangSmith Agent Builder, LobeChat, Moonshot AI, OpenRouter, Venice AI)
-- **Development Skills**: 20 (including chezmoi, Ink, Lobe CLI Toolbox, Lobe TTS, PowerDNS Authoritative/Recursor, quiche)
+- **Development Skills**: 21 (including chezmoi, dnsdist, Ink, Lobe CLI Toolbox, Lobe TTS, PowerDNS Authoritative/Recursor, quiche)
 - **AI Integration Protocol Skills**: 3 (Agent Client Protocol, Language Server Protocol, Model Context Protocol)
 - **Cloud Infrastructure Skills**: 9 (Cloudflare Developer Platform including Web Analytics, Zaraz)
 - **Cryptocurrency & Payments Skills**: 7 (AO SQLite, Arweave AO Cookbook, Arweave Bridge, Arweave Standards, Bitcoin Mining, BTCPayServer, x402)
@@ -343,6 +344,6 @@ Individual skills may have different licenses. Check each skill's directory for 
 
 ---
 
-**Last Updated**: 2026-01-14
-**Total Skills**: 82
+**Last Updated**: 2026-01-15
+**Total Skills**: 83
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)

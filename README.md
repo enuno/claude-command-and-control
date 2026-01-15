@@ -1071,6 +1071,7 @@ version: 1.0.0
 | **[document-skills/docx](skills-templates/document-skills/docx/)** | Word document creation and editing | Working with .docx files, tracked changes, or comments |
 | **[dokploy](skills-templates/dokploy/)** | Comprehensive assistance with dokploy | Deploying Docker applications with Dokploy platform |
 | **[dokploy-mcp](skills-templates/dokploy-mcp/)** | AI-driven deployment management using Dokploy MCP server | Deploying apps, provisioning databases, managing Dokploy infrastructure |
+| **[dnsdist](skills-templates/dnsdist/)** | DNS load balancer with DoS protection and multi-protocol support | Load balancing DNS, DoH/DoT/DoQ, rate limiting, dynamic blocking |
 | **[document-skills/pdf](skills-templates/document-skills/pdf/)** | PDF manipulation toolkit | Extracting text, creating PDFs, or filling PDF forms |
 | **[document-skills/pptx](skills-templates/document-skills/pptx/)** | PowerPoint presentation toolkit | Creating or editing presentations |
 | **[document-skills/xlsx](skills-templates/document-skills/xlsx/)** | Excel spreadsheet toolkit | Working with spreadsheets, formulas, or data analysis |

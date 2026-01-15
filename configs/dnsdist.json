@@ -1,0 +1,45 @@
+{
+  "name": "dnsdist",
+  "description": "DNS load balancer with DoS protection, multi-protocol support (DoH, DoT, DoQ), and dynamic traffic management",
+  "base_url": "https://dnsdist.org/",
+  "start_urls": [
+    "https://dnsdist.org/index.html",
+    "https://dnsdist.org/quickstart.html",
+    "https://dnsdist.org/install.html",
+    "https://dnsdist.org/rules-actions.html",
+    "https://dnsdist.org/reference/config.html",
+    "https://dnsdist.org/guides/serverselection.html",
+    "https://dnsdist.org/guides/dns-over-https.html",
+    "https://dnsdist.org/guides/dns-over-tls.html",
+    "https://dnsdist.org/guides/cache.html",
+    "https://dnsdist.org/guides/dynblocks.html",
+    "https://dnsdist.org/guides/webserver.html",
+    "https://dnsdist.org/reference/ebpf.html"
+  ],
+  "url_patterns": {
+    "include": [
+      "dnsdist.org/"
+    ],
+    "exclude": [
+      "/changelog/",
+      "/_images/",
+      "/_static/",
+      "/genindex.html"
+    ]
+  },
+  "categories": {
+    "quickstart": ["quickstart.html", "install.html"],
+    "configuration": ["reference/config.html", "reference/"],
+    "rules": ["rules-actions.html"],
+    "protocols": ["dns-over-https", "dns-over-tls", "dns-over-quic", "dnscrypt"],
+    "security": ["dynblocks.html", "ebpf.html"],
+    "monitoring": ["webserver.html", "metrics"],
+    "guides": ["guides/"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 75,
+  "selectors": {
+    "content": "main, article, .content, .document",
+    "exclude": "nav, footer, .sidebar, .navigation, .sphinxsidebar"
+  }
+}
