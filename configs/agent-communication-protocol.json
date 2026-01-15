@@ -1,0 +1,42 @@
+{
+  "name": "agent-communication-protocol",
+  "description": "Open protocol for AI agent interoperability enabling standardized communication between agents, applications, and humans",
+  "base_url": "https://agentcommunicationprotocol.dev/",
+  "start_urls": [
+    "https://agentcommunicationprotocol.dev/introduction/welcome",
+    "https://agentcommunicationprotocol.dev/introduction/quickstart",
+    "https://agentcommunicationprotocol.dev/introduction/example-agents",
+    "https://agentcommunicationprotocol.dev/core-concepts/architecture",
+    "https://agentcommunicationprotocol.dev/core-concepts/agent-manifest",
+    "https://agentcommunicationprotocol.dev/core-concepts/agent-run-lifecycle",
+    "https://agentcommunicationprotocol.dev/core-concepts/agent-discovery",
+    "https://agentcommunicationprotocol.dev/core-concepts/message-structure",
+    "https://agentcommunicationprotocol.dev/core-concepts/message-metadata",
+    "https://agentcommunicationprotocol.dev/core-concepts/stateful-agents",
+    "https://agentcommunicationprotocol.dev/how-to/discover-and-run-agent",
+    "https://agentcommunicationprotocol.dev/how-to/wrap-existing-agent",
+    "https://agentcommunicationprotocol.dev/how-to/generate-artifacts"
+  ],
+  "url_patterns": {
+    "include": [
+      "agentcommunicationprotocol.dev/"
+    ],
+    "exclude": [
+      "/playground/",
+      "/_next/",
+      "/api/"
+    ]
+  },
+  "categories": {
+    "introduction": ["welcome", "quickstart", "example-agents"],
+    "core_concepts": ["architecture", "agent-manifest", "agent-run-lifecycle", "agent-discovery", "message-structure", "message-metadata", "stateful-agents"],
+    "how_to": ["discover-and-run", "wrap-existing", "compose-agents", "generate-artifacts"],
+    "api": ["openapi", "rest-api"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 50,
+  "selectors": {
+    "content": "main, article, .content, .prose",
+    "exclude": "nav, footer, .sidebar, .toc"
+  }
+}

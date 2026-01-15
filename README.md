@@ -1036,6 +1036,7 @@ version: 1.0.0
 | Skill | Purpose | Use When |
 |-------|---------|----------|
 | **agent-skill-bridge** | Integrates agents and skills | Coordinating agents with skills |
+| **[agent-communication-protocol](skills-templates/agent-communication-protocol/)** | Open protocol for AI agent interoperability | Multi-agent communication, framework-agnostic agents, REST API |
 | **[ar-io-build](skills-templates/ar-io-build/)** | Comprehensive AR.IO build documentation | Building with AR.IO, implementing AR.IO solutions, debugging AR.IO code |
 | **[arweave-ao-cookbook](skills-templates/arweave-ao-cookbook/)** | Build decentralized applications on AO | Building decentralized apps on Arweave with permanent storage |
 | **[arweave-standards](skills-templates/arweave-standards/)** | Arweave standards, specifications and best practices | Working with Arweave standards, implementing protocol specifications, checking compliance |

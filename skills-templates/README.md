@@ -111,10 +111,11 @@ This directory contains production-ready skill templates and examples for Claude
 | **[elizaos](elizaos/)** | ElizaOS TypeScript framework for autonomous AI agents - multi-platform support (Discord, Telegram, Twitter, Farcaster), blockchain integration (EVM, Solana DeFi), 90+ plugins, character configuration, memory system, multi-agent orchestration, REST API, and deployment options (Docker, AWS ECS, TEE) |
 | **[virtuals-protocol](virtuals-protocol/)** | Virtuals Protocol for tokenized AI agents on Base/Solana - GAME Framework SDK (Python/TypeScript), Agent Tokenization Platform (bonding curves, Prototype→Sentient lifecycle), Agent Commerce Protocol (ACP), $VIRTUAL token economics, and comprehensive code examples |
 
-### AI Integration Protocols (3 skills)
+### AI Integration Protocols (4 skills)
 | Skill | Description |
 |-------|-------------|
 | **[agent-client-protocol](agent-client-protocol/)** | Agent Client Protocol (ACP) - standardized communication between code editors and AI coding agents (JSON-RPC 2.0), supports 18 agents (Claude Code, Gemini CLI, Goose), 15 clients (Zed, JetBrains, Neovim), with TypeScript/Python SDKs for tool calls, file operations, and session management |
+| **[agent-communication-protocol](agent-communication-protocol/)** | Agent Communication Protocol (ACP) - open protocol for AI agent interoperability (REST-based, Linux Foundation), multi-modal messaging (text, images, audio), sync/async/streaming execution modes, stateful sessions, agent discovery, Python SDK (acp-sdk), framework integrations (BeeAI, LangGraph, CrewAI, LlamaIndex) |
 | **[language-server-protocol](language-server-protocol/)** | Language Server Protocol (LSP) - Microsoft's open standard for IDE-language server communication (JSON-RPC 2.0), supports 18+ language servers, 15+ editor integrations, with TypeScript/Python/Java/Rust SDKs for completion, diagnostics, navigation, and code intelligence features |
 | **[model-context-protocol](model-context-protocol/)** | Model Context Protocol (MCP) - open standard for connecting AI applications to external data sources, tools, and systems with Host→Client→Server architecture, 10 official SDKs (TypeScript, Python, Go, Kotlin, Swift, Java, C#, Ruby, Rust, PHP), and server primitives (Tools, Resources, Prompts) |
 
@@ -295,12 +296,12 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 83
-- **Individual Skills**: 73
+- **Total Skills**: 84
+- **Individual Skills**: 74
 - **AI Agent Platform Skills**: 4 (AgentKit, Cloudflare Agents, ElizaOS, Virtuals Protocol)
 - **AI Platforms & APIs**: 7 (AgentsKB, LangChain.js, LangSmith Agent Builder, LobeChat, Moonshot AI, OpenRouter, Venice AI)
 - **Development Skills**: 21 (including chezmoi, dnsdist, Ink, Lobe CLI Toolbox, Lobe TTS, PowerDNS Authoritative/Recursor, quiche)
-- **AI Integration Protocol Skills**: 3 (Agent Client Protocol, Language Server Protocol, Model Context Protocol)
+- **AI Integration Protocol Skills**: 4 (Agent Client Protocol, Agent Communication Protocol, Language Server Protocol, Model Context Protocol)
 - **Cloud Infrastructure Skills**: 9 (Cloudflare Developer Platform including Web Analytics, Zaraz)
 - **Cryptocurrency & Payments Skills**: 7 (AO SQLite, Arweave AO Cookbook, Arweave Bridge, Arweave Standards, Bitcoin Mining, BTCPayServer, x402)
 - **Infrastructure & DevOps**: 3 (Dokploy, Dokploy MCP, Terraform)
@@ -345,5 +346,5 @@ Individual skills may have different licenses. Check each skill's directory for 
 ---
 
 **Last Updated**: 2026-01-15
-**Total Skills**: 83
+**Total Skills**: 84
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)
