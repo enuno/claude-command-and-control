@@ -11,7 +11,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 ---
 
-## Available Skills (25 Total)
+## Available Skills (27 Total)
 
 ### Bitcoin Mining Skills
 
@@ -55,6 +55,8 @@ This directory contains the repository's skill library. Each skill is a reusable
 |-------|-------------|---------------|
 | **[content-research-writer](content-research-writer/SKILL.md)** | Assists in writing high-quality content by conducting research, adding citations, improving hooks | Writing blog posts, articles, newsletters, educational content, tutorials |
 | **[create-llmstxt-py](create-llmstxt-py/SKILL.md)** | Python script for generating llms.txt and llms-full.txt files using Firecrawl and OpenAI APIs | Making websites LLM-accessible, automated content indexing, documentation extraction, website summaries |
+| **[gitbook](gitbook/SKILL.md)** | GitBook documentation platform - creating docs, publishing sites, Git sync, API references | GitBook spaces, change requests, custom domains, OpenAPI integration |
+| **[github-pages](github-pages/SKILL.md)** | GitHub Pages static site hosting - setup, configuration, custom domains, Jekyll | Creating GitHub Pages sites, custom domains, Jekyll themes, GitHub Actions |
 
 ### Data Storage & Upload Skills
 
@@ -182,6 +184,8 @@ Skills for automating repository maintenance:
 Skills for content creation and documentation:
 - Research-backed writing (content-research-writer)
 - LLM-accessible website indexing (create-llmstxt-py)
+- GitBook documentation platform (gitbook)
+- GitHub Pages static hosting (github-pages)
 
 ### Data Storage & Upload Skills
 Skills for permanent data storage and uploads to Arweave:
@@ -269,12 +273,12 @@ All skills in this repository meet these criteria:
 
 ## Statistics
 
-**Total Skills**: 25
+**Total Skills**: 27
 - Bitcoin Mining: 8
 - Development Workflow: 4
 - Design & UI/UX: 1
 - Integration & Automation: 2
-- Content & Documentation: 2
+- Content & Documentation: 4
 - Data Storage & Upload: 2
 - Marketing & SEO: 1
 - Contribution & Sharing: 1
@@ -290,6 +294,9 @@ All skills in this repository meet these criteria:
 ## Recent Additions
 
 **January 2026**:
+- ✨ **Documentation Platform Skills** (2026-01-17) - 2 new skills
+  - gitbook - GitBook documentation platform (1.1 MB, 107 pages from llms.txt)
+  - github-pages - GitHub Pages static hosting (140 KB, 10 pages from Article API)
 - ✨ **SEO & Content Indexing Skills** (2026-01-03) - 2 new skills
   - seo - Google SEO research with 2,571 GitHub stars, MIT license, covers Semrush/Moz/Ahrefs
   - create-llmstxt-py - Python tool for llms.txt generation, 257 stars, Firecrawl/OpenAI integration
@@ -326,6 +333,6 @@ All skills in this repository meet these criteria:
 
 ---
 
-**Last Updated**: January 3, 2026
+**Last Updated**: January 17, 2026
 **Maintained By**: Claude Command and Control Repository
-**Version**: 2.2.0
+**Version**: 2.3.0

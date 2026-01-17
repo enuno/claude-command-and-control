@@ -1,0 +1,31 @@
+{
+  "_note": "GitHub Docs is a JavaScript SPA - standard HTML scraping fails. Use GitHub Article API instead: curl 'https://docs.github.com/api/article?pathname=/en/pages/...'",
+  "name": "github-pages",
+  "description": "GitHub Pages static site hosting - setup, configuration, custom domains, Jekyll, and deployment",
+  "base_url": "https://docs.github.com/en/pages/",
+  "start_urls": [
+    "https://docs.github.com/en/pages/getting-started-with-github-pages",
+    "https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll",
+    "https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site"
+  ],
+  "url_patterns": {
+    "include": ["/en/pages/"],
+    "exclude": ["/enterprise-server", "/enterprise-cloud", "/discussions", "/changelog"]
+  },
+  "categories": {
+    "getting_started": ["getting-started", "about-github-pages", "creating-a-github-pages-site"],
+    "jekyll": ["jekyll", "themes", "markdown"],
+    "custom_domains": ["custom-domain", "dns", "https"],
+    "configuration": ["configuring", "publishing-source", "visibility"],
+    "troubleshooting": ["troubleshooting", "404", "build-errors"]
+  },
+  "selectors": {
+    "content": "article.markdown-body, main article, .article-content",
+    "title": "h1, .article-title",
+    "navigation": "nav.sidebar, .toc"
+  },
+  "skip_llms_txt": true,
+  "rate_limit": 1.0,
+  "max_pages": 50,
+  "max_depth": 3
+}
