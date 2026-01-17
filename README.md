@@ -1053,6 +1053,7 @@ version: 1.0.0
 | **[canvas-design](skills-templates/canvas-design/)** | Visual art creation using design philosophy | Creating posters, art, or static visual pieces |
 | **[changelog-generator](skills-templates/changelog-generator/)** | Git commits to user-friendly changelogs | Preparing release notes or product updates |
 | **[chezmoi](skills-templates/chezmoi/)** | Dotfiles manager with 56 commands, templates, password managers, encryption | Cross-machine dotfiles, machine-specific configs, encrypted secrets |
+| **[claude-mem](skills-templates/claude-mem/)** | Persistent memory compression system for Claude Code | Cross-session context, MCP search, privacy controls, observations |
 | **[cloudflare-ai-gateway](skills-templates/cloudflare-ai-gateway/)** | Unified interface to AI providers (OpenAI, Anthropic, Azure, HuggingFace) | Multi-provider AI proxy, caching, rate limiting, analytics |
 | **[cloudflare-ai-search](skills-templates/cloudflare-ai-search/)** | Semantic search and vector embeddings in Workers | Vector-based search, embedding models |
 | **[cloudflare-kv](skills-templates/cloudflare-kv/)** | Low-latency key-value storage at the edge | Edge storage, get/put/delete/list operations |
@@ -1082,6 +1083,7 @@ version: 1.0.0
 | **[fastapi](skills-templates/fastapi/)** | FastAPI modern Python web framework | Building APIs, async endpoints, dependency injection, Python backend development |
 | **file-categorization** | Categorize files as Command/Agent/Skill/Doc | Processing files in integration pipelines |
 | **[file-organizer](skills-templates/file-organizer/)** | Intelligent file organization | Organizing files, finding duplicates, or cleaning up directories |
+| **[github-copilot](skills-templates/github-copilot/)** | AI coding assistant with suggestions, chat, code review | Using GitHub Copilot features, IDE integration, custom instructions |
 | **[image-enhancer](skills-templates/image-enhancer/)** | Image quality improvement | Enhancing screenshots or images for presentations |
 | **[internal-comms](skills-templates/internal-comms/)** | Internal communications templates | Writing status reports, newsletters, or company updates |
 | **[invoice-organizer](skills-templates/invoice-organizer/)** | Invoice and receipt organization | Tax preparation or bookkeeping |
@@ -1092,6 +1094,7 @@ version: 1.0.0
 | **[lead-research-assistant](skills-templates/lead-research-assistant/)** | Lead identification and qualification | Sales, business development, or marketing research |
 | **[mailgun](skills-templates/mailgun/)** | Email sending, receiving, and tracking API | Working with Mailgun, implementing email solutions, debugging email code |
 | **[mcp-builder](skills-templates/mcp-builder/)** | MCP server development guide | Building Model Context Protocol servers |
+| **[mcp-registry](skills-templates/mcp-registry/)** | MCP server discovery and publishing registry | Publishing MCP servers, server discovery, authentication |
 | **[meeting-insights-analyzer](skills-templates/meeting-insights-analyzer/)** | Meeting transcript analysis | Improving communication or leadership skills |
 | **[neon](skills-templates/neon/)** | Neon serverless Postgres with branching | Serverless database, autoscaling, scale-to-zero, pgvector, edge-compatible drivers |
 | **[openrouter](skills-templates/openrouter/)** | Unified API gateway for 100+ AI models | Working with OpenRouter, multi-provider routing, cost optimization, model comparison |

@@ -496,6 +496,258 @@ const agentKit = await AgentKit.from({
 });
 ```
 
+## Additional Action Providers (Q1 2025+)
+
+### Swap & Bridge Providers
+
+#### zeroXActionProvider
+
+0x Protocol swap integration.
+
+```typescript
+import { zeroXActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - swap: Execute token swap via 0x
+// - get_quote: Get swap quote
+// - get_price: Get token price
+```
+
+#### sushiActionProvider
+
+SushiSwap DEX integration.
+
+```typescript
+import { sushiActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - swap: Execute swap via SushiSwap
+// - add_liquidity: Add liquidity to pool
+// - remove_liquidity: Remove liquidity from pool
+```
+
+#### acrossActionProvider
+
+Across Protocol cross-chain bridge.
+
+```typescript
+import { acrossActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - bridge: Bridge tokens across chains
+// - get_bridge_quote: Get bridge quote
+// - check_bridge_status: Check bridge transaction status
+```
+
+### Streaming & Payments
+
+#### superfluidActionProvider
+
+Superfluid token streaming protocol.
+
+```typescript
+import { superfluidActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - create_stream: Create token stream
+// - update_stream: Modify stream rate
+// - delete_stream: Stop and delete stream
+// - get_stream_info: Get stream details
+```
+
+**Example:**
+```
+User: "Stream 100 USDC per month to 0xabcd..."
+Agent calls: create_stream({
+  token: "USDCx",
+  receiver: "0xabcd...",
+  flowRate: "100/month"
+})
+```
+
+#### onrampActionProvider
+
+Fiat-to-crypto onramp.
+
+```typescript
+import { onrampActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - create_onramp_session: Create onramp purchase session
+// - get_onramp_status: Check onramp transaction status
+```
+
+### Token Creation & Launch
+
+#### clankerActionProvider
+
+Clanker token creation platform.
+
+```typescript
+import { clankerActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - create_token: Create new Clanker token
+// - get_token_info: Get token details
+```
+
+#### flaunchActionProvider
+
+Token launch functionality.
+
+```typescript
+import { flaunchActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - launch_token: Launch new token
+// - configure_launch: Configure launch parameters
+```
+
+#### wowActionProvider
+
+WOW memecoin trading.
+
+```typescript
+import { wowActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - trade_wow: Trade WOW tokens
+// - get_wow_price: Get WOW token price
+```
+
+### Data & Analytics
+
+#### defillamaActionProvider
+
+DefiLlama data aggregation.
+
+```typescript
+import { defillamaActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - get_tvl: Get protocol TVL
+// - get_protocol_info: Get protocol details
+// - get_yields: Get yield data
+```
+
+#### messariActionProvider
+
+Messari research data.
+
+```typescript
+import { messariActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - get_asset_metrics: Get asset metrics
+// - get_market_data: Get market data
+```
+
+#### zerionActionProvider
+
+Zerion portfolio tracking.
+
+```typescript
+import { zerionActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - get_portfolio: Get portfolio summary
+// - get_transactions: Get transaction history
+```
+
+### DeFi Aggregation
+
+#### ensoActionProvider
+
+Enso DeFi aggregation.
+
+```typescript
+import { ensoActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - route: Find best DeFi route
+// - execute: Execute DeFi action
+// - get_positions: Get DeFi positions
+```
+
+#### yelayActionProvider
+
+Yelay vault operations.
+
+```typescript
+import { yelayActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - deposit_vault: Deposit to vault
+// - withdraw_vault: Withdraw from vault
+// - get_vault_info: Get vault details
+```
+
+#### vaultsfyiActionProvider
+
+Vaults.fyi integration.
+
+```typescript
+import { vaultsfyiActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - get_vaults: List available vaults
+// - get_vault_apy: Get vault APY
+```
+
+### Infrastructure & External
+
+#### sshActionProvider
+
+SSH operations for server management.
+
+```typescript
+import { sshActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - execute_command: Execute SSH command
+// - upload_file: Upload file via SSH
+// - download_file: Download file via SSH
+```
+
+#### hyperbolicActionProvider
+
+Hyperbolic AI compute integration.
+
+```typescript
+import { hyperbolicActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - generate_image: Generate AI image
+// - generate_text: Generate AI text
+```
+
+#### nillionActionProvider
+
+Nillion SecretVault for encrypted data.
+
+```typescript
+import { nillionActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - store_secret: Store encrypted secret
+// - retrieve_secret: Retrieve encrypted secret
+// - delete_secret: Delete secret
+```
+
+### Trading & Markets
+
+#### truemarketsActionProvider
+
+TrueMarkets prediction markets.
+
+```typescript
+import { truemarketsActionProvider } from "@coinbase/agentkit";
+
+// Actions:
+// - place_bet: Place prediction bet
+// - get_markets: Get available markets
+```
+
 ## Action Provider Summary
 
 ### EVM Actions (50+)
@@ -508,15 +760,32 @@ const agentKit = await AgentKit.from({
 | DeFi | compoundActionProvider | supply, withdraw, borrow, repay |
 | DeFi | aaveActionProvider | supply, withdraw, borrow, repay |
 | DeFi | morphoActionProvider | morpho_deposit, morpho_withdraw |
+| DeFi | moonwellActionProvider | supply, withdraw, borrow, repay |
+| DeFi | ensoActionProvider | route, execute, get_positions |
+| DeFi | yelayActionProvider | deposit_vault, withdraw_vault |
 | NFT | erc721ActionProvider | mint_nft, transfer_nft |
 | NFT | zoraActionProvider | create_collection, mint_zora_nft |
 | NFT | openseaActionProvider | list_nft, buy_nft |
 | Token | wethActionProvider | wrap_eth, unwrap_eth |
+| Token | clankerActionProvider | create_token |
+| Token | flaunchActionProvider | launch_token |
+| Token | wowActionProvider | trade_wow |
+| Swap | zeroXActionProvider | swap, get_quote |
+| Swap | sushiActionProvider | swap, add_liquidity |
+| Bridge | acrossActionProvider | bridge, get_bridge_quote |
+| Stream | superfluidActionProvider | create_stream, update_stream |
 | Social | farcasterActionProvider | post_cast, get_feed |
 | Social | twitterActionProvider | post_tweet, get_timeline |
 | Naming | basenameActionProvider | register_basename |
 | Oracle | pythActionProvider | get_price |
+| Data | defillamaActionProvider | get_tvl, get_yields |
+| Data | messariActionProvider | get_asset_metrics |
+| Data | zerionActionProvider | get_portfolio |
 | Payment | x402ActionProvider | make_x402_payment |
+| Payment | onrampActionProvider | create_onramp_session |
+| Infra | sshActionProvider | execute_command |
+| Infra | nillionActionProvider | store_secret, retrieve_secret |
+| AI | hyperbolicActionProvider | generate_image, generate_text |
 
 ### SVM Actions (Solana)
 
@@ -531,3 +800,4 @@ const agentKit = await AgentKit.from({
 - [Action Providers Guide](https://docs.cdp.coinbase.com/agent-kit/core-concepts/action-providers)
 - [Custom Actions Tutorial](https://docs.cdp.coinbase.com/agent-kit/guides/custom-action-provider)
 - [GitHub Examples](https://github.com/coinbase/agentkit/tree/main/examples)
+- [AgentKit Q1 Update](https://www.coinbase.com/developer-platform/discover/launches/agentkit-q1-update)

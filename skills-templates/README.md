@@ -62,10 +62,11 @@ This directory contains production-ready skill templates and examples for Claude
 | **[cryptocurrency/btcpayserver-doc](cryptocurrency/btcpayserver-doc/)** | BTCPay Server documentation - self-hosted Bitcoin payment gateway with 767 files covering setup, integrations (WooCommerce, Shopify, etc.), Lightning Network, wallets, and deployment |
 | **[x402](x402/)** | HTTP 402 payment protocol for crypto-native API monetization - implements USDC payments on Base/Solana, AI agent payments, micropayments, Bazaar service discovery, and MCP server integration |
 
-### Development (21 skills)
+### Development (22 skills)
 | Skill | Description |
 |-------|-------------|
 | **[chezmoi](chezmoi/)** | Dotfiles manager for cross-machine configuration - 56 CLI commands, Go templates with sprig functions, 15+ password manager integrations (1Password, Bitwarden, pass), age/GPG encryption, source state attributes, and script automation (run_once_, run_onchange_) |
+| **[claude-mem](claude-mem/)** | Persistent memory compression system for Claude Code - cross-session context preservation, MCP search tools (search, timeline, get_observations), 28+ language support, mode system (Code, Email Investigation, Chill), privacy controls with `<private>` tags, FTS5 full-text search |
 | **[development/ansible](development/ansible/)** | Ansible community documentation - infrastructure automation platform with 786 files covering RST documentation sources, build system (nox/Sphinx), contribution guidelines, and development workflows |
 | **[dotenvx](dotenvx/)** | Secure environment variable management with AES-256 encryption - encrypt .env files for safe git commits, multi-environment configuration (dev/staging/production), CLI commands (run/encrypt/decrypt/set/get), and integrations for Node.js, Next.js, Docker, GitHub Actions, and Vercel |
 | **[dnsdist](dnsdist/)** | dnsdist - DNS load balancer from PowerDNS with DoS protection, multi-protocol support (DoH, DoT, DoQ, DNSCrypt), dynamic blocking, eBPF filtering, response caching, server pools, Lua configuration, and REST API/Prometheus metrics |
@@ -80,6 +81,7 @@ This directory contains production-ready skill templates and examples for Claude
 | **[fastapi](fastapi/)** | FastAPI modern Python web framework guide with 102 pages covering APIs, async endpoints, dependency injection, and backend development |
 | **[just](just/)** | Just command runner for project task automation with 50+ built-in functions and multi-language support |
 | **[mcp-builder](mcp-builder/)** | Guide for creating high-quality MCP (Model Context Protocol) servers for external service integration |
+| **[mcp-registry](mcp-registry/)** | MCP Registry for discovering, publishing, and authenticating Model Context Protocol servers |
 | **[opencode](opencode/)** | OpenCode open source AI coding agent - terminal TUI, desktop app, and IDE extension with multi-provider LLM support, custom agents (Build/Plan/General/Explore), 12 built-in tools, granular permissions, MCP integration, and custom commands |
 | **[powerdns-authoritative](powerdns-authoritative/)** | PowerDNS Authoritative Server - versatile DNS with multiple backends (MySQL, PostgreSQL, SQLite, BIND, LMDB, GeoIP), DNSSEC, REST API, dynamic DNS updates (RFC 2136), Lua records for health checks and geographic routing, primary/secondary replication |
 | **[powerdns-recursor](powerdns-recursor/)** | PowerDNS Recursor - high-performance recursive DNS resolver with DNSSEC validation, Lua scripting hooks (preresolve, postresolve, nxdomain), Response Policy Zones (RPZ), HTTP API, and extensive configuration options |
@@ -157,6 +159,7 @@ This directory contains production-ready skill templates and examples for Claude
 | **[content-research-writer](content-research-writer/)** | Assists in writing high-quality content by conducting research, adding citations, and providing feedback |
 | **[developer-growth-analysis](developer-growth-analysis/)** | Analyzes Claude Code chat history to identify coding patterns and curate learning resources |
 | **[file-organizer](file-organizer/)** | Intelligently organizes files and folders by understanding context and finding duplicates |
+| **[github-copilot](github-copilot/)** | AI coding assistant with inline suggestions, chat modes, code review, custom instructions, and multi-IDE support |
 | **[invoice-organizer](invoice-organizer/)** | Automatically organizes invoices and receipts for tax preparation |
 | **[meeting-insights-analyzer](meeting-insights-analyzer/)** | Analyzes meeting transcripts to uncover behavioral patterns and communication insights |
 | **[raffle-winner-picker](raffle-winner-picker/)** | Randomly selects winners from lists or spreadsheets using cryptographically secure randomness |
@@ -296,11 +299,11 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 84
-- **Individual Skills**: 74
+- **Total Skills**: 87
+- **Individual Skills**: 77
 - **AI Agent Platform Skills**: 4 (AgentKit, Cloudflare Agents, ElizaOS, Virtuals Protocol)
 - **AI Platforms & APIs**: 7 (AgentsKB, LangChain.js, LangSmith Agent Builder, LobeChat, Moonshot AI, OpenRouter, Venice AI)
-- **Development Skills**: 21 (including chezmoi, dnsdist, Ink, Lobe CLI Toolbox, Lobe TTS, PowerDNS Authoritative/Recursor, quiche)
+- **Development Skills**: 22 (including chezmoi, claude-mem, dnsdist, Ink, Lobe CLI Toolbox, Lobe TTS, PowerDNS Authoritative/Recursor, quiche)
 - **AI Integration Protocol Skills**: 4 (Agent Client Protocol, Agent Communication Protocol, Language Server Protocol, Model Context Protocol)
 - **Cloud Infrastructure Skills**: 9 (Cloudflare Developer Platform including Web Analytics, Zaraz)
 - **Cryptocurrency & Payments Skills**: 7 (AO SQLite, Arweave AO Cookbook, Arweave Bridge, Arweave Standards, Bitcoin Mining, BTCPayServer, x402)
@@ -345,6 +348,6 @@ Individual skills may have different licenses. Check each skill's directory for 
 
 ---
 
-**Last Updated**: 2026-01-15
-**Total Skills**: 84
+**Last Updated**: 2026-01-16
+**Total Skills**: 87
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)

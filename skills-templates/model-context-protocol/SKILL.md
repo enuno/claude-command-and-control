@@ -1,7 +1,8 @@
 ---
 name: model-context-protocol
-version: "1.0.0"
+version: "1.4.0"
 description: Model Context Protocol (MCP) - Open standard for connecting AI applications to external data sources, tools, and systems. Use for building MCP servers (tools, resources, prompts), clients, understanding protocol architecture, and implementing AI integrations.
+specification_version: "2024-11-05"
 ---
 
 # Model Context Protocol Skill
@@ -24,6 +25,21 @@ This skill should be triggered when:
 
 ## Protocol Overview
 
+### The AI Integration Paradox
+
+MCP addresses a fundamental challenge: **AI systems need dynamic, context-aware access to resources, but traditional APIs were built for predictable workflows.**
+
+Traditional APIs assume:
+- Known endpoints at design time
+- Predictable request patterns
+- Static data schemas
+
+AI systems require:
+- **Dynamic Discovery** - Identify needed resources at runtime
+- **Rich Context Exchange** - Metadata and relationships flow with data
+- **Secure Sandboxing** - Controlled access without direct AI permissions
+- **Bidirectional Communication** - Systems ask questions, not just consume
+
 ### The Problem MCP Solves
 
 Before MCP:
@@ -42,6 +58,29 @@ Just as USB-C provides a universal connector for devices:
 - **MCP Host** = Device (AI application like Claude Desktop)
 - **MCP Client** = Port (connection manager within the host)
 - **MCP Server** = Peripheral (service providing context)
+
+### Mediated Access Pattern (Security Broker Model)
+
+> "The Host mediates ALL AI-resource interactions"
+
+```
+┌────────────────────────────────────────────────────────┐
+│                     HOST APPLICATION                    │
+│            (Claude Desktop, IDE, Custom App)            │
+│                                                        │
+│   ┌──────────┐   ┌──────────┐   ┌──────────┐         │
+│   │ Client 1 │   │ Client 2 │   │ Client 3 │         │
+│   │   ↕      │   │   ↕      │   │   ↕      │         │
+│   │Server A  │   │Server B  │   │Server C  │   1:1   │
+│   └──────────┘   └──────────┘   └──────────┘  mapping │
+└────────────────────────────────────────────────────────┘
+```
+
+Key security principles:
+- Each Client-Server pair is isolated
+- Host acts as central authority
+- No direct AI-to-resource access
+- Prevents resource interference
 
 ---
 
@@ -78,13 +117,19 @@ Just as USB-C provides a universal connector for devices:
 
 ### Communication Protocol
 
-MCP uses **JSON-RPC 2.0** over various transports:
+MCP uses **JSON-RPC 2.0** over various transports (Specification: 2024-11-05):
+
+**JSON-RPC Requirements:**
+- `id` MUST NOT be null for requests (use string or integer)
+- `id` MUST be unique within a session
+- Requests expect responses; notifications do not
+- Unknown methods return `-32601` (Method not found)
 
 ```typescript
-// Request
+// Request (id required, must be unique per session)
 {
   "jsonrpc": "2.0",
-  "id": 1,
+  "id": "req-1",  // String or integer, never null
   "method": "tools/call",
   "params": {
     "name": "get_weather",
@@ -92,10 +137,10 @@ MCP uses **JSON-RPC 2.0** over various transports:
   }
 }
 
-// Response
+// Response (id matches request)
 {
   "jsonrpc": "2.0",
-  "id": 1,
+  "id": "req-1",
   "result": {
     "content": [{
       "type": "text",
@@ -104,7 +149,7 @@ MCP uses **JSON-RPC 2.0** over various transports:
   }
 }
 
-// Notification (no response expected)
+// Notification (no id, no response expected)
 {
   "jsonrpc": "2.0",
   "method": "notifications/resources/updated",
@@ -119,10 +164,18 @@ MCP uses **JSON-RPC 2.0** over various transports:
 │                  CONNECTION LIFECYCLE                        │
 └─────────────────────────────────────────────────────────────┘
 
-1. INITIALIZATION
+1. INITIALIZATION (Version Negotiation)
    Client ──initialize──────► Server
-   Client ◄──capabilities──── Server
-   Client ──initialized──────► Server (notification)
+     └─ protocolVersion: "2024-11-05"
+     └─ capabilities: { sampling: {}, roots: {} }
+     └─ clientInfo: { name, version }
+
+   Client ◄──result────────── Server
+     └─ protocolVersion: "2024-11-05"  (server's supported version)
+     └─ capabilities: { tools: {}, resources: {} }
+     └─ serverInfo: { name, version }
+
+   Client ──initialized──────► Server (notification, no response)
 
 2. OPERATION PHASE
    Client ◄──► Server (bidirectional messages)
@@ -131,8 +184,14 @@ MCP uses **JSON-RPC 2.0** over various transports:
    • Server may call client methods (sampling/createMessage)
 
 3. TERMINATION
-   Either party closes connection
+   For stdio:  Close input stream, wait for server exit, terminate
+   For HTTP:   Send HTTP DELETE with Mcp-Session-Id header
 ```
+
+**Version Negotiation:**
+- Client sends supported `protocolVersion` in `initialize`
+- Server responds with its version (SHOULD match or be compatible)
+- If incompatible, client MAY disconnect or proceed with limitations
 
 ---
 
@@ -184,6 +243,23 @@ Tools are **executable functions** that AI models can invoke to perform actions:
 - `audio` - Base64-encoded audio data
 - `resource` - Embedded resource content
 
+**Error Handling with `isError`:**
+```json
+// Normal result
+{
+  "content": [{ "type": "text", "text": "Success!" }],
+  "isError": false  // Optional, defaults to false
+}
+
+// Execution error (not a JSON-RPC error)
+{
+  "content": [{ "type": "text", "text": "File not found: /data/missing.txt" }],
+  "isError": true  // Tool ran but encountered an error
+}
+```
+
+Use `isError: true` when the tool executed but encountered an expected error (file not found, validation failed, etc.). Use JSON-RPC errors for protocol-level failures.
+
 ### 2. Resources (Application-Controlled)
 
 Resources are **data sources** that provide context to AI applications:
@@ -201,6 +277,34 @@ Resources are **data sources** that provide context to AI applications:
 - Standard schemes: `file://`, `https://`
 - Custom schemes: `postgres://`, `git://`
 - Resource templates: `file:///{path}` (parameterized)
+
+**Resource Templates:**
+```json
+{
+  "uriTemplate": "file:///{path}",
+  "name": "Project Files",
+  "description": "Access files in the project directory",
+  "mimeType": "text/plain"
+}
+```
+Templates use URI Template syntax (RFC 6570) for parameterized resource access. Servers that support templates should also expose `completion/complete` for auto-completion.
+
+**Content Types:**
+```json
+// Text content
+{
+  "uri": "file:///README.md",
+  "mimeType": "text/markdown",
+  "text": "# Project Title\n..."
+}
+
+// Binary content (blob)
+{
+  "uri": "file:///image.png",
+  "mimeType": "image/png",
+  "blob": "iVBORw0KGgoAAAANSUhEUgAA..."  // base64-encoded
+}
+```
 
 **Resource Operations:**
 ```json
@@ -327,6 +431,120 @@ Clients can expose filesystem roots to servers:
 ```
 
 Roots define boundaries for server access, allowing servers to understand which directories or resources they can interact with.
+
+---
+
+## Utilities
+
+MCP includes base utilities and server utilities for protocol-level operations.
+
+### Base Utilities
+
+**Ping (Connection Health):**
+```json
+// Request
+{ "jsonrpc": "2.0", "id": 1, "method": "ping" }
+
+// Response
+{ "jsonrpc": "2.0", "id": 1, "result": {} }
+```
+Used to check connection health. Either party can send ping; receiver MUST respond promptly.
+
+**Cancellation:**
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "notifications/cancelled",
+  "params": {
+    "requestId": "req-123",
+    "reason": "User cancelled operation"
+  }
+}
+```
+Notification to cancel a pending request. The receiver SHOULD stop processing and MAY return a partial result or error.
+
+**Progress Notifications:**
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "notifications/progress",
+  "params": {
+    "progressToken": "token-456",
+    "progress": 50,
+    "total": 100,
+    "message": "Processing files..."
+  }
+}
+```
+For long-running operations. The `progressToken` is provided in the original request's `_meta.progressToken`.
+
+### Server Utilities
+
+**Completion (Auto-complete):**
+```json
+// Request
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "completion/complete",
+  "params": {
+    "ref": {
+      "type": "ref/resource",
+      "uri": "file:///{path}"
+    },
+    "argument": {
+      "name": "path",
+      "value": "src/"
+    }
+  }
+}
+
+// Response
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "completion": {
+      "values": ["src/index.ts", "src/utils/", "src/types/"],
+      "hasMore": false
+    }
+  }
+}
+```
+Provides auto-completion suggestions for resource template arguments or prompt arguments.
+
+**Logging:**
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "notifications/message",
+  "params": {
+    "level": "info",  // debug, info, notice, warning, error, critical, alert, emergency
+    "logger": "database",
+    "data": "Connected to PostgreSQL at localhost:5432"
+  }
+}
+```
+Servers can send log messages to clients. The client MAY filter based on level threshold set via `logging/setLevel`.
+
+**Pagination:**
+For large result sets, use cursor-based pagination:
+```json
+// Request with cursor
+{
+  "method": "tools/list",
+  "params": { "cursor": "eyJvZmZzZXQiOjEwMH0=" }
+}
+
+// Response with next cursor
+{
+  "result": {
+    "tools": [...],
+    "nextCursor": "eyJvZmZzZXQiOjIwMH0="  // null if no more results
+  }
+}
+```
+Cursors are opaque strings. Clients SHOULD NOT assume any structure.
 
 ---
 
@@ -873,22 +1091,146 @@ server.resource("file://{path}", async (uri, params) => {
 
 ---
 
+## Production Operations
+
+### Performance Targets
+
+Production MCP servers should target:
+
+| Metric | Target | Notes |
+|--------|--------|-------|
+| **Throughput** | >1,000 req/sec | Per instance |
+| **Latency (P95)** | <100ms | Simple operations |
+| **Error Rate** | <0.1% | Under normal conditions |
+| **Availability** | >99.9% | Uptime target |
+
+### Architectural Principles
+
+**Single Responsibility**: Each server should have one clear, well-defined purpose:
+```
+✅ weather-server     → Only weather data
+✅ database-server    → Only database operations
+❌ everything-server  → Too broad, hard to maintain
+```
+
+**Defense in Depth**: Layer security controls:
+```
+Network → Authentication → Authorization → Input Validation → Output Sanitization
+```
+
+**Fail-Safe Design**: Graceful degradation:
+- Circuit breakers for external APIs
+- Caching fallbacks when services are down
+- Safe defaults when configuration missing
+
+### Health Checks
+
+Expose comprehensive health endpoints:
+```json
+{
+  "status": "healthy",
+  "checks": {
+    "database": "connected",
+    "cache": "available",
+    "external_api": "reachable",
+    "disk_space": "sufficient",
+    "memory": "normal"
+  },
+  "uptime": 86400,
+  "version": "1.0.0"
+}
+```
+
+### Monitoring & Observability
+
+**Key Metrics to Collect:**
+- Request count, latency (P50, P95, P99)
+- Active connections
+- Error count by type
+- Resource usage (CPU, memory)
+
+**Structured Logging:**
+```json
+{
+  "timestamp": "2024-01-15T10:30:00Z",
+  "level": "info",
+  "client_id": "client-123",
+  "method": "tools/call",
+  "tool": "get_weather",
+  "duration_ms": 45,
+  "status": "success"
+}
+```
+
+---
+
 ## Testing and Debugging
 
 ### MCP Inspector
 
-Use the official MCP Inspector for testing:
+The MCP Inspector is an interactive developer tool for testing and debugging MCP servers. It provides a web-based interface without requiring installation.
 
+**Basic Usage:**
 ```bash
-npx @modelcontextprotocol/inspector
+# Run directly via npx (no installation needed)
+npx @modelcontextprotocol/inspector <command>
+
+# With arguments
+npx @modelcontextprotocol/inspector <command> <arg1> <arg2>
 ```
 
-Features:
-- Connect to any MCP server
-- Browse tools, resources, prompts
-- Execute tool calls interactively
-- View JSON-RPC message flow
-- Debug capability negotiation
+**Inspecting Different Server Types:**
+```bash
+# NPM packages
+npx -y @modelcontextprotocol/inspector npx @modelcontextprotocol/server-filesystem /path/to/dir
+
+# PyPI packages
+npx @modelcontextprotocol/inspector uvx mcp-server-git --repository ~/code/repo.git
+
+# Local TypeScript server
+npx @modelcontextprotocol/inspector node path/to/server/index.js args...
+
+# Local Python server
+npx @modelcontextprotocol/inspector uv --directory path/to/server run package-name args...
+```
+
+**Inspector UI Panels:**
+
+| Panel | Purpose |
+|-------|---------|
+| **Server Connection** | Configure transport, command-line args, environment variables |
+| **Resources Tab** | List resources, view metadata, inspect content, test subscriptions |
+| **Prompts Tab** | View templates, test with custom arguments, preview generated messages |
+| **Tools Tab** | Browse tool schemas, test with custom inputs, view execution results |
+| **Notifications** | Monitor server logs and notifications in real-time |
+
+**Development Workflow:**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                INSPECTOR DEVELOPMENT WORKFLOW                │
+└─────────────────────────────────────────────────────────────┘
+
+1. VERIFICATION
+   • Launch Inspector with your server
+   • Verify basic connectivity
+   • Check capability negotiation
+
+2. ITERATION
+   • Make server code changes
+   • Rebuild server
+   • Reconnect Inspector
+   • Test affected features
+   • Monitor JSON-RPC messages
+
+3. EDGE CASES
+   • Test invalid inputs
+   • Missing prompt arguments
+   • Concurrent operations
+   • Verify error handling
+```
+
+**Repository:** https://github.com/modelcontextprotocol/inspector
 
 ### Debugging Tips
 
@@ -897,6 +1239,173 @@ Features:
 3. **Test tools individually** - Before integrating with clients
 4. **Validate schemas** - Ensure input/output schemas are correct
 5. **Check capabilities** - Verify both sides support required features
+
+### Common Debugging Scenarios
+
+**Server won't connect:**
+```bash
+# Check if server starts independently
+node path/to/server.js
+
+# Check for port conflicts
+lsof -i :3000
+
+# Verify environment variables are set
+env | grep API_KEY
+```
+
+**Tool calls failing:**
+```typescript
+// Add debug logging to tool handler
+server.tool("my_tool", schema, async (args) => {
+  console.error("Tool called with:", JSON.stringify(args));
+  try {
+    const result = await processArgs(args);
+    console.error("Tool result:", JSON.stringify(result));
+    return result;
+  } catch (error) {
+    console.error("Tool error:", error);
+    throw error;
+  }
+});
+```
+
+**Capability mismatch:**
+```bash
+# In Inspector, check the initialization exchange:
+# 1. Client capabilities sent
+# 2. Server capabilities returned
+# 3. Verify both sides support required features
+```
+
+### Claude Desktop Debugging
+
+**Log locations:**
+```bash
+# macOS
+~/Library/Logs/Claude/mcp*.log
+
+# Windows
+%APPDATA%\Claude\logs\mcp*.log
+
+# Linux
+~/.config/Claude/logs/mcp*.log
+
+# Real-time log monitoring (macOS)
+tail -n 20 -F ~/Library/Logs/Claude/mcp*.log
+```
+
+**Enable Chrome DevTools:**
+```bash
+# Create developer settings file
+echo '{"allowDevTools": true}' > ~/Library/Application\ Support/Claude/developer_settings.json
+
+# Access DevTools: Command-Option-Shift-i (macOS)
+# Use Console panel for client-side errors
+# Use Network panel for message payloads and timing
+```
+
+**Checking Server Status in Claude Desktop:**
+- Click the **plug icon** to view connected servers, available prompts, and resources
+- Click the **"Search and tools" slider icon** to view tools available to the model
+
+**Common issues:**
+- Malformed JSON in config file
+- Relative paths instead of absolute (servers often start with `/` as working directory)
+- Missing environment variables (servers only inherit `USER`, `HOME`, `PATH` by default)
+- Rate limiting from external APIs
+
+**Environment Variable Gotcha:**
+```json
+{
+  "myserver": {
+    "command": "mcp-server-myapp",
+    "env": {
+      "MYAPP_API_KEY": "your-key-here",
+      "DATABASE_URL": "postgres://localhost/mydb"
+    }
+  }
+}
+```
+
+**Reloading Changes:**
+- **Configuration changes**: Restart Claude Desktop completely
+- **Server code changes**: Use `Command-R` to reload servers
+
+### Server-Side Logging
+
+**Important**: Log to stderr, NOT stdout (stdout interferes with JSON-RPC protocol).
+
+**Python:**
+```python
+import sys
+
+# Direct stderr logging
+print("Debug: Processing request", file=sys.stderr)
+
+# Using MCP logging API
+server.request_context.session.send_log_message(
+    level="info",
+    data="Server started successfully"
+)
+```
+
+**TypeScript:**
+```typescript
+// Direct stderr logging
+console.error("Debug: Processing request");
+
+// Using MCP logging API
+server.sendLoggingMessage({
+  level: "info",
+  data: "Server started successfully"
+});
+```
+
+**What to Log:**
+- Initialization steps and configuration loaded
+- Resource access (URI, user, timestamp)
+- Tool execution (name, arguments, duration, result type)
+- Error conditions with stack traces
+- Performance metrics (operation timing, message sizes)
+
+### Debugging Workflow
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    DEBUGGING WORKFLOW                        │
+└─────────────────────────────────────────────────────────────┘
+
+1. INITIAL DEVELOPMENT
+   └─ Use MCP Inspector for basic testing
+   └─ Implement core functionality
+   └─ Add logging at key points
+
+2. INTEGRATION TESTING
+   └─ Test in Claude Desktop
+   └─ Monitor logs in real-time
+   └─ Check error handling paths
+
+3. TROUBLESHOOTING
+   └─ Check server logs first
+   └─ Verify configuration syntax
+   └─ Test standalone with Inspector
+   └─ Review environment variables
+```
+
+### Getting Help
+
+**First steps:**
+1. Check server logs for errors
+2. Test with MCP Inspector standalone
+3. Review `claude_desktop_config.json` syntax
+4. Verify environment variables are set
+
+**When reporting issues, provide:**
+- Relevant log excerpts
+- Configuration files (sanitized)
+- Steps to reproduce
+- Environment details (OS, Node/Python version)
 
 ---
 
@@ -968,6 +1477,61 @@ const tools = await mcpClient.tools();
 ---
 
 ## Version History
+
+- **1.4.0** (2026-01-10): Enhanced with comprehensive debugging documentation
+  - Enhanced Claude Desktop Debugging:
+    - Real-time log monitoring commands
+    - Chrome DevTools integration (enable, access, panels)
+    - Server status checking via UI icons
+    - Environment variable inheritance gotcha (`USER`, `HOME`, `PATH` only)
+    - Reloading changes (config vs code)
+  - Added Server-Side Logging section:
+    - stderr vs stdout importance
+    - Python and TypeScript logging examples
+    - MCP logging API usage
+    - What to log checklist
+  - Added Debugging Workflow diagram
+  - Added Getting Help section with issue reporting guidance
+
+- **1.3.0** (2026-01-10): Enhanced Testing and Debugging with MCP Inspector
+  - Comprehensive MCP Inspector documentation:
+    - Installation-free usage via npx
+    - Commands for NPM, PyPI, and local servers
+    - UI panels table (Server Connection, Resources, Prompts, Tools, Notifications)
+    - Development workflow diagram (Verification → Iteration → Edge Cases)
+  - Added Common Debugging Scenarios section:
+    - Server connection troubleshooting
+    - Tool call debugging with logging examples
+    - Capability mismatch diagnosis
+  - Added Claude Desktop Debugging:
+    - Log file locations (macOS, Windows, Linux)
+    - Common configuration issues
+
+- **1.2.0** (2026-01-10): Enhanced with official documentation content
+  - Added AI Integration Paradox design philosophy
+  - Added Mediated Access Pattern (security broker model)
+  - Added Production Operations section:
+    - Performance targets (throughput, latency, error rate)
+    - Architectural principles (single responsibility, defense in depth)
+    - Health checks and monitoring patterns
+    - Structured logging examples
+  - Enhanced protocol overview with dynamic discovery concepts
+
+- **1.1.0** (2026-01-10): Enhanced with official specification details
+  - Added specification version reference (2024-11-05)
+  - Enhanced JSON-RPC requirements (id uniqueness, null prohibition)
+  - Added detailed lifecycle with version negotiation
+  - Added shutdown procedures (stdio vs HTTP)
+  - Added tool `isError` handling for execution errors
+  - Added resource templates with URI Template syntax (RFC 6570)
+  - Added blob content type for binary resources
+  - Added Utilities section:
+    - Ping (connection health)
+    - Cancellation (notifications/cancelled)
+    - Progress notifications
+    - Completion (auto-complete)
+    - Logging (notifications/message)
+    - Pagination (cursor-based)
 
 - **1.0.0** (2026-01-10): Initial skill release
   - Complete protocol overview (architecture, primitives, transports)
