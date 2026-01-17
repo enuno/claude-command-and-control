@@ -185,6 +185,17 @@ Orchestrator Skill
 - Overlap with other skills: "review code" (too similar to code-review skill)
 - Be overly narrow: "review JavaScript authentication code on Tuesdays" (too specific)
 
+**Note on MCP Server Instructions:**
+
+With the introduction of MCP Tool Search (lazy loading), the `server instructions` field in MCP servers now functions similarly to skill triggers. Both serve the same purpose: helping Claude know when to search for and invoke specific capabilities.
+
+The same best practices apply:
+- Action-oriented descriptions of what users can DO
+- Keywords users would naturally use
+- Context clues for when this capability is appropriate vs. alternatives
+
+**See**: [MCP Registry Best Practices - Section 12](13-MCP-Registry-Best-Practices.md) for MCP server instruction patterns.
+
 ### Example Collection
 
 **Minimum**: 2 examples (happy path + edge case)
@@ -379,7 +390,7 @@ Claude Skills extend the Command and Control framework with portable, reusable w
 
 ---
 
-**Document Version**: 1.0.0
-**Last Updated**: November 22, 2025
+**Document Version**: 1.1.0
+**Last Updated**: January 17, 2026
 **Maintained By**: Claude Command and Control Project
 **Review Cycle**: Quarterly

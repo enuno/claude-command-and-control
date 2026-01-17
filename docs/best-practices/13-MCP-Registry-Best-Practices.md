@@ -844,9 +844,157 @@ Based on comprehensive research, here are the priority recommendations:
 
 ***
 
+## 12. MCP Tool Search and Context Optimization
+
+### 12.1 The Context Bloat Problem
+
+As MCP adoption grew, a critical problem emerged: **context window consumption**. Organizations reported:
+
+- MCP servers with 50+ tools each
+- Setups with 7+ servers consuming 67k+ tokens before any user input
+- A single Docker MCP server consuming 125,000 tokens for 135 tool definitions
+- Users sacrificing 33%+ of their 200k context window to tool definitions
+
+This "startup tax" forced a brutal tradeoff: limit MCP servers to 2-3 core tools, or accept that half your context budget disappears before work begins.
+
+### 12.2 MCP Tool Search (Lazy Loading)
+
+Claude Code introduced **MCP Tool Search** to solve this problem—one of the most requested features from the community.
+
+**How It Works:**
+
+1. **Threshold Detection**: System monitors when tool descriptions would consume >10% of available context
+2. **Dynamic Switching**: When threshold crossed, switches from raw tool definitions to lightweight search index
+3. **On-Demand Loading**: When user requests an action, Claude queries the index and pulls only relevant tool definitions
+4. **Full Access Maintained**: All tools remain accessible, just loaded dynamically
+
+**Performance Improvements:**
+
+| Metric | Before | After | Improvement |
+|--------|--------|-------|-------------|
+| Token consumption | ~134k | ~5k | 85% reduction |
+| Opus 4 accuracy (MCP eval) | 49% | 74% | +51% |
+| Opus 4.5 accuracy (MCP eval) | 79.5% | 88.1% | +11% |
+
+The accuracy improvements come from reduced "distraction"—when context isn't stuffed with irrelevant tool definitions, models focus better on the actual query.
+
+### 12.3 Server Instructions: The Critical Field
+
+With Tool Search, the `server instructions` field in MCP server definitions becomes **critical infrastructure**, not optional metadata.
+
+**Purpose**: Helps Claude know when to search for your tools, similar to how skills are discovered.
+
+**Before Tool Search:**
+```json
+{
+  "name": "my-database-server",
+  "description": "Database operations",
+  "instructions": ""  // Often left empty
+}
+```
+
+**After Tool Search (Required for discoverability):**
+```json
+{
+  "name": "my-database-server",
+  "description": "PostgreSQL database operations and analytics",
+  "instructions": "Use this server when the user needs to query databases, run SQL analytics, manage database schemas, or perform data migrations. Supports PostgreSQL with read/write access to production and staging environments."
+}
+```
+
+**Best Practices for Server Instructions:**
+
+1. **Action-Oriented**: Describe what users can DO, not just what the server IS
+2. **Trigger Words**: Include keywords users would naturally use ("query", "database", "SQL", "analytics")
+3. **Context Clues**: Mention when this server is appropriate vs. alternatives
+4. **Scope Boundaries**: Clarify what environments/data the server can access
+5. **Negative Triggers**: Optionally note when NOT to use this server
+
+### 12.4 Tool Description Optimization
+
+Individual tool descriptions also affect discoverability:
+
+**Poor Description:**
+```json
+{
+  "name": "run_query",
+  "description": "Runs a query"
+}
+```
+
+**Optimized Description:**
+```json
+{
+  "name": "run_query",
+  "description": "Execute SQL query against PostgreSQL database. Supports SELECT, INSERT, UPDATE, DELETE. Returns results as JSON array. Use for data retrieval, analytics queries, and record modifications.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "sql": {
+        "type": "string",
+        "description": "SQL query to execute. Parameterized queries recommended for security."
+      },
+      "database": {
+        "type": "string",
+        "description": "Target database: 'production', 'staging', or 'analytics'"
+      }
+    }
+  }
+}
+```
+
+### 12.5 Implementation for MCP Server Developers
+
+**Immediate Actions:**
+
+1. **Audit Server Instructions**: Review all servers' `instructions` field
+2. **Enhance Tool Descriptions**: Add action verbs, use cases, and scope
+3. **Test Discoverability**: Verify Claude finds your tools with natural language queries
+4. **Remove Redundancy**: Consolidate similar tools to reduce index size
+
+**Configuration Example:**
+```json
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "io.company/analytics-server",
+  "description": "Business analytics and reporting tools",
+  "version": "2.0.0",
+  "instructions": "Use when users need business intelligence, data visualization, report generation, or metric analysis. Integrates with data warehouse and provides real-time dashboards. Prefer this over raw SQL for aggregated analytics.",
+  "packages": [{
+    "registryType": "npm",
+    "identifier": "@company/analytics-mcp",
+    "version": "2.0.0",
+    "runtimeHint": "npx",
+    "transport": {"type": "stdio"}
+  }]
+}
+```
+
+### 12.6 Implications for Enterprise Deployments
+
+**Architecture Changes:**
+
+- **Virtual MCP Servers** become even more valuable (bundle related tools, provide focused instructions)
+- **Tool organization** by domain enables better search indexing
+- **MCP Gateways** should preserve and enhance server instructions during proxying
+
+**Capacity Planning:**
+
+- Previous constraint: "Limit to 2-3 MCP servers to preserve context"
+- New reality: "Access thousands of tools without startup penalty"
+- Focus shifts from limiting tools to **optimizing discoverability**
+
+**Monitoring Additions:**
+
+- Track tool search hit rates
+- Monitor which tools are frequently loaded vs. rarely used
+- Analyze user queries that fail to find appropriate tools
+
+---
+
 ## Conclusion
 
-Effective MCP server management and registry best practices require a holistic approach spanning architecture, security, testing, and lifecycle management. The MCP ecosystem has matured significantly with the v0.1 specification stabilization, providing a solid foundation for production deployments.
+Effective MCP server management and registry best practices require a holistic approach spanning architecture, security, testing, and lifecycle management. The MCP ecosystem has matured significantly with the v0.1 specification stabilization and the introduction of MCP Tool Search, providing a solid foundation for production deployments.
 
 **Critical success factors:**
 

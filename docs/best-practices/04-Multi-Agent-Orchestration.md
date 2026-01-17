@@ -54,6 +54,24 @@ workers:
 
 **See**: [Agent Skills vs. Multi-Agent Guide](../best-practices/09-Multi-Agent-Architecture-and-Skills-Integration.md) for detailed comparison and migration strategies.
 
+### Context Efficiency Improvements (January 2026)
+
+Recent optimizations have significantly reduced the "context tax" that previously constrained multi-agent architectures:
+
+**MCP Tool Search (Lazy Loading):**
+- Token consumption reduced from ~134k to ~5k (85% reduction)
+- Accuracy improved: Opus 4.5 went from 79.5% to 88.1% on MCP evaluations
+- Agents can now access thousands of tools without startup penalty
+- Focus shifts from limiting tools to optimizing discoverability
+
+**Implications for Multi-Agent:**
+- Each worker agent benefits from reduced context overhead
+- More context available for actual task execution
+- Virtual MCP servers become more valuable (bundle tools with focused instructions)
+- Workers can be equipped with richer toolsets without context bloat
+
+**See**: [MCP Registry Best Practices - Section 12](13-MCP-Registry-Best-Practices.md) and [LLM Production Optimization](14-LLM-Production-Optimization.md) for implementation details.
+
 ## Orchestrator-Worker Architecture
 
 ### Lead Agent (Orchestrator)
@@ -109,3 +127,9 @@ workers:
 
 ---
 See Document 5 for agent testing, validation, and quality assurance workflows.
+
+---
+
+**Document Version**: 1.1.0
+**Last Updated**: January 17, 2026
+**Maintained By**: Claude Command and Control Project
