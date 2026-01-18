@@ -1,0 +1,44 @@
+{
+  "name": "google-structured-data",
+  "description": "Google Search structured data implementation guide - Schema.org markup for rich results, JSON-LD, and search appearance features",
+  "base_url": "https://developers.google.com/search/docs/appearance/structured-data/",
+  "start_urls": [
+    "https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data",
+    "https://developers.google.com/search/docs/appearance/structured-data/sd-policies",
+    "https://developers.google.com/search/docs/appearance/structured-data/search-gallery"
+  ],
+  "url_patterns": {
+    "include": [
+      "/search/docs/appearance/structured-data/"
+    ],
+    "exclude": [
+      "/search/docs/monitor-debug/",
+      "/search/docs/crawling-indexing/",
+      "/search/docs/fundamentals/",
+      "/search/updates/",
+      "/search/blog/",
+      "?hl=",
+      "#",
+      "/community/"
+    ]
+  },
+  "categories": {
+    "introduction": ["intro", "overview", "how-it-works", "policies", "guidelines", "gallery"],
+    "content_publishing": ["article", "book", "recipe", "video", "news", "speakable"],
+    "ecommerce": ["product", "merchant", "shopping", "variant", "loyalty", "return-policy", "shipping"],
+    "local_business": ["local-business", "organization", "profile", "top-places"],
+    "events_experiences": ["event", "vacation-rental", "course"],
+    "knowledge_qa": ["faq", "discussion-forum", "education-qa", "qanda", "fact-check"],
+    "navigation": ["breadcrumb", "carousel", "image-metadata", "site-name", "sitelinks"],
+    "specialized": ["math-solver", "employer-rating", "subscription", "dataset", "software-app", "movie"]
+  },
+  "selectors": {
+    "content": "article, .devsite-article-body, main",
+    "code_blocks": "pre, code, .prettyprint",
+    "navigation": "nav, .devsite-nav"
+  },
+  "rate_limit": 1.0,
+  "max_pages": 100,
+  "respect_robots": true,
+  "user_agent": "Mozilla/5.0 (compatible; SkillSeeker/1.0; +https://github.com/yusufkaraaslan/Skill_Seekers)"
+}

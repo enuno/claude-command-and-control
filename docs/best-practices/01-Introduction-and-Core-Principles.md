@@ -75,6 +75,16 @@ Modern software development increasingly demands agent-first thinking—designin
 - Maintain detailed audit trails
 - Design fail-safe mechanisms and rollback capabilities
 
+**Principle 7: Apply Context Engineering Discipline**
+- Treat context as a finite, precious resource—not unlimited storage
+- Find the smallest possible set of high-signal tokens for each task
+- Use progressive disclosure: reveal context in layers (index → context → details)
+- Implement just-in-time context retrieval instead of upfront loading
+- Monitor waste ratio (target >80% relevant tokens vs total consumed)
+- Design tools and skills for context efficiency (self-contained, unambiguous)
+- Use structured note-taking for long-horizon task continuity
+- Avoid context pollution through regular compaction and cleanup
+
 ### Core Tenet: Skills-First Agent Design
 
 **Principle**: Build general-purpose agents equipped with specialized skills rather than building separate agents for each use case.
@@ -281,6 +291,7 @@ This document establishes foundational principles and architecture patterns. Pro
 - **Document 5**: Testing and Quality Assurance - Validation strategies
 - **Document 6**: Production Deployment and Maintenance - Operations and monitoring
 - **Document 7**: Quick Reference and Templates - Ready-to-use examples
+- **Document 14**: [LLM Production Optimization](14-LLM-Production-Optimization.md) - Context engineering, caching, and optimization techniques
 
 ## References
 
@@ -293,7 +304,7 @@ This manual synthesizes best practices from:
 
 ---
 
-**Document Version**: 1.0  
-**Last Updated**: November 10, 2025  
-**Maintained By**: Engineering Standards Committee  
+**Document Version**: 1.1
+**Last Updated**: January 17, 2026
+**Maintained By**: Engineering Standards Committee
 **Review Cycle**: Quarterly or upon significant platform updates

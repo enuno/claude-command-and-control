@@ -42,10 +42,20 @@ Refer to AGENTS.md for core policies.
 Builder starts: implements feature → validator: tests & reviews output → scribe documents results
 
 ## Context Management
+
+### Context Engineering Principles
+Apply context engineering to optimize agent effectiveness:
+- **Minimize tokens, maximize signal**: Find smallest set of high-signal tokens
+- **Progressive disclosure**: Load context in layers (index → context → details)
+- **Just-in-time retrieval**: Load full context only when task requires it
+- **Waste ratio target**: >80% of consumed context should be relevant
+
+### Practical Guidelines
 - Use only relevant recent commits, source files, and planning docs as agent context
 - Inject summaries or key files with `@` context reference
-- Summarize or trim context for long sessions
+- Summarize or trim context for long sessions (compaction)
 - Isolate context per agent instance for multi-agent workflows
+- Use structured note-taking (NOTES.md) for long-horizon task continuity
 
 ## Security and Audit
 - Grant least privilege; specify allowed-tools per role
@@ -71,4 +81,12 @@ Builder starts: implements feature → validator: tests & reviews output → scr
 - Ensure explicit review before agent actions modify production environments
 
 ---
-See Document 4 for instructions on orchestrating multiple agents within a project.
+
+**See Also:**
+- Document 4 for instructions on orchestrating multiple agents within a project
+- [LLM Production Optimization](14-LLM-Production-Optimization.md) for detailed context engineering techniques
+
+---
+
+**Document Version**: 1.1.0
+**Last Updated**: January 2026

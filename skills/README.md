@@ -11,7 +11,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 ---
 
-## Available Skills (27 Total)
+## Available Skills (28 Total)
 
 ### Bitcoin Mining Skills
 
@@ -69,6 +69,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 | Skill | Description | Key Use Cases |
 |-------|-------------|---------------|
+| **[google-structured-data](google-structured-data/SKILL.md)** | Schema.org markup for Google Search rich results with JSON-LD templates | Implementing structured data, Article/Product/Event/FAQ markup, JavaScript generation |
 | **[seo](seo/SKILL.md)** | Google SEO research and web traffic monetization with curated resources | SEO best practices, tool comparisons (Semrush, Moz, Ahrefs), search engine optimization, marketing strategies |
 
 ### Contribution & Sharing Skills
@@ -194,6 +195,7 @@ Skills for permanent data storage and uploads to Arweave:
 
 ### Marketing & SEO Skills
 Skills for search engine optimization and web marketing:
+- Structured data markup (google-structured-data)
 - SEO best practices and tools (seo)
 
 ### Contribution & Sharing Skills
@@ -273,14 +275,14 @@ All skills in this repository meet these criteria:
 
 ## Statistics
 
-**Total Skills**: 27
+**Total Skills**: 28
 - Bitcoin Mining: 8
 - Development Workflow: 4
 - Design & UI/UX: 1
 - Integration & Automation: 2
 - Content & Documentation: 4
 - Data Storage & Upload: 2
-- Marketing & SEO: 1
+- Marketing & SEO: 2
 - Contribution & Sharing: 1
 - Meta Skills: 1
 - Skill Development: 3
@@ -294,6 +296,13 @@ All skills in this repository meet these criteria:
 ## Recent Additions
 
 **January 2026**:
+- ✨ **google-structured-data** (2026-01-18) - Schema.org markup skill
+  - 8 structured data types (Article, Product, LocalBusiness, FAQ, Event, Breadcrumb, Video, Recipe)
+  - JSON-LD templates with required/recommended properties
+  - JavaScript generation (GTM, custom JS, React/Next.js, SSR)
+  - Implementation checklists and common mistakes
+  - Version 1.1 with 762 lines, 20KB
+
 - ✨ **Documentation Platform Skills** (2026-01-17) - 2 new skills
   - gitbook - GitBook documentation platform (1.1 MB, 107 pages from llms.txt)
   - github-pages - GitHub Pages static hosting (140 KB, 10 pages from Article API)
@@ -333,6 +342,6 @@ All skills in this repository meet these criteria:
 
 ---
 
-**Last Updated**: January 17, 2026
+**Last Updated**: January 18, 2026
 **Maintained By**: Claude Command and Control Repository
-**Version**: 2.3.0
+**Version**: 2.4.0

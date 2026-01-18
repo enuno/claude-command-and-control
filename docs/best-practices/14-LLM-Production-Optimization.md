@@ -344,9 +344,234 @@ Repeated prompts may amplify both good and bad intents:
 
 ---
 
-## 3. Context Window Optimization
+## 3. Context Engineering
 
-### 3.1 MCP Tool Search (Lazy Loading)
+Context engineering is the discipline of optimizing what information is available to an LLM at inference time. Unlike one-time prompt optimization, context engineering involves iterative curation across multiple inference turns.
+
+### 3.1 Core Principle
+
+> **"Find the smallest possible set of high-signal tokens that maximize the likelihood of your desired outcome."**
+
+This principle distinguishes context engineering from traditional prompt engineering:
+
+| Aspect | Prompt Engineering | Context Engineering |
+|--------|-------------------|---------------------|
+| Scope | Single prompt optimization | Multi-turn context curation |
+| Focus | Instruction clarity | Token signal-to-noise ratio |
+| Iteration | Per-prompt refinement | Runtime context management |
+| Components | Prompt text | System instructions, tools, MCP, external data, message history, runtime retrieval |
+
+### 3.2 The Attention Budget Problem
+
+LLMs face **context rot**—as context expands, accuracy declines due to:
+
+1. **Quadratic Token Relationships**: Attention computations scale as n², creating exponential overhead
+2. **Limited Long-Sequence Training**: Models are optimized for typical sequence lengths
+3. **Finite Attention Resources**: Diminishing returns as context grows
+4. **Context Pollution**: Irrelevant tokens compete for attention with relevant ones
+
+**Traditional RAG systems waste ~94% of attention budget** on irrelevant context. A typical session might load 35,000 tokens where only 2,000 are actually useful for the current task.
+
+### 3.3 System Prompts: The "Right Altitude"
+
+System prompts must strike a balance between specificity and flexibility:
+
+**Too Prescriptive** ❌
+```markdown
+If the user asks about authentication, check if they mean OAuth or JWT.
+If OAuth, explain the flow step by step. If JWT, show the token structure...
+```
+- Hardcoded conditional logic becomes brittle
+- Cannot adapt to novel situations
+
+**Too Vague** ❌
+```markdown
+Help the user with their requests. Be helpful and thorough.
+```
+- Lacks concrete behavioral signals
+- Inconsistent agent behavior
+
+**Optimal Balance** ✅
+```markdown
+You are an authentication specialist. When discussing auth methods:
+- Explain trade-offs between approaches
+- Provide concrete code examples
+- Consider security implications
+```
+- Specific enough to guide effectively
+- Flexible heuristics without excessive detail
+- Minimal sufficient information
+
+### 3.4 Tool Design for Context Efficiency
+
+Tools must be designed with context efficiency in mind:
+
+| Requirement | Description | Example |
+|-------------|-------------|---------|
+| **Self-contained** | Single, clear purpose per tool | `search_users` not `manage_users` |
+| **Error-resilient** | Graceful edge case handling | Return empty array, not crash |
+| **Unambiguous** | Intended use is obvious | Clear tool description |
+| **Token-efficient** | Relevant outputs without bloat | Return 10 results, not 1000 |
+| **Descriptive parameters** | Clear input naming | `user_id` not `id` or `user` |
+
+**Critical Rule**: *"If a human engineer can't definitively say which tool to use in a given situation, an AI agent can't be expected to do better."*
+
+### 3.5 Context Retrieval Strategies
+
+#### Just-In-Time Context (Recommended for Agents)
+
+Maintain lightweight identifiers; load data dynamically when needed.
+
+```python
+# Instead of loading all user data upfront
+# Keep lightweight index, fetch on demand
+class JITContextManager:
+    def __init__(self):
+        self.index = {}  # Lightweight metadata only
+
+    def get_context(self, task_id: str) -> dict:
+        """Load full context only when task requires it."""
+        if self.is_relevant(task_id):
+            return self.fetch_full_context(task_id)
+        return self.get_summary(task_id)
+```
+
+**Benefits:**
+- Avoids context pollution
+- Enables progressive disclosure
+- Mirrors human cognitive patterns
+- Scales to large knowledge bases
+
+**Trade-offs:**
+- Slightly slower than pre-computed retrieval
+- Requires well-designed retrieval logic
+
+#### Pre-Inference Retrieval (Traditional RAG)
+
+Surface context via embeddings before inference. Best suited for:
+- Static, unchanging content
+- Well-defined retrieval queries
+- Latency-sensitive applications
+
+#### Hybrid Approach
+
+Retrieve some data upfront; enable autonomous exploration for the rest.
+
+**Principle**: *"Do the simplest thing that works."*
+
+### 3.6 Progressive Disclosure Architecture
+
+Progressive disclosure treats context as a finite resource, revealing information in layers based on agent needs.
+
+**The Three-Layer Architecture:**
+
+| Layer | Token Budget | Content | Purpose |
+|-------|--------------|---------|---------|
+| **Index Layer** | ~800 tokens | Titles, timestamps, categories, token counts | Quick scanning |
+| **Context Layer** | ~2,000 tokens | Chronological narrative around specific observations | Situational awareness |
+| **Details Layer** | ~500 tokens each | Full observation content | Deep dive when needed |
+
+**Implementation Pattern:**
+```
+Phase 1: Show index (50 observations, ~800 tokens)
+Phase 2: Agent identifies 3 relevant observations
+Phase 3: Fetch details for those 3 only (~1,500 tokens)
+Total: ~2,300 tokens vs 35,000 tokens (93% reduction)
+```
+
+**Key Efficiency Metrics:**
+
+| Metric | Target | Description |
+|--------|--------|-------------|
+| Waste Ratio | >80% relevant | Relevant tokens / total tokens consumed |
+| Selective Fetching | 2-3 per session | Observations fetched vs available |
+| Time-to-Relevance | <30 seconds | Time to find relevant context |
+
+**Why Not Smart Pre-Fetching?**
+Agents understand their task context better than any prediction system. Pre-fetching assumes we know relevance better than the current task requires—we don't.
+
+### 3.7 Long-Horizon Task Techniques
+
+For tasks spanning extended interactions, use these techniques to maintain coherence:
+
+#### 1. Compaction
+
+Summarize conversations nearing context limits; reinitiate with compressed context.
+
+```python
+def compact_context(messages: list, max_tokens: int) -> list:
+    """Prioritize recall first, then eliminate superfluous content."""
+    # Step 1: Clear old tool outputs (low-hanging optimization)
+    messages = [m for m in messages if not is_stale_tool_output(m)]
+
+    # Step 2: Summarize older exchanges
+    if estimate_tokens(messages) > max_tokens:
+        older = messages[:-10]  # Keep recent 10 exchanges
+        summary = summarize_exchanges(older)
+        messages = [summary] + messages[-10:]
+
+    return messages
+```
+
+#### 2. Structured Note-Taking (Agentic Memory)
+
+Agents persist notes outside context windows for multi-hour coherent strategies:
+
+```markdown
+## Agent Scratchpad (NOTES.md)
+
+### Task State
+- Current phase: Implementation
+- Completed: Auth schema design, OAuth flow
+- Blocked: JWT key rotation (awaiting security review)
+
+### Key Decisions
+- Using RS256 for JWT signing (security requirement)
+- Session timeout: 30 minutes (business requirement)
+
+### Gotchas Discovered
+- Redis cluster requires sticky sessions
+- Rate limiter must be before auth middleware
+```
+
+Benefits:
+- Minimal token overhead
+- Maintains strategic coherence
+- Survives context window resets
+- Enables handoffs between sessions
+
+#### 3. Sub-Agent Architectures
+
+Specialized sub-agents handle focused tasks with isolated context windows:
+
+```
+Main Agent (Orchestrator)
+├─ Sub-Agent 1: Research (isolated 200K window)
+│  └─ Returns: 1,500 token summary
+├─ Sub-Agent 2: Implementation (isolated 200K window)
+│  └─ Returns: 2,000 token summary
+└─ Sub-Agent 3: Testing (isolated 200K window)
+   └─ Returns: 1,000 token summary
+
+Main agent receives: 4,500 tokens (not 600K+)
+```
+
+### 3.8 Anti-Patterns to Avoid
+
+| Anti-Pattern | Problem | Solution |
+|--------------|---------|----------|
+| Cramming everything into prompts | Context rot, reduced accuracy | Progressive disclosure |
+| Brittle if-else logic | Breaks on novel cases | Flexible heuristics |
+| Bloated, overlapping tool sets | Tool selection confusion | Focused, distinct tools |
+| Exhaustive edge case examples | Wastes tokens on rare cases | Canonical diverse examples |
+| Assuming larger windows solve everything | Quadratic attention cost | Optimize signal-to-noise |
+| Ignoring context pollution | Accumulated noise degrades output | Regular context compaction |
+
+---
+
+## 4. Context Window Optimization
+
+### 4.1 MCP Tool Search (Lazy Loading)
 
 Claude Code's MCP Tool Search addresses context bloat from tool definitions:
 
@@ -366,24 +591,72 @@ Claude Code's MCP Tool Search addresses context bloat from tool definitions:
 
 **See:** [MCP Registry Best Practices - Section 12](13-MCP-Registry-Best-Practices.md) for implementation details.
 
-### 3.2 Progressive Skill Loading
+### 4.2 Progressive Skill Loading
 
-Similar to MCP Tool Search, skills should be loaded progressively:
+Apply progressive disclosure principles to skill loading:
 
 **Pattern:**
-1. Start with minimal context (core capabilities)
-2. Load relevant skills as task requires
-3. Unload skills when phase completes
-4. Maintain focused attention throughout
+```
+Phase 1: Analysis (no skills loaded)
+  └─ Agent reads requirements, explores codebase
+  └─ Token budget: ~5K baseline
+
+Phase 2: Design (load architecture-skill)
+  └─ Pattern analysis, contract definition
+  └─ Token budget: +3K for skill
+
+Phase 3: Implementation (load builder-skill)
+  └─ TDD workflow, git operations
+  └─ Token budget: +4K for skill
+
+Phase 4: Validation (load validator-skill)
+  └─ Test generation, quality checks
+  └─ Token budget: +3K for skill
+
+Total: ~15K tokens loaded progressively
+vs. All skills upfront: ~25K tokens
+Savings: 40%
+```
 
 **Benefits:**
 - Reduced "distraction" from irrelevant context
-- Better instruction following
+- Better instruction following (focused attention)
 - More context available for actual work
+- Skills loaded only when their phase begins
+
+### 4.3 Waste Ratio Monitoring
+
+Track context efficiency using waste ratio:
+
+```python
+def calculate_waste_ratio(session: Session) -> float:
+    """
+    Waste Ratio = Relevant Tokens / Total Tokens Consumed
+    Target: >80%
+    """
+    total_tokens = session.total_context_tokens
+    relevant_tokens = session.tokens_actually_used
+
+    waste_ratio = relevant_tokens / total_tokens
+
+    if waste_ratio < 0.8:
+        log.warning(f"High context waste: {waste_ratio:.1%}")
+        suggest_context_optimization(session)
+
+    return waste_ratio
+```
+
+**Monitoring Dashboard:**
+
+| Metric | Poor | Acceptable | Good | Excellent |
+|--------|------|------------|------|-----------|
+| Waste Ratio | <50% | 50-70% | 70-85% | >85% |
+| Selective Fetching | >10 | 5-10 | 3-5 | 1-3 |
+| Context Resets | >5/hr | 2-5/hr | 1-2/hr | <1/hr |
 
 ---
 
-## 4. Key Recommendations
+## 5. Key Recommendations
 
 ### For API Cost Reduction
 
@@ -405,6 +678,16 @@ Similar to MCP Tool Search, skills should be loaded progressively:
 2. **Use MCP Tool Search** to reduce context noise
 3. **Progressive skill loading** for focused attention
 4. **Clear, action-oriented descriptions** for tool/skill discoverability
+5. **Apply context engineering** principles to all agent workflows
+
+### For Context Efficiency
+
+1. **Implement progressive disclosure** with three-layer architecture
+2. **Monitor waste ratio** (target >80% relevant tokens)
+3. **Use just-in-time context retrieval** instead of upfront loading
+4. **Design tools for context efficiency** (self-contained, unambiguous)
+5. **Implement structured note-taking** for long-horizon tasks
+6. **Use sub-agent architectures** to isolate context windows
 
 ### Pitfalls to Avoid
 
@@ -413,10 +696,13 @@ Similar to MCP Tool Search, skills should be loaded progressively:
 3. **Don't forget invalidation** (stale responses erode trust)
 4. **Don't cache everything** (personalized, time-sensitive, transactional)
 5. **Don't apply prompt repetition** to reasoning tasks
+6. **Don't cram everything into prompts** (use progressive disclosure)
+7. **Don't assume larger context windows solve efficiency** (quadratic attention cost)
+8. **Don't ignore context pollution** over extended interactions
 
 ---
 
-## 5. Production Checklist
+## 6. Production Checklist
 
 ### Semantic Caching Deployment
 
@@ -443,11 +729,25 @@ Similar to MCP Tool Search, skills should be loaded progressively:
 - [ ] Implement progressive skill loading
 - [ ] Monitor tool/skill usage patterns
 
+### Context Engineering
+
+- [ ] Implement three-layer progressive disclosure (index → context → details)
+- [ ] Set up waste ratio monitoring (target >80%)
+- [ ] Design tools following context efficiency principles
+- [ ] Implement just-in-time context retrieval for dynamic data
+- [ ] Create structured note-taking system for agent memory (NOTES.md pattern)
+- [ ] Configure sub-agent architectures with summary handoffs
+- [ ] Establish context compaction procedures for long sessions
+- [ ] Review system prompts for "right altitude" balance
+- [ ] Audit for context engineering anti-patterns
+
 ---
 
-**Document Version**: 1.0.0
+**Document Version**: 1.1.0
 **Last Updated**: January 2026
 **Sources**:
 - VentureBeat: "Claude Code just got updated with one of the most-requested user features"
 - VentureBeat: "Why your LLM bill is exploding—and how semantic caching can cut it by 73%"
 - Google Research: "Prompt Repetition Improves Non-Reasoning LLMs"
+- Claude-Mem Documentation: "Context Engineering for AI Agents"
+- Claude-Mem Documentation: "Progressive Disclosure"

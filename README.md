@@ -1086,6 +1086,7 @@ version: 1.0.0
 | **[github-copilot](skills-templates/github-copilot/)** | AI coding assistant with suggestions, chat, code review | Using GitHub Copilot features, IDE integration, custom instructions |
 | **[github-pages](skills/github-pages/SKILL.md)** | GitHub Pages static site hosting | Creating sites, custom domains, Jekyll themes, GitHub Actions deployment |
 | **[gitbook](skills/gitbook/SKILL.md)** | GitBook documentation platform | Spaces, Git sync, custom domains, OpenAPI, change requests |
+| **[google-structured-data](skills/google-structured-data/SKILL.md)** | Schema.org markup for Google Search rich results | JSON-LD templates, Article/Product/Event/FAQ markup, JavaScript generation |
 | **[image-enhancer](skills-templates/image-enhancer/)** | Image quality improvement | Enhancing screenshots or images for presentations |
 | **[internal-comms](skills-templates/internal-comms/)** | Internal communications templates | Writing status reports, newsletters, or company updates |
 | **[invoice-organizer](skills-templates/invoice-organizer/)** | Invoice and receipt organization | Tax preparation or bookkeeping |
