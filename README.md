@@ -1096,6 +1096,7 @@ version: 1.0.0
 | **[fastapi](skills-templates/fastapi/)** | FastAPI modern Python web framework | Building APIs, async endpoints, dependency injection, Python backend development |
 | **file-categorization** | Categorize files as Command/Agent/Skill/Doc | Processing files in integration pipelines |
 | **[file-organizer](skills-templates/file-organizer/)** | Intelligent file organization | Organizing files, finding duplicates, or cleaning up directories |
+| **[flyio](skills-templates/flyio/)** | Deploy and scale full-stack applications globally on Fly.io platform | When deploying web applications, APIs, databases, or microservices that need global distribution and automatic scaling |
 | **[github-copilot](skills-templates/github-copilot/)** | AI coding assistant with suggestions, chat, code review | Using GitHub Copilot features, IDE integration, custom instructions |
 | **[github-pages](skills/github-pages/SKILL.md)** | GitHub Pages static site hosting | Creating sites, custom domains, Jekyll themes, GitHub Actions deployment |
 | **[gitbook](skills/gitbook/SKILL.md)** | GitBook documentation platform | Spaces, Git sync, custom domains, OpenAPI, change requests |

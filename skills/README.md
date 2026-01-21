@@ -42,6 +42,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 | **[documentation-update](documentation-update/SKILL.md)** | Reusable logic for updating repository documentation (README, indices, tables) while preserving formatting | Adding entries to README tables after integration, maintaining indices |
 | **[dokploy-mcp](../skills-templates/dokploy-mcp/SKILL.md)** | AI-driven deployment management using Dokploy MCP server with 43 tools for projects, applications, and databases | Deploying apps, provisioning PostgreSQL databases, multi-environment management, CI/CD integration |
 | **[file-categorization](file-categorization/SKILL.md)** | Categorizes files as Command, Agent, Skill, or Documentation based on structure and content analysis | Processing files in integration pipelines, auto-routing files |
+| **[flyio](../skills-templates/flyio/SKILL.md)** | Deploy and scale full-stack applications globally on Fly.io platform | Deploying web applications, APIs, databases, microservices with global distribution and automatic scaling |
 
 ### Design & UI/UX Skills
 
@@ -275,11 +276,11 @@ All skills in this repository meet these criteria:
 
 ## Statistics
 
-**Total Skills**: 28
+**Total Skills**: 29
 - Bitcoin Mining: 8
 - Development Workflow: 4
 - Design & UI/UX: 1
-- Integration & Automation: 2
+- Integration & Automation: 3
 - Content & Documentation: 4
 - Data Storage & Upload: 2
 - Marketing & SEO: 2
@@ -296,6 +297,15 @@ All skills in this repository meet these criteria:
 ## Recent Additions
 
 **January 2026**:
+- ✨ **flyio** (2026-01-21) - Fly.io deployment platform skill
+  - Complete deployment workflow (install → launch → scale)
+  - 30+ common flyctl commands with examples
+  - fly.toml configuration reference
+  - Node.js Express API deployment example
+  - Best practices for performance, security, cost, and reliability
+  - Troubleshooting guide
+  - Version 1.0 with 52 KB (4 files)
+
 - ✨ **google-structured-data** (2026-01-18) - Schema.org markup skill
   - 8 structured data types (Article, Product, LocalBusiness, FAQ, Event, Breadcrumb, Video, Recipe)
   - JSON-LD templates with required/recommended properties
@@ -342,6 +352,6 @@ All skills in this repository meet these criteria:
 
 ---
 
-**Last Updated**: January 18, 2026
+**Last Updated**: January 21, 2026
 **Maintained By**: Claude Command and Control Repository
-**Version**: 2.4.0
+**Version**: 2.5.0
