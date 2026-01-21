@@ -1,0 +1,113 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "^http://localhost"
+    },
+    {
+      "pattern": "^https://localhost"
+    },
+    {
+      "pattern": "^http://127.0.0.1"
+    },
+    {
+      "pattern": "^https://127.0.0.1"
+    },
+    {
+      "pattern": "^http://example.com"
+    },
+    {
+      "pattern": "^https://example.com"
+    },
+    {
+      "pattern": "^https?://.*\\.example\\.com"
+    },
+    {
+      "pattern": "^https://docs.example.com"
+    },
+    {
+      "pattern": "^http://your-domain.com"
+    },
+    {
+      "pattern": "^https://your-domain.com"
+    },
+    {
+      "pattern": "^mailto:"
+    },
+    {
+      "pattern": "^https://www.reddit.com"
+    },
+    {
+      "pattern": "^https://reddit.com"
+    },
+    {
+      "pattern": "^https://.*\\.substack\\.com"
+    },
+    {
+      "pattern": "^[^/]*\\.md$"
+    },
+    {
+      "pattern": "^LICENSE$"
+    },
+    {
+      "pattern": "^CONTRIBUTING\\.md$"
+    },
+    {
+      "pattern": "^templates/"
+    },
+    {
+      "pattern": "^skills/"
+    },
+    {
+      "pattern": "^skills-templates/"
+    },
+    {
+      "pattern": "^docs/"
+    },
+    {
+      "pattern": ".*badge\\.svg$"
+    }
+  ],
+  "replacementPatterns": [
+    {
+      "pattern": "^/",
+      "replacement": "{{BASEURL}}/"
+    }
+  ],
+  "httpHeaders": [
+    {
+      "urls": ["https://github.com"],
+      "headers": {
+        "Accept": "text/html",
+        "User-Agent": "Mozilla/5.0 (compatible; link-checker/1.0)"
+      }
+    },
+    {
+      "urls": ["https://www.anthropic.com"],
+      "headers": {
+        "Accept": "text/html",
+        "User-Agent": "Mozilla/5.0 (compatible; link-checker/1.0)"
+      }
+    },
+    {
+      "urls": ["https://www.reddit.com", "https://reddit.com"],
+      "headers": {
+        "Accept": "text/html",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "urls": ["https://substack.com", "https://aimaker.substack.com"],
+      "headers": {
+        "Accept": "text/html",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    }
+  ],
+  "timeout": "20s",
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackRetryDelay": "30s",
+  "aliveStatusCodes": [200, 206, 301, 302, 307, 308, 999],
+  "ignoreDisable": false,
+  "verbose": false
+}

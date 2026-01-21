@@ -1,0 +1,307 @@
+name: PR Validation
+
+# Automated PR quality checks with Claude code review
+# Non-blocking advisory feedback
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - 'release/**'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-changes:
+    name: Validate PR Changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for proper diffing
+
+      - name: Detect Changed Files
+        id: changed-files
+        run: |
+          # Get list of changed files
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          # Count by type (using wc -l instead of grep -c to avoid issues with empty results)
+          COMMAND_COUNT=$(echo "$CHANGED_FILES" | grep ".claude/commands/" | wc -l || echo "0")
+          AGENT_COUNT=$(echo "$CHANGED_FILES" | grep ".claude/agents/" | wc -l || echo "0")
+          SKILL_COUNT=$(echo "$CHANGED_FILES" | grep "skills/" | wc -l || echo "0")
+          DOC_COUNT=$(echo "$CHANGED_FILES" | grep ".md$" | wc -l || echo "0")
+          WORKFLOW_COUNT=$(echo "$CHANGED_FILES" | grep ".github/workflows/" | wc -l || echo "0")
+
+          echo "command_count=$COMMAND_COUNT" >> $GITHUB_OUTPUT
+          echo "agent_count=$AGENT_COUNT" >> $GITHUB_OUTPUT
+          echo "skill_count=$SKILL_COUNT" >> $GITHUB_OUTPUT
+          echo "doc_count=$DOC_COUNT" >> $GITHUB_OUTPUT
+          echo "workflow_count=$WORKFLOW_COUNT" >> $GITHUB_OUTPUT
+
+          # Save changed files list
+          echo "$CHANGED_FILES" > /tmp/changed-files.txt
+
+      - name: Validate Command Files
+        if: steps.changed-files.outputs.command_count > 0
+        id: validate-commands
+        continue-on-error: true
+        run: |
+          echo "Validating command files..."
+
+          ISSUES=""
+          while IFS= read -r file; do
+            if [[ "$file" =~ \.claude/commands/.*\.md$ ]]; then
+              echo "Checking: $file"
+
+              # Check for required frontmatter
+              if ! grep -q "^---$" "$file"; then
+                ISSUES+="❌ Missing frontmatter: $file\n"
+              fi
+
+              # Check for allowed-tools
+              if ! grep -q "allowed-tools:" "$file"; then
+                ISSUES+="⚠️  Missing allowed-tools: $file\n"
+              fi
+
+              # Check for version
+              if ! grep -q "^version:" "$file"; then
+                ISSUES+="⚠️  Missing version: $file\n"
+              fi
+
+              # Check for description
+              if ! grep -q "^description:" "$file"; then
+                ISSUES+="⚠️  Missing description: $file\n"
+              fi
+            fi
+          done < /tmp/changed-files.txt
+
+          if [ -n "$ISSUES" ]; then
+            echo "validation_issues<<EOF" >> $GITHUB_OUTPUT
+            echo -e "$ISSUES" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            echo "has_issues=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_issues=false" >> $GITHUB_OUTPUT
+            echo "✅ All command files validated successfully"
+          fi
+
+      - name: Validate Agent Files
+        if: steps.changed-files.outputs.agent_count > 0
+        id: validate-agents
+        continue-on-error: true
+        run: |
+          echo "Validating agent configuration files..."
+
+          ISSUES=""
+          while IFS= read -r file; do
+            if [[ "$file" =~ \.claude/agents/.*\.md$ ]]; then
+              echo "Checking: $file"
+
+              # Check for role definition
+              if ! grep -q "^role:" "$file"; then
+                ISSUES+="⚠️  Missing role definition: $file\n"
+              fi
+
+              # Check for model specification
+              if ! grep -q "^model:" "$file"; then
+                ISSUES+="⚠️  Missing model specification: $file\n"
+              fi
+
+              # Check for permissions
+              if ! grep -q "permissions:" "$file"; then
+                ISSUES+="⚠️  Missing permissions: $file\n"
+              fi
+
+              # Check for responsibilities
+              if ! grep -q "responsibilities:" "$file"; then
+                ISSUES+="⚠️  Missing responsibilities: $file\n"
+              fi
+            fi
+          done < /tmp/changed-files.txt
+
+          if [ -n "$ISSUES" ]; then
+            echo "validation_issues<<EOF" >> $GITHUB_OUTPUT
+            echo -e "$ISSUES" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            echo "has_issues=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_issues=false" >> $GITHUB_OUTPUT
+            echo "✅ All agent files validated successfully"
+          fi
+
+      - name: Validate Skill Files
+        if: steps.changed-files.outputs.skill_count > 0
+        id: validate-skills
+        continue-on-error: true
+        run: |
+          echo "Validating skill files..."
+
+          ISSUES=""
+          while IFS= read -r file; do
+            if [[ "$file" =~ skills/.*SKILL\.md$ ]]; then
+              echo "Checking: $file"
+
+              # Check for skill metadata
+              if ! grep -q "^---$" "$file"; then
+                ISSUES+="❌ Missing frontmatter: $file\n"
+              fi
+
+              # Check for name
+              if ! grep -q "^name:" "$file"; then
+                ISSUES+="⚠️  Missing name: $file\n"
+              fi
+
+              # Check for description
+              if ! grep -q "^description:" "$file"; then
+                ISSUES+="⚠️  Missing description: $file\n"
+              fi
+
+              # Check for checklist or workflow
+              if ! grep -q "checklist:" "$file" && ! grep -q "## Workflow" "$file"; then
+                ISSUES+="⚠️  Missing checklist or workflow: $file\n"
+              fi
+            fi
+          done < /tmp/changed-files.txt
+
+          if [ -n "$ISSUES" ]; then
+            echo "validation_issues<<EOF" >> $GITHUB_OUTPUT
+            echo -e "$ISSUES" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            echo "has_issues=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_issues=false" >> $GITHUB_OUTPUT
+            echo "✅ All skill files validated successfully"
+          fi
+
+      - name: Setup Claude CLI
+        if: steps.changed-files.outputs.command_count > 0 || steps.changed-files.outputs.agent_count > 0
+        uses: ./.github/actions/setup-claude
+        with:
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          cache-enabled: 'true'
+
+      - name: Run Claude Code Review
+        if: steps.changed-files.outputs.command_count > 0 || steps.changed-files.outputs.agent_count > 0
+        id: code-review
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          echo "Running Claude code review..."
+
+          # Note: Adjust command based on actual Claude CLI syntax
+          claude run --command /code-review > /tmp/review-output.log 2>&1 || {
+            echo "Code review command failed (non-blocking)"
+          }
+
+          # Check if review generated output
+          if [ -f /tmp/review-output.log ]; then
+            REVIEW_CONTENT=$(cat /tmp/review-output.log)
+            echo "review_generated=true" >> $GITHUB_OUTPUT
+
+            # Truncate if too long for PR comment
+            if [ ${#REVIEW_CONTENT} -gt 60000 ]; then
+              REVIEW_CONTENT="${REVIEW_CONTENT:0:60000}...\n\n*Review truncated. See full output in workflow artifacts.*"
+            fi
+
+            # Escape for GitHub Actions
+            REVIEW_CONTENT="${REVIEW_CONTENT//'%'/'%25'}"
+            REVIEW_CONTENT="${REVIEW_CONTENT//$'\n'/'%0A'}"
+            REVIEW_CONTENT="${REVIEW_CONTENT//$'\r'/'%0D'}"
+
+            echo "review_content=$REVIEW_CONTENT" >> $GITHUB_OUTPUT
+          else
+            echo "review_generated=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload Review Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-validation-logs
+          path: /tmp/review-output.log
+          retention-days: 30
+
+      - name: Post Validation Summary
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const commandIssues = '${{ steps.validate-commands.outputs.has_issues }}' === 'true';
+            const agentIssues = '${{ steps.validate-agents.outputs.has_issues }}' === 'true';
+            const skillIssues = '${{ steps.validate-skills.outputs.has_issues }}' === 'true';
+            const hasAnyIssues = commandIssues || agentIssues || skillIssues;
+
+            let body = `## 🔍 PR Validation Report\n\n`;
+            body += `**Status:** ${hasAnyIssues ? '⚠️  Issues Detected' : '✅ All Checks Passed'}\n\n`;
+
+            body += `### Changes Summary\n\n`;
+            body += `| Type | Count |\n`;
+            body += `|------|-------|\n`;
+            body += `| Commands | ${{ steps.changed-files.outputs.command_count }} |\n`;
+            body += `| Agents | ${{ steps.changed-files.outputs.agent_count }} |\n`;
+            body += `| Skills | ${{ steps.changed-files.outputs.skill_count }} |\n`;
+            body += `| Documentation | ${{ steps.changed-files.outputs.doc_count }} |\n`;
+            body += `| Workflows | ${{ steps.changed-files.outputs.workflow_count }} |\n\n`;
+
+            // Command validation results
+            if ('${{ steps.changed-files.outputs.command_count }}' > '0') {
+              body += `### Command Validation\n\n`;
+              if (commandIssues) {
+                body += `⚠️  **Issues Found:**\n\n`;
+                body += `\`\`\`\n${{ steps.validate-commands.outputs.validation_issues }}\`\`\`\n\n`;
+              } else {
+                body += `✅ All command files are properly formatted\n\n`;
+              }
+            }
+
+            // Agent validation results
+            if ('${{ steps.changed-files.outputs.agent_count }}' > '0') {
+              body += `### Agent Validation\n\n`;
+              if (agentIssues) {
+                body += `⚠️  **Issues Found:**\n\n`;
+                body += `\`\`\`\n${{ steps.validate-agents.outputs.validation_issues }}\`\`\`\n\n`;
+              } else {
+                body += `✅ All agent files are properly configured\n\n`;
+              }
+            }
+
+            // Skill validation results
+            if ('${{ steps.changed-files.outputs.skill_count }}' > '0') {
+              body += `### Skill Validation\n\n`;
+              if (skillIssues) {
+                body += `⚠️  **Issues Found:**\n\n`;
+                body += `\`\`\`\n${{ steps.validate-skills.outputs.validation_issues }}\`\`\`\n\n`;
+              } else {
+                body += `✅ All skill files are properly structured\n\n`;
+              }
+            }
+
+            // Claude code review
+            if ('${{ steps.code-review.outputs.review_generated }}' === 'true') {
+              body += `### 🤖 Claude Code Review\n\n`;
+              body += `${{ steps.code-review.outputs.review_content }}\n\n`;
+            }
+
+            body += `---\n`;
+            body += `*This is an automated validation. Issues are advisory and do not block merging.*\n`;
+            body += `*Full logs available in [workflow artifacts](${context.payload.repository.html_url}/actions/runs/${context.runId})*\n`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: body
+            });

@@ -7,6 +7,15 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/enuno/claude-command-and-control)
 
+### GitHub Actions Status
+
+[![Maintenance Scan](https://github.com/enuno/claude-command-and-control/actions/workflows/maintenance-scan.yml/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/maintenance-scan.yml)
+[![Integration Pipeline](https://github.com/enuno/claude-command-and-control/actions/workflows/integration-pipeline.yml/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/integration-pipeline.yml)
+[![Security Scanning](https://github.com/enuno/claude-command-and-control/actions/workflows/security-scanning.yml/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/security-scanning.yml)
+[![PR Validation](https://github.com/enuno/claude-command-and-control/actions/workflows/pr-validation.yml/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/pr-validation.yml)
+[![Link Checker](https://github.com/enuno/claude-command-and-control/actions/workflows/link-checker.yml/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/link-checker.yml)
+[![Research Monitor](https://github.com/enuno/claude-command-and-control/actions/workflows/research-monitor.yml/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/research-monitor.yml)
+
 ---
 
 ## 📑 Table of Contents
@@ -39,6 +48,10 @@
   - [Maintenance System](#what-is-the-maintenance-system)
   - [Directory Structure](#directory-structure)
   - [Integration Manager Agent](#integration-manager-agent)
+- [Automation & CI/CD](#-automation--cicd)
+  - [Automated Workflows](#automated-workflows)
+  - [Setup & Configuration](#setup--configuration)
+  - [Cost & Monitoring](#cost--monitoring)
 
 ### Architecture & Patterns
 - [Agent Skills vs Multi-Agent Architecture](#-agent-skills-vs-multi-agent-architecture)
@@ -1083,6 +1096,7 @@ version: 1.0.0
 | **[fastapi](skills-templates/fastapi/)** | FastAPI modern Python web framework | Building APIs, async endpoints, dependency injection, Python backend development |
 | **file-categorization** | Categorize files as Command/Agent/Skill/Doc | Processing files in integration pipelines |
 | **[file-organizer](skills-templates/file-organizer/)** | Intelligent file organization | Organizing files, finding duplicates, or cleaning up directories |
+| **[flyio](skills-templates/flyio/)** | Deploy and scale full-stack applications globally on Fly.io platform | When deploying web applications, APIs, databases, or microservices that need global distribution and automatic scaling |
 | **[github-copilot](skills-templates/github-copilot/)** | AI coding assistant with suggestions, chat, code review | Using GitHub Copilot features, IDE integration, custom instructions |
 | **[github-pages](skills/github-pages/SKILL.md)** | GitHub Pages static site hosting | Creating sites, custom domains, Jekyll themes, GitHub Actions deployment |
 | **[gitbook](skills/gitbook/SKILL.md)** | GitBook documentation platform | Spaces, Git sync, custom domains, OpenAPI, change requests |
@@ -1652,6 +1666,114 @@ See: [agents-templates/integration-manager.md](agents-templates/integration-mana
 ✅ **Audit Trail** - Complete history of all changes
 
 ✅ **Repository Health** - Proactive staleness detection
+
+---
+
+## 🤖 Automation & CI/CD
+
+**NEW**: Comprehensive GitHub Actions workflows for automated maintenance, security, and integration.
+
+### Automated Workflows
+
+The repository includes 6 production-ready GitHub Actions workflows:
+
+#### Core Automation
+
+**🔧 Maintenance Scan**
+- **Schedule:** Monthly (1st @ 2 AM UTC)
+- **Purpose:** Identifies stale files and generates health reports
+- **Output:** GitHub Issue with actionable maintenance tasks
+- **Cost:** ~$0.03/month
+
+**🔄 Integration Pipeline**
+- **Schedule:** Hourly during work hours (Mon-Fri 9 AM-5 PM)
+- **Trigger:** New files in `INTEGRATION/incoming/`
+- **Pipeline:** Scan → Validate → Process → Create PR
+- **Output:** Automated PR for validated files
+- **Cost:** ~$1.80/month
+
+**📚 Research Monitor**
+- **Schedule:** Weekly (Monday @ 9 AM UTC)
+- **Sources:** Anthropic blog, SDK releases, MCP servers
+- **Output:** GitHub Issue with research summary
+- **Downloads:** New content to `INTEGRATION/incoming/`
+- **Cost:** ~$0.06/month
+
+#### Security & Quality
+
+**🔒 Security Scanning**
+- **Schedule:** Daily @ 3 AM UTC + on push/PR
+- **Tools:** CodeQL, TruffleHog, ShellCheck, Dependency Review
+- **Output:** Security alerts + issues for findings
+- **Cost:** Free (GitHub native)
+
+**✅ PR Validation**
+- **Trigger:** All pull requests
+- **Validates:** Commands, agents, skills, structure
+- **Includes:** Claude code review
+- **Mode:** Non-blocking advisory
+- **Cost:** ~$1.20/month
+
+**🔗 Link Checker**
+- **Schedule:** Weekly (Wednesday @ 10 AM UTC)
+- **Validates:** All markdown links
+- **Output:** GitHub Issue if broken links found
+- **Cost:** Free
+
+### Setup & Configuration
+
+#### Required Secrets
+
+Configure in repository settings:
+
+```
+Settings → Secrets and variables → Actions
+
+Name: ANTHROPIC_API_KEY
+Value: <your-anthropic-api-key>
+```
+
+#### Testing Workflows
+
+All workflows support manual dispatch:
+
+1. Go to **Actions** tab
+2. Select workflow from sidebar
+3. Click **Run workflow**
+4. Configure inputs (if any)
+5. Click **Run workflow**
+
+### Cost & Monitoring
+
+**Total Monthly Cost:** ~$3.09 in Anthropic API usage + Free GitHub Actions
+
+**Monitoring:**
+- Weekly: Review failed workflows, triage issues, merge PRs
+- Monthly: Review maintenance report, audit security alerts
+- Quarterly: Update configurations, rotate API key
+
+**Benefits:**
+- ✅ **Automated Health Checks** - Catches stale content early
+- ✅ **Security First** - Daily scans with multiple tools
+- ✅ **Quality Gates** - Automated PR validation
+- ✅ **Research Tracking** - Stay current with Claude ecosystem
+- ✅ **Cost Effective** - ~$3/month for comprehensive automation
+- ✅ **Zero Maintenance** - Runs autonomously with human approval gates
+
+### Workflow Files
+
+All automation is in `.github/`:
+- `workflows/maintenance-scan.yml` - Monthly health checks
+- `workflows/integration-pipeline.yml` - Content processing
+- `workflows/security-scanning.yml` - Security audits
+- `workflows/pr-validation.yml` - PR quality checks
+- `workflows/research-monitor.yml` - Research tracking
+- `workflows/link-checker.yml` - Link validation
+- `actions/setup-claude/` - Composite action for Claude CLI
+- `dependabot.yml` - Dependency updates
+- `markdown-link-check.json` - Link checker config
+
+See [CLAUDE.md#github-actions-automation](CLAUDE.md#github-actions-automation) for detailed documentation.
 
 ---
 

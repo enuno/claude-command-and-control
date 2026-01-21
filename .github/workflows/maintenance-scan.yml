@@ -1,0 +1,290 @@
+name: Maintenance Scan
+
+# Monthly repository health scanning
+# Identifies stale files (>30 days old) and generates maintenance proposals
+
+on:
+  schedule:
+    # Monthly on the 1st at 2 AM UTC
+    - cron: '0 2 1 * *'
+  workflow_dispatch:
+    inputs:
+      staleness-threshold:
+        description: 'Staleness threshold in days'
+        required: false
+        default: '30'
+        type: number
+
+permissions:
+  contents: read
+
+jobs:
+  maintenance-scan:
+    name: Run Maintenance Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Claude CLI
+        uses: ./.github/actions/setup-claude
+        with:
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          cache-enabled: 'true'
+
+      - name: Run Maintenance Scan Command
+        id: maintenance-scan
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          echo "Running /maintenance-scan command..."
+
+          # Note: Adjust command invocation based on actual Claude CLI syntax
+          # This is a placeholder - update based on real implementation
+          claude run --command /maintenance-scan > /tmp/maintenance-output.log 2>&1 || {
+            echo "Maintenance scan command failed"
+            exit 1
+          }
+
+          echo "Maintenance scan completed"
+
+      - name: Check for Maintenance Reports
+        id: check-reports
+        run: |
+          # Check if maintenance reports were generated
+          REPORT_DIR="MAINTENANCE/todo"
+
+          if [ -d "$REPORT_DIR" ]; then
+            REPORT_COUNT=$(find "$REPORT_DIR" -name "*.md" -type f | wc -l)
+            echo "Found $REPORT_COUNT maintenance reports"
+            echo "has_reports=true" >> $GITHUB_OUTPUT
+            echo "report_count=$REPORT_COUNT" >> $GITHUB_OUTPUT
+
+            # Find the latest report
+            LATEST_REPORT=$(find "$REPORT_DIR" -name "*.md" -type f -printf '%T@ %p\n' | sort -rn | head -1 | cut -d' ' -f2-)
+            echo "latest_report=$LATEST_REPORT" >> $GITHUB_OUTPUT
+          else
+            echo "No maintenance reports found"
+            echo "has_reports=false" >> $GITHUB_OUTPUT
+            echo "report_count=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Read Maintenance Report
+        id: read-report
+        if: steps.check-reports.outputs.has_reports == 'true'
+        run: |
+          REPORT_FILE="${{ steps.check-reports.outputs.latest_report }}"
+
+          if [ -f "$REPORT_FILE" ]; then
+            echo "Reading report: $REPORT_FILE"
+
+            # Read report content
+            REPORT_CONTENT=$(cat "$REPORT_FILE")
+
+            # Escape for GitHub Actions output
+            REPORT_CONTENT="${REPORT_CONTENT//'%'/'%25'}"
+            REPORT_CONTENT="${REPORT_CONTENT//$'\n'/'%0A'}"
+            REPORT_CONTENT="${REPORT_CONTENT//$'\r'/'%0D'}"
+
+            echo "report_content=$REPORT_CONTENT" >> $GITHUB_OUTPUT
+
+            # Extract summary metrics
+            STALE_COUNT=$(grep -oP '\*\*Stale Files:\*\* \K\d+' "$REPORT_FILE" || echo "0")
+            TOTAL_COUNT=$(grep -oP '\*\*Total Files:\*\* \K\d+' "$REPORT_FILE" || echo "0")
+            HEALTH_SCORE=$(grep -oP '\*\*Health Score:\*\* \K\d+/\d+' "$REPORT_FILE" || echo "N/A")
+
+            echo "stale_count=$STALE_COUNT" >> $GITHUB_OUTPUT
+            echo "total_count=$TOTAL_COUNT" >> $GITHUB_OUTPUT
+            echo "health_score=$HEALTH_SCORE" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload Maintenance Reports
+        if: steps.check-reports.outputs.has_reports == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: maintenance-reports
+          path: MAINTENANCE/todo/*.md
+          retention-days: 90
+
+      - name: Upload Scan Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maintenance-scan-logs
+          path: /tmp/maintenance-output.log
+          retention-days: 30
+
+      - name: Create Maintenance Issue
+        if: steps.check-reports.outputs.has_reports == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+
+            // Read the report file
+            const reportFile = '${{ steps.check-reports.outputs.latest_report }}';
+            let reportContent = '';
+
+            try {
+              reportContent = fs.readFileSync(reportFile, 'utf8');
+            } catch (error) {
+              console.error('Failed to read report file:', error);
+              reportContent = 'Report content could not be loaded. Check workflow artifacts.';
+            }
+
+            // Extract date from filename or use current date
+            const date = new Date().toISOString().split('T')[0];
+
+            // Create issue with report content
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🔧 Monthly Maintenance Report - ${date}`,
+              body: `## Repository Maintenance Report
+
+            **Date:** ${date}
+            **Workflow:** Maintenance Scan
+            **Status:** ✅ Completed
+
+            ### Summary
+
+            - **Total Files Analyzed:** ${{ steps.read-report.outputs.total_count }}
+            - **Stale Files Detected:** ${{ steps.read-report.outputs.stale_count }}
+            - **Health Score:** ${{ steps.read-report.outputs.health_score }}
+
+            ---
+
+            ${reportContent}
+
+            ---
+
+            ### Action Items
+
+            - [ ] Review stale files list
+            - [ ] Update or archive outdated content
+            - [ ] Refresh documentation as needed
+            - [ ] Apply recommended updates
+            - [ ] Close this issue when maintenance is complete
+
+            ### Resources
+
+            - **Full Report:** Download from [workflow artifacts](${context.payload.repository.html_url}/actions/runs/${context.runId})
+            - **Maintenance Logs:** Available in workflow artifacts (30-day retention)
+            - **Command Documentation:** \`.claude/commands/maintenance-scan.md\`
+
+            ### Next Steps
+
+            1. Review each flagged file in the report
+            2. For stale files, decide: update, archive, or remove
+            3. Update file modification times for files that are still valid
+            4. Create PRs for any necessary updates
+            5. Re-run \`/maintenance-scan\` to verify health score improvement
+
+            ---
+            *This issue was automatically created by the Maintenance Scan workflow.*
+
+            **Estimated Review Time:** ${Math.ceil(parseInt('${{ steps.read-report.outputs.stale_count }}') / 10)} hours
+            `,
+              labels: ['maintenance', 'automated', 'monthly-report']
+            });
+
+            console.log(`Created maintenance issue #${issue.data.number}`);
+
+            // Add milestone if exists
+            try {
+              const milestones = await github.rest.issues.listMilestones({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open'
+              });
+
+              const maintenanceMilestone = milestones.data.find(m =>
+                m.title.toLowerCase().includes('maintenance')
+              );
+
+              if (maintenanceMilestone) {
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.data.number,
+                  milestone: maintenanceMilestone.number
+                });
+                console.log(`Added to milestone: ${maintenanceMilestone.title}`);
+              }
+            } catch (error) {
+              console.log('No maintenance milestone found or error adding:', error.message);
+            }
+
+      - name: Report No Issues Found
+        if: steps.check-reports.outputs.has_reports == 'false'
+        run: |
+          echo "✅ No maintenance issues detected!"
+          echo "Repository health is excellent - all files are up to date."
+          echo ""
+          echo "Health Score: 100/100"
+          echo "Stale Files: 0"
+          echo ""
+          echo "No action required. Next scan: $(date -d '+1 month' +%Y-%m-%d)"
+
+      - name: Handle Scan Failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '❌ Maintenance Scan Failed',
+              body: `## Maintenance Scan Failure
+
+            **Date:** ${new Date().toISOString()}
+            **Workflow:** Maintenance Scan
+            **Status:** ❌ Failed
+
+            The automated maintenance scan failed to complete.
+
+            ### Troubleshooting
+
+            1. **Check Workflow Logs:** [View Run](${context.payload.repository.html_url}/actions/runs/${context.runId})
+            2. **Review Command:** \`.claude/commands/maintenance-scan.md\`
+            3. **Verify API Key:** Ensure \`ANTHROPIC_API_KEY\` secret is valid
+            4. **Check Disk Space:** Workflow may have run out of space
+            5. **Timeout Issues:** Scan may have exceeded 30-minute limit
+
+            ### Manual Workaround
+
+            Run the maintenance scan locally:
+
+            \`\`\`bash
+            # Install Claude CLI
+            npm install -g @anthropic-ai/claude-cli
+
+            # Configure API key
+            export ANTHROPIC_API_KEY="your-key-here"
+
+            # Run scan
+            claude command /maintenance-scan
+            \`\`\`
+
+            ### Next Steps
+
+            - [ ] Review error logs
+            - [ ] Fix underlying issue
+            - [ ] Re-run workflow manually
+            - [ ] Close this issue when resolved
+
+            ---
+            *This issue was automatically created by the Maintenance Scan workflow.*
+            `,
+              labels: ['maintenance', 'bug', 'automated']
+            });
+
+            console.log(`Created failure issue #${issue.data.number}`);

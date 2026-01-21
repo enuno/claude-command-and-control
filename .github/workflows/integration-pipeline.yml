@@ -1,0 +1,460 @@
+name: Integration Pipeline
+
+# Automated content ingestion and processing
+# Scans INTEGRATION/incoming/ directory and processes valid files
+
+on:
+  schedule:
+    # Hourly during work hours (9 AM - 5 PM UTC, Mon-Fri)
+    - cron: '0 9-17 * * 1-5'
+  push:
+    paths:
+      - 'INTEGRATION/incoming/**'
+  workflow_dispatch:
+    inputs:
+      auto-process:
+        description: 'Automatically process validated files'
+        required: false
+        type: boolean
+        default: true
+      max-files:
+        description: 'Maximum files to process (1-10)'
+        required: false
+        type: number
+        default: 5
+
+permissions:
+  contents: read
+
+jobs:
+  scan-incoming:
+    name: Scan Incoming Files
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      issues: write
+    outputs:
+      has-files: ${{ steps.check-files.outputs.has_files }}
+      file-count: ${{ steps.check-files.outputs.file_count }}
+      scan-completed: ${{ steps.integration-scan.outputs.scan_completed }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Check Incoming Directory
+        id: check-files
+        run: |
+          INCOMING_DIR="INTEGRATION/incoming"
+
+          if [ ! -d "$INCOMING_DIR" ]; then
+            echo "Creating incoming directory..."
+            mkdir -p "$INCOMING_DIR"
+            echo "has_files=false" >> $GITHUB_OUTPUT
+            echo "file_count=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Count files in incoming directory
+          FILE_COUNT=$(find "$INCOMING_DIR" -type f | wc -l)
+          echo "Found $FILE_COUNT files in incoming directory"
+
+          if [ "$FILE_COUNT" -gt 0 ]; then
+            echo "has_files=true" >> $GITHUB_OUTPUT
+            echo "file_count=$FILE_COUNT" >> $GITHUB_OUTPUT
+
+            # List files
+            echo "Files to process:"
+            find "$INCOMING_DIR" -type f -exec ls -lh {} \;
+          else
+            echo "has_files=false" >> $GITHUB_OUTPUT
+            echo "file_count=0" >> $GITHUB_OUTPUT
+            echo "No files to process"
+          fi
+
+      - name: Setup Claude CLI
+        if: steps.check-files.outputs.has_files == 'true'
+        uses: ./.github/actions/setup-claude
+        with:
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          cache-enabled: 'true'
+
+      - name: Run Integration Scan
+        if: steps.check-files.outputs.has_files == 'true'
+        id: integration-scan
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          echo "Running /integration-scan command..."
+
+          claude run --command /integration-scan > /tmp/scan-output.log 2>&1 || {
+            echo "Integration scan failed"
+            echo "scan_completed=false" >> $GITHUB_OUTPUT
+            exit 1
+          }
+
+          echo "scan_completed=true" >> $GITHUB_OUTPUT
+          echo "Integration scan completed successfully"
+
+      - name: Upload Scan Logs
+        if: always() && steps.check-files.outputs.has_files == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-scan-logs
+          path: /tmp/scan-output.log
+          retention-days: 30
+
+      - name: Check Scan Results
+        if: steps.check-files.outputs.has_files == 'true'
+        id: scan-results
+        run: |
+          LOG_DIR="INTEGRATION/logs"
+
+          if [ -d "$LOG_DIR" ]; then
+            LATEST_SCAN=$(find "$LOG_DIR" -name "scan-*.log" -type f -printf '%T@ %p\n' | sort -rn | head -1 | cut -d' ' -f2-)
+
+            if [ -n "$LATEST_SCAN" ]; then
+              echo "Latest scan log: $LATEST_SCAN"
+
+              # Extract summary from scan log
+              CATEGORIZED=$(grep -oP 'Categorized: \K\d+' "$LATEST_SCAN" || echo "0")
+              FAILED=$(grep -oP 'Failed: \K\d+' "$LATEST_SCAN" || echo "0")
+
+              echo "categorized_count=$CATEGORIZED" >> $GITHUB_OUTPUT
+              echo "failed_count=$FAILED" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+  validate-files:
+    name: Validate Files
+    runs-on: ubuntu-latest
+    needs: scan-incoming
+    if: needs.scan-incoming.outputs.has-files == 'true' && needs.scan-incoming.outputs.scan-completed == 'true'
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      issues: write
+    outputs:
+      validation-passed: ${{ steps.integration-validate.outputs.validation_passed }}
+      validated-count: ${{ steps.validate-results.outputs.validated_count }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Claude CLI
+        uses: ./.github/actions/setup-claude
+        with:
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          cache-enabled: 'true'
+
+      - name: Run Integration Validate
+        id: integration-validate
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          echo "Running /integration-validate command..."
+
+          claude run --command /integration-validate > /tmp/validate-output.log 2>&1 || {
+            echo "Validation failed"
+            echo "validation_passed=false" >> $GITHUB_OUTPUT
+            exit 1
+          }
+
+          echo "validation_passed=true" >> $GITHUB_OUTPUT
+          echo "Validation completed successfully"
+
+      - name: Upload Validation Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-validate-logs
+          path: /tmp/validate-output.log
+          retention-days: 30
+
+      - name: Check Validation Results
+        id: validate-results
+        run: |
+          LOG_DIR="INTEGRATION/logs"
+
+          if [ -d "$LOG_DIR" ]; then
+            LATEST_VALIDATE=$(find "$LOG_DIR" -name "validate-*.log" -type f -printf '%T@ %p\n' | sort -rn | head -1 | cut -d' ' -f2-)
+
+            if [ -n "$LATEST_VALIDATE" ]; then
+              echo "Latest validation log: $LATEST_VALIDATE"
+
+              # Extract summary
+              VALIDATED=$(grep -oP 'Validated: \K\d+' "$LATEST_VALIDATE" || echo "0")
+              ERRORS=$(grep -oP 'Errors: \K\d+' "$LATEST_VALIDATE" || echo "0")
+
+              echo "validated_count=$VALIDATED" >> $GITHUB_OUTPUT
+              echo "error_count=$ERRORS" >> $GITHUB_OUTPUT
+
+              # Check if all files passed
+              if [ "$ERRORS" -eq 0 ] && [ "$VALIDATED" -gt 0 ]; then
+                echo "all_passed=true" >> $GITHUB_OUTPUT
+              else
+                echo "all_passed=false" >> $GITHUB_OUTPUT
+              fi
+            fi
+          fi
+
+  process-files:
+    name: Process Validated Files
+    runs-on: ubuntu-latest
+    needs: [scan-incoming, validate-files]
+    if: |
+      needs.validate-files.outputs.validation-passed == 'true' &&
+      (github.event.inputs.auto-process == 'true' || github.event_name != 'workflow_dispatch')
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Check File Count Limit
+        id: check-limit
+        run: |
+          MAX_FILES="${{ github.event.inputs.max-files || '5' }}"
+          FILE_COUNT="${{ needs.scan-incoming.outputs.file-count }}"
+
+          echo "Max files allowed: $MAX_FILES"
+          echo "Files to process: $FILE_COUNT"
+
+          if [ "$FILE_COUNT" -gt "$MAX_FILES" ]; then
+            echo "⚠️  File count ($FILE_COUNT) exceeds limit ($MAX_FILES)"
+            echo "Manual review required for batch processing"
+            echo "exceeds_limit=true" >> $GITHUB_OUTPUT
+            exit 1
+          else
+            echo "exceeds_limit=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup Claude CLI
+        uses: ./.github/actions/setup-claude
+        with:
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          cache-enabled: 'true'
+
+      - name: Run Integration Process
+        id: integration-process
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          echo "Running /integration-process command..."
+
+          claude run --command /integration-process > /tmp/process-output.log 2>&1 || {
+            echo "Processing failed"
+            exit 1
+          }
+
+          echo "Processing completed successfully"
+
+      - name: Upload Process Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-process-logs
+          path: /tmp/process-output.log
+          retention-days: 30
+
+      - name: Check for Changes
+        id: check-changes
+        run: |
+          # Check if any files were modified
+          if git diff --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No files were modified"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Files were modified:"
+            git status --short
+          fi
+
+      - name: Create Integration Branch
+        if: steps.check-changes.outputs.has_changes == 'true'
+        id: create-branch
+        run: |
+          BRANCH_NAME="integration/auto-process-$(date +%Y%m%d-%H%M%S)"
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+          git checkout -b "$BRANCH_NAME"
+          echo "Created branch: $BRANCH_NAME"
+
+      - name: Commit Changes
+        if: steps.check-changes.outputs.has_changes == 'true'
+        run: |
+          git add .
+          git commit -m "chore(integration): auto-process validated files
+
+          - Processed ${{ needs.validate-files.outputs.validated-count }} validated files
+          - Moved files from INTEGRATION/incoming/ to proper locations
+          - Updated documentation indices
+
+          Automated by: Integration Pipeline workflow
+          Run: ${{ github.run_id }}"
+
+      - name: Push Branch
+        if: steps.check-changes.outputs.has_changes == 'true'
+        run: |
+          git push origin "${{ steps.create-branch.outputs.branch_name }}"
+
+      - name: Create Pull Request
+        if: steps.check-changes.outputs.has_changes == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🔄 Auto-process Integration Files - ${new Date().toISOString().split('T')[0]}`,
+              head: '${{ steps.create-branch.outputs.branch_name }}',
+              base: 'main',
+              body: `## Automated Integration Processing
+
+            **Date:** ${new Date().toISOString()}
+            **Workflow:** Integration Pipeline
+            **Files Processed:** ${{ needs.validate-files.outputs.validated-count }}
+
+            ### Summary
+
+            This PR was automatically created by the integration pipeline to process validated files from \`INTEGRATION/incoming/\`.
+
+            ### Changes
+
+            - ✅ Scanned ${{ needs.scan-incoming.outputs.file-count }} incoming files
+            - ✅ Validated ${{ needs.validate-files.outputs.validated-count }} files
+            - ✅ Moved files to appropriate locations
+            - ✅ Updated documentation tables and indices
+
+            ### Quality Gates Passed
+
+            - [x] All files scanned successfully
+            - [x] All validations passed
+            - [x] File count within limit (${{ needs.validate-files.outputs.validated-count }} ≤ ${{ github.event.inputs.max-files || '5' }})
+            - [x] Automated processing completed
+
+            ### Review Checklist
+
+            - [ ] Verify files are in correct directories
+            - [ ] Check documentation updates are accurate
+            - [ ] Confirm no unintended changes
+            - [ ] Approve and merge
+
+            ### Logs
+
+            - **Scan Logs:** [Download artifact](${context.payload.repository.html_url}/actions/runs/${context.runId})
+            - **Validation Logs:** [Download artifact](${context.payload.repository.html_url}/actions/runs/${context.runId})
+            - **Process Logs:** [Download artifact](${context.payload.repository.html_url}/actions/runs/${context.runId})
+
+            ---
+            *This PR was automatically created by the Integration Pipeline workflow.*
+
+            **Auto-merge:** Not enabled - manual review required
+            `,
+              draft: false
+            });
+
+            console.log(`Created PR #${pr.data.number}`);
+
+            // Add labels
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.data.number,
+              labels: ['integration', 'automated', 'content-ingestion']
+            });
+
+  handle-manual-review:
+    name: Create Manual Review Issue
+    runs-on: ubuntu-latest
+    needs: [scan-incoming, validate-files, process-files]
+    if: |
+      always() &&
+      needs.scan-incoming.outputs.has-files == 'true' &&
+      (needs.validate-files.outputs.validation-passed == 'false' ||
+       needs.process-files.result == 'failure' ||
+       needs.process-files.result == 'skipped')
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Create Manual Review Issue
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📋 Manual Review Required - Integration Pipeline`,
+              body: `## Integration Pipeline - Manual Review Required
+
+            **Date:** ${new Date().toISOString()}
+            **Workflow:** Integration Pipeline
+            **Status:** ⚠️  Requires Manual Review
+
+            ### Summary
+
+            The integration pipeline requires manual intervention:
+
+            - **Files Scanned:** ${{ needs.scan-incoming.outputs.file-count }}
+            - **Validation Status:** ${{ needs.validate-files.outputs.validation-passed == 'true' ? '✅ Passed' : '❌ Failed' }}
+            - **Processing Status:** ${{ needs.process-files.result }}
+
+            ### Possible Reasons
+
+            1. **Validation Failures** - Some files failed quality checks
+            2. **File Count Exceeded** - More than ${{ github.event.inputs.max-files || '5' }} files to process
+            3. **Processing Errors** - Errors during file processing
+            4. **Manual Mode** - Auto-process disabled in workflow dispatch
+
+            ### Action Required
+
+            1. Review workflow logs: [View Run](${context.payload.repository.html_url}/actions/runs/${context.runId})
+            2. Check \`INTEGRATION/incoming/\` directory
+            3. Review scan and validation logs in artifacts
+            4. Fix any validation errors
+            5. Run \`/integration-process\` manually OR
+            6. Re-trigger workflow with adjusted parameters
+
+            ### Manual Processing
+
+            \`\`\`bash
+            # Review incoming files
+            ls -la INTEGRATION/incoming/
+
+            # Run integration commands manually
+            claude command /integration-scan
+            claude command /integration-validate
+            claude command /integration-process
+            \`\`\`
+
+            ### Re-trigger Workflow
+
+            Go to [Actions](${context.payload.repository.html_url}/actions/workflows/integration-pipeline.yml) and click "Run workflow" with:
+            - \`auto-process\`: false (for review-only mode)
+            - \`max-files\`: Increase if needed (max: 10)
+
+            ---
+            *This issue was automatically created by the Integration Pipeline workflow.*
+            `,
+              labels: ['integration', 'manual-review', 'automated']
+            });
+
+            console.log(`Created manual review issue #${issue.data.number}`);

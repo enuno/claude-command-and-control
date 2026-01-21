@@ -1,0 +1,355 @@
+name: Security Scanning
+
+# Daily security audits with CodeQL, secret scanning, and shell script validation
+# Creates security alerts and issues for findings
+
+on:
+  schedule:
+    # Daily at 3 AM UTC
+    - cron: '0 3 * * *'
+  push:
+    branches:
+      - main
+      - 'feature/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  codeql-python:
+    name: CodeQL Analysis (Python)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: 'python'
+          queries: security-and-quality
+          config: |
+            paths:
+              - skills-templates
+              - .claude/hooks
+            paths-ignore:
+              - '**/*.md'
+              - '**/*.txt'
+              - 'docs/**'
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:python"
+
+  codeql-javascript:
+    name: CodeQL Analysis (JavaScript)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: 'javascript'
+          queries: security-and-quality
+          config: |
+            paths:
+              - .claude/hooks
+            paths-ignore:
+              - '**/*.md'
+              - '**/*.txt'
+              - 'docs/**'
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript"
+
+  secret-scanning:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for comprehensive scanning
+
+      - name: TruffleHog Secret Scan
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --only-verified --fail
+
+      - name: Create Issue on Secret Detection
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 Security Alert: Secrets Detected in Repository',
+              body: `## Secret Detection Alert
+
+            **Workflow:** Security Scanning
+            **Job:** Secret Scanning
+            **Status:** ❌ Failed
+            **Timestamp:** ${new Date().toISOString()}
+
+            TruffleHog has detected potential secrets in the repository.
+
+            ### Action Required
+
+            1. Review the workflow logs: [View Run](${context.payload.repository.html_url}/actions/runs/${context.runId})
+            2. Identify the detected secrets
+            3. Rotate compromised credentials immediately
+            4. Remove secrets from git history using:
+               - \`git filter-repo\` (recommended)
+               - \`BFG Repo-Cleaner\`
+               - GitHub's built-in secret removal tool
+
+            ### Prevention
+
+            - Never commit secrets to version control
+            - Use GitHub Secrets for sensitive data
+            - Enable pre-commit hooks to prevent secret commits
+            - Use \`.gitignore\` for files containing secrets
+
+            ### Resources
+
+            - [Removing sensitive data from a repository](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository)
+            - [GitHub Secret Scanning](https://docs.github.com/en/code-security/secret-scanning)
+
+            ---
+            *This issue was automatically created by the Security Scanning workflow.*
+            `,
+              labels: ['security', 'critical', 'automated']
+            });
+            console.log(`Created issue #${issue.data.number}`);
+
+  shellcheck:
+    name: Shell Script Validation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Find Shell Scripts
+        id: find-scripts
+        run: |
+          # Find all shell scripts
+          SCRIPTS=$(find . -type f \( -name "*.sh" -o -name "*.bash" \) | grep -v ".git" | grep -v "node_modules" || true)
+
+          if [ -z "$SCRIPTS" ]; then
+            echo "No shell scripts found"
+            echo "has_scripts=false" >> $GITHUB_OUTPUT
+          else
+            echo "Found shell scripts:"
+            echo "$SCRIPTS"
+            echo "has_scripts=true" >> $GITHUB_OUTPUT
+            echo "$SCRIPTS" > /tmp/scripts.txt
+          fi
+
+      - name: Run ShellCheck
+        if: steps.find-scripts.outputs.has_scripts == 'true'
+        run: |
+          # Install ShellCheck
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+          # Run ShellCheck on all scripts
+          EXIT_CODE=0
+          while IFS= read -r script; do
+            echo "Checking: $script"
+            if ! shellcheck -S warning -f gcc "$script"; then
+              EXIT_CODE=1
+            fi
+          done < /tmp/scripts.txt
+
+          exit $EXIT_CODE
+
+      - name: Create Issue on ShellCheck Failure
+        if: failure() && steps.find-scripts.outputs.has_scripts == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '⚠️ Shell Script Issues Detected',
+              body: `## Shell Script Validation Failed
+
+            **Workflow:** Security Scanning
+            **Job:** Shell Script Validation
+            **Status:** ❌ Failed
+            **Timestamp:** ${new Date().toISOString()}
+
+            ShellCheck has detected issues in shell scripts.
+
+            ### Action Required
+
+            1. Review the workflow logs: [View Run](${context.payload.repository.html_url}/actions/runs/${context.runId})
+            2. Fix reported issues in shell scripts
+            3. Common issues to check:
+               - Unquoted variables
+               - Missing error handling
+               - Syntax errors
+               - Unsafe operations
+
+            ### Running ShellCheck Locally
+
+            \`\`\`bash
+            # Install ShellCheck
+            brew install shellcheck  # macOS
+            sudo apt-get install shellcheck  # Linux
+
+            # Check a script
+            shellcheck path/to/script.sh
+
+            # Check all scripts
+            find . -name "*.sh" -exec shellcheck {} \\;
+            \`\`\`
+
+            ### Resources
+
+            - [ShellCheck Wiki](https://github.com/koalaman/shellcheck/wiki)
+            - [Shell Scripting Best Practices](https://www.shellcheck.net/)
+
+            ---
+            *This issue was automatically created by the Security Scanning workflow.*
+            `,
+              labels: ['quality', 'shellcheck', 'automated']
+            });
+            console.log(`Created issue #${issue.data.number}`);
+
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    # Only run on pull requests
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+          fail-on-scopes: runtime
+          comment-summary-in-pr: always
+
+  security-summary:
+    name: Security Summary
+    runs-on: ubuntu-latest
+    needs: [codeql-python, codeql-javascript, secret-scanning, shellcheck]
+    if: always()
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Check Job Results
+        id: check-results
+        run: |
+          # Check if any security job failed
+          CODEQL_PYTHON="${{ needs.codeql-python.result }}"
+          CODEQL_JS="${{ needs.codeql-javascript.result }}"
+          SECRET_SCAN="${{ needs.secret-scanning.result }}"
+          SHELLCHECK="${{ needs.shellcheck.result }}"
+
+          echo "CodeQL Python: $CODEQL_PYTHON"
+          echo "CodeQL JavaScript: $CODEQL_JS"
+          echo "Secret Scanning: $SECRET_SCAN"
+          echo "ShellCheck: $SHELLCHECK"
+
+          FAILED=false
+          if [ "$CODEQL_PYTHON" == "failure" ] || [ "$CODEQL_JS" == "failure" ] || [ "$SECRET_SCAN" == "failure" ] || [ "$SHELLCHECK" == "failure" ]; then
+            FAILED=true
+          fi
+
+          echo "has_failures=$FAILED" >> $GITHUB_OUTPUT
+
+      - name: Create Summary Issue
+        if: steps.check-results.outputs.has_failures == 'true' && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🔒 Security Scan Report - ${new Date().toISOString().split('T')[0]}`,
+              body: `## Daily Security Scan Summary
+
+            **Date:** ${new Date().toISOString().split('T')[0]}
+            **Status:** ⚠️ Issues Detected
+
+            ### Job Results
+
+            | Check | Status |
+            |-------|--------|
+            | CodeQL (Python) | ${{ needs.codeql-python.result == 'success' ? '✅ Passed' : '❌ Failed' }} |
+            | CodeQL (JavaScript) | ${{ needs.codeql-javascript.result == 'success' ? '✅ Passed' : '❌ Failed' }} |
+            | Secret Scanning | ${{ needs.secret-scanning.result == 'success' ? '✅ Passed' : '❌ Failed' }} |
+            | ShellCheck | ${{ needs.shellcheck.result == 'success' ? '✅ Passed' : '❌ Failed' }} |
+
+            ### Action Required
+
+            1. Review detailed findings in the Security tab
+            2. Check workflow logs: [View Run](${context.payload.repository.html_url}/actions/runs/${context.runId})
+            3. Address critical and high-severity issues within 7 days
+            4. Update this issue when remediation is complete
+
+            ### Next Steps
+
+            - [ ] Review CodeQL findings
+            - [ ] Investigate secret scanning alerts
+            - [ ] Fix shell script issues
+            - [ ] Create remediation PRs
+            - [ ] Verify fixes with re-run
+
+            ---
+            *This issue was automatically created by the Security Scanning workflow.*
+            `,
+              labels: ['security', 'daily-scan', 'automated']
+            });
+            console.log(`Created summary issue #${issue.data.number}`);

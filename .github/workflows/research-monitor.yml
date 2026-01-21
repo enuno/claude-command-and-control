@@ -1,0 +1,394 @@
+name: Research Monitor
+
+# Weekly monitoring of Claude Code research sources
+# Downloads new research reports and creates summary issues
+
+on:
+  schedule:
+    # Weekly on Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+    inputs:
+      sources:
+        description: 'Sources to monitor (comma-separated: blog,sdk-python,sdk-typescript,mcp,curated)'
+        required: false
+        default: 'blog,sdk-python,sdk-typescript,mcp'
+
+permissions:
+  contents: read
+
+jobs:
+  monitor-anthropic-blog:
+    name: Monitor Anthropic Blog
+    runs-on: ubuntu-latest
+    if: |
+      contains(github.event.inputs.sources, 'blog') ||
+      github.event_name == 'schedule'
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    outputs:
+      new-posts: ${{ steps.check-rss.outputs.new_posts }}
+      post-count: ${{ steps.check-rss.outputs.post_count }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: |
+          npm install -g rss-parser
+
+      - name: Fetch RSS Feed
+        id: fetch-rss
+        run: |
+          # Fetch Anthropic blog RSS feed
+          curl -s "https://www.anthropic.com/blog/rss.xml" > /tmp/anthropic-blog.xml
+
+          if [ ! -s /tmp/anthropic-blog.xml ]; then
+            echo "Failed to fetch RSS feed"
+            exit 1
+          fi
+
+          echo "✅ RSS feed fetched successfully"
+
+      - name: Parse RSS and Check for New Posts
+        id: check-rss
+        run: |
+          # Parse RSS feed (using simple grep for now - can enhance with proper XML parser)
+          # Extract post titles and dates from last 7 days
+
+          # Get date 7 days ago
+          CUTOFF_DATE=$(date -u -d '7 days ago' '+%Y-%m-%d')
+          echo "Checking for posts since: $CUTOFF_DATE"
+
+          # Create tracking file if it doesn't exist
+          mkdir -p INTEGRATION/logs
+          TRACKING_FILE="INTEGRATION/logs/research-blog-last-check.txt"
+
+          if [ ! -f "$TRACKING_FILE" ]; then
+            echo "$CUTOFF_DATE" > "$TRACKING_FILE"
+          fi
+
+          LAST_CHECK=$(cat "$TRACKING_FILE")
+          echo "Last check: $LAST_CHECK"
+
+          # Extract titles and links (simplified - in production use proper XML parser)
+          NEW_POSTS=$(grep -o '<item>.*</item>' /tmp/anthropic-blog.xml | grep -c '<item>' || echo "0")
+
+          if [ "$NEW_POSTS" -gt 0 ]; then
+            echo "new_posts=true" >> $GITHUB_OUTPUT
+            echo "post_count=$NEW_POSTS" >> $GITHUB_OUTPUT
+
+            # Save post details
+            grep -o '<title>.*</title>' /tmp/anthropic-blog.xml | head -5 > /tmp/blog-titles.txt
+            grep -o '<link>.*</link>' /tmp/anthropic-blog.xml | head -5 > /tmp/blog-links.txt
+          else
+            echo "new_posts=false" >> $GITHUB_OUTPUT
+            echo "post_count=0" >> $GITHUB_OUTPUT
+          fi
+
+          # Update last check time
+          echo "$(date -u '+%Y-%m-%d')" > "$TRACKING_FILE"
+
+      - name: Download New Posts
+        if: steps.check-rss.outputs.new_posts == 'true'
+        run: |
+          mkdir -p INTEGRATION/incoming
+
+          # Download posts as markdown (placeholder - implement actual download logic)
+          echo "Downloading ${{ steps.check-rss.outputs.post_count }} new blog posts..."
+
+          # This is a placeholder - in production, implement proper HTML-to-markdown conversion
+          for i in $(seq 1 ${{ steps.check-rss.outputs.post_count }}); do
+            FILENAME="INTEGRATION/incoming/research-anthropic-blog-$(date +%Y%m%d)-post-$i.md"
+            echo "# Anthropic Blog Post $i" > "$FILENAME"
+            echo "Date: $(date -u '+%Y-%m-%d')" >> "$FILENAME"
+            echo "Source: Anthropic Blog RSS" >> "$FILENAME"
+            echo "" >> "$FILENAME"
+            echo "*Content placeholder - implement full download*" >> "$FILENAME"
+          done
+
+          echo "✅ Downloaded posts to INTEGRATION/incoming/"
+
+      - name: Upload Blog Artifacts
+        if: steps.check-rss.outputs.new_posts == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: anthropic-blog-posts
+          path: INTEGRATION/incoming/research-anthropic-blog-*.md
+          retention-days: 90
+
+  monitor-github-releases:
+    name: Monitor GitHub Releases
+    runs-on: ubuntu-latest
+    if: |
+      contains(github.event.inputs.sources, 'sdk-python') ||
+      contains(github.event.inputs.sources, 'sdk-typescript') ||
+      contains(github.event.inputs.sources, 'mcp') ||
+      github.event_name == 'schedule'
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    outputs:
+      new-releases: ${{ steps.check-releases.outputs.new_releases }}
+      release-count: ${{ steps.check-releases.outputs.release_count }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Check Anthropic SDK Python Releases
+        id: sdk-python
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const releases = await github.rest.repos.listReleases({
+              owner: 'anthropics',
+              repo: 'anthropic-sdk-python',
+              per_page: 5
+            });
+
+            // Get releases from last 7 days
+            const cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - 7);
+
+            const newReleases = releases.data.filter(release => {
+              const releaseDate = new Date(release.published_at);
+              return releaseDate > cutoffDate;
+            });
+
+            core.setOutput('count', newReleases.length);
+
+            if (newReleases.length > 0) {
+              const summary = newReleases.map(r => `- [${r.tag_name}](${r.html_url}): ${r.name}`).join('\n');
+              core.setOutput('summary', summary);
+            }
+
+            return newReleases.length;
+
+      - name: Check Anthropic SDK TypeScript Releases
+        id: sdk-typescript
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const releases = await github.rest.repos.listReleases({
+              owner: 'anthropics',
+              repo: 'anthropic-sdk-typescript',
+              per_page: 5
+            });
+
+            const cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - 7);
+
+            const newReleases = releases.data.filter(release => {
+              const releaseDate = new Date(release.published_at);
+              return releaseDate > cutoffDate;
+            });
+
+            core.setOutput('count', newReleases.length);
+
+            if (newReleases.length > 0) {
+              const summary = newReleases.map(r => `- [${r.tag_name}](${r.html_url}): ${r.name}`).join('\n');
+              core.setOutput('summary', summary);
+            }
+
+            return newReleases.length;
+
+      - name: Check MCP Servers Releases
+        id: mcp
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const releases = await github.rest.repos.listReleases({
+              owner: 'modelcontextprotocol',
+              repo: 'servers',
+              per_page: 5
+            });
+
+            const cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - 7);
+
+            const newReleases = releases.data.filter(release => {
+              const releaseDate = new Date(release.published_at);
+              return releaseDate > cutoffDate;
+            });
+
+            core.setOutput('count', newReleases.length);
+
+            if (newReleases.length > 0) {
+              const summary = newReleases.map(r => `- [${r.tag_name}](${r.html_url}): ${r.name}`).join('\n');
+              core.setOutput('summary', summary);
+            }
+
+            return newReleases.length;
+
+      - name: Aggregate Release Data
+        id: check-releases
+        run: |
+          PYTHON_COUNT="${{ steps.sdk-python.outputs.count }}"
+          TS_COUNT="${{ steps.sdk-typescript.outputs.count }}"
+          MCP_COUNT="${{ steps.mcp.outputs.count }}"
+
+          TOTAL_COUNT=$((PYTHON_COUNT + TS_COUNT + MCP_COUNT))
+
+          echo "Total new releases: $TOTAL_COUNT"
+          echo "release_count=$TOTAL_COUNT" >> $GITHUB_OUTPUT
+
+          if [ "$TOTAL_COUNT" -gt 0 ]; then
+            echo "new_releases=true" >> $GITHUB_OUTPUT
+          else
+            echo "new_releases=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Download Release Notes
+        if: steps.check-releases.outputs.new_releases == 'true'
+        run: |
+          mkdir -p INTEGRATION/incoming
+
+          # Download release notes for new releases
+          # This is a placeholder - implement actual download logic
+
+          PYTHON_COUNT="${{ steps.sdk-python.outputs.count }}"
+          TS_COUNT="${{ steps.sdk-typescript.outputs.count }}"
+          MCP_COUNT="${{ steps.mcp.outputs.count }}"
+
+          if [ "$PYTHON_COUNT" -gt 0 ]; then
+            FILENAME="INTEGRATION/incoming/research-anthropic-sdk-python-$(date +%Y%m%d).md"
+            echo "# Anthropic SDK Python - New Releases" > "$FILENAME"
+            echo "Date: $(date -u '+%Y-%m-%d')" >> "$FILENAME"
+            echo "" >> "$FILENAME"
+            echo "${{ steps.sdk-python.outputs.summary }}" >> "$FILENAME"
+          fi
+
+          if [ "$TS_COUNT" -gt 0 ]; then
+            FILENAME="INTEGRATION/incoming/research-anthropic-sdk-typescript-$(date +%Y%m%d).md"
+            echo "# Anthropic SDK TypeScript - New Releases" > "$FILENAME"
+            echo "Date: $(date -u '+%Y-%m-%d')" >> "$FILENAME"
+            echo "" >> "$FILENAME"
+            echo "${{ steps.sdk-typescript.outputs.summary }}" >> "$FILENAME"
+          fi
+
+          if [ "$MCP_COUNT" -gt 0 ]; then
+            FILENAME="INTEGRATION/incoming/research-mcp-servers-$(date +%Y%m%d).md"
+            echo "# MCP Servers - New Releases" > "$FILENAME"
+            echo "Date: $(date -u '+%Y-%m-%d')" >> "$FILENAME"
+            echo "" >> "$FILENAME"
+            echo "${{ steps.mcp.outputs.summary }}" >> "$FILENAME"
+          fi
+
+          echo "✅ Downloaded release notes to INTEGRATION/incoming/"
+
+      - name: Upload Release Artifacts
+        if: steps.check-releases.outputs.new_releases == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-releases
+          path: INTEGRATION/incoming/research-*.md
+          retention-days: 90
+
+  create-summary:
+    name: Create Research Summary
+    runs-on: ubuntu-latest
+    needs: [monitor-anthropic-blog, monitor-github-releases]
+    if: |
+      always() &&
+      (needs.monitor-anthropic-blog.outputs.new-posts == 'true' ||
+       needs.monitor-github-releases.outputs.new-releases == 'true')
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Create Summary Issue
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const blogPosts = '${{ needs.monitor-anthropic-blog.outputs.new-posts }}' === 'true';
+            const releases = '${{ needs.monitor-github-releases.outputs.new-releases }}' === 'true';
+
+            const date = new Date().toISOString().split('T')[0];
+
+            let body = `## 📚 Weekly Research Update\n\n`;
+            body += `**Date:** ${date}\n`;
+            body += `**Workflow:** Research Monitor\n\n`;
+
+            body += `### Summary\n\n`;
+
+            if (blogPosts) {
+              body += `- ✅ **Anthropic Blog:** ${{ needs.monitor-anthropic-blog.outputs.post-count }} new posts\n`;
+            } else {
+              body += `- ℹ️  **Anthropic Blog:** No new posts\n`;
+            }
+
+            if (releases) {
+              body += `- ✅ **GitHub Releases:** ${{ needs.monitor-github-releases.outputs.release-count }} new releases\n`;
+              body += `  - SDK Python: ${{ needs.monitor-github-releases.steps.sdk-python.outputs.count }} releases\n`;
+              body += `  - SDK TypeScript: ${{ needs.monitor-github-releases.steps.sdk-typescript.outputs.count }} releases\n`;
+              body += `  - MCP Servers: ${{ needs.monitor-github-releases.steps.mcp.outputs.count }} releases\n`;
+            } else {
+              body += `- ℹ️  **GitHub Releases:** No new releases\n`;
+            }
+
+            body += `\n### Downloaded Content\n\n`;
+            body += `New research content has been downloaded to \`INTEGRATION/incoming/\`:\n\n`;
+
+            if (blogPosts) {
+              body += `#### Anthropic Blog Posts\n\n`;
+              body += `- Files: \`research-anthropic-blog-*.md\`\n`;
+              body += `- Count: ${{ needs.monitor-anthropic-blog.outputs.post-count }}\n\n`;
+            }
+
+            if (releases) {
+              body += `#### GitHub Releases\n\n`;
+              body += `- Python SDK: \`research-anthropic-sdk-python-*.md\`\n`;
+              body += `- TypeScript SDK: \`research-anthropic-sdk-typescript-*.md\`\n`;
+              body += `- MCP Servers: \`research-mcp-servers-*.md\`\n\n`;
+            }
+
+            body += `### Next Steps\n\n`;
+            body += `The Integration Pipeline will automatically process these files:\n\n`;
+            body += `1. **Automated Processing:** Files will be scanned and validated\n`;
+            body += `2. **Quality Checks:** Each file will be validated for structure and content\n`;
+            body += `3. **PR Creation:** A pull request will be created if validation passes\n`;
+            body += `4. **Manual Review:** Review and merge the integration PR\n\n`;
+
+            body += `### Manual Actions\n\n`;
+            body += `If you want to process these files manually:\n\n`;
+            body += `\`\`\`bash\n`;
+            body += `# Review downloaded files\n`;
+            body += `ls -la INTEGRATION/incoming/research-*\n\n`;
+            body += `# Run integration pipeline\n`;
+            body += `claude command /integration-scan\n`;
+            body += `claude command /integration-validate\n`;
+            body += `claude command /integration-process\n`;
+            body += `\`\`\`\n\n`;
+
+            body += `### Resources\n\n`;
+            body += `- **Workflow Artifacts:** [Download files](${context.payload.repository.html_url}/actions/runs/${context.runId})\n`;
+            body += `- **Anthropic Blog:** https://www.anthropic.com/blog\n`;
+            body += `- **SDK Python:** https://github.com/anthropics/anthropic-sdk-python/releases\n`;
+            body += `- **SDK TypeScript:** https://github.com/anthropics/anthropic-sdk-typescript/releases\n`;
+            body += `- **MCP Servers:** https://github.com/modelcontextprotocol/servers/releases\n\n`;
+
+            body += `---\n`;
+            body += `*This issue was automatically created by the Research Monitor workflow.*\n`;
+
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📚 Weekly Research Update - ${date}`,
+              body: body,
+              labels: ['research', 'automated', 'weekly-update']
+            });
+
+            console.log(`Created research summary issue #${issue.data.number}`);

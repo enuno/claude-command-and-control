@@ -1,0 +1,110 @@
+# Dependabot Configuration
+# Automated dependency updates for claude-command-and-control repository
+#
+# Documentation: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+
+updates:
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "automated"
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    reviewers:
+      - "enuno"
+    assignees:
+      - "enuno"
+
+  # Python dependencies (skills with requirements.txt)
+  - package-ecosystem: "pip"
+    directory: "/skills-templates"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "python"
+      - "automated"
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    allow:
+      # Allow both direct and indirect dependencies
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+    ignore:
+      # Ignore major version updates for stable dependencies
+      # Uncomment if you want to control breaking changes manually
+      # - dependency-name: "*"
+      #   update-types: ["version-update:semver-major"]
+
+  # npm dependencies (if hooks use Node.js)
+  - package-ecosystem: "npm"
+    directory: "/.claude/hooks"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "npm"
+      - "automated"
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    versioning-strategy: "increase"
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+
+  # Docker dependencies (if Dockerfiles exist)
+  # Uncomment when/if Docker is added to the project
+  # - package-ecosystem: "docker"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+  #     day: "thursday"
+  #     time: "09:00"
+  #     timezone: "UTC"
+  #   open-pull-requests-limit: 2
+  #   labels:
+  #     - "dependencies"
+  #     - "docker"
+  #     - "automated"
+
+# Dependabot Security Updates (enabled by default)
+# Automatically creates PRs for security vulnerabilities
+# Configure at: Settings → Security → Dependabot security updates
+
+# Expected Behavior:
+# - Weekly dependency scans on Monday/Tuesday/Wednesday
+# - Maximum 3 PRs open at once per ecosystem
+# - Auto-labeled for easy triage
+# - Commits follow Conventional Commits format
+# - PRs assigned to repository maintainer
+
+# Maintenance Notes:
+# - Review and merge Dependabot PRs weekly
+# - Check for breaking changes in major version updates
+# - Monitor CI/CD pipeline after merging dependency updates
+# - Update this configuration when new package ecosystems are added

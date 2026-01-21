@@ -146,11 +146,12 @@ This directory contains production-ready skill templates and examples for Claude
 | **[documentation/latex-wikibook](documentation/latex-wikibook/)** | Comprehensive LaTeX tutorials from WikiBooks - covers LaTeX fundamentals, best practices, formatting, and document preparation |
 | **[starlight](starlight/)** | Starlight documentation theme built on Astro - full-featured docs framework with built-in search (Pagefind), i18n support (20+ languages), MDX components (Tabs, Cards, Steps, FileTree), customizable styling (CSS/Tailwind), and sidebar navigation for creating beautiful documentation websites |
 
-### Infrastructure & DevOps (3 skills)
+### Infrastructure & DevOps (4 skills)
 | Skill | Description |
 |-------|-------------|
 | **[dokploy](dokploy/)** | Open-source PaaS alternative to Vercel/Netlify/Heroku - deploy applications, databases, and Docker Compose stacks with Traefik routing, Let's Encrypt SSL, and Docker Swarm orchestration |
 | **[dokploy-mcp](dokploy-mcp/)** | AI-driven deployment management using Dokploy MCP server - manage projects, applications, databases (PostgreSQL, MySQL, MongoDB, Redis), domains, and deployments via Model Context Protocol |
+| **[flyio](flyio/)** | Deploy and scale full-stack applications globally on Fly.io platform - Machines (fast-launching VMs), automatic scaling, multi-region deployment, Docker containers, databases (Postgres, Redis), and 30+ flyctl commands with configuration reference |
 | **[infrastructure/terraform](infrastructure/terraform/)** | HashiCorp Terraform Infrastructure as Code (IaC) tool for provisioning, managing, and versioning cloud infrastructure across AWS, Azure, GCP, and other providers - comprehensive 33KB guide with state management, modules, and production examples |
 
 ### Productivity & Organization (6 skills)
@@ -299,15 +300,15 @@ Detailed description and instructions...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 87
-- **Individual Skills**: 77
+- **Total Skills**: 88
+- **Individual Skills**: 78
 - **AI Agent Platform Skills**: 4 (AgentKit, Cloudflare Agents, ElizaOS, Virtuals Protocol)
 - **AI Platforms & APIs**: 7 (AgentsKB, LangChain.js, LangSmith Agent Builder, LobeChat, Moonshot AI, OpenRouter, Venice AI)
 - **Development Skills**: 22 (including chezmoi, claude-mem, dnsdist, Ink, Lobe CLI Toolbox, Lobe TTS, PowerDNS Authoritative/Recursor, quiche)
 - **AI Integration Protocol Skills**: 4 (Agent Client Protocol, Agent Communication Protocol, Language Server Protocol, Model Context Protocol)
 - **Cloud Infrastructure Skills**: 9 (Cloudflare Developer Platform including Web Analytics, Zaraz)
 - **Cryptocurrency & Payments Skills**: 7 (AO SQLite, Arweave AO Cookbook, Arweave Bridge, Arweave Standards, Bitcoin Mining, BTCPayServer, x402)
-- **Infrastructure & DevOps**: 3 (Dokploy, Dokploy MCP, Terraform)
+- **Infrastructure & DevOps**: 4 (Dokploy, Dokploy MCP, Fly.io, Terraform)
 - **Security & Authentication**: 2 (Passwordless, Secrets Manager SDK)
 - **Document Processing Suite**: 6
 - **Orchestration Skills**: 4
@@ -348,6 +349,6 @@ Individual skills may have different licenses. Check each skill's directory for 
 
 ---
 
-**Last Updated**: 2026-01-16
-**Total Skills**: 87
+**Last Updated**: 2026-01-21
+**Total Skills**: 88
 **Repository**: [claude-command-and-control](https://github.com/enuno/claude-command-and-control)
