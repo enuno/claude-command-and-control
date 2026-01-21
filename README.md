@@ -9,12 +9,12 @@
 
 ### GitHub Actions Status
 
-[![Maintenance Scan](https://github.com/enuno/claude-command-and-control/workflows/Maintenance%20Scan/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/maintenance-scan.yml)
-[![Integration Pipeline](https://github.com/enuno/claude-command-and-control/workflows/Integration%20Pipeline/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/integration-pipeline.yml)
-[![Security Scanning](https://github.com/enuno/claude-command-and-control/workflows/Security%20Scanning/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/security-scanning.yml)
-[![PR Validation](https://github.com/enuno/claude-command-and-control/workflows/PR%20Validation/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/pr-validation.yml)
-[![Link Checker](https://github.com/enuno/claude-command-and-control/workflows/Link%20Checker/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/link-checker.yml)
-[![Research Monitor](https://github.com/enuno/claude-command-and-control/workflows/Research%20Monitor/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/research-monitor.yml)
+[![Maintenance Scan](https://github.com/enuno/claude-command-and-control/actions/workflows/maintenance-scan.yml/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/maintenance-scan.yml)
+[![Integration Pipeline](https://github.com/enuno/claude-command-and-control/actions/workflows/integration-pipeline.yml/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/integration-pipeline.yml)
+[![Security Scanning](https://github.com/enuno/claude-command-and-control/actions/workflows/security-scanning.yml/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/security-scanning.yml)
+[![PR Validation](https://github.com/enuno/claude-command-and-control/actions/workflows/pr-validation.yml/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/pr-validation.yml)
+[![Link Checker](https://github.com/enuno/claude-command-and-control/actions/workflows/link-checker.yml/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/link-checker.yml)
+[![Research Monitor](https://github.com/enuno/claude-command-and-control/actions/workflows/research-monitor.yml/badge.svg)](https://github.com/enuno/claude-command-and-control/actions/workflows/research-monitor.yml)
 
 ---
 

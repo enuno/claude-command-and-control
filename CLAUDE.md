@@ -593,12 +593,12 @@ The repository includes comprehensive GitHub Actions workflows for automated mai
 
 ### Workflow Status Badges
 
-![Maintenance Scan](https://github.com/enuno/claude-command-and-control/workflows/Maintenance%20Scan/badge.svg)
-![Integration Pipeline](https://github.com/enuno/claude-command-and-control/workflows/Integration%20Pipeline/badge.svg)
-![Security Scanning](https://github.com/enuno/claude-command-and-control/workflows/Security%20Scanning/badge.svg)
-![PR Validation](https://github.com/enuno/claude-command-and-control/workflows/PR%20Validation/badge.svg)
-![Link Checker](https://github.com/enuno/claude-command-and-control/workflows/Link%20Checker/badge.svg)
-![Research Monitor](https://github.com/enuno/claude-command-and-control/workflows/Research%20Monitor/badge.svg)
+![Maintenance Scan](https://github.com/enuno/claude-command-and-control/actions/workflows/maintenance-scan.yml/badge.svg)
+![Integration Pipeline](https://github.com/enuno/claude-command-and-control/actions/workflows/integration-pipeline.yml/badge.svg)
+![Security Scanning](https://github.com/enuno/claude-command-and-control/actions/workflows/security-scanning.yml/badge.svg)
+![PR Validation](https://github.com/enuno/claude-command-and-control/actions/workflows/pr-validation.yml/badge.svg)
+![Link Checker](https://github.com/enuno/claude-command-and-control/actions/workflows/link-checker.yml/badge.svg)
+![Research Monitor](https://github.com/enuno/claude-command-and-control/actions/workflows/research-monitor.yml/badge.svg)
 
 ### Automated Workflows
 
