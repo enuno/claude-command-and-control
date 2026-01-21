@@ -46,6 +46,12 @@
       "pattern": "^[^/]*\\.md$"
     },
     {
+      "pattern": "^LICENSE$"
+    },
+    {
+      "pattern": "^CONTRIBUTING\\.md$"
+    },
+    {
       "pattern": "^templates/"
     },
     {
