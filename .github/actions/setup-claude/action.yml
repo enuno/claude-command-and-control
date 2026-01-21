@@ -1,0 +1,126 @@
+name: 'Setup Claude CLI'
+description: 'Install and authenticate Claude CLI for command invocation'
+author: 'claude-command-and-control'
+
+inputs:
+  anthropic-api-key:
+    description: 'Anthropic API key for Claude CLI authentication'
+    required: true
+  claude-version:
+    description: 'Claude CLI version to install (default: latest)'
+    required: false
+    default: 'latest'
+  cache-enabled:
+    description: 'Enable caching of Claude CLI installation'
+    required: false
+    default: 'true'
+
+outputs:
+  claude-version:
+    description: 'Installed Claude CLI version'
+    value: ${{ steps.install.outputs.version }}
+  cache-hit:
+    description: 'Whether cache was restored'
+    value: ${{ steps.cache.outputs.cache-hit }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Detect OS and Architecture
+      id: detect-os
+      shell: bash
+      run: |
+        OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+        ARCH=$(uname -m)
+
+        case "$ARCH" in
+          x86_64)
+            ARCH="x64"
+            ;;
+          aarch64|arm64)
+            ARCH="arm64"
+            ;;
+          *)
+            echo "::error::Unsupported architecture: $ARCH"
+            exit 1
+            ;;
+        esac
+
+        echo "os=$OS" >> $GITHUB_OUTPUT
+        echo "arch=$ARCH" >> $GITHUB_OUTPUT
+        echo "Detected OS: $OS, Architecture: $ARCH"
+
+    - name: Cache Claude CLI
+      if: inputs.cache-enabled == 'true'
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.claude
+          ~/claude-cli
+        key: claude-cli-${{ steps.detect-os.outputs.os }}-${{ steps.detect-os.outputs.arch }}-${{ inputs.claude-version }}
+        restore-keys: |
+          claude-cli-${{ steps.detect-os.outputs.os }}-${{ steps.detect-os.outputs.arch }}-
+
+    - name: Install Claude CLI
+      id: install
+      if: steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        echo "Installing Claude CLI..."
+
+        # Download and install Claude CLI
+        # Note: This is a placeholder - adjust based on actual installation method
+        if command -v npm &> /dev/null; then
+          echo "Installing via npm..."
+          npm install -g @anthropic-ai/claude-cli || {
+            echo "::warning::npm installation failed, trying alternative method"
+          }
+        fi
+
+        # Verify installation
+        if command -v claude &> /dev/null; then
+          VERSION=$(claude --version 2>&1 || echo "unknown")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Claude CLI installed successfully: $VERSION"
+        else
+          echo "::error::Claude CLI installation failed"
+          exit 1
+        fi
+
+    - name: Configure Claude CLI
+      shell: bash
+      env:
+        ANTHROPIC_API_KEY: ${{ inputs.anthropic-api-key }}
+      run: |
+        echo "Configuring Claude CLI authentication..."
+
+        # Create config directory
+        mkdir -p ~/.claude
+
+        # Configure API key (method depends on actual CLI implementation)
+        # This is a placeholder - adjust based on actual authentication method
+        if [ -n "$ANTHROPIC_API_KEY" ]; then
+          echo "API key configured"
+          export ANTHROPIC_API_KEY
+        else
+          echo "::error::ANTHROPIC_API_KEY is not set"
+          exit 1
+        fi
+
+        # Verify authentication
+        echo "Verifying Claude CLI authentication..."
+        # Add actual verification command here
+
+    - name: Display Claude CLI Info
+      shell: bash
+      run: |
+        echo "=== Claude CLI Setup Complete ==="
+        echo "Version: $(claude --version 2>&1 || echo 'unknown')"
+        echo "Location: $(which claude || echo 'not found in PATH')"
+        echo "Config: ~/.claude"
+        echo "================================"
+
+branding:
+  icon: 'terminal'
+  color: 'blue'

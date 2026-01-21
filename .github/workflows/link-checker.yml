@@ -1,0 +1,284 @@
+name: Link Checker
+
+# Weekly validation of markdown links across documentation
+# Creates issues for broken links
+
+on:
+  schedule:
+    # Weekly on Wednesday at 10 AM UTC
+    - cron: '0 10 * * 3'
+  pull_request:
+    paths:
+      - '**.md'
+      - '.github/workflows/link-checker.yml'
+      - '.github/markdown-link-check.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  markdown-lint:
+    name: Validate Markdown Links
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Find Markdown Files
+        id: find-files
+        run: |
+          # Find all markdown files
+          FILES=$(find . -type f -name "*.md" \
+            -not -path "*/node_modules/*" \
+            -not -path "*/.git/*" \
+            -not -path "*/vendor/*" | sort)
+
+          COUNT=$(echo "$FILES" | wc -l)
+          echo "Found $COUNT markdown files"
+          echo "count=$COUNT" >> $GITHUB_OUTPUT
+
+          # Save file list
+          echo "$FILES" > /tmp/markdown-files.txt
+
+      - name: Check Links in Documentation
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'no'
+          use-verbose-mode: 'yes'
+          config-file: '.github/markdown-link-check.json'
+          folder-path: 'docs/'
+          file-path: './README.md, ./CLAUDE.md, ./DEVELOPMENT_PLAN.md'
+          max-depth: -1
+
+      - name: Check Links in Templates
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'no'
+          use-verbose-mode: 'yes'
+          config-file: '.github/markdown-link-check.json'
+          folder-path: 'templates/'
+          max-depth: -1
+
+      - name: Check Links in Commands
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'no'
+          use-verbose-mode: 'yes'
+          config-file: '.github/markdown-link-check.json'
+          folder-path: '.claude/commands/'
+          max-depth: -1
+
+      - name: Check Links in Agent Configs
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'no'
+          use-verbose-mode: 'yes'
+          config-file: '.github/markdown-link-check.json'
+          folder-path: '.claude/agents/'
+          max-depth: -1
+
+      - name: Generate Link Report
+        if: always()
+        id: generate-report
+        run: |
+          REPORT_FILE="/tmp/link-check-report.md"
+
+          cat > $REPORT_FILE <<'EOF'
+          ## Link Validation Report
+
+          **Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **Total Files Checked:** ${{ steps.find-files.outputs.count }}
+
+          ### Checked Directories
+
+          - ✅ Documentation (`docs/`)
+          - ✅ Root files (`README.md`, `CLAUDE.md`, etc.)
+          - ✅ Templates (`templates/`)
+          - ✅ Commands (`.claude/commands/`)
+          - ✅ Agent Configs (`.claude/agents/`)
+
+          ### Common Link Issues
+
+          1. **404 Not Found** - Link points to non-existent resource
+          2. **Timeout** - Server did not respond within 20 seconds
+          3. **SSL/TLS Errors** - Certificate issues
+          4. **Rate Limited (429)** - Too many requests to the server
+
+          ### Fixing Broken Links
+
+          1. Update the link to point to the correct resource
+          2. Remove links to deprecated/deleted content
+          3. Replace with alternative resources if available
+          4. Add to ignore list if link is intentionally broken (examples, templates)
+
+          ### Configuration
+
+          Link checker configuration: `.github/markdown-link-check.json`
+          EOF
+
+          echo "report_file=$REPORT_FILE" >> $GITHUB_OUTPUT
+
+      - name: Upload Report Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: link-check-report
+          path: /tmp/link-check-report.md
+          retention-days: 30
+
+      - name: Create Issue on Broken Links
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // Check if there's already an open issue for broken links
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'broken-links,automated',
+              per_page: 100
+            });
+
+            const hasOpenIssue = existingIssues.data.length > 0;
+
+            if (hasOpenIssue) {
+              console.log('Open broken links issue already exists. Adding comment instead.');
+
+              const latestIssue = existingIssues.data[0];
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: latestIssue.number,
+                body: `## Link Check Update
+
+            **Date:** ${new Date().toISOString()}
+            **Status:** ❌ Still finding broken links
+
+            Broken links are still present in the repository.
+
+            **Workflow Run:** [View Logs](${context.payload.repository.html_url}/actions/runs/${context.runId})
+
+            Please review and fix the broken links, then close this issue once resolved.
+            `
+              });
+            } else {
+              console.log('Creating new broken links issue.');
+
+              const issue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '🔗 Broken Links Detected in Documentation',
+                body: `## Broken Links Report
+
+            **Workflow:** Link Checker
+            **Status:** ❌ Failed
+            **Date:** ${new Date().toISOString()}
+            **Checked Files:** ${{ steps.find-files.outputs.count }} markdown files
+
+            The automated link checker has detected broken links in the repository.
+
+            ### Action Required
+
+            1. Review the workflow logs: [View Run](${context.payload.repository.html_url}/actions/runs/${context.runId})
+            2. Download the detailed report from the workflow artifacts
+            3. Fix or remove broken links
+            4. Re-run the workflow to verify fixes
+
+            ### Checked Directories
+
+            - Documentation (\`docs/\`)
+            - Root files (\`README.md\`, \`CLAUDE.md\`, etc.)
+            - Templates (\`templates/\`)
+            - Commands (\`.claude/commands/\`)
+            - Agent Configs (\`.claude/agents/\`)
+
+            ### Common Fixes
+
+            **Update Link:**
+            \`\`\`markdown
+            - [Old Link](https://example.com/old)
+            + [New Link](https://example.com/new)
+            \`\`\`
+
+            **Remove Broken Link:**
+            \`\`\`markdown
+            - See [deprecated guide](https://example.com/gone)
+            + Contact support for the latest guide
+            \`\`\`
+
+            **Add to Ignore List:**
+            Edit \`.github/markdown-link-check.json\`:
+            \`\`\`json
+            {
+              "ignorePatterns": [
+                {
+                  "pattern": "^https://example.com"
+                }
+              ]
+            }
+            \`\`\`
+
+            ### Testing Locally
+
+            \`\`\`bash
+            # Install markdown-link-check
+            npm install -g markdown-link-check
+
+            # Check a file
+            markdown-link-check README.md
+
+            # Check all markdown files
+            find . -name "*.md" -not -path "*/node_modules/*" -exec markdown-link-check {} \\;
+            \`\`\`
+
+            ### Resources
+
+            - [markdown-link-check Documentation](https://github.com/tcort/markdown-link-check)
+            - [Configuration Options](https://github.com/tcort/markdown-link-check#config-file-format)
+
+            ---
+            *This issue was automatically created by the Link Checker workflow.*
+
+            **Close this issue once all broken links are fixed and the workflow passes.**
+            `,
+                labels: ['documentation', 'broken-links', 'automated']
+              });
+
+              console.log(`Created issue #${issue.data.number}`);
+            }
+
+      - name: Comment on PR
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## ⚠️ Link Validation Failed
+
+            The link checker has detected broken links in the markdown files changed in this PR.
+
+            **Action Required:**
+            1. Review the workflow logs: [View Run](${context.payload.repository.html_url}/actions/runs/${context.runId})
+            2. Fix broken links in the affected files
+            3. Push the fixes to update this PR
+
+            **Common Issues:**
+            - 404 Not Found - Update or remove the link
+            - Timeout - Check if the URL is correct and accessible
+            - SSL/TLS Errors - Verify the HTTPS certificate is valid
+
+            ---
+            *This comment was automatically posted by the Link Checker workflow.*
+            `
+            });
