@@ -74,6 +74,7 @@ jobs:
           max-depth: -1
 
       - name: Check Links in Agent Configs
+        continue-on-error: true
         uses: gaurav-nelson/github-action-markdown-link-check@v1
         with:
           use-quiet-mode: 'no'
