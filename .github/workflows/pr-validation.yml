@@ -37,12 +37,12 @@ jobs:
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
-          # Count by type
-          COMMAND_COUNT=$(echo "$CHANGED_FILES" | grep -c ".claude/commands/" || echo "0")
-          AGENT_COUNT=$(echo "$CHANGED_FILES" | grep -c ".claude/agents/" || echo "0")
-          SKILL_COUNT=$(echo "$CHANGED_FILES" | grep -c "skills/" || echo "0")
-          DOC_COUNT=$(echo "$CHANGED_FILES" | grep -c ".md$" || echo "0")
-          WORKFLOW_COUNT=$(echo "$CHANGED_FILES" | grep -c ".github/workflows/" || echo "0")
+          # Count by type (using wc -l instead of grep -c to avoid issues with empty results)
+          COMMAND_COUNT=$(echo "$CHANGED_FILES" | grep ".claude/commands/" | wc -l || echo "0")
+          AGENT_COUNT=$(echo "$CHANGED_FILES" | grep ".claude/agents/" | wc -l || echo "0")
+          SKILL_COUNT=$(echo "$CHANGED_FILES" | grep "skills/" | wc -l || echo "0")
+          DOC_COUNT=$(echo "$CHANGED_FILES" | grep ".md$" | wc -l || echo "0")
+          WORKFLOW_COUNT=$(echo "$CHANGED_FILES" | grep ".github/workflows/" | wc -l || echo "0")
 
           echo "command_count=$COMMAND_COUNT" >> $GITHUB_OUTPUT
           echo "agent_count=$AGENT_COUNT" >> $GITHUB_OUTPUT

@@ -19,6 +19,12 @@
       "pattern": "^https://example.com"
     },
     {
+      "pattern": "^https?://.*\\.example\\.com"
+    },
+    {
+      "pattern": "^https://docs.example.com"
+    },
+    {
       "pattern": "^http://your-domain.com"
     },
     {
@@ -26,6 +32,15 @@
     },
     {
       "pattern": "^mailto:"
+    },
+    {
+      "pattern": "^https://www.reddit.com"
+    },
+    {
+      "pattern": "^https://reddit.com"
+    },
+    {
+      "pattern": "^https://.*\\.substack\\.com"
     }
   ],
   "replacementPatterns": [
@@ -47,6 +62,20 @@
       "headers": {
         "Accept": "text/html",
         "User-Agent": "Mozilla/5.0 (compatible; link-checker/1.0)"
+      }
+    },
+    {
+      "urls": ["https://www.reddit.com", "https://reddit.com"],
+      "headers": {
+        "Accept": "text/html",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "urls": ["https://substack.com", "https://aimaker.substack.com"],
+      "headers": {
+        "Accept": "text/html",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
       }
     }
   ],
