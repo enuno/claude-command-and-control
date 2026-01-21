@@ -41,6 +41,24 @@
     },
     {
       "pattern": "^https://.*\\.substack\\.com"
+    },
+    {
+      "pattern": "^[^/]*\\.md$"
+    },
+    {
+      "pattern": "^templates/"
+    },
+    {
+      "pattern": "^skills/"
+    },
+    {
+      "pattern": "^skills-templates/"
+    },
+    {
+      "pattern": "^docs/"
+    },
+    {
+      "pattern": ".*badge\\.svg$"
     }
   ],
   "replacementPatterns": [
