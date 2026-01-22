@@ -124,7 +124,7 @@ claude-command-and-control/
 │       └── registry.json      # Skill discovery and metadata
 │
 ├── docs/
-│   ├── best-practices/        # 13 comprehensive instruction manuals
+│   ├── best-practices/        # 15 comprehensive instruction manuals
 │   │   ├── 01-Introduction-and-Core-Principles.md
 │   │   ├── 02-Individual-Command-Creation.md
 │   │   ├── 03-Individual-Agent-Configuration.md
@@ -137,15 +137,17 @@ claude-command-and-control/
 │   │   ├── 10-Developing-High-Impact-Claude-Skills.md
 │   │   ├── 11-hybrid-ai-agent-multi-git-worktree-development.md
 │   │   ├── 12-Skills-First-Planning-and-Orchestration.md
-│   │   └── 13-Pict-BDD-Test-Design.md
+│   │   ├── 13-Pict-BDD-Test-Design.md
+│   │   ├── 14-LLM-Production-Optimization.md
+│   │   └── 15-Advanced-Orchestration-Patterns.md
 │   ├── references/            # Anthropic specifications and guides
 │   │   ├── agent-skills-specification.md
 │   │   ├── agent-skills-overview.md
 │   │   └── agent-skills-integration-guide.md
 │   └── TEMPLATE_CUSTOMIZATION.md
 │
-├── commands-templates/        # 21 command templates
-│   ├── orchestration/         # Multi-agent orchestration commands
+├── commands-templates/        # 21 base + 6 orchestration = 27 command templates
+│   ├── orchestration/         # Multi-agent orchestration commands (basic)
 │   │   ├── coordinate-workflow.md
 │   │   ├── orchestrate-feature.md
 │   │   ├── quality-gate.md
@@ -167,12 +169,18 @@ claude-command-and-control/
 │   ├── summarize.md           # Change summarization
 │   └── test-all.md            # Comprehensive test suite execution
 │
-├── agents-templates/          # 10 specialized agent configurations
-│   ├── orchestration/         # Multi-agent orchestration agents
-│   │   ├── orchestrator-lead.md
-│   │   ├── task-coordinator.md
-│   │   ├── integration-orchestrator.md
-│   │   └── monitoring-agent.md
+├── agents-templates/          # 10 base + 6 orchestration = 16 specialized agent configurations
+│   ├── orchestration/         # Advanced orchestration agents (NEW in v1.1)
+│   │   ├── dag-orchestrator.md          # DAG execution with topological sorting
+│   │   ├── orchestrator-lead.md         # Multi-agent workflow coordination
+│   │   ├── performance-monitor.md       # Performance profiling and optimization
+│   │   ├── pool-manager.md              # Dynamic agent pool management
+│   │   ├── resilience-orchestrator.md   # Saga pattern and circuit breakers
+│   │   ├── state-manager.md             # Distributed state with CRDTs
+│   │   ├── task-coordinator.md          # Task dependency resolution
+│   │   ├── integration-orchestrator.md  # Result synthesis and merging
+│   │   └── monitoring-agent.md          # Real-time progress tracking
+│   ├── general-agent-skills-first.md    # Generic skills-first agent template (NEW)
 │   ├── architect.md           # System design and planning (v2.0 consolidated)
 │   ├── builder.md             # Implementation with TDD
 │   ├── devops.md              # Infrastructure and CI/CD
@@ -204,8 +212,14 @@ claude-command-and-control/
 │   ├── using-superpowers/     # Skill discovery and invocation
 │   └── validator-role-skill/  # Testing workflows
 │
-├── skills-templates/          # 31 skill templates
-│   ├── orchestration/         # Multi-skill orchestration templates
+├── skills-templates/          # 31 base + 6 orchestration = 37 skill templates
+│   ├── orchestration/         # Advanced orchestration skill templates (NEW in v1.1)
+│   │   ├── agent-pool-manager-skill.md        # Auto-scaling, health monitoring
+│   │   ├── circuit-breaker-skill.md           # Cascading failure prevention
+│   │   ├── distributed-state-sync-skill.md    # CRDT implementations
+│   │   ├── performance-profiler-skill.md      # Token usage profiling
+│   │   ├── saga-pattern-skill.md              # Compensating transactions
+│   │   └── task-dependency-resolver-skill.md  # Kahn's algorithm, cycle detection
 │   ├── artifacts-builder/     # Artifact generation patterns
 │   ├── brand-guidelines/      # Brand consistency workflows
 │   ├── canvas-design/         # Visual design in Canvas
@@ -236,6 +250,14 @@ claude-command-and-control/
 │   └── webapp-testing/        # Web application testing
 │
 ├── templates/
+│   ├── commands/              # Advanced orchestration command templates (NEW in v1.1)
+│   │   └── orchestration/
+│   │       ├── dag-executor.md                    # DAG workflow execution
+│   │       ├── dynamic-orchestrator.md            # Auto-scaling agent pools
+│   │       ├── fault-tolerant-orchestrator.md     # Resilient workflows
+│   │       ├── observability-tracker.md           # Distributed tracing
+│   │       ├── performance-optimizer.md           # Performance analysis
+│   │       └── state-coordinator.md               # State management
 │   ├── orchestration/         # Planning templates for multi-agent workflows
 │   │   ├── MULTI_AGENT_PLAN.md
 │   │   └── TASK_DECOMPOSITION.md
@@ -243,6 +265,14 @@ claude-command-and-control/
 │       ├── minimal-skill-template.md
 │       ├── standard-skill-template.md
 │       └── comprehensive-skill-template.md
+│
+├── examples/                  # Working examples with performance metrics (NEW in v1.1)
+│   └── orchestration/         # Advanced orchestration pattern demonstrations
+│       ├── 01-large-scale-refactoring/         # 1,247 files, 6.5x faster, 30% cost savings
+│       ├── 02-multi-environment-deployment/    # Saga pattern, 55% downtime reduction
+│       ├── 03-parallel-research-synthesis/     # 15 agents, 17.8x speedup, zero conflicts
+│       ├── 04-distributed-testing/             # 5,247 tests, 11.2x speedup, 55% cost savings
+│       └── 05-complex-feature-implementation/  # All 6 patterns, 3.5x speedup, 57% cost savings
 │
 ├── INTEGRATION/               # Content ingestion and quality validation
 │   ├── incoming/              # New content drop zone
@@ -2628,13 +2658,17 @@ This manual synthesizes best practices from:
 
 ## 🗺️ Roadmap
 
-### Current Version: 1.0
+### Current Version: 1.1
 
-**Planned for 1.1** (Q1 2026):
-- [ ] Advanced orchestration patterns
-- [ ] CI/CD integration templates
+**Completed in 1.1** (January 2026):
+- [x] **Advanced orchestration patterns** - Document 15 with 6 enterprise-grade patterns (DAG execution, agent pools, distributed state, saga pattern, circuit breakers, performance profiling)
+- [x] **CI/CD integration templates** - Complete GitHub Actions automation system (6 workflows, security scanning, automated maintenance)
+- [x] **Extended agent role library** - Added 6 specialized orchestration agents (DAG orchestrator, pool manager, state manager, resilience orchestrator, performance monitor, general skills-first agent)
+- [x] **Production orchestration skills** - 6 advanced skill templates with algorithm implementations (Kahn's, CRDT, saga pattern, circuit breaker)
+- [x] **Working examples** - 5 comprehensive real-world examples with performance metrics
+
+**Remaining for 1.2** (Q1 2026):
 - [ ] Performance benchmarking tools
-- [ ] Extended agent role library
 - [ ] Multi-language command support
 
 **Planned for 2.0** (Q2 2026):
@@ -2648,17 +2682,19 @@ This manual synthesizes best practices from:
 
 ## 📈 Project Stats
 
-- **Documentation**: 13 comprehensive best practice manuals
+- **Documentation**: 15 comprehensive best practice manuals (including Document 15: Advanced Orchestration Patterns)
 - **Active Commands**: 13 production-ready commands
-- **Agent Templates**: 10 specialized agent configurations
-- **Command Templates**: 21 command templates
+- **Agent Templates**: 15 specialized agent configurations (10 base + 5 orchestration)
+- **Command Templates**: 27 command templates (21 base + 6 orchestration)
 - **Production Skills**: 20 working skills in `skills/`
-- **Skill Templates**: 29 skill templates in `skills-templates/`
+- **Skill Templates**: 35 skill templates (29 base + 6 orchestration)
+- **Orchestration Examples**: 5 comprehensive real-world examples with metrics
 - **Processed Skills**: 30 integrated skills in `INTEGRATION/processed/`
 - **Code Examples**: 100+ working examples across all categories
 - **Best Practices**: 100+ documented patterns
 - **Security Guidelines**: Comprehensive threat model and audit protocols
 - **Test Coverage**: All templates validated
+- **GitHub Actions**: 6 automated workflows (maintenance, integration, security, PR validation, link checking, research monitoring)
 
 ---
 
@@ -2672,7 +2708,7 @@ If you find this project useful, please consider starring it on GitHub to help o
 
 **Built with ❤️ by the AI Engineering Community**
 
-**Version**: 2.0.0
-**Last Updated**: December 26, 2025
+**Version**: 1.1.0
+**Last Updated**: January 22, 2026
 **Maintained By**: [@enuno](https://github.com/enuno)
 **Status**: ✅ Production Ready
