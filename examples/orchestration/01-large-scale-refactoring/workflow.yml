@@ -1,0 +1,444 @@
+# Large-Scale TypeScript Migration Workflow
+# 50 modules, 1,247 files total
+
+name: typescript-migration
+description: Migrate legacy JavaScript codebase to TypeScript
+fail_strategy: continue  # Continue even if some modules fail
+auto_scale: true
+
+pool:
+  min_size: 5
+  max_size: 15
+  scale_up_threshold: 10
+  scale_down_threshold: 3
+
+tasks:
+  # ============================================================
+  # BATCH 1: Foundation modules (no dependencies)
+  # ============================================================
+
+  - id: migrate_utils
+    description: Migrate utility functions (127 files)
+    command: /builder
+    args: "Migrate utils/ to TypeScript with strict types"
+    dependencies: []
+    estimated_duration: 25  # minutes
+    skills: [builder-skill, typescript-expert-skill]
+
+  - id: migrate_constants
+    description: Migrate constants and enums (43 files)
+    command: /builder
+    args: "Migrate constants/ to TypeScript enums"
+    dependencies: []
+    estimated_duration: 15
+    skills: [builder-skill]
+
+  - id: migrate_types
+    description: Create TypeScript type definitions (89 files)
+    command: /architect
+    args: "Design and create TypeScript interfaces and types"
+    dependencies: []
+    estimated_duration: 35
+    skills: [architect-skill, typescript-type-expert-skill]
+
+  - id: migrate_helpers
+    description: Migrate helper functions (64 files)
+    command: /builder
+    args: "Migrate helpers/ with generic type parameters"
+    dependencies: []
+    estimated_duration: 20
+    skills: [builder-skill]
+
+  - id: migrate_config
+    description: Migrate configuration files (23 files)
+    command: /builder
+    args: "Migrate config/ with strict env validation"
+    dependencies: []
+    estimated_duration: 18
+    skills: [builder-skill]
+
+  - id: migrate_validators
+    description: Migrate validation schemas (31 files)
+    command: /builder
+    args: "Migrate validators/ using Zod for runtime validation"
+    dependencies: []
+    estimated_duration: 22
+    skills: [builder-skill]
+
+  - id: migrate_errors
+    description: Migrate custom error classes (17 files)
+    command: /builder
+    args: "Migrate errors/ with proper error inheritance"
+    dependencies: []
+    estimated_duration: 12
+    skills: [builder-skill]
+
+  - id: migrate_logger
+    description: Migrate logging utilities (9 files)
+    command: /builder
+    args: "Migrate logger/ with type-safe logging"
+    dependencies: []
+    estimated_duration: 10
+    skills: [builder-skill]
+
+  - id: migrate_crypto
+    description: Migrate cryptography utilities (14 files)
+    command: /builder
+    args: "Migrate crypto/ with secure typing"
+    dependencies: []
+    estimated_duration: 15
+    skills: [builder-skill]
+
+  - id: migrate_date_utils
+    description: Migrate date utilities (21 files)
+    command: /builder
+    args: "Migrate date-utils/ using date-fns with types"
+    dependencies: []
+    estimated_duration: 13
+    skills: [builder-skill]
+
+  - id: migrate_string_utils
+    description: Migrate string utilities (18 files)
+    command: /builder
+    args: "Migrate string-utils/ with template literal types"
+    dependencies: []
+    estimated_duration: 11
+    skills: [builder-skill, typescript-type-expert-skill]
+
+  - id: migrate_array_utils
+    description: Migrate array utilities (25 files)
+    command: /builder
+    args: "Migrate array-utils/ with generic array types"
+    dependencies: []
+    estimated_duration: 14
+    skills: [builder-skill]
+
+  # ============================================================
+  # BATCH 2: Core modules (depend on foundation)
+  # ============================================================
+
+  - id: migrate_database
+    description: Migrate database layer (78 files)
+    command: /builder
+    args: "Migrate database/ using Prisma with full type safety"
+    dependencies: [migrate_types, migrate_errors, migrate_config]
+    estimated_duration: 45
+    skills: [builder-skill, database-expert-skill]
+
+  - id: migrate_api_client
+    description: Migrate API client (52 files)
+    command: /builder
+    args: "Migrate api-client/ with typed HTTP methods"
+    dependencies: [migrate_types, migrate_errors, migrate_validators]
+    estimated_duration: 35
+    skills: [builder-skill]
+
+  - id: migrate_auth
+    description: Migrate authentication (67 files)
+    command: /builder
+    args: "Migrate auth/ with JWT typing and session types"
+    dependencies: [migrate_types, migrate_crypto, migrate_database]
+    estimated_duration: 50
+    skills: [builder-skill, typescript-expert-skill]
+
+  - id: migrate_cache
+    description: Migrate caching layer (29 files)
+    command: /builder
+    args: "Migrate cache/ with Redis type definitions"
+    dependencies: [migrate_types, migrate_config]
+    estimated_duration: 25
+    skills: [builder-skill]
+
+  - id: migrate_queue
+    description: Migrate job queue (34 files)
+    command: /builder
+    args: "Migrate queue/ with Bull queue typing"
+    dependencies: [migrate_types, migrate_database]
+    estimated_duration: 28
+    skills: [builder-skill]
+
+  - id: migrate_events
+    description: Migrate event system (41 files)
+    command: /builder
+    args: "Migrate events/ with type-safe event emitters"
+    dependencies: [migrate_types]
+    estimated_duration: 30
+    skills: [builder-skill, typescript-type-expert-skill]
+
+  - id: migrate_websocket
+    description: Migrate WebSocket layer (38 files)
+    command: /builder
+    args: "Migrate websocket/ with Socket.IO types"
+    dependencies: [migrate_types, migrate_auth, migrate_events]
+    estimated_duration: 32
+    skills: [builder-skill]
+
+  - id: migrate_storage
+    description: Migrate file storage (27 files)
+    command: /builder
+    args: "Migrate storage/ with S3 type definitions"
+    dependencies: [migrate_types, migrate_config]
+    estimated_duration: 24
+    skills: [builder-skill]
+
+  - id: migrate_email
+    description: Migrate email service (31 files)
+    command: /builder
+    args: "Migrate email/ with template typing"
+    dependencies: [migrate_types, migrate_config, migrate_queue]
+    estimated_duration: 26
+    skills: [builder-skill]
+
+  - id: migrate_notifications
+    description: Migrate notification system (35 files)
+    command: /builder
+    args: "Migrate notifications/ with push notification types"
+    dependencies: [migrate_types, migrate_database, migrate_queue]
+    estimated_duration: 29
+    skills: [builder-skill]
+
+  - id: migrate_search
+    description: Migrate search engine integration (44 files)
+    command: /builder
+    args: "Migrate search/ with Elasticsearch types"
+    dependencies: [migrate_types, migrate_database]
+    estimated_duration: 33
+    skills: [builder-skill]
+
+  - id: migrate_analytics
+    description: Migrate analytics tracking (23 files)
+    command: /builder
+    args: "Migrate analytics/ with event typing"
+    dependencies: [migrate_types, migrate_events]
+    estimated_duration: 21
+    skills: [builder-skill]
+
+  - id: migrate_monitoring
+    description: Migrate monitoring/metrics (19 files)
+    command: /builder
+    args: "Migrate monitoring/ with Prometheus types"
+    dependencies: [migrate_types]
+    estimated_duration: 18
+    skills: [builder-skill]
+
+  - id: migrate_rate_limiter
+    description: Migrate rate limiting (16 files)
+    command: /builder
+    args: "Migrate rate-limiter/ with typed rate limits"
+    dependencies: [migrate_types, migrate_cache]
+    estimated_duration: 16
+    skills: [builder-skill]
+
+  - id: migrate_permissions
+    description: Migrate permissions/RBAC (47 files)
+    command: /builder
+    args: "Migrate permissions/ with type-safe RBAC"
+    dependencies: [migrate_types, migrate_database, migrate_auth]
+    estimated_duration: 38
+    skills: [builder-skill, typescript-type-expert-skill]
+
+  - id: migrate_audit
+    description: Migrate audit logging (22 files)
+    command: /builder
+    args: "Migrate audit/ with typed audit events"
+    dependencies: [migrate_types, migrate_database, migrate_events]
+    estimated_duration: 20
+    skills: [builder-skill]
+
+  # ============================================================
+  # BATCH 3: Business logic modules (depend on core)
+  # ============================================================
+
+  - id: migrate_users_service
+    description: Migrate users service (83 files)
+    command: /builder
+    args: "Migrate services/users/ with full type coverage"
+    dependencies: [migrate_database, migrate_auth, migrate_permissions]
+    estimated_duration: 55
+    skills: [builder-skill]
+
+  - id: migrate_products_service
+    description: Migrate products service (91 files)
+    command: /builder
+    args: "Migrate services/products/ with inventory types"
+    dependencies: [migrate_database, migrate_storage, migrate_search]
+    estimated_duration: 60
+    skills: [builder-skill]
+
+  - id: migrate_orders_service
+    description: Migrate orders service (104 files)
+    command: /builder
+    args: "Migrate services/orders/ with transaction types"
+    dependencies: [migrate_database, migrate_users_service, migrate_products_service]
+    estimated_duration: 68
+    skills: [builder-skill]
+
+  - id: migrate_payments_service
+    description: Migrate payments service (67 files)
+    command: /builder
+    args: "Migrate services/payments/ with Stripe types"
+    dependencies: [migrate_database, migrate_orders_service]
+    estimated_duration: 48
+    skills: [builder-skill]
+
+  - id: migrate_shipping_service
+    description: Migrate shipping service (54 files)
+    command: /builder
+    args: "Migrate services/shipping/ with carrier types"
+    dependencies: [migrate_database, migrate_orders_service]
+    estimated_duration: 42
+    skills: [builder-skill]
+
+  - id: migrate_inventory_service
+    description: Migrate inventory service (61 files)
+    command: /builder
+    args: "Migrate services/inventory/ with stock types"
+    dependencies: [migrate_database, migrate_products_service]
+    estimated_duration: 45
+    skills: [builder-skill]
+
+  - id: migrate_reviews_service
+    description: Migrate reviews service (39 files)
+    command: /builder
+    args: "Migrate services/reviews/ with rating types"
+    dependencies: [migrate_database, migrate_users_service, migrate_products_service]
+    estimated_duration: 32
+    skills: [builder-skill]
+
+  - id: migrate_recommendations_service
+    description: Migrate recommendations service (48 files)
+    command: /builder
+    args: "Migrate services/recommendations/ with ML types"
+    dependencies: [migrate_database, migrate_users_service, migrate_products_service]
+    estimated_duration: 38
+    skills: [builder-skill]
+
+  - id: migrate_api_controllers
+    description: Migrate API controllers (127 files)
+    command: /builder
+    args: "Migrate controllers/ with Express type definitions"
+    dependencies: [
+      migrate_users_service,
+      migrate_products_service,
+      migrate_orders_service,
+      migrate_payments_service
+    ]
+    estimated_duration: 75
+    skills: [builder-skill]
+
+  - id: migrate_api_routes
+    description: Migrate API routes (56 files)
+    command: /builder
+    args: "Migrate routes/ with typed route handlers"
+    dependencies: [migrate_api_controllers]
+    estimated_duration: 40
+    skills: [builder-skill]
+
+  - id: migrate_api_middleware
+    description: Migrate API middleware (33 files)
+    command: /builder
+    args: "Migrate middleware/ with Express middleware types"
+    dependencies: [migrate_auth, migrate_permissions, migrate_rate_limiter]
+    estimated_duration: 28
+    skills: [builder-skill]
+
+  - id: migrate_graphql_schema
+    description: Migrate GraphQL schema (71 files)
+    command: /builder
+    args: "Migrate graphql/ with type-graphql"
+    dependencies: [migrate_types, migrate_api_controllers]
+    estimated_duration: 52
+    skills: [builder-skill, graphql-expert-skill]
+
+  - id: migrate_ui_components
+    description: Migrate React components (189 files)
+    command: /builder
+    args: "Migrate components/ to TypeScript React"
+    dependencies: [migrate_types, migrate_api_client]
+    estimated_duration: 95
+    skills: [builder-skill, react-expert-skill, typescript-expert-skill]
+
+  - id: migrate_ui_pages
+    description: Migrate React pages (74 files)
+    command: /builder
+    args: "Migrate pages/ with Next.js types"
+    dependencies: [migrate_ui_components]
+    estimated_duration: 58
+    skills: [builder-skill, react-expert-skill]
+
+  - id: migrate_ui_hooks
+    description: Migrate React hooks (42 files)
+    command: /builder
+    args: "Migrate hooks/ with generic hook types"
+    dependencies: [migrate_types]
+    estimated_duration: 34
+    skills: [builder-skill, react-expert-skill, typescript-type-expert-skill]
+
+  - id: migrate_ui_context
+    description: Migrate React context (29 files)
+    command: /builder
+    args: "Migrate context/ with typed context providers"
+    dependencies: [migrate_types]
+    estimated_duration: 25
+    skills: [builder-skill, react-expert-skill]
+
+  - id: migrate_ui_styles
+    description: Migrate styled components (38 files)
+    command: /builder
+    args: "Migrate styles/ with styled-components types"
+    dependencies: []
+    estimated_duration: 22
+    skills: [builder-skill]
+
+  - id: migrate_state_management
+    description: Migrate Redux store (51 files)
+    command: /builder
+    args: "Migrate store/ using Redux Toolkit with types"
+    dependencies: [migrate_types]
+    estimated_duration: 40
+    skills: [builder-skill, react-expert-skill, typescript-expert-skill]
+
+  # ============================================================
+  # BATCH 4: Integration and deployment (depend on everything)
+  # ============================================================
+
+  - id: migrate_integration_tests
+    description: Migrate integration tests (94 files)
+    command: /validator
+    args: "Migrate integration tests with typed test utilities"
+    dependencies: [
+      migrate_api_routes,
+      migrate_database,
+      migrate_users_service,
+      migrate_products_service
+    ]
+    estimated_duration: 85
+    skills: [validator-skill, jest-testing-expert-skill]
+
+  - id: migrate_e2e_tests
+    description: Migrate E2E tests (67 files)
+    command: /validator
+    args: "Migrate E2E tests using Playwright with types"
+    dependencies: [migrate_ui_pages, migrate_api_routes]
+    estimated_duration: 70
+    skills: [validator-skill, playwright-expert-skill]
+
+  - id: migrate_build_config
+    description: Update build configuration (12 files)
+    command: /devops
+    args: "Update webpack/vite config for TypeScript"
+    dependencies: [migrate_ui_components, migrate_api_controllers]
+    estimated_duration: 18
+    skills: [devops-skill, typescript-build-expert-skill]
+
+  - id: run_final_validation
+    description: Run full type checking and tests
+    command: /validator
+    args: "Run tsc --noEmit and full test suite"
+    dependencies: [migrate_integration_tests, migrate_e2e_tests, migrate_build_config]
+    estimated_duration: 45
+    skills: [validator-skill]
+
+# Estimated total duration (sequential): ~42 hours
+# Estimated with parallel execution: 6-8 hours (6.5x speedup)
+# Critical path: utils → database → users_service → api_controllers → ui_components → e2e_tests

@@ -370,6 +370,7 @@ claude-command-and-control/
 | **[08-Claude-Skills-Guide](docs/best-practices/08-Claude-Skills-Guide.md)** | Skills creation and integration | Skill architecture, triggers, examples, orchestration patterns, best practices |
 | **[09-Agent-Skills-vs-Multi-Agent](docs/best-practices/09-Agent-Skills-vs-Multi-Agent.md)** | Strategic guidance on architecture | Skills-first approach, hybrid patterns, migration strategies, decision matrices |
 | **[12-Skills-First-Planning-and-Orchestration](docs/best-practices/12-Skills-First-Planning-and-Orchestration.md)** | Planning for skills-first and multi-agent workflows | Decision framework, agent registries, multi-agent plans, orchestration patterns, metrics |
+| **[15-Advanced-Orchestration-Patterns](docs/best-practices/15-Advanced-Orchestration-Patterns.md)** | Enterprise-grade orchestration patterns | DAG execution, state management, resilience, performance optimization, CRDT, saga pattern, circuit breakers |
 
 ### Reference Documentation
 
@@ -1149,7 +1150,18 @@ version: 1.0.0
 
 #### Orchestration Skills (NEW)
 
-Advanced multi-agent coordination and parallel execution:
+**Advanced Orchestration Skills** - Enterprise-grade patterns (Document 15):
+
+| Skill | Purpose | Use When |
+|-------|---------|----------|
+| **[task-dependency-resolver-skill](skills-templates/orchestration/task-dependency-resolver-skill.md)** | Kahn's algorithm for topological sorting and cycle detection | Executing workflows with complex task dependencies (DAG execution) |
+| **[agent-pool-manager-skill](skills-templates/orchestration/agent-pool-manager-skill.md)** | Auto-scaling, health monitoring, and agent recycling | Managing variable workloads with dynamic agent pools |
+| **[distributed-state-sync-skill](skills-templates/orchestration/distributed-state-sync-skill.md)** | CRDT implementations for conflict-free distributed state | Sharing state across concurrent agents with automatic conflict resolution |
+| **[saga-pattern-skill](skills-templates/orchestration/saga-pattern-skill.md)** | Compensating transactions for distributed workflows | Multi-step workflows requiring automatic rollback on failure |
+| **[circuit-breaker-skill](skills-templates/orchestration/circuit-breaker-skill.md)** | 3-state FSM to prevent cascading failures | Protecting against failing external services or dependencies |
+| **[performance-profiler-skill](skills-templates/orchestration/performance-profiler-skill.md)** | Token usage analysis and bottleneck detection | Optimizing costs and meeting performance SLAs |
+
+**Basic Orchestration Skills** - Multi-agent coordination:
 
 | Skill | Purpose | Use When |
 |-------|---------|----------|
