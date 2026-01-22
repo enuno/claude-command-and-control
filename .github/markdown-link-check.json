@@ -65,6 +65,9 @@
     },
     {
       "pattern": ".*badge\\.svg$"
+    },
+    {
+      "pattern": "^https://api\\.star-history\\.com"
     }
   ],
   "replacementPatterns": [
