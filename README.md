@@ -1080,6 +1080,7 @@ version: 1.0.0
 | Skill | Purpose | Use When |
 |-------|---------|----------|
 | **agent-skill-bridge** | Integrates agents and skills | Coordinating agents with skills |
+| **[agent-starter](skills/agent-starter/SKILL.md)** | OpenServ SDK for autonomous AI agents | Building AI agents, implementing capabilities with Zod schemas, testing locally, deploying to production |
 | **[agent-communication-protocol](skills-templates/agent-communication-protocol/)** | Open protocol for AI agent interoperability | Multi-agent communication, framework-agnostic agents, REST API |
 | **[ar-io-build](skills-templates/ar-io-build/)** | Comprehensive AR.IO build documentation | Building with AR.IO, implementing AR.IO solutions, debugging AR.IO code |
 | **[arweave-ao-cookbook](skills-templates/arweave-ao-cookbook/)** | Build decentralized applications on AO | Building decentralized apps on Arweave with permanent storage |
@@ -1131,6 +1132,7 @@ version: 1.0.0
 | **[github-copilot](skills-templates/github-copilot/)** | AI coding assistant with suggestions, chat, code review | Using GitHub Copilot features, IDE integration, custom instructions |
 | **[github-pages](skills/github-pages/SKILL.md)** | GitHub Pages static site hosting | Creating sites, custom domains, Jekyll themes, GitHub Actions deployment |
 | **[gitbook](skills/gitbook/SKILL.md)** | GitBook documentation platform | Spaces, Git sync, custom domains, OpenAPI, change requests |
+| **[google-seo](skills/google-seo/SKILL.md)** | Google SEO best practices and web optimization | Creating web content, reviewing pages for SEO, implementing metadata, structuring URLs and site architecture |
 | **[google-structured-data](skills/google-structured-data/SKILL.md)** | Schema.org markup for Google Search rich results | JSON-LD templates, Article/Product/Event/FAQ markup, JavaScript generation |
 | **[image-enhancer](skills-templates/image-enhancer/)** | Image quality improvement | Enhancing screenshots or images for presentations |
 | **[internal-comms](skills-templates/internal-comms/)** | Internal communications templates | Writing status reports, newsletters, or company updates |

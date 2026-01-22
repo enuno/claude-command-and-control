@@ -11,7 +11,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 ---
 
-## Available Skills (28 Total)
+## Available Skills (30 Total)
 
 ### Bitcoin Mining Skills
 
@@ -30,6 +30,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 | Skill | Description | Key Use Cases |
 |-------|-------------|---------------|
+| **[agent-starter](agent-starter/SKILL.md)** | OpenServ SDK for building autonomous AI agents with TypeScript | Building AI agents with capabilities, local testing with process(), platform integration, production deployment |
 | **[root-cause-tracing](root-cause-tracing/SKILL.md)** | Systematically traces bugs backward through call stack to find original trigger | Debugging errors deep in execution, tracing invalid data sources |
 | **[software-architecture](software-architecture/SKILL.md)** | Clean Architecture & DDD guidance for quality-focused development | Software design, architecture decisions, code quality, anti-patterns |
 | **[subagent-driven-development](subagent-driven-development/SKILL.md)** | Dispatches fresh subagent for each task with code review between tasks | Executing plans with independent tasks, fast iteration with quality gates |
@@ -70,6 +71,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 | Skill | Description | Key Use Cases |
 |-------|-------------|---------------|
+| **[google-seo](google-seo/SKILL.md)** | Google SEO best practices and web optimization based on official Google SEO Starter Guide | Creating web content, reviewing pages for SEO, implementing metadata (titles, descriptions, alt text), structuring URLs and site architecture |
 | **[google-structured-data](google-structured-data/SKILL.md)** | Schema.org markup for Google Search rich results with JSON-LD templates | Implementing structured data, Article/Product/Event/FAQ markup, JavaScript generation |
 | **[seo](seo/SKILL.md)** | Google SEO research and web traffic monetization with curated resources | SEO best practices, tool comparisons (Semrush, Moz, Ahrefs), search engine optimization, marketing strategies |
 
@@ -168,6 +170,7 @@ Skills for Bitcoin mining operations and management:
 
 ### Development Workflow Skills
 Skills that enhance the software development process:
+- AI agent development (agent-starter)
 - Software architecture (software-architecture)
 - Debugging (root-cause-tracing)
 - Parallel development (using-git-worktrees)
@@ -196,6 +199,7 @@ Skills for permanent data storage and uploads to Arweave:
 
 ### Marketing & SEO Skills
 Skills for search engine optimization and web marketing:
+- Google SEO best practices (google-seo)
 - Structured data markup (google-structured-data)
 - SEO best practices and tools (seo)
 
@@ -276,14 +280,14 @@ All skills in this repository meet these criteria:
 
 ## Statistics
 
-**Total Skills**: 29
+**Total Skills**: 31
 - Bitcoin Mining: 8
-- Development Workflow: 4
+- Development Workflow: 5
 - Design & UI/UX: 1
 - Integration & Automation: 3
 - Content & Documentation: 4
 - Data Storage & Upload: 2
-- Marketing & SEO: 2
+- Marketing & SEO: 3
 - Contribution & Sharing: 1
 - Meta Skills: 1
 - Skill Development: 3
@@ -297,6 +301,26 @@ All skills in this repository meet these criteria:
 ## Recent Additions
 
 **January 2026**:
+- ✨ **agent-starter** (2026-01-22) - OpenServ SDK AI agent development skill
+  - Complete agent development workflow from OpenServ Labs GitHub repository
+  - 6 workflow phases (Project Setup, Agent Implementation, Local Testing, Platform Integration, OpenServ Registration, Production Deployment)
+  - 3 comprehensive examples (Simple Sum Agent, Weather Agent with External API, Multi-Capability Task Agent)
+  - TypeScript code examples with Zod schemas for type-safe capabilities
+  - Tunneling tool integration (ngrok, localtunnel) for local development
+  - Production deployment strategies (Vercel, Render, Fly.io, Dokku, self-hosted)
+  - Advanced SDK features (file operations, task management, user interaction)
+  - Common pitfalls and troubleshooting guide
+  - Version 1.0 with 19 KB
+
+- ✨ **google-seo** (2026-01-22) - Google SEO best practices skill
+  - Comprehensive guidance from Google's official SEO Starter Guide
+  - 6 workflow phases (Content Discovery, URL Structure, Metadata, Images, Content Quality, Technical Implementation)
+  - 3 real-world examples (documentation site, blog optimization, e-commerce)
+  - Concrete code examples (HTML, XML, structured data)
+  - Common pitfalls and troubleshooting guide
+  - Debunked SEO myths section
+  - Version 1.0 with 21 KB
+
 - ✨ **flyio** (2026-01-21) - Fly.io deployment platform skill
   - Complete deployment workflow (install → launch → scale)
   - 30+ common flyctl commands with examples
@@ -352,6 +376,6 @@ All skills in this repository meet these criteria:
 
 ---
 
-**Last Updated**: January 21, 2026
+**Last Updated**: January 22, 2026
 **Maintained By**: Claude Command and Control Repository
-**Version**: 2.5.0
+**Version**: 2.7.0
