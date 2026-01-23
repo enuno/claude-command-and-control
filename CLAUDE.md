@@ -3,8 +3,8 @@
 > **Living Document Notice**: This CLAUDE.md file is a living document designed to evolve with AI agent development standards, command/agent patterns, and orchestration best practices. Version updates follow semantic versioning (MAJOR.MINOR.PATCH).
 
 ## Document Version
-- **Version**: 3.0.0  
-- **Last Updated**: December 1, 2025
+- **Version**: 4.0.0
+- **Last Updated**: January 23, 2026
 - **Review Cycle**: Quarterly or upon significant AI agent ecosystem updates
 - **Maintainer**: @enuno
 - **Repository**: https://github.com/enuno/claude-command-and-control
@@ -26,7 +26,7 @@ The **Claude Command and Control** repository provides comprehensive instruction
 - **Command-Centric Design**: Slash commands are primary interface for agent workflows
 - **Composable Capabilities**: Combine skills for complex workflows
 - **Template-Driven**: Reusable patterns captured as production-tested templates
-- **Documentation as Protocol**: Instructions are executable specifications, not mere guidelines
+- **Documentation as Protocol**: Instructions are executable specifications
 
 ### Agent Development Standards
 - **Role Specialization** (Skills): Capabilities packaged as skills (builder-skill, validator-skill, etc.)
@@ -51,7 +51,7 @@ The **Claude Command and Control** repository provides comprehensive instruction
 - **Input Validation**: Sanitize all dynamic values and user inputs
 - **Approval Gates**: Human confirmation required for destructive operations
 - **Audit Logging**: Log all command executions with timestamps and parameters
-- **Version Control**: Semantic versioning for all command changes (1.0 → 1.1 → 2.0)
+- **Version Control**: Semantic versioning for all command changes
 
 ### Agent Security
 - **Least Privilege**: Grant minimum necessary permissions per agent role
@@ -71,244 +71,65 @@ The **Claude Command and Control** repository provides comprehensive instruction
 
 ## Hooks for Quality Assurance and Policy Enforcement
 
+> **Full Documentation**: See [docs/claude-reference/hooks-overview.md](docs/claude-reference/hooks-overview.md) and [Document 05](docs/best-practices/05-Testing-and-Quality-Assurance.md#production-grade-hooks-for-quality-assurance)
+
 ### Overview
-
-Claude Code hooks provide **deterministic, event-driven policy enforcement** for agentic workflows, bridging the gap between soft guidance (CLAUDE.md) and mandatory controls. Unlike prompts that agents might skip under context pressure, hooks execute with the reliability of shell scripts or CI pipelines.
-
-### Hook Lifecycle Events
-
-**11 distinct events** spanning the full agent interaction lifecycle:
-
-**Operational Events:**
-- **PreToolUse**: Block dangerous operations before execution (e.g., `rm -rf /`, sensitive file access, unauthorized API calls)
-- **PostToolUse**: Enforce quality after file modifications (auto-format code, run tests, type checking)
-- **PermissionRequest**: Override permission decisions (auto-approve safe operations, auto-deny high-risk)
-
-**Interaction Events:**
-- **UserPromptSubmit**: Block-at-submit pattern for complex workflows (validate before allowing new prompts)
-- **Notification**: Desktop/Slack notifications for permission prompts or idle states
-- **Stop**: Session summarization, CI/CD triggers, extract learnings for future sessions
-
-**Specialized Events:**
-- **SubagentStop**: Aggregate subagent results, detect cascading failures
-- **SessionStart / SessionEnd**: One-time setup and cleanup (load environment, archive transcripts)
-- **PreCompact**: Save full transcript before context compaction
+Claude Code hooks provide deterministic, event-driven policy enforcement for agentic workflows. Unlike prompts, hooks execute with the reliability of shell scripts.
 
 ### Key Benefits
+- **Mandatory Execution**: If configured, hooks WILL run
+- **Blocking Semantics**: Exit code 2 halts workflow
+- **Production Proven**: 40% → 85% refactor success rate, 20% → 84% TDD activation
 
-- **Mandatory Execution**: If a hook is configured, it *will* run; agents cannot override or ignore it
-- **Blocking Semantics**: Exit code 2 halts workflow, feeding error messages directly to Claude for remediation
-- **Structured Control**: JSON output enables sophisticated decision logic (allow, deny, block, request approval)
-- **Deterministic Control**: Convert "should do" into "must do"—hooks bridge agent intention and team requirements
-- **Production Proven**:
-  - **40% → 85%** refactor success rate (enterprise monorepo with 95K LOC)
-  - **20% → 84%** TDD activation rate (hooks + skills + subagents)
-  - **90%** permission prompt reduction (policy-as-code with OPA/Rego)
+### Hook Lifecycle Events
+**Operational**: PreToolUse, PostToolUse, PermissionRequest  
+**Interaction**: UserPromptSubmit, Notification, Stop  
+**Specialized**: SubagentStop, SessionStart, SessionEnd, PreCompact
 
-### Communication Protocol
-
-**Input (stdin)**: JSON event context
-```json
-{
-  "session_id": "550e8400-...",
-  "tool_name": "Bash",
-  "tool_input": {"command": "npm test"}
-}
-```
-
-**Output**: Exit codes + JSON to stdout
-- **Exit 0**: Success, continue normally
-- **Exit 2**: **Blocking error** (stderr fed to Claude, must fix before proceeding)
-- **Exit other**: Non-blocking warning
-
-**JSON Control** (stdout):
-```json
-{
-  "decision": "deny",
-  "reason": "Command matches high-risk pattern",
-  "permissionDecision": "allow"  // PreToolUse only
-}
-```
-
-### Quick Example: Security Hook
-
+### Quick Example
 ```bash
 #!/bin/bash
-# .claude/hooks/pretooluse_security.sh
-
-INPUT=$(cat)  # Read JSON from stdin
+INPUT=$(cat)
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command')
-
-# Block dangerous commands
-if echo "$COMMAND" | grep -E "(rm -rf /|sudo|chmod 777)" > /dev/null; then
-  echo "❌ Dangerous command blocked by policy" >&2
-  echo '{"decision": "deny", "reason": "Command contains high-risk operations"}'
-  exit 2  # Blocking error - Claude must fix before proceeding
+if echo "$COMMAND" | grep -E "(rm -rf /|sudo)" > /dev/null; then
+  echo "❌ Dangerous command blocked" >&2
+  exit 2
 fi
-
-exit 0  # Allow
+exit 0
 ```
-
-**Configuration** (`.claude/settings.json`):
-```json
-{
-  "hooks": {
-    "PreToolUse": [{
-      "matcher": "Bash",
-      "hooks": [{
-        "type": "command",
-        "command": ".claude/hooks/pretooluse_security.sh",
-        "timeout": 5
-      }]
-    }]
-  }
-}
-```
-
-### Design Principles
-
-1. **Determinism Over Probabilistic Guidance**: If a policy must be enforced, use a hook. If a policy should be considered, use CLAUDE.md.
-2. **Block-at-Submit > Mid-Plan Interruption**: For complex workflows, prefer `UserPromptSubmit` or `PostToolUse` to avoid disrupting agent plan coherence
-3. **Narrow Scope and Composability**: Each hook enforces one policy; compose multiple hooks for complex workflows
-4. **Observable by Design**: Log all hook executions with OpenTelemetry traces (span name, attributes, events)
-5. **Minimize Cognitive Overhead**: Silent success (exit 0 with no output), actionable errors (specific guidance), fast execution (<1s)
-
-### Production Use Cases
-
-**Case Study 1 - Enterprise Monorepo** (95K LOC, React/TypeScript/Supabase):
-- **UserPromptSubmit Hook**: Block new prompts until uncommitted lint violations resolved
-- **PostToolUse Hook**: Auto-format code, run TypeScript type checking
-- **Result**: 40% → 85% refactor success rate, 30% token usage reduction, 66% code review time reduction
-
-**Case Study 2 - TDD Enforcement** (Vue.js consultancy, 15 engineers):
-- **PreToolUse Hook**: Block implementation if corresponding test file doesn't exist or tests aren't failing first
-- **PostToolUse Hook**: Run tests automatically after each file edit
-- **Result**: 20% → 84% TDD activation rate, 45% → 91% code coverage
-
-**Case Study 3 - Policy-as-Code** (Financial services, SOC 2 / PCI-DSS):
-- **OPA/Rego Integration**: PreToolUse hook queries Open Policy Agent for centralized policy enforcement
-- **Centralized Governance**: Security team maintains Rego policies; engineering maintains hooks
-- **Result**: 90% permission prompt reduction, 100% audit compliance, 0 security incidents in 6 months
-
-### Comprehensive Documentation
-
-For complete hooks documentation including:
-- Formal hook model with all 11 events
-- Security analysis (CVE-2025-54795, threat modeling, defensive patterns)
-- Organizational governance (central repositories, review workflows, SDLC integration)
-- Evaluation framework (quantitative metrics, statistical rigor, industry benchmarks)
-- Architectural deployment checklists (4 phases, failure playbook)
-
-**See**: [Document 05: Testing and Quality Assurance](docs/best-practices/05-Testing-and-Quality-Assurance.md#production-grade-hooks-for-quality-assurance)
 
 ---
 
 ## Compliance and Regulatory Alignment
 
-### Enterprise Compliance Standards
+> **Full Documentation**: See [docs/claude-reference/compliance.md](docs/claude-reference/compliance.md) and [Document 06](docs/best-practices/06-Production-Deployment-and-Maintenance.md#compliance-requirements)
 
-Production Claude Code deployments align with industry regulatory requirements through systematic audit trails, access controls, and governance frameworks.
+Production deployments align with SOC 2, HIPAA, and GDPR through systematic audit trails, access controls, and governance frameworks.
 
-#### SOC 2 Type II Compliance
+### Supported Standards
+- **SOC 2 Type II**: Audit trails, access controls, change management workflows
+- **HIPAA**: PHI redaction, encryption (AES-256), access controls
+- **GDPR**: Data residency (EU), right to deletion, consent management
 
-**Requirements:**
-- Comprehensive audit trails demonstrating security controls
-- Access controls with principle of least privilege
-- Change management workflows with approval gates
-- Continuous monitoring and incident response
-
-**Implementation:**
-- **Audit Logging**: All tool executions logged with timestamp, user, action, outcome to `.claude/audit.jsonl` + remote SIEM
-- **Permission Scoping**: `allowed-tools` restrict agent capabilities; hooks enforce policies with blocking semantics
-- **Change Management**: All command/agent changes reviewed via PR, tested in staging before production
-- **Monitoring**: Real-time dashboards (SigNoz, Datadog) with alerting on policy violations
-
-**Evidence Collection:**
-- Monthly audit reports: Tool usage, policy violations, remediation actions
-- Quarterly security reviews: Hook effectiveness, false positive rates, security incidents
-- Annual penetration testing: Adversarial prompt injection, command injection attempts
-
-#### HIPAA (Healthcare)
-
-**Requirements:**
-- PHI (Protected Health Information) never transmitted to LLM APIs
-- Agent processing limited to metadata and structural information
-- Human review required for any patient-facing content
-- Encryption at rest and in transit
-
-**Implementation:**
-- **Data Redaction**: PostToolUse hooks scan outputs for PHI patterns (SSN, medical record numbers), replace with `[REDACTED]`
-- **Access Controls**: `allowed-tools` prevent Read access to directories containing PHI
-- **Audit Trails**: Every agent action logged with user, timestamp, data accessed
-- **Encryption**: Session transcripts encrypted (AES-256), decryption keys managed via HashiCorp Vault
-
-**Compliance Validation:**
-- Weekly automated scans for PHI exposure in agent logs
-- Monthly access reviews ensuring least privilege adherence
-- Quarterly HIPAA compliance audits by external assessors
-
-#### GDPR (European Union)
-
-**Requirements:**
-- Data residency: EU customer data remains within geographic boundaries
-- Right to deletion: Users can request removal of all agent-generated artifacts
-- Data minimization: Collect only necessary information
-- Consent management: Clear opt-in for AI assistance features
-
-**Implementation:**
-- **Geographic Restrictions**: Claude for Enterprise deployed via AWS eu-west-1 (Ireland) or eu-central-1 (Frankfurt)
-- **Data Deletion**: `/delete-session` command removes session transcripts, audit logs, cached outputs
-- **Minimization**: Hooks strip personally identifiable information before sending to LLMs
-- **Consent UI**: Developers opt-in to Claude Code per-project; consent logged in audit trail
-
-**Compliance Validation:**
-- Data residency verified via network traffic analysis (no cross-border API calls)
-- Deletion workflows tested monthly (mock GDPR data subject requests)
-- Annual GDPR compliance audits covering data processing, storage, retention
-
-### Audit Trail Requirements
-
-**Comprehensive Logging Structure:**
-```json
-{
-  "timestamp": "2026-01-23T14:32:18.456Z",
-  "event_type": "tool_execution",
-  "session_id": "550e8400-...",
-  "user": "alice@example.com",
-  "project": "api-server",
-  "tool_name": "Bash",
-  "tool_input": {"command": "npm test"},
-  "tool_output": {"exit_code": 0, "duration_ms": 2340},
-  "policy_checks": {
-    "PreToolUse/bash_security": "allow",
-    "PostToolUse/test_validator": "allow"
-  }
-}
-```
-
-**Storage and Retention:**
-- **Local**: `.claude/audit.jsonl` (30-day retention)
-- **Remote**: SIEM (Splunk, Datadog, SigNoz) with 1-7 year retention per compliance requirements
-- **Session Transcripts**: `~/.claude/projects/{id}/sessions/{id}.jsonl` (until project deleted)
-
-**For Complete Compliance Patterns**: See [Document 06: Production Deployment and Maintenance](docs/best-practices/06-Production-Deployment-and-Maintenance.md#compliance-requirements)
+### Audit Trail Structure
+All tool executions logged to `.claude/audit.jsonl` + remote SIEM with timestamp, user, action, outcome, and policy checks.
 
 ---
 
 ## Repository Components
 
 ### Core Documentation (9 Manuals)
-1. **01-Introduction-and-Core-Principles.md** - Foundational philosophy and architecture
-2. **02-Individual-Command-Creation.md** - Technical specifications for slash commands
-3. **03-Individual-Agent-Configuration.md** - Agent setup and configuration
-4. **04-Multi-Agent-Orchestration.md** - Coordinating multiple agents
+1. **01-Introduction-and-Core-Principles.md** - Foundational philosophy
+2. **02-Individual-Command-Creation.md** - Command specifications
+3. **03-Individual-Agent-Configuration.md** - Agent setup
+4. **04-Multi-Agent-Orchestration.md** - Multi-agent coordination
 5. **05-Testing-and-Quality-Assurance.md** - Validation strategies
 6. **06-Production-Deployment-and-Maintenance.md** - Operations and monitoring
 7. **07-Quick-Reference-and-Templates.md** - Boilerplate and cheat sheets
-8. **08-Claude-Skills-Guide.md** - Skills creation and integration
-9. **15-Advanced-Orchestration-Patterns.md** - Enterprise-grade orchestration with DAG execution, state management, and resilience patterns
+8. **08-Claude-Skills-Guide.md** - Skills creation
+9. **15-Advanced-Orchestration-Patterns.md** - Enterprise DAG, state management, resilience
 
-### Template Library Structure
+### Template Library
 ```
 templates/
 ├── commands/              # Slash command templates
@@ -317,16 +138,7 @@ templates/
 │   ├── utility/          # Helper commands
 │   └── orchestration/    # Multi-agent commands
 ├── agents/               # Agent configuration templates
-│   ├── architect.md      # System design agent
-│   ├── builder.md        # Implementation agent
-│   ├── validator.md      # Testing agent
-│   ├── scribe.md         # Documentation agent
-│   ├── devops.md         # Infrastructure agent
-│   └── orchestration/    # Orchestration agents
 └── skills/               # Reusable workflow skills
-    ├── minimal-skill-template.md
-    ├── standard-skill-template.md
-    └── comprehensive-skill-template.md
 ```
 
 ### Integration & Maintenance Systems
@@ -334,7 +146,6 @@ templates/
 INTEGRATION/
 ├── incoming/      # New content drop zone
 ├── processed/     # Successfully integrated files
-├── failed/        # Files that failed validation
 └── logs/          # Integration audit trails
 
 MAINTENANCE/
@@ -347,569 +158,114 @@ MAINTENANCE/
 ## Command Development Standards
 
 ### Three-Tier Command Hierarchy
+1. **User-Level** (`~/.claude/commands/`): Personal productivity tools
+2. **Project-Level** (`.claude/commands/`): Team-shared workflows
+3. **Organization-Wide** (system CLAUDE.md): Company-wide standards
 
-Production deployments separate commands across three levels for clear separation of concerns and centralized governance:
-
-**1. User-Level Commands** (`~/.claude/commands/`):
-- **Purpose**: Personal productivity tools for individual developers
-- **Versioning**: Outside project repositories, enabling private experimentation
-- **Use Cases**: Personalized commit message formats, custom test runners, individual analysis scripts
-- **Scope**: Developer-specific workflows without team coordination overhead
-
-**2. Project-Level Commands** (`.claude/commands/`):
-- **Purpose**: Team-shared workflows versioned with repositories
-- **Versioning**: Git-tracked, ensuring consistency across team members
-- **Use Cases**: CI/CD integration, deployment checks, code review preparation
-- **Scope**: Codify institutional knowledge, ensuring consistent execution regardless of seniority
-
-**3. Organization-Wide Standards** (system-level CLAUDE.md):
-- **Purpose**: System-level deployment of company-wide coding standards
-- **Versioning**: Centrally managed, propagated to all Claude Code instances
-- **Use Cases**: Security policies, architectural conventions, compliance requirements
-- **Scope**: Enforce baseline compliance without manual synchronization
-
-**Benefits**:
-- Clear separation of concerns (personal vs team vs organization)
-- Reduced configuration drift across developers
-- Centralized governance for compliance-critical standards
-
-### Progressive Disclosure for Context Management
-
-Rather than embedding complete documentation inline, production implementations use **progressive disclosure** to prevent context window saturation:
-
-**Pattern: Reference External Documentation**
-
+### Progressive Disclosure Pattern
+Keep trigger tables in CLAUDE.md, externalize details to `/docs/claude-reference/`:
 ```markdown
 # .claude/commands/deploy.md
-
----
-description: "Deploy application following company deployment standards"
-allowed-tools: ["Bash(git:*,gh:*)", "Read"]
----
-
-# Deploy Application
-
-## Standards
 See `.claude/rules/deployment.md` for deployment procedures.
-
-## Pre-Deployment Checks
-Refer to `.claude/rules/security.md` for security validation.
-
-## Steps
-1. Verify branch: !git branch --show-current
-2. Run deployment script: !./scripts/deploy.sh $1
-3. Validate: See DEPLOYMENT.md for post-deploy validation
-```
-
-**Modular Rules Architecture:**
-
-```
-.claude/
-├── commands/
-│   ├── deploy.md
-│   ├── test.md
-│   └── pr.md
-└── rules/
-    ├── deployment.md       # Deployment procedures
-    ├── security.md          # Security standards
-    ├── testing.md           # Test conventions
-    └── code-style.md        # Formatting rules
-```
-
-**Benefits**:
-- **Prevents context window saturation**: Commands stay focused (<500 lines)
-- **Enables on-demand retrieval**: Claude loads referenced files only when needed
-- **Supports ownership distribution**: Security team maintains `security.md`, DevOps owns `deployment.md`
-
-### Command Anatomy
-```markdown
-# Command Name
-Version: 1.0
-Description: Clear one-line description
-
-## Purpose
-Detailed explanation of what this command does
-
-## Usage
-/command-name [arguments]
-
-## Parameters
-- param1: Description and type
-- param2: Description and type (optional)
-
-## Permissions
-allowed-tools: ["Read", "Search", "Edit"]
-
-## Examples
-Example usage scenarios
-
-## Error Handling
-Common errors and resolutions
-
-## Version History
-- 1.0: Initial release
+See `.claude/rules/security.md` for security validation.
 ```
 
 ### Command Naming Conventions
 - Use verb-noun pattern: `/start-session`, `/prepare-pr`, `/deploy-check`
 - Lowercase with hyphens (kebab-case)
-- Descriptive and action-oriented
 - Maximum 3 words for clarity
-- Avoid abbreviations unless universal
-
-### Command Categories
-1. **Core Workflow**: start-session, close-session, plan, summarize
-2. **Quality Assurance**: test-all, lint-fixes, error-report, deps-update
-3. **Utility**: docs, search, cleanup, env-check
-4. **Integration**: integration-scan, maintenance-scan
-5. **Orchestration**: orchestrate-feature, spawn-agents, coordinate-workflow
 
 ---
 
 ## Agent Development Standards
 
-### Agent Configuration Template
-```yaml
-name: "Agent Name"
-role: "Specific Role"
-model: "claude-sonnet-4" or "claude-opus-4"
-version: "1.0"
-
-permissions:
-  allowed-tools: ["Read", "Search", "Edit", "Test"]
-  restricted-paths: ["/secrets", "/credentials"]
-  
-context:
-  scope: "Focused area of responsibility"
-  memory: "Explicit memory management strategy"
-  
-responsibilities:
-  - Primary responsibility 1
-  - Primary responsibility 2
-  
-collaboration:
-  handoff-protocol: "Clear communication pattern"
-  dependencies: ["Agent names it depends on"]
-```
-
 ### Agent Role Taxonomy
 | Agent | Model | Purpose | Key Capabilities |
 |-------|-------|---------|------------------|
-| **Architect** | Opus 4 | System design | Architecture assessment, planning docs, design decisions |
+| **Architect** | Opus 4 | System design | Architecture assessment, planning docs |
 | **Builder** | Sonnet 4 | Implementation | Feature development, TDD, git workflow |
 | **Validator** | Sonnet 4 | Testing & review | Test creation, code review, security audits |
 | **Scribe** | Sonnet 4 | Documentation | API docs, guides, architecture docs |
 | **DevOps** | Sonnet 4 | Infrastructure | CI/CD, IaC, monitoring setup |
-| **Researcher** | Sonnet 4 | Technical research | Tech evaluation, feasibility studies |
-| **Integration Manager** | Sonnet 4 | Content ingestion | File categorization, quality validation |
-
-### Orchestration Agent Roles
-| Agent | Model | Purpose | Optimization |
-|-------|-------|---------|--------------|
-| **Orchestrator Lead** | Opus 4 | Workflow coordination | High capability for planning |
-| **Task Coordinator** | Sonnet 4 | Dependency management | Efficient for coordination |
-| **Integration Orchestrator** | Sonnet 4 | Result merging | Efficient for integration |
-| **Monitoring Agent** | Haiku 3.5 | Progress tracking | Minimal cost for monitoring |
 
 ---
 
 ## Multi-Agent Orchestration Patterns
 
-**IMPORTANT**: Anthropic's latest research shows that for most workflows, a **single general agent with skills** is more efficient than multiple specialized agents. This section focuses on the specific scenarios where multi-agent orchestration provides value.
+> **Full Documentation**: See [docs/claude-reference/advanced-orchestration.md](docs/claude-reference/advanced-orchestration.md) and [Document 15](docs/best-practices/15-Advanced-Orchestration-Patterns.md)
+
+**IMPORTANT**: For most workflows, use a **single general agent with skills** instead of multiple specialized agents.
 
 ### When to Use Multi-Agent
+✅ **Use When:**
+- Breadth-first parallelization (research across independent sources)
+- Scale requires concurrency (large codebase parallel analysis)
+- Comparison through diversity (multiple implementations to compare)
 
-✅ **Use Multi-Agent When:**
-1. **Breadth-First Parallelization** - Research across independent sources, exploring multiple solution approaches
-2. **Scale Requires Concurrency** - Large codebases needing parallel analysis, high-volume data processing
-3. **Comparison Through Diversity** - Want multiple implementations to compare, leveraging stochastic variation
-
-❌ **Don't Use Multi-Agent For:**
+❌ **Don't Use For:**
 - Sequential workflows (use single agent + skills)
-- Context-heavy tasks (use single agent + progressive skill loading)
-- Standard development tasks (feature implementation, bug fixes, documentation, testing)
+- Context-heavy tasks (use progressive skill loading)
+- Standard development (features, bugs, docs, tests)
 
 ### Decision Matrix
-
 | Task Type | Sequential? | Parallel? | Recommended Approach |
-|-----------|-------------|-----------|--------------------|
+|-----------|-------------|-----------|----------------------|
 | Bug fix | ✓ | ✗ | Single agent + builder skill |
-| Feature (small) | ✓ | ✗ | Single agent + builder + test skills |
-| Feature (large) | ✗ | ✓ | Multi-agent with skills per agent |
+| Small feature | ✓ | ✗ | Single agent + builder + test skills |
+| Large feature | ✗ | ✓ | Multi-agent with skills per agent |
 | Research | ✗ | ✓ | Multi-agent (breadth-first) |
 | Refactoring | ✓ | ✗ | Single agent + refactor skill |
-| Multiple approaches | ✗ | ✓ | Multi-agent + same skill per agent |
 
----
-
-### The Hybrid AI Agent Development Pattern
-```
-┌─────────────────────────────────────────────┐
-│   Lead Orchestrator (Claude Opus 4)        │
-│   • Decomposes feature into parallel tasks │
-│   • Spawns specialized agents in worktrees │
-│   • Monitors progress and coordinates       │
-│   • Synthesizes results and resolves        │
-└──────────────┬──────────────────────────────┘
-               │
-       ┌───────┼───────┬────────┬────────┐
-       ▼       ▼       ▼        ▼        ▼
-   Architect Builder Builder Validator ...
-   (worktree) (worktree) (worktree) (worktree)
-```
-
-### Orchestration Workflow
-1. **Planning**: `/orchestrate-feature` - Create MULTI_AGENT_PLAN.md
-2. **Spawning**: `/spawn-agents` - Instantiate agents in isolated worktrees
-3. **Coordination**: `/coordinate-workflow` - Monitor progress, resolve blockers
-4. **Validation**: `/quality-gate` - Multi-stage validation pipeline
-5. **Integration**: Merge results from parallel workstreams
-
-### Decision Matrix: When to Use Orchestration
-| Scenario | Use Orchestration? | Pattern |
-|----------|-------------------|---------|
-| Simple bug fix (< 100 lines) | ❌ No | Single Builder |
-| Feature < 500 lines | ❌ No | Builder + Validator |
-| Complex feature, multiple approaches | ✅ Yes | Parallel builders + comparison |
-| Large refactoring | ✅ Yes | Architect + parallel builders |
-| Full-stack feature | ✅ Yes | Specialized agents per layer |
-| Technical POC | ✅ Yes | Parallel researchers |
-
----
-
-## Advanced Orchestration Patterns
-
-**Document 17** provides enterprise-grade orchestration patterns for production AI agent systems. These patterns extend basic multi-agent coordination with advanced capabilities for resilience, state management, and performance optimization.
-
-### Core Pattern Categories
-
-#### 1. Complex Dependency Management
-- **DAG Execution**: Topological sorting with Kahn's algorithm
-- **Cycle Detection**: Identify circular dependencies before execution
-- **Parallel Batching**: Group independent tasks for concurrent execution
-- **Critical Path Analysis**: Identify bottlenecks in dependency chains
-- **Commands**: `/dag-executor`
-- **Agents**: `dag-orchestrator.md`
-- **Skills**: `task-dependency-resolver-skill`
-
-#### 2. Dynamic Agent Management
-- **Agent Pools**: Pre-warmed agent pools with lifecycle management
-- **Auto-Scaling**: Reactive and predictive scaling based on workload
-- **Health Monitoring**: Continuous health checks with automatic replacement
-- **Agent Recycling**: Prevent memory leaks by recycling after N tasks
-- **Commands**: `/dynamic-orchestrator`
-- **Agents**: `pool-manager.md`
-- **Skills**: `agent-pool-manager-skill`
-
-#### 3. State Management Patterns
-- **CRDTs**: Conflict-Free Replicated Data Types (OR-Set, G-Counter, LWW-Register, PN-Counter)
-- **Event Sourcing**: Immutable event log with state reconstruction
-- **Atomic Operations**: Compare-and-swap for conflict-free updates
-- **Distributed State**: Multi-agent state synchronization
-- **Commands**: `/state-coordinator`
-- **Agents**: `state-manager.md`
-- **Skills**: `distributed-state-sync-skill`
-
-#### 4. Advanced Error Handling
-- **Retry with Exponential Backoff**: Transient failure recovery
-- **Circuit Breaker Pattern**: 3-state FSM (CLOSED, OPEN, HALF_OPEN) to prevent cascading failures
-- **Saga Pattern**: Distributed transactions with compensating actions
-- **Bulkhead Isolation**: Resource isolation to contain failures
-- **Commands**: `/fault-tolerant-orchestrator`
-- **Agents**: `resilience-orchestrator.md`
-- **Skills**: `saga-pattern-skill`, `circuit-breaker-skill`
-
-#### 5. Performance Optimization
-- **Token Profiling**: Track and optimize token usage across workflows
-- **Bottleneck Detection**: Identify slow tasks and high token consumers
-- **Cost Analysis**: Real-time cost tracking and budget enforcement
-- **Load Balancing**: Distribute work using round-robin, least-loaded, or performance-based strategies
-- **Commands**: `/performance-optimizer`
-- **Agents**: `performance-monitor.md`
-- **Skills**: `performance-profiler-skill`
-
-### When to Use Advanced Patterns
-
-| Pattern | Use When | Don't Use When |
-|---------|----------|----------------|
-| **DAG Execution** | >5 interdependent tasks | Linear workflows |
-| **Agent Pools** | Variable workload, long-running workflows | Fixed agent count, short tasks |
-| **CRDT State** | Concurrent state updates across agents | Single agent, read-only state |
-| **Saga Pattern** | Multi-step workflows requiring atomicity | Read-only operations |
-| **Circuit Breaker** | External service dependencies | Internal function calls |
-| **Performance Profiling** | Cost optimization, SLA compliance | One-off tasks, cost not a concern |
-
-### Production Templates
-
-**Commands** (`templates/commands/orchestration/`):
-- `dag-executor.md` - DAG workflow execution
-- `dynamic-orchestrator.md` - Auto-scaling agent pools
-- `state-coordinator.md` - Distributed state management
-- `fault-tolerant-orchestrator.md` - Resilient workflow execution
-- `performance-optimizer.md` - Performance analysis
-- `observability-tracker.md` - Distributed tracing
-
-**Agents** (`agents-templates/orchestration/`):
-- `dag-orchestrator.md` - Dependency resolution coordinator
-- `pool-manager.md` - Agent lifecycle manager
-- `state-manager.md` - State synchronization coordinator
-- `resilience-orchestrator.md` - Fault tolerance coordinator
-- `performance-monitor.md` - Performance analysis coordinator
-- `general-agent-skills-first.md` - Generic skills-first agent template
-
-**Skills** (`skills-templates/orchestration/`):
-- `task-dependency-resolver-skill.md` - Kahn's algorithm, cycle detection
-- `agent-pool-manager-skill.md` - Auto-scaling, health monitoring
-- `distributed-state-sync-skill.md` - CRDT implementations
-- `saga-pattern-skill.md` - Compensating transactions
-- `circuit-breaker-skill.md` - Cascading failure prevention
-- `performance-profiler-skill.md` - Token and execution profiling
-
-### Integration Example
-
-```python
-# Complete orchestration workflow combining multiple patterns
-
-# 1. Initialize agent pool (Dynamic Agent Management)
-pool = AgentPoolManager(min_size=3, max_size=20, auto_scale=True)
-
-# 2. Setup distributed state (State Management)
-state = StateManager(crdt_type="OR-Set")
-
-# 3. Define workflow with dependencies (DAG Execution)
-workflow = DAGOrchestrator(tasks=tasks, dependencies=dependencies)
-
-# 4. Add resilience (Error Handling)
-workflow.add_retry(max_attempts=3, backoff="exponential")
-workflow.add_circuit_breaker(failure_threshold=5, timeout=60)
-workflow.add_saga(compensation_actions=rollback_actions)
-
-# 5. Enable monitoring (Performance Optimization)
-profiler = PerformanceProfiler()
-profiler.track_workflow(workflow)
-
-# 6. Execute with full orchestration
-result = workflow.execute(
-    agent_pool=pool,
-    state_manager=state,
-    profiler=profiler
-)
-
-# 7. Analyze performance
-report = profiler.generate_report()
-optimizations = profiler.suggest_optimizations()
-```
-
-### Success Metrics
-
-**Performance Improvements**:
-- **40% faster execution** through parallel DAG execution
-- **35% cost reduction** via token profiling and optimization
-- **99.9% uptime** with circuit breakers and saga compensation
-- **Zero data inconsistencies** using CRDTs for distributed state
-
-**Production Use Cases**:
-- Large-scale refactoring (1000+ files) with parallel agents
-- Multi-environment deployment pipelines with saga rollback
-- Distributed testing across independent test suites
-- Research synthesis from 10+ sources with state aggregation
+### Advanced Orchestration Patterns
+**Available patterns** (see full documentation for details):
+1. **Complex Dependency Management**: DAG execution, cycle detection, critical path analysis
+2. **Dynamic Agent Management**: Agent pools, auto-scaling, health monitoring
+3. **State Management**: CRDTs, event sourcing, atomic operations
+4. **Advanced Error Handling**: Circuit breaker, saga pattern, bulkhead isolation
+5. **Performance Optimization**: Token profiling, bottleneck detection, cost analysis
 
 ---
 
 ## Observability and Monitoring
 
+> **Full Documentation**: See [docs/claude-reference/observability.md](docs/claude-reference/observability.md) and [Document 06](docs/best-practices/06-Production-Deployment-and-Maintenance.md#observability-and-feedback-loops)
+
 ### Production Observability Stack
+**OpenTelemetry + Prometheus + SigNoz Integration** for distributed tracing, metrics collection, and dashboard visualization.
 
-Effective observability transforms agentic coding from experimental tooling to mission-critical infrastructure. Production systems require real-time visibility into agent decision-making, tool selection confidence, performance bottlenecks, and policy compliance.
-
-**OpenTelemetry + Prometheus + SigNoz Integration:**
-
-**Architecture:**
-```
-Agent Workflow → OpenTelemetry SDK → SigNoz (Collector + Storage + UI)
-                       ↓
-                 Prometheus Metrics → Grafana Dashboards
-```
-
-**Distributed Tracing**: Capture execution spans across tool calls, hook invocations, and subagent coordination:
-- **Session Span**: Root span covering entire user session (prompt submission → response delivery)
-- **Tool Call Spans**: Each tool execution creates child span with attributes:
-  - `tool_name`: Which tool was invoked (Bash, Edit, Write, Read)
-  - `tool_input`: Command/file path/content (sanitized for secrets)
-  - `execution_time_ms`: Duration
-  - `exit_code`: Success (0) or error
-  - `token_count`: Tokens consumed
-- **Hook Execution Spans**: PreToolUse, PostToolUse, Stop hooks tracked with:
-  - `hook_name`: Which hook fired
-  - `decision`: allow/deny/block
-  - `exit_code`: Hook result (0=success, 2=blocking)
-  - `policy_violation`: Boolean flag
-
-**Prometheus Metrics:**
-```prometheus
-# Hook execution duration histogram
-claude_hook_duration_seconds{hook_name="PreToolUse/bash_security", exit_code="0"} 0.123
-
-# Tool call success rate counter
-claude_tool_success_total{tool_name="Bash"} 1247
-claude_tool_failure_total{tool_name="Bash"} 18
-
-# Session token usage gauge
-claude_session_tokens{session_id="550e8400-...", model="claude-sonnet-4"} 12450
-
-# Policy violation counter
-claude_policy_violations_total{violation_type="security", severity="high"} 3
-```
-
-**Dashboard Widgets** (SigNoz Example):
-- **Hook Execution Heatmap**: Visualizes when hooks run (time of day, day of week); identifies peak load
-- **Policy Violation Trends**: Line chart of security vs. quality vs. compliance violations over 30 days
-- **Latency Percentiles**: Histogram of hook execution times; alerts on p95 > 2s
-- **Error Rate**: % of hooks failing (exit code != 0); alerts on rate > 5%
-- **Cost Attribution**: Token usage per command/agent/feature; identifies optimization opportunities
+### Key Performance Indicators
+| Metric | Target | Alert Threshold |
+|--------|--------|-----------------|
+| **Response Latency** | < 3s (p95) | p95 > 5s |
+| **Token Usage** | < 15K/session | > 25K/session |
+| **Success Rate** | > 95% | < 90% |
+| **Cost per Task** | < $0.50 | > $2.00 |
+| **Hook Execution** | < 1s (p95) | p95 > 3s |
+| **Policy Compliance** | 100% | < 99% |
 
 ### Decision Confidence Scores
-
-Production agentic systems track **decision confidence** to identify when agents require additional context or skill refinement. Decision margins measure the gap between the chosen option and top alternatives.
-
-**Confidence Scoring Pattern:**
-
-```json
-{
-  "decision_type": "tool_selection",
-  "task": "implement user authentication",
-  "decision": {
-    "chosen": "Passport.js",
-    "confidence": 0.73,
-    "alternatives": [
-      {"tool": "Auth0 SDK", "confidence": 0.68},
-      {"tool": "Custom JWT", "confidence": 0.52}
-    ],
-    "margin": 0.05
-  }
-}
-```
-
-**Margin Analysis:**
-- **Margin > 0.20**: High confidence, clear winner
-- **Margin 0.10-0.20**: Moderate confidence, acceptable
-- **Margin < 0.10**: Low confidence, consider providing additional context
-- **Margin < 0.05**: Critical—agent may benefit from skill refinement or human guidance
-
-**Alerting on Low Confidence:**
-```yaml
-# Prometheus alert rule
-- alert: LowDecisionConfidence
-  expr: claude_decision_margin < 0.10
-  for: 5m
-  labels:
-    severity: warning
-  annotations:
-    summary: "Agent decision confidence degrading"
-    description: "Decision margin {{ $value }} below threshold"
-```
-
-### Automated Quality Checks with Code Review Subagents
-
-Code review subagents execute in **independent context windows**, evaluating implementation quality without bias from original reasoning:
-
-**Benefits:**
-- **Unbiased evaluation**: Subagent doesn't inherit implementation context, catches assumptions
-- **Parallel execution**: Review runs while developer continues other work
-- **CI/CD integration**: Structured JSON output feeds automated workflows
-- **Consistency**: Same review standards applied across all code changes
-
-**Metrics to Track:**
-- **Detection rate**: % of bugs caught by subagent before human review
-- **False positive rate**: % of subagent findings incorrectly flagged
-- **Time savings**: Human code review duration (baseline vs. with subagent pre-screening)
-
-### Key Performance Indicators (KPIs)
-
-| Metric | Target | Measurement | Alert Threshold |
-|--------|--------|-------------|-----------------|
-| **Response Latency** | < 3s (p95) | Time from tool call to completion | p95 > 5s |
-| **Token Usage** | < 15K/session | Tokens consumed per session | > 25K/session |
-| **Success Rate** | > 95% | % of commands completing without error | < 90% |
-| **Cost per Task** | < $0.50 | API costs (model + tools) per feature | > $2.00 |
-| **Hook Execution Time** | < 1s (p95) | Hook duration (PreToolUse, PostToolUse) | p95 > 3s |
-| **Policy Compliance** | 100% | % of operations passing policy checks | < 99% |
-
-### Iterative Improvement Through Usage Analytics
-
-Organizations track command usage patterns, failure modes, and performance metrics:
-
-**Analytics Framework:**
-
-1. **Frequency Analysis**: Which commands are most-used? Where should documentation investment focus?
-   - Example: `/test-all` used 450 times/week → Invest in optimization
-   - Example: `/deploy-check` only 12 times/week → Consider deprecating
-
-2. **Failure Correlation**: What environmental conditions predict errors?
-   - Example finding: Low retrieval scores + high token counts = 3x failure rate
-   - **Action**: Implement retrieval quality gates, chunk large contexts
-
-3. **Cost Attribution**: Which skills/commands consume most tokens?
-   - Example: Architecture planning uses 15K tokens/session (appropriate for Opus)
-   - Example: Simple refactoring uses 12K tokens (could use Sonnet)
-   - **Action**: Route simple tasks to Sonnet 4, achieving 28.4% cost reduction while maintaining 96.7% performance
-
-4. **User Satisfaction**: Net Promoter Score (NPS) for AI-generated code
-   - Example: NPS 72 for feature implementation, but only 45 for bug fixes
-   - **Action**: Enhance debugging skills, add systematic-debugging workflow
-
-**Continuous Improvement Cycles:**
-- **Weekly**: Failure pattern reviews, identify top 3 error categories
-- **Monthly**: Cost analysis, model selection optimization, command usage trends
-- **Quarterly**: Security audits, compliance alignment, skill effectiveness evaluation
-
-**For Complete Observability Implementation**: See [Document 06: Production Deployment and Maintenance](docs/best-practices/06-Production-Deployment-and-Maintenance.md#observability-and-feedback-loops)
+Track margin between chosen option and alternatives:
+- **Margin > 0.20**: High confidence
+- **Margin < 0.10**: Low confidence, needs context
+- **Margin < 0.05**: Critical, needs human guidance
 
 ---
 
 ## Skills Development Standards
 
 ### The Skills-First Paradigm
-
-**Skills** are portable workflow automation units that represent the **primary building block** for AI agent capabilities:
-
+**Skills** are the primary building block for AI agent capabilities:
 ```
 Commands < Skills < Agents < Multi-Agent Systems
 ```
 
-- **Commands**: Quick session shortcuts (`/test`, `/pr`)
-- **Skills**: Reusable workflow automation (builder-skill, validator-skill)
-- **Agents**: General-purpose with skill loading capability
-- **Multi-Agent**: Orchestration for parallelization
-
 ### Why Skills Win
-
 | Aspect | Multiple Agents | Single Agent + Skills |
-|--------|-----------------|---------------------|
+|--------|-----------------|----------------------|
 | Maintenance | Update N agents | Update 1 agent + M skills |
 | Token Efficiency | 15x baseline | 5-7x baseline (35% savings) |
 | Context Management | Distributed, duplicated | Centralized, progressive |
-| Composability | Agent coordination overhead | Native skill composition |
-| Sharing | Copy entire agent configs | Share skill packages |
-| Versioning | N agent versions | 1 agent + M skill versions |
-
-### When to Use Each
-
-**Skills (Default Choice)**:
-- Any sequential workflow
-- Standard development tasks
-- Depth-first problem solving
-- Context-heavy operations
-
-**Multi-Agent (Special Cases)**:
-- Parallel independent research
-- Exploring multiple approaches
-- Breadth-first tasks
-- Scale requiring concurrency
-
-**Hybrid (Complex Features)**:
-- Orchestrator + workers with skills
-- Best of both worlds
+| Composability | Coordination overhead | Native skill composition |
 
 ### Skill Templates
 - **Minimal**: `templates/skills/minimal-skill-template.md` (simple workflows)
@@ -917,30 +273,20 @@ Commands < Skills < Agents < Multi-Agent Systems
 - **Comprehensive**: `templates/skills/comprehensive-skill-template.md` (complex workflows)
 
 ### Pre-Built Skills
-- **agent-skill-bridge**: Integrates agents and skills
-- **content-research-writer**: Writing with research and citations
-- **documentation-update**: Update repository tables and indices
-- **file-categorization**: Categorize files by type
-- **root-cause-tracing**: Systematic debugging
-- **skill-creator**: Creates new skills
-- **skill-orchestrator**: Coordinates multiple skills
-- **subagent-driven-development**: Execute plans with fresh subagents
-- **using-git-worktrees**: Isolated workspace management
-- **using-superpowers**: Meta-skill for skill discovery
+**Core Skills:**
+- **builder-skill**: Feature development with TDD workflow
+- **validator-skill**: Test creation and code review
+- **documentation-skill**: API docs and guides
+- **root-cause-tracing-skill**: Systematic debugging
+- **using-git-worktrees-skill**: Isolated workspace management
 
-### Orchestration Skills (Advanced)
-- **task-dependency-resolver-skill**: Kahn's algorithm for topological sorting and cycle detection
-- **agent-pool-manager-skill**: Auto-scaling, health monitoring, and agent recycling
-- **distributed-state-sync-skill**: CRDT implementations for conflict-free distributed state
-- **saga-pattern-skill**: Compensating transactions for distributed workflows
-- **circuit-breaker-skill**: 3-state FSM to prevent cascading failures
-- **performance-profiler-skill**: Token usage analysis and bottleneck detection
-
-### Basic Orchestration Skills
-- **multi-agent-planner-skill**: Automated MULTI_AGENT_PLAN.md generation
-- **parallel-executor-skill**: Concurrent task execution
-- **worktree-manager-skill**: Git worktree lifecycle management
-- **agent-communication-skill**: Inter-agent messaging and handoffs
+**Orchestration Skills:**
+- **task-dependency-resolver-skill**: DAG execution, cycle detection
+- **agent-pool-manager-skill**: Auto-scaling, health monitoring
+- **distributed-state-sync-skill**: CRDT implementations
+- **saga-pattern-skill**: Compensating transactions
+- **circuit-breaker-skill**: Cascading failure prevention
+- **performance-profiler-skill**: Token usage analysis
 
 ---
 
@@ -962,21 +308,6 @@ Commands < Skills < Agents < Multi-Agent Systems
 - [ ] Permissions are appropriate
 - [ ] Collaboration patterns are clear
 
-### Orchestration Testing Checklist
-- [ ] Task decomposition is logical
-- [ ] Dependencies are correctly mapped
-- [ ] Parallel execution works without conflicts
-- [ ] Worktree isolation is effective
-- [ ] Result synthesis is accurate
-- [ ] Error recovery mechanisms function
-
-### Integration System Testing
-- [ ] File categorization is accurate
-- [ ] Quality validation catches issues
-- [ ] Audit trails are complete
-- [ ] Documentation updates are correct
-- [ ] Failed files are properly quarantined
-
 ---
 
 ## Version Control & Collaboration
@@ -985,45 +316,12 @@ Commands < Skills < Agents < Multi-Agent Systems
 - **Main Branch**: Production-ready templates and documentation
 - **Feature Branches**: `feature/command-name` or `feature/agent-role`
 - **Documentation Branches**: `docs/section-name`
-- **Integration Branches**: `integration/content-batch-YYYY-MM-DD`
 
 ### Commit Message Format
 ```
 type(scope): subject
 
-body (optional)
-
-footer (optional)
-```
-
-Types:
-- `feat`: New command, agent, or skill
-- `fix`: Bug fix or correction
-- `docs`: Documentation updates
-- `refactor`: Code restructuring
-- `test`: Test additions or updates
-- `chore`: Maintenance tasks
-
-### Pull Request Template
-```markdown
-## Type of Change
-- [ ] New Command
-- [ ] New Agent
-- [ ] New Skill
-- [ ] Documentation Update
-- [ ] Bug Fix
-
-## Description
-Clear description of changes
-
-## Testing Done
-How this was tested
-
-## Checklist
-- [ ] Documentation updated
-- [ ] Examples provided
-- [ ] Security reviewed
-- [ ] Templates validated
+Types: feat, fix, docs, refactor, test, chore
 ```
 
 ---
@@ -1031,20 +329,20 @@ How this was tested
 ## Integration & Maintenance Workflows
 
 ### Integration Workflow
-1. **Drop Files**: Place new content in `/INTEGRATION/incoming/`
-2. **Scan**: Run `/integration-scan` to categorize and validate
-3. **Review**: Check scan report in `/INTEGRATION/logs/`
-4. **Process**: Move validated files to proper locations
-5. **Update**: Update documentation tables and indices
-6. **Archive**: Move to `/INTEGRATION/processed/`
+1. Drop files in `/INTEGRATION/incoming/`
+2. Run `/integration-scan` to categorize and validate
+3. Review scan report in `/INTEGRATION/logs/`
+4. Process validated files to proper locations
+5. Update documentation tables and indices
+6. Archive to `/INTEGRATION/processed/`
 
 ### Maintenance Workflow
-1. **Scan**: Run `/maintenance-scan` to identify stale files (>30 days)
-2. **Research**: Investigate latest best practices for flagged files
-3. **Propose**: Generate update proposals in `/MAINTENANCE/reports/`
-4. **Review**: Evaluate proposals for accuracy and relevance
-5. **Update**: Apply approved changes with version bumps
-6. **Document**: Update CHANGELOG.md with rationale
+1. Run `/maintenance-scan` to identify stale files (>30 days)
+2. Research latest best practices
+3. Generate update proposals in `/MAINTENANCE/reports/`
+4. Evaluate proposals for accuracy
+5. Apply approved changes with version bumps
+6. Update CHANGELOG.md
 
 ---
 
@@ -1052,17 +350,9 @@ How this was tested
 
 ### Documentation Maintenance
 - **Quarterly Reviews**: Align with AI ecosystem updates
-- **Version Control**: Treat docs like code with semantic versioning
+- **Version Control**: Semantic versioning for all changes
 - **Pull Request Workflow**: All changes via reviewed PRs
 - **CHANGELOG.md**: Track all significant changes
-- **ADRs (Architecture Decision Records)**: Document major decisions
-
-### Documentation Categories
-1. **Core Manuals**: Comprehensive instruction sets (7 manuals)
-2. **Templates**: Production-ready boilerplate code
-3. **Examples**: Working implementations with explanations
-4. **Quick Reference**: Cheat sheets and command lists
-5. **Best Practices**: Proven patterns and anti-patterns
 
 ### Evolution Strategy
 - Track Claude ecosystem developments
@@ -1076,19 +366,17 @@ How this was tested
 ## AI Agent Optimization
 
 ### CLAUDE.md Best Practices
-- Keep file under 100KB for efficient loading
+- Keep file under 40k tokens for efficient loading
 - Use clear section headers for navigation
 - Provide concrete bash command examples
 - Include decision matrices and checklists
 - Document common error resolutions
-- Update based on agent interaction patterns
 
 ### Tool Use Conventions
 - All custom commands in `.claude/commands/`
-- All agent configs in `.claude/agents/` or project-specific locations
+- All agent configs in `.claude/agents/`
 - All skills in `skills/` directory
 - Version control all agent instructions
-- Test workflows with real agents regularly
 
 ### Agent Limitations & Safety
 - Agents cannot access production secrets
@@ -1096,7 +384,6 @@ How this was tested
 - Default to read-only access
 - Escalate security-sensitive changes
 - Implement audit logging for all actions
-- Monitor agent behavior for anomalies
 
 ---
 
@@ -1118,7 +405,6 @@ How this was tested
 /orchestrate-feature    # Multi-agent feature development
 /spawn-agents           # Instantiate agents in worktrees
 /coordinate-workflow    # Real-time progress tracking
-/quality-gate           # Multi-stage validation pipeline
 
 # Integration & Maintenance
 /integration-scan       # Scan incoming files
@@ -1133,35 +419,23 @@ How this was tested
 ### Skills-First Workflows
 
 **Feature Implementation** (Single Agent + Skills):
-```bash
-# Agent loads builder-skill dynamically
+```
 1. Analyze requirements
 2. Agent loads: builder-skill, validator-skill
 3. Implement with TDD workflow
 4. Agent loads: documentation-skill
 5. Generate docs and commit
-# Result: 35% fewer tokens vs multi-agent approach
+Result: 35% fewer tokens vs multi-agent
 ```
 
 **Bug Investigation** (Progressive Skill Loading):
-```bash
-# Agent progressively loads skills as needed
+```
 1. Agent loads: root-cause-tracing-skill
 2. Identify issue location
 3. Agent loads: builder-skill for fix
 4. Agent loads: validator-skill for tests
 5. Verify fix and commit
-# Context maintained throughout - no agent switching
-```
-
-**Parallel Research** (Multi-Agent with Skills):
-```bash
-# Hybrid approach: Each agent loads research-skill
-1. Orchestrator spawns 3 researcher agents
-2. Each loads: researcher-skill + domain-specific context
-3. Parallel investigation of alternatives
-4. Orchestrator synthesizes findings
-# Parallel execution + skills efficiency
+Result: Context maintained throughout
 ```
 
 ### File Structure
@@ -1171,200 +445,41 @@ claude-command-and-control/
 │   ├── commands/          # Active commands
 │   └── agents/            # Active agents
 ├── docs/
-│   └── best-practices/    # 7 core manuals
+│   ├── best-practices/    # 9 core manuals
+│   └── claude-reference/  # Externalized CLAUDE.md content
 ├── templates/
 │   ├── commands/          # Command templates
 │   ├── agents/            # Agent templates
 │   └── skills/            # Skill templates
-├── commands-templates/    # Production command examples
-├── agents-templates/      # Production agent examples
-├── skills-templates/      # Production skill examples
 ├── INTEGRATION/           # Content ingestion system
 ├── MAINTENANCE/           # Repository health system
 ├── CLAUDE.md              # This file
-├── README.md              # Project overview
-└── DEVELOPMENT_PLAN.md    # Roadmap and backlog
+└── README.md              # Project overview
 ```
 
 ---
 
 ## GitHub Actions Automation
 
+> **Full Documentation**: See [docs/claude-reference/github-actions.md](docs/claude-reference/github-actions.md) or use `Skill("github-actions-reference")`
+
 The repository includes comprehensive GitHub Actions workflows for automated maintenance, security scanning, and content integration.
 
-### Workflow Status Badges
+### Workflow Overview
+**Core Automation:**
+- **Maintenance Scan**: Monthly repository health checks (~$0.03/month)
+- **Integration Pipeline**: Hourly content processing (~$1.80/month)
+- **Research Monitor**: Weekly research tracking (~$0.06/month)
 
-![Maintenance Scan](https://github.com/enuno/claude-command-and-control/actions/workflows/maintenance-scan.yml/badge.svg)
-![Integration Pipeline](https://github.com/enuno/claude-command-and-control/actions/workflows/integration-pipeline.yml/badge.svg)
-![Security Scanning](https://github.com/enuno/claude-command-and-control/actions/workflows/security-scanning.yml/badge.svg)
-![PR Validation](https://github.com/enuno/claude-command-and-control/actions/workflows/pr-validation.yml/badge.svg)
-![Link Checker](https://github.com/enuno/claude-command-and-control/actions/workflows/link-checker.yml/badge.svg)
-![Research Monitor](https://github.com/enuno/claude-command-and-control/actions/workflows/research-monitor.yml/badge.svg)
+**Security & Quality:**
+- **Security Scanning**: Daily CodeQL, TruffleHog, ShellCheck (Free)
+- **PR Validation**: Automated quality checks (~$1.20/month)
+- **Link Checker**: Weekly link validation (Free)
 
-### Automated Workflows
+**Total Cost**: ~$3.09/month Anthropic API + Free GitHub Actions
 
-#### Core Automation
-
-**Maintenance Scan** (`.github/workflows/maintenance-scan.yml`)
-- **Schedule:** Monthly on the 1st @ 2 AM UTC
-- **Purpose:** Identifies stale files (>30 days old) and generates health reports
-- **Output:** GitHub Issue with maintenance report
-- **Invokes:** `/maintenance-scan` command via Claude CLI
-- **Cost:** ~$0.03/month
-
-**Integration Pipeline** (`.github/workflows/integration-pipeline.yml`)
-- **Schedule:** Hourly during work hours (9 AM-5 PM Mon-Fri)
-- **Trigger:** New files in `INTEGRATION/incoming/`
-- **Purpose:** Automated content ingestion and processing
-- **Pipeline:** Scan → Validate → Process → Create PR
-- **Quality Gates:** Max 5 files, all must pass validation
-- **Cost:** ~$1.80/month
-
-**Research Monitor** (`.github/workflows/research-monitor.yml`)
-- **Schedule:** Weekly Monday @ 9 AM UTC
-- **Purpose:** Monitor Claude Code research sources
-- **Sources:**
-  - Anthropic Blog RSS feed
-  - anthropics/anthropic-sdk-python releases
-  - anthropics/anthropic-sdk-typescript releases
-  - modelcontextprotocol/servers releases
-- **Output:** GitHub Issue with new research summary
-- **Downloads:** New content to `INTEGRATION/incoming/`
-- **Cost:** ~$0.06/month
-
-#### Security & Quality
-
-**Security Scanning** (`.github/workflows/security-scanning.yml`)
-- **Schedule:** Daily @ 3 AM UTC + on push/PR
-- **Components:**
-  - CodeQL Analysis (Python & JavaScript)
-  - TruffleHog secret scanning
-  - ShellCheck for shell scripts
-  - Dependency Review (PRs only)
-- **Output:** Security alerts + GitHub Issues for findings
-- **Cost:** Free (GitHub native tools)
-
-**PR Validation** (`.github/workflows/pr-validation.yml`)
-- **Trigger:** All pull requests
-- **Validates:**
-  - Command frontmatter and structure
-  - Agent configuration format
-  - Skill file structure
-  - allowed-tools definitions
-- **Invokes:** `/code-review` command via Claude CLI
-- **Mode:** Non-blocking (advisory feedback)
-- **Cost:** ~$1.20/month
-
-**Link Checker** (`.github/workflows/link-checker.yml`)
-- **Schedule:** Weekly Wednesday @ 10 AM UTC
-- **Purpose:** Validate all markdown links
-- **Checks:** docs/, templates/, commands/, agents/, root files
-- **Output:** GitHub Issue if broken links found
-- **Cost:** Free
-
-#### Infrastructure
-
-**Composite Action: setup-claude** (`.github/actions/setup-claude/`)
-- Installs Claude CLI in workflows
-- Handles authentication with `ANTHROPIC_API_KEY`
-- Caches installation for faster runs
-- Used by all workflows that invoke commands
-
-**Dependabot** (`.github/dependabot.yml`)
-- **Schedule:** Weekly (Mon/Tue/Wed)
-- **Monitors:**
-  - GitHub Actions dependencies
-  - Python packages (skills)
-  - npm packages (hooks)
-- **Configuration:** Max 3 PRs at once per ecosystem
-
-### Setup Instructions
-
-#### Required Secrets
-
-Configure in **Settings → Secrets and variables → Actions**:
-
-```
-Name: ANTHROPIC_API_KEY
-Value: <your-anthropic-api-key>
-Description: Claude CLI authentication for command invocation
-```
-
-#### Testing Workflows
-
-All workflows support manual dispatch:
-
-1. Go to **Actions** tab
-2. Select workflow from left sidebar
-3. Click **Run workflow** button
-4. Configure inputs (if any)
-5. Click **Run workflow**
-
-### Cost Breakdown
-
-**Monthly Anthropic API Costs:**
-- Maintenance Scan: $0.03
-- Integration Pipeline: $1.80
-- PR Validation: $1.20
-- Research Monitor: $0.06
-- **Total: ~$3.09/month**
-
-**GitHub Actions:**
-- Free for public repositories
-- All workflows <5 min runtime
-
-### Monitoring & Maintenance
-
-#### Weekly Review
-- Check Actions tab for failed workflows
-- Review auto-created issues
-- Triage integration PRs
-- Monitor API usage
-
-#### Monthly Review
-- Review maintenance report (1st of month)
-- Audit security alerts
-- Check workflow execution times
-- Update research source list if needed
-
-#### Quarterly Review
-- Update workflow configurations
-- Rotate `ANTHROPIC_API_KEY`
-- Review cron schedules
-- Gather stakeholder feedback
-
-### Troubleshooting
-
-**Common Issues:**
-
-| Issue | Solution |
-|-------|----------|
-| "claude: command not found" | Check `ANTHROPIC_API_KEY` secret is set |
-| "Permission denied" | Add required permissions to job |
-| "No files to process" | Normal - workflow exits gracefully |
-| "API rate limit exceeded" | Workflow retries with backoff |
-
-**Debug Steps:**
-1. Check workflow logs in Actions tab
-2. Download artifacts for detailed logs
-3. Verify secrets are configured
-4. Test command locally with Claude CLI
-5. Create issue if problem persists
-
-### Workflow Files
-
-All workflow files are in `.github/workflows/`:
-- `maintenance-scan.yml` - Monthly repository health checks
-- `integration-pipeline.yml` - Hourly content processing
-- `security-scanning.yml` - Daily security audits
-- `pr-validation.yml` - Automated PR quality checks
-- `research-monitor.yml` - Weekly research tracking
-- `link-checker.yml` - Weekly link validation
-
-Configuration files:
-- `.github/dependabot.yml` - Dependency update automation
-- `.github/markdown-link-check.json` - Link checker rules
-- `.github/ISSUE_TEMPLATE/maintenance-report.md` - Issue template
+### Quick Setup
+Configure `ANTHROPIC_API_KEY` secret in repository settings for workflow authentication.
 
 ---
 
@@ -1372,7 +487,7 @@ Configuration files:
 
 ### Organizational Impact
 - **28.4% reduction** in operational costs (efficient model selection)
-- **96.7% maintained performance** quality (optimized architectures)
+- **96.7% maintained performance** quality
 - **40% faster** feature delivery (multi-agent parallelization)
 - **60% reduction** in code review time (automated validation)
 - **Zero security incidents** (following security best practices)
@@ -1389,85 +504,13 @@ Configuration files:
 
 ## Enhanced Documentation References
 
-### Production-Grade Best Practices Integration
+The following documents have been significantly enhanced with production-grade patterns from 100+ enterprise deployments:
 
-The following core documents have been **significantly enhanced** with production-grade patterns from 100+ enterprise deployments, achieving 2-10x velocity improvements and comprehensive security/compliance coverage:
-
-#### Document 02: Individual Command Creation (v2.0.0)
-**Enhanced with:**
-- **Three-Tier Command Hierarchy**: User-level, project-level, organization-wide command separation for clear governance
-- **Command Composability and Orchestration**: Atomic commands (single responsibility) vs. orchestration patterns with programmatic invocation
-- **Permission-Based Architecture**: Five permission modes (default, acceptEdits, plan, dontAsk, bypassPermissions) with allowed-tools scoping
-- **Progressive Disclosure**: Modular `.claude/rules/` architecture to prevent context window saturation
-- **Semantic Versioning for Commands**: MAJOR.MINOR.PATCH tracking with dependency management
-- **CI/CD Pipeline Integration**: GitHub Actions workflow examples with structured JSON output
-- **Introduction to Hooks**: Runtime validation with security examples and enforcement patterns
-- **Reference Architectures**: Small team (5-25 devs) vs. platform engineering (100+ devs) deployment patterns
-
-**Read**: [docs/best-practices/02-Individual-Command-Creation.md](docs/best-practices/02-Individual-Command-Creation.md)
-
-#### Document 05: Testing and Quality Assurance (v2.0.0)
-**Enhanced with comprehensive "Production-Grade Hooks for Quality Assurance" section:**
-- **Formal Hook Model**: 11 lifecycle events (PreToolUse, PostToolUse, PermissionRequest, UserPromptSubmit, Notification, Stop, SubagentStop, SessionStart, SessionEnd, PreCompact) with complete communication protocol
-- **Communication Protocol**: stdin/stdout/stderr, exit codes (0=success, 2=blocking), JSON control structures for sophisticated orchestration
-- **Design Principles**: Determinism over probabilistic guidance, block-at-submit pattern, composability, observability, cognitive load minimization
-- **Security Analysis**: CVE-2025-54795 (CVSS 8.7 command injection), threat modeling, prompt injection defenses, path traversal prevention, secrets exposure mitigation
-- **Organizational Governance**: Central policy repositories, review workflows, SDLC integration patterns
-- **Case Study 1 - Enterprise Monorepo**: 95K LOC, block-at-submit strategy, 40%→85% refactor success rate, 30% token reduction
-- **Case Study 2 - TDD Enforcement**: 20%→84% activation rate using hooks + skills + subagents, 45%→91% code coverage
-- **Case Study 3 - Policy-as-Code with OPA/Rego**: Cupcake framework, 90% permission prompt reduction, 100% audit compliance
-- **Evaluation Framework**: Quantitative metrics (defect reduction, compliance rate), statistical rigor (95% CI), industry benchmarks (AWS CodeWhisperer 57% productivity boost)
-- **Architectural Checklist**: 4-phase deployment (observability, non-blocking checks, security, escalation), comprehensive failure playbook
-
-**Read**: [docs/best-practices/05-Testing-and-Quality-Assurance.md](docs/best-practices/05-Testing-and-Quality-Assurance.md#production-grade-hooks-for-quality-assurance)
-
-#### Document 06: Production Deployment and Maintenance (v2.0.0)
-**Enhanced with:**
-- **Observability and Feedback Loops**: OpenTelemetry + Prometheus + SigNoz integration with example instrumentation, distributed tracing for agent workflows
-- **Decision Confidence Scores**: Track margin between chosen option and alternatives (margin < 0.05 = critical), alerting on degrading confidence
-- **Automated Quality Checks**: Code review subagents with independent context windows for unbiased evaluation
-- **Iterative Improvement**: Usage analytics framework (frequency analysis, failure correlation, cost attribution, NPS tracking)
-- **Audit Trails and Change Management**: Comprehensive audit log structure (local + remote SIEM storage), performance metrics with KPI table
-- **User Feedback Collection**: Inline ratings, session surveys, weekly NPS tracking, integration with analytics
-- **Compliance Requirements** with detailed implementation:
-  - **SOC 2 Type II**: Audit trails, access controls, change management workflows, continuous monitoring
-  - **HIPAA**: PHI redaction patterns, encryption (AES-256), human review gates, weekly automated scans
-  - **GDPR**: Data residency controls, right to deletion (`/delete-session`), consent management, annual compliance audits
-- **Change Management Workflows**: 5-phase process (proposal → review → staging → production → validation) with rollback procedures
-
-**Read**: [docs/best-practices/06-Production-Deployment-and-Maintenance.md](docs/best-practices/06-Production-Deployment-and-Maintenance.md)
-
-#### Document 07: Quick Reference and Templates (v2.0.0)
-**Enhanced with:**
-- **Command Templates** (3 inline code blocks):
-  - Minimal Command Template: For simple single-step workflows
-  - Standard Command Template: For moderate complexity with conditional logic
-  - Orchestration Command Template: Multi-agent coordination with 4-phase workflow (planning, implementation, validation, integration)
-- **Hook Templates** (4 inline code blocks):
-  - PreToolUse Security Hook: Bash script blocking dangerous commands + sensitive file access + path traversal
-  - PostToolUse Quality Hook: Auto-formatting, linting, type checking, test execution
-  - UserPromptSubmit Hook: Block-at-submit pattern with lint/test validation
-  - Stop Hook: Session summarization with metrics and next steps
-- **Implementation Checklists** (3 table format):
-  - Command Implementation Checklist: 18 items (planning, development, documentation, testing, security, deployment)
-  - Hook Deployment Checklist: 13 items (planning, development, testing, integration, documentation, staged rollout)
-  - Production Readiness Checklist: 16 items (documentation, testing, security, observability, compliance, post-deployment monitoring)
-
-**Read**: [docs/best-practices/07-Quick-Reference-and-Templates.md](docs/best-practices/07-Quick-Reference-and-Templates.md)
-
-### Integration Summary
-
-**Content Integrated from Source Materials:**
-- **Claude-Code-Commands.md** (770 lines, 9 sections): Command taxonomy, AGENTS.md foundation, permission architecture, git worktrees, OpenTelemetry/Prometheus, reference architectures
-- **Claude-Code-Hooks.md** (1,553 lines, 10 sections): Formal hook model, security analysis (CVE-2025-54795), 3 production case studies with quantified results, evaluation framework, architectural checklists
-
-**Total Enhancement:** 1,650+ lines of production-grade patterns across 4 documents, preserving all existing content while adding enterprise-scale best practices.
-
-**Key Achievements:**
-- All 3 case studies included in full detail with quantified results
-- Cross-references established between Documents 02, 05, 06, 07
-- Professional markdown formatting maintained throughout
-- Version numbers incremented following semantic versioning (all → 2.0.0 for major enhancements)
+- **Document 02**: Three-tier command hierarchy, progressive disclosure, semantic versioning
+- **Document 05**: Production-grade hooks (11 events, 3 case studies, security analysis)
+- **Document 06**: Observability (OpenTelemetry + Prometheus), compliance (SOC 2, HIPAA, GDPR)
+- **Document 07**: Command/hook/checklist templates for rapid development
+- **Document 15**: Advanced orchestration (DAG, agent pools, CRDTs, circuit breakers)
 
 ---
 
@@ -1482,19 +525,14 @@ The following core documents have been **significantly enhanced** with productio
 ### Community
 - [GitHub Discussions](https://github.com/enuno/claude-command-and-control/discussions)
 - [Issue Tracker](https://github.com/enuno/claude-command-and-control/issues)
-- [DeepWiki](https://deepwiki.com/enuno/claude-command-and-control)
 
 ### Standards
 - [Conventional Commits](https://www.conventionalcommits.org/)
 - [Semantic Versioning](https://semver.org/)
-- [SOLID Principles](https://en.wikipedia.org/wiki/SOLID)
-- [12-Factor App](https://12factor.net/)
 
 ---
 
-**Note**: This document evolves with the AI agent ecosystem. Review quarterly or upon significant updates. Contributions via pull requests are encouraged.
-
-**Status**: ✅ Production Ready  
-**Version**: 3.0.0  
-**Last Updated**: December 1, 2025  
+**Status**: ✅ Production Ready (Optimized for < 40k tokens)  
+**Version**: 4.0.0 (Major restructuring with progressive disclosure)  
+**Last Updated**: January 23, 2026  
 **Maintained By**: [@enuno](https://github.com/enuno)
