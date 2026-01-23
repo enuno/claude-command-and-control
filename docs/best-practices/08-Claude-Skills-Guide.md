@@ -64,7 +64,7 @@ Commands < Skills < Agents < Multi-Agent Systems
 - **Agents**: General-purpose with skill loading
 - **Multi-Agent**: Orchestration for parallelization
 
-**Migration**: Most existing "agent templates" should be converted to skills. See [Agent Skills vs. Multi-Agent Guide](../best-practices/09-Multi-Agent-Architecture-and-Skills-Integration.md) for conversion examples.
+**Migration**: Most existing "agent templates" should be converted to skills. See [Agent Skills vs. Multi-Agent Guide](../best-practices/11-Multi-Agent-Architecture-and-Skills-Integration.md) for conversion examples.
 
 ## When to Use Skills
 

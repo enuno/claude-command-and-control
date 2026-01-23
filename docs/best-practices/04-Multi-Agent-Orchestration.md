@@ -52,7 +52,7 @@ workers:
     isolation: git-worktree
 ```
 
-**See**: [Agent Skills vs. Multi-Agent Guide](../best-practices/09-Multi-Agent-Architecture-and-Skills-Integration.md) for detailed comparison and migration strategies.
+**See**: [Agent Skills vs. Multi-Agent Guide](../best-practices/11-Multi-Agent-Architecture-and-Skills-Integration.md) for detailed comparison and migration strategies.
 
 ### Context Efficiency Improvements (January 2026)
 

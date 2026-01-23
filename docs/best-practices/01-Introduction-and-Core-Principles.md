@@ -103,7 +103,7 @@ Modern software development increasingly demands agent-first thinking—designin
 
 **Hybrid Approach**: For complex features, use orchestrator-worker pattern where each worker is a general agent loading task-specific skills.
 
-**See Also**: [Agent Skills vs. Multi-Agent Guide](09-Multi-Agent-Architecture-and-Skills-Integration.md)
+**See Also**: [Agent Skills vs. Multi-Agent Guide](11-Multi-Agent-Architecture-and-Skills-Integration.md)
 
 ## The Claude Ecosystem Architecture
 
