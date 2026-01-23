@@ -457,6 +457,6 @@ allowed-tools:
 
 ## References
 
-- MCP Builder Skill: `docs/claude/skills-templates/mcp-builder/SKILL.md`
+- MCP Builder Skill: `skills-templates/mcp-builder/SKILL.md`
 - Skills vs Multi-Agent: `docs/best-practices/09-Agent-Skills-vs-Multi-Agent.md`
 - MCP Protocol: https://modelcontextprotocol.io/llms-full.txt

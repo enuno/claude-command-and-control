@@ -199,7 +199,7 @@ For complete hooks documentation including:
 - Evaluation framework (quantitative metrics, statistical rigor, industry benchmarks)
 - Architectural deployment checklists (4 phases, failure playbook)
 
-**See**: [Document 05: Testing and Quality Assurance](docs/claude/05-Testing-and-Quality-Assurance.md#production-grade-hooks-for-quality-assurance)
+**See**: [Document 05: Testing and Quality Assurance](docs/best-practices/05-Testing-and-Quality-Assurance.md#production-grade-hooks-for-quality-assurance)
 
 ---
 
@@ -291,7 +291,7 @@ Production Claude Code deployments align with industry regulatory requirements t
 - **Remote**: SIEM (Splunk, Datadog, SigNoz) with 1-7 year retention per compliance requirements
 - **Session Transcripts**: `~/.claude/projects/{id}/sessions/{id}.jsonl` (until project deleted)
 
-**For Complete Compliance Patterns**: See [Document 06: Production Deployment and Maintenance](docs/claude/06-Production-Deployment-and-Maintenance.md#compliance-requirements)
+**For Complete Compliance Patterns**: See [Document 06: Production Deployment and Maintenance](docs/best-practices/06-Production-Deployment-and-Maintenance.md#compliance-requirements)
 
 ---
 
@@ -579,7 +579,7 @@ collaboration:
 
 ## Advanced Orchestration Patterns
 
-**Document 15** provides enterprise-grade orchestration patterns for production AI agent systems. These patterns extend basic multi-agent coordination with advanced capabilities for resilience, state management, and performance optimization.
+**Document 17** provides enterprise-grade orchestration patterns for production AI agent systems. These patterns extend basic multi-agent coordination with advanced capabilities for resilience, state management, and performance optimization.
 
 ### Core Pattern Categories
 
@@ -863,7 +863,7 @@ Organizations track command usage patterns, failure modes, and performance metri
 - **Monthly**: Cost analysis, model selection optimization, command usage trends
 - **Quarterly**: Security audits, compliance alignment, skill effectiveness evaluation
 
-**For Complete Observability Implementation**: See [Document 06: Production Deployment and Maintenance](docs/claude/06-Production-Deployment-and-Maintenance.md#observability-and-feedback-loops)
+**For Complete Observability Implementation**: See [Document 06: Production Deployment and Maintenance](docs/best-practices/06-Production-Deployment-and-Maintenance.md#observability-and-feedback-loops)
 
 ---
 
@@ -1404,7 +1404,7 @@ The following core documents have been **significantly enhanced** with productio
 - **Introduction to Hooks**: Runtime validation with security examples and enforcement patterns
 - **Reference Architectures**: Small team (5-25 devs) vs. platform engineering (100+ devs) deployment patterns
 
-**Read**: [docs/claude/02-Individual-Command-Creation.md](docs/claude/02-Individual-Command-Creation.md)
+**Read**: [docs/best-practices/02-Individual-Command-Creation.md](docs/best-practices/02-Individual-Command-Creation.md)
 
 #### Document 05: Testing and Quality Assurance (v2.0.0)
 **Enhanced with comprehensive "Production-Grade Hooks for Quality Assurance" section:**
@@ -1419,7 +1419,7 @@ The following core documents have been **significantly enhanced** with productio
 - **Evaluation Framework**: Quantitative metrics (defect reduction, compliance rate), statistical rigor (95% CI), industry benchmarks (AWS CodeWhisperer 57% productivity boost)
 - **Architectural Checklist**: 4-phase deployment (observability, non-blocking checks, security, escalation), comprehensive failure playbook
 
-**Read**: [docs/claude/05-Testing-and-Quality-Assurance.md](docs/claude/05-Testing-and-Quality-Assurance.md#production-grade-hooks-for-quality-assurance)
+**Read**: [docs/best-practices/05-Testing-and-Quality-Assurance.md](docs/best-practices/05-Testing-and-Quality-Assurance.md#production-grade-hooks-for-quality-assurance)
 
 #### Document 06: Production Deployment and Maintenance (v2.0.0)
 **Enhanced with:**
@@ -1435,7 +1435,7 @@ The following core documents have been **significantly enhanced** with productio
   - **GDPR**: Data residency controls, right to deletion (`/delete-session`), consent management, annual compliance audits
 - **Change Management Workflows**: 5-phase process (proposal → review → staging → production → validation) with rollback procedures
 
-**Read**: [docs/claude/06-Production-Deployment-and-Maintenance.md](docs/claude/06-Production-Deployment-and-Maintenance.md)
+**Read**: [docs/best-practices/06-Production-Deployment-and-Maintenance.md](docs/best-practices/06-Production-Deployment-and-Maintenance.md)
 
 #### Document 07: Quick Reference and Templates (v2.0.0)
 **Enhanced with:**
@@ -1453,7 +1453,7 @@ The following core documents have been **significantly enhanced** with productio
   - Hook Deployment Checklist: 13 items (planning, development, testing, integration, documentation, staged rollout)
   - Production Readiness Checklist: 16 items (documentation, testing, security, observability, compliance, post-deployment monitoring)
 
-**Read**: [docs/claude/07-Quick-Reference-and-Templates.md](docs/claude/07-Quick-Reference-and-Templates.md)
+**Read**: [docs/best-practices/07-Quick-Reference-and-Templates.md](docs/best-practices/07-Quick-Reference-and-Templates.md)
 
 ### Integration Summary
 

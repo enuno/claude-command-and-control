@@ -421,10 +421,10 @@ All commands leverage these skills:
 
 ## Related Documentation
 
-- **MCP Builder Skill**: `docs/claude/skills-templates/mcp-builder/SKILL.md`
+- **MCP Builder Skill**: `skills-templates/mcp-builder/SKILL.md`
 - **Multi-Agent Orchestration**: `docs/best-practices/04-Multi-Agent-Orchestration.md`
 - **Skills vs Multi-Agent**: `docs/best-practices/09-Agent-Skills-vs-Multi-Agent.md`
-- **Multi-Agent Planner Skill**: `docs/claude/skills-templates/orchestration/multi-agent-planner-skill.md`
+- **Multi-Agent Planner Skill**: `skills-templates/orchestration/multi-agent-planner-skill.md`
 
 ---
 

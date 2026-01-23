@@ -316,7 +316,7 @@ allowed-tools:
 
 ## References
 
-- MCP Builder Skill: `docs/claude/skills-templates/mcp-builder/SKILL.md`
+- MCP Builder Skill: `skills-templates/mcp-builder/SKILL.md`
 - MCP Protocol Spec: https://modelcontextprotocol.io/llms-full.txt
 - TypeScript SDK: https://github.com/modelcontextprotocol/typescript-sdk
 - Python SDK: https://github.com/modelcontextprotocol/python-sdk
