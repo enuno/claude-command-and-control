@@ -30,7 +30,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 | Skill | Description | Key Use Cases |
 |-------|-------------|---------------|
-| **[agent-starter](agent-starter/SKILL.md)** | OpenServ SDK for building autonomous AI agents with TypeScript | Building AI agents with capabilities, local testing with process(), platform integration, production deployment |
+| **[openserv-agents](openserv-agents/SKILL.md)** | Complete OpenServ platform guide - SDK, API, and no-code agent development | Building autonomous AI agents, multi-agent orchestration, "Second Brain" architecture, BRAID framework, deployment strategies, production hosting |
 | **[root-cause-tracing](root-cause-tracing/SKILL.md)** | Systematically traces bugs backward through call stack to find original trigger | Debugging errors deep in execution, tracing invalid data sources |
 | **[software-architecture](software-architecture/SKILL.md)** | Clean Architecture & DDD guidance for quality-focused development | Software design, architecture decisions, code quality, anti-patterns |
 | **[subagent-driven-development](subagent-driven-development/SKILL.md)** | Dispatches fresh subagent for each task with code review between tasks | Executing plans with independent tasks, fast iteration with quality gates |
@@ -73,6 +73,8 @@ This directory contains the repository's skill library. Each skill is a reusable
 |-------|-------------|---------------|
 | **[google-seo](google-seo/SKILL.md)** | Google SEO best practices and web optimization based on official Google SEO Starter Guide | Creating web content, reviewing pages for SEO, implementing metadata (titles, descriptions, alt text), structuring URLs and site architecture |
 | **[google-structured-data](google-structured-data/SKILL.md)** | Schema.org markup for Google Search rich results with JSON-LD templates | Implementing structured data, Article/Product/Event/FAQ markup, JavaScript generation |
+| **[google-seo-starter-guide](google-seo-starter-guide/SKILL.md)** | Official Google SEO fundamentals - complete implementation guide | New site SEO setup, URL structure optimization, content strategy, title/meta optimization, image/video SEO, promotion tactics, Search Console monitoring |
+| **[google-url-inspection](google-url-inspection/SKILL.md)** | Search Console URL Inspection Tool mastery for indexing diagnosis | Verifying URL indexing, diagnosing crawl errors, testing live URLs, checking JavaScript rendering, requesting re-indexing, troubleshooting indexing issues |
 | **[seo](seo/SKILL.md)** | Google SEO research and web traffic monetization with curated resources | SEO best practices, tool comparisons (Semrush, Moz, Ahrefs), search engine optimization, marketing strategies |
 
 ### Contribution & Sharing Skills
@@ -170,7 +172,7 @@ Skills for Bitcoin mining operations and management:
 
 ### Development Workflow Skills
 Skills that enhance the software development process:
-- AI agent development (agent-starter)
+- AI agent development (openserv-agents)
 - Software architecture (software-architecture)
 - Debugging (root-cause-tracing)
 - Parallel development (using-git-worktrees)
@@ -280,14 +282,14 @@ All skills in this repository meet these criteria:
 
 ## Statistics
 
-**Total Skills**: 31
+**Total Skills**: 32
 - Bitcoin Mining: 8
 - Development Workflow: 5
 - Design & UI/UX: 1
 - Integration & Automation: 3
 - Content & Documentation: 4
 - Data Storage & Upload: 2
-- Marketing & SEO: 3
+- Marketing & SEO: 5
 - Contribution & Sharing: 1
 - Meta Skills: 1
 - Skill Development: 3
@@ -301,16 +303,50 @@ All skills in this repository meet these criteria:
 ## Recent Additions
 
 **January 2026**:
-- ✨ **agent-starter** (2026-01-22) - OpenServ SDK AI agent development skill
-  - Complete agent development workflow from OpenServ Labs GitHub repository
-  - 6 workflow phases (Project Setup, Agent Implementation, Local Testing, Platform Integration, OpenServ Registration, Production Deployment)
-  - 3 comprehensive examples (Simple Sum Agent, Weather Agent with External API, Multi-Capability Task Agent)
-  - TypeScript code examples with Zod schemas for type-safe capabilities
-  - Tunneling tool integration (ngrok, localtunnel) for local development
-  - Production deployment strategies (Vercel, Render, Fly.io, Dokku, self-hosted)
-  - Advanced SDK features (file operations, task management, user interaction)
-  - Common pitfalls and troubleshooting guide
-  - Version 1.0 with 19 KB
+- ✨ **google-url-inspection** (2026-01-22) - Search Console URL Inspection Tool mastery
+  - Comprehensive guide for Google's URL Inspection Tool in Search Console
+  - 7 workflow phases (access tool, inspect URL, analyze details, test live, view rendering, request indexing, troubleshoot)
+  - 10 trigger conditions for effective usage
+  - 3 practical scenarios (blog post verification, missing product page diagnosis, JavaScript rendering verification)
+  - 5 common pitfalls with solutions (over-requesting indexing, assuming permanent rejection, ignoring rendering, URL variant confusion, not fixing before requesting)
+  - 4 major troubleshooting scenarios (not in search results, rankings dropped, indexed but not ranking, duplicate content)
+  - 8 quality standards checklist
+  - 5 authoritative resource links
+  - Integration with broader SEO workflow
+  - Source: https://support.google.com/webmasters/answer/9012289
+  - Version 1.0 with 20 KB
+
+- ✨ **google-seo-starter-guide** (2026-01-22) - Official Google SEO fundamentals
+  - Complete implementation guide from Google Search Central's official SEO Starter Guide
+  - 7 comprehensive workflow phases (site assessment, URL structure, content optimization, title/meta tags, image/video optimization, promotion, monitoring)
+  - 12 trigger conditions covering all SEO fundamentals
+  - 3 detailed implementation examples (blog post optimization, e-commerce product page fix, new website launch)
+  - Before/After code comparison examples
+  - 5 common pitfalls with detailed solutions
+  - 4 major troubleshooting scenarios with diagnosis steps
+  - 12 authoritative Google Search Central resource links
+  - Quality standards checklist with 12 verification items
+  - Timeline expectations (hours to months for different changes)
+  - Source: https://developers.google.com/search/docs/fundamentals/seo-starter-guide
+  - Version 1.0 with 36 KB
+
+- 🔄 **openserv-agents** (2026-01-22) - Combined OpenServ platform guide
+  - **Merged**: agent-starter + openserv-docs into single comprehensive skill
+  - Complete OpenServ platform documentation covering SDK, API, and no-code approaches
+  - 7 workflow phases (approach selection, platform setup, implementation, local testing, production deployment, QA, marketplace submission)
+  - 3 development paths (API for flexibility, SDK for power, no-code for simplicity)
+  - 3 comprehensive examples (Text Summarizer with API, Reminder Agent with no-code, Multi-Agent Collaboration with SDK)
+  - TypeScript and Python code examples with Zod schemas
+  - OpenServ Platform API endpoint documentation
+  - "Second Brain" architecture explanation
+  - BRAID reasoning framework overview (70x cost reduction)
+  - Deployment guides (Railway, Render, Vercel, Fly.io, Dokku, self-hosted)
+  - Tunneling integration (ngrok, localtunnel)
+  - Tokenization features for crypto startups
+  - 5 common pitfalls with solutions
+  - 4 troubleshooting scenarios
+  - Sources: agent-starter + openserv-docs repositories
+  - Version 2.0 with 32 KB (combined from 19 KB + 32 KB)
 
 - ✨ **google-seo** (2026-01-22) - Google SEO best practices skill
   - Comprehensive guidance from Google's official SEO Starter Guide
@@ -378,4 +414,4 @@ All skills in this repository meet these criteria:
 
 **Last Updated**: January 22, 2026
 **Maintained By**: Claude Command and Control Repository
-**Version**: 2.7.0
+**Version**: 2.10.0

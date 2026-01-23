@@ -1080,7 +1080,6 @@ version: 1.0.0
 | Skill | Purpose | Use When |
 |-------|---------|----------|
 | **agent-skill-bridge** | Integrates agents and skills | Coordinating agents with skills |
-| **[agent-starter](skills/agent-starter/SKILL.md)** | OpenServ SDK for autonomous AI agents | Building AI agents, implementing capabilities with Zod schemas, testing locally, deploying to production |
 | **[agent-communication-protocol](skills-templates/agent-communication-protocol/)** | Open protocol for AI agent interoperability | Multi-agent communication, framework-agnostic agents, REST API |
 | **[ar-io-build](skills-templates/ar-io-build/)** | Comprehensive AR.IO build documentation | Building with AR.IO, implementing AR.IO solutions, debugging AR.IO code |
 | **[arweave-ao-cookbook](skills-templates/arweave-ao-cookbook/)** | Build decentralized applications on AO | Building decentralized apps on Arweave with permanent storage |
@@ -1134,6 +1133,8 @@ version: 1.0.0
 | **[gitbook](skills/gitbook/SKILL.md)** | GitBook documentation platform | Spaces, Git sync, custom domains, OpenAPI, change requests |
 | **[google-seo](skills/google-seo/SKILL.md)** | Google SEO best practices and web optimization | Creating web content, reviewing pages for SEO, implementing metadata, structuring URLs and site architecture |
 | **[google-structured-data](skills/google-structured-data/SKILL.md)** | Schema.org markup for Google Search rich results | JSON-LD templates, Article/Product/Event/FAQ markup, JavaScript generation |
+| **[google-seo-starter-guide](skills/google-seo-starter-guide/SKILL.md)** | Google SEO fundamentals and best practices | Implementing SEO for new sites, optimizing URLs and content, improving search visibility, auditing SEO implementation |
+| **[google-url-inspection](skills/google-url-inspection/SKILL.md)** | Search Console URL Inspection Tool guide | Verifying indexing status, diagnosing crawl issues, requesting re-indexing, troubleshooting rendering problems |
 | **[image-enhancer](skills-templates/image-enhancer/)** | Image quality improvement | Enhancing screenshots or images for presentations |
 | **[internal-comms](skills-templates/internal-comms/)** | Internal communications templates | Writing status reports, newsletters, or company updates |
 | **[invoice-organizer](skills-templates/invoice-organizer/)** | Invoice and receipt organization | Tax preparation or bookkeeping |
@@ -1147,6 +1148,7 @@ version: 1.0.0
 | **[mcp-registry](skills-templates/mcp-registry/)** | MCP server discovery and publishing registry | Publishing MCP servers, server discovery, authentication |
 | **[meeting-insights-analyzer](skills-templates/meeting-insights-analyzer/)** | Meeting transcript analysis | Improving communication or leadership skills |
 | **[neon](skills-templates/neon/)** | Neon serverless Postgres with branching | Serverless database, autoscaling, scale-to-zero, pgvector, edge-compatible drivers |
+| **[openserv-agents](skills/openserv-agents/SKILL.md)** | OpenServ platform for AI agents (SDK, API, no-code) | Building autonomous agents, "Second Brain" architecture, BRAID framework, multi-agent orchestration, deployment guides |
 | **[openrouter](skills-templates/openrouter/)** | Unified API gateway for 100+ AI models | Working with OpenRouter, multi-provider routing, cost optimization, model comparison |
 | **[passwordless-docs](skills-templates/passwordless-docs/)** | Bitwarden Passwordless.dev documentation, SDKs, and React examples | Implementing passwordless authentication, integrating FIDO2/WebAuthn, building React passwordless auth |
 | **[pict-test-designer](skills-templates/pict-test-designer/)** | PICT pairwise test case design | Designing comprehensive test cases with minimal coverage |
