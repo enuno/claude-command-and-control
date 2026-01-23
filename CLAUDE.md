@@ -69,6 +69,232 @@ The **Claude Command and Control** repository provides comprehensive instruction
 
 ---
 
+## Hooks for Quality Assurance and Policy Enforcement
+
+### Overview
+
+Claude Code hooks provide **deterministic, event-driven policy enforcement** for agentic workflows, bridging the gap between soft guidance (CLAUDE.md) and mandatory controls. Unlike prompts that agents might skip under context pressure, hooks execute with the reliability of shell scripts or CI pipelines.
+
+### Hook Lifecycle Events
+
+**11 distinct events** spanning the full agent interaction lifecycle:
+
+**Operational Events:**
+- **PreToolUse**: Block dangerous operations before execution (e.g., `rm -rf /`, sensitive file access, unauthorized API calls)
+- **PostToolUse**: Enforce quality after file modifications (auto-format code, run tests, type checking)
+- **PermissionRequest**: Override permission decisions (auto-approve safe operations, auto-deny high-risk)
+
+**Interaction Events:**
+- **UserPromptSubmit**: Block-at-submit pattern for complex workflows (validate before allowing new prompts)
+- **Notification**: Desktop/Slack notifications for permission prompts or idle states
+- **Stop**: Session summarization, CI/CD triggers, extract learnings for future sessions
+
+**Specialized Events:**
+- **SubagentStop**: Aggregate subagent results, detect cascading failures
+- **SessionStart / SessionEnd**: One-time setup and cleanup (load environment, archive transcripts)
+- **PreCompact**: Save full transcript before context compaction
+
+### Key Benefits
+
+- **Mandatory Execution**: If a hook is configured, it *will* run; agents cannot override or ignore it
+- **Blocking Semantics**: Exit code 2 halts workflow, feeding error messages directly to Claude for remediation
+- **Structured Control**: JSON output enables sophisticated decision logic (allow, deny, block, request approval)
+- **Deterministic Control**: Convert "should do" into "must do"—hooks bridge agent intention and team requirements
+- **Production Proven**:
+  - **40% → 85%** refactor success rate (enterprise monorepo with 95K LOC)
+  - **20% → 84%** TDD activation rate (hooks + skills + subagents)
+  - **90%** permission prompt reduction (policy-as-code with OPA/Rego)
+
+### Communication Protocol
+
+**Input (stdin)**: JSON event context
+```json
+{
+  "session_id": "550e8400-...",
+  "tool_name": "Bash",
+  "tool_input": {"command": "npm test"}
+}
+```
+
+**Output**: Exit codes + JSON to stdout
+- **Exit 0**: Success, continue normally
+- **Exit 2**: **Blocking error** (stderr fed to Claude, must fix before proceeding)
+- **Exit other**: Non-blocking warning
+
+**JSON Control** (stdout):
+```json
+{
+  "decision": "deny",
+  "reason": "Command matches high-risk pattern",
+  "permissionDecision": "allow"  // PreToolUse only
+}
+```
+
+### Quick Example: Security Hook
+
+```bash
+#!/bin/bash
+# .claude/hooks/pretooluse_security.sh
+
+INPUT=$(cat)  # Read JSON from stdin
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command')
+
+# Block dangerous commands
+if echo "$COMMAND" | grep -E "(rm -rf /|sudo|chmod 777)" > /dev/null; then
+  echo "❌ Dangerous command blocked by policy" >&2
+  echo '{"decision": "deny", "reason": "Command contains high-risk operations"}'
+  exit 2  # Blocking error - Claude must fix before proceeding
+fi
+
+exit 0  # Allow
+```
+
+**Configuration** (`.claude/settings.json`):
+```json
+{
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "Bash",
+      "hooks": [{
+        "type": "command",
+        "command": ".claude/hooks/pretooluse_security.sh",
+        "timeout": 5
+      }]
+    }]
+  }
+}
+```
+
+### Design Principles
+
+1. **Determinism Over Probabilistic Guidance**: If a policy must be enforced, use a hook. If a policy should be considered, use CLAUDE.md.
+2. **Block-at-Submit > Mid-Plan Interruption**: For complex workflows, prefer `UserPromptSubmit` or `PostToolUse` to avoid disrupting agent plan coherence
+3. **Narrow Scope and Composability**: Each hook enforces one policy; compose multiple hooks for complex workflows
+4. **Observable by Design**: Log all hook executions with OpenTelemetry traces (span name, attributes, events)
+5. **Minimize Cognitive Overhead**: Silent success (exit 0 with no output), actionable errors (specific guidance), fast execution (<1s)
+
+### Production Use Cases
+
+**Case Study 1 - Enterprise Monorepo** (95K LOC, React/TypeScript/Supabase):
+- **UserPromptSubmit Hook**: Block new prompts until uncommitted lint violations resolved
+- **PostToolUse Hook**: Auto-format code, run TypeScript type checking
+- **Result**: 40% → 85% refactor success rate, 30% token usage reduction, 66% code review time reduction
+
+**Case Study 2 - TDD Enforcement** (Vue.js consultancy, 15 engineers):
+- **PreToolUse Hook**: Block implementation if corresponding test file doesn't exist or tests aren't failing first
+- **PostToolUse Hook**: Run tests automatically after each file edit
+- **Result**: 20% → 84% TDD activation rate, 45% → 91% code coverage
+
+**Case Study 3 - Policy-as-Code** (Financial services, SOC 2 / PCI-DSS):
+- **OPA/Rego Integration**: PreToolUse hook queries Open Policy Agent for centralized policy enforcement
+- **Centralized Governance**: Security team maintains Rego policies; engineering maintains hooks
+- **Result**: 90% permission prompt reduction, 100% audit compliance, 0 security incidents in 6 months
+
+### Comprehensive Documentation
+
+For complete hooks documentation including:
+- Formal hook model with all 11 events
+- Security analysis (CVE-2025-54795, threat modeling, defensive patterns)
+- Organizational governance (central repositories, review workflows, SDLC integration)
+- Evaluation framework (quantitative metrics, statistical rigor, industry benchmarks)
+- Architectural deployment checklists (4 phases, failure playbook)
+
+**See**: [Document 05: Testing and Quality Assurance](docs/claude/05-Testing-and-Quality-Assurance.md#production-grade-hooks-for-quality-assurance)
+
+---
+
+## Compliance and Regulatory Alignment
+
+### Enterprise Compliance Standards
+
+Production Claude Code deployments align with industry regulatory requirements through systematic audit trails, access controls, and governance frameworks.
+
+#### SOC 2 Type II Compliance
+
+**Requirements:**
+- Comprehensive audit trails demonstrating security controls
+- Access controls with principle of least privilege
+- Change management workflows with approval gates
+- Continuous monitoring and incident response
+
+**Implementation:**
+- **Audit Logging**: All tool executions logged with timestamp, user, action, outcome to `.claude/audit.jsonl` + remote SIEM
+- **Permission Scoping**: `allowed-tools` restrict agent capabilities; hooks enforce policies with blocking semantics
+- **Change Management**: All command/agent changes reviewed via PR, tested in staging before production
+- **Monitoring**: Real-time dashboards (SigNoz, Datadog) with alerting on policy violations
+
+**Evidence Collection:**
+- Monthly audit reports: Tool usage, policy violations, remediation actions
+- Quarterly security reviews: Hook effectiveness, false positive rates, security incidents
+- Annual penetration testing: Adversarial prompt injection, command injection attempts
+
+#### HIPAA (Healthcare)
+
+**Requirements:**
+- PHI (Protected Health Information) never transmitted to LLM APIs
+- Agent processing limited to metadata and structural information
+- Human review required for any patient-facing content
+- Encryption at rest and in transit
+
+**Implementation:**
+- **Data Redaction**: PostToolUse hooks scan outputs for PHI patterns (SSN, medical record numbers), replace with `[REDACTED]`
+- **Access Controls**: `allowed-tools` prevent Read access to directories containing PHI
+- **Audit Trails**: Every agent action logged with user, timestamp, data accessed
+- **Encryption**: Session transcripts encrypted (AES-256), decryption keys managed via HashiCorp Vault
+
+**Compliance Validation:**
+- Weekly automated scans for PHI exposure in agent logs
+- Monthly access reviews ensuring least privilege adherence
+- Quarterly HIPAA compliance audits by external assessors
+
+#### GDPR (European Union)
+
+**Requirements:**
+- Data residency: EU customer data remains within geographic boundaries
+- Right to deletion: Users can request removal of all agent-generated artifacts
+- Data minimization: Collect only necessary information
+- Consent management: Clear opt-in for AI assistance features
+
+**Implementation:**
+- **Geographic Restrictions**: Claude for Enterprise deployed via AWS eu-west-1 (Ireland) or eu-central-1 (Frankfurt)
+- **Data Deletion**: `/delete-session` command removes session transcripts, audit logs, cached outputs
+- **Minimization**: Hooks strip personally identifiable information before sending to LLMs
+- **Consent UI**: Developers opt-in to Claude Code per-project; consent logged in audit trail
+
+**Compliance Validation:**
+- Data residency verified via network traffic analysis (no cross-border API calls)
+- Deletion workflows tested monthly (mock GDPR data subject requests)
+- Annual GDPR compliance audits covering data processing, storage, retention
+
+### Audit Trail Requirements
+
+**Comprehensive Logging Structure:**
+```json
+{
+  "timestamp": "2026-01-23T14:32:18.456Z",
+  "event_type": "tool_execution",
+  "session_id": "550e8400-...",
+  "user": "alice@example.com",
+  "project": "api-server",
+  "tool_name": "Bash",
+  "tool_input": {"command": "npm test"},
+  "tool_output": {"exit_code": 0, "duration_ms": 2340},
+  "policy_checks": {
+    "PreToolUse/bash_security": "allow",
+    "PostToolUse/test_validator": "allow"
+  }
+}
+```
+
+**Storage and Retention:**
+- **Local**: `.claude/audit.jsonl` (30-day retention)
+- **Remote**: SIEM (Splunk, Datadog, SigNoz) with 1-7 year retention per compliance requirements
+- **Session Transcripts**: `~/.claude/projects/{id}/sessions/{id}.jsonl` (until project deleted)
+
+**For Complete Compliance Patterns**: See [Document 06: Production Deployment and Maintenance](docs/claude/06-Production-Deployment-and-Maintenance.md#compliance-requirements)
+
+---
+
 ## Repository Components
 
 ### Core Documentation (9 Manuals)
@@ -119,6 +345,81 @@ MAINTENANCE/
 ---
 
 ## Command Development Standards
+
+### Three-Tier Command Hierarchy
+
+Production deployments separate commands across three levels for clear separation of concerns and centralized governance:
+
+**1. User-Level Commands** (`~/.claude/commands/`):
+- **Purpose**: Personal productivity tools for individual developers
+- **Versioning**: Outside project repositories, enabling private experimentation
+- **Use Cases**: Personalized commit message formats, custom test runners, individual analysis scripts
+- **Scope**: Developer-specific workflows without team coordination overhead
+
+**2. Project-Level Commands** (`.claude/commands/`):
+- **Purpose**: Team-shared workflows versioned with repositories
+- **Versioning**: Git-tracked, ensuring consistency across team members
+- **Use Cases**: CI/CD integration, deployment checks, code review preparation
+- **Scope**: Codify institutional knowledge, ensuring consistent execution regardless of seniority
+
+**3. Organization-Wide Standards** (system-level CLAUDE.md):
+- **Purpose**: System-level deployment of company-wide coding standards
+- **Versioning**: Centrally managed, propagated to all Claude Code instances
+- **Use Cases**: Security policies, architectural conventions, compliance requirements
+- **Scope**: Enforce baseline compliance without manual synchronization
+
+**Benefits**:
+- Clear separation of concerns (personal vs team vs organization)
+- Reduced configuration drift across developers
+- Centralized governance for compliance-critical standards
+
+### Progressive Disclosure for Context Management
+
+Rather than embedding complete documentation inline, production implementations use **progressive disclosure** to prevent context window saturation:
+
+**Pattern: Reference External Documentation**
+
+```markdown
+# .claude/commands/deploy.md
+
+---
+description: "Deploy application following company deployment standards"
+allowed-tools: ["Bash(git:*,gh:*)", "Read"]
+---
+
+# Deploy Application
+
+## Standards
+See `.claude/rules/deployment.md` for deployment procedures.
+
+## Pre-Deployment Checks
+Refer to `.claude/rules/security.md` for security validation.
+
+## Steps
+1. Verify branch: !git branch --show-current
+2. Run deployment script: !./scripts/deploy.sh $1
+3. Validate: See DEPLOYMENT.md for post-deploy validation
+```
+
+**Modular Rules Architecture:**
+
+```
+.claude/
+├── commands/
+│   ├── deploy.md
+│   ├── test.md
+│   └── pr.md
+└── rules/
+    ├── deployment.md       # Deployment procedures
+    ├── security.md          # Security standards
+    ├── testing.md           # Test conventions
+    └── code-style.md        # Formatting rules
+```
+
+**Benefits**:
+- **Prevents context window saturation**: Commands stay focused (<500 lines)
+- **Enables on-demand retrieval**: Claude loads referenced files only when needed
+- **Supports ownership distribution**: Security team maintains `security.md`, DevOps owns `deployment.md`
 
 ### Command Anatomy
 ```markdown
@@ -412,6 +713,157 @@ optimizations = profiler.suggest_optimizations()
 - Multi-environment deployment pipelines with saga rollback
 - Distributed testing across independent test suites
 - Research synthesis from 10+ sources with state aggregation
+
+---
+
+## Observability and Monitoring
+
+### Production Observability Stack
+
+Effective observability transforms agentic coding from experimental tooling to mission-critical infrastructure. Production systems require real-time visibility into agent decision-making, tool selection confidence, performance bottlenecks, and policy compliance.
+
+**OpenTelemetry + Prometheus + SigNoz Integration:**
+
+**Architecture:**
+```
+Agent Workflow → OpenTelemetry SDK → SigNoz (Collector + Storage + UI)
+                       ↓
+                 Prometheus Metrics → Grafana Dashboards
+```
+
+**Distributed Tracing**: Capture execution spans across tool calls, hook invocations, and subagent coordination:
+- **Session Span**: Root span covering entire user session (prompt submission → response delivery)
+- **Tool Call Spans**: Each tool execution creates child span with attributes:
+  - `tool_name`: Which tool was invoked (Bash, Edit, Write, Read)
+  - `tool_input`: Command/file path/content (sanitized for secrets)
+  - `execution_time_ms`: Duration
+  - `exit_code`: Success (0) or error
+  - `token_count`: Tokens consumed
+- **Hook Execution Spans**: PreToolUse, PostToolUse, Stop hooks tracked with:
+  - `hook_name`: Which hook fired
+  - `decision`: allow/deny/block
+  - `exit_code`: Hook result (0=success, 2=blocking)
+  - `policy_violation`: Boolean flag
+
+**Prometheus Metrics:**
+```prometheus
+# Hook execution duration histogram
+claude_hook_duration_seconds{hook_name="PreToolUse/bash_security", exit_code="0"} 0.123
+
+# Tool call success rate counter
+claude_tool_success_total{tool_name="Bash"} 1247
+claude_tool_failure_total{tool_name="Bash"} 18
+
+# Session token usage gauge
+claude_session_tokens{session_id="550e8400-...", model="claude-sonnet-4"} 12450
+
+# Policy violation counter
+claude_policy_violations_total{violation_type="security", severity="high"} 3
+```
+
+**Dashboard Widgets** (SigNoz Example):
+- **Hook Execution Heatmap**: Visualizes when hooks run (time of day, day of week); identifies peak load
+- **Policy Violation Trends**: Line chart of security vs. quality vs. compliance violations over 30 days
+- **Latency Percentiles**: Histogram of hook execution times; alerts on p95 > 2s
+- **Error Rate**: % of hooks failing (exit code != 0); alerts on rate > 5%
+- **Cost Attribution**: Token usage per command/agent/feature; identifies optimization opportunities
+
+### Decision Confidence Scores
+
+Production agentic systems track **decision confidence** to identify when agents require additional context or skill refinement. Decision margins measure the gap between the chosen option and top alternatives.
+
+**Confidence Scoring Pattern:**
+
+```json
+{
+  "decision_type": "tool_selection",
+  "task": "implement user authentication",
+  "decision": {
+    "chosen": "Passport.js",
+    "confidence": 0.73,
+    "alternatives": [
+      {"tool": "Auth0 SDK", "confidence": 0.68},
+      {"tool": "Custom JWT", "confidence": 0.52}
+    ],
+    "margin": 0.05
+  }
+}
+```
+
+**Margin Analysis:**
+- **Margin > 0.20**: High confidence, clear winner
+- **Margin 0.10-0.20**: Moderate confidence, acceptable
+- **Margin < 0.10**: Low confidence, consider providing additional context
+- **Margin < 0.05**: Critical—agent may benefit from skill refinement or human guidance
+
+**Alerting on Low Confidence:**
+```yaml
+# Prometheus alert rule
+- alert: LowDecisionConfidence
+  expr: claude_decision_margin < 0.10
+  for: 5m
+  labels:
+    severity: warning
+  annotations:
+    summary: "Agent decision confidence degrading"
+    description: "Decision margin {{ $value }} below threshold"
+```
+
+### Automated Quality Checks with Code Review Subagents
+
+Code review subagents execute in **independent context windows**, evaluating implementation quality without bias from original reasoning:
+
+**Benefits:**
+- **Unbiased evaluation**: Subagent doesn't inherit implementation context, catches assumptions
+- **Parallel execution**: Review runs while developer continues other work
+- **CI/CD integration**: Structured JSON output feeds automated workflows
+- **Consistency**: Same review standards applied across all code changes
+
+**Metrics to Track:**
+- **Detection rate**: % of bugs caught by subagent before human review
+- **False positive rate**: % of subagent findings incorrectly flagged
+- **Time savings**: Human code review duration (baseline vs. with subagent pre-screening)
+
+### Key Performance Indicators (KPIs)
+
+| Metric | Target | Measurement | Alert Threshold |
+|--------|--------|-------------|-----------------|
+| **Response Latency** | < 3s (p95) | Time from tool call to completion | p95 > 5s |
+| **Token Usage** | < 15K/session | Tokens consumed per session | > 25K/session |
+| **Success Rate** | > 95% | % of commands completing without error | < 90% |
+| **Cost per Task** | < $0.50 | API costs (model + tools) per feature | > $2.00 |
+| **Hook Execution Time** | < 1s (p95) | Hook duration (PreToolUse, PostToolUse) | p95 > 3s |
+| **Policy Compliance** | 100% | % of operations passing policy checks | < 99% |
+
+### Iterative Improvement Through Usage Analytics
+
+Organizations track command usage patterns, failure modes, and performance metrics:
+
+**Analytics Framework:**
+
+1. **Frequency Analysis**: Which commands are most-used? Where should documentation investment focus?
+   - Example: `/test-all` used 450 times/week → Invest in optimization
+   - Example: `/deploy-check` only 12 times/week → Consider deprecating
+
+2. **Failure Correlation**: What environmental conditions predict errors?
+   - Example finding: Low retrieval scores + high token counts = 3x failure rate
+   - **Action**: Implement retrieval quality gates, chunk large contexts
+
+3. **Cost Attribution**: Which skills/commands consume most tokens?
+   - Example: Architecture planning uses 15K tokens/session (appropriate for Opus)
+   - Example: Simple refactoring uses 12K tokens (could use Sonnet)
+   - **Action**: Route simple tasks to Sonnet 4, achieving 28.4% cost reduction while maintaining 96.7% performance
+
+4. **User Satisfaction**: Net Promoter Score (NPS) for AI-generated code
+   - Example: NPS 72 for feature implementation, but only 45 for bug fixes
+   - **Action**: Enhance debugging skills, add systematic-debugging workflow
+
+**Continuous Improvement Cycles:**
+- **Weekly**: Failure pattern reviews, identify top 3 error categories
+- **Monthly**: Cost analysis, model selection optimization, command usage trends
+- **Quarterly**: Security audits, compliance alignment, skill effectiveness evaluation
+
+**For Complete Observability Implementation**: See [Document 06: Production Deployment and Maintenance](docs/claude/06-Production-Deployment-and-Maintenance.md#observability-and-feedback-loops)
 
 ---
 
@@ -932,6 +1384,90 @@ Configuration files:
 - Community contribution rate
 - Documentation freshness
 - Command/agent effectiveness
+
+---
+
+## Enhanced Documentation References
+
+### Production-Grade Best Practices Integration
+
+The following core documents have been **significantly enhanced** with production-grade patterns from 100+ enterprise deployments, achieving 2-10x velocity improvements and comprehensive security/compliance coverage:
+
+#### Document 02: Individual Command Creation (v2.0.0)
+**Enhanced with:**
+- **Three-Tier Command Hierarchy**: User-level, project-level, organization-wide command separation for clear governance
+- **Command Composability and Orchestration**: Atomic commands (single responsibility) vs. orchestration patterns with programmatic invocation
+- **Permission-Based Architecture**: Five permission modes (default, acceptEdits, plan, dontAsk, bypassPermissions) with allowed-tools scoping
+- **Progressive Disclosure**: Modular `.claude/rules/` architecture to prevent context window saturation
+- **Semantic Versioning for Commands**: MAJOR.MINOR.PATCH tracking with dependency management
+- **CI/CD Pipeline Integration**: GitHub Actions workflow examples with structured JSON output
+- **Introduction to Hooks**: Runtime validation with security examples and enforcement patterns
+- **Reference Architectures**: Small team (5-25 devs) vs. platform engineering (100+ devs) deployment patterns
+
+**Read**: [docs/claude/02-Individual-Command-Creation.md](docs/claude/02-Individual-Command-Creation.md)
+
+#### Document 05: Testing and Quality Assurance (v2.0.0)
+**Enhanced with comprehensive "Production-Grade Hooks for Quality Assurance" section:**
+- **Formal Hook Model**: 11 lifecycle events (PreToolUse, PostToolUse, PermissionRequest, UserPromptSubmit, Notification, Stop, SubagentStop, SessionStart, SessionEnd, PreCompact) with complete communication protocol
+- **Communication Protocol**: stdin/stdout/stderr, exit codes (0=success, 2=blocking), JSON control structures for sophisticated orchestration
+- **Design Principles**: Determinism over probabilistic guidance, block-at-submit pattern, composability, observability, cognitive load minimization
+- **Security Analysis**: CVE-2025-54795 (CVSS 8.7 command injection), threat modeling, prompt injection defenses, path traversal prevention, secrets exposure mitigation
+- **Organizational Governance**: Central policy repositories, review workflows, SDLC integration patterns
+- **Case Study 1 - Enterprise Monorepo**: 95K LOC, block-at-submit strategy, 40%→85% refactor success rate, 30% token reduction
+- **Case Study 2 - TDD Enforcement**: 20%→84% activation rate using hooks + skills + subagents, 45%→91% code coverage
+- **Case Study 3 - Policy-as-Code with OPA/Rego**: Cupcake framework, 90% permission prompt reduction, 100% audit compliance
+- **Evaluation Framework**: Quantitative metrics (defect reduction, compliance rate), statistical rigor (95% CI), industry benchmarks (AWS CodeWhisperer 57% productivity boost)
+- **Architectural Checklist**: 4-phase deployment (observability, non-blocking checks, security, escalation), comprehensive failure playbook
+
+**Read**: [docs/claude/05-Testing-and-Quality-Assurance.md](docs/claude/05-Testing-and-Quality-Assurance.md#production-grade-hooks-for-quality-assurance)
+
+#### Document 06: Production Deployment and Maintenance (v2.0.0)
+**Enhanced with:**
+- **Observability and Feedback Loops**: OpenTelemetry + Prometheus + SigNoz integration with example instrumentation, distributed tracing for agent workflows
+- **Decision Confidence Scores**: Track margin between chosen option and alternatives (margin < 0.05 = critical), alerting on degrading confidence
+- **Automated Quality Checks**: Code review subagents with independent context windows for unbiased evaluation
+- **Iterative Improvement**: Usage analytics framework (frequency analysis, failure correlation, cost attribution, NPS tracking)
+- **Audit Trails and Change Management**: Comprehensive audit log structure (local + remote SIEM storage), performance metrics with KPI table
+- **User Feedback Collection**: Inline ratings, session surveys, weekly NPS tracking, integration with analytics
+- **Compliance Requirements** with detailed implementation:
+  - **SOC 2 Type II**: Audit trails, access controls, change management workflows, continuous monitoring
+  - **HIPAA**: PHI redaction patterns, encryption (AES-256), human review gates, weekly automated scans
+  - **GDPR**: Data residency controls, right to deletion (`/delete-session`), consent management, annual compliance audits
+- **Change Management Workflows**: 5-phase process (proposal → review → staging → production → validation) with rollback procedures
+
+**Read**: [docs/claude/06-Production-Deployment-and-Maintenance.md](docs/claude/06-Production-Deployment-and-Maintenance.md)
+
+#### Document 07: Quick Reference and Templates (v2.0.0)
+**Enhanced with:**
+- **Command Templates** (3 inline code blocks):
+  - Minimal Command Template: For simple single-step workflows
+  - Standard Command Template: For moderate complexity with conditional logic
+  - Orchestration Command Template: Multi-agent coordination with 4-phase workflow (planning, implementation, validation, integration)
+- **Hook Templates** (4 inline code blocks):
+  - PreToolUse Security Hook: Bash script blocking dangerous commands + sensitive file access + path traversal
+  - PostToolUse Quality Hook: Auto-formatting, linting, type checking, test execution
+  - UserPromptSubmit Hook: Block-at-submit pattern with lint/test validation
+  - Stop Hook: Session summarization with metrics and next steps
+- **Implementation Checklists** (3 table format):
+  - Command Implementation Checklist: 18 items (planning, development, documentation, testing, security, deployment)
+  - Hook Deployment Checklist: 13 items (planning, development, testing, integration, documentation, staged rollout)
+  - Production Readiness Checklist: 16 items (documentation, testing, security, observability, compliance, post-deployment monitoring)
+
+**Read**: [docs/claude/07-Quick-Reference-and-Templates.md](docs/claude/07-Quick-Reference-and-Templates.md)
+
+### Integration Summary
+
+**Content Integrated from Source Materials:**
+- **Claude-Code-Commands.md** (770 lines, 9 sections): Command taxonomy, AGENTS.md foundation, permission architecture, git worktrees, OpenTelemetry/Prometheus, reference architectures
+- **Claude-Code-Hooks.md** (1,553 lines, 10 sections): Formal hook model, security analysis (CVE-2025-54795), 3 production case studies with quantified results, evaluation framework, architectural checklists
+
+**Total Enhancement:** 1,650+ lines of production-grade patterns across 4 documents, preserving all existing content while adding enterprise-scale best practices.
+
+**Key Achievements:**
+- All 3 case studies included in full detail with quantified results
+- Cross-references established between Documents 02, 05, 06, 07
+- Professional markdown formatting maintained throughout
+- Version numbers incremented following semantic versioning (all → 2.0.0 for major enhancements)
 
 ---
 
