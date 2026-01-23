@@ -2214,7 +2214,7 @@ Templates:
 Documentation:
   └─ docs/best-practices/
       ├─ 08-Claude-Skills-Guide.md             # Skill creation
-      ├─ 09-Multi-Agent-Architecture...md      # Architecture patterns
+      ├─ 11-Multi-Agent-Architecture...md      # Architecture patterns
       └─ 12-Skills-First-Planning...md         # This document
 
 Commands:
@@ -2232,7 +2232,7 @@ Commands:
 
 ### Related Documentation
 - [08-Claude-Skills-Guide.md](./08-Claude-Skills-Guide.md) - Creating and using skills
-- [09-Multi-Agent-Architecture-and-Skills-Integration.md](./09-Multi-Agent-Architecture-and-Skills-Integration.md) - Architecture patterns
+- [11-Multi-Agent-Architecture-and-Skills-Integration.md](./11-Multi-Agent-Architecture-and-Skills-Integration.md) - Architecture patterns
 - [04-Multi-Agent-Orchestration.md](./04-Multi-Agent-Orchestration.md) - Orchestration fundamentals
 
 ### Research References
