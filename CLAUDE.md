@@ -127,7 +127,7 @@ All tool executions logged to `.claude/audit.jsonl` + remote SIEM with timestamp
 6. **06-Production-Deployment-and-Maintenance.md** - Operations and monitoring
 7. **07-Quick-Reference-and-Templates.md** - Boilerplate and cheat sheets
 8. **08-Claude-Skills-Guide.md** - Skills creation
-9. **15-Advanced-Orchestration-Patterns.md** - Enterprise DAG, state management, resilience
+9. **17-Advanced-Orchestration-Patterns.md** - Enterprise DAG, state management, resilience
 
 ### Template Library
 ```
@@ -192,7 +192,7 @@ See `.claude/rules/security.md` for security validation.
 
 ## Multi-Agent Orchestration Patterns
 
-> **Full Documentation**: See [docs/claude-reference/advanced-orchestration.md](docs/claude-reference/advanced-orchestration.md) and [Document 15](docs/best-practices/15-Advanced-Orchestration-Patterns.md)
+> **Full Documentation**: See [docs/claude-reference/advanced-orchestration.md](docs/claude-reference/advanced-orchestration.md) and [Document 17](docs/best-practices/17-Advanced-Orchestration-Patterns.md)
 
 **IMPORTANT**: For most workflows, use a **single general agent with skills** instead of multiple specialized agents.
 
