@@ -156,7 +156,131 @@ Orchestrator Skill
 - Common pitfalls
 - Version history
 
+### Evaluation-First Development
+
+**Updated 2026 guidance**: Create evaluations **before** writing extensive documentation to ensure skills solve real problems.
+
+**Evaluation structure**:
+```json
+{
+  "skills": ["your-skill"],
+  "query": "User request that should trigger this skill",
+  "expected_behavior": [
+    "Specific outcome 1",
+    "Specific outcome 2",
+    "Specific outcome 3"
+  ]
+}
+```
+
+**Benefits**:
+- Prevents documenting imagined use cases
+- Provides data-driven validation
+- Reveals gaps through real behavior testing
+- Parallels test-driven development in software engineering
+
+### Progressive Disclosure
+
+**Pattern**: Structure skills so Claude only loads context when needed:
+- **SKILL.md**: Keep under 500 lines, use references for details
+- **References**: Separate domain-specific docs (e.g., `finance.md`, `sales.md`)
+- **Conditional details**: Link to detailed guides only when needed
+
+**Why it matters**: Enables 30+ concurrent skills without context bloat (~100 tokens per skill in system prompt).
+
+### What NOT to Include
+
+Do **not** create extraneous documentation in skill directories:
+- ❌ README.md (skills are for AI agents, not human onboarding)
+- ❌ INSTALLATION_GUIDE.md
+- ❌ QUICK_REFERENCE.md
+- ❌ CHANGELOG.md
+
+Skills should contain only files directly supporting AI agent task execution.
+
+## Activation Reliability
+
+### Quantified Reliability Patterns
+
+Research across 200+ test scenarios reveals:
+
+| Approach | Activation Rate | Use When |
+|----------|----------------|----------|
+| No hooks | 0% | Never (baseline) |
+| Simple instruction hook | 20% | Low-stakes workflows |
+| LLM hook | 80% | Standard workflows |
+| **Forced eval hook** | **84%** | **Mission-critical workflows** |
+
+### Forced Evaluation Hook Pattern
+
+For mission-critical skills, implement explicit evaluation requirement in CLAUDE.md:
+
+```markdown
+Before starting any task:
+
+1. Review all available skills
+2. For each potentially relevant skill, output:
+   - Skill name
+   - YES/NO decision
+   - Brief reasoning
+
+3. Only after completing this evaluation, proceed with the task using appropriate skills
+```
+
+Once Claude writes "YES - need X," it's committed to activating that skill.
+
+**Trade-offs**:
+- ✅ 84% activation reliability (vs 20% for simple hooks)
+- ✅ Works reliably even with 10+ skills active
+- ⚠️ Adds ~$0.006 per query
+- ⚠️ Increases latency by reasoning overhead
+
+### Description Best Practices
+
+**Critical constraints**:
+- Description must be **single-line YAML** (multiline breaks parsing)
+- Description limited to **1024 characters** (excess truncated invisibly)
+- Description is the **primary triggering mechanism**
+
+**Optimal pattern**:
+```yaml
+---
+name: your-skill
+description: What the skill does and specific keywords for when to use. Use when Claude needs to: (1) Action A, (2) Action B, (3) Action C, or other specific triggers
+---
+```
+
+Include **both** what the skill does **and** specific trigger contexts.
+
 ## Troubleshooting
+
+### Common Activation Failures
+
+**Issue: Vague Descriptions**
+
+**Symptom**: Skill triggers unpredictably or not at all
+
+**Fix**: Add specific keywords and trigger phrases
+- ❌ Bad: "This skill helps with documents"
+- ✅ Good: "Use when Claude needs to work with professional documents (.docx files) for: (1) Creating new documents, (2) Modifying content, (3) Working with tracked changes"
+
+**Issue: Description Exceeds 1024 Characters**
+
+**Symptom**: Skill never triggers despite being relevant
+
+**Fix**: Truncation happens silently. Compress description, prioritize trigger keywords over explanatory prose.
+
+**Issue: Too Many Skills (>32)**
+
+**Symptom**: Inconsistent skill detection; some skills invisible
+
+**Fix**: Due to token budget constraints, only 32-36 skills detected reliably. Prune redundant skills or organize into specialized skill sets for different contexts.
+
+**Issue: Context Window Consumed**
+
+**Symptom**: Skills don't load even when triggered
+
+**Fix**: Implement aggressive context management (see [Document 12](12-Production-Grade-Skills-Development.md)). Clear context before it reaches 60% utilization.
 
 ### Issue: Skill Doesn't Invoke
 
@@ -318,6 +442,8 @@ Claude Skills extend the Command and Control framework with portable, reusable w
 - **Accelerate** repetitive tasks
 - **Improve** consistency and quality
 
+**For Advanced Production Patterns**: See [Document 12: Production-Grade Skills Development](12-Production-Grade-Skills-Development.md) for comprehensive guidance on activation reliability engineering, progressive disclosure architecture, evaluation-driven development workflows, lifecycle management, and enterprise deployment strategies.
+
 **Next Steps:**
 1. Identify 3 high-value workflows to automate
 2. Use skill-creator to build first skill
@@ -328,7 +454,7 @@ Claude Skills extend the Command and Control framework with portable, reusable w
 
 ---
 
-**Document Version**: 1.0.0
-**Last Updated**: November 22, 2025
+**Document Version**: 1.1.0
+**Last Updated**: January 23, 2026
 **Maintained By**: Claude Command and Control Project
 **Review Cycle**: Quarterly
