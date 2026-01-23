@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### [2026-01-23] - FastMCP Skill Addition
+
+#### Added
+- **skills/fastmcp/SKILL.md**: Comprehensive Model Context Protocol (MCP) server development skill using FastMCP framework
+  - Python and TypeScript examples for all core concepts
+  - Tools, Resources, Prompts, and Context implementation patterns
+  - Claude Desktop integration with installation methods (CLI and manual)
+  - Authentication and security best practices (OAuth, token verification)
+  - Production deployment guidance (STDIO, HTTP, SSE transports)
+  - FastMCP v2 stable and v3 beta coverage with migration guide
+  - Integration with creating-skills workflow for custom MCP-based skills
+  - Complete validation test suite (10 tests)
+  - 45 Python examples, 9 TypeScript examples, 5,518 words
+- **skills/fastmcp/validation_tests.md**: Comprehensive test suite for skill validation
+- **skills/fastmcp/run_validation_tests.sh**: Automated test runner script
+
+#### Changed
+- Updated skills/README.md: Added fastmcp to Development Workflow Skills section
+- Updated skill count: 30 → 31 total skills
+
 ### [2026-01-23] - CLAUDE.md Optimization (v4.0.0)
 
 #### Changed
