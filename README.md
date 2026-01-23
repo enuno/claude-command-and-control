@@ -1125,6 +1125,7 @@ version: 1.0.0
 | **[domain-name-brainstormer](skills-templates/domain-name-brainstormer/)** | Domain name generation and availability checking | Finding available domain names for projects |
 | **[farm-monitor](skills/farm-monitor/SKILL.md)** | Bitcoin mining fleet monitoring | Monitoring mining operations, fleet management |
 | **[fastapi](skills-templates/fastapi/)** | FastAPI modern Python web framework | Building APIs, async endpoints, dependency injection, Python backend development |
+| **[fastmcp](skills/fastmcp/SKILL.md)** | Model Context Protocol (MCP) server development with FastMCP framework | Creating MCP servers, Claude Desktop integration, building AI tools/resources, production MCP deployment (Python + TypeScript) |
 | **file-categorization** | Categorize files as Command/Agent/Skill/Doc | Processing files in integration pipelines |
 | **[file-organizer](skills-templates/file-organizer/)** | Intelligent file organization | Organizing files, finding duplicates, or cleaning up directories |
 | **[flyio](skills-templates/flyio/)** | Deploy and scale full-stack applications globally on Fly.io platform | When deploying web applications, APIs, databases, or microservices that need global distribution and automatic scaling |

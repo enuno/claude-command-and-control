@@ -11,7 +11,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 ---
 
-## Available Skills (30 Total)
+## Available Skills (31 Total)
 
 ### Bitcoin Mining Skills
 
@@ -30,6 +30,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 | Skill | Description | Key Use Cases |
 |-------|-------------|---------------|
+| **[fastmcp](fastmcp/SKILL.md)** | Model Context Protocol (MCP) server development with FastMCP framework - tools, resources, prompts, authentication, Claude Desktop integration, and production deployment with Python and TypeScript examples | Creating MCP servers, integrating with Claude Desktop, building AI-powered tools and data access layers, production MCP deployment, v2/v3 migration |
 | **[openserv-agents](openserv-agents/SKILL.md)** | Complete OpenServ platform guide - SDK, API, and no-code agent development | Building autonomous AI agents, multi-agent orchestration, "Second Brain" architecture, BRAID framework, deployment strategies, production hosting |
 | **[root-cause-tracing](root-cause-tracing/SKILL.md)** | Systematically traces bugs backward through call stack to find original trigger | Debugging errors deep in execution, tracing invalid data sources |
 | **[software-architecture](software-architecture/SKILL.md)** | Clean Architecture & DDD guidance for quality-focused development | Software design, architecture decisions, code quality, anti-patterns |
