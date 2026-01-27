@@ -1,0 +1,111 @@
+{
+  "name": "raycast",
+  "description": "Raycast extension development framework. Use for creating extensions, API integration, UI components, command development, TypeScript patterns, React integration, and extension publishing.",
+  "base_url": "https://developers.raycast.com/",
+  "start_urls": [
+    "https://developers.raycast.com/basics",
+    "https://developers.raycast.com/basics/getting-started",
+    "https://developers.raycast.com/basics/create-your-first-extension",
+    "https://developers.raycast.com/basics/prepare-an-extension-for-store",
+    "https://developers.raycast.com/api-reference",
+    "https://developers.raycast.com/api-reference/environment",
+    "https://developers.raycast.com/api-reference/clipboard",
+    "https://developers.raycast.com/api-reference/user-interface/list",
+    "https://developers.raycast.com/api-reference/user-interface/action-panel",
+    "https://developers.raycast.com/api-reference/user-interface/form",
+    "https://developers.raycast.com/information",
+    "https://developers.raycast.com/examples",
+    "https://developers.raycast.com/teams"
+  ],
+  "selectors": {
+    "main_content": "article, main",
+    "title": "h1, h2",
+    "code_blocks": "pre code"
+  },
+  "url_patterns": {
+    "include": [
+      "/basics/",
+      "/api-reference/",
+      "/information/",
+      "/examples/",
+      "/teams/"
+    ],
+    "exclude": [
+      "/changelog",
+      "/blog",
+      "/community",
+      "/support"
+    ]
+  },
+  "categories": {
+    "getting_started": [
+      "getting-started",
+      "create-your-first",
+      "quick-start",
+      "installation",
+      "setup",
+      "tutorial"
+    ],
+    "extension_development": [
+      "create-your-first-extension",
+      "manifest",
+      "project-structure",
+      "development",
+      "prepare-an-extension",
+      "publish"
+    ],
+    "api": [
+      "api-reference",
+      "command",
+      "browser",
+      "cache",
+      "clipboard",
+      "environment",
+      "keyboard",
+      "oauth",
+      "storage",
+      "preferences",
+      "window"
+    ],
+    "ui_components": [
+      "list",
+      "action-panel",
+      "actions",
+      "form",
+      "detail",
+      "grid",
+      "colors",
+      "icons",
+      "navigation",
+      "alert",
+      "toast",
+      "hud"
+    ],
+    "utilities": [
+      "utilities",
+      "ai",
+      "feedback",
+      "keyboard",
+      "shortcuts"
+    ],
+    "examples": [
+      "examples",
+      "templates",
+      "showcase"
+    ],
+    "teams": [
+      "teams",
+      "shared-extensions",
+      "collaboration"
+    ],
+    "best_practices": [
+      "information",
+      "best-practices",
+      "performance",
+      "security",
+      "lifecycle"
+    ]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 400
+}
