@@ -6,6 +6,7 @@
 [![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](docs/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/enuno/claude-command-and-control)
+[![codecov](https://codecov.io/github/enuno/claude-command-and-control/graph/badge.svg?token=3TJJK83SWS)](https://codecov.io/github/enuno/claude-command-and-control)
 
 ### GitHub Actions Status
 
