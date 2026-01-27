@@ -1158,6 +1158,7 @@ version: 1.0.0
 | **[prompt-engineering](skills-templates/prompt-engineering/)** | Advanced prompt engineering patterns | Writing commands, hooks, skills, or optimizing LLM interactions |
 | **[quiche](skills-templates/quiche/)** | Cloudflare QUIC/HTTP3 Rust library | QUIC connections, HTTP/3 clients/servers, connection management |
 | **[raffle-winner-picker](skills-templates/raffle-winner-picker/)** | Random winner selection | Running giveaways, raffles, or contests |
+| **[raycast](skills/raycast/SKILL.md)** | Raycast extension development framework | Building Raycast extensions with TypeScript/React, API integration (Environment, Clipboard, Storage, OAuth), UI components (List, ActionPanel, Form) |
 | **root-cause-tracing** | Systematic debugging through call stack | Tracing bugs deep in execution |
 | **[sdk-sm](skills-templates/sdk-sm/)** | Bitwarden Secrets Manager SDK | Using Bitwarden Secrets Manager, working with multi-language SDK (Rust, Python, C#, Go, Java), secrets management API |
 | **[seo](skills/seo/SKILL.md)** | Google SEO research and web traffic monetization | SEO best practices, tool comparisons (Semrush, Moz, Ahrefs), search engine optimization, marketing |
