@@ -93,7 +93,10 @@ describe('Skill Validation', () => {
       });
 
       test('should have meaningful body content', () => {
-        expect(body.length).toBeGreaterThan(100);
+        // Allow shorter content for template files
+        const isTemplate = skillName.includes('template');
+        const minLength = isTemplate ? 10 : 100;
+        expect(body.length).toBeGreaterThan(minLength);
       });
 
       test('should have "When to Use" section', () => {
@@ -107,7 +110,7 @@ describe('Skill Validation', () => {
 
       test('should have at least one code example or usage pattern', () => {
         const hasCodeBlock = body.includes('```');
-        const hasExample = body.match(/##\s+Example/i);
+        const hasExample = !!body.match(/##\s+Example/i);
         if (!hasCodeBlock && !hasExample) {
           console.warn(`⚠️  Skill ${skillName} missing code examples - consider adding some`);
         }

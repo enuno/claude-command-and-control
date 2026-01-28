@@ -2,7 +2,7 @@
 name: flyio
 description: Deploy and scale full-stack applications globally on Fly.io platform
 when-to-use: When deploying web applications, APIs, databases, or microservices that need global distribution and automatic scaling
-version: 1.1
+version: "1.1"
 source: https://fly.io/docs/
 generated: 2026-01-21
 updated: 2026-01-21

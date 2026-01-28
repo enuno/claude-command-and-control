@@ -1,5 +1,6 @@
 {
   "name": "langflow",
+  "description": "Visual AI framework for building multi-agent and RAG applications with drag-and-drop flow designer",
   "base_url": "https://docs.langflow.org/",
   "start_urls": [
     "https://docs.langflow.org/",
