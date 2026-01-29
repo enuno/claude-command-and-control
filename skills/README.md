@@ -11,7 +11,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 ---
 
-## Available Skills (32 Total)
+## Available Skills (33 Total)
 
 ### Bitcoin Mining Skills
 
@@ -36,6 +36,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 | **[root-cause-tracing](root-cause-tracing/SKILL.md)** | Systematically traces bugs backward through call stack to find original trigger | Debugging errors deep in execution, tracing invalid data sources |
 | **[software-architecture](software-architecture/SKILL.md)** | Clean Architecture & DDD guidance for quality-focused development | Software design, architecture decisions, code quality, anti-patterns |
 | **[subagent-driven-development](subagent-driven-development/SKILL.md)** | Dispatches fresh subagent for each task with code review between tasks | Executing plans with independent tasks, fast iteration with quality gates |
+| **[terraform-best-practices](terraform-best-practices/SKILL.md)** | Comprehensive Terraform infrastructure-as-code best practices from Anton Babenko's community guide covering infrastructure sizing, modules, state management, naming conventions, and tool recommendations | Designing Terraform project structure, scaling IaC implementations, choosing Terraform vs Terragrunt, establishing coding standards, troubleshooting common Terraform problems |
 | **[using-git-worktrees](using-git-worktrees/SKILL.md)** | Creates isolated git worktrees with smart directory selection and safety verification | Feature work needing isolation, working on multiple branches simultaneously |
 
 ### Integration & Automation Skills
