@@ -35,21 +35,39 @@ Follow these structural assumptions and conventions (adapt as repo evolves):
   - Location: `.claude/commands/`
   - Purpose: End‑user workflows, usually invoked as `/namespace:command-name`.
   - Style: One primary workflow per file, clear phases, explicit acceptance criteria.
+  - Note: `.claude/commands/CLAUDE.md` provides command-specific context.
 
-- **Skills / Agents**
-  - Location: `.claude/skills/` or `docs/skills/`
-  - Purpose: Reusable patterns (reviewers, refactorers, planners, etc.) that commands can call.
-  - Style: Role‑focused, small and composable.
+- **Skills**
+  - Location: `skills/` (root level directory)
+  - Purpose: Reusable workflow automation units (reviewers, refactorers, planners, debuggers, etc.) that work across projects.
+  - Style: Role‑focused, small and composable, with YAML frontmatter.
+  - Note: `.claude/skills/README.md` provides skill directory overview and usage guide.
+
+- **Templates**
+  - Location: `templates/`
+  - Subdirectories: `commands/`, `skills/`, `orchestration/`
+  - Purpose: Starter templates for creating new commands, skills, and orchestration patterns.
+  - Note: Used by `/create-command` and `/create-skill` commands.
 
 - **Docs & Guides**
-  - Location: `docs/` (e.g. `docs/architecture/*.md`, `docs/examples/*.md`)
+  - Location: `docs/`
+  - Subdirectories:
+    - `best-practices/` - Comprehensive guides (17 numbered files covering commands, agents, testing, deployment, etc.)
+    - `claude-reference/` - Claude Code specific reference material (hooks, GitHub Actions, observability, etc.)
+    - `references/` - Technical specifications (agent-skills architecture, integration guides, etc.)
   - Purpose: Deep‑dive explanations and longform examples that should **not** be in this CLAUDE.md.
   - When you want detailed context, ask the user to include the relevant doc with `@file`.
 
+- **Examples & Utilities**
+  - `examples/` - Working examples (currently `orchestration/` subdirectory)
+  - `scripts/` - Utility scripts for repository maintenance
+  - `configs/` - Configuration files and settings
+
 Maintain these properties:
-- Commands describe **what** to do and **how to orchestrate** (steps, sub‑agents, checks).
-- Skills describe **how a specific role behaves** (reviewer, planner, implementer, etc.).
-- Docs provide the narrative justification, long examples, and background material.
+- Commands (`.claude/commands/*.md`) describe **what** to do and **how to orchestrate** (steps, sub‑agents, checks).
+- Skills (`skills/*/SKILL.md`) describe **how a specific role behaves** or **what workflow to automate** (reviewer, planner, debugger, workspace setup, etc.).
+- Templates (`templates/`) provide starter patterns for creating new commands and skills.
+- Docs (`docs/`) provide the narrative justification, long examples, and background material.
 
 ---
 
@@ -68,7 +86,7 @@ When you touch `.claude/commands/*.md`:
    - “Use when…” section with concrete scenarios.
    - Step‑by‑step workflow (numbered list).
    - Validation / acceptance criteria.
-   - Hooks to skills/agents (e.g., “delegate to @.claude/skills/reviewer.md for code review”).
+   - Hooks to skills/agents (e.g., "delegate to @skills/code-reviewer/SKILL.md for code review").
 
 3. **Be explicit about orchestration**
    - Call out parallelizable steps and where sub‑agents are invoked.
@@ -83,7 +101,7 @@ When you touch `.claude/commands/*.md`:
 
 ## 4. Editing & Creating Skills
 
-When you touch `.claude/skills/*.md` or similar:
+When you touch `skills/*/SKILL.md` files:
 
 1. **Define role and boundaries**
    - Start with: Purpose, Inputs, Outputs.
@@ -98,8 +116,9 @@ When you touch `.claude/skills/*.md` or similar:
    - If a skill assumes certain files or tools, document that assumption and fail clearly when they’re missing.
 
 4. **Offload long patterns**
-   - Put large checklists, extended examples, or domain‑specific heuristics into dedicated docs (e.g. `docs/skills/refactor-checklist.md`).
+   - Put large checklists, extended examples, or domain‑specific heuristics into dedicated docs (e.g. `docs/best-practices/`, `docs/references/`).
    - From the skill file, reference those docs instead of inlining them.
+   - For skill-specific bundled content, create subdirectories within the skill folder (e.g. `skills/my-skill/templates/`, `skills/my-skill/docs/`).
 
 ---
 
@@ -146,7 +165,7 @@ For all changes you propose (commands, skills, docs):
 If requested behavior is ambiguous or you’re missing key files:
 
 - Ask the user to:
-  - Include specific files: `@.claude/commands/...`, `@.claude/skills/...`, `@docs/...`.
+  - Include specific files: `@.claude/commands/...`, `@skills/...`, `@docs/...`, `@templates/...`.
   - Clarify target environment (local dev, CI, GitHub Action, self‑hosted Claude Code, etc.).
 - Prefer **one or two focused questions** instead of a long questionnaire.
 
