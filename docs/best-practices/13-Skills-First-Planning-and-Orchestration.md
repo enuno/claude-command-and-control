@@ -98,6 +98,12 @@ Based on empirical data from production orchestrations:
 - Sonnet 4: Default worker model ($3/$15 per MTok)
 - Opus 4: Orchestration, complex reasoning only ($15/$75 per MTok)
 
+**Empirical Validation (SkillsBench, 2026)**:
+- Skills enable **model scale compensation**: Haiku 4.5 + Skills (27.7%) outperformed Opus 4.5 without Skills (22.0%)
+- **Optimal skill quantity**: 2-3 skills per task showed +18.6pp improvement; 4+ skills showed only +5.9pp due to cognitive overhead
+- **Domain-specific gains**: Healthcare (+51.9pp), Manufacturing (+41.9pp) significantly outperform general Software Engineering (+4.5pp)
+- **Skill complexity**: Moderate-length skills (+18.8pp) dramatically outperform comprehensive documentation (-2.9pp), validating progressive disclosure patterns
+
 ---
 
 ## 2. Decision Framework

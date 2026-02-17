@@ -2,6 +2,13 @@
 
 This directory contains authoritative reference documentation from official sources.
 
+## Research & Empirical Evidence
+
+| Document | Description |
+|----------|-------------|
+| **[skillsbench-research-2026.md](skillsbench-research-2026.md)** | Comprehensive summary of SkillsBench benchmark research (Li et al., 2026) - the first systematic evaluation of Agent Skills efficacy across 84 tasks, 11 domains, and 7,308 evaluation trajectories. Provides empirical validation for skills-based development practices. |
+| **[ai-agent-architecture-guide.md](ai-agent-architecture-guide.md)** | Reference architecture guide for AI agent systems with comprehensive implementation patterns |
+
 ## Agent Skills Specification
 
 The Agent Skills format is an open standard originally developed by Anthropic for portable AI agent capabilities. These documents are the official specification, integrated from [agentskills.io](https://agentskills.io).

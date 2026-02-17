@@ -114,6 +114,66 @@ Use this **three-tier classification** when defining skill scope:
 
 If you answered "Yes" to 3+ questions, create a dedicated skill.
 
+### **1.4 Empirical Evidence: SkillsBench Research (February 2026)**
+
+The **SkillsBench** benchmark represents the first systematic evaluation framework measuring Agent Skills efficacy across diverse tasks, providing empirical validation for skills-based development practices.
+
+**Study Scope**: 84 diverse tasks across 11 domains, 7 agent-model configurations, 7,308 evaluation trajectories.
+
+#### **Key Finding 1: Skills Deliver Substantial Performance Gains**
+
+Curated skills improved performance by **16.2 percentage points** on average, with configuration-specific improvements ranging from 13.6pp to 23.3pp.
+
+- **Best Configuration**: Gemini CLI + Flash 3 achieved 48.7% pass rate with skills
+- **Highest Improvement**: Claude Code + Opus 4.5 showed +23.3pp gain
+
+**Implication**: Skills provide measurable, reproducible performance improvements across agent platforms.
+
+#### **Key Finding 2: Domain-Specific Heterogeneity**
+
+Performance gains vary dramatically by domain, with specialized workflows benefiting most:
+
+| Domain | With Skills | Without Skills | Improvement |
+|--------|-------------|----------------|-------------|
+| Healthcare | 86.1% | 34.2% | **+51.9pp** |
+| Manufacturing | 42.9% | 1.0% | **+41.9pp** |
+| Cybersecurity | 44.0% | 20.8% | +23.2pp |
+| Software Engineering | 38.9% | 34.4% | +4.5pp |
+
+**Implication**: Prioritize skills development for domains with specialized workflows underrepresented in model pretraining. Software engineering shows lower gains because coding patterns are well-represented in training data.
+
+#### **Key Finding 3: Optimal Skill Quantity**
+
+Tasks with **2-3 skills** demonstrated peak performance (+18.6pp improvement), while 4+ skills yielded diminishing returns (+5.9pp) due to cognitive overhead.
+
+**Implication**: Avoid skill bloat. When >3 skills seem necessary, consider:
+- Consolidating related skills
+- Creating a workflow orchestration skill
+- Splitting the task into subtasks
+
+#### **Key Finding 4: Moderate-Length Skills Outperform Comprehensive Ones**
+
+**Moderate-length skills**: +18.8pp improvement
+**Comprehensive skills**: -2.9pp degradation
+
+This validates the progressive disclosure pattern: concise SKILL.md (<500 lines) with references for extensive details outperforms exhaustive documentation.
+
+**Implication**: Your token budget tiers (Simple: 500-2K, Moderate: 2K-8K, Complex: 8K-20K) align with empirical evidence. Resist adding comprehensive documentation directly to SKILL.md.
+
+#### **Key Finding 5: Self-Generated Skills Are Inadequate**
+
+Models attempting to generate their own procedural knowledge showed **-1.3pp average performance** (negligible or negative impact).
+
+**Implication**: Human-curated domain expertise is non-negotiable. The Claude A/B development pattern (§3.1) where human experts guide skill creation is validated by this finding.
+
+#### **Key Finding 6: Skills Enable Model Scale Compensation**
+
+Claude Haiku 4.5 with Skills (27.7%) **exceeded** Opus 4.5 without Skills (22.0%), demonstrating that procedural augmentation can partially substitute for model capacity.
+
+**Implication**: For cost-sensitive deployments, invest in high-quality skills and use smaller models (Haiku/Sonnet) rather than defaulting to largest models (Opus) without skills.
+
+**Citation**: Li, X., Chen, W., Liu, Y., et al. (2026). "SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks." arXiv:2602.12670v1.
+
 ***
 
 ## **2. Writing Clear, Discoverable, and Actionable Instruction Sets**
