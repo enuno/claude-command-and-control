@@ -188,5 +188,19 @@ Unless the user asks otherwise:
   - 1–2 alternative options with tradeoffs,
   - Pointers to where the patterns should live (command vs skill vs docs).
 
-Keep this file **high‑signal and stable**.  
+Keep this file **high‑signal and stable**.
 Push evolving, repo‑specific detail into separate docs and skill files that can be loaded on demand.
+
+---
+
+## 9. Integration & Operational Patterns
+
+For detailed patterns, lessons, and operational guidance on skill integration, documentation maintenance, and repository scaling, see **MEMORY.md** in the project root. This captures:
+
+- Integration pipeline workflow (scan → process → validate → update-docs → commit)
+- Skill quality metrics and checklists
+- Git workflow conventions
+- Documentation auto-update patterns
+- INTEGRATION directory maintenance strategies
+
+MEMORY.md is maintained via the `claude-mem-mastery` skill and should be consulted before starting integration work to avoid repeating past mistakes.

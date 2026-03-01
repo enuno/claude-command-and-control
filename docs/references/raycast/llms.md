@@ -1,0 +1,111 @@
+# Raycast API
+
+## Raycast API
+
+- [Introduction](/readme.md): Start building your perfect tools with the Raycast API.
+- [Getting Started](/basics/getting-started.md): This guide covers the prerequisites you need to start building extensions.
+- [Create Your First Extension](/basics/create-your-first-extension.md): Learn how to build your first extension and use it in Raycast.
+- [Contribute to an Extension](/basics/contribute-to-an-extension.md): Learn how to import an extension to collaborate with others.
+- [Prepare an Extension for Store](/basics/prepare-an-extension-for-store.md): Learn how to get through review process quickly
+- [Publish an Extension](/basics/publish-an-extension.md): Learn how to share your extension with our community.
+- [Debug an Extension](/basics/debug-an-extension.md): This guide covers how to find and fix bugs in your extension.
+- [Install an Extension](/basics/install-an-extension.md): Learn how to find and use extensions from the Raycast Store.
+- [Review an Extension in a Pull Request](/basics/review-pullrequest.md): Learn how to review a contribution from a Pull Request opened by a contributor.
+- [Getting Started](/ai/getting-started.md): This guide explains how to use AI inside extensions.
+- [Create an AI Extension](/ai/create-an-ai-extension.md): Learn how to turn a regular extension into an AI-powered one.
+- [Learn Core Concepts of AI Extensions](/ai/learn-core-concepts-of-ai-extensions.md): Get to know the core concepts of AI extensions.
+- [Write Evals for Your AI Extension](/ai/write-evals-for-your-ai-extension.md): Make your AI Extension more reliable by writing evals.
+- [Follow Best Practices for AI Extensions](/ai/follow-best-practices-for-ai-extensions.md): Make the most out of your AI Extension by following best practices.
+- [Getting Started](/teams/getting-started.md): This guide sets you up with Raycast for Teams.
+- [Publish a Private Extension](/teams/publish-a-private-extension.md): Learn how to share an extension in your organization's private extension store
+- [Collaborate on Private Extensions](/teams/collaborate-on-private-extensions.md): This guide explains how to collaborate with your team on extensions.
+- [Doppler Share Secrets](/examples/doppler.md): This example uses a simple form to collect data.
+- [Hacker News](/examples/hacker-news.md): This example shows how to show an RSS feed as a List.
+- [Todo List](/examples/todo-list.md): This example show how to use lists in combination with forms.
+- [Spotify Controls](/examples/spotify-controls.md): This example shows how to bundle multiple scripts into a single extension.
+- [Terminology](/information/terminology.md): An explanation of various terms used in this documentation.
+- [File Structure](/information/file-structure.md): Understand the file structure of an extension.
+- [Manifest](/information/manifest.md)
+- [Lifecycle](/information/lifecycle.md)
+- [Arguments](/information/lifecycle/arguments.md)
+- [Background Refresh](/information/lifecycle/background-refresh.md)
+- [Deeplinks](/information/lifecycle/deeplinks.md)
+- [Best Practices](/information/best-practices.md): Tips to guarantee a good user experience for your extensions.
+- [Developer Tools](/information/developer-tools.md)
+- [Manage Extensions Command](/information/developer-tools/manage-extensions-command.md): A Raycast command to manage your extensions, add new commands or attachments, etc.
+- [CLI](/information/developer-tools/cli.md): The Raycast CLI allows you to build, develop, and lint your extension.
+- [ESLint](/information/developer-tools/eslint.md)
+- [Forked Extensions (community tool)](/information/developer-tools/forked-extensions.md)
+- [VS Code (community tool)](/information/developer-tools/vscode.md)
+- [Templates](/information/developer-tools/templates.md): Learn about the templates provided by Raycast to help kickstart your extension.
+- [Security](/information/security.md)
+- [Versioning](/information/versioning.md)
+- [AI](/api-reference/ai.md)
+- [Browser Extension](/api-reference/browser-extension.md)
+- [Cache](/api-reference/cache.md)
+- [Command](/api-reference/command.md)
+- [Clipboard](/api-reference/clipboard.md)
+- [Environment](/api-reference/environment.md)
+- [Feedback](/api-reference/feedback.md)
+- [Alert](/api-reference/feedback/alert.md)
+- [HUD](/api-reference/feedback/hud.md)
+- [Toast](/api-reference/feedback/toast.md)
+- [Keyboard](/api-reference/keyboard.md)
+- [Menu Bar Commands](/api-reference/menu-bar-commands.md)
+- [OAuth](/api-reference/oauth.md)
+- [Preferences](/api-reference/preferences.md)
+- [Storage](/api-reference/storage.md)
+- [System Utilities](/api-reference/utilities.md)
+- [User Interface](/api-reference/user-interface.md)
+- [Action Panel](/api-reference/user-interface/action-panel.md)
+- [Actions](/api-reference/user-interface/actions.md)
+- [Detail](/api-reference/user-interface/detail.md)
+- [Form](/api-reference/user-interface/form.md)
+- [List](/api-reference/user-interface/list.md): The de-facto user interface in Raycast. Ideal to present similar data such as to-dos or files.
+- [Grid](/api-reference/user-interface/grid.md)
+- [Colors](/api-reference/user-interface/colors.md)
+- [Icons & Images](/api-reference/user-interface/icons-and-images.md)
+- [Navigation](/api-reference/user-interface/navigation.md)
+- [Raycast Window & Search Bar](/api-reference/window-and-search-bar.md)
+- [Tool](/api-reference/tool.md)
+- [Window Management](/api-reference/window-management.md)
+- [Getting Started](/utilities/getting-started.md)
+- [Functions](/utilities/functions.md)
+- [createDeeplink](/utilities/functions/createdeeplink.md)
+- [executeSQL](/utilities/functions/executesql.md)
+- [runAppleScript](/utilities/functions/runapplescript.md)
+- [runPowerShellScript](/utilities/functions/runpowershellscript.md)
+- [showFailureToast](/utilities/functions/showfailuretoast.md)
+- [withCache](/utilities/functions/withcache.md)
+- [Icons](/utilities/icons.md)
+- [getAvatarIcon](/utilities/icons/getavataricon.md)
+- [getFavicon](/utilities/icons/getfavicon.md)
+- [getProgressIcon](/utilities/icons/getprogressicon.md)
+- [OAuth Utils](/utilities/oauth.md)
+- [OAuthService](/utilities/oauth/oauthservice.md)
+- [withAccessToken](/utilities/oauth/withaccesstoken.md)
+- [getAccessToken](/utilities/oauth/getaccesstoken.md)
+- [Getting a Google client ID](/utilities/oauth/getting-google-client-id.md)
+- [React hooks](/utilities/react-hooks.md)
+- [useCachedState](/utilities/react-hooks/usecachedstate.md)
+- [usePromise](/utilities/react-hooks/usepromise.md)
+- [useCachedPromise](/utilities/react-hooks/usecachedpromise.md)
+- [useFetch](/utilities/react-hooks/usefetch.md)
+- [useForm](/utilities/react-hooks/useform.md)
+- [useExec](/utilities/react-hooks/useexec.md)
+- [useSQL](/utilities/react-hooks/usesql.md)
+- [useAI](/utilities/react-hooks/useai.md)
+- [useFrecencySorting](/utilities/react-hooks/usefrecencysorting.md)
+- [useStreamJSON](/utilities/react-hooks/usestreamjson.md)
+- [useLocalStorage](/utilities/react-hooks/uselocalstorage.md)
+- [Changelog](/misc/changelog.md)
+- [Migration](/misc/migration.md)
+- [v1.28.0](/misc/migration/v1.28.0.md)
+- [v1.31.0](/misc/migration/v1.31.0.md)
+- [v1.37.0](/misc/migration/v1.37.0.md)
+- [v1.42.0](/misc/migration/v1.42.0.md)
+- [v1.48.8](/misc/migration/v1.48.8.md)
+- [v1.50.0](/misc/migration/v1.50.0.md)
+- [v1.51.0](/misc/migration/v1.51.0.md)
+- [v1.59.0](/misc/migration/v1.59.0.md)
+- [FAQ](/misc/faq.md): Answers to the most frequently asked questions.

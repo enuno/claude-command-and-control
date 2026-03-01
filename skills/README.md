@@ -30,6 +30,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 | Skill | Description | Key Use Cases |
 |-------|-------------|---------------|
+| **[claude-mem-coded-assistant](claude-mem-mastery/SKILL.md)** | Entry-point skill for using claude-mem to keep CLAUDE.md and MEMORY.md in sync | Mining past work, maintaining project instructions, updating memory after work |
 | **[fastmcp](fastmcp/SKILL.md)** | Model Context Protocol (MCP) server development with FastMCP framework - tools, resources, prompts, authentication, Claude Desktop integration, and production deployment with Python and TypeScript examples | Creating MCP servers, integrating with Claude Desktop, building AI-powered tools and data access layers, production MCP deployment, v2/v3 migration |
 | **[openserv-agents](openserv-agents/SKILL.md)** | Complete OpenServ platform guide - SDK, API, and no-code agent development | Building autonomous AI agents, multi-agent orchestration, "Second Brain" architecture, BRAID framework, deployment strategies, production hosting |
 | **[raycast](raycast/SKILL.md)** | Raycast extension development framework for creating extensions with API integration, UI components, TypeScript patterns, and React | Building Raycast extensions, implementing extension APIs (Environment, Clipboard, Storage, OAuth), creating UI components (List, ActionPanel, Form), debugging extension code |

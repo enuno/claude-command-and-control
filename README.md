@@ -1112,6 +1112,7 @@ version: 1.0.0
 | **[changelog-generator](skills-templates/changelog-generator/)** | Git commits to user-friendly changelogs | Preparing release notes or product updates |
 | **[chezmoi](skills-templates/chezmoi/)** | Dotfiles manager with 56 commands, templates, password managers, encryption | Cross-machine dotfiles, machine-specific configs, encrypted secrets |
 | **[claude-mem](skills-templates/claude-mem/)** | Persistent memory compression system for Claude Code | Cross-session context, MCP search, privacy controls, observations |
+| **[claude-mem-mastery](skills/claude-mem-mastery/SKILL.md)** | Entry-point skill for using claude-mem to keep CLAUDE.md and MEMORY.md in sync | Mining past work, maintaining project instructions, updating memory after work |
 | **[cloudflare-ai-gateway](skills-templates/cloudflare-ai-gateway/)** | Unified interface to AI providers (OpenAI, Anthropic, Azure, HuggingFace) | Multi-provider AI proxy, caching, rate limiting, analytics |
 | **[cloudflare-ai-search](skills-templates/cloudflare-ai-search/)** | Semantic search and vector embeddings in Workers | Vector-based search, embedding models |
 | **[cloudflare-kv](skills-templates/cloudflare-kv/)** | Low-latency key-value storage at the edge | Edge storage, get/put/delete/list operations |
