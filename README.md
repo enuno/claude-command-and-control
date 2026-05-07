@@ -105,9 +105,10 @@ The **Claude Command and Control** repository is the definitive resource for bui
 
 ### What You'll Find Here
 
-- **📖 Comprehensive Manuals**: Seven interconnected documents covering every aspect of command and agent creation
+- **📖 Comprehensive Manuals**: 17 interconnected documents covering every aspect of command and agent creation
 - **🎯 Ready-to-Use Templates**: Production-tested templates for common commands and agent roles
 - **🏗️ Architecture Patterns**: Proven orchestration patterns for multi-agent workflows
+- **🔬 Empirical Research**: SkillsBench validation data (+16.2pp average improvement from skills)
 - **🔒 Security Best Practices**: Guidelines for safe, controlled AI agent operations
 - **✅ Quality Standards**: Testing, validation, and maintenance strategies
 - **🚀 Production Guidance**: Deployment, monitoring, and lifecycle management
@@ -125,7 +126,7 @@ claude-command-and-control/
 │       └── registry.json      # Skill discovery and metadata
 │
 ├── docs/
-│   ├── best-practices/        # 15 comprehensive instruction manuals
+│   ├── best-practices/        # 17 comprehensive instruction manuals
 │   │   ├── 01-Introduction-and-Core-Principles.md
 │   │   ├── 02-Individual-Command-Creation.md
 │   │   ├── 03-Individual-Agent-Configuration.md
@@ -293,7 +294,7 @@ claude-command-and-control/
 ### Key Directories Explained
 
 - **`.claude/commands/`**: Active production commands for your local Claude Code installation
-- **`docs/best-practices/`**: 13 comprehensive manuals covering all aspects of command/agent/skill development
+- **`docs/best-practices/`**: 17 comprehensive manuals covering all aspects of command/agent/skill development
 - **`commands-templates/`**: 21 production-tested command templates ready to copy and customize
 - **`agents-templates/`**: 10 specialized agent configurations (v2.0 with consolidated patterns)
 - **`skills/`**: 20 production-ready skills for immediate use with agents
@@ -399,17 +400,29 @@ claude-command-and-control/
 | **[06-Production-Deployment-and-Maintenance](docs/best-practices/06-Production-Deployment-and-Maintenance.md)** | Operations and monitoring | Deployment strategies, observability, rollback, lifecycle management |
 | **[07-Quick-Reference-and-Templates](docs/best-practices/07-Quick-Reference-and-Templates.md)** | Boilerplate and cheat sheets | Command templates, agent configs, QA checklists, memory snippets |
 | **[08-Claude-Skills-Guide](docs/best-practices/08-Claude-Skills-Guide.md)** | Skills creation and integration | Skill architecture, triggers, examples, orchestration patterns, best practices |
-| **[09-Agent-Skills-vs-Multi-Agent](docs/best-practices/09-Agent-Skills-vs-Multi-Agent.md)** | Strategic guidance on architecture | Skills-first approach, hybrid patterns, migration strategies, decision matrices |
-| **[12-Skills-First-Planning-and-Orchestration](docs/best-practices/12-Skills-First-Planning-and-Orchestration.md)** | Planning for skills-first and multi-agent workflows | Decision framework, agent registries, multi-agent plans, orchestration patterns, metrics |
-| **[15-Advanced-Orchestration-Patterns](docs/best-practices/15-Advanced-Orchestration-Patterns.md)** | Enterprise-grade orchestration patterns | DAG execution, state management, resilience, performance optimization, CRDT, saga pattern, circuit breakers |
+| **[09-Developing-High-Impact-Claude-Skills](docs/best-practices/09-Developing-High-Impact-Claude-Skills.md)** | Comprehensive skill development guide ✨ | Evaluation-driven development, Claude A/B pattern, empirical SkillsBench validation, skill templates |
+| **[10-Agent-Skills-vs-Multi-Agent](docs/best-practices/10-Agent-Skills-vs-Multi-Agent.md)** | Strategic guidance on architecture | Skills-first approach, hybrid patterns, migration strategies, decision matrices |
+| **[11-Multi-Agent-Architecture-and-Skills-Integration](docs/best-practices/11-Multi-Agent-Architecture-and-Skills-Integration.md)** | Integrating skills with multi-agent systems | Architecture patterns, skill orchestration, hybrid approaches |
+| **[12-hybrid-ai-agent-multi-git-worktree-development](docs/best-practices/12-hybrid-ai-agent-multi-git-worktree-development.md)** | Hybrid development workflows | Git worktrees, isolated workspaces, parallel development |
+| **[13-Skills-First-Planning-and-Orchestration](docs/best-practices/13-Skills-First-Planning-and-Orchestration.md)** | Planning for skills-first workflows ✨ | Decision framework, token efficiency, empirical benchmarking, orchestration patterns |
+| **[14-Production-Grade-Skills-Development](docs/best-practices/14-Production-Grade-Skills-Development.md)** | Advanced production patterns ✨ | Progressive disclosure, forced evaluation hooks (84% reliability), empirical benchmarking, lifecycle management |
+| **[15-MCP-Registry-Best-Practices](docs/best-practices/15-MCP-Registry-Best-Practices.md)** | MCP server configuration patterns | Server instructions, tool discovery, registry management |
+| **[16-LLM-Production-Optimization](docs/best-practices/16-LLM-Production-Optimization.md)** | Model selection and optimization | Performance tuning, cost optimization, latency reduction |
+| **[17-Advanced-Orchestration-Patterns](docs/best-practices/17-Advanced-Orchestration-Patterns.md)** | Enterprise-grade orchestration patterns | DAG execution, state management, resilience, performance optimization, CRDT, saga pattern, circuit breakers |
+
+**✨ = Recently updated with SkillsBench research findings (February 2026)**
 
 ### Reference Documentation
 
 | Document | Purpose | Source |
 |----------|---------|--------|
+| **[SkillsBench Research Summary](docs/references/skillsbench-research-2026.md)** ✨ | Empirical benchmarking of Agent Skills efficacy | Li et al., 2026 (arXiv:2602.12670v1) |
+| **[AI Agent Architecture Guide](docs/references/ai-agent-architecture-guide.md)** | Reference architecture for AI agent systems | Industry best practices |
 | **[Agent Skills Specification](docs/references/agent-skills-specification.md)** | Official format spec for SKILL.md files | Anthropic (agentskills.io) |
 | **[Agent Skills Overview](docs/references/agent-skills-overview.md)** | What are skills? Concept introduction | Anthropic (agentskills.io) |
 | **[Agent Skills Integration Guide](docs/references/agent-skills-integration-guide.md)** | How to build skills-compatible agents | Anthropic (agentskills.io) |
+
+**✨ = New in February 2026**
 
 ### 📚 Learning Paths
 
@@ -1099,6 +1112,7 @@ version: 1.0.0
 | **[changelog-generator](skills-templates/changelog-generator/)** | Git commits to user-friendly changelogs | Preparing release notes or product updates |
 | **[chezmoi](skills-templates/chezmoi/)** | Dotfiles manager with 56 commands, templates, password managers, encryption | Cross-machine dotfiles, machine-specific configs, encrypted secrets |
 | **[claude-mem](skills-templates/claude-mem/)** | Persistent memory compression system for Claude Code | Cross-session context, MCP search, privacy controls, observations |
+| **[claude-mem-mastery](skills/claude-mem-mastery/SKILL.md)** | Entry-point skill for using claude-mem to keep CLAUDE.md and MEMORY.md in sync | Mining past work, maintaining project instructions, updating memory after work |
 | **[cloudflare-ai-gateway](skills-templates/cloudflare-ai-gateway/)** | Unified interface to AI providers (OpenAI, Anthropic, Azure, HuggingFace) | Multi-provider AI proxy, caching, rate limiting, analytics |
 | **[cloudflare-ai-search](skills-templates/cloudflare-ai-search/)** | Semantic search and vector embeddings in Workers | Vector-based search, embedding models |
 | **[cloudflare-kv](skills-templates/cloudflare-kv/)** | Low-latency key-value storage at the edge | Edge storage, get/put/delete/list operations |
@@ -2689,7 +2703,7 @@ This manual synthesizes best practices from:
 
 ## 📈 Project Stats
 
-- **Documentation**: 15 comprehensive best practice manuals (including Document 15: Advanced Orchestration Patterns)
+- **Documentation**: 17 comprehensive best practice manuals (including empirical SkillsBench research validation)
 - **Active Commands**: 13 production-ready commands
 - **Agent Templates**: 15 specialized agent configurations (10 base + 5 orchestration)
 - **Command Templates**: 27 command templates (21 base + 6 orchestration)

@@ -254,6 +254,47 @@ Once Claude writes "YES - need reactive state," it's committed to activating tha
 | Too many skills (>32) | Inconsistent detection | Prune redundant skills or organize into specialized sets |
 | Context window consumed | Skills don't load when triggered | Implement aggressive context management |
 
+### 4.5 Empirical Benchmarking Data: SkillsBench (February 2026)
+
+The SkillsBench research (Li et al., 2026) provides the first systematic evaluation of Agent Skills efficacy, measuring performance across 84 diverse tasks spanning 11 domains with 7,308 evaluation trajectories.
+
+#### **Production Deployment Insights**
+
+**Skill Quantity Optimization:**
+- **Optimal**: 2-3 skills per task (+18.6pp improvement)
+- **Diminishing Returns**: 4+ skills per task (+5.9pp improvement)
+- **Implication**: Detection ceiling around 32-36 skills (§1.2) is validated. Beyond 3 active skills, cognitive overhead reduces effectiveness.
+
+**Skill Complexity Tradeoffs:**
+- **Moderate-length skills**: +18.8pp performance gain
+- **Comprehensive skills**: -2.9pp degradation
+- **Implication**: Progressive disclosure architecture (§2) outperforms exhaustive documentation, even for complex domains.
+
+**Domain-Specific Activation Patterns:**
+
+| Domain | Performance With Skills | Performance Without Skills | Improvement |
+|--------|------------------------|---------------------------|-------------|
+| Healthcare | 86.1% | 34.2% | +51.9pp |
+| Manufacturing | 42.9% | 1.0% | +41.9pp |
+| Cybersecurity | 44.0% | 20.8% | +23.2pp |
+| Software Engineering | 38.9% | 34.4% | +4.5pp |
+
+**Key Insight**: Skills deliver maximum value in domains with specialized workflows underrepresented in model pretraining. Software engineering shows lower gains because coding patterns are already well-represented in training data.
+
+**Self-Generation Failure:**
+Models attempting autonomous skill generation showed **-1.3pp average performance** (negligible or negative impact). This empirically validates the Claude A/B development pattern (§3.1) requiring human domain expertise.
+
+**Model Scale Compensation:**
+Claude Haiku 4.5 + Skills (27.7%) outperformed Opus 4.5 without Skills (22.0%), demonstrating that high-quality skills enable smaller models to match larger models.
+
+**Production Recommendations:**
+1. **Limit active skills to 2-3 per workflow** to avoid cognitive overhead
+2. **Prioritize skill development for specialized domains** (healthcare, manufacturing, legal) over general software engineering
+3. **Invest in human-curated skills** rather than attempting automated skill generation
+4. **Consider model downgrading** (Opus → Sonnet, Sonnet → Haiku) when skills are available to reduce costs while maintaining quality
+
+**Citation**: Li, X., Chen, W., Liu, Y., et al. (2026). "SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks." arXiv:2602.12670v1. Available at: https://arxiv.org/html/2602.12670v1
+
 ---
 
 ## 5. SKILL.md Structure and Conventions

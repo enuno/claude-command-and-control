@@ -11,7 +11,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 ---
 
-## Available Skills (47 Total)
+## Available Skills (48 Total)
 
 ### Bitcoin Mining Skills
 
@@ -30,12 +30,14 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 | Skill | Description | Key Use Cases |
 |-------|-------------|---------------|
+| **[claude-mem-coded-assistant](claude-mem-mastery/SKILL.md)** | Entry-point skill for using claude-mem to keep CLAUDE.md and MEMORY.md in sync | Mining past work, maintaining project instructions, updating memory after work |
 | **[fastmcp](fastmcp/SKILL.md)** | Model Context Protocol (MCP) server development with FastMCP framework - tools, resources, prompts, authentication, Claude Desktop integration, and production deployment with Python and TypeScript examples | Creating MCP servers, integrating with Claude Desktop, building AI-powered tools and data access layers, production MCP deployment, v2/v3 migration |
 | **[openserv-agents](openserv-agents/SKILL.md)** | Complete OpenServ platform guide - SDK, API, and no-code agent development | Building autonomous AI agents, multi-agent orchestration, "Second Brain" architecture, BRAID framework, deployment strategies, production hosting |
 | **[raycast](raycast/SKILL.md)** | Raycast extension development framework for creating extensions with API integration, UI components, TypeScript patterns, and React | Building Raycast extensions, implementing extension APIs (Environment, Clipboard, Storage, OAuth), creating UI components (List, ActionPanel, Form), debugging extension code |
 | **[root-cause-tracing](root-cause-tracing/SKILL.md)** | Systematically traces bugs backward through call stack to find original trigger | Debugging errors deep in execution, tracing invalid data sources |
 | **[software-architecture](software-architecture/SKILL.md)** | Clean Architecture & DDD guidance for quality-focused development | Software design, architecture decisions, code quality, anti-patterns |
 | **[subagent-driven-development](subagent-driven-development/SKILL.md)** | Dispatches fresh subagent for each task with code review between tasks | Executing plans with independent tasks, fast iteration with quality gates |
+| **[terraform-best-practices](terraform-best-practices/SKILL.md)** | Comprehensive Terraform infrastructure-as-code best practices from Anton Babenko's community guide covering infrastructure sizing, modules, state management, naming conventions, and tool recommendations | Designing Terraform project structure, scaling IaC implementations, choosing Terraform vs Terragrunt, establishing coding standards, troubleshooting common Terraform problems |
 | **[using-git-worktrees](using-git-worktrees/SKILL.md)** | Creates isolated git worktrees with smart directory selection and safety verification | Feature work needing isolation, working on multiple branches simultaneously |
 
 ### LangChain Platform Skills

@@ -32,6 +32,8 @@ Anthropic's research demonstrates that the industry has been over-using multi-ag
 | Sharing | Copy entire agent configs | Share skill packages |
 | Versioning | N agent versions | 1 agent + M skill versions |
 
+**Empirical Validation**: The SkillsBench research (Li et al., 2026) demonstrates that curated skills improve agent performance by **16.2 percentage points** on average across 84 diverse tasks. Notably, Claude Haiku 4.5 with skills (27.7% pass rate) exceeded Opus 4.5 without skills (22.0%), proving that high-quality skills enable smaller, more cost-efficient models to match larger models' performance.
+
 ### When to Use Each
 
 **Skills (Default Choice)**:
