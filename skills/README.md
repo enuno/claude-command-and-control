@@ -11,7 +11,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 ---
 
-## Available Skills (32 Total)
+## Available Skills (47 Total)
 
 ### Bitcoin Mining Skills
 
@@ -37,6 +37,26 @@ This directory contains the repository's skill library. Each skill is a reusable
 | **[software-architecture](software-architecture/SKILL.md)** | Clean Architecture & DDD guidance for quality-focused development | Software design, architecture decisions, code quality, anti-patterns |
 | **[subagent-driven-development](subagent-driven-development/SKILL.md)** | Dispatches fresh subagent for each task with code review between tasks | Executing plans with independent tasks, fast iteration with quality gates |
 | **[using-git-worktrees](using-git-worktrees/SKILL.md)** | Creates isolated git worktrees with smart directory selection and safety verification | Feature work needing isolation, working on multiple branches simultaneously |
+
+### LangChain Platform Skills
+
+| Skill | Description | Key Use Cases |
+|-------|-------------|---------------|
+| **[langchain](langchain/SKILL.md)** | LangChain `create_agent()` factory + comprehensive middleware system (HITL, PII, fallback, rate limits, summarization) | Building agents with model strings, adding approval gates per tool, PII redaction, automatic model failover, auto-compressing long conversations |
+| **[langchain-aws](langchain-aws/SKILL.md)** | LangChain AWS integration — Bedrock chat models, embeddings, Knowledge Base RAG, Bedrock Agents, prompt caching, computer use toolkits (code interpreter + browser), Neptune graph, SageMaker | Bedrock chat/embeddings, RAG from Knowledge Base, Bedrock Agents, computer use, Neptune graph Q&A |
+| **[langchain-deepagents](langchain-deepagents/SKILL.md)** | LangChain Deep Agents (Python) — stateful agents with virtual filesystems, subagents, human-in-the-loop, and LangSmith observability | Deep Agents, LangGraph, LangSmith tracing, Agent Server API, RAG pipelines |
+| **[langchain-exa](langchain-exa/SKILL.md)** | LangChain Exa integration — semantic search with ExaSearchRetriever (RAG), ExaSearchResults (agent tool), and ExaFindSimilarResults | Neural web search for RAG, find similar URLs, domain/date filtering, per-result summaries, highlights |
+| **[langchain-mcp-adapters](langchain-mcp-adapters/SKILL.md)** | LangChain MCP Adapters — connect LangChain agents to MCP servers via stdio, SSE, HTTP, or WebSocket transports with interceptors and callbacks | Loading MCP tools for LangChain agents, configuring connection types, tool call interceptors for retry/caching |
+| **[langchain-neo4j](langchain-neo4j/SKILL.md)** | LangChain Neo4j integration — Neo4jGraph for Cypher queries, GraphCypherQAChain for NL-to-Cypher Q&A, Neo4jVector for RAG, Neo4jSaver LangGraph checkpointer | Graph RAG, natural language Cypher queries, hybrid vector+graph search, knowledge graph construction |
+| **[langchain-ollama](langchain-ollama/SKILL.md)** | LangChain Ollama integration — run local LLMs with ChatOllama, OllamaLLM, OllamaEmbeddings; supports reasoning/thinking mode | Local LLM inference, tool calling, structured output, reasoning models (DeepSeek-R1), local embeddings |
+| **[langchain-openrouter](langchain-openrouter/SKILL.md)** | LangChain OpenRouter integration — access 100+ models from one API key with provider routing preferences, reasoning mode, plugins, and attribution | Switching between model providers, provider routing (force Anthropic vs proxy), multi-model fallback chains |
+| **[langchain-perplexity](langchain-perplexity/SKILL.md)** | LangChain Perplexity AI integration — chat with built-in web search, domain/date filtering, reasoning parsers, search retriever | Real-time web search in LLM responses, domain-filtered search, reasoning model output parsing |
+| **[langchain-postgres](langchain-postgres/SKILL.md)** | LangChain PostgreSQL integration — PGVectorStore (v2) and PGVector (v1) for pgvector RAG, PostgresChatMessageHistory, HNSW/IVFFlat indexes, hybrid search | pgvector RAG, HNSW/IVFFlat index management, hybrid vector+full-text search, chat history persistence |
+| **[langchain-redis](langchain-redis/SKILL.md)** | LangChain Redis integration — RedisVectorStore, RedisCache (exact), RedisSemanticCache (similarity-based), RedisChatMessageHistory | Vector store RAG, exact LLM response caching, semantic caching with distance threshold, Redis chat history |
+| **[langgraph](langgraph/SKILL.md)** | LangGraph (Python) overview — build stateful agent graphs with checkpointing, streaming, interrupts, fault tolerance, and durable execution | LangGraph agents, state management, human-in-the-loop interrupts, streaming, fault tolerance |
+| **[langgraph-functional-api](langgraph-functional-api/SKILL.md)** | LangGraph Functional API — `@entrypoint` and `@task` decorators for imperative workflows with parallel execution and third-party agent wrapping | Wrapping existing agents (CrewAI, AutoGen, Strands), parallel task execution, imperative agent logic |
+| **[langgraph-graph-api](langgraph-graph-api/SKILL.md)** | LangGraph Graph API — explicit DAG agent workflows with StateGraph, typed state, nodes, edges, Command/Send routing | Building StateGraph agents, conditional routing, parallel fan-out with Send, HITL interrupts, streaming |
+| **[langsmith](langsmith/SKILL.md)** | LangSmith Python SDK — trace, evaluate, and monitor LLM applications with `@traceable`, `evaluate()`, comparative A/B evaluation, datasets, ASGI middleware | Instrumenting agents with tracing, running evaluations on datasets, comparative A/B testing, pytest integration |
 
 ### Integration & Automation Skills
 
