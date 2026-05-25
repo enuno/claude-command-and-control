@@ -1,330 +1,405 @@
 ---
 name: gitbook
-description: GitBook documentation platform - creating docs, publishing sites, Git sync, API references, and collaboration
+description: GitBook documentation platform. Use when creating, publishing, or managing docs sites — content structure, blocks, Git Sync, customization, AI search, collaboration, and the GitBook API.
 ---
 
 # GitBook Skill
 
-Use when working with GitBook documentation platform, generated from official documentation (107 pages).
+Comprehensive assistance with GitBook — an AI-native documentation platform for creating, publishing, and managing product documentation, API references, and knowledge bases.
 
 ## When to Use This Skill
 
-This skill should be triggered when:
-- Creating or managing GitBook documentation spaces
-- Setting up Git synchronization (GitHub/GitLab)
-- Publishing documentation sites with custom domains
-- Working with GitBook's block-based editor
-- Configuring OpenAPI/API reference documentation
-- Managing team collaboration and change requests
-- Migrating content to GitBook
-- Customizing site appearance and branding
+Trigger this skill when:
 
-## Quick Reference
+- **Creating documentation** in GitBook (spaces, pages, blocks, collections)
+- **Setting up Git Sync** between a GitBook space and a GitHub or GitLab repository
+- **Publishing a docs site** — custom domains, site structure, visibility settings
+- **Configuring GitBook AI** — AI Search, GitBook Assistant, GitBook Agent
+- **Collaborating on docs** — change requests, roles, permissions, comments
+- **Importing content** from Notion, Confluence, GitHub, or other sources
+- **Customizing site appearance** — themes, colors, fonts, logos, layout
+- **Using the GitBook API** or building integrations
+- **Embedding docs** into a product using Docs Embed
+- **Troubleshooting** Git Sync conflicts, publishing issues, or permission problems
 
-### Core Concepts
+## Key Concepts
 
-| Concept | Description |
-|---------|-------------|
-| **Space** | A documentation project (like a book or wiki) |
-| **Collection** | A group of related spaces |
-| **Site** | Published documentation accessible via URL |
-| **Change Request** | Draft changes for review before publishing |
-| **Live Edits** | Direct changes without change request workflow |
+### Content Hierarchy
+```
+Organization
+  └── Collection (group of spaces)
+       └── Space (a documentation project)
+            └── Page (a document)
+                 └── Block (content unit: text, code, hint, table, etc.)
+```
 
-### Content Blocks
+### Spaces vs Sites
+- **Space** — where you write and organize content (private by default)
+- **Docs Site** — the published version of one or more spaces; has its own URL, customization, and access controls
 
-GitBook uses a block-based editor. Common blocks:
+### Change Requests
+GitBook's equivalent of Git pull requests. All edits happen in a change request (a branch of the live content), then get reviewed and merged — preserving a full audit trail.
 
-| Block | Shortcut | Description |
-|-------|----------|-------------|
-| Paragraph | Just type | Default text block |
-| Heading | `#`, `##`, `###` | Section headers (H1, H2, H3) |
-| Code Block | ``` or `/code` | Syntax-highlighted code |
-| Quote | `>` or `/quote` | Blockquote |
-| List | `-`, `1.` | Unordered/ordered lists |
-| Task List | `- [ ]` | Checkbox items |
-| Table | `/table` | Data tables |
-| Image | `/image` | Upload or embed images |
-| Tabs | `/tabs` | Tabbed content |
-| Expandable | `/expandable` | Collapsible sections |
-| Cards | `/cards` | Visual link cards |
-| Hint | `/hint` | Info, warning, danger, success boxes |
-| API Reference | `/openapi` | OpenAPI spec integration |
+---
 
-### Inline Content (/) Palette
+## Getting Started
 
-Press `/` in any text block to access:
-- **Link** - Relative (internal) or absolute (external) links
-- **Image** - Inline images
-- **Emoji** - `:emoji_name:` syntax
-- **Math** - LaTeX/KaTeX formulas: `$$formula$$`
-- **Annotation** - Footnote-style explanations
+### Create an Account and First Space
+1. Sign up at `app.gitbook.com`
+2. Create a new space from the sidebar
+3. Add pages using the `+` button or `/` command in the editor
+4. Publish as a docs site when ready
 
-### Common Patterns
+### Import Existing Content
+GitBook can import from:
+- **Confluence** — via the import panel
+- **Notion** — via the import panel
+- **GitHub/GitLab** — via Git Sync (bi-directional)
+- **Files** — Markdown, HTML, Word documents, CSV
 
-#### Create a hint/callout box
-```markdown
-{% hint style="info" %}
-This is an info hint
+```
+Space menu → Import → Choose source
+```
+
+---
+
+## Content Creation
+
+### Blocks
+GitBook is block-based — every element is a block. Insert with `/` in the editor.
+
+| Block | Purpose |
+|-------|---------|
+| Paragraph | Standard text with inline formatting |
+| Heading (H1/H2/H3) | Page structure and SEO |
+| Code block | Syntax-highlighted code with language detection |
+| Hint | Callouts: `info`, `warning`, `danger`, `success` |
+| Table | Structured data |
+| Tabs | Side-by-side content variants |
+| Expandable | Collapsible FAQ-style sections |
+| Stepper | Step-by-step guides |
+| Cards | Visual navigation grids |
+| Image | Single image or gallery |
+| Embed | Video, Figma, CodePen, etc. |
+| Reusable content | Synced block used across multiple pages |
+| OpenAPI | Auto-rendered API reference from an OpenAPI spec |
+| Drawing | Inline diagram editor |
+| Math/TeX | Mathematical formulas |
+
+### Hint Block Styles
+```
+{% hint style="info" %}    → Blue info box
+{% hint style="warning" %} → Yellow warning
+{% hint style="danger" %}  → Red alert
+{% hint style="success" %} → Green success
 {% endhint %}
-
-{% hint style="warning" %}
-This is a warning
-{% endhint %}
-
-{% hint style="danger" %}
-This is a danger/error hint
-{% endhint %}
-
-{% hint style="success" %}
-This is a success hint
-{% endhint %}
 ```
 
-#### Create tabs
-```markdown
-{% tabs %}
-{% tab title="JavaScript" %}
-console.log("Hello");
-{% endtab %}
-{% tab title="Python" %}
-print("Hello")
-{% endtab %}
-{% endtabs %}
+### Code Blocks
+- Set language for syntax highlighting
+- Toggle line numbers, caption, line wrap
+- One-click copy button for readers
+
+### Reusable Content
+Create once, sync everywhere. Edit one instance and all uses update automatically.
+```
+/ → Reusable content → Create new reusable block
+Requires Pro or Enterprise plan
 ```
 
-#### Create expandable section
-```markdown
-{% expandable title="Click to expand" %}
-Hidden content here
-{% endexpandable %}
-```
+### Variables and Expressions
+Define reusable text values (version numbers, product names) at the space level. Reference them inline with `{{ variable_name }}`. Useful for content that changes across versions.
 
-#### Create stepper (numbered steps)
-```markdown
-{% stepper %}
-{% step %}
-First step content
-{% endstep %}
-{% step %}
-Second step content
-{% endstep %}
-{% endstepper %}
-```
+### Version Control
+Every change request merge creates a history entry. View the **Version history** side panel to see all changes — who made them, when, and what changed. Roll back by creating a new change request from a past version.
 
-#### Create cards
-```markdown
-{% cards %}
-{% card title="Card 1" href="/page1" %}
-Description here
-{% endcard %}
-{% card title="Card 2" href="/page2" %}
-Another description
-{% endcard %}
-{% endcards %}
-```
+---
 
-### Git Sync Configuration
+## Git Sync
 
-#### Enable GitHub Sync
-1. Go to space settings → Git Sync
-2. Connect GitHub account
-3. Select repository and branch
-4. Configure sync direction:
-   - **GitBook → GitHub**: GitBook is source of truth
-   - **GitHub → GitBook**: Git repo is source of truth
-   - **Two-way**: Bidirectional sync
+Bi-directional sync between a GitBook space and a GitHub or GitLab repo.
 
-#### Directory structure for Git
-```
-docs/
-├── README.md          # Space landing page
-├── SUMMARY.md         # Table of contents
-├── .gitbook.yaml      # GitBook configuration
-├── page-one.md
-├── group/
-│   ├── README.md      # Group landing page
-│   └── nested-page.md
-└── .gitbook/
-    └── assets/        # Images and files
-```
+### Enabling GitHub Sync
+1. Open space → **Configure** (top-right header)
+2. Select **GitHub Sync** from the provider list
+3. Authenticate with GitHub (one-time)
+4. Choose repo, branch, and sync direction:
+   - **GitHub → GitBook** (import existing docs)
+   - **GitBook → GitHub** (export to repo)
+   - **Bi-directional** (recommended)
 
-#### SUMMARY.md structure
-```markdown
-# Table of contents
+### `.gitbook.yaml` Configuration
+Place at the repo root to control how GitBook parses the repo:
 
-* [Introduction](README.md)
-* [Getting Started](getting-started.md)
-
-## Section Title
-
-* [Page One](section/page-one.md)
-* [Page Two](section/page-two.md)
-```
-
-#### .gitbook.yaml configuration
 ```yaml
-root: ./docs/          # Documentation root directory
-
+root: ./docs          # optional: look in a subdirectory
 structure:
-  readme: README.md    # Landing page file
-  summary: SUMMARY.md  # Table of contents file
+  readme: README.md   # the space's root page
+  summary: SUMMARY.md # table of contents
 
 redirects:
-  old-path: new-path   # URL redirects
+  previous/page: new-folder/page.md
 ```
 
-### Custom Domain Setup
+### Monorepos
+Point `root:` to a specific subdirectory to sync only part of a repo.
 
-1. Go to site settings → Custom domain
-2. Add your domain (e.g., `docs.example.com`)
-3. Configure DNS:
-   - **CNAME record**: Point to `hosting.gitbook.io`
-   - Or **A record** for apex domains
-4. Enable HTTPS (automatic via Let's Encrypt)
+### How Content Maps
+- Markdown files → GitBook pages
+- Folders → page groups
+- `SUMMARY.md` → sidebar structure (if present)
+- Images in `.gitbook/assets` → embedded images
 
-#### Subdirectory publishing (with Cloudflare/Vercel)
+### Pull Request Previews
+GitBook can add a preview comment to GitHub PRs showing a staging link before merge.
+
+---
+
+## Publishing Docs Sites
+
+### Create a Docs Site
 ```
-example.com/docs → GitBook site
-```
-
-### OpenAPI Integration
-
-#### Add OpenAPI specification
-1. Upload OpenAPI/Swagger file (JSON or YAML)
-2. Or link to hosted spec URL
-3. GitBook auto-generates interactive API docs
-
-#### Customize API reference
-```markdown
-{% openapi src="./api.yaml" /%}
+Organization home → New site → Link an existing space or create new
 ```
 
-### Publishing Options
+### Site Structure Options
+- **Single space** — one space = one site
+- **Site sections** — multiple spaces as tabbed sections (e.g., "Guides", "API Reference")
+- **Content variants** — same space, multiple versions (e.g., v1, v2) or languages
 
-| Type | Description |
-|------|-------------|
-| **Public** | Accessible to everyone |
-| **Unlisted** | No search indexing, URL access only |
-| **Share links** | Private with token-based access |
-| **Authenticated** | SSO/login required |
+### Custom Domain
+1. Available on Premium and Ultimate plans
+2. Add CNAME record pointing to `hosting.gitbook.io`
+3. Enter domain in site settings → **Custom domain**
+4. GitBook auto-provisions SSL
 
-### Collaboration
+Custom subdirectory (e.g. `example.com/docs`) requires a Cloudflare Workers, Vercel, or AWS CloudFront proxy.
 
-#### Change Requests
-- Create a change request for non-breaking changes
-- Request reviews from team members
-- Merge when approved
-- Automatic conflict detection
+### Visibility Options
+- **Public** — anyone can access without signing in
+- **Unlisted** — accessible via direct link only
+- **Private** — requires GitBook account with org membership
+- **Share links** — invite-only access via secret URL
+- **Authenticated access** — your own SSO/JWT visitor authentication
 
-#### Live Edits
-- Direct editing for quick fixes
-- No approval workflow
-- Immediate publishing
+### Site Customization
+- Logo, favicon, social image
+- Color theme (light/dark/system)
+- Font family
+- Header links and footer
+- Custom CSS (Ultimate plan)
 
-#### Comments
-- Inline comments on any block
-- @mention team members
-- Resolve when addressed
+### PDF Export
+Enable in site settings → readers can export any page or the full site as PDF.
 
-### Migration to GitBook
+---
 
-#### From other platforms
-1. **Import panel**: Confluence, Notion, Docusaurus, Markdown
-2. **Git Sync**: Connect existing Git repo with markdown files
-3. **Manual**: Copy/paste with formatting preserved
+## Collaboration
 
-#### Import via Git Sync
+### Change Requests
+The primary editing workflow — all edits live in a change request until merged.
+
+```
+Space → New change request → Edit → Request review → Merge
+```
+
+- Multiple people can edit the same change request
+- Reviewers get notified; can approve or request changes
+- Merge rules can require N approvals before merging
+
+### Roles
+
+| Role | Can do |
+|------|--------|
+| Owner | Everything including billing and org deletion |
+| Admin | Manage members, spaces, and settings |
+| Creator | Create and publish spaces and sites |
+| Editor | Edit content in spaces with edit access |
+| Reviewer | Review and comment on change requests |
+| Commenter | Comment only, no edits |
+| Reader | View only |
+
+### Permissions and Inheritance
+GitBook uses cascading role-based permissions:
+```
+Organization role → inherited by all spaces
+  └── Collection role → overrides org role for spaces in collection
+       └── Space role → overrides for that space
+            └── Site role → overrides for published site access
+```
+Setting a space to "No access" restricts it regardless of org-level role.
+
+### Comments
+Add inline comments on any block. Comments thread and resolve. Use `@mentions` to notify team members.
+
+---
+
+## AI Features
+
+### GitBook AI Search
+Replaces keyword search with semantic understanding. Users ask questions in natural language; AI answers using your docs as the source.
+
+```
+Site → Configure → Search → Enable AI Search
+```
+
+Options:
+- **Keyword search** — default, always on
+- **GitBook AI search** — semantic Q&A over your docs (Pro+)
+- **GitBook AI search + Crawler** — also indexes external URLs
+
+### GitBook Agent
+An AI teammate that creates and maintains documentation inside GitBook.
+
+Capabilities:
+- Write new pages from a prompt or outline
+- Edit existing blocks via natural language instructions
+- All edits happen in a change request for human review
+- Follows custom style guides and instructions
+- Translate docs into other languages
+- Write from source materials (URLs or uploaded files)
+
+Requires Pro or Enterprise plan.
+
+### Docs Embed
+Embed your documentation as a widget inside your own product:
+
+```html
+<script src="https://gitbook.com/assets/docs-embed.js"
+        data-api-key="YOUR_KEY"></script>
+```
+
+```tsx
+// React
+import { GitBookEmbed } from '@gitbook/docs-embed/react';
+
+<GitBookEmbed apiKey="YOUR_KEY" welcomeMessage="How can we help?" />
+```
+
+Supports AI Q&A, page browsing, custom welcome messages, and authenticated visitors.
+
+### LLM-Ready Docs
+Every GitBook page exposes a machine-readable endpoint:
+```
+GET https://your-site.gitbook.io/page-path.md
+```
+
+With live Q&A:
+```
+GET https://your-site.gitbook.io/page-path.md?ask=how do I set up git sync
+```
+
+### AI Insights
+See what questions users are actually asking — identify documentation gaps.
+```
+Site → Insights → AI Insights
+```
+
+---
+
+## Developer API
+
+### Authentication
 ```bash
-# Prepare your repo
-mkdir docs
-echo "# Welcome" > docs/README.md
-echo "* [Welcome](README.md)" > docs/SUMMARY.md
-git add . && git commit -m "Initial docs"
+curl -H "Authorization: Bearer YOUR_TOKEN" \
+  https://api.gitbook.com/v1/user
 ```
 
-### Keyboard Shortcuts
+Generate tokens: `app.gitbook.com → Settings → Developer → API Tokens`
 
-| Action | Shortcut |
-|--------|----------|
-| Command palette | `⌘/Ctrl + K` |
-| Bold | `⌘/Ctrl + B` |
-| Italic | `⌘/Ctrl + I` |
-| Link | `⌘/Ctrl + K` (with selection) |
-| Code | `⌘/Ctrl + E` |
-| Search | `⌘/Ctrl + /` |
+### Key Endpoints
+```
+GET  /v1/orgs/{orgId}/spaces           List spaces
+GET  /v1/spaces/{spaceId}/content      Get space content
+POST /v1/spaces/{spaceId}/content/page Create a page
+GET  /v1/spaces/{spaceId}/revisions    List revision history
+```
 
-## Reference Files
+### Integrations SDK
+Build custom GitBook integrations using `@gitbook/runtime`:
+- Custom blocks rendered in the GitBook editor
+- Webhooks triggered on space events
+- External data source connections
 
-This skill includes comprehensive documentation in `references/`:
+---
 
-- **llms-txt.md** - Full GitBook documentation (107 pages, 456 KB)
-- **llms-full.md** - Complete llms.txt source
-- **llms.md** - Condensed reference (95 KB)
+## Examples
 
-Use `view` to read specific reference files when detailed information is needed.
+### Example 1: Set Up Git Sync for a Monorepo
 
-## Content Categories
+```yaml
+# .gitbook.yaml — docs live in /packages/docs/
+root: ./packages/docs
+structure:
+  readme: index.md
+  summary: SUMMARY.md
+redirects:
+  old-section/page: new-section/page.md
+```
 
-The reference documentation covers:
+1. Space → Configure → GitHub Sync → select repo, branch `main`
+2. After initial import, switch to bi-directional sync
+3. Publish as docs site with custom domain
 
-### Creating Content
-- Blocks (code, tables, images, tabs, cards, etc.)
-- Inline content (links, emojis, math, annotations)
-- Formatting and layout
-- Page structure and navigation
+### Example 2: Version Variants for v1/v2 Docs
 
-### Publishing
-- Sites and custom domains
-- Public vs private publishing
-- Share links and authentication
-- Redirects and SEO
+1. Create two spaces: `docs-v1` and `docs-v2`
+2. Create docs site → **Add space** → configure as **Content variants**
+3. GitBook shows a version picker; `/v1/` and `/v2/` paths both stay live
 
-### Collaboration
-- Change requests and live edits
-- Comments and reviews
-- Team management
-- Merge rules
+### Example 3: Reusable Warning Callout Across Spaces
 
-### Integration
-- Git Sync (GitHub, GitLab)
-- OpenAPI/API documentation
-- Translations
-- Extensions
+```
+Space settings → Reusable content → New reusable block
+Add hint: {% hint style="warning" %}
+          Breaking change in v2: the `id` field is now `uuid`.
+          {% endhint %}
+```
 
-### Configuration
-- Site structure and theming
-- Icons, colors, and branding
-- Content configuration
-- Troubleshooting
+Embed this block on every affected page. Update once → all pages update.
 
-## Common Issues
+### Example 4: Adaptive Content for Different User Plans
 
-### Git Sync not working
-- Check repository permissions
-- Verify branch exists
-- Ensure SUMMARY.md is valid
-- Check for merge conflicts
+```
+Site → Configure → Adaptive content
+```
+Define visitor properties (`plan: "free" | "pro" | "enterprise"`) via your auth token. Show/hide blocks conditionally based on `{{ visitor.plan }}`.
 
-### Custom domain issues
-- Verify DNS propagation (can take 24-48 hours)
-- Check CNAME points to `hosting.gitbook.io`
-- Ensure no conflicting records
+---
 
-### Content not updating
-- Check for pending change requests
-- Verify Git sync status
-- Clear browser cache
-- Check for merge conflicts
+## Common Patterns
 
-## Notes
+### Hint for Plan-Gated Features
+```
+{% hint style="info" %}
+This feature is available on Pro and Enterprise plans.
+{% endhint %}
+```
 
-- This skill was generated from official GitBook documentation via llms.txt
-- Reference files contain 107 pages of comprehensive documentation
-- Content is current as of January 2026
+### `.gitbook.yaml` with Redirects
+```yaml
+root: ./docs
+structure:
+  readme: README.md
+  summary: SUMMARY.md
+redirects:
+  getting-started: introduction/quickstart.md
+  api/v1/auth: api/authentication.md
+```
+
+### Variable Reference in Content
+```
+API base URL: {{ env.api_base_url }}
+Current version: {{ product.version }}
+```
+
+---
 
 ## Resources
 
-- [GitBook Documentation](https://docs.gitbook.com/)
-- [GitBook Status](https://status.gitbook.com/)
-- [GitBook Community](https://github.com/GitbookIO)
+- **Docs**: `gitbook.com/docs`
+- **LLMs.txt** (full doc index): `gitbook.com/docs/llms.txt`
+- **API reference**: `gitbook.com/docs/developers/gitbook-api/api-reference`
+- **Integrations SDK**: `gitbook.com/docs/developers/integrations`
+- **Community**: `community.gitbook.com`
+- **Status**: `gitbookstatus.com`

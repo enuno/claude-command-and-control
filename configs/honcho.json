@@ -1,0 +1,77 @@
+{
+  "name": "honcho",
+  "description": "Honcho v3 — user modeling and memory platform for AI agents. Use for adding persistent user context, peer representations, session memory, and multi-agent workflows to LLM applications.",
+  "base_url": "https://honcho.dev/docs/",
+  "llms_txt_url": "https://honcho.dev/docs/llms.txt",
+  "start_urls": [
+    "https://honcho.dev/docs/v3/documentation/introduction/overview.md",
+    "https://honcho.dev/docs/v3/documentation/introduction/quickstart.md",
+    "https://honcho.dev/docs/v3/documentation/introduction/vibecoding.md",
+    "https://honcho.dev/docs/v3/documentation/core-concepts/architecture.md",
+    "https://honcho.dev/docs/v3/documentation/core-concepts/design-patterns.md",
+    "https://honcho.dev/docs/v3/documentation/core-concepts/reasoning.md",
+    "https://honcho.dev/docs/v3/documentation/core-concepts/representation.md",
+    "https://honcho.dev/docs/v3/documentation/features/chat.md",
+    "https://honcho.dev/docs/v3/documentation/features/get-context.md",
+    "https://honcho.dev/docs/v3/documentation/features/storing-data.md",
+    "https://honcho.dev/docs/v3/documentation/features/advanced/dreaming.md",
+    "https://honcho.dev/docs/v3/documentation/features/advanced/file-uploads.md",
+    "https://honcho.dev/docs/v3/documentation/features/advanced/peer-card.md",
+    "https://honcho.dev/docs/v3/documentation/features/advanced/queue-status.md",
+    "https://honcho.dev/docs/v3/documentation/features/advanced/reasoning-configuration.md",
+    "https://honcho.dev/docs/v3/documentation/features/advanced/representation-scopes.md",
+    "https://honcho.dev/docs/v3/documentation/features/advanced/search.md",
+    "https://honcho.dev/docs/v3/documentation/features/advanced/streaming-response.md",
+    "https://honcho.dev/docs/v3/documentation/features/advanced/summarizer.md",
+    "https://honcho.dev/docs/v3/documentation/features/advanced/using-filters.md",
+    "https://honcho.dev/docs/v3/documentation/reference/sdk.md",
+    "https://honcho.dev/docs/v3/documentation/reference/cli.md",
+    "https://honcho.dev/docs/v3/documentation/reference/platform.md",
+    "https://honcho.dev/docs/v3/guides/overview.md",
+    "https://honcho.dev/docs/v3/guides/integrations/claude-code.md",
+    "https://honcho.dev/docs/v3/guides/integrations/langgraph.md",
+    "https://honcho.dev/docs/v3/guides/integrations/crewai.md",
+    "https://honcho.dev/docs/v3/guides/integrations/mcp.md",
+    "https://honcho.dev/docs/v3/guides/integrations/vercel-ai-sdk.md",
+    "https://honcho.dev/docs/v3/guides/integrations/hermes.md",
+    "https://honcho.dev/docs/v3/guides/integrations/n8n.md",
+    "https://honcho.dev/docs/v3/guides/discord.md",
+    "https://honcho.dev/docs/v3/guides/gmail.md",
+    "https://honcho.dev/docs/v3/guides/telegram.md",
+    "https://honcho.dev/docs/v3/guides/granola.md",
+    "https://honcho.dev/docs/v3/guides/migrations/mem0.md",
+    "https://honcho.dev/docs/v3/guides/community/agent0.md",
+    "https://honcho.dev/docs/v3/contributing/self-hosting.md"
+  ],
+  "selectors": {
+    "main_content": "article",
+    "title": "h1",
+    "code_blocks": "pre code"
+  },
+  "url_patterns": {
+    "include": [
+      "/docs/v3/documentation/",
+      "/docs/v3/guides/",
+      "/docs/v3/contributing/self-hosting"
+    ],
+    "exclude": [
+      "/_next/",
+      "/_mintlify/",
+      "/api-reference/",
+      "/changelog/",
+      "/evals/"
+    ]
+  },
+  "categories": {
+    "getting_started": ["overview", "quickstart", "introduction", "vibecoding"],
+    "core_concepts": ["architecture", "design-patterns", "reasoning", "representation"],
+    "features": ["chat", "get-context", "storing-data", "context"],
+    "advanced": ["dreaming", "file-uploads", "peer-card", "queue-status", "reasoning-configuration", "representation-scopes", "search", "streaming", "summarizer", "using-filters"],
+    "reference": ["sdk", "cli", "platform"],
+    "integrations": ["claude-code", "langgraph", "crewai", "mcp", "vercel-ai-sdk", "hermes", "n8n", "openclaw", "opencode", "sillytavern"],
+    "guides": ["discord", "gmail", "telegram", "granola", "mem0", "agent0", "migrations"],
+    "self_hosting": ["self-hosting", "contributing"]
+  },
+  "rate_limit": 0.5,
+  "max_pages": 60
+}

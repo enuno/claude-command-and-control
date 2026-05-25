@@ -11,7 +11,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 
 ---
 
-## Available Skills (48 Total)
+## Available Skills (49 Total)
 
 ### Bitcoin Mining Skills
 
@@ -32,6 +32,7 @@ This directory contains the repository's skill library. Each skill is a reusable
 |-------|-------------|---------------|
 | **[claude-mem-coded-assistant](claude-mem-mastery/SKILL.md)** | Entry-point skill for using claude-mem to keep CLAUDE.md and MEMORY.md in sync | Mining past work, maintaining project instructions, updating memory after work |
 | **[fastmcp](fastmcp/SKILL.md)** | Model Context Protocol (MCP) server development with FastMCP framework - tools, resources, prompts, authentication, Claude Desktop integration, and production deployment with Python and TypeScript examples | Creating MCP servers, integrating with Claude Desktop, building AI-powered tools and data access layers, production MCP deployment, v2/v3 migration |
+| **[mempalace](mempalace/SKILL.md)** | Local-first AI memory system — verbatim storage, palace architecture (Wings/Rooms/Drawers), 4-layer token stack, hybrid BM25+semantic search (96.6% R@5), MCP server, knowledge graph, and Claude Code auto-save hooks | Claude Code session retention, mining project files/transcripts, retrieving past context, wiring stop/precompact hooks, multi-agent memory |
 | **[openserv-agents](openserv-agents/SKILL.md)** | Complete OpenServ platform guide - SDK, API, and no-code agent development | Building autonomous AI agents, multi-agent orchestration, "Second Brain" architecture, BRAID framework, deployment strategies, production hosting |
 | **[raycast](raycast/SKILL.md)** | Raycast extension development framework for creating extensions with API integration, UI components, TypeScript patterns, and React | Building Raycast extensions, implementing extension APIs (Environment, Clipboard, Storage, OAuth), creating UI components (List, ActionPanel, Form), debugging extension code |
 | **[root-cause-tracing](root-cause-tracing/SKILL.md)** | Systematically traces bugs backward through call stack to find original trigger | Debugging errors deep in execution, tracing invalid data sources |
@@ -196,6 +197,7 @@ Skills for Bitcoin mining operations and management:
 
 ### Development Workflow Skills
 Skills that enhance the software development process:
+- AI memory & session retention (mempalace)
 - AI agent development (openserv-agents)
 - Software architecture (software-architecture)
 - Debugging (root-cause-tracing)
@@ -326,6 +328,18 @@ All skills in this repository meet these criteria:
 
 ## Recent Additions
 
+**May 2026**:
+- ✨ **mempalace** (2026-05-25) - Local-first AI memory system
+  - Palace architecture: Wings (people/projects) → Rooms (days/sessions) → Drawers (verbatim text)
+  - 4-layer token stack: L0 identity (~100 tokens), L1 story (~500–800), L2 on-demand, L3 full search
+  - AAAK compression dialect for compact LLM-scannable index
+  - Benchmarks: 96.6% R@5 raw on LongMemEval (no LLM, no API key required)
+  - 29-tool MCP server, SQLite knowledge graph with temporal relationships
+  - Auto-save hooks: stop hook + precompact hook for Claude Code session retention
+  - CLI: mine, sweep, search, wake-up, repair, migrate, hook install
+  - Source: local repo at ~/projects/mempalace (README.md, CLAUDE.md, layers.py, cli.py)
+  - Version 3.3.6, 254 lines, 8.8 KB
+
 **January 2026**:
 - ✨ **google-url-inspection** (2026-01-22) - Search Console URL Inspection Tool mastery
   - Comprehensive guide for Google's URL Inspection Tool in Search Console
@@ -436,6 +450,6 @@ All skills in this repository meet these criteria:
 
 ---
 
-**Last Updated**: January 22, 2026
+**Last Updated**: May 25, 2026
 **Maintained By**: Claude Command and Control Repository
-**Version**: 2.10.0
+**Version**: 2.11.0
